@@ -33,6 +33,7 @@
             "2":       SwitchToTab("Artists"),
             "3":       SwitchToTab("Albums"),
             "4":       SwitchToTab("Search"),
+            "5":       SwitchToTab("Full Art"),
             "q":       Quit,
             ">":       NextTrack,
             "p":       TogglePause,
@@ -123,6 +124,13 @@
         (
             name: "Search",
             pane: Pane(Search),
+        ),
+        (
+            name: "Full Art",
+            pane: Split(
+                direction: Horizontal,
+                panes: [ (size: "40%", pane: Pane(AlbumArt)), (size: "60%", pane: Pane(Lyrics))],
+            ),
         ),
     ],
 )

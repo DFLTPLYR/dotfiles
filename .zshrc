@@ -11,6 +11,8 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="/home/dfltplyr/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/php/conf.d"
 export PATH="/home/dfltplyr/.config/composer/vendor/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
 
 eval $(thefuck --alias)
 eval "$(zoxide init zsh)"
