@@ -1,0 +1,291 @@
+# WARNING:
+# IF THE RICH PRESENCE DOES NOT GET UPDATED
+# PLEASE CHECK THE LOGS FOR ANY ERRORS
+
+# ------------------
+# Basic Settings
+# ------------------
+# Whether to clear Discord activity when media is paused
+clear_on_pause = true
+
+# How often to update Discord presence (in milliseconds)
+interval = 500
+
+# ------------------
+# Display Template
+# ------------------
+[template]
+# First line in Discord presence for all activity types
+detail = "{{{title}}}"
+
+# Second line in Discord presence for all activity types
+# state = "{{{artist_display}}}"
+# or
+state = "{{#each artists}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}"
+
+# Text shown when hovering over the large image
+# For "listening" activity type: Shows as third line
+large_text = "{{#if album}}{{{album}}}{{#if year}} ({{{year}}}){{/if}}{{#if album_artist_display}} by {{{album_artist_display}}}{{/if}}{{/if}}"
+# large_text = "{{{player}}} - {{{volume}}}"
+# Text shown when hovering over the small image (player icon)
+# Only visible when show_icon = true
+small_text = "{{#if player}}Playing on {{{player}}}{{else}}Mprisence{{/if}}"
+
+# Templates are rendered using Handlebars
+#
+# Available Handlebars Helpers:
+# - Built-in Helpers: https://handlebarsjs.com/guide/builtin-helpers.html
+# - eq: Compare two values for equality
+#   Example: {{#if (eq status "playing")}}Playing{{/if}}
+#
+# Available template variables:
+# Core Metadata:
+#   {{{title}}}              - Track title
+#   {{{artists}}}            - Track artists (as array)
+#   {{{artist_display}}}     - Track artists (comma separated)
+#   {{{album}}}              - Album name
+#   {{{album_artists}}}      - Album artists (as array)
+#   {{{album_artist_display}}} - Album artists (comma separated)
+#   {{{track_number}}}       - Track number
+#   {{{track_total}}}        - Total tracks in album
+#   {{{track_display}}}      - Track number as "X/Y"
+#   {{{disc_number}}}        - Disc number
+#   {{{disc_total}}}         - Total discs
+#   {{{disc_display}}}       - Disc number as "X/Y"
+#   {{{genres}}}             - Track genres (as array)
+#   {{{genre_display}}}      - Track genres (comma separated)
+#   {{{year}}}               - Release year
+#
+# Additional Metadata:
+#   {{{duration_secs}}}      - Duration in seconds
+#   {{{duration_display}}}   - Duration as "MM:SS"
+#   {{{initial_key}}}        - Musical key
+#   {{{bpm}}}                - Beats per minute
+#   {{{mood}}}               - Track mood
+#
+# Audio Properties:
+#   {{{bitrate_display}}}    - e.g. "320 kbps"
+#   {{{sample_rate_display}}} - e.g. "44.1 kHz"
+#   {{{bit_depth_display}}}  - e.g. "16-bit"
+#   {{{channels_display}}}   - e.g. "Stereo"
+#
+# Player Status:
+#   {{{player}}}             - Media player name
+#   {{{player_bus_name}}}    - Player bus name
+#   {{{status}}}             - Playback status
+#   {{{status_icon}}}        - Status as icon (▶, ⏸, ⏹)
+#   {{{volume}}}             - Player volume
+#
+# Additional IDs:
+#   {{{isrc}}}               - International Standard Recording Code
+#   {{{barcode}}}            - Release barcode
+#   {{{catalog_number}}}     - Release catalog number
+#   {{{label}}}              - Record label
+#   {{{musicbrainz_track_id}}} - MusicBrainz track ID
+#   {{{musicbrainz_album_id}}} - MusicBrainz album ID
+#   {{{musicbrainz_artist_id}}} - MusicBrainz artist ID
+#   {{{musicbrainz_album_artist_id}}} - MusicBrainz album artist ID
+#   {{{musicbrainz_release_group_id}}} - MusicBrainz release group ID
+
+# ------------------
+# Activity Types
+# ------------------
+[activity_type]
+# Automatically determine activity type based on media content
+# audio -> "listening", video -> "watching", etc.
+use_content_type = true
+
+# Default activity type when content type detection is disabled
+# or when the type cannot be determined
+# Available types:
+#   "listening" - Shows as "Listening to ..."
+#   "watching"  - Shows as "Watching ..."
+#   "playing"   - Shows as "Playing ..."
+#   "competing" - Shows as "Competing in ..."
+default = "listening"
+
+# ------------------
+# Time Settings
+# ------------------
+[time]
+# Enable/disable time progress in Discord
+# When enabled:
+# - For "listening": Shows as progress bar
+# - For other types: Shows as elapsed/remaining time
+show = true
+
+# Time display mode:
+# true = show elapsed time (e.g., 1:23)
+# false = show remaining time (e.g., -1:23)
+as_elapsed = true
+
+# ------------------
+# Cover Art Settings
+# ------------------
+[cover]
+# List of file names (without extension) to search for local cover art.
+# Files are searched in the order listed.
+# Extensions like .jpg, .jpeg, .png, .gif are automatically checked.
+file_names = ["cover", "folder", "front", "album", "art"]
+
+# How many parent directories to search upwards from the media file's location
+# for local cover art. 0 means only search in the same directory.
+local_search_depth = 2
+
+[cover.provider]
+# Cover art providers (in order of preference)
+# "musicbrainz" - Fetch from MusicBrainz database
+# "imgbb"      - Upload and host on ImgBB
+provider = ["musicbrainz", "imgbb"]
+
+[cover.provider.imgbb]
+# Your ImgBB API key (required to use the imgbb provider).
+# Obtain from https://api.imgbb.com/
+# api_key = "your_api_key"
+
+# Expiration time in seconds for images uploaded to ImgBB.
+# 0 means the image never expires.
+expiration = 86400 # 24 hours
+
+[cover.provider.musicbrainz]
+# Minimum score (0-100) required for a MusicBrainz result to be considered valid.
+# Higher values mean stricter matching, lower values allow more potential matches and are more likely to be false positives.
+min_score = 95
+
+# ------------------
+# Player Settings
+# ------------------
+[player]
+# Default configuration for all players
+# Fields:
+#   ignore: Don't show rich presence for this player
+#   app_id: Discord application ID (get yours at: https://discord.com/developers/docs/quick-start/overview-of-apps)
+#   icon: Player icon URL (shown as small image)
+#   show_icon: Show player icon in Discord (as small image)
+#   allow_streaming: Enable Discord rich presence for web-based media (browsers, streaming services)
+#   override_activity_type: Will always show this activity type regardless of media content type
+default = { ignore = true, app_id = "1126153268486213672", icon = "https://raw.githubusercontent.com/lazykern/mprisence/main/assets/icon.png", show_icon = false, allow_streaming = true }
+
+# ------------------
+# Example Player-Specific Settings
+# ------------------
+# Each player can override any of the default settings above
+# Example for VLC Media Player:
+[player.vlc_media_player]
+app_id = "1124968989538402334"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/VLC_Icon.svg/1200px-VLC_Icon.svg.png"
+show_icon = true
+allow_streaming = true
+# override_activity_type = "wtching"
+
+[player.kew]
+app_id = "1127548029294084147"
+icon = "https://raw.githubusercontent.com/lazykern/mprisence/main/assets/icon.png"
+show_icon = false
+allow_streaming = true
+
+[player.tauon]
+app_id = "1127548029294084147"
+icon = "https://raw.githubusercontent.com/lazykern/mprisence/main/assets/icon.png"
+show_icon = false
+allow_streaming = true
+
+[player.audacious]
+app_id = "1125084572166656031"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Audacious-2.4-logo.svg/1200px-Audacious-2.4-logo.svg.png"
+
+[player.elisa]
+app_id = "1125089232776601761"
+icon = "https://store-images.s-microsoft.com/image/apps.47778.14129707655588863.dafceb08-f3ca-4e43-974e-9776c934976c.b69f75ea-0df1-4e00-9289-d11d9ac5a0f0"
+
+[player.lollypop]
+app_id = "1124183825489068103"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lollypop_icon_2019.svg/640px-Lollypop_icon_2019.svg.png"
+allow_streaming = true
+
+[player.rhythmbox]
+app_id = "1124770552754733056"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Rhythmbox_logo_3.4.4.svg/1200px-Rhythmbox_logo_3.4.4.svg.png"
+allow_streaming = true
+
+[player.cmus]
+app_id = "1124777797722853476"
+
+[player.mpv]
+app_id = "1125075797942734928"
+icon = "https://upload.wikimedia.org/wikipedia/commons/7/73/Mpv_logo_%28official%29.png"
+allow_streaming = true
+
+[player.mpd]
+app_id = "1126153268486213672"
+icon = "https://www.musicpd.org/logo.png"
+allow_streaming = true
+
+[player."music_player_daemon_(mpdris2-rs)"]
+app_id = "1126153268486213672"
+icon = "https://www.musicpd.org/logo.png"
+allow_streaming = true
+show_icon = false
+
+
+[org.mpris.MediaPlayer2.mpd]
+app_id = "1126153268486213672"
+icon = "https://www.musicpd.org/logo.png"
+allow_streaming = true
+show_icon = true
+
+[player.music_player_daemon]
+app_id = "1126153268486213672"
+icon = "https://www.musicpd.org/logo.png"
+allow_streaming = true
+
+[player.musikcube]
+app_id = "1127548029294084147"
+icon = "https://dashboard.snapcraft.io/site_media/appmedia/2020/04/ic_launcher_square.png"
+allow_streaming = true
+
+[player.clementine]
+app_id = "1125075725473562735"
+icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYiUYLmMQwsDaNqu6eg5I4aB1vyy_uptN34eouN7XxA5eFZTAV8RISZHCsn_M6-iQc-Pw&usqp=CAU"
+allow_streaming = true
+
+[player.strawberry]
+app_id = "1126197744512536647"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Strawberry-icon-1000px.png/800px-Strawberry-icon-1000px.png"
+allow_streaming = true
+
+[player.amberol]
+app_id = "1125077658192056431"
+icon = "https://dashboard.snapcraft.io/site_media/appmedia/2022/09/io.bassi.Amberol.svg.png"
+
+[player.smplayer]
+app_id = "1125077752756834314"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/SMPlayer_icon.svg/1200px-SMPlayer_icon.svg.png"
+
+[player.spotify]
+ignore = true
+
+[player.youtube_music]
+app_id = "1125082278339559505"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/768px-Youtube_Music_icon.svg.png"
+allow_streaming = true
+
+[player.microsoft_edge]
+ignore = true
+allow_streaming = true
+
+[player.chrome]
+ignore = true
+allow_streaming = true
+
+[player.mozilla_firefox]
+ignore = true
+allow_streaming = true
+
+[player.mozilla_zen]
+ignore = true
+allow_streaming = true
+
+[player.brave]
+ignore = false
+allow_streaming = true
