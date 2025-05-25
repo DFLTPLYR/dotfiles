@@ -7,6 +7,7 @@
     theme: "/home/dfltplyr/.config/rmpc/themes/Catppucin Macchiato/theme",
     cache_dir: None,
     on_song_change: None,
+    lyrics_dir: "~/../../StorageBtw/Music",
     volume_step: 5,
     max_fps: 165,
     scrolloff: 0,
@@ -29,11 +30,11 @@
             ".":       VolumeUp,
             "<Tab>":   NextTab,
             "<S-Tab>": PreviousTab,
-            "1":       SwitchToTab("Queue"),
-            "2":       SwitchToTab("Artists"),
-            "3":       SwitchToTab("Albums"),
-            "4":       SwitchToTab("Search"),
-            "5":       SwitchToTab("Full Art"),
+            "1":       SwitchToTab("Full Art"),
+            "2":       SwitchToTab("Queue"),
+            "3":       SwitchToTab("Artists"),
+            "4":       SwitchToTab("Albums"),
+            "5":       SwitchToTab("Search"),
             "q":       Quit,
             ">":       NextTrack,
             "p":       TogglePause,
@@ -107,6 +108,13 @@
     ),
     tabs: [
         (
+        name: "Full Art",
+        pane: Split(
+            direction: Horizontal,
+            panes: [ (size: "40%", pane: Pane(AlbumArt)), (size: "60%", pane: Pane(Lyrics))],
+            ),
+        ),
+        (
             name: "Queue",
             pane: Split(
                 direction: Horizontal,
@@ -124,13 +132,6 @@
         (
             name: "Search",
             pane: Pane(Search),
-        ),
-        (
-            name: "Full Art",
-            pane: Split(
-                direction: Horizontal,
-                panes: [ (size: "40%", pane: Pane(AlbumArt)), (size: "60%", pane: Pane(Lyrics))],
-            ),
         ),
     ],
 )

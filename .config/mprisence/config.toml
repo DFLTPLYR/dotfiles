@@ -221,19 +221,6 @@ app_id = "1126153268486213672"
 icon = "https://www.musicpd.org/logo.png"
 allow_streaming = true
 
-[player."music_player_daemon_(mpdris2-rs)"]
-app_id = "1126153268486213672"
-icon = "https://www.musicpd.org/logo.png"
-allow_streaming = true
-show_icon = false
-
-
-[org.mpris.MediaPlayer2.mpd]
-app_id = "1126153268486213672"
-icon = "https://www.musicpd.org/logo.png"
-allow_streaming = true
-show_icon = true
-
 [player.music_player_daemon]
 app_id = "1126153268486213672"
 icon = "https://www.musicpd.org/logo.png"
@@ -271,19 +258,19 @@ icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_
 allow_streaming = true
 
 [player.microsoft_edge]
-ignore = true
+ignore = false
 allow_streaming = true
 
 [player.chrome]
-ignore = true
+ignore = false
 allow_streaming = true
 
 [player.mozilla_firefox]
-ignore = true
+ignore = false
 allow_streaming = true
 
 [player.mozilla_zen]
-ignore = true
+ignore = false
 allow_streaming = true
 
 [player.brave]
