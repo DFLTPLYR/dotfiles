@@ -19,13 +19,13 @@
     current_item_style: (fg: "black", bg: "blue", modifiers: "Bold"),
     borders_style: (fg: "blue"),
     highlight_border_style: (fg: "blue"),
-    symbols: (song: "S", dir: "D", marker: "M", ellipsis: "..."),
+    symbols: (song: "", dir: "", marker: "", ellipsis: " ... "),
     progress_bar: (
-        symbols: ["-", ">", " "],
-        track_style: (fg: "#1e2030"),
-        elapsed_style: (fg: "blue"),
-        thumb_style: (fg: "blue", bg: "#1e2030"),
-    ),
+            symbols: ["", "󰮯", ""],
+            track_style: (fg: "#3b4252"),
+            elapsed_style: (fg: "#81a1c1"),
+            thumb_style: (fg: "#81a1c1"),
+        ),
     scrollbar: (
         symbols: ["│", "█", "▲", "▼"],
         track_style: (),
@@ -34,10 +34,9 @@
     ),
     song_table_format: [
         (
-            prop: (kind: Property(Artist),
-                default: (kind: Text("Unknown"))
-            ),
-            width: "20%",
+                prop: (kind: Property(Artist), style: (fg: "#b7bdf8"), default: (kind: Text("Unknown"))),
+                width: "15%",
+                alignment: Left,
         ),
         (
             prop: (kind: Property(Title),
@@ -49,34 +48,43 @@
             prop: (kind: Property(Album), style: (fg: "white"),
                 default: (kind: Text("Unknown Album"), style: (fg: "white"))
             ),
-            width: "30%",
+            width: "20%",
         ),
         (
             prop: (kind: Property(Duration),
                 default: (kind: Text("-"))
             ),
-            width: "15%",
+            width: "10%",
             alignment: Right,
+        ),
+        (
+                prop: (kind: Sticker("playCount"), default: (kind: Text("0"))),
+                width: "20%",
+                alignment: Right,
+                label: "Goon Count"
         ),
     ],
     layout: Split(
         direction: Vertical,
         panes: [
             (
+                size: "4",
+                borders: "ALL",
                 pane: Pane(Header),
-                size: "2",
             ),
             (
-                pane: Pane(Tabs),
                 size: "3",
+                pane: Pane(Tabs),
             ),
             (
-                pane: Pane(TabContent),
                 size: "100%",
+                borders: "ALL",
+                pane: Pane(TabContent),
             ),
             (
+                size: "3",
+                borders: "ALL",
                 pane: Pane(ProgressBar),
-                size: "1",
             ),
         ],
     ),
@@ -144,4 +152,3 @@
         ),
     ],
 )
-
