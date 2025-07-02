@@ -98,6 +98,26 @@
             "C":       JumpToCurrent,
         },
     ),
+    cava: (
+        framerate: 165, // default 60
+        autosens: true, // default true
+        sensitivity: 100, // default 100
+        lower_cutoff_freq: 50, // not passed to cava if not provided
+        higher_cutoff_freq: 10000, // not passed to cava if not provided
+        input: (
+            method: Fifo,
+            source: "/tmp/mpd.fifo",
+            sample_rate: 44100,
+            channels: 2,
+            sample_bits: 16,
+        ),
+        smoothing: (
+            noise_reduction: 77,
+            monstercat: false,
+            waves: false,
+        ),
+        eq: []
+    ),
     search: (
         case_sensitive: false,
         mode: Contains,
@@ -130,21 +150,35 @@
                                     direction: Vertical,
                                     panes: [
                                         (
-                                            size: "60%",
-                                            borders: "BOTTOM",
+                                            size: "75%",
+                                            borders: "NONE",
                                             pane: Pane(AlbumArt),
                                         ),
                                         (
-                                            size: "40%",
-                                            borders: "NONE",
-                                            pane: Pane(Lyrics),
+                                            size: "25%",
+                                            borders: "ALL",
+                                            pane: Split(
+                                                direction: Vertical,
+                                                panes: [
+                                                (
+                                                    size: "50%",
+                                                    borders: "NONE",
+                                                    pane:Pane(Lyrics)
+                                                ),
+                                                (
+                                                    size: "50%",
+                                                    borders: "NONE",
+                                                    pane:Pane(Cava)
+                                                ),
+                                                ]
+                                            ),
                                         ),
                                     ]
                                 ),
                             ),
                             (
                                 size: "20%",
-                                borders: "NONE",
+                                borders: "ALL",
                                 pane: Pane(Queue),
                             ),
                         ]

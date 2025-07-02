@@ -164,7 +164,7 @@ min_score = 95
 #   show_icon: Show player icon in Discord (as small image)
 #   allow_streaming: Enable Discord rich presence for web-based media (browsers, streaming services)
 #   override_activity_type: Will always show this activity type regardless of media content type
-default = { ignore = true, app_id = "1126153268486213672", icon = "https://raw.githubusercontent.com/lazykern/mprisence/main/assets/icon.png", show_icon = false, allow_streaming = true }
+default = { ignore = false, app_id = "1126153268486213672", icon = "https://raw.githubusercontent.com/lazykern/mprisence/main/assets/icon.png", show_icon = false, allow_streaming = true }
 
 # ------------------
 # Example Player-Specific Settings
@@ -275,4 +275,6 @@ allow_streaming = true
 
 [player.brave]
 ignore = false
+app_id = "1125082278339559505"
+icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/768px-Youtube_Music_icon.svg.png"
 allow_streaming = true
