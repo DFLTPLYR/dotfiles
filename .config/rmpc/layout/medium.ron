@@ -6,7 +6,7 @@
     password: None,
     theme: "/home/dfltplyr/.config/rmpc/theme/medium",
     cache_dir: None,
-    on_resize: ["/home/dfltplyr/.config/rmpc/scripts/resize.sh"],
+    on_resize: ["resize-player.zsh"],
     on_song_change: ["/home/dfltplyr/.config/rmpc/scripts/onsongchange.sh"],
     lyrics_dir: "/StorageBtw/Music",
     volume_step: 5,
