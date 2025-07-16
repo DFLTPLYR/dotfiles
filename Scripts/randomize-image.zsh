@@ -7,7 +7,7 @@ random_img=$(find "$logo_dir" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*
 
 if [[ -n "$random_img" ]]; then
     cp "$random_img" "$target_logo"
-    echo "$random_img"   # ✅ return full path
+    echo "$random_img"
 else
     echo "No image found to randomize." >&2
     exit 1
