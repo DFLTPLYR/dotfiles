@@ -4,7 +4,7 @@
 exec 2>/dev/null
 
 WALLPAPER_BASE="$HOME/Pictures/wallpaper"
-ROFI_THEME="/home/dfltplyr/.local/share/rofi/themes/style_11.rasi"
+ROFI_THEME="$HOME/.local/share/rofi/themes/style_11.rasi"
 CACHE_DIR="$HOME/.cache/wallpaper-thumbs"
 THUMB_SIZE="300x300"
 
