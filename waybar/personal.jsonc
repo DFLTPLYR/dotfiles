@@ -1,0 +1,36 @@
+{
+    "layer": "top",
+    "output": ["*"],
+    "position": "top",
+    "mod": "dock",
+    "height": 10,
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "reload_style_on_change": true,
+    "include": [
+        "$XDG_CONFIG_HOME/waybar/modules/*json*",
+        "$XDG_CONFIG_HOME/waybar/includes/includes.json",
+    ],
+    "modules-left": ["group/leaf", "mpris"],
+    "group/leaf": {
+        "orientation": "inherit",
+        "modules": ["cpu", "memory", "custom/gpuinfo", "clock"],
+    },
+    "modules-center": ["group/pill#center"],
+    "group/pill#center": {
+        "modules": ["hyprland/workspaces", "custom/updates"],
+        "orientation": "inherit",
+    },
+    "modules-right": ["group/leaf-inverse#right1"],
+    "group/leaf-inverse#right1": {
+        "modules": [
+            "custom/hyde-menu",
+            "pulseaudio",
+            "network",
+            "custom/swaync",
+            "custom/power",
+        ],
+        "orientation": "inherit",
+    },
+}

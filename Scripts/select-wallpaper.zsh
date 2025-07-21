@@ -12,7 +12,7 @@ THUMB_SIZE="300x300"
 monitors=$(hyprctl -j monitors | jq -r '.[] | "\(.name) [\(.width)x\(.height)@\(.refreshRate)Hz]"')
 
 # Show selection menu (silencing all warnings)
-chosen=$(echo "$monitors" | rofi -dmenu -p "Select monitor" -i -theme $ROFI_THEME)
+chosen=$(echo "$monitors" | rofi -dmenu -p "Select monitor" -i -theme)
 
 # Exit if nothing selected
 [[ -z "$chosen" ]] && exit 0
@@ -45,10 +45,31 @@ wallpapers=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" 
 # Generate image list with preview capability
 chosen_wallpaper=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | while read img; do
   echo -e "$(basename "$img")\x00icon\x1f$img"
-done | rofi -dmenu -p "Select wallpaper" -i -theme $ROFI_THEME -show-icons)
+done | rofi -dmenu -p "Select wallpaper" -i)
 
 # Set wallpaper
 swww img --outputs "$monitor_name" "$WALLPAPER_DIR/$chosen_wallpaper" --transition-type grow --transition-duration 0.5
+
+wallpaper=$(swww query)
+
+typeset -a wallpapers
+
+while IFS= read -r line; do
+  if [[ "$line" == *"image:"* ]]; then
+    wallpaper="${line##*image: }"
+    wallpapers+=("$wallpaper")
+  fi
+done < <(swww query)
+
+wp1="${wallpapers[1]}"
+wp2="${wallpapers[2]}"
+
+temp_wall="/tmp/combined_wallpaper_$$.png"
+convert +append "$wp1" "$wp2" "$temp_wall"
+
+wal -i "$temp_wall"
+
+rm -f "$temp_wall"
 
 # Exit
 [[ -z "$chosen_wallpaper" ]] && exit 0
