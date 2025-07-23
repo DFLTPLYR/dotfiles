@@ -1,12 +1,58 @@
 #!/usr/bin/env bash
 
-# Clean way to suppress fontconfig warnings
 exec 2>/dev/null
 
 WALLPAPER_BASE="$HOME/Pictures/wallpaper"
-ROFI_THEME="$HOME/.local/share/rofi/themes/style_11.rasi"
 CACHE_DIR="$HOME/.cache/wallpaper-thumbs"
 THUMB_SIZE="300x300"
+
+# Array of wallpapers
+wallpapers=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort)
+
+exec 2>/dev/null
+
+regen=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --regen)
+      regen=true
+      ;;
+  esac
+done
+
+if $regen; then
+  # Only run this block when --regen is passed
+  wallpaper=$(swww query)
+
+  typeset -a wallpapers
+
+  # Loop over the swww query
+  while IFS= read -r line; do
+    if [[ "$line" == *"image:"* ]]; then
+      wallpaper="${line##*image: }"
+      wallpapers+=("$wallpaper")
+    fi
+  done < <(swww query)
+
+  wp1="${wallpapers[1]}"
+  wp2="${wallpapers[2]}"
+
+  # Get Temp wallpaper
+  temp_wall="/tmp/combined_wallpaper_$$.png"
+  convert +append "$wp1" "$wp2" "$temp_wall"
+
+  # Generate colors
+  wal -i "$temp_wall"
+
+  # delete temp
+  rm -f "$temp_wall"
+
+  pkill swaync && nohup swaync > /dev/null 2>&1 &
+  pkill waybar && nohup waybar > /dev/null 2>&1 &
+
+  exit 0
+fi
 
 # Get monitor info in clean format
 monitors=$(hyprctl -j monitors | jq -r '.[] | "\(.name) [\(.width)x\(.height)@\(.refreshRate)Hz]"')
@@ -39,9 +85,6 @@ case $current_transform in
         ;;
 esac
 
-# Array of wallpapers
-wallpapers=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort)
-
 # Generate image list with preview capability
 chosen_wallpaper=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | while read img; do
   echo -e "$(basename "$img")\x00icon\x1f$img"
@@ -49,27 +92,6 @@ done | rofi -dmenu -p "Select wallpaper" -i)
 
 # Set wallpaper
 swww img --outputs "$monitor_name" "$WALLPAPER_DIR/$chosen_wallpaper" --transition-type grow --transition-duration 0.5
-
-wallpaper=$(swww query)
-
-typeset -a wallpapers
-
-while IFS= read -r line; do
-  if [[ "$line" == *"image:"* ]]; then
-    wallpaper="${line##*image: }"
-    wallpapers+=("$wallpaper")
-  fi
-done < <(swww query)
-
-wp1="${wallpapers[1]}"
-wp2="${wallpapers[2]}"
-
-temp_wall="/tmp/combined_wallpaper_$$.png"
-convert +append "$wp1" "$wp2" "$temp_wall"
-
-wal -i "$temp_wall"
-
-rm -f "$temp_wall"
 
 # Exit
 [[ -z "$chosen_wallpaper" ]] && exit 0
