@@ -1,28 +1,20 @@
-@import "theme.css";
+@import "/home/dfltplyr/.config/waybar/colors-waybar.css";
 
-@import "./includes/border-radius.css";
-@import "./includes/global.css";
-
-window#waybar {
-    background: transparent;
+* {
+    border-radius: 0em;
+    padding: 2px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 10px;
 }
 
-#leaf,
-#leaf-inverse,
-#leaf-up,
-#leaf-down,
-#leaf-right,
-#leaf-left,
-#pill,
-#pill-right,
-#pill-left,
-#pill-down,
-#pill-up,
-#pill-in,
-#pill-out {
-    background-color: @main-bg;
+window#waybar {
+    background: alpha(@background, 0.7);
+}
+
+#pill {
+    background-color: @background;
     border-style: solid;
-    border-color: @main-bg;
+    border-color: @background;
 }
 
 #workspaces button {
@@ -35,13 +27,13 @@ window#waybar {
     padding-left: 0.3em;
     padding-right: 0.3em;
     margin-right: 0em;
-    color: @main-fg;
+    color: alpha(@foreground, 0.9);
     animation: ws_normal 20s ease-in-out 1;
 }
 
 #workspaces button.active {
-    background: @wb-act-bg;
-    color: @wb-act-fg;
+    background: @color7;
+    color: @color0;
     margin-left: 0.3em;
     padding-left: 1.2em;
     padding-right: 1.2em;
@@ -51,8 +43,8 @@ window#waybar {
 }
 
 #workspaces button:hover {
-    background: @wb-hvr-bg;
-    color: @wb-hvr-fg;
+    background: alpha(@color7, 0.5);
+    color: @color0;
     animation: ws_hover 20s ease-in-out 1;
     transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
@@ -67,13 +59,13 @@ window#waybar {
     padding-left: 0.3em;
     padding-right: 0.3em;
     margin-right: 0em;
-    color: @wb-color;
+    color: @color1;
     animation: tb_normal 20s ease-in-out 1;
 }
 
 #taskbar button.active {
-    background: @wb-act-bg;
-    color: @wb-act-color;
+    background: @color7;
+    color: @color6;
     margin-left: 0.3em;
     padding-left: 1.2em;
     padding-right: 1.2em;
@@ -83,8 +75,8 @@ window#waybar {
 }
 
 #taskbar button:hover {
-    background: @wb-hvr-bg;
-    color: @wb-hvr-color;
+    background: alpha(@color1, 0.5);
+    color: @color6;
     animation: tb_hover 20s ease-in-out 1;
     transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
@@ -122,61 +114,13 @@ window#waybar.right label.module {
     margin-bottom: 0.2em;
 }
 
-window#waybar.right #leaf,
-window#waybar.left #leaf,
-window#waybar.right #leaf-inverse,
-window#waybar.left #leaf-inverse,
-window#waybar.right #leaf-up,
-window#waybar.left #leaf-up,
-window#waybar.right #leaf-down,
-window#waybar.left #leaf-down,
-window#waybar.right #leaf-right,
-window#waybar.left #leaf-right,
-window#waybar.right #leaf-left,
-window#waybar.left #leaf-left,
 window#waybar.right #pill,
-window#waybar.left #pill,
-window#waybar.right #pill-right,
-window#waybar.left #pill-right,
-window#waybar.right #pill-left,
-window#waybar.left #pill-left,
-window#waybar.right #pill-down,
-window#waybar.left #pill-down,
-window#waybar.right #pill-up,
-window#waybar.left #pill-up,
-window#waybar.right #pill-in,
-window#waybar.left #pill-in,
-window#waybar.right #pill-out,
-window#waybar.left #pill-out {
+window#waybar.left #pill {
     padding: 0em;
 }
 
-window#waybar.bottom #leaf,
-window#waybar.bottom #leaf-inverse,
-window#waybar.bottom #leaf-up,
-window#waybar.bottom #leaf-down,
-window#waybar.bottom #leaf-right,
-window#waybar.bottom #leaf-left,
 window#waybar.bottom #pill,
-window#waybar.bottom #pill-right,
-window#waybar.bottom #pill-left,
-window#waybar.bottom #pill-down,
-window#waybar.bottom #pill-up,
-window#waybar.bottom #pill-in,
-window#waybar.bottom #pill-out,
-window#waybar.top #leaf,
-window#waybar.top #leaf-inverse,
-window#waybar.top #leaf-up,
-window#waybar.top #leaf-down,
-window#waybar.top #leaf-right,
-window#waybar.top #leaf-left,
-window#waybar.top #pill,
-window#waybar.top #pill-right,
-window#waybar.top #pill-left,
-window#waybar.top #pill-down,
-window#waybar.top #pill-up,
-window#waybar.top #pill-in,
-window#waybar.top #pill-out {
+window#waybar.top #pill {
     padding: 0em 1em;
 }
 
@@ -197,10 +141,10 @@ window#waybar.right button {
 
 tooltip {
     /* all: unset; */
-    background: @main-bg;
-    color: @main-fg;
+    background: @background;
+    color: @foreground;
     border-width: 0.1pt;
-    border-color: @main-fg;
+    border-color: @foreground;
 }
 
 #tray menu * {
@@ -213,4 +157,30 @@ tooltip {
 
 #language {
     min-width: 1.11em;
+}
+
+window#waybar.bottom #pill menuitem,
+window#waybar.bottom #pill menu,
+window#waybar.bottom #pill tooltip,
+window#waybar.bottom #pill,
+window#waybar.bottom #pill button,
+window#waybar.top #pill menuitem,
+window#waybar.top #pill menu,
+window#waybar.top #pill tooltip,
+window#waybar.top #pill,
+window#waybar.top #pill button {
+    border-radius: 10pt 10pt 10pt 10pt;
+}
+
+window#waybar.left #pill menuitem,
+window#waybar.left #pill menu,
+window#waybar.left #pill tooltip,
+window#waybar.left #pill,
+window#waybar.left #pill button,
+window#waybar.right #pill menuitem,
+window#waybar.right #pill menu,
+window#waybar.right #pill tooltip,
+window#waybar.right #pill,
+window#waybar.right #pill button {
+    border-radius: 10pt 10pt 10pt 10pt;
 }

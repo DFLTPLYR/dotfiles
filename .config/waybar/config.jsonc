@@ -19,12 +19,12 @@
     },
     "modules-center": ["group/pill#center"],
     "group/pill#center": {
-        "modules": ["hyprland/workspaces"],
+        "modules": ["hyprland/workspaces", "custom/swaync"],
         "orientation": "inherit",
     },
     "modules-right": ["group/pill#right"],
     "group/pill#right": {
-        "modules": ["network", "custom/swaync", "custom/power"],
+        "modules": ["custom/updates", "network", "custom/power"],
         "orientation": "inherit",
     },
 }

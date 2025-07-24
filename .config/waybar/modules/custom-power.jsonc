@@ -1,19 +1,8 @@
 {
     "custom/power": {
-        "format": "{0}",
-        "rotate": 0,
+        "format": "",
         "tooltip": true,
         "tooltip-format": " Logout menu",
-        "menu": "on-click-left",
-        "menu-file": "${HYDE_WAYBAR_MENU_DIR:-$XDG_DATA_HOME/waybar/menus}/power.xml",
-        "menu-actions": {
-            "shutdown-now": "shutdown now",
-            "shutdown-wait": "systemctl poweroff",
-            "reboot-now": "systemctl reboot",
-            "reboot-firmware": "systemctl reboot --firmware-setup",
-            "suspend": "systemctl suspend",
-            "hibernate": "systemctl hibernate",
-        },
-        "interval": 86400,
+        "on-click": "wlogout",
     },
 }

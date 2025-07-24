@@ -3,9 +3,8 @@
 exec 2>/dev/null
 
 WALLPAPER_BASE="$HOME/Pictures/wallpaper"
-CACHE_DIR="$HOME/.cache/wallpaper-thumbs"
-THUMB_SIZE="300x300"
 
+rofi_monitor_theme="$HOME/.config/rofi/themes/config-monitor.rasi"
 # Array of wallpapers
 wallpapers=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort)
 
@@ -43,7 +42,7 @@ if $regen; then
   convert +append "$wp1" "$wp2" "$temp_wall"
 
   # Generate colors
-  wal -i "$temp_wall"
+  wallust run "$temp_wall"
 
   # delete temp
   rm -f "$temp_wall"
@@ -55,10 +54,11 @@ if $regen; then
 fi
 
 # Get monitor info in clean format
-monitors=$(hyprctl -j monitors | jq -r '.[] | "\(.name) [\(.width)x\(.height)@\(.refreshRate)Hz]"')
+monitors=$(hyprctl -j monitors | jq -r '.[].name')
+
 
 # Show selection menu (silencing all warnings)
-chosen=$(echo "$monitors" | rofi -dmenu -p "Select monitor" -i -theme)
+chosen=$(echo "$monitors" | rofi -dmenu -p "Select monitor" -i)
 
 # Exit if nothing selected
 [[ -z "$chosen" ]] && exit 0
@@ -74,21 +74,24 @@ case $current_transform in
     0|2)
         orientation="landscape"
         WALLPAPER_DIR="$WALLPAPER_BASE/landscape"
+        ROFI_THEME="$HOME/.config/rofi/themes/config-wallpaper.rasi"
         ;;
     1|3)
         orientation="portrait"
         WALLPAPER_DIR="$WALLPAPER_BASE/portrait"
+        ROFI_THEME="$HOME/.config/rofi/themes/config-wallpaper.rasi"
         ;;
     *)
         orientation="unknown"
         WALLPAPER_DIR="$WALLPAPER_BASE"
+        ROFI_THEME="$HOME/.config/rofi/themes/config-wallpaper.rasi"
         ;;
 esac
 
 # Generate image list with preview capability
 chosen_wallpaper=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | while read img; do
   echo -e "$(basename "$img")\x00icon\x1f$img"
-done | rofi -dmenu -p "Select wallpaper" -i)
+done | rofi -dmenu -p "Select wallpaper" -i -config $ROFI_THEME)
 
 # Set wallpaper
 swww img --outputs "$monitor_name" "$WALLPAPER_DIR/$chosen_wallpaper" --transition-type grow --transition-duration 0.5
