@@ -38,14 +38,16 @@ if $regen; then
   wp2="${wallpapers[2]}"
 
   # Get Temp wallpaper
-  temp_wall="/tmp/combined_wallpaper_$$.png"
-  convert +append "$wp1" "$wp2" "$temp_wall"
+  temp_wall="/tmp/combined_wallpaper.png"
+  convert "$wp1" -resize x1080 -gravity center -extent x1080 /tmp/wp1.png
+  convert "$wp2" -resize x1080 -gravity center -extent x1080 /tmp/wp2.png
+  convert -background none +append /tmp/wp1.png /tmp/wp2.png "$temp_wall"
 
   # Generate colors
   wallust run "$temp_wall"
 
   # delete temp
-  rm -f "$temp_wall"
+  # rm -f "$temp_wall"
 
   pkill swaync && nohup swaync > /dev/null 2>&1 &
   pkill waybar && nohup waybar > /dev/null 2>&1 &
