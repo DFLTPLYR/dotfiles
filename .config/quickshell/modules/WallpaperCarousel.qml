@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Hyprland
-
+import Quickshell.Wayland
 import qs.modules.components.Wallpaper
 import Quickshell.Widgets
 import qs
@@ -93,9 +93,10 @@ PanelWindow {
                 y: 10
                 height: 40
                 spacing: 10
+
                 Text {
                     text: "Search:"
-                    color: "white"
+                    color: Colors.color15
                     font.pixelSize: 24
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -103,7 +104,7 @@ PanelWindow {
                 Rectangle {
                     id: inputBox
                     radius: 6
-                    color: "#222"
+                    color: Colors.color0
                     border.color: Colors.color14
                     border.width: 1
                     height: parent.height
@@ -114,12 +115,11 @@ PanelWindow {
                         anchors.fill: parent
                         anchors.margins: 8
                         font.pixelSize: 16
-                        color: "white"
+                        color: Colors.color15
                         cursorVisible: true
                         font.capitalization: Font.AllLowercase
                         clip: true
 
-                        text: morphBox.userInput
                         onTextChanged: morphBox.wallpaperSearch = text.toLowerCase()
 
                         Keys.onPressed: event => {
@@ -155,6 +155,12 @@ PanelWindow {
         target: GlobalState
         function onShowWallpaperCarouselSignal(value, monitorName) {
             shouldBeVisible = (monitorName === screen.name) ? value : false;
+        }
+    }
+
+    Component.onCompleted: {
+        if (this.WlrLayershell != null) {
+            this.WlrLayershell.layer = WlrLayer.Overlay;
         }
     }
 }

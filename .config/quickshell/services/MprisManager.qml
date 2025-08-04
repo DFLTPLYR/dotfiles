@@ -15,6 +15,7 @@ import Quickshell.Services.Mpris
 */
 Singleton {
     id: root
+
     property var availablePlayers: Mpris?.players
     property MprisPlayer trackedPlayer: null
     property MprisPlayer activePlayer: trackedPlayer ?? Mpris?.players?.values[0] ?? null

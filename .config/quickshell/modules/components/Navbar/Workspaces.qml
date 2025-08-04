@@ -53,7 +53,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: romanNumber(modelData.id - 1)
+                        text: kanjiNumber(modelData.id - 1)
                         color: monitorIndicator.hovered ? Colors.color2 : (modelData.active && modelData.focused) ? Colors.color14 : Colors.color2
                         font.pixelSize: Appearance.fontsize
                         // Animate the fill color
