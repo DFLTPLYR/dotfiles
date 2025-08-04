@@ -38,13 +38,13 @@ case "$1" in
     CURRENT=$(get_volume)
     NEW=$((CURRENT + ${STEP%\%}))
     set_volume "$(clamp_volume "$NEW")"
-    send_notification
+    # send_notification
     ;;
   --dec)
     CURRENT=$(get_volume)
     NEW=$((CURRENT - ${STEP%\%}))
     set_volume "$(clamp_volume "$NEW")"
-    send_notification
+    # send_notification
     ;;
   *)
     echo "Usage: $0 --inc | --dec"
