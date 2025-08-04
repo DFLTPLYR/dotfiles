@@ -29,12 +29,15 @@ Column {
             color: "transparent"
 
             Image {
-                anchors.fill: parent
                 source: MprisManager.activePlayer ? MprisManager.activePlayer.trackArtUrl : null
                 fillMode: Image.PreserveAspectCrop
                 cache: true
                 smooth: true
                 mipmap: true
+                width: parent.width
+                height: parent.height
+                sourceSize.width: width
+                sourceSize.height: height
             }
 
             Canvas {
@@ -110,6 +113,7 @@ Column {
                 source: Assets.iconPaths.play
                 width: 48
                 height: 48
+
                 onActivationChanged: MprisManager.previous()
             }
 

@@ -29,16 +29,29 @@ Item {
 
     // WallpaperShortcut
     GlobalShortcut {
-        id: debugKeybind
-        name: "toggleDebug"
-        description: "Show Wallpaper Carousel to the current monitor"
+        id: resourceDashboard
+        name: "showResourceBoard"
+        description: "Show Resource Dashboard"
     }
 
     Connections {
-        target: debugKeybind
+        target: resourceDashboard
         function onPressed() {
-            // GlobalState.toggleMpris();
             GlobalState.toggleDrawer("mpris");
+        }
+    }
+
+    // App Menu
+    GlobalShortcut {
+        id: appMenu
+        name: "showAppMenu"
+        description: "Show Resource Dashboard"
+    }
+
+    Connections {
+        target: appMenu
+        function onPressed() {
+            GlobalState.toggleDrawer("appMenu");
         }
     }
 }

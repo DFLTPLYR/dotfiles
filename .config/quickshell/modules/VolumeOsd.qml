@@ -42,7 +42,7 @@ Scope {
         active: root.shouldShowOsd
         component: PanelWindow {
             id: rootWindow
-            WlrLayershell.layer: WlrLayer.Overlay
+
             implicitWidth: screen.width
             implicitHeight: screen.height
             color: "transparent"
@@ -142,6 +142,12 @@ Scope {
                             x: volumeSlider.visualPosition * (volumeSlider.width - width)
                         }
                     }
+                }
+            }
+
+            Component.onCompleted: {
+                if (this.WlrLayershell != null) {
+                    this.WlrLayershell.layer = WlrLayer.Overlay;
                 }
             }
         }

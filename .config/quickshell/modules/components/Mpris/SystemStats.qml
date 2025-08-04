@@ -55,8 +55,10 @@ Rectangle {
 
                     Image {
                         anchors.centerIn: parent
-                        width: 32
-                        height: 32
+                        width: 64
+                        height: 64
+                        sourceSize.width: width
+                        sourceSize.height: height
                         source: Assets.iconPaths.cpu
                         cache: true
                         smooth: true
@@ -100,8 +102,10 @@ Rectangle {
 
                     Image {
                         anchors.centerIn: parent
-                        width: 32
-                        height: 32
+                        width: 64
+                        height: 64
+                        sourceSize.width: width
+                        sourceSize.height: height
                         source: Assets.iconPaths.gpu
                         cache: true
                         smooth: true
@@ -146,8 +150,10 @@ Rectangle {
 
                     Image {
                         anchors.centerIn: parent
-                        width: 32
-                        height: 32
+                        width: 64
+                        height: 64
+                        sourceSize.width: width
+                        sourceSize.height: height
                         source: Assets.iconPaths.network
                         cache: true
                         smooth: true

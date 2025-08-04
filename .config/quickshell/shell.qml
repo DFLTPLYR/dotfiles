@@ -27,7 +27,7 @@ ShellRoot {
                 id: screenRoot
                 property var modelData
                 screen: modelData
-                WlrLayershell.layer: WlrLayer.Top
+
                 color: "transparent"
                 implicitHeight: 42
 
@@ -45,6 +45,11 @@ ShellRoot {
                 }
 
                 Navbar {}
+
+                LazyLoader {
+                    active: persistStates.showAppMenu
+                    component: AppMenu {}
+                }
 
                 LazyLoader {
                     active: persistStates.showMpris
@@ -93,6 +98,12 @@ ShellRoot {
                         }
                     }
                 }
+
+                Component.onCompleted: {
+                    if (this.WlrLayershell != null) {
+                        this.WlrLayershell.layer = WlrLayer.Top;
+                    }
+                }
             }
         }
     }
@@ -102,92 +113,6 @@ ShellRoot {
     VolumeOsd {}
 
     // Component.onCompleted: HardwareStats.updateTimer.start()
-    // PanelWindow {
-    //     id: window
-    //     width: 500
-    //     height: 240
-    //     visible: false
-    //     color: "transparent"
-
-    //     // Visual container for shape dimensions
-    //     Item {
-    //         id: wrapper
-    //         width: parent.width
-    //         height: parent.height
-    //     }
-
-    //     Shape {
-    //         anchors.fill: wrapper
-
-    //         ShapePath {
-    //             id: root
-
-    //             // All values defined locally
-    //             readonly property real rounding: 40
-    //             readonly property bool flatten: wrapper.height < rounding * 2
-    //             readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
-
-    //             strokeWidth: -1
-    //             fillColor: "#ccccff" // Instead of Colours.palette.m3surface
-
-    //             // Top-left outward arc
-    //             PathArc {
-    //                 relativeX: root.rounding
-    //                 relativeY: root.roundingY
-    //                 radiusX: root.rounding
-    //                 radiusY: root.roundingY
-    //             }
-
-    //             PathLine {
-    //                 relativeX: 0
-    //                 relativeY: wrapper.height - root.roundingY * 2
-    //             }
-
-    //             // Bottom-left outward arc
-    //             PathArc {
-    //                 relativeX: root.rounding
-    //                 relativeY: root.roundingY
-    //                 radiusX: root.rounding
-    //                 radiusY: root.roundingY
-    //                 direction: PathArc.Counterclockwise
-    //             }
-
-    //             PathLine {
-    //                 relativeX: wrapper.width - root.rounding * 4
-    //                 relativeY: 0
-    //             }
-
-    //             // Bottom-right outward arc
-    //             PathArc {
-    //                 relativeX: root.rounding
-    //                 relativeY: -root.roundingY
-    //                 radiusX: root.rounding
-    //                 radiusY: root.roundingY
-    //                 direction: PathArc.Counterclockwise
-    //             }
-
-    //             PathLine {
-    //                 relativeX: 0
-    //                 relativeY: -(wrapper.height - root.roundingY * 2)
-    //             }
-
-    //             // Top-right outward arc
-    //             PathArc {
-    //                 relativeX: root.rounding
-    //                 relativeY: -root.roundingY
-    //                 radiusX: root.rounding
-    //                 radiusY: root.roundingY
-    //             }
-
-    //             Behavior on fillColor {
-    //                 ColorAnimation {
-    //                     duration: 250
-    //                     easing.type: Easing.InOutQuad
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     // starting singletons
     Component.onCompleted: {
@@ -195,5 +120,6 @@ ShellRoot {
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
+        AppManager;
     }
 }
