@@ -10,6 +10,15 @@ Singleton {
     property string weatherInfo: ""
     property string weatherCondition: ""
 
+    property var weatherIcons: ({
+            cloud: '\uf1c0',
+            thunder: '\uf0e7',
+            rainy: '\uf73d',
+            wet: '\uf0e9',
+            sunny: '\uf185',
+            windy: '\uf72e'
+        })
+
     Process {
         id: weatherProc
         running: true
@@ -31,9 +40,8 @@ Singleton {
                     condition = "rainy";
                 } else if (icon.includes("☁") || lowerIcon.includes("cloud")) {
                     condition = "cloudy";
-                } else if (icon.includes("❄") || lowerIcon.includes("snow")) {
-                    condition = "snowy";
                 }
+
                 weatherCondition = condition;
             }
         }

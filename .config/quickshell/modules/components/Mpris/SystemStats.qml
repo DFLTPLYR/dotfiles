@@ -39,6 +39,7 @@ Rectangle {
 
         property bool isPortrait: screen.height > screen.width
 
+        // CPU
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -81,6 +82,7 @@ Rectangle {
             }
         }
 
+        // GPU
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -124,6 +126,7 @@ Rectangle {
             }
         }
 
+        // Network
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -163,6 +166,87 @@ Rectangle {
                 }
             }
         }
+
+        // Storage
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 20
+                Layout.preferredWidth: 150
+
+                Item {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredHeight: parent.height * 0.4
+                    Layout.fillWidth: true
+
+                    CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf1c0"
+                        size: 64
+                        color: Colors.color9
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 10
+                    Layout.alignment: Qt.AlignHCenter
+
+                    Text {
+                        text: `${formatSpeed(HardwareStats.downloadSpeed)}`
+                        color: Colors.color10
+                        font.pixelSize: 12
+                    }
+                    Text {
+                        text: `${formatSpeed(HardwareStats.uploadSpeed)}`
+                        color: Colors.color10
+                        font.pixelSize: 12
+                    }
+                }
+            }
+        }
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 20
+                Layout.preferredWidth: 150
+
+                Item {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredHeight: parent.height * 0.4
+                    Layout.fillWidth: true
+
+                    CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf1eb"
+                        size: 64
+                        color: Colors.color9
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 10
+                    Layout.alignment: Qt.AlignHCenter
+
+                    Text {
+                        text: `${formatSpeed(HardwareStats.downloadSpeed)}`
+                        color: Colors.color10
+                        font.pixelSize: 12
+                    }
+                    Text {
+                        text: `${formatSpeed(HardwareStats.uploadSpeed)}`
+                        color: Colors.color10
+                        font.pixelSize: 12
+                    }
+                }
+            }
+        }
+
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
