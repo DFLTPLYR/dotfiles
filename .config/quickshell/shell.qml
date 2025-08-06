@@ -4,6 +4,7 @@
 
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
+
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -14,6 +15,7 @@ import Quickshell.Wayland
 // component
 import qs.modules
 import qs.services
+import qs.assets
 
 ShellRoot {
     // Shortcut
@@ -27,13 +29,13 @@ ShellRoot {
                 id: screenRoot
                 property var modelData
                 screen: modelData
-
+                focusable: persistStates.showAppMenu || persistStates.showMpris || persistStates.showWallpaperCarousel
                 color: "transparent"
                 implicitHeight: 42
 
                 margins {
-                    left: screen.width / (screen.width * 0.25)
-                    right: screen.width / (screen.width * 0.25)
+                    left: 10
+                    right: 10
                     top: 10
                     bottom: 10
                 }
@@ -111,8 +113,6 @@ ShellRoot {
     Shortcuts {}
 
     VolumeOsd {}
-
-    // Component.onCompleted: HardwareStats.updateTimer.start()
 
     // starting singletons
     Component.onCompleted: {

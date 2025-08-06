@@ -146,6 +146,8 @@ ListView {
         height: flick.delegateHeight
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
+        property bool isFocused: ListView.isCurrentItem
+
         Rectangle {
             id: container
             anchors.fill: parent
@@ -153,7 +155,6 @@ ListView {
             radius: 12
             clip: true
 
-            property bool isFocused: ListView.isCurrentItem
             property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
             property color targetColor: isFocused || itemMouse.hovered ? Colors.color4 : Colors.color2
 

@@ -4,6 +4,7 @@ import QtQuick.Shapes
 import QtQuick.Controls
 import Quickshell.Widgets
 import Quickshell.Hyprland
+import Quickshell.Wayland
 
 import qs
 import qs.services
@@ -11,7 +12,7 @@ import qs.modules.components.commons
 import qs.modules.components.AppMenu
 
 PopupWindow {
-    id: resourceSection
+    id: appMenu
 
     property bool isPortrait: screen.height > screen.width
 
@@ -54,6 +55,7 @@ PopupWindow {
 
     ClippingRectangle {
         id: playerBackground
+
         width: isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2.5
         height: isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4
 
@@ -68,6 +70,7 @@ PopupWindow {
         Shape {
             anchors.fill: parent
             scale: -1 * animProgress
+
             ShapePath {
                 id: root
 
@@ -137,33 +140,61 @@ PopupWindow {
             }
         }
 
-        Row {
+        Column {
             id: mainContent
             width: parent.width - 80
             height: parent.height - 20
             anchors.centerIn: parent
-            spacing: 0
+            spacing: 10
+
+            property string searchValue: ""
+
+            Rectangle {
+                width: parent.width
+                height: parent.height / 10
+                color: 'transparent'
+                radius: 20
+
+                TextField {
+                    id: searchField
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    placeholderText: "Search..."
+                    text: mainContent.searchValue
+
+                    color: Colors.color15
+
+                    background: Rectangle {
+                        color: Colors.color0
+                        radius: parent.parent.radius
+                    }
+
+                    onTextChanged: mainContent.searchValue = text
+                }
+            }
 
             ClippingRectangle {
-                anchors.fill: parent
+                width: parent.width
+                height: parent.height - 60
                 color: 'transparent'
-                topLeftRadius: 20
-                topRightRadius: 20
-                bottomLeftRadius: 20
-                bottomRightRadius: 20
+                topLeftRadius: 5
+                topRightRadius: 5
+                bottomLeftRadius: 5
+                bottomRightRadius: 5
 
-                ListContent {}
+                AppListView {
+                    searchText: mainContent.searchValue
+                }
             }
         }
     }
 
-    // MouseArea {
-    //     anchors.fill: parent
-    //     onClicked: {
-    //         GlobalState.toggleDrawer("appMenu");
-    //     }
-    //     hoverEnabled: true
-    // }
+    Component.onCompleted: {
+        if (this.WlrLayershell != null) {
+            this.WlrLayershell.layer = WlrLayer.Overlay;
+            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+        }
+    }
 
     Connections {
         target: GlobalState

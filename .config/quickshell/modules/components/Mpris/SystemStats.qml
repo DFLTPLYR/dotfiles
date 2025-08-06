@@ -6,15 +6,15 @@ import QtQuick.Shapes
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Services.Mpris
+import QtQuick.Effects
 
 // quickshell
+import qs
 import qs.services
-import qs.modules.components.commons
 import qs.animations
 import qs.modules
 import qs.assets
-import qs
-import QtQuick.Effects
+import qs.modules.components.commons
 
 Rectangle {
     id: layoutWrapper
@@ -53,16 +53,11 @@ Rectangle {
                     Layout.preferredHeight: parent.height * 0.4
                     Layout.fillWidth: true
 
-                    Image {
+                    CustomIcon {
                         anchors.centerIn: parent
-                        width: 64
-                        height: 64
-                        sourceSize.width: width
-                        sourceSize.height: height
-                        source: Assets.iconPaths.cpu
-                        cache: true
-                        smooth: true
-                        mipmap: true
+                        name: "\uf2db"
+                        size: 64
+                        color: Colors.color9
                     }
                 }
 
@@ -100,16 +95,11 @@ Rectangle {
                     Layout.preferredHeight: parent.height * 0.4
                     Layout.fillWidth: true
 
-                    Image {
+                    CustomIcon {
                         anchors.centerIn: parent
-                        width: 64
-                        height: 64
-                        sourceSize.width: width
-                        sourceSize.height: height
-                        source: Assets.iconPaths.gpu
-                        cache: true
-                        smooth: true
-                        mipmap: true
+                        name: "\uf013"
+                        size: 64
+                        color: Colors.color9
                     }
                 }
 
@@ -148,16 +138,11 @@ Rectangle {
                     Layout.preferredHeight: parent.height * 0.4
                     Layout.fillWidth: true
 
-                    Image {
+                    CustomIcon {
                         anchors.centerIn: parent
-                        width: 64
-                        height: 64
-                        sourceSize.width: width
-                        sourceSize.height: height
-                        source: Assets.iconPaths.network
-                        cache: true
-                        smooth: true
-                        mipmap: true
+                        name: "\uf1eb"
+                        size: 64
+                        color: Colors.color9
                     }
                 }
 

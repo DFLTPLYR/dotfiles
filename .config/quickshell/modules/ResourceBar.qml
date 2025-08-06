@@ -138,7 +138,7 @@ PopupWindow {
 
         Row {
             id: mainContent
-            width: parent.width - 40
+            width: parent.width - 120
             height: parent.height - 40
             anchors.centerIn: parent
             spacing: 0
