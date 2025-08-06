@@ -17,11 +17,11 @@ PopupWindow {
     anchor.adjustment: PopupAdjustment.Slide
     anchor.window: screenRoot
 
-    anchor.rect.x: parentWindow.width / 2 - width / 2
-    anchor.rect.y: parentWindow.height
+    anchor.rect.x: Math.round(parentWindow.width / 2 - width / 2)
+    anchor.rect.y: Math.round(parentWindow.height)
 
-    implicitHeight: playerBackground.height
-    implicitWidth: playerBackground.width
+    implicitHeight: Math.floor(playerBackground.height)
+    implicitWidth: Math.floor(playerBackground.width)
 
     mask: Region {
         item: playerBackground
@@ -51,8 +51,8 @@ PopupWindow {
 
     ClippingRectangle {
         id: playerBackground
-        width: isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2
-        height: isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4
+        width: Math.floor(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2)
+        height: Math.floor(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
 
         color: 'transparent'
         opacity: animProgress
@@ -138,16 +138,16 @@ PopupWindow {
 
         Row {
             id: mainContent
-            width: parent.width - 120
-            height: parent.height - 40
+            width: Math.floor(parent.width - 120)
+            height: Math.floor(parent.height - 40)
             anchors.centerIn: parent
             spacing: 0
 
             ClippingRectangle {
                 color: 'transparent'
 
-                width: mainContent.width * 0.55
-                height: mainContent.height
+                width: Math.floor(mainContent.width * 0.55)
+                height: Math.floor(mainContent.height)
 
                 MainContent {}
             }
@@ -155,8 +155,8 @@ PopupWindow {
             ClippingRectangle {
                 id: testing
                 color: 'transparent'
-                width: mainContent.width * 0.45 - 40
-                height: mainContent.height
+                width: Math.floor(mainContent.width * 0.45 - 40)
+                height: Math.floor(mainContent.height)
 
                 SystemStats {}
             }

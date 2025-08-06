@@ -11,6 +11,11 @@ Singleton {
 
     property var desktopApp: []
 
+    Process {
+        id: openAppInTerminal
+        running: false
+    }
+
     Component.onCompleted: {
         const Applications = DesktopEntries.applications.values;
 
@@ -28,7 +33,14 @@ Singleton {
                 name: entry.name,
                 icon: resolved,
                 exec: entry.execString,
-                execFunc: () => entry.execute(),
+                execFunc: () => {
+                    if (entry.runInTerminal) {
+                        openAppInTerminal.command = ["kitty", "-e", "zsh", "-c", entry.execString];
+                        openAppInTerminal.running = true;
+                    } else {
+                        entry.execute(); // GUI app
+                    }
+                },
                 categories: entry.categories,
                 comment: entry.comment,
                 ref: entry

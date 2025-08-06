@@ -3,8 +3,8 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 
 // Adjust this to make the shell smaller or larger
-//@ pragma Env QT_SCALE_FACTOR=1
-
+// @ pragma Env QT_SCALE_FACTOR=1
+//@ pragma Env QT_QPA_PLATFORM=wayland
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -16,6 +16,7 @@ import Quickshell.Wayland
 import qs.modules
 import qs.services
 import qs.assets
+import qs.modules.components.commons
 
 ShellRoot {
     // Shortcut
