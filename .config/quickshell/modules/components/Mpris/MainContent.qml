@@ -102,8 +102,8 @@ Column {
 
     Column {
         id: leftoverArea
-        width: parent.width
-        height: parent.height - cover.height
+        width: Math.round(parent.width)
+        height: Math.round(parent.height - cover.height)
         Layout.alignment: Qt.AlignHCenter
 
         RowLayout {
@@ -144,21 +144,75 @@ Column {
             }
         }
 
-        RowLayout {
+        Column {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 10
 
             Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 text: MprisManager.activeTrack.artist ?? "SYBAU"
-                color: "white"
+                color: Colors.color10
+                font.pixelSize: 24
+                wrapMode: Text.Wrap
+            }
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
+                color: Colors.color11
                 font.pixelSize: 16
+                wrapMode: Text.Wrap
+                width: Math.round(leftoverArea.width * 0.8)
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            ComboBox {
+                id: playerDropdown
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.round(leftoverArea.width / 2.5)
+                model: MprisManager.availablePlayers.values
+                textRole: "identity"
+                font.pixelSize: 14
+
+                background: Rectangle {
+                    implicitHeight: 36
+                    color: Colors.color10
+                    radius: 4
+                    border.color: playerDropdown.activeFocus ? "#aaa" : "#555"
+                    border.width: 1
+                }
+
+                contentItem: Text {
+                    text: playerDropdown.displayText
+                    color: "white"
+                    font.pixelSize: 12
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+
+                indicator: CustomIcon {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    name: "\uf13a"
+                    size: 24
+                    color: Colors.color9
+                }
+
+                onCurrentIndexChanged: {
+                    const selected = model[currentIndex];
+                    console.log("Selected player:", selected.identity);
+                    MprisManager.setActivePlayer(selected);
+                }
             }
         }
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
-            color: "white"
-            font.pixelSize: 16
+    }
+
+    Component.onCompleted: {
+        const players = MprisManager.availablePlayers.values;
+        for (let i = 0; i < players.length; i++) {
+            const player = players[i];
+            console.log(`[${i}] - ${player.identity}`);
         }
     }
 }
