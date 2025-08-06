@@ -19,16 +19,13 @@ PopupWindow {
     anchor.adjustment: PopupAdjustment.Slide
     anchor.window: screenRoot
 
-    anchor.rect.x: screen.width / 2 - width / 2
-    anchor.rect.y: screen.height
-
-    implicitHeight: playerBackground.height
-    implicitWidth: playerBackground.width
+    implicitHeight: screen.height
+    implicitWidth: screen.width
 
     mask: Region {
         item: playerBackground
     }
-
+    anchor.edges: Edges.Bottom | Edges.Right
     visible: false
 
     color: 'transparent'
@@ -56,13 +53,14 @@ PopupWindow {
     ClippingRectangle {
         id: playerBackground
 
-        width: isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2.5
-        height: isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4
+        width: Math.round(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2.5)
+        height: Math.round(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
+
+        x: Math.round(screen.width / 2 - width / 2)
+        y: Math.round(screen.height - height + (1 - animProgress) * height)
 
         color: 'transparent'
         opacity: animProgress
-
-        y: 500 + animProgress * -500
 
         scale: animProgress
         transformOrigin: Item.Center
@@ -150,8 +148,8 @@ PopupWindow {
             property string searchValue: ""
 
             Rectangle {
-                width: parent.width
-                height: parent.height / 10
+                width: Math.round(parent.width)
+                height: Math.round(parent.height / 10)
                 color: 'transparent'
                 radius: 20
 
@@ -161,7 +159,10 @@ PopupWindow {
                     anchors.margins: 5
                     placeholderText: "Search..."
                     text: mainContent.searchValue
-
+                    font.pixelSize: 12
+                    font.family: "Ubuntu" // or "Noto Sans", "DejaVu Sans", "Inter", etc.
+                    font.weight: Font.DemiBold
+                    renderType: Text.NativeRendering
                     color: Colors.color15
 
                     background: Rectangle {
@@ -174,8 +175,8 @@ PopupWindow {
             }
 
             ClippingRectangle {
-                width: parent.width
-                height: parent.height - 60
+                width: Math.round(parent.width)
+                height: Math.round(parent.height - 60)
                 color: 'transparent'
                 topLeftRadius: 5
                 topRightRadius: 5

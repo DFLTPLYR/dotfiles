@@ -73,6 +73,7 @@ PanelWindow {
 
             width: Math.max(1, popup.targetWidth * animProgress)
             height: Math.max(1, popup.targetHeight * animProgress)
+
             scale: animProgress
             opacity: animProgress
 
