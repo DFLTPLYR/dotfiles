@@ -28,6 +28,7 @@ Singleton {
                 name: entry.name,
                 icon: resolved,
                 exec: entry.execString,
+                execFunc: () => entry.execute(),
                 categories: entry.categories,
                 comment: entry.comment,
                 ref: entry

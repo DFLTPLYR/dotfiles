@@ -1,11 +1,13 @@
-import Quickshell
-import Quickshell.Hyprland
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Shapes
 import QtQuick.Controls
 import QtQuick.Layouts
+
+import Quickshell
+import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Services.Mpris
+
 import qs.services
 import qs.modules.components.commons
 import qs.assets
@@ -108,35 +110,44 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
 
-            PanelToggler {
+            StyledButton {
                 Layout.alignment: Qt.AlignRight
-                source: Assets.iconPaths.play
-                width: 48
-                height: 48
-
-                onActivationChanged: MprisManager.previous()
+                icon: "\uf04a"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.togglePlaying()
             }
 
-            PanelToggler {
+            StyledButton {
                 Layout.alignment: Qt.AlignHCenter
-                source: Assets.iconPaths.play
-                width: 48
-                height: 48
-                onActivationChanged: MprisManager.togglePlaying()
+                icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.togglePlaying()
             }
 
-            PanelToggler {
+            StyledButton {
                 Layout.alignment: Qt.AlignLeft
-                source: Assets.iconPaths.play
-                width: 48
-                height: 48
-                onActivationChanged: MprisManager.next()
+                icon: "\uf04e"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.togglePlaying()
             }
         }
 
         RowLayout {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 10
+
             Text {
                 text: MprisManager.activeTrack.artist ?? "SYBAU"
                 color: "white"
@@ -145,7 +156,7 @@ Column {
         }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: MprisManager.activeTrack.title ?? "SYBAU"
+            text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
             color: "white"
             font.pixelSize: 16
         }
