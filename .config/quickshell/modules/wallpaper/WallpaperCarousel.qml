@@ -12,46 +12,32 @@ import qs
 import qs.services
 import qs.components
 
-PanelWindow {
+import qs.utils
+
+AnimatedScreenOverlay {
     id: toplevel
     screen: screenRoot.modelData
+    color: Scripts.hexToRgba(Colors.background, 0.2)
 
-    color: "transparent"
-
-    implicitWidth: Math.round(screen.width)
-    implicitHeight: Math.round(screen.height)
-
-    visible: internalVisible
-
-    focusable: internalVisible
-
-    exclusionMode: ExclusionMode.Ignore
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-
-    property bool shouldBeVisible: false
-    property bool internalVisible: false
-    property real animProgress: 0.0
-
-    // Manual animator
-    NumberAnimation on animProgress {
-        id: anim
-        duration: 300
-        easing.type: Easing.InOutQuad
+    onClicked: {
+        return;
     }
 
-    onShouldBeVisibleChanged: {
-        anim.to = shouldBeVisible ? 1.0 : 0.0;
-        anim.restart();
-    }
+    onHidden: key => GlobalState.removeDrawer(key)
 
-    onAnimProgressChanged: {
-        if (animProgress > 0 && !internalVisible) {
-            internalVisible = true;
-        } else if (!shouldBeVisible && animProgress === 0.00) {
-            internalVisible = false;
-            const drawerKey = `WallpaperCarousel-${screen.name}`;
-            GlobalState.removeDrawer(drawerKey);
+    Item {
+        id: keyCatcher
+        anchors.fill: parent
+        focus: true
+
+        signal keyPressed(var event)
+
+        Keys.onPressed: event => {
+            keyPressed(event);
+            if (event.key === Qt.Key_Escape) {
+                GlobalState.toggleDrawer("wallpaper");
+                event.accepted = true;
+            }
         }
     }
 
@@ -131,11 +117,33 @@ PanelWindow {
 
                         onTextChanged: morphBox.wallpaperSearch = text.toLowerCase()
 
-                        Keys.onPressed: event => {
-                            if (event.key === Qt.Key_Escape || event.key === Qt.Key_Up || event.key === Qt.Key_Down || event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
-                                input.focus = false;
-                                flick.forceActiveFocus();
-                                event.accepted = true;
+                        Connections {
+                            target: keyCatcher
+                            function onKeyPressed(event) {
+                                const specialKeys = [Qt.Key_Up, Qt.Key_Down, Qt.Key_Left, Qt.Key_Right, Qt.Key_Escape];
+
+                                if (specialKeys.includes(event.key)) {
+                                    event.accepted = true;
+                                    return;
+                                }
+                                // Handle Backspace manually
+                                if (event.key === Qt.Key_Backspace) {
+                                    if (input.text.length > 0) {
+                                        input.text = input.text.slice(0, -1);
+                                        morphBox.wallpaperSearch = input.text.toLowerCase();
+                                    }
+                                    event.accepted = true;
+                                    return;
+                                }
+
+                                // Handle normal key input
+                                const keyChar = event.text;
+                                if (keyChar && keyChar.length === 1) {
+                                    input.text += keyChar;
+                                    morphBox.wallpaperSearch = input.text.toLowerCase();
+                                    input.forceActiveFocus();
+                                    event.accepted = true;
+                                }
                             }
                         }
                     }
@@ -148,28 +156,58 @@ PanelWindow {
                 height: parent.height
                 visible: animProgress > 0
                 opacity: animProgress
+
+                Connections {
+                    target: keyCatcher
+                    function onKeyPressed(event) {
+                        switch (event.key) {
+                        case Qt.Key_Slash:
+                            input.forceActiveFocus();
+                            event.accepted = true;
+                            break;
+                        case Qt.Key_Enter:
+                        case Qt.Key_Return:
+                            {
+                                const index = flick.currentIndex;
+                                const model = flick.model;
+                                if (model && model.values && index >= 0 && index < model.values.length) {
+                                    const path = model.values[index].path;
+                                    const screenName = screen.name;
+                                    WallpaperStore.setWallpaper(screenName, path);
+                                }
+                                event.accepted = true;
+                                break;
+                            }
+                        case Qt.Key_Left:
+                            if (flick.currentIndex > 0)
+                                flick.currentIndex -= 1;
+                            event.accepted = true;
+                            break;
+                        case Qt.Key_Right:
+                            if (flick.currentIndex < flick.count - 1)
+                                flick.currentIndex += 1;
+                            event.accepted = true;
+                            break;
+                        case Qt.Key_Escape:
+                            GlobalState.toggleDrawer("wallpaper");
+                            event.accepted = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            GlobalState.toggleDrawer("wallpaper");
-        }
-        hoverEnabled: true
-    }
-
     Connections {
         target: GlobalState
-        function onShowWallpaperCarouselSignal(value, monitorName) {
-            shouldBeVisible = (monitorName === screen.name) ? value : false;
-        }
-    }
 
-    Component.onCompleted: {
-        if (this.WlrLayershell != null) {
-            this.WlrLayershell.layer = WlrLayer.Overlay;
+        function onShowWallpaperCarouselSignal(value, monitorName) {
+            const isMatch = monitorName === screen.name;
+
+            if (isMatch) {
+                toplevel.shouldBeVisible = value;
+            }
         }
     }
 }

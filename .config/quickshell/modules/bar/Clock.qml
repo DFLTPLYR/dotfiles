@@ -13,7 +13,7 @@ Item {
     Text {
         id: clockText
         text: Time.time
-        color: Colors.color14
+        color: Colors.color10
         font.pixelSize: Appearance.fontsize
         font.family: "monospace"
         Fade on text {}

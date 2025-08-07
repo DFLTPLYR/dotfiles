@@ -26,7 +26,7 @@ Item {
         }
     }
 
-    // WallpaperShortcut
+    // Resource bar
     GlobalShortcut {
         id: resourceDashboard
         name: "showResourceBoard"

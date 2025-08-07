@@ -54,6 +54,32 @@ ShellRoot {
 
             Bar {}
 
+            // LazyLoader {
+            //     active: persistStates.showWallpaperCarousel
+            //     component: AnimatedScreenOverlay {
+            //         id: overlay
+            //         screen: modelData
+            //         color: ColorUtils.hexToRgba(Colors.background, 0.2)
+            //         onClicked: {
+            //             return;
+            //         }
+
+            //         onHidden: key => GlobalState.removeDrawer(key)
+
+            //         Connections {
+            //             target: GlobalState
+
+            //             function onShowWallpaperCarouselSignal(value, monitorName) {
+            //                 const isMatch = monitorName === screen.name;
+
+            //                 if (isMatch) {
+            //                     overlay.shouldBeVisible = value;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
             LazyLoader {
                 active: persistStates.showAppMenu
                 component: AppMenu {}
@@ -115,11 +141,11 @@ ShellRoot {
                 }
             }
 
-            Component.onCompleted: {
-                if (this.WlrLayershell != null) {
-                    this.WlrLayershell.layer = WlrLayer.Top;
-                }
-            }
+            // Component.onCompleted: {
+            //     if (this.WlrLayershell != null) {
+            //         this.WlrLayershell.layer = WlrLayer.Top;
+            //     }
+            // }
         }
     }
 
@@ -139,6 +165,6 @@ ShellRoot {
         WallpaperStore;
         WeatherFetcher;
         AppManager;
-        Font;
+        FontAssets;
     }
 }
