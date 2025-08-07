@@ -1,7 +1,7 @@
 // StyledButton.qml
 import qs.assets
 
-import QtQuick 2.15
+import QtQuick
 
 Rectangle {
     id: root
@@ -20,7 +20,7 @@ Rectangle {
     property color hoverColor: "#444"
     property color borderColor: "#666"
     property color iconColor: "white"
-    property string fontFamily: Font.fontAwesome
+    property string fontFamily: Font.fontAwesomeRegular
 
     property bool hovered: false
     signal clicked

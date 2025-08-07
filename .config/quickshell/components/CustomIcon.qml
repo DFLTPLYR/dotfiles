@@ -11,7 +11,7 @@ Text {
     property color iconColor: "white"
 
     text: name
-    font.family: Font.fontAwesome // assumes your font is loaded and available
+    font.family: Font.fontAwesomeRegular
     font.pixelSize: size
     color: iconColor
 }

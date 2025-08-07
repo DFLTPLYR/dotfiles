@@ -3,7 +3,6 @@ import QtQuick
 import Quickshell.Hyprland
 import qs.services
 import qs
-import Quickshell.Services.Mpris
 
 Item {
     // WallpaperShortcut

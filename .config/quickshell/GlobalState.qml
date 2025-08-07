@@ -9,10 +9,12 @@ PersistentProperties {
 
     // Ui states
     property var openDrawers: []
+    property var openPanels: []
 
     signal openDrawersUpdated
+    signal openPanelUpdated
 
-    signal drawer(string drawer)
+    // signal Drawers
     signal showWallpaperCarouselSignal(bool value, string monitorName)
     signal showMprisChangedSignal(bool value, string monitorName)
     signal showAppMenuChangedSignal(bool value, string monitorName)
@@ -58,7 +60,6 @@ PersistentProperties {
     function addDrawer(name) {
         if (!openDrawers.includes(name)) {
             openDrawers.push(name);
-            drawer(name);
             openDrawersUpdated();
         }
     }
@@ -67,7 +68,6 @@ PersistentProperties {
         let index = openDrawers.indexOf(name);
         if (index !== -1) {
             openDrawers.splice(index, 1);
-            drawer(name);
             openDrawersUpdated();
         }
     }

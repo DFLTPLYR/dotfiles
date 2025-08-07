@@ -1,34 +1,34 @@
-import Quickshell
-import Quickshell.Hyprland
-import Quickshell.Widgets
 import QtQuick
-import QtQuick.Controls
+import Quickshell
 import QtQuick.Shapes
+import QtQuick.Controls
+import Quickshell.Widgets
+import Quickshell.Hyprland
+import Quickshell.Wayland
 
 import qs
 import qs.services
-import qs.modules.components.Mpris
+import qs.components
 
 PopupWindow {
-    id: resourceSection
+    id: appMenu
 
     property bool isPortrait: screen.height > screen.width
 
     anchor.adjustment: PopupAdjustment.Slide
     anchor.window: screenRoot
 
-    anchor.rect.x: Math.round(parentWindow.width / 2 - width / 2)
-    anchor.rect.y: Math.round(parentWindow.height)
-
-    implicitHeight: Math.floor(playerBackground.height)
-    implicitWidth: Math.floor(playerBackground.width)
+    implicitHeight: screen.height
+    implicitWidth: screen.width
 
     mask: Region {
         item: playerBackground
     }
-
+    anchor.edges: Edges.Bottom | Edges.Right
     visible: false
+
     color: 'transparent'
+
     property bool shouldBeVisible: false
     property real animProgress: 0.0
 
@@ -44,34 +44,35 @@ PopupWindow {
             visible = true;
         if (!shouldBeVisible && Math.abs(animProgress) < 0.001) {
             visible = false;
-            const drawerKey = `MprisDashboard-${screen.name}`;
+            const drawerKey = `AppMenu-${screen.name}`;
             GlobalState.removeDrawer(drawerKey);
         }
     }
 
     ClippingRectangle {
         id: playerBackground
-        width: Math.floor(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2)
-        height: Math.floor(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
+
+        width: Math.round(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2.5)
+        height: Math.round(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
+
+        x: Math.round(screen.width / 2 - width / 2)
+        y: Math.round(screen.height - height + (1 - animProgress) * height)
 
         color: 'transparent'
         opacity: animProgress
-
-        bottomLeftRadius: 100
-        bottomRightRadius: 100
-        y: -500 + animProgress * 500
 
         scale: animProgress
         transformOrigin: Item.Center
 
         Shape {
             anchors.fill: parent
-            scale: animProgress
+            scale: -1 * animProgress
+
             ShapePath {
                 id: root
 
                 // All values defined locally
-                readonly property real rounding: 40
+                readonly property real rounding: 30
                 readonly property bool flatten: playerBackground.height < rounding * 2
                 readonly property real roundingY: flatten ? playerBackground.height / 2 : rounding
 
@@ -136,36 +137,68 @@ PopupWindow {
             }
         }
 
-        Row {
+        Column {
             id: mainContent
-            width: Math.floor(parent.width - 120)
-            height: Math.floor(parent.height - 40)
+            width: parent.width - 80
+            height: parent.height - 20
             anchors.centerIn: parent
-            spacing: 0
+            spacing: 10
 
-            ClippingRectangle {
+            property string searchValue: ""
+
+            Rectangle {
+                width: Math.round(parent.width)
+                height: Math.round(parent.height / 10)
                 color: 'transparent'
+                radius: 20
 
-                width: Math.floor(mainContent.width * 0.55)
-                height: Math.floor(mainContent.height)
+                TextField {
+                    id: searchField
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    placeholderText: "Search..."
+                    text: mainContent.searchValue
+                    font.pixelSize: 12
+                    font.family: "Ubuntu" // or "Noto Sans", "DejaVu Sans", "Inter", etc.
+                    font.weight: Font.DemiBold
+                    renderType: Text.NativeRendering
+                    color: Colors.color15
 
-                MainContent {}
+                    background: Rectangle {
+                        color: Colors.color0
+                        radius: parent.parent.radius
+                    }
+
+                    onTextChanged: mainContent.searchValue = text
+                }
             }
 
             ClippingRectangle {
-                id: testing
+                width: Math.round(parent.width)
+                height: Math.round(parent.height - 60)
                 color: 'transparent'
-                width: Math.floor(mainContent.width * 0.45 - 40)
-                height: Math.floor(mainContent.height)
+                topLeftRadius: 5
+                topRightRadius: 5
+                bottomLeftRadius: 5
+                bottomRightRadius: 5
 
-                SystemStats {}
+                AppListView {
+                    searchText: mainContent.searchValue
+                }
             }
+        }
+    }
+
+    Component.onCompleted: {
+        if (this.WlrLayershell != null) {
+            this.WlrLayershell.layer = WlrLayer.Overlay;
+            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
         }
     }
 
     Connections {
         target: GlobalState
-        function onShowMprisChangedSignal(value, monitorName) {
+        function onShowAppMenuChangedSignal(value, monitorName) {
             if (monitorName === parentWindow.screen.name) {
                 shouldBeVisible = value;
                 animProgress = value ? 1 : 0;
