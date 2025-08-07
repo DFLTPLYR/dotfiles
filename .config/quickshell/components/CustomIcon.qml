@@ -9,9 +9,10 @@ Text {
     property string name: "\uf04b"
     property int size: 24
     property color iconColor: "white"
+    property string fontFamily: FontAssets.fontAwesomeRegular
 
     text: name
-    font.family: Font.fontAwesomeRegular
+    font.family: fontFamily
     font.pixelSize: size
     color: iconColor
 }

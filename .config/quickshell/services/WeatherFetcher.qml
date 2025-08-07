@@ -7,16 +7,20 @@ import Quickshell.Io
 
 Singleton {
     id: root
+
     property string weatherInfo: ""
     property string weatherCondition: ""
+    property string weatherIcon: ""
 
+    // Weather icon codes
     property var weatherIcons: ({
             cloud: '\uf1c0',
             thunder: '\uf0e7',
             rainy: '\uf73d',
             wet: '\uf0e9',
             sunny: '\uf185',
-            windy: '\uf72e'
+            windy: '\uf72e',
+            unknown: '\uf128' // fallback icon
         })
 
     Process {
@@ -39,11 +43,35 @@ Singleton {
                 } else if (icon.includes("🌧") || icon.includes("🌦") || lowerIcon.includes("rain")) {
                     condition = "rainy";
                 } else if (icon.includes("☁") || lowerIcon.includes("cloud")) {
-                    condition = "cloudy";
+                    condition = "cloud";
+                } else if (icon.includes("🌩") || icon.includes("⚡")) {
+                    condition = "thunder";
+                } else if (icon.includes("💧") || icon.includes("🌫")) {
+                    condition = "wet";
+                } else if (icon.includes("💨") || lowerIcon.includes("wind")) {
+                    condition = "windy";
                 }
 
                 weatherCondition = condition;
+                weatherIcon = weatherIcons[condition] || weatherIcons.unknown;
             }
         }
     }
+
+    // Function to fetch weather
+    function fetchWeather() {
+        weatherProc.running = true;
+    }
+
+    Timer {
+        id: refreshTimer
+        interval: 600000 // 10 minutes
+        repeat: true
+        running: true
+        triggeredOnStart: true
+
+        onTriggered: fetchWeather()
+    }
+
+    Component.onCompleted: fetchWeather()
 }

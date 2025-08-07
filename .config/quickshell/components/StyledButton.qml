@@ -13,14 +13,14 @@ Rectangle {
     border.width: 1
     antialiasing: true
 
-    property alias icon: iconText.text
+    property string icon: "\uf04c"
     property int size: 64
     property real iconRatio: 0.5
     property color backgroundColor: "#222"
     property color hoverColor: "#444"
     property color borderColor: "#666"
     property color iconColor: "white"
-    property string fontFamily: Font.fontAwesomeRegular
+    property string fontFamily: FontAssets.fontAwesomeRegular
 
     property bool hovered: false
     signal clicked
@@ -51,7 +51,7 @@ Rectangle {
     Text {
         id: iconText
         anchors.centerIn: parent
-        text: "\uf04c"
+        text: root.icon || "\uf128"
         font.family: fontFamily
         font.pixelSize: root.size * iconRatio
         color: iconColor

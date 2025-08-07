@@ -17,22 +17,12 @@ Item {
         id: weatherText
         visible: true
         text: WeatherFetcher.weatherInfo
-        color: Colors.color14
+        color: Colors.color10
 
         font.pixelSize: Appearance.fontsize
         font.family: "monospace"
         Fade on text {}
 
         anchors.verticalCenter: parent.verticalCenter
-    }
-
-    Timer {
-        id: updateTimer
-        interval: 2000
-        running: true
-        repeat: true
-        // onTriggered: {
-        //     getSystemState.running = true;
-        // }
     }
 }
