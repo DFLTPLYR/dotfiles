@@ -1,25 +1,33 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
+
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Wayland
-import qs.modules.components.Wallpaper
 import Quickshell.Widgets
+
 import qs
 import qs.services
-import qs.modules.components.commons
+import qs.components
 
 PanelWindow {
     id: toplevel
     screen: screenRoot.modelData
+
     color: "transparent"
 
-    implicitWidth: screen.width
-    implicitHeight: screen.height
+    implicitWidth: Math.round(screen.width)
+    implicitHeight: Math.round(screen.height)
 
     visible: internalVisible
+
     focusable: internalVisible
+
+    exclusionMode: ExclusionMode.Ignore
+    WlrLayershell.layer: WlrLayer.Overlay
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
     property bool shouldBeVisible: false
     property bool internalVisible: false
@@ -61,8 +69,8 @@ PanelWindow {
         property real targetHeight: screen.height * 0.5
 
         // Animate using animProgress
-        implicitWidth: targetWidth
-        implicitHeight: targetHeight
+        implicitWidth: Math.round(targetWidth)
+        implicitHeight: Math.round(targetHeight)
 
         anchor.rect.x: (screen.width - width) / 2
         anchor.rect.y: (screen.height - height) / 2

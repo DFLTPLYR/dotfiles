@@ -1,8 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
+
 import Quickshell
 import Quickshell.Hyprland
+
 import qs.services
 import qs
 

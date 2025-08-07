@@ -7,19 +7,18 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Qt.labs.lottieqt
 import QtQuick.Shapes
-import qs.modules.components.Navbar
+
 import qs.services
-import qs.modules.components.commons
+import qs.components
 import qs.assets
 import qs
 import Quickshell.Wayland
 
 Rectangle {
-
     anchors.fill: parent
     color: Colors.background
     opacity: 1
-    radius: 20
+    // radius: 20
 
     Item {
         id: wrapper
@@ -63,20 +62,7 @@ Rectangle {
                 anchors.centerIn: parent
                 spacing: 8
 
-                // PanelToggler {
-                // source: Assets.iconPaths.play
-                // onToggled: active => {
-                // console.log("Toggled:", active);
-                // }
-                // }
-
                 Workspaces {}
-                // PanelToggler {
-                // source: Assets.iconPaths.restart
-                // onActivationChanged: active => {
-                // console.log("Toggled:", active);
-                // }
-                // }
             }
         }
 
@@ -95,11 +81,15 @@ Rectangle {
 
                 spacing: 2
 
-                PanelToggler {
-                    source: Assets.iconPaths.menu
-                    onActivationChanged: active => {
-                        GlobalState.toggleDrawer("wallpaper");
-                    }
+                StyledButton {
+                    Layout.alignment: Qt.AlignRight
+                    icon: "\uf011"
+                    size: parent.height
+                    iconRatio: 0.5
+                    backgroundColor: Colors.background
+                    hoverColor: Colors.color15
+                    iconColor: Colors.color10
+                    onClicked: MprisManager.togglePlaying()
                 }
             }
         }

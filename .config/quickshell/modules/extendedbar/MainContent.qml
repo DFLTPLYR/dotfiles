@@ -9,7 +9,7 @@ import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
 import qs.services
-import qs.modules.components.commons
+import qs.components
 import qs.assets
 import qs
 
@@ -105,6 +105,84 @@ Column {
         width: Math.round(parent.width)
         height: Math.round(parent.height - cover.height)
         Layout.alignment: Qt.AlignHCenter
+        spacing: 10
+
+        ComboBox {
+            id: playerDropdown
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.round(leftoverArea.width / 2.5)
+            model: MprisManager.availablePlayers.values
+            textRole: "identity"
+            font.pixelSize: 14
+            padding: 2
+
+            delegate: ItemDelegate {
+                id: delegate
+
+                required property var model
+                required property int index
+
+                width: Math.round(playerDropdown.width)
+
+                contentItem: Text {
+                    text: delegate.model[playerDropdown.textRole]
+                    color: Colors.color10
+                    font: playerDropdown.font
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
+                highlighted: playerDropdown.highlightedIndex === index
+            }
+
+            background: Rectangle {
+                color: Colors.color10
+                radius: 50
+            }
+
+            contentItem: Text {
+                text: playerDropdown.displayText
+                color: "white"
+                font.pixelSize: 24
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
+
+            indicator: CustomIcon {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 8
+                name: "\uf13a"
+                size: 32
+                color: Colors.color9
+            }
+
+            popup: Popup {
+                y: Math.round(playerDropdown.height - 1)
+                width: Math.round(playerDropdown.width)
+                height: Math.min(contentItem.implicitHeight, playerDropdown.Window.height - topMargin - bottomMargin)
+                padding: 1
+
+                contentItem: ListView {
+                    clip: true
+                    implicitHeight: contentHeight
+                    model: playerDropdown.popup.visible ? playerDropdown.delegateModel : null
+                    currentIndex: playerDropdown.highlightedIndex
+
+                    ScrollIndicator.vertical: ScrollIndicator {}
+                }
+
+                background: Rectangle {
+                    color: Colors.background
+                    border.color: Colors.background
+                    radius: 2
+                }
+            }
+
+            onCurrentIndexChanged: {
+                const selected = model[currentIndex];
+                MprisManager.setActivePlayer(selected);
+            }
+        }
 
         RowLayout {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -165,45 +243,6 @@ Column {
                 wrapMode: Text.Wrap
                 width: Math.round(leftoverArea.width * 0.8)
                 horizontalAlignment: Text.AlignHCenter
-            }
-
-            ComboBox {
-                id: playerDropdown
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.round(leftoverArea.width / 2.5)
-                model: MprisManager.availablePlayers.values
-                textRole: "identity"
-                font.pixelSize: 14
-
-                background: Rectangle {
-                    implicitHeight: 36
-                    color: Colors.color10
-                    radius: 4
-                    border.color: playerDropdown.activeFocus ? "#aaa" : "#555"
-                    border.width: 1
-                }
-
-                contentItem: Text {
-                    text: playerDropdown.displayText
-                    color: "white"
-                    font.pixelSize: 12
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                indicator: CustomIcon {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    name: "\uf13a"
-                    size: 24
-                    color: Colors.color9
-                }
-
-                onCurrentIndexChanged: {
-                    const selected = model[currentIndex];
-                    console.log("Selected player:", selected.identity);
-                    MprisManager.setActivePlayer(selected);
-                }
             }
         }
     }

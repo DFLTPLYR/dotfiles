@@ -43,9 +43,11 @@ Singleton {
     Behavior on gpuMemUsage {
         AnimatedNumber {}
     }
+
     Behavior on gpuProcUsage {
         AnimatedNumber {}
     }
+
     Behavior on gpuTemp {
         AnimatedNumber {}
     }
@@ -53,18 +55,23 @@ Singleton {
     Behavior on totalMemory {
         AnimatedNumber {}
     }
+
     Behavior on usedMemory {
         AnimatedNumber {}
     }
+
     Behavior on downloadSpeed {
         AnimatedNumber {}
     }
+
     Behavior on uploadSpeed {
         AnimatedNumber {}
     }
+
     Behavior on rootDiskUsage {
         AnimatedNumber {}
     }
+
     Behavior on cpuTemperature {
         AnimatedNumber {}
     }
@@ -133,6 +140,4 @@ Singleton {
             }
         }
     }
-
-
 }
