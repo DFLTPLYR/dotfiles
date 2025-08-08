@@ -7,206 +7,161 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 import qs
+import qs.utils
 import qs.services
 import qs.components
 
-PopupWindow {
-    id: appMenu
+AnimatedScreenOverlay {
+    id: toplevel
+    screen: screenRoot.modelData
+    key: 'AppMenu'
 
+    color: Scripts.hexToRgba(Colors.background, 0.2)
+
+    onClicked: {
+        return;
+    }
+
+    onHidden: key => GlobalState.removeDrawer(key)
+
+    Item {
+        id: keyCatcher
+        anchors.fill: parent
+        focus: true
+
+        Keys.onPressed: event => {
+            switch (event.key) {
+            case Qt.Key_Escape:
+                searchValue = "";
+                GlobalState.toggleDrawer("appMenu");
+                event.accepted = true;
+                break;
+            case Qt.Key_Backspace:
+                searchValue = searchValue.slice(0, -1);
+                event.accepted = true;
+                break;
+            case Qt.Key_Enter:
+            case Qt.Key_Return:
+                if (grid.currentItem && grid.currentItem.openApp) {
+                    grid.currentItem.openApp();
+                }
+                event.accepted = true;
+                break;
+            case Qt.Key_Left:
+                if (grid.currentIndex > 0)
+                    grid.currentIndex -= 1;
+                event.accepted = true;
+                break;
+            case Qt.Key_Right:
+                if (grid.currentIndex < grid.count - 1)
+                    grid.currentIndex += 1;
+                event.accepted = true;
+                break;
+            case Qt.Key_Up:
+                grid.currentIndex = Math.max(0, grid.currentIndex - grid.columns);
+                event.accepted = true;
+                break;
+            case Qt.Key_Down:
+                grid.currentIndex = Math.min(grid.count - 1, grid.currentIndex + grid.columns);
+                event.accepted = true;
+                break;
+            default:
+                if (event.text.length > 0) {
+                    searchValue += event.text;
+                    event.accepted = true;
+                }
+            }
+        }
+    }
+
+    property string searchValue: ''
     property bool isPortrait: screen.height > screen.width
 
-    anchor.adjustment: PopupAdjustment.Slide
-    anchor.window: screenRoot
-
-    implicitHeight: screen.height
-    implicitWidth: screen.width
-
-    mask: Region {
-        item: playerBackground
-    }
-    anchor.edges: Edges.Bottom | Edges.Right
-    visible: false
-
-    color: 'transparent'
-
-    property bool shouldBeVisible: false
-    property real animProgress: 0.0
-
-    Behavior on animProgress {
-        NumberAnimation {
-            duration: 400
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    onAnimProgressChanged: {
-        if (animProgress > 0 && !visible)
-            visible = true;
-        if (!shouldBeVisible && Math.abs(animProgress) < 0.001) {
-            visible = false;
-            const drawerKey = `AppMenu-${screen.name}`;
-            GlobalState.removeDrawer(drawerKey);
-        }
-    }
-
     ClippingRectangle {
-        id: playerBackground
-
-        width: Math.round(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2.5)
-        height: Math.round(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
+        width: Math.round(isPortrait ? screen.width / 1.5 : screen.width / 2.5)
+        height: Math.round(isPortrait ? screen.height / 2.25 : screen.height / 2)
 
         x: Math.round(screen.width / 2 - width / 2)
-        y: Math.round(screen.height - height + (1 - animProgress) * height)
+        y: Math.round(screen.height / 2 - height / 2)
 
-        color: 'transparent'
+        color: Scripts.hexToRgba(Colors.background, 0.6)
         opacity: animProgress
+
+        radius: 20
 
         scale: animProgress
         transformOrigin: Item.Center
 
-        Shape {
-            anchors.fill: parent
-            scale: -1 * animProgress
-
-            ShapePath {
-                id: root
-
-                // All values defined locally
-                readonly property real rounding: 30
-                readonly property bool flatten: playerBackground.height < rounding * 2
-                readonly property real roundingY: flatten ? playerBackground.height / 2 : rounding
-
-                strokeWidth: -1
-                fillColor: Colors.background
-
-                // Top-left outward arc
-                PathArc {
-                    relativeX: root.rounding
-                    relativeY: root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
-                }
-
-                PathLine {
-                    relativeX: 0
-                    relativeY: playerBackground.height - root.roundingY * 2
-                }
-
-                // Bottom-left outward arc
-                PathArc {
-                    relativeX: root.rounding
-                    relativeY: root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
-                    direction: PathArc.Counterclockwise
-                }
-
-                PathLine {
-                    relativeX: playerBackground.width - root.rounding * 4
-                    relativeY: 0
-                }
-
-                // Bottom-right outward arc
-                PathArc {
-                    relativeX: root.rounding
-                    relativeY: -root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
-                    direction: PathArc.Counterclockwise
-                }
-
-                PathLine {
-                    relativeX: 0
-                    relativeY: -(playerBackground.height - root.roundingY * 2)
-                }
-
-                // Top-right outward arc
-                PathArc {
-                    relativeX: root.rounding
-                    relativeY: -root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
-                }
-
-                Behavior on fillColor {
-                    ColorAnimation {
-                        duration: 250
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
-        }
-
         Column {
-            id: mainContent
-            width: parent.width - 80
-            height: parent.height - 20
-            anchors.centerIn: parent
-            spacing: 10
+            anchors.fill: parent
 
-            property string searchValue: ""
+            // Item list
+            Item {
+                height: Math.round(parent.height * 0.9)
+                width: parent.width
 
-            Rectangle {
-                width: Math.round(parent.width)
-                height: Math.round(parent.height / 10)
-                color: 'transparent'
-                radius: 20
-
-                TextField {
-                    id: searchField
+                Rectangle {
                     anchors.fill: parent
-                    anchors.margins: 5
-                    placeholderText: "Search..."
-                    text: mainContent.searchValue
-                    font.pixelSize: 12
-                    font.family: "Ubuntu" // or "Noto Sans", "DejaVu Sans", "Inter", etc.
-                    font.weight: Font.DemiBold
-                    renderType: Text.NativeRendering
-                    color: Colors.color15
+                    color: Scripts.hexToRgba(Colors.foreground, 0.4)
+                }
 
-                    background: Rectangle {
-                        color: Colors.color0
-                        radius: parent.parent.radius
+                Row {
+                    anchors.fill: parent
+                    Rectangle {
+                        width: Math.round(parent.width * 0.2)
+                        height: parent.height
+                        clip: true
+
+                        Image {
+                            id: name
+                            source: WallpaperStore.currentWallpapers[screen.name]
+                            fillMode: Image.Pad
+                        }
                     }
 
-                    onTextChanged: mainContent.searchValue = text
+                    Rectangle {
+                        width: Math.round(parent.width * 0.8)
+                        height: parent.height
+                        color: 'transparent'
+                        AppListView {
+                            id: grid
+                            searchText: searchValue
+                        }
+                    }
                 }
             }
 
-            ClippingRectangle {
-                width: Math.round(parent.width)
-                height: Math.round(parent.height - 60)
-                color: 'transparent'
-                topLeftRadius: 5
-                topRightRadius: 5
-                bottomLeftRadius: 5
-                bottomRightRadius: 5
+            // Search Bar
+            Item {
+                height: Math.round(parent.height * 0.1)
+                width: parent.width
 
-                AppListView {
-                    searchText: mainContent.searchValue
+                Rectangle {
+                    anchors.fill: parent
+                    color: Scripts.hexToRgba(Colors.background, 0.1)
+                }
+
+                Text {
+                    id: searchText
+                    text: qsTr(`Search: ${searchValue}`)
+                    font.pixelSize: 24
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12
+                    color: Colors.color15
                 }
             }
-        }
-    }
-
-    Component.onCompleted: {
-        if (this.WlrLayershell != null) {
-            this.WlrLayershell.layer = WlrLayer.Overlay;
-            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
         }
     }
 
     Connections {
         target: GlobalState
+
         function onShowAppMenuChangedSignal(value, monitorName) {
-            if (monitorName === parentWindow.screen.name) {
-                shouldBeVisible = value;
-                animProgress = value ? 1 : 0;
-            } else {
-                if (shouldBeVisible) {
-                    shouldBeVisible = false;
-                    animProgress = 0;
-                }
+            const isMatch = monitorName === screen.name;
+
+            if (isMatch) {
+                toplevel.shouldBeVisible = value;
             }
         }
     }

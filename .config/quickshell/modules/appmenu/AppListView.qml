@@ -15,6 +15,7 @@ GridView {
     anchors.fill: parent
 
     property string searchText: ""
+    property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
 
     clip: true
     cellWidth: Math.floor(parent.width / 6)
@@ -22,6 +23,8 @@ GridView {
 
     focus: true
     keyNavigationWraps: true
+    keyNavigationEnabled: true
+
     boundsBehavior: Flickable.StopAtBounds
     snapMode: GridView.NoSnap
 
@@ -49,6 +52,12 @@ GridView {
         color: "transparent"
 
         property bool isHovered: false
+        property bool isSelected: GridView.isCurrentItem
+
+        function openApp() {
+            modelData.execFunc();
+            GlobalState.toggleDrawer("appMenu");
+        }
 
         MouseArea {
             id: hoverArea
@@ -57,10 +66,7 @@ GridView {
 
             onEntered: isHovered = true
             onExited: isHovered = false
-            onClicked: {
-                modelData.execFunc();
-                GlobalState.toggleDrawer("appMenu");
-            }
+            onClicked: openApp()
         }
 
         ClippingRectangle {
@@ -70,10 +76,19 @@ GridView {
             height: Math.floor(grid.cellHeight * 0.9)
 
             radius: 5
-            color: isHovered ? Colors.backgroundAlt : "transparent"
+            color: isHovered || isSelected ? Colors.backgroundAlt : "transparent"
+
+            border.color: isSelected ? Colors.foreground : "transparent"
+            border.width: isSelected ? 2 : 0
 
             Behavior on color {
                 ColorAnimation {
+                    duration: 150
+                }
+            }
+
+            Behavior on border.width {
+                NumberAnimation {
                     duration: 150
                 }
             }

@@ -5,6 +5,7 @@
 // Adjust this to make the shell smaller or larger
 // @ pragma Env QT_SCALE_FACTOR=1
 //@ pragma Env QT_QPA_PLATFORM=wayland
+
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -22,7 +23,7 @@ import qs.modules.bar
 import qs.modules.appmenu
 import qs.modules.extendedbar
 import qs.modules.wallpaper
-import qs.modules.logout
+import qs.modules.sessionmenu
 
 ShellRoot {
     Variants {
@@ -33,8 +34,6 @@ ShellRoot {
             id: screenRoot
             property var modelData
             screen: modelData
-
-            focusable: persistStates.showAppMenu || persistStates.showMpris
 
             color: "transparent"
             implicitHeight: 42
@@ -82,23 +81,31 @@ ShellRoot {
 
             LazyLoader {
                 active: persistStates.showAppMenu
+                activeAsync: true
+                loading: true
                 component: AppMenu {}
             }
 
             LazyLoader {
                 active: persistStates.showMpris
+                activeAsync: true
+                loading: true
                 component: ExtendedBar {}
             }
 
             LazyLoader {
                 active: persistStates.showWallpaperCarousel
+                activeAsync: true
+                loading: true
                 component: WallpaperCarousel {}
             }
 
             Scope {
+                property var modelData
+
                 PersistentProperties {
                     id: persistStates
-                    reloadableId: "persistStates-" + screen.name
+                    reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
                     property bool showWallpaperCarousel: false
                     property bool showMpris: false
                     property bool showAppMenu: false
@@ -126,7 +133,7 @@ ShellRoot {
                                 property: 'showWindowsOptions'
                             }
                         ];
-                        const monitorName = screen.name;
+                        const monitorName = modelData.name;
 
                         for (let i = 0; i < drawers.length; i++) {
                             const drawer = drawers[i];
@@ -140,12 +147,6 @@ ShellRoot {
                     }
                 }
             }
-
-            // Component.onCompleted: {
-            //     if (this.WlrLayershell != null) {
-            //         this.WlrLayershell.layer = WlrLayer.Top;
-            //     }
-            // }
         }
     }
 
@@ -153,10 +154,42 @@ ShellRoot {
 
     VolumeOsd {}
 
-    // LazyLoader {
-    //     active: false
-    //     component: Logout {}
-    // }
+    LazyLoader {
+        active: panelStates.showWindowsOptions
+        component: SessionMenu {}
+    }
+
+    Scope {
+        PersistentProperties {
+            id: panelStates
+            reloadableId: "persistPanelStates"
+            property bool showAppMenu: false
+            property bool showWindowsOptions: false
+        }
+
+        Connections {
+            target: GlobalState
+            function onOpenPanelsUpdated() {
+                const panels = [
+                    {
+                        name: 'WindowsOptions',
+                        property: 'showWindowsOptions'
+                    },
+                    {
+                        name: 'AppMenu',
+                        property: 'showAppMenu'
+                    }
+                ];
+
+                for (let i = 0; i < panels.length; i++) {
+                    const panel = panels[i];
+                    const key = panel.name;
+                    const exists = GlobalState.hasPanel(key);
+                    panelStates[panel.property] = exists ?? false;
+                }
+            }
+        }
+    }
 
     // starting singletons
     Component.onCompleted: {

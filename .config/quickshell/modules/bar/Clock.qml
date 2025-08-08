@@ -4,6 +4,7 @@ import Quickshell
 import qs.services
 import qs.animations
 import qs.modules
+import qs.assets
 
 Item {
     id: root
@@ -14,8 +15,7 @@ Item {
         id: clockText
         text: Time.time
         color: Colors.color10
-        font.pixelSize: Appearance.fontsize
-        font.family: "monospace"
+        font.pixelSize: 12
         Fade on text {}
         anchors.verticalCenter: parent.verticalCenter
     }

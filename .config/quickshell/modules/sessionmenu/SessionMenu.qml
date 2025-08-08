@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 
-import qs.modules.Logout
+import qs.modules.sessionmenu
 import qs.components
 import qs.services
 
@@ -63,6 +63,7 @@ Variants {
     ]
 
     model: Quickshell.screens
+
     PanelWindow {
         id: window
 

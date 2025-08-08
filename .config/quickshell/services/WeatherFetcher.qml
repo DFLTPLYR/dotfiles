@@ -8,11 +8,11 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property string weatherInfo: ""
-    property string weatherCondition: ""
-    property string weatherIcon: ""
+    property string weatherInfo: "" // e.g., "32°C"
+    property string weatherCondition: "" // e.g., "sunny"
+    property string weatherIcon: "" // FontAwesome or your custom icon
+    property var weatherData: {} // Full raw JSON if needed
 
-    // Weather icon codes
     property var weatherIcons: ({
             cloud: '\uf1c0',
             thunder: '\uf0e7',
@@ -20,45 +20,51 @@ Singleton {
             wet: '\uf0e9',
             sunny: '\uf185',
             windy: '\uf72e',
-            unknown: '\uf128' // fallback icon
+            unknown: '\uf128'
         })
 
     Process {
         id: weatherProc
-        running: true
-        command: ["curl", "wttr.in/manila?format=%t%20%c"]
+        running: false
+        command: ["curl", "wttr.in/manila?format=j1"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const out = this.text.trim();
-                root.weatherInfo = out;
+                try {
+                    const json = JSON.parse(this.text.trim());
+                    root.weatherData = json;
 
-                const parts = out.split(" ");
-                const icon = parts.length > 1 ? parts[1] : "";
-                const lowerIcon = icon.toLowerCase();
+                    const current = json.current_condition[0];
+                    const temp = current.temp_C + "°C";
+                    const desc = current.weatherDesc[0].value.toLowerCase();
 
-                let condition = "unknown";
+                    root.weatherInfo = temp;
+                    console.log(desc);
 
-                if (icon.includes("☀") || lowerIcon.includes("sun")) {
-                    condition = "sunny";
-                } else if (icon.includes("🌧") || icon.includes("🌦") || lowerIcon.includes("rain")) {
-                    condition = "rainy";
-                } else if (icon.includes("☁") || lowerIcon.includes("cloud")) {
-                    condition = "cloud";
-                } else if (icon.includes("🌩") || icon.includes("⚡")) {
-                    condition = "thunder";
-                } else if (icon.includes("💧") || icon.includes("🌫")) {
-                    condition = "wet";
-                } else if (icon.includes("💨") || lowerIcon.includes("wind")) {
-                    condition = "windy";
+                    let condition = "unknown";
+
+                    if (desc.includes("sun")) {
+                        condition = "sunny";
+                    } else if (desc.includes("rain")) {
+                        condition = "rainy";
+                    } else if (desc.includes("cloud")) {
+                        condition = "cloud";
+                    } else if (desc.includes("thunder")) {
+                        condition = "thunder";
+                    } else if (desc.includes("mist") || desc.includes("fog") || desc.includes("drizzle")) {
+                        condition = "wet";
+                    } else if (desc.includes("wind")) {
+                        condition = "windy";
+                    }
+
+                    root.weatherCondition = condition;
+                    root.weatherIcon = weatherIcons[condition] || weatherIcons.unknown;
+                } catch (e) {
+                    console.warn("Failed to parse weather JSON:", e);
                 }
-
-                weatherCondition = condition;
-                weatherIcon = weatherIcons[condition] || weatherIcons.unknown;
             }
         }
     }
 
-    // Function to fetch weather
     function fetchWeather() {
         weatherProc.running = true;
     }

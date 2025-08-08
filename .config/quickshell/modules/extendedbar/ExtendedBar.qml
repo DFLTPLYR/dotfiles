@@ -33,7 +33,7 @@ PopupWindow {
 
     Behavior on animProgress {
         NumberAnimation {
-            duration: 400
+            duration: 300
             easing.type: Easing.InOutQuad
         }
     }
@@ -44,7 +44,7 @@ PopupWindow {
         if (!shouldBeVisible && Math.abs(animProgress) < 0.001) {
             visible = false;
             const drawerKey = `MprisDashboard-${screen.name}`;
-            GlobalState.removeDrawer(drawerKey);
+            Qt.callLater(() => GlobalState.removeDrawer(drawerKey));
         }
     }
 
@@ -56,8 +56,8 @@ PopupWindow {
         color: 'transparent'
         opacity: animProgress
 
-        bottomLeftRadius: 100
-        bottomRightRadius: 100
+        // bottomLeftRadius: 100
+        // bottomRightRadius: 100
         y: -500 + animProgress * 500
 
         scale: animProgress
@@ -164,15 +164,17 @@ PopupWindow {
 
     Connections {
         target: GlobalState
+        ignoreUnknownSignals: true
+
         function onShowMprisChangedSignal(value, monitorName) {
+            if (!resourceSection || resourceSection.destroyed)
+                return;
             if (monitorName === parentWindow.screen.name) {
                 shouldBeVisible = value;
                 animProgress = value ? 1 : 0;
-            } else {
-                if (shouldBeVisible) {
-                    shouldBeVisible = false;
-                    animProgress = 0;
-                }
+            } else if (shouldBeVisible) {
+                shouldBeVisible = false;
+                animProgress = 0;
             }
         }
     }

@@ -9,15 +9,17 @@ PersistentProperties {
 
     // Ui states
     property var openDrawers: []
-    property var openPanels: []
 
     signal openDrawersUpdated
-    signal openPanelUpdated
+    signal openPanelsUpdated
 
     // signal Drawers
     signal showWallpaperCarouselSignal(bool value, string monitorName)
     signal showMprisChangedSignal(bool value, string monitorName)
     signal showAppMenuChangedSignal(bool value, string monitorName)
+
+    // signal Panels
+    signal showSessionMenuChangedSignal(bool value)
 
     property bool debug: false
 
@@ -38,33 +40,52 @@ PersistentProperties {
                 keyPrefix: "AppMenu",
                 signal: showAppMenuChangedSignal
             }
-            // Add more as needed...
         };
 
-        const config = drawerMap[type];
-        if (!config) {
-            console.warn("Unknown drawer type:", type);
-            return;
-        }
+        const specialPanel = {
+            logoutMenu: {
+                keyPrefix: "SessionMenu",
+                signal: showSessionMenuChangedSignal
+            }
+        };
 
-        const drawerKey = `${config.keyPrefix}-${monitorName}`;
+        const isSpecial = !!specialPanel[type];
+        const config = drawerMap[type] ? drawerMap[type] : isSpecial ? specialPanel[type] : (console.warn("Unknown drawer type:", type), null);
+
+        if (!config)
+            return;
+
+        const drawerKey = isSpecial ? config.keyPrefix : `${config.keyPrefix}-${monitorName}`;
+
         const shouldBeVisible = !hasDrawer(drawerKey);
 
         if (shouldBeVisible) {
-            addDrawer(drawerKey);
+            addDrawer(drawerKey, isSpecial);
         }
 
-        config.signal(shouldBeVisible, monitorName);
+        if (isSpecial) {
+            config.signal(shouldBeVisible);
+        } else {
+            config.signal(shouldBeVisible, monitorName);
+        }
     }
 
-    function addDrawer(name) {
+    function addDrawer(name, isSpecial = false) {
+        if (isSpecial) {
+            openPanelsUpdated();
+            return;
+        }
         if (!openDrawers.includes(name)) {
             openDrawers.push(name);
             openDrawersUpdated();
         }
     }
 
-    function removeDrawer(name) {
+    function removeDrawer(name, isSpecial = false) {
+        if (isSpecial) {
+            openPanelsUpdated();
+            return;
+        }
         let index = openDrawers.indexOf(name);
         if (index !== -1) {
             openDrawers.splice(index, 1);

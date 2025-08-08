@@ -6,10 +6,13 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs.services
+import qs.utils
 import qs
 
 ListView {
     id: flick
+    property string searchText
+
     clip: true
     orientation: ListView.Horizontal
     spacing: 20
@@ -27,8 +30,6 @@ ListView {
 
     model: ScriptModel {
         values: {
-            const searchValue = morphBox.wallpaperSearch.trim().toLowerCase();
-
             const wallpapers = popup.isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
 
             function hexToHSL(hex) {
@@ -94,10 +95,10 @@ ListView {
                 const color = (w.color ?? "").toLowerCase();
                 const brightness = (w.brightness ?? "").toLowerCase();
 
-                if (color.includes(searchValue) || brightness.includes(searchValue))
+                if (color.includes(searchText) || brightness.includes(searchText))
                     return true;
 
-                return matchesKeywordColor(color, searchValue);
+                return matchesKeywordColor(color, searchText);
             });
 
             return filtered.sort((a, b) => a.color.localeCompare(b.color));
@@ -139,8 +140,8 @@ ListView {
         }
     }
 
-    property int delegateWidth: popup.isPortrait ? width * 0.4 : width * 0.5
-    property int delegateHeight: popup.isPortrait ? height * 0.9 : height * 0.8
+    property int delegateWidth: Math.round(popup.isPortrait ? width * 0.4 : width * 0.5)
+    property int delegateHeight: Math.round(popup.isPortrait ? height * 0.9 : height * 0.8)
 
     delegate: Item {
 
@@ -158,8 +159,8 @@ ListView {
             clip: true
 
             property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
-            property color targetColor: isFocused || itemMouse.hovered ? Colors.color4 : Colors.color2
-
+            property color targetColor: isFocused || itemMouse.hovered ? Scripts.hexToRgba(Colors.color14, 0.5) : Scripts.hexToRgba(Colors.color12, 0.2)
+            // color: Scripts.hexToRgba(Colors.background, 0.2)
             scale: targetScale
             color: targetColor
 

@@ -16,13 +16,12 @@ PanelWindow {
     id: root
 
     required property var screen
-    property int animationDuration: 300
+    required property string key
+
     property string layer: "Overlay"
     property string keyboardFocus: "Exclusive"
     property bool excludeFromTaskbar: true
-    property string drawerKey: `WallpaperCarousel-${screen.name}`
-    property var stateHandler: null
-    property string visibilitySignal: "showWallpaperCarouselSignal"
+    property string drawerKey: `${key}-${screen.name}`
     property color backgroundColor: "black"
 
     // Internal properties
