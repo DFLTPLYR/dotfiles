@@ -122,7 +122,7 @@ Column {
             id: squareWrapper
             Layout.row: 0
             Layout.column: 0
-            Layout.preferredWidth: layout.height // Force square: width = height
+            Layout.preferredWidth: layout.height
             Layout.fillHeight: true
 
             Rectangle {
@@ -269,6 +269,39 @@ Column {
                         onClicked: MprisManager.togglePlaying()
                     }
                     Spacer {}
+
+                    Repeater {
+
+                        model: {
+                            return MprisManager.availablePlayers;
+                        }
+
+                        delegate: ClippingRectangle {
+
+                            width: Math.round(isPortrait ? parent.height : parent.height)
+                            height: Math.round(isPortrait ? parent.height : parent.height)
+                            radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
+
+                            color: "green"
+
+                            Image {
+                                source: modelData.trackArtUrl
+                                fillMode: Image.PreserveAspectCrop
+                                cache: true
+                                smooth: true
+                                mipmap: true
+                                width: Math.round(parent.width)
+                                height: Math.round(parent.height)
+                                sourceSize.width: width
+                                sourceSize.height: height
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: MprisManager.trackedPlayer = modelData
+                            }
+                        }
+                    }
                 }
             }
         }

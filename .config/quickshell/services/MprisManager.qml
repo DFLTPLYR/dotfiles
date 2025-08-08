@@ -15,8 +15,6 @@ import Quickshell.Services.Mpris
 */
 Singleton {
     id: root
-
-    property var availablePlayers: Mpris?.players
     property MprisPlayer trackedPlayer: null
     property MprisPlayer activePlayer: trackedPlayer ?? Mpris?.players?.values[0] ?? null
     signal trackChanged(reverse: bool)
@@ -25,37 +23,51 @@ Singleton {
 
     property var activeTrack
 
-    Instantiator {
-        model: availablePlayers
+    // 🆕 The reliable array of MprisPlayer instances
+    property var availablePlayers: []
 
-        Connections {
+    Instantiator {
+        id: playerInstantiator
+        model: Mpris?.players ?? []
+
+        delegate: Item {
             required property MprisPlayer modelData
-            target: modelData
 
             Component.onCompleted: {
-                if (root.trackedPlayer == null || modelData.isPlaying) {
+                // Add to array if not already present
+                if (!root.availablePlayers.includes(modelData)) {
+                    root.availablePlayers.push(modelData);
+                    console.log("[+] Added:", modelData.identity);
+                }
+
+                // Set initial tracked player
+                if (root.trackedPlayer === null || modelData.isPlaying) {
                     root.trackedPlayer = modelData;
                 }
             }
 
             Component.onDestruction: {
-                if (root.trackedPlayer == null || !root.trackedPlayer.isPlaying) {
-                    for (const player of Mpris.players.values) {
-                        if (player.playbackState.isPlaying) {
-                            root.trackedPlayer = player;
-                            break;
-                        }
-                    }
+                const index = root.availablePlayers.indexOf(modelData);
+                if (index !== -1) {
+                    root.availablePlayers.splice(index, 1);
+                    console.log("[-] Removed:", modelData.identity);
+                }
 
-                    if (trackedPlayer == null && Mpris.players.values.length != 0) {
-                        trackedPlayer = Mpris.players.values[0];
-                    }
+                // Reassign trackedPlayer safely
+                if (root.trackedPlayer === modelData) {
+                    const next = root.availablePlayers.find(p => p.playbackState === "Playing");
+                    root.trackedPlayer = next ?? root.availablePlayers[0] ?? null;
                 }
             }
 
-            function onPlaybackStateChanged() {
-                if (root.trackedPlayer !== modelData)
-                    root.trackedPlayer = modelData;
+            Connections {
+                target: modelData
+
+                function onPlaybackStateChanged() {
+                    if (root.trackedPlayer !== modelData && modelData.playbackState === "Playing") {
+                        root.trackedPlayer = modelData;
+                    }
+                }
             }
         }
     }
