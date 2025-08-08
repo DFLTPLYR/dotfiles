@@ -1,11 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Services.Pipewire
-import Quickshell.Widgets
-import qs.services
 import QtQuick.Controls
+
+import Quickshell
+import Quickshell.Widgets
 import Quickshell.Wayland
+import Quickshell.Services.Pipewire
+
+import qs.services
+import qs.assets
 
 Scope {
     id: root
@@ -53,6 +56,8 @@ Scope {
 
             property bool isPortrait: screen.height > screen.width
 
+            property string volumeIcon: Math.round(root.volume * 100) > 0 ? (Math.round(root.volume * 100) < 70 ? '\uf027' : '\uf028') : '\uf026'
+
             Rectangle {
                 id: mainRect
                 z: 99999
@@ -71,16 +76,16 @@ Scope {
                     anchors.fill: parent
                     anchors.margins: 10
 
-                    spacing: 8
+                    // spacing: 8
 
                     Text {
-                        Layout.preferredWidth: 40
-                        text: Math.round(root.volume * 100) + "%"
+                        Layout.preferredWidth: 60
+                        text: `${volumeIcon}   ${Math.round(root.volume * 100)}%`
                         color: Colors.color13
-                        horizontalAlignment: Text.AlignRight
+                        // horizontalAlignment: Text.AlignRight
                         elide: Text.ElideRight
                         clip: true
-
+                        font.family: FontAssets.fontAwesomeRegular
                         font.pixelSize: 14
                     }
 

@@ -1,22 +1,23 @@
 import QtQuick
+import QtQuick.Shapes
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt.labs.lottieqt
+
 import Quickshell
 import Quickshell.Io
-import QtQuick.Controls
-import QtQuick.Layouts
-
+import Quickshell.Wayland
 import Quickshell.Widgets
-import Qt.labs.lottieqt
-import QtQuick.Shapes
 
+import qs
+import qs.utils
+import qs.assets
 import qs.services
 import qs.components
-import qs.assets
-import qs
-import Quickshell.Wayland
 
 Rectangle {
     anchors.fill: parent
-    color: Colors.background
+    color: Scripts.hexToRgba(Colors.background, 0.8)
     opacity: 1
     // radius: 20
 
@@ -39,7 +40,7 @@ Rectangle {
                 height: left.height * 0.95
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 2
+                spacing: 10
 
                 Clock {}
 
@@ -60,7 +61,7 @@ Rectangle {
             Row {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.centerIn: parent
-                spacing: 8
+                spacing: 10
 
                 Workspaces {}
             }
@@ -90,7 +91,7 @@ Rectangle {
                     hoverColor: Colors.color15
                     iconColor: Colors.color10
                     onClicked: {
-                        return;
+                        return GlobalState.isSessionMenuOpen = true;
                     }
                 }
             }

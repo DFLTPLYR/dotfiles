@@ -7,6 +7,7 @@ import Quickshell.Wayland
 import qs.modules.sessionmenu
 import qs.components
 import qs.services
+import qs
 
 Variants {
     id: root
@@ -80,7 +81,7 @@ Variants {
             focus: true
             Keys.onPressed: event => {
                 if (event.key == Qt.Key_Escape)
-                    Qt.quit();
+                    GlobalState.isSessionMenuOpen = false;
                 else {
                     for (let i = 0; i < buttons.length; i++) {
                         let button = buttons[i];
@@ -104,7 +105,7 @@ Variants {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: Qt.quit()
+                onClicked: GlobalState.isSessionMenuOpen = false
 
                 GridLayout {
                     anchors.centerIn: parent
