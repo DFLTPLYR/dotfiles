@@ -9,14 +9,16 @@ import Quickshell.Wayland
 import Quickshell.Widgets
 
 import qs
+import qs.utils
 import qs.services
 import qs.components
 
-import qs.utils
-
 AnimatedScreenOverlay {
     id: toplevel
+
     screen: screenRoot.modelData
+    key: 'WallpaperCarousel'
+
     color: Scripts.hexToRgba(Colors.background, 0.2)
 
     onClicked: {
@@ -30,16 +32,47 @@ AnimatedScreenOverlay {
         anchors.fill: parent
         focus: true
 
-        signal keyPressed(var event)
-
         Keys.onPressed: event => {
-            keyPressed(event);
-            if (event.key === Qt.Key_Escape) {
+            switch (event.key) {
+            case Qt.Key_Escape:
+                searchValue = "";
                 GlobalState.toggleDrawer("wallpaper");
                 event.accepted = true;
+                break;
+            case Qt.Key_Backspace:
+                searchValue = searchValue.slice(0, -1);
+                event.accepted = true;
+                break;
+            case Qt.Key_Enter:
+            case Qt.Key_Return:
+                if (flick.currentItem && flick.currentItem.openApp) {
+                    flick.currentItem.openApp();
+                }
+                event.accepted = true;
+                break;
+            case Qt.Key_Left:
+            case Qt.Key_Down:
+                if (flick.currentIndex > 0)
+                    flick.currentIndex -= 1;
+                event.accepted = true;
+                break;
+            case Qt.Key_Up:
+            case Qt.Key_Right:
+                if (flick.currentIndex < flick.count - 1)
+                    flick.currentIndex += 1;
+                event.accepted = true;
+                break;
+            default:
+                if (event.text.length > 0) {
+                    searchValue += event.text;
+
+                    event.accepted = true;
+                }
             }
         }
     }
+
+    property string searchValue: ""
 
     PopupWindow {
         id: popup
@@ -50,6 +83,7 @@ AnimatedScreenOverlay {
 
         anchor.window: toplevel
         anchor.adjustment: PopupAdjustment.Slide
+
         // Target sizes
         property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
         property real targetHeight: screen.height * 0.5
@@ -72,82 +106,21 @@ AnimatedScreenOverlay {
             opacity: animProgress
 
             radius: Math.min(height, height) / 30
-            clip: true
 
             transformOrigin: Item.Center
-            color: Colors.background
+            color: Scripts.hexToRgba(Colors.background, 0.2)
 
-            border.color: Colors.foreground
-            border.width: 1
+            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+            border.width: 2
 
-            property string wallpaperSearch: ""
-
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width / 2
-                y: 10
-                height: 40
-                spacing: 10
-
-                Text {
-                    text: "Search:"
-                    color: Colors.color15
-                    font.pixelSize: 24
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Rectangle {
-                    id: inputBox
-                    radius: 6
-                    color: Colors.color0
-                    border.color: Colors.color14
-                    border.width: 1
-                    height: parent.height
-                    width: parent.width - 100
-
-                    TextInput {
-                        id: input
-                        anchors.fill: parent
-                        anchors.margins: 8
-                        font.pixelSize: 16
-                        color: Colors.color15
-                        cursorVisible: true
-                        font.capitalization: Font.AllLowercase
-                        clip: true
-
-                        onTextChanged: morphBox.wallpaperSearch = text.toLowerCase()
-
-                        Connections {
-                            target: keyCatcher
-                            function onKeyPressed(event) {
-                                const specialKeys = [Qt.Key_Up, Qt.Key_Down, Qt.Key_Left, Qt.Key_Right, Qt.Key_Escape];
-
-                                if (specialKeys.includes(event.key)) {
-                                    event.accepted = true;
-                                    return;
-                                }
-                                // Handle Backspace manually
-                                if (event.key === Qt.Key_Backspace) {
-                                    if (input.text.length > 0) {
-                                        input.text = input.text.slice(0, -1);
-                                        morphBox.wallpaperSearch = input.text.toLowerCase();
-                                    }
-                                    event.accepted = true;
-                                    return;
-                                }
-
-                                // Handle normal key input
-                                const keyChar = event.text;
-                                if (keyChar && keyChar.length === 1) {
-                                    input.text += keyChar;
-                                    morphBox.wallpaperSearch = input.text.toLowerCase();
-                                    input.forceActiveFocus();
-                                    event.accepted = true;
-                                }
-                            }
-                        }
-                    }
-                }
+            Text {
+                id: searchText
+                text: qsTr(`Search: ${searchValue}`)
+                font.pixelSize: 24
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                color: Colors.color15
             }
 
             ListContent {
@@ -156,45 +129,7 @@ AnimatedScreenOverlay {
                 height: parent.height
                 visible: animProgress > 0
                 opacity: animProgress
-
-                Connections {
-                    target: keyCatcher
-                    function onKeyPressed(event) {
-                        switch (event.key) {
-                        case Qt.Key_Slash:
-                            input.forceActiveFocus();
-                            event.accepted = true;
-                            break;
-                        case Qt.Key_Enter:
-                        case Qt.Key_Return:
-                            {
-                                const index = flick.currentIndex;
-                                const model = flick.model;
-                                if (model && model.values && index >= 0 && index < model.values.length) {
-                                    const path = model.values[index].path;
-                                    const screenName = screen.name;
-                                    WallpaperStore.setWallpaper(screenName, path);
-                                }
-                                event.accepted = true;
-                                break;
-                            }
-                        case Qt.Key_Left:
-                            if (flick.currentIndex > 0)
-                                flick.currentIndex -= 1;
-                            event.accepted = true;
-                            break;
-                        case Qt.Key_Right:
-                            if (flick.currentIndex < flick.count - 1)
-                                flick.currentIndex += 1;
-                            event.accepted = true;
-                            break;
-                        case Qt.Key_Escape:
-                            GlobalState.toggleDrawer("wallpaper");
-                            event.accepted = true;
-                            break;
-                        }
-                    }
-                }
+                searchText: searchValue
             }
         }
     }

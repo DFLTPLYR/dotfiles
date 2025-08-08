@@ -11,12 +11,12 @@ import qs
 Singleton {
     id: root
 
+    property var currentWallpapers
     property var landscapeWallpapers: []
     property var portraitWallpapers: []
     property var colorQueue: []
 
     function classifyWallpapers() {
-        console.log('Classifying');
         searchFiles.running = true;
     }
 
@@ -133,6 +133,7 @@ Singleton {
 
         getCurrentMonitorWallpapers(function (wallpaperMap) {
             generateCombinedWallpaperImage(wallpaperMap);
+            root.currentWallpapers = wallpaperMap;
         });
 
         return GlobalState.toggleDrawer("wallpaper");
@@ -295,5 +296,8 @@ Singleton {
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
         initWallpaperDb(); // 🖥️ Setup per-monitor wallpaper tracking
         // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
+        getCurrentMonitorWallpapers(e => {
+            root.currentWallpapers = e;
+        });
     }
 }

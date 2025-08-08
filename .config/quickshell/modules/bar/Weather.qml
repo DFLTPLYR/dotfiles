@@ -16,11 +16,11 @@ Item {
     Text {
         id: weatherText
         visible: true
-        text: WeatherFetcher.weatherInfo
+        text: WeatherFetcher.weatherInfo ? `${WeatherFetcher.weatherInfo} - ${WeatherFetcher.weatherCondition}` : ''
         color: Colors.color10
 
         font.pixelSize: Appearance.fontsize
-        font.family: "monospace"
+        font.family: FontAssets.fontAwesomeRegular
         Fade on text {}
 
         anchors.verticalCenter: parent.verticalCenter

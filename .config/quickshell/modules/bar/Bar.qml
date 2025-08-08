@@ -89,7 +89,9 @@ Rectangle {
                     backgroundColor: Colors.background
                     hoverColor: Colors.color15
                     iconColor: Colors.color10
-                    onClicked: MprisManager.togglePlaying()
+                    onClicked: {
+                        return;
+                    }
                 }
             }
         }
