@@ -22,6 +22,7 @@ PersistentProperties {
     signal showSessionMenuChangedSignal(bool value)
 
     property bool debug: false
+    property bool isSessionMenuOpen: false
 
     function toggleDrawer(type) {
         Hyprland.refreshMonitors();

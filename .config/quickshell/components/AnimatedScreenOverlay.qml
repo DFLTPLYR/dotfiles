@@ -20,7 +20,6 @@ PanelWindow {
 
     property string layer: "Overlay"
     property string keyboardFocus: "Exclusive"
-    property bool excludeFromTaskbar: true
     property string drawerKey: `${key}-${screen.name}`
     property color backgroundColor: "black"
 
@@ -86,7 +85,6 @@ PanelWindow {
     Component.onCompleted: {
         if (root.WlrLayershell) {
             root.WlrLayershell.layer = root.layer;
-            root.exclusionMode = root.excludeFromTaskbar ? ExclusionMode.Ignore : ExclusionMode.Normal;
             root.WlrLayershell.keyboardFocus = root.keyboardFocus;
         }
     }

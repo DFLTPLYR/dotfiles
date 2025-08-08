@@ -1,6 +1,9 @@
 // ClockWidget.qml
 import QtQuick
+
 import Quickshell
+import Quickshell.Widgets
+
 import qs.services
 import qs.animations
 import qs.modules

@@ -155,7 +155,7 @@ ShellRoot {
     VolumeOsd {}
 
     LazyLoader {
-        active: panelStates.showWindowsOptions
+        active: GlobalState.isSessionMenuOpen
         component: SessionMenu {}
     }
 
