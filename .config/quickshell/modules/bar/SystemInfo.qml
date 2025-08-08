@@ -1,5 +1,7 @@
 import QtQuick
 import Quickshell
+
+import qs
 import qs.services
 import qs.animations
 import qs.modules
@@ -21,12 +23,4 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
     }
-
-    // Timer {
-    //     id: weatherTimer
-    //     interval: 5 * 60 * 1000
-    //     running: true
-    //     repeat: true
-    //     onTriggered: WeatherFetcher.infoFetcher.running = true
-    // }
 }

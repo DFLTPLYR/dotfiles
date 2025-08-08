@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Shapes
 
 import qs
+import qs.utils
 import qs.services
 
 PopupWindow {
@@ -56,8 +57,6 @@ PopupWindow {
         color: 'transparent'
         opacity: animProgress
 
-        // bottomLeftRadius: 100
-        // bottomRightRadius: 100
         y: -500 + animProgress * 500
 
         scale: animProgress
@@ -75,7 +74,7 @@ PopupWindow {
                 readonly property real roundingY: flatten ? playerBackground.height / 2 : rounding
 
                 strokeWidth: -1
-                fillColor: Colors.background
+                fillColor: Scripts.hexToRgba(Colors.background, 0.9)
 
                 // Top-left outward arc
                 PathArc {
@@ -137,7 +136,7 @@ PopupWindow {
 
         Row {
             id: mainContent
-            width: Math.floor(parent.width - 120)
+            width: Math.floor(isPortrait ? parent.width - 100 : parent.width - 120)
             height: Math.floor(parent.height - 40)
             anchors.centerIn: parent
             spacing: 0
@@ -145,20 +144,20 @@ PopupWindow {
             ClippingRectangle {
                 color: 'transparent'
 
-                width: Math.floor(mainContent.width * 0.55)
+                width: Math.floor(mainContent.width)
                 height: Math.floor(mainContent.height)
 
-                MainContent {}
+                MprisContent {}
             }
 
-            ClippingRectangle {
-                id: testing
-                color: 'transparent'
-                width: Math.floor(mainContent.width * 0.45 - 40)
-                height: Math.floor(mainContent.height)
+            // ClippingRectangle {
+            //     id: testing
+            //     color: 'transparent'
+            //     width: Math.floor(mainContent.width * 0.45)
+            //     height: Math.floor(mainContent.height)
 
-                SystemStats {}
-            }
+            //     SystemStats {}
+            // }
         }
     }
 

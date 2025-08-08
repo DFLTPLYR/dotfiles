@@ -1,7 +1,10 @@
-import Quickshell
 import QtQuick
 import QtQuick.Controls
+
+import Quickshell
 import Quickshell.Hyprland
+
+import qs
 import qs.services
 import qs.modules
 
