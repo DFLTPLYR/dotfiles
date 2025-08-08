@@ -199,5 +199,6 @@ ShellRoot {
         WeatherFetcher;
         AppManager;
         FontAssets;
+        SystemResource;
     }
 }

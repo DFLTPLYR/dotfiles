@@ -3,10 +3,11 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import qs.services
-import qs.animations
+import qs
 import qs.assets
 import qs.modules
+import qs.services
+import qs.animations
 
 Item {
     id: root
