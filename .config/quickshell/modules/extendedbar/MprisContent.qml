@@ -13,123 +13,83 @@ import qs.components
 import qs.assets
 import qs
 
-Column {
+GridLayout {
+    id: parentGrid
     anchors.fill: parent
-    spacing: 20
+    columns: 5
+    rows: 5
+    rowSpacing: 8
+    columnSpacing: 8
 
-    GridLayout {
-        height: (parent.height - 2 * parent.spacing) / 3
-        width: parent.width
-        Row {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+    // Date and Clock
+    Rectangle {
+        color: "#ff9999"
+
+        border.width: 1
+        border.color: Colors.color1
+        radius: 10
+
+        Layout.row: 0
+        Layout.column: 0
+        Layout.rowSpan: 5
+        Layout.minimumWidth: 80
+        Layout.preferredWidth: Math.round(parent.width / 5)
+        Layout.fillHeight: true
+        Text {
+            anchors.centerIn: parent
+            text: "1"
         }
     }
 
-    GridLayout {
-        height: (parent.height - 2 * parent.spacing) / 3
-        width: parent.width
-        Row {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+    // System data
+    Rectangle {
+        color: "#99ff99"
+
+        border.width: 1
+        border.color: Colors.color1
+        radius: 10
+
+        Layout.row: 0
+        Layout.column: 1
+        Layout.columnSpan: 3
+        Layout.rowSpan: 2
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Text {
+            anchors.centerIn: parent
+            text: "2"
         }
-        // ComboBox {
-        //     id: playerDropdown
-        //     width: 50
-        //     model: MprisManager.availablePlayers.values
-        //     textRole: "identity"
-        //     font.pixelSize: 3
-        //     // padding: 2
-
-        //     delegate: ItemDelegate {
-        //         id: delegate
-
-        //         required property var model
-        //         required property int index
-
-        //         width: Math.round(playerDropdown.width)
-
-        //         contentItem: Text {
-        //             text: delegate.model[playerDropdown.textRole]
-        //             color: Colors.color10
-        //             font: playerDropdown.font
-        //             elide: Text.ElideRight
-        //             verticalAlignment: Text.AlignVCenter
-        //         }
-        //         highlighted: playerDropdown.highlightedIndex === index
-        //     }
-
-        //     background: Rectangle {
-        //         color: Colors.color10
-        //         radius: 50
-        //     }
-
-        //     contentItem: Text {
-        //         text: playerDropdown.displayText
-        //         color: "white"
-        //         font.pixelSize: 24
-        //         verticalAlignment: Text.AlignVCenter
-        //         elide: Text.ElideRight
-        //     }
-
-        //     indicator: CustomIcon {
-        //         anchors.right: parent.right
-        //         anchors.verticalCenter: parent.verticalCenter
-        //         anchors.rightMargin: 8
-        //         name: "\uf13a"
-        //         size: 32
-        //         color: Colors.color9
-        //     }
-
-        //     popup: Popup {
-        //         y: Math.round(playerDropdown.height - 1)
-        //         width: Math.round(playerDropdown.width)
-        //         height: Math.min(contentItem.implicitHeight, playerDropdown.Window.height - topMargin - bottomMargin)
-        //         padding: 1
-
-        //         contentItem: ListView {
-        //             clip: true
-        //             implicitHeight: contentHeight
-        //             model: playerDropdown.popup.visible ? playerDropdown.delegateModel : null
-        //             currentIndex: playerDropdown.highlightedIndex
-
-        //             ScrollIndicator.vertical: ScrollIndicator {}
-        //         }
-
-        //         background: Rectangle {
-        //             color: Colors.background
-        //             border.color: Colors.background
-        //             radius: 2
-        //         }
-        //     }
-
-        //     onCurrentIndexChanged: {
-        //         const selected = model[currentIndex];
-        //         MprisManager.setActivePlayer(selected);
-        //     }
-        // }
     }
 
-    GridLayout {
-        id: layout
-        width: parent.width
-        height: (parent.height - 2 * parent.spacing) / 3
-        columns: 2
-        columnSpacing: 0
-        rowSpacing: 0
+    // Mpris
+    Rectangle {
+        color: "transparent"
 
-        Item {
-            id: squareWrapper
-            Layout.row: 0
-            Layout.column: 0
-            Layout.preferredWidth: layout.height
-            Layout.fillHeight: true
+        border.width: 1
+        border.color: Colors.color1
+        radius: 10
 
-            Rectangle {
-                anchors.fill: parent
+        Layout.row: 0
+        Layout.column: 4
+        Layout.rowSpan: 5
+        Layout.minimumWidth: 80
+        Layout.preferredWidth: Math.round(parent.width / 5)
+        Layout.fillHeight: true
+
+        Rectangle {
+            id: albumWrapper
+            width: parent.width
+            height: width
+            color: "transparent"
+
+            ClippingRectangle {
                 color: "transparent"
+                anchors.centerIn: parent
+                width: Math.round(isPortrait ? parent.height : parent.height) - 25
+                height: Math.round(isPortrait ? parent.height : parent.height) - 25
 
                 ClippingRectangle {
+
                     width: Math.round(isPortrait ? parent.height : parent.height)
                     height: Math.round(isPortrait ? parent.height : parent.height)
                     radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
@@ -206,104 +166,150 @@ Column {
         }
 
         Rectangle {
-            Layout.row: 0
-            Layout.column: 1
-            Layout.fillHeight: true
-            Layout.preferredWidth: layout.width - squareWrapper.width
+            id: albumDetails
             color: "transparent"
+            anchors.top: albumWrapper.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height / 3
 
-            ColumnLayout {
-                anchors.fill: parent
-                spacing: 2
+            ClippingRectangle {
+                color: "transparent"
+                anchors.centerIn: parent
+                width: Math.round(isPortrait ? parent.width : parent.width) - 25
+                height: Math.round(isPortrait ? parent.height : parent.height) - 25
 
-                Text {
-                    id: artistText
-                    text: MprisManager.activeTrack.artist ?? "SYBAU"
-                    color: Colors.color10
-                    font.pixelSize: 12
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                }
+                ColumnLayout {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: parent.height / 3
 
-                Text {
-                    id: songTitle
-                    text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
-                    color: Colors.color11
-                    font.pixelSize: 12
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    StyledButton {
-                        icon: "\uf04a"
-                        size: 48
-                        iconRatio: 0.5
-                        backgroundColor: Colors.background
-                        hoverColor: Colors.color15
-                        iconColor: Colors.color10
-                        onClicked: MprisManager.togglePlaying()
+                    Text {
+                        id: artist
+                        text: MprisManager.activeTrack.artist ?? "SYBAU"
+                        color: Colors.color10
+                        font.pixelSize: 24
+                        wrapMode: Text.Wrap
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter
                     }
 
-                    StyledButton {
-                        icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
-                        size: 48
-                        iconRatio: 0.5
-                        backgroundColor: Colors.background
-                        hoverColor: Colors.color15
-                        iconColor: Colors.color10
-                        onClicked: MprisManager.togglePlaying()
-                    }
-
-                    StyledButton {
-                        icon: "\uf04e"
-                        size: 48
-                        iconRatio: 0.5
-                        backgroundColor: Colors.background
-                        hoverColor: Colors.color15
-                        iconColor: Colors.color10
-                        onClicked: MprisManager.togglePlaying()
-                    }
-                    Spacer {}
-
-                    Repeater {
-
-                        model: {
-                            return MprisManager.availablePlayers;
-                        }
-
-                        delegate: ClippingRectangle {
-
-                            width: Math.round(isPortrait ? parent.height : parent.height)
-                            height: Math.round(isPortrait ? parent.height : parent.height)
-                            radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
-
-                            color: "green"
-
-                            Image {
-                                source: modelData.trackArtUrl
-                                fillMode: Image.PreserveAspectCrop
-                                cache: true
-                                smooth: true
-                                mipmap: true
-                                width: Math.round(parent.width)
-                                height: Math.round(parent.height)
-                                sourceSize.width: width
-                                sourceSize.height: height
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: MprisManager.trackedPlayer = modelData
-                            }
-                        }
+                    Text {
+                        id: title
+                        text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
+                        color: Colors.color11
+                        font.pixelSize: 12
+                        wrapMode: Text.Wrap
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter
                     }
                 }
             }
+        }
+
+        RowLayout {
+            id: mprisControls
+            anchors.top: albumDetails.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            Spacer {}
+
+            StyledButton {
+                icon: "\uf04a"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.previous()
+            }
+
+            StyledButton {
+                icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.togglePlaying()
+            }
+
+            StyledButton {
+                icon: "\uf04e"
+                size: 48
+                iconRatio: 0.5
+                backgroundColor: Colors.background
+                hoverColor: Colors.color15
+                iconColor: Colors.color10
+                onClicked: MprisManager.next()
+            }
+
+            Spacer {}
+        }
+
+        Rectangle {
+
+            anchors.top: mprisControls.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            color: 'transparent'
+
+            RowLayout {
+                anchors.centerIn: parent
+
+                Spacer {}
+
+                Repeater {
+                    model: Mpris.players.values
+                    delegate: Rectangle {
+                        Layout.preferredHeight: 24
+                        Layout.preferredWidth: 24
+                        radius: width / 2
+                        color: "transparent"
+
+                        Image {
+                            anchors.fill: parent
+                            source: modelData.trackArtUrl
+                            fillMode: Image.PreserveAspectCrop
+                            cache: true
+                            smooth: true
+                            mipmap: true
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: MprisManager.activePlayer = modelData
+                        }
+                    }
+                }
+
+                Spacer {}
+            }
+        }
+    }
+
+    // Calendar
+    Rectangle {
+        color: "#ffff99"
+
+        border.width: 1
+        border.color: Colors.color1
+        radius: 10
+
+        Layout.row: 2
+        Layout.column: 1
+        Layout.columnSpan: 3
+        Layout.rowSpan: 3
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Text {
+            anchors.centerIn: parent
+            text: "4"
         }
     }
 }

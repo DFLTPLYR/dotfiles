@@ -51,8 +51,8 @@ PopupWindow {
 
     ClippingRectangle {
         id: playerBackground
-        width: Math.floor(isPortrait ? parentWindow.width / 1.5 : parentWindow.width / 2)
-        height: Math.floor(isPortrait ? parentWindow.width / 2.25 : parentWindow.width / 4)
+        width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
+        height: Math.floor(isPortrait ? parentWindow.width / 2 : parentWindow.width / 4)
 
         color: 'transparent'
         opacity: animProgress
