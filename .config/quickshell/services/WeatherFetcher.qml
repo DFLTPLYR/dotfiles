@@ -8,18 +8,22 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property string weatherInfo: "" // e.g., "32°C"
-    property string weatherCondition: "" // e.g., "sunny"
-    property string weatherIcon: "" // FontAwesome or your custom icon
-    property var weatherData: {} // Full raw JSON if needed
+    property string weatherInfo: ""
+    property string weatherCondition: ""
+    property string weatherIcon: ""
+    property var weatherData: {}
 
     property var weatherIcons: ({
-            cloud: '\uf1c0',
+            cloud: '\uf0c2',
+            partlyCloudy: '\uf6c4',
             thunder: '\uf0e7',
             rainy: '\uf73d',
             wet: '\uf0e9',
             sunny: '\uf185',
             windy: '\uf72e',
+            snowy: '\uf2dc',
+            hail: '\uf7ad',
+            dusty: '\uf72f',
             unknown: '\uf128'
         })
 
@@ -42,18 +46,39 @@ Singleton {
 
                     let condition = "unknown";
 
-                    if (desc.includes("sun")) {
+                    switch (true) {
+                    case desc.includes("sun") || desc.includes("clear"):
                         condition = "sunny";
-                    } else if (desc.includes("rain")) {
+                        break;
+                    case desc.includes("rain") || desc.includes("shower"):
                         condition = "rainy";
-                    } else if (desc.includes("cloud")) {
+                        break;
+                    case desc.includes("cloud") || desc.includes("overcast") || desc.includes("partly"):
                         condition = "cloud";
-                    } else if (desc.includes("thunder")) {
+                        break;
+                    case desc.includes("thunder"):
                         condition = "thunder";
-                    } else if (desc.includes("mist") || desc.includes("fog") || desc.includes("drizzle")) {
+                        break;
+                    case desc.includes("mist") || desc.includes("fog") || desc.includes("drizzle"):
                         condition = "wet";
-                    } else if (desc.includes("wind")) {
+                        break;
+                    case desc.includes("wind") || desc.includes("breeze") || desc.includes("gust"):
                         condition = "windy";
+                        break;
+                    case desc.includes("snow") || desc.includes("sleet") || desc.includes("blizzard") || desc.includes("flurries"):
+                        condition = "snowy";
+                        break;
+                    case desc.includes("hail"):
+                        condition = "hail";
+                        break;
+                    case desc.includes("tornado") || desc.includes("hurricane") || desc.includes("cyclone"):
+                        condition = "extreme";
+                        break;
+                    case desc.includes("dust") || desc.includes("sand") || desc.includes("smoke"):
+                        condition = "dusty";
+                        break;
+                    default:
+                        condition = "unknown";
                     }
 
                     root.weatherCondition = condition;

@@ -42,11 +42,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 10
 
-                Clock {}
-
-                Weather {}
-
-                // SystemInfo {}
+                // Weather {}
             }
         }
 
@@ -79,19 +75,18 @@ Rectangle {
                 height: right.height * 0.95
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-
                 spacing: 2
 
                 StyledButton {
-                    Layout.alignment: Qt.AlignRight
+                    anchors.verticalCenter: parent.verticalCenter
                     icon: "\uf011"
-                    size: parent.height
+                    size: parent.height / 1.5
                     iconRatio: 0.5
                     backgroundColor: Colors.background
                     hoverColor: Colors.color15
                     iconColor: Colors.color10
                     onClicked: {
-                        return GlobalState.isSessionMenuOpen = true;
+                        GlobalState.isSessionMenuOpen = true;
                     }
                 }
             }
