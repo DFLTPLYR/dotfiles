@@ -1,73 +1,54 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-// From https://git.outfoxxed.me/outfoxxed/nixnew
-// It does not have a license, but the author is okay with redistribution.
-
 import QtQml.Models
 import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import qs
 
-/**
-* A service that provides easy access to the active Mpris player.
-*/
 Singleton {
     id: root
     property MprisPlayer trackedPlayer: null
-    property MprisPlayer activePlayer: trackedPlayer ?? Mpris?.players?.values[0] ?? null
+    property MprisPlayer activePlayer: trackedPlayer ?? Mpris.players.values[0] ?? null
     signal trackChanged(reverse: bool)
 
     property bool __reverse: false
 
     property var activeTrack
 
-    // 🆕 The reliable array of MprisPlayer instances
-    property var availablePlayers: []
-
     Instantiator {
-        id: playerInstantiator
-        model: Mpris?.players ?? []
+        model: Mpris.players
 
-        delegate: Item {
+        Connections {
             required property MprisPlayer modelData
+            target: modelData
 
             Component.onCompleted: {
-                // Add to array if not already present
-                if (!root.availablePlayers.includes(modelData)) {
-                    root.availablePlayers.push(modelData);
-                    console.log("[+] Added:", modelData.identity);
-                }
-
-                // Set initial tracked player
-                if (root.trackedPlayer === null || modelData.isPlaying) {
+                if (root.trackedPlayer == null || modelData.isPlaying) {
                     root.trackedPlayer = modelData;
                 }
             }
 
             Component.onDestruction: {
-                const index = root.availablePlayers.indexOf(modelData);
-                if (index !== -1) {
-                    root.availablePlayers.splice(index, 1);
-                    console.log("[-] Removed:", modelData.identity);
-                }
+                if (root.trackedPlayer == null || !root.trackedPlayer.isPlaying) {
+                    for (const player of Mpris.players.values) {
+                        if (player.playbackState.isPlaying) {
+                            root.trackedPlayer = player;
+                            break;
+                        }
+                    }
 
-                // Reassign trackedPlayer safely
-                if (root.trackedPlayer === modelData) {
-                    const next = root.availablePlayers.find(p => p.playbackState === "Playing");
-                    root.trackedPlayer = next ?? root.availablePlayers[0] ?? null;
+                    if (trackedPlayer == null && Mpris.players.values.length != 0) {
+                        trackedPlayer = Mpris.players.values[0];
+                    }
                 }
             }
 
-            Connections {
-                target: modelData
-
-                function onPlaybackStateChanged() {
-                    if (root.trackedPlayer !== modelData && modelData.playbackState === "Playing") {
-                        root.trackedPlayer = modelData;
-                    }
-                }
+            function onPlaybackStateChanged() {
+                if (root.trackedPlayer !== modelData)
+                    root.trackedPlayer = modelData;
             }
         }
     }
@@ -80,7 +61,11 @@ Singleton {
         }
 
         function onTrackArtUrlChanged() {
+            console.log("arturl:", activePlayer.trackArtUrl);
+            //root.updateTrack();
             if (root.activePlayer.uniqueId == root.activeTrack.uniqueId && root.activePlayer.trackArtUrl != root.activeTrack.artUrl) {
+                // cantata likes to send cover updates *BEFORE* updating the track info.
+                // as such, art url changes shouldn't be able to break the reverse animation
                 const r = root.__reverse;
                 root.updateTrack();
                 root.__reverse = r;
@@ -91,12 +76,13 @@ Singleton {
     onActivePlayerChanged: this.updateTrack()
 
     function updateTrack() {
+        //console.log(`update: ${this.activePlayer?.trackTitle ?? ""} : ${this.activePlayer?.trackArtists}`)
         this.activeTrack = {
             uniqueId: this.activePlayer?.uniqueId ?? 0,
             artUrl: this.activePlayer?.trackArtUrl ?? "",
-            title: this.activePlayer?.trackTitle ?? "",
-            artist: this.activePlayer?.trackArtist ?? "",
-            album: this.activePlayer?.trackAlbum ?? ""
+            title: this.activePlayer?.trackTitle || "Unknown Title",
+            artist: this.activePlayer?.trackArtist || "Unknown Artist",
+            album: this.activePlayer?.trackAlbum || "Unknown Album"
         };
 
         this.trackChanged(__reverse);
@@ -105,7 +91,6 @@ Singleton {
 
     property bool isPlaying: this.activePlayer && this.activePlayer.isPlaying
     property bool canTogglePlaying: this.activePlayer?.canTogglePlaying ?? false
-
     function togglePlaying() {
         if (this.canTogglePlaying)
             this.activePlayer.togglePlaying();
@@ -147,6 +132,7 @@ Singleton {
 
     function setActivePlayer(player: MprisPlayer) {
         const targetPlayer = player ?? Mpris.players[0];
+        console.log(`setactive: ${targetPlayer} from ${activePlayer}`);
 
         if (targetPlayer && this.activePlayer) {
             this.__reverse = Mpris.players.indexOf(targetPlayer) < Mpris.players.indexOf(this.activePlayer);
