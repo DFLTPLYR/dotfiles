@@ -65,64 +65,63 @@ PopupWindow {
         Shape {
             anchors.fill: parent
             scale: animProgress
-            ShapePath {
-                id: root
 
-                // All values defined locally
-                readonly property real rounding: 40
+            ShapePath {
+                id: shapeBackground
+                readonly property real rounding: 20
                 readonly property bool flatten: playerBackground.height < rounding * 2
                 readonly property real roundingY: flatten ? playerBackground.height / 2 : rounding
 
                 strokeWidth: -1
-                fillColor: Scripts.hexToRgba(Colors.background, 0.9)
+                fillColor: Scripts.hexToRgba(Colors.background, 0.8)
 
                 // Top-left outward arc
                 PathArc {
-                    relativeX: root.rounding
-                    relativeY: root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
+                    relativeX: shapeBackground.rounding
+                    relativeY: shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
                 }
 
                 PathLine {
                     relativeX: 0
-                    relativeY: playerBackground.height - root.roundingY * 2
+                    relativeY: playerBackground.height - shapeBackground.roundingY * 2
                 }
 
                 // Bottom-left outward arc
                 PathArc {
-                    relativeX: root.rounding
-                    relativeY: root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
+                    relativeX: shapeBackground.rounding
+                    relativeY: shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
                     direction: PathArc.Counterclockwise
                 }
 
                 PathLine {
-                    relativeX: playerBackground.width - root.rounding * 4
+                    relativeX: playerBackground.width - shapeBackground.rounding * 4
                     relativeY: 0
                 }
 
                 // Bottom-right outward arc
                 PathArc {
-                    relativeX: root.rounding
-                    relativeY: -root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
+                    relativeX: shapeBackground.rounding
+                    relativeY: -shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
                     direction: PathArc.Counterclockwise
                 }
 
                 PathLine {
                     relativeX: 0
-                    relativeY: -(playerBackground.height - root.roundingY * 2)
+                    relativeY: -(playerBackground.height - shapeBackground.roundingY * 2)
                 }
 
                 // Top-right outward arc
                 PathArc {
-                    relativeX: root.rounding
-                    relativeY: -root.roundingY
-                    radiusX: root.rounding
-                    radiusY: root.roundingY
+                    relativeX: shapeBackground.rounding
+                    relativeY: -shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
                 }
 
                 Behavior on fillColor {
@@ -136,8 +135,8 @@ PopupWindow {
 
         Row {
             id: mainContent
-            width: Math.floor(isPortrait ? parent.width - 100 : parent.width - 120)
-            height: Math.floor(parent.height - 40)
+            width: Math.floor(parent.width - (shapeBackground.rounding * 3))
+            height: Math.floor(parent.height - shapeBackground.rounding)
             anchors.centerIn: parent
             spacing: 0
 
@@ -147,17 +146,8 @@ PopupWindow {
                 width: Math.floor(mainContent.width)
                 height: Math.floor(mainContent.height)
 
-                MprisContent {}
+                Dashboard {}
             }
-
-            // ClippingRectangle {
-            //     id: testing
-            //     color: 'transparent'
-            //     width: Math.floor(mainContent.width * 0.45)
-            //     height: Math.floor(mainContent.height)
-
-            //     SystemStats {}
-            // }
         }
     }
 

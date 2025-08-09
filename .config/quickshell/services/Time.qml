@@ -13,5 +13,47 @@ QtObject {
         precision: SystemClock.Seconds
     }
 
-    readonly property string time: Qt.formatDateTime(clock.date, detailed ? "dddd MMMM d yyyy hh:mm AP" : "ddd h:mmAP")
+    // Raw values from SystemClock
+    readonly property int rawHours: clock.hours
+    readonly property int minutes: clock.minutes
+    readonly property int seconds: clock.seconds
+    readonly property date date: clock.date
+
+    // 12-hour conversion with zero padding
+    readonly property string hoursPadded: {
+        let h = rawHours % 12;
+        if (h === 0)
+            h = 12;
+        return h < 10 ? "0" + h : "" + h;
+    }
+    readonly property string minutesPadded: minutes < 10 ? "0" + minutes : "" + minutes
+    readonly property string ampm: rawHours >= 12 ? "PM" : "AM"
+
+    // Formatted strings
+    readonly property string dateString: Qt.formatDateTime(clock.date, "yyyy-MM-dd")
+    readonly property string fullTime: hoursPadded + ":" + minutesPadded + " " + ampm
+
+    // Day name (Monday, Tuesday, etc.)
+    readonly property string dayName: Qt.formatDateTime(clock.date, "dddd")
+
+    // Short day name (Mon, Tue, etc.)
+    readonly property string dayShort: Qt.formatDateTime(clock.date, "ddd")
+
+    // Month name (January, February, etc.)
+    readonly property string monthName: Qt.formatDateTime(clock.date, "MMMM")
+
+    // Short month (Jan, Feb, etc.)
+    readonly property string monthShort: Qt.formatDateTime(clock.date, "MMM")
+
+    // Day of month (01–31)
+    readonly property string dayNumber: Qt.formatDateTime(clock.date, "dd")
+
+    // Week number (01–53)
+    readonly property string weekNumber: Qt.formatDateTime(clock.date, "ww")
+
+    // Time.qml (add these props)
+    readonly property int year: parseInt(Qt.formatDateTime(clock.date, "yyyy"))
+    readonly property int month: parseInt(Qt.formatDateTime(clock.date, "M")) // 1..12
+    readonly property int day: parseInt(Qt.formatDateTime(clock.date, "d")) // 1..31
+
 }

@@ -11,6 +11,7 @@ import Quickshell.Services.Mpris
 import qs.services
 import qs.components
 import qs.assets
+import qs.utils
 import qs
 
 GridLayout {
@@ -23,7 +24,7 @@ GridLayout {
 
     // Date and Clock
     Rectangle {
-        color: "#ff9999"
+        color: "transparent"
 
         border.width: 1
         border.color: Colors.color1
@@ -35,15 +36,88 @@ GridLayout {
         Layout.minimumWidth: 80
         Layout.preferredWidth: Math.round(parent.width / 5)
         Layout.fillHeight: true
-        Text {
-            anchors.centerIn: parent
-            text: "1"
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 0 // no extra gap between rows
+
+                // Weather top section
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: parent.height / 3
+                    spacing: -50
+                    Layout.alignment: Qt.AlignHCenter
+
+                    Text {
+                        Layout.fillWidth: true
+                        color: Colors.color10
+                        text: "\uf0c2"
+                        font.pixelSize: 50
+                        font.family: FontAssets.fontAwesomeRegular
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    Text {
+                        Layout.fillWidth: true
+                        color: Colors.color10
+                        text: WeatherFetcher.weatherInfo
+                        font.pixelSize: 32
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                // Middle section (time)
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredHeight: parent.height / 3
+                    Text {
+                        color: Colors.color10
+                        text: Time.hoursPadded
+                        font.pixelSize: 24
+                    }
+                    Rectangle {
+                        color: Colors.color15
+                        height: 1
+                        Layout.preferredWidth: parent.width
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Text {
+                        color: Colors.color10
+                        text: Time.minutesPadded
+                        font.pixelSize: 24
+                    }
+                }
+
+                // Bottom section
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: parent.height / 3
+                    spacing: 4
+                    Layout.alignment: Qt.AlignHCenter
+                    Text {
+                        color: Colors.color10
+                        text: 'Free space'
+                        wrapMode: Text.Wrap
+                        font.pixelSize: 20
+                        font.family: FontAssets.fontAwesomeRegular
+                    }
+                }
+            }
         }
     }
 
     // System data
     Rectangle {
-        color: "#99ff99"
+        color: Scripts.hexToRgba(Colors.background, 0.8)
 
         border.width: 1
         border.color: Colors.color1
@@ -58,6 +132,7 @@ GridLayout {
         Text {
             anchors.centerIn: parent
             text: "2"
+            color: Colors.color13
         }
     }
 
@@ -295,11 +370,7 @@ GridLayout {
 
     // Calendar
     Rectangle {
-        color: "#ffff99"
-
-        border.width: 1
-        border.color: Colors.color1
-        radius: 10
+        color: "transparent"
 
         Layout.row: 2
         Layout.column: 1
@@ -307,9 +378,87 @@ GridLayout {
         Layout.rowSpan: 3
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Text {
-            anchors.centerIn: parent
-            text: "4"
+
+        Rectangle {
+            id: calendarWrapper
+            anchors.fill: parent
+            color: "transparent"
+
+            property int year: Time.year
+            property int month: Time.month
+
+            function daysInMonth(y, m) {
+                return new Date(y, m + 1, 0).getDate();
+            }
+
+            function firstDayOfMonth(y, m) {
+                return new Date(y, m, 1).getDay();
+            }
+
+            GridLayout {
+                id: calendarGrid
+                anchors.fill: parent
+                columns: 7
+                rowSpacing: 4
+                columnSpacing: 4
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                property var dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+                Repeater {
+                    model: calendarGrid.columns
+                    delegate: Rectangle {
+                        color: 'transparent'
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        height: 30
+
+                        border.color: Colors.color1
+                        radius: 4
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: calendarGrid.dayNames[index]
+                            font.bold: true
+                            color: Colors.color13
+                        }
+                    }
+                }
+
+                // Row 2+: Dates
+                Repeater {
+                    model: {
+                        let totalDays = calendarWrapper.daysInMonth(calendarWrapper.year, calendarWrapper.month);
+                        let startOffset = calendarWrapper.firstDayOfMonth(calendarWrapper.year, calendarWrapper.month);
+                        let cells = [];
+                        let totalCells = totalDays + startOffset;
+                        for (let i = 0; i < totalCells; i++) {
+                            if (i < startOffset) {
+                                cells.push("");
+                            } else {
+                                cells.push(i - startOffset + 1);
+                            }
+                        }
+                        return cells;
+                    }
+
+                    delegate: Rectangle {
+                        property bool selected: modelData === Time.date.getDate()
+                        color: selected ? Scripts.hexToRgba(Colors.color15, 0.2) : "transparent"
+                        radius: 4
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        height: 40
+                        border.color: Colors.color1
+                        opacity: modelData != 0
+                        Text {
+                            anchors.centerIn: parent
+                            text: modelData
+                            color: selected ? Colors.color10 : Colors.color15
+                        }
+                    }
+                }
+            }
         }
     }
 }
