@@ -195,24 +195,6 @@ Singleton {
         command: ["sh", "-c", "select-wallpaper.zsh --regen"]
     }
 
-    // ColorQuantizer {
-    //     id: colorQuantizer
-    //     depth: 4
-    //     source: "file://tmp/combined_wallpaper.png"
-    //     rescaleSize: 128
-    //     onColorsChanged: {
-    //         Colors.genTheme = colors;
-    //         console.log(colors);
-    //     }
-    // }
-
-    // FileView {
-    //     id: jsonFile
-    //     path: "file:///tmp/combined_wallpaper.png"
-    //     watchChanges: true
-    //     onFileChanged: console.log(this)
-    // }
-
     Process {
         id: searchFiles
         running: false

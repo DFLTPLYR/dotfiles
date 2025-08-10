@@ -42,7 +42,6 @@ Singleton {
                     const desc = current.weatherDesc[0].value.toLowerCase();
 
                     root.weatherInfo = temp;
-                    console.log(desc);
 
                     let condition = "unknown";
 

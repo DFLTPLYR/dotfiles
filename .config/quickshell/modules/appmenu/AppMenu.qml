@@ -114,7 +114,7 @@ AnimatedScreenOverlay {
 
                         Image {
                             id: name
-                            source: WallpaperStore.currentWallpapers[screen.name]
+                            source: WallpaperStore.currentWallpapers[screen.name] ?? null
                             fillMode: Image.Pad
                         }
                     }

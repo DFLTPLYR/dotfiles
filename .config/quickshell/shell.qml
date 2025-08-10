@@ -53,49 +53,23 @@ ShellRoot {
 
             Bar {}
 
-            // LazyLoader {
-            //     active: persistStates.showWallpaperCarousel
-            //     component: AnimatedScreenOverlay {
-            //         id: overlay
-            //         screen: modelData
-            //         color: ColorUtils.hexToRgba(Colors.background, 0.2)
-            //         onClicked: {
-            //             return;
-            //         }
-
-            //         onHidden: key => GlobalState.removeDrawer(key)
-
-            //         Connections {
-            //             target: GlobalState
-
-            //             function onShowWallpaperCarouselSignal(value, monitorName) {
-            //                 const isMatch = monitorName === screen.name;
-
-            //                 if (isMatch) {
-            //                     overlay.shouldBeVisible = value;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-
             LazyLoader {
                 active: persistStates.showAppMenu
-                activeAsync: true
+                activeAsync: false
                 loading: true
                 component: AppMenu {}
             }
 
             LazyLoader {
                 active: persistStates.showMpris
-                activeAsync: true
+                activeAsync: false
                 loading: true
                 component: ExtendedBar {}
             }
 
             LazyLoader {
                 active: persistStates.showWallpaperCarousel
-                activeAsync: true
+                activeAsync: false
                 loading: true
                 component: WallpaperCarousel {}
             }
