@@ -1,5 +1,4 @@
 pragma Singleton
-pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
@@ -16,48 +15,58 @@ Singleton {
         running: false
     }
 
-    Component.onCompleted: {
-        const Applications = DesktopEntries.applications.values;
+    function loadApplications() {
+        try {
+            const Applications = DesktopEntries.applications?.values ?? [];
+            const apps = [];
 
-        const apps = [];
+            for (let i = 0; i < Applications.length; i++) {
+                const entry = Applications[i];
+                if (!entry || !entry.icon || entry.icon === "lsp-plugins")
+                    continue;
 
-        for (let i = 0; i < Applications.length; i++) {
-            const entry = Applications[i];
-            if (!entry.icon || entry.icon === "lsp-plugins")
-                continue;
+                let iconPath = "";
+                try {
+                    iconPath = Quickshell.iconPath(entry.icon, true) || "";
+                } catch (e) {
+                    console.warn("Icon resolution failed for", entry.icon, e);
+                    iconPath = "";
+                }
 
-            let iconName = entry.icon;
-            let resolved = Quickshell.iconPath(iconName, true);
-
-            apps.push({
-                name: entry.name,
-                icon: resolved,
-                exec: entry.execString,
-                execFunc: () => {
-                    if (entry.runInTerminal) {
-                        openAppInTerminal.command = ["kitty", "-e", "zsh", "-c", entry.execString];
-                        openAppInTerminal.running = true;
-                    } else {
-                        entry.execute(); // GUI app
-                    }
-                },
-                categories: entry.categories,
-                comment: entry.comment,
-                ref: entry
-            });
-        }
-
-        apps.sort((a, b) => {
-            const aMissing = a.icon === '' ? 1 : 0;
-            const bMissing = b.icon === '' ? 1 : 0;
-
-            if (aMissing !== bMissing) {
-                return aMissing - bMissing;
+                apps.push({
+                    name: entry.name || "",
+                    icon: iconPath,
+                    exec: entry.execString || "",
+                    execFunc: () => {
+                        try {
+                            if (entry.runInTerminal) {
+                                openAppInTerminal.command = ["kitty", "-e", "zsh", "-c", entry.execString];
+                                openAppInTerminal.running = true;
+                            } else {
+                                entry.execute();
+                            }
+                        } catch (err) {
+                            console.error("Execution failed:", err);
+                        }
+                    },
+                    categories: entry.categories || [],
+                    comment: entry.comment || ""
+                    // No direct reference to entry object
+                });
             }
 
-            return 0;
-        });
+            apps.sort((a, b) => {
+                const aMissing = a.icon === '' ? 1 : 0;
+                const bMissing = b.icon === '' ? 1 : 0;
+                return aMissing - bMissing;
+            });
 
-        root.desktopApp = apps;
+            root.desktopApp = apps;
+        } catch (err) {
+            console.error("Error while loading applications:", err);
+            root.desktopApp = [];
+        }
     }
+
+    Component.onCompleted: loadApplications()
 }

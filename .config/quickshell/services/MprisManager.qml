@@ -76,7 +76,6 @@ Singleton {
     onActivePlayerChanged: this.updateTrack()
 
     function updateTrack() {
-        //console.log(`update: ${this.activePlayer?.trackTitle ?? ""} : ${this.activePlayer?.trackArtists}`)
         this.activeTrack = {
             uniqueId: this.activePlayer?.uniqueId ?? 0,
             artUrl: this.activePlayer?.trackArtUrl ?? "",
@@ -132,8 +131,6 @@ Singleton {
 
     function setActivePlayer(player: MprisPlayer) {
         const targetPlayer = player ?? Mpris.players[0];
-        console.log(`setactive: ${targetPlayer} from ${activePlayer}`);
-
         if (targetPlayer && this.activePlayer) {
             this.__reverse = Mpris.players.indexOf(targetPlayer) < Mpris.players.indexOf(this.activePlayer);
         } else {

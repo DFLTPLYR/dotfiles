@@ -129,10 +129,38 @@ GridLayout {
         Layout.rowSpan: 2
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Text {
+
+        GridLayout {
             anchors.centerIn: parent
-            text: "2"
-            color: Colors.color13
+            width: parent.width - 10
+            height: parent.height - 10
+            columnSpacing: 8
+            rowSpacing: 8
+            columns: Math.max(1, Math.floor(width / 100))
+
+            Rectangle {
+                radius: 10
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "lightgreen"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: 'jesus'
+                }
+            }
+
+            Rectangle {
+                radius: 10
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "lightgreen"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: 'test'
+                }
+            }
         }
     }
 
@@ -298,7 +326,7 @@ GridLayout {
                 iconRatio: 0.5
                 backgroundColor: Colors.background
                 hoverColor: Colors.color15
-                iconColor: Colors.color10
+                iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
                 onClicked: MprisManager.previous()
             }
 
@@ -308,7 +336,7 @@ GridLayout {
                 iconRatio: 0.5
                 backgroundColor: Colors.background
                 hoverColor: Colors.color15
-                iconColor: Colors.color10
+                iconColor: MprisManager.canTogglePlaying ? Colors.color10 : Colors.color0
                 onClicked: MprisManager.togglePlaying()
             }
 
@@ -318,7 +346,7 @@ GridLayout {
                 iconRatio: 0.5
                 backgroundColor: Colors.background
                 hoverColor: Colors.color15
-                iconColor: Colors.color10
+                iconColor: MprisManager.canGoNext ? Colors.color10 : Colors.color0
                 onClicked: MprisManager.next()
             }
 
@@ -336,12 +364,14 @@ GridLayout {
 
             RowLayout {
                 anchors.centerIn: parent
+                visible: Mpris.players.values.length > 1
 
                 Spacer {}
 
                 Repeater {
+
                     model: Mpris.players.values
-                    delegate: Rectangle {
+                    delegate: ClippingRectangle {
                         Layout.preferredHeight: 24
                         Layout.preferredWidth: 24
                         radius: width / 2
@@ -358,7 +388,7 @@ GridLayout {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: MprisManager.activePlayer = modelData
+                            onClicked: MprisManager.setActivePlayer(modelData)
                         }
                     }
                 }
