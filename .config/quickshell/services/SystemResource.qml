@@ -5,17 +5,25 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
+import qs.animations
+
 // yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/ResourceUsage.qml
 
 Singleton {
+
+    // memory
     property double memoryTotal: 1
     property double memoryFree: 1
     property double memoryUsed: memoryTotal - memoryFree
     property double memoryUsedPercentage: memoryUsed / memoryTotal
+
+    // Swap
     property double swapTotal: 1
     property double swapFree: 1
     property double swapUsed: swapTotal - swapFree
     property double swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
+
+    //Cpu
     property double cpuUsage: 0
     property var previousCpuStats
 
@@ -66,5 +74,35 @@ Singleton {
     FileView {
         id: fileStat
         path: "/proc/stat"
+    }
+
+    // animate
+
+    Behavior on memoryTotal {
+        AnimatedNumber {}
+    }
+    Behavior on memoryFree {
+        AnimatedNumber {}
+    }
+    Behavior on memoryUsed {
+        AnimatedNumber {}
+    }
+    Behavior on memoryUsedPercentage {
+        AnimatedNumber {}
+    }
+    Behavior on swapTotal {
+        AnimatedNumber {}
+    }
+    Behavior on swapFree {
+        AnimatedNumber {}
+    }
+    Behavior on swapUsed {
+        AnimatedNumber {}
+    }
+    Behavior on swapUsedPercentage {
+        AnimatedNumber {}
+    }
+    Behavior on cpuUsage {
+        AnimatedNumber {}
     }
 }

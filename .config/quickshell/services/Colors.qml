@@ -6,26 +6,26 @@ import QtQuick
 
 QtObject {
     // Base colors
-    readonly property color foreground: "#F7F3F8"
-    readonly property color background: "#101115"
-    readonly property color backgroundAlt: Qt.rgba(16,17,21, 0.25)
-    readonly property color cursor: "#D5B5CB"
+    readonly property color foreground: "#F1F3F5"
+    readonly property color background: "#0E110E"
+    readonly property color backgroundAlt: Qt.rgba(14,17,14, 0.25)
+    readonly property color cursor: "#BDC08B"
 
     // ANSI colors
-    readonly property color color0: "#38393D"
-    readonly property color color1: "#90545F"
-    readonly property color color2: "#865876"
-    readonly property color color3: "#BF695B"
-    readonly property color color4: "#BF726C"
-    readonly property color color5: "#868795"
-    readonly property color color6: "#AEA6B0"
-    readonly property color color7: "#EBE6EC"
-    readonly property color color8: "#A5A1A5"
-    readonly property color color9: "#C0717F"
-    readonly property color color10: "#B2769E"
-    readonly property color color11: "#FE8C7A"
-    readonly property color color12: "#FF9890"
-    readonly property color color13: "#B2B4C7"
-    readonly property color color14: "#E8DDEB"
-    readonly property color color15: "#EBE6EC"
+    readonly property color color0: "#373A37"
+    readonly property color color1: "#59595F"
+    readonly property color color2: "#666A19"
+    readonly property color color3: "#656B1C"
+    readonly property color color4: "#B25246"
+    readonly property color color5: "#717620"
+    readonly property color color6: "#A2A5AA"
+    readonly property color color7: "#E3E5E8"
+    readonly property color color8: "#9FA0A3"
+    readonly property color color9: "#76777E"
+    readonly property color color10: "#898D21"
+    readonly property color color11: "#878F25"
+    readonly property color color12: "#ED6D5D"
+    readonly property color color13: "#969D2B"
+    readonly property color color14: "#D8DCE3"
+    readonly property color color15: "#E3E5E8"
 }

@@ -48,9 +48,14 @@ AnimatedScreenOverlay {
                 break;
             case Qt.Key_Enter:
             case Qt.Key_Return:
-                if (flick.currentItem && flick.currentItem.openApp) {
-                    flick.currentItem.openApp();
+                const currentItem = flick.currentItem;
+
+                if (currentItem) {
+                    const screenName = screen.name;
+                    const path = currentItem.modelData.path;
+                    WallpaperStore.setWallpaper(screenName, path);
                 }
+
                 event.accepted = true;
                 break;
             case Qt.Key_Left:
@@ -147,7 +152,6 @@ AnimatedScreenOverlay {
 
         function onShowWallpaperCarouselSignal(value, monitorName) {
             const isMatch = monitorName === screen.name;
-
             if (isMatch) {
                 toplevel.shouldBeVisible = value;
             }

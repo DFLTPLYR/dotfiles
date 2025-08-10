@@ -32,7 +32,7 @@ ShellRoot {
 
         PanelWindow {
             id: screenRoot
-            property var modelData
+            required property var modelData
             screen: modelData
 
             color: "transparent"
