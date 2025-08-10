@@ -36,6 +36,7 @@ GridLayout {
         Layout.minimumWidth: 80
         Layout.preferredWidth: Math.round(parent.width / 5)
         Layout.fillHeight: true
+
         Rectangle {
             anchors.fill: parent
             color: "transparent"
@@ -117,7 +118,7 @@ GridLayout {
 
     // System data
     Rectangle {
-        color: Scripts.hexToRgba(Colors.background, 0.8)
+        color: 'transparent'
 
         border.width: 1
         border.color: Colors.color1
@@ -138,11 +139,215 @@ GridLayout {
             rowSpacing: 8
             columns: Math.max(1, Math.floor(width / 100))
 
+            // Rectangle {
+            //     id: outerRect
+            //     radius: 10
+            //     Layout.fillWidth: true
+            //     Layout.fillHeight: true
+            //     color: "transparent"
+
+            //     ColumnLayout {
+            //         anchors.fill: parent
+            //         anchors.margins: 10
+            //         spacing: 8
+
+            //         Text {
+            //             id: name
+            //             text: qsTr("Swap")
+            //             color: Colors.color15
+            //         }
+
+            //         ColumnLayout {
+            //             Layout.fillWidth: true
+            //             Layout.fillHeight: true
+
+            //             Text {
+            //                 Layout.fillWidth: true
+            //                 text: "Free"
+            //                 color: "green"
+            //                 horizontalAlignment: Text.AlignLeft
+            //             }
+            //             Rectangle {
+            //                 Layout.fillWidth: true
+            //                 height: 2
+            //                 radius: 10
+            //                 color: Colors.color10
+            //             }
+            //         }
+
+            //         ColumnLayout {
+            //             Layout.fillWidth: true
+            //             Layout.fillHeight: true
+
+            //             Text {
+            //                 Layout.fillWidth: true
+            //                 text: (SystemResource.memoryUsedPercentage * 100).toFixed(0)
+            //                 color: "green"
+            //                 horizontalAlignment: Text.AlignLeft
+            //             }
+            //             Rectangle {
+            //                 Layout.fillWidth: true
+            //                 height: 2
+            //                 radius: 10
+            //                 color: Colors.color10
+
+            //                 Rectangle {
+            //                     width: parent.width / (SystemResource.memoryUsedPercentage * 100).toFixed(0)
+            //                     height: 2
+            //                     radius: 10
+            //                     color: Colors.color10
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
             Rectangle {
                 radius: 10
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: "lightgreen"
+                color: "transparent"
+
+                function formatGB(value) {
+                    return (value / (1024 * 1024)).toFixed(2) + " GB";
+                }
+
+                ColumnLayout {
+                    anchors.centerIn: parent
+
+                    Text {
+                        font.family: FontAssets.fontAwesomeRegular
+                        text: "\uf0ec"
+                        font.pixelSize: 24
+                        color: Colors.color14
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Text {
+                        color: Colors.color14
+                        text: (SystemResource.swapUsedPercentage * 100).toFixed(1) + "%"
+                    }
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 4
+
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 10
+                    color: Colors.color14
+                    text: parent.formatGB(SystemResource.swapUsed) + " / " + parent.formatGB(SystemResource.swapTotal)
+                }
+
+                Gauge {
+                    value: SystemResource.swapUsedPercentage * 100
+                    backgroundColor: Colors.color2
+                    foregroundColor: Colors.color15
+                    smoothRepaint: parentGrid.visible
+                }
+            }
+
+            Rectangle {
+                radius: 10
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+
+                function formatGB(value) {
+                    return (value / (1024 * 1024)).toFixed(2) + " GB";
+                }
+
+                ColumnLayout {
+                    anchors.centerIn: parent
+
+                    Text {
+                        font.family: FontAssets.fontAwesomeRegular
+                        text: "\uf2d1"
+                        font.pixelSize: 24
+                        color: Colors.color14
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Text {
+                        color: Colors.color14
+                        text: (SystemResource.memoryUsedPercentage * 100).toFixed(1) + "%"
+                    }
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 4
+
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 10
+                    color: Colors.color14
+                    text: parent.formatGB(SystemResource.memoryUsed) + " / " + parent.formatGB(SystemResource.memoryTotal)
+                }
+
+                Gauge {
+                    value: SystemResource.memoryUsedPercentage * 100
+                    backgroundColor: Colors.color2
+                    foregroundColor: Colors.color15
+                    smoothRepaint: parentGrid.visible
+                }
+            }
+
+            Rectangle {
+                radius: 10
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
+
+                function formatGB(value) {
+                    return (value / (1024 * 1024)).toFixed(2) + " GB";
+                }
+
+                ColumnLayout {
+                    anchors.centerIn: parent
+
+                    Text {
+                        font.family: FontAssets.fontAwesomeRegular
+                        text: "\uf2db"
+                        font.pixelSize: 24
+                        color: Colors.color14
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Text {
+                        color: Colors.color14
+                        text: (SystemResource.cpuUsage * 100).toFixed(1) + "%"
+                    }
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 4
+
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 10
+                    color: Colors.color14
+                    text: 'Cpu Usage'
+                }
+
+                Gauge {
+                    value: SystemResource.cpuUsage * 100
+                    backgroundColor: Colors.color2
+                    foregroundColor: Colors.color15
+                    smoothRepaint: parentGrid.visible
+                }
+            }
+
+            Rectangle {
+                radius: 10
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
 
                 Text {
                     anchors.centerIn: parent
@@ -154,11 +359,11 @@ GridLayout {
                 radius: 10
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: "lightgreen"
+                color: "transparent"
 
                 Text {
                     anchors.centerIn: parent
-                    text: 'test'
+                    text: 'jesus'
                 }
             }
         }
@@ -180,227 +385,228 @@ GridLayout {
         Layout.fillHeight: true
 
         Rectangle {
-            id: albumWrapper
-            width: parent.width
-            height: width
+            anchors.fill: parent
             color: "transparent"
 
-            ClippingRectangle {
+            Rectangle {
+                id: albumWrapper
+                width: parent.width
+                height: width
                 color: "transparent"
-                anchors.centerIn: parent
-                width: Math.round(isPortrait ? parent.height : parent.height) - 25
-                height: Math.round(isPortrait ? parent.height : parent.height) - 25
 
                 ClippingRectangle {
-
-                    width: Math.round(isPortrait ? parent.height : parent.height)
-                    height: Math.round(isPortrait ? parent.height : parent.height)
-                    radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
-
                     color: "transparent"
+                    anchors.centerIn: parent
+                    width: Math.round(isPortrait ? parent.height : parent.height) - 25
+                    height: Math.round(isPortrait ? parent.height : parent.height) - 25
 
-                    Image {
-                        source: MprisManager.activePlayer ? MprisManager.activePlayer.trackArtUrl : null
-                        fillMode: Image.PreserveAspectCrop
-                        cache: true
-                        smooth: true
-                        mipmap: true
-                        width: Math.round(parent.width)
-                        height: Math.round(parent.height)
-                        sourceSize.width: width
-                        sourceSize.height: height
-                    }
+                    ClippingRectangle {
 
-                    Canvas {
-                        anchors.fill: parent
-                        onPaint: {
-                            const ctx = getContext("2d");
-                            ctx.clearRect(0, 0, width, height);
-                            const r = width / 2;
-                            ctx.beginPath();
-                            ctx.lineWidth = 6;
-                            ctx.strokeStyle = Colors.color1;
-                            ctx.arc(width / 2, height / 2, r, 0, 2 * Math.PI);
-                            ctx.stroke();
-                        }
-                    }
+                        width: Math.round(isPortrait ? parent.height : parent.height)
+                        height: Math.round(isPortrait ? parent.height : parent.height)
+                        radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
 
-                    Canvas {
-                        id: progressCanvas
-                        anchors.fill: parent
-                        property real progress: 0.0
-
-                        onPaint: {
-                            const ctx = getContext("2d");
-                            ctx.clearRect(0, 0, width, height);
-                            const r = width / 2;
-                            ctx.beginPath();
-                            ctx.lineWidth = 6;
-                            ctx.strokeStyle = Colors.color15;
-                            ctx.arc(width / 2, height / 2, r, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * progress);
-                            ctx.stroke();
-                        }
-
-                        onProgressChanged: requestPaint()
-                    }
-
-                    Connections {
-                        id: posChange
-                        target: MprisManager.activePlayer
-                        function onPositionChanged() {
-                            const player = MprisManager.activePlayer;
-                            const pos = player?.position;
-                            const len = player?.length;
-
-                            const safePos = Math.min(pos, len);
-                            const rawProgress = safePos / len;
-                            const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-
-                            progressCanvas.progress = clampedProgress;
-                        }
-                    }
-
-                    FrameAnimation {
-                        running: MprisManager.activePlayer.playbackState == MprisPlaybackState.Playing
-                        onTriggered: MprisManager.activePlayer.positionChanged()
-                    }
-                }
-            }
-        }
-
-        Rectangle {
-            id: albumDetails
-            color: "transparent"
-            anchors.top: albumWrapper.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: parent.height / 3
-
-            ClippingRectangle {
-                color: "transparent"
-                anchors.centerIn: parent
-                width: Math.round(isPortrait ? parent.width : parent.width) - 25
-                height: Math.round(isPortrait ? parent.height : parent.height) - 25
-
-                ColumnLayout {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: parent.height / 3
-
-                    Text {
-                        id: artist
-                        text: MprisManager.activeTrack.artist ?? "SYBAU"
-                        color: Colors.color10
-                        font.pixelSize: 24
-                        wrapMode: Text.Wrap
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    Text {
-                        id: title
-                        text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
-                        color: Colors.color11
-                        font.pixelSize: 12
-                        wrapMode: Text.Wrap
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                }
-            }
-        }
-
-        RowLayout {
-            id: mprisControls
-            anchors.top: albumDetails.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Spacer {}
-
-            StyledButton {
-                icon: "\uf04a"
-                size: 48
-                iconRatio: 0.5
-                backgroundColor: Colors.background
-                hoverColor: Colors.color15
-                iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
-                onClicked: MprisManager.previous()
-            }
-
-            StyledButton {
-                icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
-                size: 48
-                iconRatio: 0.5
-                backgroundColor: Colors.background
-                hoverColor: Colors.color15
-                iconColor: MprisManager.canTogglePlaying ? Colors.color10 : Colors.color0
-                onClicked: MprisManager.togglePlaying()
-            }
-
-            StyledButton {
-                icon: "\uf04e"
-                size: 48
-                iconRatio: 0.5
-                backgroundColor: Colors.background
-                hoverColor: Colors.color15
-                iconColor: MprisManager.canGoNext ? Colors.color10 : Colors.color0
-                onClicked: MprisManager.next()
-            }
-
-            Spacer {}
-        }
-
-        Rectangle {
-
-            anchors.top: mprisControls.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            color: 'transparent'
-
-            RowLayout {
-                anchors.centerIn: parent
-                visible: Mpris.players.values.length > 1
-
-                Spacer {}
-
-                Repeater {
-
-                    model: Mpris.players.values
-                    delegate: ClippingRectangle {
-                        Layout.preferredHeight: 24
-                        Layout.preferredWidth: 24
-                        radius: width / 2
                         color: "transparent"
 
                         Image {
-                            anchors.fill: parent
-                            source: modelData.trackArtUrl
+                            source: MprisManager.activePlayer ? MprisManager.activePlayer.trackArtUrl : null
                             fillMode: Image.PreserveAspectCrop
                             cache: true
                             smooth: true
                             mipmap: true
+                            width: Math.round(parent.width)
+                            height: Math.round(parent.height)
+                            sourceSize.width: width
+                            sourceSize.height: height
                         }
 
-                        MouseArea {
+                        Canvas {
                             anchors.fill: parent
-                            onClicked: MprisManager.setActivePlayer(modelData)
+                            onPaint: {
+                                const ctx = getContext("2d");
+                                ctx.clearRect(0, 0, width, height);
+                                const r = width / 2;
+                                ctx.beginPath();
+                                ctx.lineWidth = 6;
+                                ctx.strokeStyle = Colors.color1;
+                                ctx.arc(width / 2, height / 2, r, 0, 2 * Math.PI);
+                                ctx.stroke();
+                            }
+                        }
+
+                        Canvas {
+                            id: progressCanvas
+                            anchors.fill: parent
+                            property real progress: 0.0
+
+                            onPaint: {
+                                const ctx = getContext("2d");
+                                ctx.clearRect(0, 0, width, height);
+                                const r = width / 2;
+                                ctx.beginPath();
+                                ctx.lineWidth = 6;
+                                ctx.strokeStyle = Colors.color15;
+                                ctx.arc(width / 2, height / 2, r, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * progress);
+                                ctx.stroke();
+                            }
+
+                            onProgressChanged: requestPaint()
+                        }
+
+                        Connections {
+                            id: posChange
+                            target: MprisManager.activePlayer
+                            function onPositionChanged() {
+                                const player = MprisManager.activePlayer;
+                                const pos = player?.position;
+                                const len = player?.length;
+
+                                const safePos = Math.min(pos, len);
+                                const rawProgress = safePos / len;
+                                const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+
+                                progressCanvas.progress = clampedProgress;
+                            }
                         }
                     }
                 }
+            }
+
+            Rectangle {
+                id: albumDetails
+
+                height: parent.height / 3
+                color: "transparent"
+
+                anchors.top: albumWrapper.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                ClippingRectangle {
+                    color: "transparent"
+                    anchors.centerIn: parent
+                    width: Math.round(isPortrait ? parent.width : parent.width) - 25
+                    height: Math.round(isPortrait ? parent.height : parent.height) - 25
+
+                    ColumnLayout {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: parent.height / 3
+
+                        Text {
+                            id: artist
+                            text: MprisManager.activeTrack.artist ?? "SYBAU"
+                            color: Colors.color10
+                            font.pixelSize: 24
+                            wrapMode: Text.Wrap
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Text {
+                            id: title
+                            text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
+                            color: Colors.color11
+                            font.pixelSize: 12
+                            wrapMode: Text.Wrap
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                id: mprisControls
+                anchors.top: albumDetails.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
 
                 Spacer {}
+
+                StyledButton {
+                    icon: "\uf04a"
+                    size: 48
+                    iconRatio: 0.5
+                    backgroundColor: Colors.background
+                    hoverColor: Colors.color15
+                    iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
+                    onClicked: MprisManager.previous()
+                }
+
+                StyledButton {
+                    icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
+                    size: 48
+                    iconRatio: 0.5
+                    backgroundColor: Colors.background
+                    hoverColor: Colors.color15
+                    iconColor: MprisManager.canTogglePlaying ? Colors.color10 : Colors.color0
+                    onClicked: MprisManager.togglePlaying()
+                }
+
+                StyledButton {
+                    icon: "\uf04e"
+                    size: 48
+                    iconRatio: 0.5
+                    backgroundColor: Colors.background
+                    hoverColor: Colors.color15
+                    iconColor: MprisManager.canGoNext ? Colors.color10 : Colors.color0
+                    onClicked: MprisManager.next()
+                }
+
+                Spacer {}
+            }
+
+            Rectangle {
+
+                anchors.top: mprisControls.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                color: 'transparent'
+
+                RowLayout {
+                    anchors.centerIn: parent
+                    visible: Mpris.players.values.length > 1
+
+                    Spacer {}
+
+                    Repeater {
+
+                        model: Mpris.players.values
+                        delegate: ClippingRectangle {
+                            Layout.preferredHeight: 24
+                            Layout.preferredWidth: 24
+                            radius: width / 2
+                            color: "transparent"
+
+                            Image {
+                                anchors.fill: parent
+                                source: modelData.trackArtUrl
+                                fillMode: Image.PreserveAspectCrop
+                                cache: true
+                                smooth: true
+                                mipmap: true
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: MprisManager.setActivePlayer(modelData)
+                            }
+                        }
+                    }
+
+                    Spacer {}
+                }
             }
         }
     }
 
     // Calendar
-    Rectangle {
-        color: "transparent"
+    RowLayout {
 
         Layout.row: 2
         Layout.column: 1
@@ -411,7 +617,8 @@ GridLayout {
 
         Rectangle {
             id: calendarWrapper
-            anchors.fill: parent
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             color: "transparent"
 
             property int year: Time.year
@@ -450,7 +657,7 @@ GridLayout {
                             anchors.centerIn: parent
                             text: calendarGrid.dayNames[index]
                             font.bold: true
-                            color: Colors.color13
+                            color: Colors.color10
                         }
                     }
                 }
@@ -480,15 +687,21 @@ GridLayout {
                         Layout.fillHeight: true
                         height: 40
                         border.color: Colors.color1
-                        opacity: modelData != 0
                         Text {
                             anchors.centerIn: parent
-                            text: modelData
-                            color: selected ? Colors.color10 : Colors.color15
+                            text: modelData ? modelData : '\uf111'
+                            font.pixelSize: modelData ? 12 : 6
+                            color: modelData ? (selected ? Colors.color10 : Colors.color15) : Colors.color0
                         }
                     }
                 }
             }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            color: "transparent"
         }
     }
 }

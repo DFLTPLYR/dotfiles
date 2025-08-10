@@ -19,7 +19,7 @@ Item {
     }
 
     // These update automatically when .name becomes available
-    readonly property string fontAwesomeRegular: awesomeFontReg.name || "Sans Serif"
-    readonly property string fontAwesomeBrands: awesomeFontBrandReg.name || "Sans Serif"
-    readonly property string fontAwesomeSolid: awesomeFontSolid.name || "Sans Serif"
+    readonly property string fontAwesomeRegular: awesomeFontReg.name
+    readonly property string fontAwesomeBrands: awesomeFontBrandReg.name
+    readonly property string fontAwesomeSolid: awesomeFontSolid.name
 }

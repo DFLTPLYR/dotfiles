@@ -105,41 +105,6 @@ ListView {
         }
     }
 
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Slash) {
-            input.forceActiveFocus(); // 🔁 focus the search input
-            event.accepted = true;
-        }
-
-        if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-            const index = flick.currentIndex;
-            const model = flick.model;
-
-            const path = model.values[index].path;
-            const screenName = screen.name;
-            WallpaperStore.setWallpaper(screenName, path);
-            event.accepted = true;
-        }
-
-        // Optional: other key handling
-        if (event.key === Qt.Key_Left) {
-            if (flick.currentIndex > 0)
-                flick.currentIndex -= 1;
-            event.accepted = true;
-        }
-
-        if (event.key === Qt.Key_Right) {
-            if (flick.currentIndex < flick.count - 1)
-                flick.currentIndex += 1;
-            event.accepted = true;
-        }
-
-        if (event.key === Qt.Key_Escape) {
-            GlobalState.toggleDrawer("wallpaper");
-            event.accepted = true;
-        }
-    }
-
     property int delegateWidth: Math.round(isPortrait ? width * 0.4 : width * 0.5)
     property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.8)
 
@@ -150,7 +115,7 @@ ListView {
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
         property bool isFocused: ListView.isCurrentItem
-
+        required property var modelData
         Rectangle {
             id: container
             anchors.fill: parent

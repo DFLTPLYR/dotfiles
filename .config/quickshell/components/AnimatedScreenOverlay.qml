@@ -1,16 +1,9 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Shapes
 
 import Quickshell
-import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Wayland
-import Quickshell.Widgets
-
-import qs
-import qs.services
-import qs.components
 
 PanelWindow {
     id: root
@@ -83,9 +76,9 @@ PanelWindow {
 
     // Configure WlrLayershell if available
     Component.onCompleted: {
-        if (root.WlrLayershell) {
-            root.WlrLayershell.layer = root.layer;
-            root.WlrLayershell.keyboardFocus = root.keyboardFocus;
+        if (this.WlrLayershell) {
+            this.WlrLayershell.layer = WlrLayer.Overlay;
+            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
         }
     }
 }
