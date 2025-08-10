@@ -119,7 +119,6 @@ GridView {
                         width: parent.width
                         text: modelData.name
                         font.pixelSize: 10
-                        font.family: "Ubuntu"
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.Wrap
                         color: Colors.color15

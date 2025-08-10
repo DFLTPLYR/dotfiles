@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
+import Qt5Compat.GraphicalEffects
 
 import Quickshell
 import Quickshell.Io
@@ -41,6 +42,8 @@ AnimatedScreenOverlay {
                 break;
             case Qt.Key_Backspace:
                 searchValue = searchValue.slice(0, -1);
+                showSearchInput = true;
+                searchTimer.restart();
                 event.accepted = true;
                 break;
             case Qt.Key_Enter:
@@ -65,71 +68,76 @@ AnimatedScreenOverlay {
             default:
                 if (event.text.length > 0) {
                     searchValue += event.text;
-
+                    showSearchInput = true;
+                    searchTimer.restart();
                     event.accepted = true;
                 }
             }
         }
     }
 
+    Timer {
+        id: searchTimer
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            showSearchInput = false;
+        }
+    }
+
     property string searchValue: ""
+    property bool showSearchInput: false
 
-    PopupWindow {
-        id: popup
-        readonly property bool isPortrait: screen.height > screen.width
+    readonly property bool isPortrait: screen.height > screen.width
 
-        visible: animProgress > 0
-        color: "transparent"
+    // Target sizes
+    property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
+    property real targetHeight: screen.height * 0.5
 
-        anchor.window: toplevel
-        anchor.adjustment: PopupAdjustment.Slide
+    ClippingRectangle {
+        id: morphBox
+        anchors.centerIn: parent
 
-        // Target sizes
-        property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
-        property real targetHeight: screen.height * 0.5
+        width: Math.max(1, targetWidth * animProgress)
+        height: Math.max(1, targetHeight * animProgress)
 
-        // Animate using animProgress
-        implicitWidth: Math.round(targetWidth)
-        implicitHeight: Math.round(targetHeight)
+        scale: animProgress
+        opacity: animProgress
 
-        anchor.rect.x: (screen.width - width) / 2
-        anchor.rect.y: (screen.height - height) / 2
+        radius: Math.min(height, height) / 30
 
-        ClippingRectangle {
-            id: morphBox
-            anchors.centerIn: parent
+        transformOrigin: Item.Center
+        color: Scripts.hexToRgba(Colors.background, 0.2)
 
-            width: Math.max(1, popup.targetWidth * animProgress)
-            height: Math.max(1, popup.targetHeight * animProgress)
+        border.color: Scripts.hexToRgba(Colors.colors10, 1)
+        border.width: 2
 
-            scale: animProgress
+        x: Math.round(screen.width / 2 - width / 2)
+        y: Math.round(screen.height / 2 - height / 2)
+
+        ListContent {
+            id: flick
+            width: parent.width
+            height: parent.height
+            visible: animProgress > 0
             opacity: animProgress
+            searchText: searchValue
+        }
 
-            radius: Math.min(height, height) / 30
+        Text {
+            id: searchLabel
+            text: qsTr(searchValue)
+            font.pixelSize: 32
+            font.bold: true
+            anchors.centerIn: parent
+            color: Colors.color15
+            opacity: showSearchInput ? 1.0 : 0.0
 
-            transformOrigin: Item.Center
-            color: Scripts.hexToRgba(Colors.background, 0.2)
-
-            border.color: Scripts.hexToRgba(Colors.colors10, 1)
-            border.width: 2
-
-            Text {
-                id: searchText
-                text: qsTr(`Search: ${searchValue}`)
-                font.pixelSize: 24
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: 12
-                color: Colors.color15
-            }
-
-            ListContent {
-                id: flick
-                width: parent.width
-                height: parent.height
-                visible: animProgress > 0
-                opacity: animProgress
-                searchText: searchValue
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
     }

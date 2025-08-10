@@ -30,7 +30,7 @@ ListView {
 
     model: ScriptModel {
         values: {
-            const wallpapers = popup.isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
+            const wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
 
             function hexToHSL(hex) {
                 const r = parseInt(hex.substr(1, 2), 16) / 255;
@@ -140,8 +140,8 @@ ListView {
         }
     }
 
-    property int delegateWidth: Math.round(popup.isPortrait ? width * 0.4 : width * 0.5)
-    property int delegateHeight: Math.round(popup.isPortrait ? height * 0.9 : height * 0.8)
+    property int delegateWidth: Math.round(isPortrait ? width * 0.4 : width * 0.5)
+    property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.8)
 
     delegate: Item {
 
