@@ -149,8 +149,8 @@ AnimatedScreenOverlay {
             model: ScriptModel {
                 values: {
                     if (!toplevel.searchValue || toplevel.searchValue.trim() === "")
-                        return toplevel.clipboardHistory;
-                    return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.toLowerCase().includes(toplevel.searchValue.toLowerCase()));
+                        return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0);
+                    return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0 && obj.text.toLowerCase().includes(toplevel.searchValue.toLowerCase()));
                 }
             }
 
@@ -159,7 +159,7 @@ AnimatedScreenOverlay {
 
                 property bool isSelected: ListView.isCurrentItem
                 property bool isHovered: clickableArea.containsMouse
-
+                visible: clipboardList.count !== 0
                 width: clipboardList.width
                 height: 48 // adjust height if you want else...then dont wtf
 
@@ -250,6 +250,22 @@ AnimatedScreenOverlay {
                 }
             }
         }
+        Text {
+            id: searchLabel
+            text: qsTr(searchValue)
+            font.pixelSize: 32
+            font.bold: true
+            anchors.centerIn: parent
+            color: Colors.color15
+            opacity: showSearchInput ? 1.0 : 0.0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
     }
 
     property var clipboardHistory: []
@@ -273,15 +289,8 @@ AnimatedScreenOverlay {
     Process {
         id: removeClipboardEntry
         running: false
-        stdout: StdioCollector {
-            onStreamFinished: console.log("stdout:", this.text)
-        }
-        stderr: StdioCollector {
-            onStreamFinished: console.log("stderr:", this.text)
-        }
         onExited: (exitCode, exitStatus) => {
             cbHistory.running = true;
-            console.log(exitCode, exitStatus);
         }
     }
 

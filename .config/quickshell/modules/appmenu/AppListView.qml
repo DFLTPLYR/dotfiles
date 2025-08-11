@@ -63,7 +63,6 @@ GridView {
             GlobalState.toggleDrawer("appMenu");
         }
 
-        MouseArea {
             id: hoverArea
             anchors.fill: parent
             hoverEnabled: true
