@@ -25,8 +25,15 @@ ListView {
     highlightFollowsCurrentItem: true
     highlightRangeMode: ListView.StrictlyEnforceRange
 
+    property int delegateWidth: Math.round(isPortrait ? width * 0.4 : width * 0.5)
+    property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.8)
+
     preferredHighlightBegin: (width - delegateWidth) / 2
     preferredHighlightEnd: (width + delegateWidth) / 2
+
+    onCountChanged: {
+        flick.currentIndex = 0;
+    }
 
     model: ScriptModel {
         values: {
@@ -104,9 +111,6 @@ ListView {
             return filtered.sort((a, b) => a.color.localeCompare(b.color));
         }
     }
-
-    property int delegateWidth: Math.round(isPortrait ? width * 0.4 : width * 0.5)
-    property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.8)
 
     delegate: Item {
 

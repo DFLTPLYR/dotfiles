@@ -28,11 +28,7 @@ AnimatedScreenOverlay {
 
     onHidden: key => GlobalState.removeDrawer(key)
 
-    Item {
-        id: keyCatcher
-        anchors.fill: parent
-        focus: true
-
+    KeyboardEventHandler {
         Keys.onPressed: event => {
             switch (event.key) {
             case Qt.Key_Escape:

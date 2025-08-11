@@ -24,7 +24,7 @@ AnimatedScreenOverlay {
 
     onHidden: key => GlobalState.removeDrawer(key)
 
-    Item {
+    KeyboardEventHandler {
         id: keyCatcher
         anchors.fill: parent
         focus: true
@@ -123,6 +123,7 @@ AnimatedScreenOverlay {
                         width: Math.round(parent.width * 0.8)
                         height: parent.height
                         color: 'transparent'
+
                         AppListView {
                             id: grid
                             searchText: searchValue
@@ -165,6 +166,5 @@ AnimatedScreenOverlay {
             }
         }
     }
-
     Component.onCompleted: AppManager.loadApplications()
 }

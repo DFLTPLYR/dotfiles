@@ -74,6 +74,13 @@ ShellRoot {
                 component: WallpaperCarousel {}
             }
 
+            LazyLoader {
+                active: persistStates.showClipBoard
+                activeAsync: false
+                loading: true
+                component: ClipBoard {}
+            }
+
             Scope {
                 property var modelData
 
@@ -83,6 +90,7 @@ ShellRoot {
                     property bool showWallpaperCarousel: false
                     property bool showMpris: false
                     property bool showAppMenu: false
+                    property bool showClipBoard: false
                     property bool showWindowsOptions: false
                 }
 
@@ -103,18 +111,20 @@ ShellRoot {
                                 property: 'showAppMenu'
                             },
                             {
+                                name: 'ClipBoard',
+                                property: 'showClipBoard'
+                            },
+                            {
                                 name: 'WindowsOptions',
                                 property: 'showWindowsOptions'
                             }
                         ];
                         const monitorName = modelData.name;
-
                         for (let i = 0; i < drawers.length; i++) {
                             const drawer = drawers[i];
                             const uniqueKey = ['WindowsOptions'];
 
                             const key = uniqueKey.includes(drawer.name) ? drawer.name : `${drawer.name}-${monitorName}`;
-
                             const exists = GlobalState.hasDrawer(key);
                             persistStates[drawer.property] = exists;
                         }
@@ -137,7 +147,6 @@ ShellRoot {
         PersistentProperties {
             id: panelStates
             reloadableId: "persistPanelStates"
-            property bool showAppMenu: false
             property bool showWindowsOptions: false
         }
 
@@ -148,10 +157,6 @@ ShellRoot {
                     {
                         name: 'WindowsOptions',
                         property: 'showWindowsOptions'
-                    },
-                    {
-                        name: 'AppMenu',
-                        property: 'showAppMenu'
                     }
                 ];
 

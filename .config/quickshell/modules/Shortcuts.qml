@@ -53,4 +53,18 @@ Item {
             GlobalState.toggleDrawer("appMenu");
         }
     }
+
+    // ClipBoard
+    GlobalShortcut {
+        id: clipBoard
+        name: "showClipBoard"
+        description: "Show Clipboard history"
+    }
+
+    Connections {
+        target: clipBoard
+        function onPressed() {
+            GlobalState.toggleDrawer("clipBoard");
+        }
+    }
 }

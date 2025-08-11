@@ -60,7 +60,6 @@ Scope {
 
             Rectangle {
                 id: mainRect
-                z: 99999
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 40
