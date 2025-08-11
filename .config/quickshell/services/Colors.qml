@@ -8,7 +8,7 @@ QtObject {
     // Base colors
     readonly property color foreground: "#EEEEEE"
     readonly property color background: "#1E1E1E"
-    readonly property color backgroundAlt: Qt.rgba(30,30,30, 0.25)
+    readonly property color backgroundAlt: Qt.rgba(30, 30, 30, 0.25)
     readonly property color cursor: "#E4C89A"
 
     // ANSI colors

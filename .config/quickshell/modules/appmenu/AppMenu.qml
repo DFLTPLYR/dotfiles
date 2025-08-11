@@ -165,4 +165,6 @@ AnimatedScreenOverlay {
             }
         }
     }
+
+    Component.onCompleted: AppManager.loadApplications()
 }

@@ -167,11 +167,10 @@ ShellRoot {
 
     // starting singletons
     Component.onCompleted: {
-        HardwareStats;
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
-        AppManager;
+        AppManager.loadApplications();
         FontAssets;
         SystemResource;
     }

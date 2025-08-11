@@ -348,22 +348,18 @@ GridLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: "transparent"
-
-                Text {
+                ColumnLayout {
                     anchors.centerIn: parent
-                    text: 'jesus'
-                }
-            }
 
-            Rectangle {
-                radius: 10
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: "transparent"
+                    Text {
+                        text: qsTr(`\uf093 ${SystemResource.netUpload}`)
+                        color: Colors.color10
+                    }
 
-                Text {
-                    anchors.centerIn: parent
-                    text: 'jesus'
+                    Text {
+                        text: qsTr(`\uf019 ${SystemResource.netDownload}`)
+                        color: Colors.color10
+                    }
                 }
             }
         }

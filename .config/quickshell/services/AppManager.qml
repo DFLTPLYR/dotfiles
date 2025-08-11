@@ -58,7 +58,16 @@ Singleton {
             apps.sort((a, b) => {
                 const aMissing = a.icon === '' ? 1 : 0;
                 const bMissing = b.icon === '' ? 1 : 0;
-                return aMissing - bMissing;
+
+                // First: missing icons go last
+                if (aMissing !== bMissing) {
+                    return aMissing - bMissing;
+                }
+
+                // Second: alphabetical by name (case-insensitive)
+                return a.name.localeCompare(b.name, undefined, {
+                    sensitivity: 'base'
+                });
             });
 
             root.desktopApp = apps;
@@ -67,6 +76,4 @@ Singleton {
             root.desktopApp = [];
         }
     }
-
-    Component.onCompleted: loadApplications()
 }
