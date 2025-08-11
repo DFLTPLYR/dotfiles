@@ -17,6 +17,7 @@ PersistentProperties {
     signal showWallpaperCarouselSignal(bool value, string monitorName)
     signal showMprisChangedSignal(bool value, string monitorName)
     signal showAppMenuChangedSignal(bool value, string monitorName)
+    signal showClipBoardChangedSignal(bool value, string monitorName)
 
     // signal Panels
     signal showSessionMenuChangedSignal(bool value)
@@ -40,6 +41,10 @@ PersistentProperties {
             appMenu: {
                 keyPrefix: "AppMenu",
                 signal: showAppMenuChangedSignal
+            },
+            clipBoard: {
+                keyPrefix: "ClipBoard",
+                signal: showClipBoardChangedSignal
             }
         };
 
@@ -52,7 +57,6 @@ PersistentProperties {
 
         const isSpecial = !!specialPanel[type];
         const config = drawerMap[type] ? drawerMap[type] : isSpecial ? specialPanel[type] : (console.warn("Unknown drawer type:", type), null);
-
         if (!config)
             return;
 

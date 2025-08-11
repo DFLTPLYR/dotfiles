@@ -28,6 +28,10 @@ GridView {
     boundsBehavior: Flickable.StopAtBounds
     snapMode: GridView.NoSnap
 
+    onCountChanged: {
+        grid.currentIndex = 0;
+    }
+
     model: ScriptModel {
         values: {
             const DesktopApplications = AppManager.desktopApp;

@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-Singleton {
+Scope {
     id: root
 
     property var desktopApp: []
