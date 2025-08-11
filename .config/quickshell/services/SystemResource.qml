@@ -7,7 +7,7 @@ import Quickshell.Io
 
 import qs.animations
 
-// yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/ResourceUsage.qml
+// yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/ResourceUsage.qml but extended
 
 Singleton {
     id: root
@@ -60,7 +60,7 @@ Singleton {
     }
 
     // Network
-    property string netInterface: "" // Change to your interface name
+    property string netInterface: ""
     property var prevNet: ({
             rx: 0,
             tx: 0,
@@ -166,7 +166,6 @@ Singleton {
     }
 
     // animate
-
     Behavior on memoryTotal {
         AnimatedNumber {}
     }
@@ -194,18 +193,10 @@ Singleton {
     Behavior on cpuUsage {
         AnimatedNumber {}
     }
-
     Behavior on netUploadValue {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.InOutQuad
-        }
+        AnimatedNumber {}
     }
-
     Behavior on netDownloadValue {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.InOutQuad
-        }
+        AnimatedNumber {}
     }
 }
