@@ -83,7 +83,7 @@ AnimatedScreenOverlay {
     property string searchValue: ''
     property bool isPortrait: screen.height > screen.width
 
-    ClippingRectangle {
+    Rectangle {
         width: Math.round(isPortrait ? screen.width / 1.5 : screen.width / 2.5)
         height: Math.round(isPortrait ? screen.height / 2.25 : screen.height / 2)
 

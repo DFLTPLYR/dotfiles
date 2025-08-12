@@ -16,7 +16,7 @@ ListView {
     clip: true
     orientation: ListView.Horizontal
     spacing: 20
-    focus: true
+
     snapMode: ListView.SnapToItem
     boundsBehavior: Flickable.StopAtBounds
 

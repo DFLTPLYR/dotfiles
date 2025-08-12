@@ -26,52 +26,55 @@ PersistentProperties {
     property bool isSessionMenuOpen: false
 
     function toggleDrawer(type) {
-        const monitorName = Hyprland.focusedMonitor.name;
+        Hyprland.refreshMonitors();
+        Qt.callLater(() => {
+            const monitorName = Hyprland.focusedMonitor.name;
 
-        const drawerMap = {
-            wallpaper: {
-                keyPrefix: "WallpaperCarousel",
-                signal: showWallpaperCarouselSignal
-            },
-            mpris: {
-                keyPrefix: "MprisDashboard",
-                signal: showMprisChangedSignal
-            },
-            appMenu: {
-                keyPrefix: "AppMenu",
-                signal: showAppMenuChangedSignal
-            },
-            clipBoard: {
-                keyPrefix: "ClipBoard",
-                signal: showClipBoardChangedSignal
+            const drawerMap = {
+                wallpaper: {
+                    keyPrefix: "WallpaperCarousel",
+                    signal: showWallpaperCarouselSignal
+                },
+                mpris: {
+                    keyPrefix: "MprisDashboard",
+                    signal: showMprisChangedSignal
+                },
+                appMenu: {
+                    keyPrefix: "AppMenu",
+                    signal: showAppMenuChangedSignal
+                },
+                clipBoard: {
+                    keyPrefix: "ClipBoard",
+                    signal: showClipBoardChangedSignal
+                }
+            };
+
+            const specialPanel = {
+                logoutMenu: {
+                    keyPrefix: "SessionMenu",
+                    signal: showSessionMenuChangedSignal
+                }
+            };
+
+            const isSpecial = !!specialPanel[type];
+            const config = drawerMap[type] ? drawerMap[type] : isSpecial ? specialPanel[type] : (console.warn("Unknown drawer type:", type), null);
+            if (!config)
+                return;
+
+            const drawerKey = isSpecial ? config.keyPrefix : `${config.keyPrefix}-${monitorName}`;
+
+            const shouldBeVisible = !hasDrawer(drawerKey);
+
+            if (shouldBeVisible) {
+                addDrawer(drawerKey, isSpecial);
             }
-        };
 
-        const specialPanel = {
-            logoutMenu: {
-                keyPrefix: "SessionMenu",
-                signal: showSessionMenuChangedSignal
+            if (isSpecial) {
+                config.signal(shouldBeVisible);
+            } else {
+                config.signal(shouldBeVisible, monitorName);
             }
-        };
-
-        const isSpecial = !!specialPanel[type];
-        const config = drawerMap[type] ? drawerMap[type] : isSpecial ? specialPanel[type] : (console.warn("Unknown drawer type:", type), null);
-        if (!config)
-            return;
-
-        const drawerKey = isSpecial ? config.keyPrefix : `${config.keyPrefix}-${monitorName}`;
-
-        const shouldBeVisible = !hasDrawer(drawerKey);
-
-        if (shouldBeVisible) {
-            addDrawer(drawerKey, isSpecial);
-        }
-
-        if (isSpecial) {
-            config.signal(shouldBeVisible);
-        } else {
-            config.signal(shouldBeVisible, monitorName);
-        }
+        });
     }
 
     function addDrawer(name, isSpecial = false) {
