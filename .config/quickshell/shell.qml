@@ -175,7 +175,6 @@ ShellRoot {
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
-        AppManager.loadApplications();
         FontAssets;
         SystemResource;
     }

@@ -1,7 +1,10 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import QtQuick.Shapes
 import QtQuick.Controls
+import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Hyprland
 import Quickshell.Wayland
@@ -22,7 +25,9 @@ AnimatedScreenOverlay {
         return;
     }
 
-    onHidden: key => GlobalState.removeDrawer(key)
+    onHidden: key => {
+        GlobalState.removeDrawer(key);
+    }
 
     KeyboardEventHandler {
         id: keyCatcher
@@ -42,8 +47,9 @@ AnimatedScreenOverlay {
                 break;
             case Qt.Key_Enter:
             case Qt.Key_Return:
-                if (grid.currentItem && grid.currentItem.openApp) {
-                    grid.currentItem.openApp();
+                const currentItem = grid.currentItem;
+                if (currentItem) {
+                    currentItem.openApp(currentItem.modelData);
                 }
                 event.accepted = true;
                 break;
@@ -105,11 +111,12 @@ AnimatedScreenOverlay {
                     color: Scripts.hexToRgba(Colors.foreground, 0.4)
                 }
 
-                Row {
+                RowLayout {
                     anchors.fill: parent
+
                     Rectangle {
-                        width: Math.round(parent.width * 0.2)
-                        height: parent.height
+                        Layout.preferredWidth: parent.width * 0.2
+                        Layout.fillHeight: true
                         clip: true
 
                         Image {
@@ -118,12 +125,11 @@ AnimatedScreenOverlay {
                             fillMode: Image.Pad
                         }
                     }
-
                     Rectangle {
-                        width: Math.round(parent.width * 0.8)
-                        height: parent.height
+                        id: container
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                         color: 'transparent'
-
                         AppListView {
                             id: grid
                             searchText: searchValue
@@ -166,5 +172,4 @@ AnimatedScreenOverlay {
             }
         }
     }
-    Component.onCompleted: AppManager.loadApplications()
 }

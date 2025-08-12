@@ -26,7 +26,6 @@ PersistentProperties {
     property bool isSessionMenuOpen: false
 
     function toggleDrawer(type) {
-        Hyprland.refreshMonitors();
         const monitorName = Hyprland.focusedMonitor.name;
 
         const drawerMap = {
