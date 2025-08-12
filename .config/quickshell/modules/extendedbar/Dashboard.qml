@@ -104,12 +104,14 @@ GridLayout {
                     Layout.preferredHeight: parent.height / 3
                     spacing: 4
                     Layout.alignment: Qt.AlignHCenter
-                    Text {
-                        color: Colors.color10
-                        text: 'Free space'
-                        wrapMode: Text.Wrap
-                        font.pixelSize: 20
-                        font.family: FontAssets.fontAwesomeRegular
+
+                    AnimatedImage {
+                        source: "../../assets/gifs/" + selectedGif
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        fillMode: AnimatedImage.PreserveAspectFit
+                        cache: true
+                        smooth: true
                     }
                 }
             }
@@ -661,8 +663,10 @@ GridLayout {
                 // Row 2+: Dates
                 Repeater {
                     model: {
-                        let totalDays = calendarWrapper.daysInMonth(calendarWrapper.year, calendarWrapper.month);
-                        let startOffset = calendarWrapper.firstDayOfMonth(calendarWrapper.year, calendarWrapper.month);
+                        let year = calendarWrapper.year;
+                        let month = calendarWrapper.month - 1;
+                        let totalDays = calendarWrapper.daysInMonth(year, month);
+                        let startOffset = calendarWrapper.firstDayOfMonth(year, month);
                         let cells = [];
                         let totalCells = totalDays + startOffset;
                         for (let i = 0; i < totalCells; i++) {
@@ -699,5 +703,12 @@ GridLayout {
             Layout.fillHeight: true
             color: "transparent"
         }
+    }
+
+    property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "nokotan.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "urara2.gif", "urara.gif"]
+    property string selectedGif: ""
+
+    Component.onCompleted: {
+        selectedGif = gifList[Math.floor(Math.random() * gifList.length)];
     }
 }
