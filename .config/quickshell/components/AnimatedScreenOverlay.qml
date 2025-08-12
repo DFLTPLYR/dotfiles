@@ -36,7 +36,7 @@ PanelWindow {
     }
 
     color: backgroundColor
-
+    exclusionMode: ExclusionMode.Ignore
     visible: internalVisible
     focusable: internalVisible
 
