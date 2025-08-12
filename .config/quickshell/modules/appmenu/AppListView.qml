@@ -51,7 +51,7 @@ GridView {
         }
     }
 
-    delegate: ClippingRectangle {
+    delegate: Rectangle {
         required property var modelData
         width: grid.cellWidth
         height: grid.cellHeight
