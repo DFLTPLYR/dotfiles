@@ -18,6 +18,7 @@ GridView {
     property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
 
     clip: true
+
     cellWidth: Math.floor(parent.width / 6)
     cellHeight: Math.floor(parent.width / 6)
 
@@ -34,7 +35,7 @@ GridView {
 
     model: ScriptModel {
         values: {
-            const DesktopApplications = AppManager.desktopApp;
+            const DesktopApplications = DesktopEntries.applications.values.filter(a => !a.noDisplay).filter(a => !(a.categories || []).includes("X-LSP-Plugins")).sort((a, b) => a.name.localeCompare(b.name));
 
             if (!searchText || searchText.trim() === "")
                 return DesktopApplications;
@@ -51,6 +52,7 @@ GridView {
     }
 
     delegate: ClippingRectangle {
+        required property var modelData
         width: grid.cellWidth
         height: grid.cellHeight
         color: "transparent"
@@ -58,18 +60,16 @@ GridView {
         property bool isHovered: false
         property bool isSelected: GridView.isCurrentItem
 
-        function openApp() {
-            modelData.execFunc();
+        function openApp(entry) {
+            if (entry.runInTerminal) {
+                Quickshell.execDetached({
+                    command: ["kitty", "-e", "zsh", "-c", entry.execString],
+                    workingDirectory: entry.workingDirectory
+                });
+            } else {
+                entry.execute();
+            }
             GlobalState.toggleDrawer("appMenu");
-        }
-
-            id: hoverArea
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: isHovered = true
-            onExited: isHovered = false
-            onClicked: openApp()
         }
 
         ClippingRectangle {
@@ -106,7 +106,7 @@ GridView {
 
                     IconImage {
                         anchors.centerIn: parent
-                        source: modelData.icon
+                        source: Quickshell.iconPath(modelData.icon, "image-missing")
                         width: 48
                         height: 48
                         mipmap: false
@@ -130,6 +130,16 @@ GridView {
                     }
                 }
             }
+        }
+
+        MouseArea {
+            id: hoverArea
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: isHovered = true
+            onExited: isHovered = false
+            onClicked: openApp(modelData)
         }
     }
 }

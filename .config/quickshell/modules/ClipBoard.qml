@@ -250,22 +250,6 @@ AnimatedScreenOverlay {
                 }
             }
         }
-        Text {
-            id: searchLabel
-            text: qsTr(searchValue)
-            font.pixelSize: 32
-            font.bold: true
-            anchors.centerIn: parent
-            color: Colors.color15
-            opacity: showSearchInput ? 1.0 : 0.0
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
     }
 
     property var clipboardHistory: []
