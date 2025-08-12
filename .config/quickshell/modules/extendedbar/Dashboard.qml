@@ -605,7 +605,6 @@ GridLayout {
 
     // Calendar
     RowLayout {
-
         Layout.row: 2
         Layout.column: 1
         Layout.columnSpan: 3
@@ -705,7 +704,7 @@ GridLayout {
         }
     }
 
-    property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "nokotan.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "urara2.gif", "urara.gif"]
+    property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "umamusumeprettyderby (1).gif", "umamusumeprettyderby.gif"]
     property string selectedGif: ""
 
     Component.onCompleted: {

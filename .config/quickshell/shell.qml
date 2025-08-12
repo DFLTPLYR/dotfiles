@@ -55,29 +55,21 @@ ShellRoot {
 
             LazyLoader {
                 active: persistStates.showAppMenu
-                activeAsync: false
-                loading: true
                 component: AppMenu {}
             }
 
             LazyLoader {
                 active: persistStates.showMpris
-                activeAsync: false
-                loading: true
                 component: ExtendedBar {}
             }
 
             LazyLoader {
                 active: persistStates.showWallpaperCarousel
-                activeAsync: false
-                loading: true
                 component: WallpaperCarousel {}
             }
 
             LazyLoader {
                 active: persistStates.showClipBoard
-                activeAsync: false
-                loading: true
                 component: ClipBoard {}
             }
 
