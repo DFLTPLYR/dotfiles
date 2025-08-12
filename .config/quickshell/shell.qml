@@ -45,32 +45,12 @@ ShellRoot {
             //     bottom: 10
             // }
 
+            Bar {}
+
             anchors {
                 top: true
                 left: true
                 right: true
-            }
-
-            Bar {}
-
-            LazyLoader {
-                active: persistStates.showAppMenu
-                component: AppMenu {}
-            }
-
-            LazyLoader {
-                active: persistStates.showMpris
-                component: ExtendedBar {}
-            }
-
-            LazyLoader {
-                active: persistStates.showWallpaperCarousel
-                component: WallpaperCarousel {}
-            }
-
-            LazyLoader {
-                active: persistStates.showClipBoard
-                component: ClipBoard {}
             }
 
             Scope {
@@ -84,6 +64,26 @@ ShellRoot {
                     property bool showAppMenu: false
                     property bool showClipBoard: false
                     property bool showWindowsOptions: false
+                }
+
+                LazyLoader {
+                    active: persistStates.showMpris
+                    component: ExtendedBar {}
+                }
+
+                LazyLoader {
+                    active: persistStates.showWallpaperCarousel
+                    component: WallpaperCarousel {}
+                }
+
+                LazyLoader {
+                    active: persistStates.showClipBoard
+                    component: ClipBoard {}
+                }
+
+                LazyLoader {
+                    active: persistStates.showAppMenu
+                    component: AppMenu {}
                 }
 
                 Connections {

@@ -120,6 +120,7 @@ ListView {
 
         property bool isFocused: ListView.isCurrentItem
         required property var modelData
+
         Rectangle {
             id: container
             anchors.fill: parent
@@ -129,7 +130,7 @@ ListView {
 
             property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
             property color targetColor: isFocused || itemMouse.hovered ? Scripts.hexToRgba(Colors.color14, 0.5) : Scripts.hexToRgba(Colors.color12, 0.2)
-            // color: Scripts.hexToRgba(Colors.background, 0.2)
+
             scale: targetScale
             color: targetColor
 

@@ -355,12 +355,12 @@ GridLayout {
 
                     Text {
                         text: qsTr(`\uf093 ${SystemResource.netUpload}`)
-                        color: Colors.color10
+                        color: Colors.color14
                     }
 
                     Text {
                         text: qsTr(`\uf019 ${SystemResource.netDownload}`)
-                        color: Colors.color10
+                        color: Colors.color14
                     }
                 }
             }
@@ -621,6 +621,24 @@ GridLayout {
             property int year: Time.year
             property int month: Time.month
 
+            function incrementMonth() {
+                if (calendarWrapper.month >= 12) {
+                    calendarWrapper.month = 1;
+                    calendarWrapper.year++;
+                } else {
+                    calendarWrapper.month++;
+                }
+            }
+
+            function decrementMonth() {
+                if (calendarWrapper.month <= 1) {
+                    calendarWrapper.month = 12;
+                    calendarWrapper.year--;
+                } else {
+                    calendarWrapper.month--;
+                }
+            }
+
             function daysInMonth(y, m) {
                 return new Date(y, m + 1, 0).getDate();
             }
@@ -638,6 +656,89 @@ GridLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 property var dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                property var monthShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+                Rectangle {
+                    color: 'transparent'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: false
+                    height: 20
+
+                    border.color: prevBtnMA.containsMouse ? Colors.color12 : Colors.color1
+                    radius: 4
+
+                    Behavior on border.color {
+                        ColorAnimation {
+                            duration: 200
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+
+                    Text {
+                        id: prevBtn
+                        text: '\uf0d9'
+                        color: Colors.color15
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        id: prevBtnMA
+                        anchors.fill: parent
+                        onClicked: calendarWrapper.decrementMonth()
+                        z: 1
+                    }
+                }
+
+                Rectangle {
+                    color: 'transparent'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: false
+                    height: 20
+                    Layout.columnSpan: 5
+
+                    Text {
+                        id: currentDate
+                        text: qsTr(`${calendarWrapper.year} - ${calendarGrid.monthShort[calendarWrapper.month - 1]}`)
+                        color: Colors.color15
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+                }
+
+                Rectangle {
+                    color: 'transparent'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: false
+                    height: 20
+
+                    border.color: nextBtnMA.containsMouse ? Colors.color12 : Colors.color1
+                    radius: 4
+                    Behavior on border.color {
+                        ColorAnimation {
+                            duration: 200
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+
+                    Text {
+                        id: nextBtn
+                        text: '\uf0da'
+                        color: Colors.color15
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        id: nextBtnMA
+                        anchors.fill: parent
+                        onClicked: calendarWrapper.incrementMonth()
+                        z: 1
+                    }
+                }
 
                 Repeater {
                     model: calendarGrid.columns
@@ -654,12 +755,11 @@ GridLayout {
                             anchors.centerIn: parent
                             text: calendarGrid.dayNames[index]
                             font.bold: true
-                            color: Colors.color10
+                            color: Colors.color11
                         }
                     }
                 }
 
-                // Row 2+: Dates
                 Repeater {
                     model: {
                         let year = calendarWrapper.year;
@@ -684,7 +784,7 @@ GridLayout {
                         radius: 4
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        height: 40
+
                         border.color: Colors.color1
                         Text {
                             anchors.centerIn: parent

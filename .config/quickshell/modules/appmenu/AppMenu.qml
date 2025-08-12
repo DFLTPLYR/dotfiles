@@ -84,7 +84,7 @@ AnimatedScreenOverlay {
     property bool isPortrait: screen.height > screen.width
 
     Rectangle {
-        width: Math.round(isPortrait ? screen.width / 1.5 : screen.width / 2.5)
+        width: Math.round(isPortrait ? screen.width / 1.5 : screen.width / 2)
         height: Math.round(isPortrait ? screen.height / 2.25 : screen.height / 2)
 
         x: Math.round(screen.width / 2 - width / 2)
@@ -115,21 +115,27 @@ AnimatedScreenOverlay {
                     anchors.fill: parent
 
                     Rectangle {
-                        Layout.preferredWidth: parent.width * 0.2
+                        Layout.preferredWidth: parent.width * 0.3
                         Layout.fillHeight: true
                         clip: true
 
                         Image {
                             id: name
+
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+
                             source: WallpaperStore.currentWallpapers[screen.name] ?? null
-                            fillMode: Image.Pad
                         }
                     }
                     Rectangle {
                         id: container
+
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         color: 'transparent'
+
                         AppListView {
                             id: grid
                             searchText: searchValue
