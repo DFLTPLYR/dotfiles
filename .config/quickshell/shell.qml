@@ -30,7 +30,7 @@ ShellRoot {
         // see Variants for details
         model: Quickshell.screens
 
-        PanelWindow {
+        delegate: PanelWindow {
             id: screenRoot
             required property var modelData
             screen: modelData
