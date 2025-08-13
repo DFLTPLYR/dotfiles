@@ -71,10 +71,6 @@ Variants {
         property var modelData
         screen: modelData
 
-        exclusionMode: ExclusionMode.Ignore
-        WlrLayershell.layer: WlrLayer.Overlay
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-
         color: "transparent"
 
         contentItem {
@@ -159,6 +155,14 @@ Variants {
                         }
                     }
                 }
+            }
+        }
+
+        Component.onCompleted: {
+            if (this.WlrLayershell) {
+                this.WlrLayershell.layer = WlrLayer.Overlay;
+                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                this.exclusionMode = ExclusionMode.Ignore;
             }
         }
     }

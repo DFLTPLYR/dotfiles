@@ -36,7 +36,6 @@ PanelWindow {
     }
 
     color: backgroundColor
-    exclusionMode: ExclusionMode.Ignore
     visible: internalVisible
     focusable: internalVisible
 
@@ -79,6 +78,7 @@ PanelWindow {
         if (this.WlrLayershell) {
             this.WlrLayershell.layer = WlrLayer.Overlay;
             this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+            this.exclusionMode = ExclusionMode.Ignore;
         }
     }
 }

@@ -19,4 +19,16 @@ QtObject {
         const b = parseInt(hex.slice(4, 6), 16) / 255;
         return Qt.rgba(r, g, b, alpha || 1);
     }
+
+    function setOpacity(color, alpha) {
+        // Accepts a Qt.rgba or Qt.color object and returns the same color with new alpha
+        if (!color)
+            return Qt.rgba(0, 0, 0, alpha || 1);
+
+        // If color is a string, convert to Qt.rgba
+        if (typeof color === "string")
+            color = Qt.color(color);
+
+        return Qt.rgba(color.r, color.g, color.b, alpha || 1);
+    }
 }
