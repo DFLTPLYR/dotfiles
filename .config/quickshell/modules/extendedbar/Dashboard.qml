@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick3D
 import QtQuick.Shapes
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -407,6 +408,8 @@ GridLayout {
                         color: "transparent"
 
                         Image {
+                            id: albumArt
+                            property real albumRotation: 0
                             source: MprisManager.activePlayer ? MprisManager.activePlayer.trackArtUrl : null
                             fillMode: Image.PreserveAspectCrop
                             cache: true
@@ -416,6 +419,17 @@ GridLayout {
                             height: Math.round(parent.height)
                             sourceSize.width: width
                             sourceSize.height: height
+                            rotation: MprisManager.activePlayer.isPlaying ? albumRotation : 0
+                        }
+
+                        FrameAnimation {
+                            id: albumRotateFrame
+                            running: MprisManager.activePlayer.isPlaying
+                            onTriggered: {
+                                albumArt.albumRotation += 0.1; // Adjust speed as needed
+                                if (albumArt.albumRotation > 360)
+                                    albumArt.albumRotation -= 360;
+                            }
                         }
 
                         Canvas {
@@ -467,53 +481,56 @@ GridLayout {
                             }
                         }
                     }
+                }
 
-                    Canvas {
-                        id: cavaBarCanvas
-                        anchors.fill: parent
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        property var values: parentGrid.values
-                        visible: MprisManager.activePlayer.isPlaying
-                        onPaint: {
-                            const ctx = getContext("2d");
-                            ctx.clearRect(0, 0, width, height);
+                Canvas {
+                    id: cavaBarCanvas
+                    property var values: parentGrid.values
 
-                            const barCount = values.length;
-                            const centerX = width / 2;
-                            const centerY = height / 2;
-                            const radius = width / 3;
-                            const barLength = width / 6;
-                            const angleStep = 2 * Math.PI / barCount;
+                    anchors.fill: parent
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                            // Draw base circle
+                    visible: MprisManager.activePlayer.isPlaying
+
+                    onPaint: {
+                        const ctx = getContext("2d");
+                        ctx.clearRect(0, 0, width, height);
+
+                        const barCount = values.length;
+                        const centerX = width / 2;
+                        const centerY = height / 2;
+                        const radius = width / 2;
+                        const barLength = width / 6;
+                        const angleStep = 2 * Math.PI / barCount;
+
+                        // Draw base circle
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                        ctx.strokeStyle = "transparent";
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+
+                        // Draw bars radiating inward from the circle
+                        for (let i = 0; i < barCount; i++) {
+                            const value = values[i];
+                            const angle = i * angleStep - Math.PI / 2;
+                            const x1 = centerX + Math.cos(angle) * (radius + barLength);
+                            const y1 = centerY + Math.sin(angle) * (radius + barLength);
+                            const x2 = centerX + Math.cos(angle) * (radius + (1 - value) * barLength);
+                            const y2 = centerY + Math.sin(angle) * (radius + (1 - value) * barLength);
+
                             ctx.beginPath();
-                            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                            ctx.strokeStyle = "transparent";
-                            ctx.lineWidth = 2;
+                            ctx.moveTo(x1, y1);
+                            ctx.lineTo(x2, y2);
+                            ctx.strokeStyle = Scripts.setOpacity(Colors.color12, 0.4);
+                            ctx.lineWidth = 1;
                             ctx.stroke();
-
-                            // Draw bars radiating inward from the circle
-                            for (let i = 0; i < barCount; i++) {
-                                const value = values[i];
-                                const angle = i * angleStep - Math.PI / 2;
-                                const x1 = centerX + Math.cos(angle) * (radius + barLength);
-                                const y1 = centerY + Math.sin(angle) * (radius + barLength);
-                                const x2 = centerX + Math.cos(angle) * (radius + (1 - value) * barLength);
-                                const y2 = centerY + Math.sin(angle) * (radius + (1 - value) * barLength);
-
-                                ctx.beginPath();
-                                ctx.moveTo(x1, y1);
-                                ctx.lineTo(x2, y2);
-                                ctx.strokeStyle = Scripts.setOpacity(Colors.color10, 0.4);
-                                ctx.lineWidth = 1;
-                                ctx.stroke();
-                            }
                         }
+                    }
 
-                        Connections {
-                            target: parentGrid
-                            onValuesChanged: cavaBarCanvas.requestPaint()
-                        }
+                    Connections {
+                        target: parentGrid
+                        onValuesChanged: cavaBarCanvas.requestPaint()
                     }
                 }
             }
@@ -576,8 +593,9 @@ GridLayout {
                     icon: "\uf04a"
                     size: 48
                     iconRatio: 0.5
-                    backgroundColor: Colors.background
-                    hoverColor: Colors.color15
+                    borderColor: Colors.color10
+                    backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
+                    hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
                     iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
                     onClicked: MprisManager.previous()
                 }
@@ -586,8 +604,9 @@ GridLayout {
                     icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
                     size: 48
                     iconRatio: 0.5
-                    backgroundColor: Colors.background
-                    hoverColor: Colors.color15
+                    borderColor: Colors.color10
+                    backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
+                    hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
                     iconColor: MprisManager.canTogglePlaying ? Colors.color10 : Colors.color0
                     onClicked: MprisManager.togglePlaying()
                 }
@@ -596,8 +615,9 @@ GridLayout {
                     icon: "\uf04e"
                     size: 48
                     iconRatio: 0.5
-                    backgroundColor: Colors.background
-                    hoverColor: Colors.color15
+                    borderColor: Colors.color10
+                    backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
+                    hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
                     iconColor: MprisManager.canGoNext ? Colors.color10 : Colors.color0
                     onClicked: MprisManager.next()
                 }
@@ -880,7 +900,7 @@ GridLayout {
 
     property int count: 256
     property int noiseReduction: 60
-    property string channels: "mono" // or stereo
+    property string channels: "stereo" // or stereo
     property string monoOption: "average" // or left or right
     property var config: ({
             general: {
@@ -896,19 +916,7 @@ GridLayout {
                 mono_option: monoOption
             }
         })
-    property var values: Array(count).fill(0) // 0 <= value <= 1
-
-    function isSilent(vals, threshold) {
-        let avg = 0;
-        for (let i = 0; i < vals.length; i++)
-            avg += vals[i];
-        avg /= vals.length;
-        for (let i = 0; i < vals.length; i++) {
-            if (Math.abs(vals[i] - avg) > threshold)
-                return false;
-        }
-        return true;
-    }
+    property var values: Array(count).fill(0)
 
     onConfigChanged: {
         process.running = false;
