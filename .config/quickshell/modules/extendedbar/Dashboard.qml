@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
@@ -399,7 +400,6 @@ GridLayout {
                     height: Math.round(isPortrait ? parent.height : parent.height) - 25
 
                     ClippingRectangle {
-
                         width: Math.round(isPortrait ? parent.height : parent.height)
                         height: Math.round(isPortrait ? parent.height : parent.height)
                         radius: Math.round(isPortrait ? parent.height / 2 : parent.height / 2)
@@ -465,6 +465,54 @@ GridLayout {
 
                                 progressCanvas.progress = clampedProgress;
                             }
+                        }
+                    }
+
+                    Canvas {
+                        id: cavaBarCanvas
+                        anchors.fill: parent
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        property var values: parentGrid.values
+                        visible: MprisManager.activePlayer.isPlaying
+                        onPaint: {
+                            const ctx = getContext("2d");
+                            ctx.clearRect(0, 0, width, height);
+
+                            const barCount = values.length;
+                            const centerX = width / 2;
+                            const centerY = height / 2;
+                            const radius = width / 3;
+                            const barLength = width / 6;
+                            const angleStep = 2 * Math.PI / barCount;
+
+                            // Draw base circle
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                            ctx.strokeStyle = "transparent";
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+
+                            // Draw bars radiating inward from the circle
+                            for (let i = 0; i < barCount; i++) {
+                                const value = values[i];
+                                const angle = i * angleStep - Math.PI / 2;
+                                const x1 = centerX + Math.cos(angle) * (radius + barLength);
+                                const y1 = centerY + Math.sin(angle) * (radius + barLength);
+                                const x2 = centerX + Math.cos(angle) * (radius + (1 - value) * barLength);
+                                const y2 = centerY + Math.sin(angle) * (radius + (1 - value) * barLength);
+
+                                ctx.beginPath();
+                                ctx.moveTo(x1, y1);
+                                ctx.lineTo(x2, y2);
+                                ctx.strokeStyle = Scripts.setOpacity(Colors.color10, 0.4);
+                                ctx.lineWidth = 3;
+                                ctx.stroke();
+                            }
+                        }
+
+                        Connections {
+                            target: parentGrid
+                            onValuesChanged: cavaBarCanvas.requestPaint()
                         }
                     }
                 }
@@ -558,7 +606,6 @@ GridLayout {
             }
 
             Rectangle {
-
                 anchors.top: mprisControls.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -806,6 +853,88 @@ GridLayout {
 
     property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "umamusumeprettyderby (1).gif", "umamusumeprettyderby.gif"]
     property string selectedGif: ""
+
+    property int count: 128
+    property int noiseReduction: 60
+    property string channels: "mono" // or stereo
+    property string monoOption: "average" // or left or right
+    property var config: ({
+            general: {
+                bars: count
+            },
+            smoothing: {
+                noise_reduction: noiseReduction
+            },
+            output: {
+                method: "raw",
+                bit_format: 8,
+                channels: channels,
+                mono_option: monoOption
+            }
+        })
+    property var values: Array(count).fill(0) // 0 <= value <= 1
+
+    function isSilent(vals, threshold) {
+        let avg = 0;
+        for (let i = 0; i < vals.length; i++)
+            avg += vals[i];
+        avg /= vals.length;
+        for (let i = 0; i < vals.length; i++) {
+            if (Math.abs(vals[i] - avg) > threshold)
+                return false;
+        }
+        return true;
+    }
+
+    onConfigChanged: {
+        process.running = false;
+        process.running = true;
+    }
+
+    Process {
+        id: process
+        property int index: 0
+        stdinEnabled: true
+        command: ["cava", "-p", "/dev/stdin"]
+        onExited: {
+            stdinEnabled = true;
+            index = 0;
+        }
+        onStarted: {
+            const iniParts = [];
+            for (const k in config) {
+                if (typeof config[k] !== "object") {
+                    write(k + "=" + config[k] + "\n");
+                    continue;
+                }
+                write("[" + k + "]\n");
+                const obj = config[k];
+                for (const k2 in obj) {
+                    write(k2 + "=" + obj[k2] + "\n");
+                }
+            }
+            stdinEnabled = false;
+        }
+        stdout: SplitParser {
+            property var newValues: Array(count).fill(0)
+            splitMarker: ""
+            onRead: data => {
+                const length = config.general.bars;
+                if (process.index + data.length > length) {
+                    process.index = 0;
+                }
+                for (let i = 0; i < data.length; i += 1) {
+                    const newIndex = i + process.index;
+                    if (newIndex > length) {
+                        break;
+                    }
+                    newValues[newIndex] = Math.min(data.charCodeAt(i), 128) / 128;
+                }
+                process.index += data.length;
+                values = newValues;
+            }
+        }
+    }
 
     Component.onCompleted: {
         selectedGif = gifList[Math.floor(Math.random() * gifList.length)];
