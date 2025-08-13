@@ -505,7 +505,7 @@ GridLayout {
                                 ctx.moveTo(x1, y1);
                                 ctx.lineTo(x2, y2);
                                 ctx.strokeStyle = Scripts.setOpacity(Colors.color10, 0.4);
-                                ctx.lineWidth = 3;
+                                ctx.lineWidth = 1;
                                 ctx.stroke();
                             }
                         }
@@ -668,6 +668,16 @@ GridLayout {
             property int year: Time.year
             property int month: Time.month
 
+            property int currentYear: Time.year
+            property int currentMonth: Time.month
+
+            property bool isCurrentDate: currentYear === year && currentMonth === month
+
+            function goToToday() {
+                year = currentYear;
+                month = currentMonth;
+            }
+
             function incrementMonth() {
                 if (calendarWrapper.month >= 12) {
                     calendarWrapper.month = 1;
@@ -705,6 +715,7 @@ GridLayout {
                 property var dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
                 property var monthShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
+                // Prev Button
                 Rectangle {
                     color: 'transparent'
                     Layout.fillWidth: true
@@ -738,6 +749,7 @@ GridLayout {
                     }
                 }
 
+                // Date Year Month
                 Rectangle {
                     color: 'transparent'
                     Layout.fillWidth: true
@@ -747,14 +759,21 @@ GridLayout {
 
                     Text {
                         id: currentDate
+                        anchors.centerIn: parent
                         text: qsTr(`${calendarWrapper.year} - ${calendarGrid.monthShort[calendarWrapper.month - 1]}`)
                         color: Colors.color15
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        anchors.centerIn: parent
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: calendarWrapper.goToToday()
+                            z: 1
+                        }
                     }
                 }
 
+                // Next Button
                 Rectangle {
                     color: 'transparent'
                     Layout.fillWidth: true
@@ -826,13 +845,18 @@ GridLayout {
                     }
 
                     delegate: Rectangle {
-                        property bool selected: modelData === Time.date.getDate()
+                        property bool selected: {
+                            return modelData === Time.date.getDate() && calendarWrapper.isCurrentDate;
+                        }
+
                         color: selected ? Scripts.hexToRgba(Colors.color15, 0.2) : "transparent"
                         radius: 4
+
                         Layout.fillWidth: true
                         Layout.fillHeight: true
 
                         border.color: Colors.color1
+
                         Text {
                             anchors.centerIn: parent
                             text: modelData ? modelData : '\uf111'
@@ -854,7 +878,7 @@ GridLayout {
     property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "umamusumeprettyderby (1).gif", "umamusumeprettyderby.gif"]
     property string selectedGif: ""
 
-    property int count: 128
+    property int count: 256
     property int noiseReduction: 60
     property string channels: "mono" // or stereo
     property string monoOption: "average" // or left or right
