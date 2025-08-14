@@ -146,7 +146,7 @@ PopupWindow {
                 width: Math.floor(mainContent.width)
                 height: Math.floor(mainContent.height)
 
-                Dashboard {}
+                ContainerBar {}
             }
         }
     }
