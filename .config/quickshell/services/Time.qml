@@ -33,27 +33,8 @@ QtObject {
     readonly property string dateString: Qt.formatDateTime(clock.date, "yyyy-MM-dd")
     readonly property string fullTime: hoursPadded + ":" + minutesPadded + " " + ampm
 
-    // Day name (Monday, Tuesday, etc.)
-    readonly property string dayName: Qt.formatDateTime(clock.date, "dddd")
-
-    // Short day name (Mon, Tue, etc.)
-    readonly property string dayShort: Qt.formatDateTime(clock.date, "ddd")
-
-    // Month name (January, February, etc.)
-    readonly property string monthName: Qt.formatDateTime(clock.date, "MMMM")
-
-    // Short month (Jan, Feb, etc.)
-    readonly property string monthShort: Qt.formatDateTime(clock.date, "MMM")
-
-    // Day of month (01–31)
-    readonly property string dayNumber: Qt.formatDateTime(clock.date, "dd")
-
-    // Week number (01–53)
-    readonly property string weekNumber: Qt.formatDateTime(clock.date, "ww")
-
     // Time.qml (add these props)
     readonly property int year: parseInt(Qt.formatDateTime(clock.date, "yyyy"))
-    readonly property int month: parseInt(Qt.formatDateTime(clock.date, "M")) // 1..12
-    readonly property int day: parseInt(Qt.formatDateTime(clock.date, "d")) // 1..31
-
+    readonly property int month: parseInt(Qt.formatDateTime(clock.date, "M"))
+    readonly property int day: parseInt(Qt.formatDateTime(clock.date, "d"))
 }
