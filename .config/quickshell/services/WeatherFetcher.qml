@@ -28,51 +28,43 @@ Singleton {
             unknown: '\uf128'
         })
 
+    function iconKeyForDesc(desc) {
+        desc = desc.toLowerCase();
+        if (desc.includes("drizzle"))
+            return "drizzle";
+        if (desc.includes("sun") || desc.includes("clear"))
+            return "sunny";
+        if (desc.includes("rain") || desc.includes("shower"))
+            return "rainy";
+        if (desc.includes("cloud") || desc.includes("overcast") || desc.includes("partly"))
+            return "cloud";
+        if (desc.includes("thunder"))
+            return "thunder";
+        if (desc.includes("mist") || desc.includes("fog"))
+            return "wet";
+        if (desc.includes("wind") || desc.includes("breeze") || desc.includes("gust"))
+            return "windy";
+        if (desc.includes("snow") || desc.includes("sleet") || desc.includes("blizzard") || desc.includes("flurries"))
+            return "snowy";
+        if (desc.includes("hail"))
+            return "hail";
+        if (desc.includes("tornado") || desc.includes("hurricane") || desc.includes("cyclone"))
+            return "extreme";
+        if (desc.includes("dust") || desc.includes("sand") || desc.includes("smoke"))
+            return "dusty";
+        return "unknown";
+    }
+
     function parseWeather(json) {
         root.weatherData = json;
 
         const current = json.current_condition[0];
         const temp = current.temp_C + "°C";
-        const desc = current.weatherDesc[0].value.toLowerCase();
+        const desc = current.weatherDesc[0].value;
 
         root.weatherInfo = temp;
 
-        let condition = "unknown";
-        switch (true) {
-        case desc.includes("sun") || desc.includes("clear"):
-            condition = "sunny";
-            break;
-        case desc.includes("rain") || desc.includes("shower"):
-            condition = "rainy";
-            break;
-        case desc.includes("cloud") || desc.includes("overcast") || desc.includes("partly"):
-            condition = "cloud";
-            break;
-        case desc.includes("thunder"):
-            condition = "thunder";
-            break;
-        case desc.includes("mist") || desc.includes("fog") || desc.includes("drizzle"):
-            condition = "wet";
-            break;
-        case desc.includes("wind") || desc.includes("breeze") || desc.includes("gust"):
-            condition = "windy";
-            break;
-        case desc.includes("snow") || desc.includes("sleet") || desc.includes("blizzard") || desc.includes("flurries"):
-            condition = "snowy";
-            break;
-        case desc.includes("hail"):
-            condition = "hail";
-            break;
-        case desc.includes("tornado") || desc.includes("hurricane") || desc.includes("cyclone"):
-            condition = "extreme";
-            break;
-        case desc.includes("dust") || desc.includes("sand") || desc.includes("smoke"):
-            condition = "dusty";
-            break;
-        default:
-            condition = "unknown";
-        }
-
+        let condition = iconKeyForDesc(desc);
         root.weatherCondition = condition;
         root.weatherIcon = root.weatherIcons[condition] || root.weatherIcons.unknown;
 
@@ -80,14 +72,8 @@ Singleton {
         const forecastArr = json.weather;
         for (let i = 0; i < Math.min(forecastArr.length, 4); i++) {
             const day = forecastArr[i];
-            const noonDesc = day.hourly[4].weatherDesc[0].value.toLowerCase();
-            let iconKey = "unknown";
-            if (noonDesc.includes("sun"))
-                iconKey = "sunny";
-            else if (noonDesc.includes("rain"))
-                iconKey = "rainy";
-            else if (noonDesc.includes("cloud"))
-                iconKey = "cloud";
+            const noonDesc = day.hourly[4].weatherDesc[0].value;
+            let iconKey = iconKeyForDesc(noonDesc);
             root.weatherForecast.push({
                 date: day.date,
                 avgTemp: day.avgtempC + "°C",
@@ -119,12 +105,12 @@ Singleton {
 
     Timer {
         id: refreshTimer
-        interval: 600000 // 10 minutes
+        interval: 6000
         repeat: true
         running: true
         triggeredOnStart: true
         onTriggered: fetchWeather()
     }
 
-    Component.onCompleted: fetchWeather()
+    Component.onCompleted: refreshTimer.start()
 }
