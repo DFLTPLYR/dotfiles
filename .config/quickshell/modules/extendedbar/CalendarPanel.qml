@@ -1,18 +1,9 @@
 import QtQuick
-import QtQuick3D
-import QtQuick.Shapes
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
-import Quickshell.Widgets
-import Quickshell.Services.Mpris
 
 import qs.services
-import qs.components
-import qs.assets
 import qs.utils
 import qs
 
