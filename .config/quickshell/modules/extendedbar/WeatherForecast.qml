@@ -35,7 +35,7 @@ RowLayout {
                 Text {
                     text: modelData.icon
                     color: Colors.color10
-                    font.family: FontAssets.fontAwesomeRegular
+                    font.family: FontAssets.fontAwesomeSolid
                 }
 
                 Text {

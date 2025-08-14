@@ -164,6 +164,7 @@ ShellRoot {
 
     // starting singletons
     Component.onCompleted: {
+        NotificationService;
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
