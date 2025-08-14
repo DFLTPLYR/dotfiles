@@ -18,7 +18,6 @@ Item {
         source: fontPath + "Font-Awesome-7-Free-Solid-900.otf"
     }
 
-    // These update automatically when .name becomes available
     readonly property string fontAwesomeRegular: awesomeFontReg.name
     readonly property string fontAwesomeBrands: awesomeFontBrandReg.name
     readonly property string fontAwesomeSolid: awesomeFontSolid.name
