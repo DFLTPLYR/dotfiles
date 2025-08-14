@@ -2,12 +2,13 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.services
+import qs.assets
 
 RowLayout {
     anchors.fill: parent
 
     Repeater {
-        model: WeatherFetcher.weatherForecast
+        model: WeatherFetcher.weatherForecast ?? []
 
         delegate: Rectangle {
             Layout.fillWidth: true
@@ -20,20 +21,27 @@ RowLayout {
                 spacing: 2
 
                 Text {
-                    text: modelData.date
+                    text: Qt.formatDate(modelData.date, "ddd, MMM yyyy")
                     color: Colors.color10
+                    font.family: FontAssets.fontAwesomeRegular
                 }
+
                 Text {
                     text: modelData.avgTemp
                     color: Colors.color10
+                    font.family: FontAssets.fontAwesomeRegular
                 }
-                Text {
-                    text: modelData.desc
-                    color: Colors.color10
-                }
+
                 Text {
                     text: modelData.icon
                     color: Colors.color10
+                    font.family: FontAssets.fontAwesomeRegular
+                }
+
+                Text {
+                    text: modelData.desc
+                    color: Colors.color10
+                    font.family: FontAssets.fontAwesomeRegular
                 }
             }
         }
