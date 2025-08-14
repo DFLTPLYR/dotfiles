@@ -10,8 +10,9 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
-import qs.services
 import qs.components
+import qs.animations
+import qs.services
 import qs.assets
 import qs.utils
 import qs
@@ -121,13 +122,8 @@ GridLayout {
     }
 
     // Middle Top Panel
-    Rectangle {
-        color: 'transparent'
-
-        border.width: 1
-        border.color: Colors.color1
-        radius: 10
-
+    StackLayout {
+        id: middleTopStack
         Layout.row: 0
         Layout.column: 1
         Layout.columnSpan: 3
@@ -135,7 +131,50 @@ GridLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        SystemStats {}
+        Rectangle {
+            color: 'transparent'
+            border.width: 1
+            border.color: Colors.color1
+            radius: 10
+
+            opacity: middleTopStack.currentIndex === 0 ? 1 : 0
+
+            Behavior on opacity {
+                AnimatedNumber {}
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                z: 1
+                onClicked: {
+                    middleTopStack.currentIndex++;
+                }
+            }
+            SystemStats {}
+        }
+
+        Rectangle {
+            color: 'transparent'
+            border.width: 1
+            border.color: Colors.color1
+            radius: 10
+
+            opacity: middleTopStack.currentIndex === 1 ? 1 : 0
+
+            Behavior on opacity {
+                AnimatedNumber {}
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                z: 1
+                onClicked: {
+                    middleTopStack.currentIndex--;
+                }
+            }
+
+            WeatherForecast {}
+        }
     }
 
     // Middle Bottom
