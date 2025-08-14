@@ -69,7 +69,7 @@ Singleton {
 
         for (let i = 0; i < Math.min(forecastArr.length, 3); i++) {
             const day = forecastArr[i];
-            const noonHour = day.hourly[4]; // index 4 is usually 12:00
+            const noonHour = day.hourly[4];
             const noonDesc = noonHour.weatherDesc[0].value;
             let iconKey = iconKeyForDesc(noonDesc);
 
