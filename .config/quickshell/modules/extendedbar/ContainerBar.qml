@@ -382,7 +382,7 @@ GridLayout {
     }
 
     property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "umamusumeprettyderby (1).gif", "umamusumeprettyderby.gif"]
-    property string selectedGif: ""
+    property string selectedGif: "bongocat.gif"
 
     property int count: 256
     property int noiseReduction: 60
