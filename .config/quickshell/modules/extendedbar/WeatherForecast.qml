@@ -7,7 +7,7 @@ RowLayout {
     anchors.fill: parent
 
     Repeater {
-        model: [...WeatherFetcher.weatherForecast]
+        model: WeatherFetcher.weatherForecast
 
         delegate: Rectangle {
             Layout.fillWidth: true
@@ -38,6 +38,4 @@ RowLayout {
             }
         }
     }
-
-    Component.onCompleted: console.log(WeatherFetcher.weatherForecast)
 }
