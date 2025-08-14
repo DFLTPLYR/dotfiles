@@ -24,7 +24,7 @@ Singleton {
             snowy: '\uf2dc',
             hail: '\uf7ad',
             dusty: '\uf72f',
-            drizzle: '\uf743',
+            drizzle: '\uf52d',
             unknown: '\uf128'
         })
 
@@ -57,28 +57,40 @@ Singleton {
 
     function parseWeather(json) {
         root.weatherData = json;
-
         const current = json.current_condition[0];
-        const temp = current.temp_C + "°C";
-        const desc = current.weatherDesc[0].value;
-
-        root.weatherInfo = temp;
-
-        let condition = iconKeyForDesc(desc);
+        root.weatherInfo = current.temp_C + "°C";
+        let condition = iconKeyForDesc(current.weatherDesc[0].value);
         root.weatherCondition = condition;
         root.weatherIcon = root.weatherIcons[condition] || root.weatherIcons.unknown;
 
         root.weatherForecast = [];
         const forecastArr = json.weather;
-        for (let i = 0; i < Math.min(forecastArr.length, 4); i++) {
+        const now = new Date();
+
+        for (let i = 0; i < Math.min(forecastArr.length, 3); i++) {
             const day = forecastArr[i];
-            const noonDesc = day.hourly[4].weatherDesc[0].value;
+            const noonHour = day.hourly[4]; // index 4 is usually 12:00
+            const noonDesc = noonHour.weatherDesc[0].value;
             let iconKey = iconKeyForDesc(noonDesc);
+
+            // Calculate relative time
+            const forecastDate = new Date(day.date + " " + noonHour.time.padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2"));
+            const diffMs = forecastDate - now;
+            const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+            let relativeTime = "";
+            if (diffHours > 0)
+                relativeTime = "in " + diffHours + "h";
+            else if (diffHours === 0)
+                relativeTime = "now";
+            else
+                relativeTime = Math.abs(diffHours) + "h ago";
+
             root.weatherForecast.push({
                 date: day.date,
                 avgTemp: day.avgtempC + "°C",
-                desc: day.hourly[4].weatherDesc[0].value,
-                icon: root.weatherIcons[iconKey]
+                desc: noonDesc,
+                icon: root.weatherIcons[iconKey],
+                relativeTime: relativeTime
             });
         }
     }
@@ -95,6 +107,7 @@ Singleton {
                 } catch (e) {
                     console.warn("Failed to parse weather JSON:", e);
                 }
+                refreshTimer.interval = 600000;
             }
         }
     }
@@ -105,7 +118,7 @@ Singleton {
 
     Timer {
         id: refreshTimer
-        interval: 6000
+        interval: 1
         repeat: true
         running: true
         triggeredOnStart: true
