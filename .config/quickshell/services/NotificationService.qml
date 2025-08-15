@@ -14,7 +14,7 @@ import Quickshell.Services.Notifications
 * - Notification groups by app
 */
 
-// Extended https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/Notifications.qml
+//Yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/Notifications.qml
 Singleton {
     id: root
 
@@ -38,6 +38,7 @@ Singleton {
 
         onNotificationChanged: {
             if (notification === null) {
+                console.log('test');
                 root.discardNotification(notificationId);
             }
         }
@@ -62,17 +63,17 @@ Singleton {
         interval: 5000
         running: true
         onTriggered: () => {
+            console.log('test');
             root.timeoutNotification(notificationId);
             destroy();
         }
     }
 
-    property bool silent: false
-    property var filePath: './notification.json'
+    property var filePath: '/tmp/notification.json'
     property list<Notif> list: []
     property var popupList: list.filter(notif => notif.popup)
-    property bool popupInhibited: silent
     property var latestTimeForApp: ({})
+
     Component {
         id: notifComponent
         Notif {}
@@ -160,14 +161,12 @@ Singleton {
             root.list = [...root.list, newNotifObject];
 
             // Popup
-            if (!root.popupInhibited) {
-                newNotifObject.popup = true;
-                if (notification.expireTimeout != 0) {
-                    newNotifObject.timer = notifTimerComponent.createObject(root, {
-                        "notificationId": newNotifObject.notificationId,
-                        "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
-                    });
-                }
+            newNotifObject.popup = true;
+            if (notification.expireTimeout != 0) {
+                newNotifObject.timer = notifTimerComponent.createObject(root, {
+                    "notificationId": newNotifObject.notificationId,
+                    "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
+                });
             }
 
             root.notify(newNotifObject);
