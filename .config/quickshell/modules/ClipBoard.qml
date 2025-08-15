@@ -94,8 +94,6 @@ AnimatedScreenOverlay {
     property string searchValue: ""
     property bool showSearchInput: false
 
-    readonly property bool isPortrait: screen.height > screen.width
-
     // Target sizes
     property real targetWidth: 400
     property real targetHeight: 600

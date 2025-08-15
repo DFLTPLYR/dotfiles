@@ -67,7 +67,9 @@ Singleton {
         }
     }
 
-    property var filePath: '../notification.json'
+    property ListModel notificationListModel: ListModel {}
+
+    property var filePath: '/tmp/notification.json'
     property list<Notif> list: []
     property var popupList: list.filter(notif => notif.popup)
     property var latestTimeForApp: ({})
@@ -167,7 +169,17 @@ Singleton {
                 });
             }
 
-            root.notify(newNotifObject);
+            root.notificationListModel.append({
+                notificationId: newNotifObject.notificationId,
+                actions: newNotifObject.actions,
+                appIcon: newNotifObject.appIcon,
+                appName: newNotifObject.appName,
+                body: newNotifObject.body,
+                image: newNotifObject.image,
+                summary: newNotifObject.summary,
+                time: newNotifObject.time,
+                urgency: newNotifObject.urgency
+            });
             notifFileView.setText(stringifyList(root.list));
         }
     }
@@ -201,11 +213,18 @@ Singleton {
         if (root.list[index] != null)
             root.list[index].popup = false;
         root.timeout(id);
+        for (var i = 0; i < root.notificationListModel.count; ++i) {
+            if (root.notificationListModel.get(i).notificationId === id) {
+                root.notificationListModel.remove(i);
+                break;
+            }
+        }
     }
 
     function timeoutAll() {
         root.popupList.forEach(notif => {
             root.timeout(notif.notificationId);
+            root.notificationListModel.remove(notif.notificationId);
         });
         root.popupList.forEach(notif => {
             notif.popup = false;
@@ -237,6 +256,19 @@ Singleton {
 
     Component.onCompleted: {
         refresh();
+        root.list.forEach(notif => {
+            root.notificationListModel.append({
+                notificationId: notif.notificationId,
+                actions: notif.actions,
+                appIcon: notif.appIcon,
+                appName: notif.appName,
+                body: notif.body,
+                image: notif.image,
+                summary: notif.summary,
+                time: notif.time,
+                urgency: notif.urgency
+            });
+        });
     }
 
     FileView {
