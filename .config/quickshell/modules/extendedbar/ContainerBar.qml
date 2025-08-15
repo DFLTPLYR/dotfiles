@@ -188,11 +188,7 @@ GridLayout {
 
         CalendarPanel {}
 
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: "transparent"
-        }
+        NotificationsPanel {}
     }
 
     // Right Panel
