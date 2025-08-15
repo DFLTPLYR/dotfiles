@@ -36,7 +36,11 @@ Rectangle {
                 backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
                 hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
                 iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
-                onClicked: NotificationService.discardAllNotifications()
+                onClicked: {
+                    console.log(JSON.stringify(NotificationService.groupsByAppName));
+                    console.log(JSON.stringify(NotificationService.appNameList));
+                    // NotificationService.discardAllNotifications();
+                }
             }
         }
 
