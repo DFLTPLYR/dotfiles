@@ -38,7 +38,6 @@ Singleton {
 
         onNotificationChanged: {
             if (notification === null) {
-                console.log('test');
                 root.discardNotification(notificationId);
             }
         }
@@ -175,7 +174,6 @@ Singleton {
     }
 
     function discardNotification(id) {
-        console.log("[Notifications] Discarding notification with ID: " + id);
         const index = root.list.findIndex(notif => notif.notificationId === id);
         const notifServerIndex = notifServer.trackedNotifications.values.findIndex(notif => notif.id + root.idOffset === id);
         if (index !== -1) {
