@@ -60,19 +60,8 @@ Singleton {
         }
     }
 
-    property ListModel notificationListModel: ListModel {
-        ListElement {
-            notificationId: 1
-            actions: []
-            appIcon: "icon.png"
-            appName: "ExampleApp"
-            body: "This is a notification body."
-            image: "/tmp/combined_wallpaper.png"
-            summary: "Notification summary"
-            time: 1692182400000
-            urgency: "normal"
-        }
-    }
+    property ListModel notificationListModel: ListModel {}
+    property ListModel notificationListGroupModel: ListModel {}
 
     property var filePath: '/tmp/notification.json'
     property list<Notif> list: []
@@ -133,8 +122,6 @@ Singleton {
 
     property var groupsByAppName: groupsForList(root.list)
     property var popupGroupsByAppName: groupsForList(root.popupList)
-    property var appNameList: appNameListForGroups(root.groupsByAppName)
-    property var popupAppNameList: appNameListForGroups(root.popupGroupsByAppName)
 
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
     // can already contain higher IDs. This is for avoiding id collisions
@@ -263,19 +250,6 @@ Singleton {
 
     Component.onCompleted: {
         refresh();
-        root.list.forEach(notif => {
-            root.notificationListModel.append({
-                notificationId: notif.notificationId,
-                actions: notif.actions,
-                appIcon: notif.appIcon,
-                appName: notif.appName,
-                body: notif.body,
-                image: notif.image,
-                summary: notif.summary,
-                time: notif.time,
-                urgency: notif.urgency
-            });
-        });
     }
 
     FileView {
