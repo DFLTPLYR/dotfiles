@@ -1,10 +1,12 @@
 import QtQuick
 
 import Quickshell
+import Quickshell.Widgets
+
 import qs.utils
 import qs.services
 
-Rectangle {
+ClippingRectangle {
     width: parent.width
     height: 60
     color: "transparent"
@@ -14,11 +16,14 @@ Rectangle {
 
     Row {
         anchors.fill: parent
-        anchors.margins: 12
+        anchors.margins: 2
         spacing: 8
+
         Image {
             id: name
-            source: "file"
+            width: parent.height
+            height: width
+            source: modelData.image
         }
 
         Column {
