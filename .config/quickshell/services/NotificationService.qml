@@ -62,13 +62,12 @@ Singleton {
         interval: 5000
         running: true
         onTriggered: () => {
-            console.log('test');
             root.timeoutNotification(notificationId);
             destroy();
         }
     }
 
-    property var filePath: '/tmp/notification.json'
+    property var filePath: '../notification.json'
     property list<Notif> list: []
     property var popupList: list.filter(notif => notif.popup)
     property var latestTimeForApp: ({})
@@ -184,7 +183,7 @@ Singleton {
         if (notifServerIndex !== -1) {
             notifServer.trackedNotifications.values[notifServerIndex].dismiss();
         }
-        root.discard(id); // Emit signal
+        root.discard(id);
     }
 
     function discardAllNotifications() {
