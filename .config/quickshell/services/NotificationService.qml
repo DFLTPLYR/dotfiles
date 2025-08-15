@@ -7,13 +7,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
 
-/**
-* Provides extra features not in Quickshell.Services.Notifications:
-* - Persistent storage
-* - Popup notifications, with timeout
-* - Notification groups by app
-*/
-
 //Yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/Notifications.qml
 Singleton {
     id: root
@@ -67,7 +60,19 @@ Singleton {
         }
     }
 
-    property ListModel notificationListModel: ListModel {}
+    property ListModel notificationListModel: ListModel {
+        ListElement {
+            notificationId: 1
+            actions: []
+            appIcon: "icon.png"
+            appName: "ExampleApp"
+            body: "This is a notification body."
+            image: "/tmp/combined_wallpaper.png"
+            summary: "Notification summary"
+            time: 1692182400000
+            urgency: "normal"
+        }
+    }
 
     property var filePath: '/tmp/notification.json'
     property list<Notif> list: []
