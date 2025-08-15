@@ -38,31 +38,15 @@ Scope {
 
         ListView {
             id: listview
+
             width: parent.width
             height: parent.height
+
             spacing: 10
 
-            model: ListModel {
-                id: notificationListModel
-            }
+            model: NotificationService.notificationListModel
 
             delegate: NotificationItem {}
-
-            Component.onCompleted: {
-                NotificationService.list.forEach(notif => {
-                    notificationListModel.append({
-                        notificationId: notif.notificationId,
-                        actions: notif.actions,
-                        appIcon: notif.appIcon,
-                        appName: notif.appName,
-                        body: notif.body,
-                        image: notif.image,
-                        summary: notif.summary,
-                        time: notif.time,
-                        urgency: notif.urgency
-                    });
-                });
-            }
 
             add: Transition {
                 NumberAnimation {
@@ -78,6 +62,7 @@ Scope {
                     duration: 250
                 }
             }
+
             remove: Transition {
                 NumberAnimation {
                     property: "opacity"
@@ -89,35 +74,6 @@ Scope {
                     property: "x"
                     to: 200
                     duration: 250
-                }
-            }
-        }
-
-        Connections {
-            target: NotificationService
-
-            function onNotify(notif) {
-                notificationListModel.append({
-                    notificationId: notif.notificationId,
-                    actions: notif.actions,
-                    appIcon: notif.appIcon,
-                    appName: notif.appName,
-                    body: notif.body,
-                    image: notif.image,
-                    summary: notif.summary,
-                    time: notif.time,
-                    urgency: notif.urgency
-                });
-
-                listview.positionViewAtEnd();
-            }
-
-            function onTimeout(id) {
-                for (var i = 0; i < notificationListModel.count; ++i) {
-                    if (notificationListModel.get(i).notificationId === id) {
-                        notificationListModel.remove(i);
-                        break;
-                    }
                 }
             }
         }
