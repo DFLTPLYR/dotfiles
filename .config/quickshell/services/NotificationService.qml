@@ -78,6 +78,7 @@ Singleton {
         id: notifComponent
         Notif {}
     }
+
     Component {
         id: notifTimerComponent
         NotifTimer {}
@@ -180,6 +181,7 @@ Singleton {
                 time: newNotifObject.time,
                 urgency: newNotifObject.urgency
             });
+
             notifFileView.setText(stringifyList(root.list));
         }
     }
