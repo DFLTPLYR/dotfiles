@@ -24,6 +24,7 @@ import qs.modules.appmenu
 import qs.modules.extendedbar
 import qs.modules.wallpaper
 import qs.modules.sessionmenu
+import qs.modules.notification
 
 ShellRoot {
     Variants {
@@ -161,6 +162,8 @@ ShellRoot {
             }
         }
     }
+
+    NotificationList {}
 
     // starting singletons
     Component.onCompleted: {
