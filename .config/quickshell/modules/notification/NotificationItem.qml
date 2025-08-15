@@ -1,48 +1,72 @@
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
-import Quickshell.Widgets
 
 import qs.utils
 import qs.services
 
-ClippingRectangle {
-    width: parent.width
-    height: 60
-    color: "transparent"
-    radius: 8
+Rectangle {
+    required property var modelData
+    width: listview.width
+    height: 80
+    color: Scripts.setOpacity(Colors.background, 0.7)
     border.color: Colors.color1
-    border.width: 1
+    radius: 12
 
-    Row {
+    RowLayout {
         anchors.fill: parent
-        anchors.margins: 2
-        spacing: 8
+        spacing: 0
 
         Image {
-            id: name
-            width: parent.height
-            height: width
+            id: image
             source: modelData.image
+            Layout.preferredWidth: parent.height
+            Layout.preferredHeight: parent.height
+            Layout.fillHeight: true
+            visible: modelData.image ?? false
         }
 
-        Column {
-            Text {
-                text: modelData.appName
-                color: Colors.color12
-                font.bold: true
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 5
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 10
+
+                Text {
+                    text: modelData.appName
+                    font.bold: true
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                    color: Colors.color15
+                }
+
+                Text {
+                    id: timeText
+                    text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
+                    color: Colors.color10
+                }
             }
+
             Text {
                 text: modelData.summary
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                maximumLineCount: 2
+                elide: Text.ElideRight
                 color: Colors.color10
             }
         }
     }
 
     MouseArea {
+        id: itemArea
         anchors.fill: parent
         onClicked: {
-            NotificationService.discardNotification(modelData.notificationId);
+            NotificationService.timeoutNotification(modelData.notificationId);
         }
     }
 }
