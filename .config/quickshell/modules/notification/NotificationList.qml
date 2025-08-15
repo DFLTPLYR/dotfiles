@@ -8,6 +8,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
+import qs
 import qs.utils
 import qs.services
 
@@ -39,6 +40,9 @@ Scope {
         ListView {
             id: listview
 
+            property bool shouldBeVisible: true
+
+            visible: shouldBeVisible
             width: parent.width
             height: parent.height
 
@@ -74,6 +78,13 @@ Scope {
                     property: "x"
                     to: 200
                     duration: 250
+                }
+            }
+
+            Connections {
+                target: GlobalState
+                function onShowMprisChangedSignal() {
+                    listview.shouldBeVisible = !listview.shouldBeVisible;
                 }
             }
         }
