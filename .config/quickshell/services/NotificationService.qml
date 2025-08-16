@@ -36,6 +36,31 @@ Singleton {
         }
     }
 
+    component NotifTimer: Timer {
+        required property int notificationId
+        interval: 5000
+        running: true
+        onTriggered: () => {
+            root.timeoutNotification(notificationId);
+            destroy();
+        }
+    }
+
+    Component {
+        id: notifComponent
+        Notif {}
+    }
+
+    Component {
+        id: notifTimerComponent
+        NotifTimer {}
+    }
+
+    property var filePath: '/tmp/notification.json'
+    property list<Notif> list: []
+    property var popupList: list.filter(notif => notif.popup)
+    property var latestTimeForApp: ({})
+
     function notifToJSON(notif) {
         return {
             "notificationId": notif.notificationId,
@@ -48,34 +73,6 @@ Singleton {
             "time": notif.time,
             "urgency": notif.urgency
         };
-    }
-
-    component NotifTimer: Timer {
-        required property int notificationId
-        interval: 5000
-        running: true
-        onTriggered: () => {
-            root.timeoutNotification(notificationId);
-            destroy();
-        }
-    }
-
-    property ListModel notificationListModel: ListModel {}
-    property ListModel notificationListGroupModel: ListModel {}
-
-    property var filePath: '/tmp/notification.json'
-    property list<Notif> list: []
-    property var popupList: list.filter(notif => notif.popup)
-    property var latestTimeForApp: ({})
-
-    Component {
-        id: notifComponent
-        Notif {}
-    }
-
-    Component {
-        id: notifTimerComponent
-        NotifTimer {}
     }
 
     function stringifyList(list) {
@@ -161,19 +158,7 @@ Singleton {
                     "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
                 });
             }
-
-            root.notificationListModel.append({
-                notificationId: newNotifObject.notificationId,
-                actions: newNotifObject.actions,
-                appIcon: newNotifObject.appIcon,
-                appName: newNotifObject.appName,
-                body: newNotifObject.body,
-                image: newNotifObject.image,
-                summary: newNotifObject.summary,
-                time: newNotifObject.time,
-                urgency: newNotifObject.urgency
-            });
-
+            root.notify(newNotifObject);
             notifFileView.setText(stringifyList(root.list));
         }
     }
@@ -207,18 +192,11 @@ Singleton {
         if (root.list[index] != null)
             root.list[index].popup = false;
         root.timeout(id);
-        for (var i = 0; i < root.notificationListModel.count; ++i) {
-            if (root.notificationListModel.get(i).notificationId === id) {
-                root.notificationListModel.remove(i);
-                break;
-            }
-        }
     }
 
     function timeoutAll() {
         root.popupList.forEach(notif => {
             root.timeout(notif.notificationId);
-            root.notificationListModel.remove(notif.notificationId);
         });
         root.popupList.forEach(notif => {
             notif.popup = false;
