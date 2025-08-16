@@ -38,9 +38,7 @@ Rectangle {
                 hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
                 iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
                 onClicked: {
-                    console.log(JSON.stringify(NotificationService.groupsByAppName));
-                    console.log(JSON.stringify(NotificationService.appNameList));
-                    // NotificationService.discardAllNotifications();
+                    NotificationService.discardAllNotifications();
                 }
             }
         }
@@ -61,7 +59,7 @@ Rectangle {
                 property int collapsedHeight: 40
                 property int expandedHeight: notificationItem.height
 
-                height: expand ? expandedHeight : collapsedHeight
+                height: expand ? expandedHeight + 10 : collapsedHeight
                 implicitWidth: container.width
 
                 color: Scripts.setOpacity(Colors.background, 0.7)
@@ -124,11 +122,85 @@ Rectangle {
                                 color: Colors.color11
                             }
                         }
-                        Rectangle {
-                            visible: delegateRect.expand
-                            Layout.fillWidth: true
-                            height: 90
-                            color: 'white'
+
+                        Repeater {
+                            model: notifications
+                            delegate: Rectangle {
+                                required property var modelData
+                                visible: delegateRect.expand
+                                Layout.fillWidth: true
+                                height: 80
+                                color: Scripts.setOpacity(Colors.background, 0.7)
+                                border.color: Colors.color1
+                                radius: 12
+                                clip: true
+
+                                RowLayout {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width - 25
+                                    height: parent.height
+                                    spacing: 10
+
+                                    Rectangle {
+                                        visible: !!modelData.image || !!modelData.appIcon
+                                        Layout.preferredWidth: parent.height
+                                        Layout.preferredHeight: parent.height
+                                        Layout.fillHeight: true
+                                        color: "transparent"
+                                        clip: true
+                                        Image {
+                                            id: image
+                                            anchors.fill: parent
+                                            source: modelData.image || modelData.appIcon
+                                            fillMode: Image.PreserveAspectFit
+                                        }
+                                    }
+
+                                    ColumnLayout {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        spacing: 5
+
+                                        RowLayout {
+                                            Layout.fillWidth: true
+                                            spacing: 10
+
+                                            Text {
+                                                text: modelData.appName
+                                                font.bold: true
+                                                Layout.fillWidth: true
+                                                elide: Text.ElideRight
+                                                color: Colors.color12
+                                            }
+
+                                            Text {
+                                                id: timeText
+                                                text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
+                                                color: Colors.color11
+                                            }
+                                        }
+
+                                        Text {
+                                            text: modelData.body
+                                            Layout.fillWidth: true
+                                            wrapMode: Text.Wrap
+                                            maximumLineCount: 2
+                                            elide: Text.ElideRight
+                                            color: Colors.color11
+                                        }
+
+                                        Text {
+                                            text: modelData.summary
+                                            Layout.fillWidth: true
+                                            wrapMode: Text.Wrap
+                                            maximumLineCount: 2
+                                            elide: Text.ElideRight
+                                            color: Colors.color10
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -165,8 +237,8 @@ Rectangle {
                     duration: 250
                 }
                 NumberAnimation {
-                    property: "y"
-                    from: 30
+                    property: "x"
+                    from: 200
                     to: 0
                     duration: 250
                 }
@@ -208,10 +280,52 @@ Rectangle {
         }
     }
 
+    function findGroupIndexByApp(appName) {
+        for (var i = 0; i < root.notificationGroup.count; ++i) {
+            var g = root.notificationGroup.get(i);
+            if (g.appName === appName)
+                return i;
+        }
+        return -1;
+    }
+
+    function sanitizeNotif(n) {
+        return {
+            notificationId: n.notificationId || 0,
+            actions: n.actions || [],
+            appIcon: n.appIcon || "",
+            appName: n.appName || "",
+            body: n.body || "",
+            image: n.image || "",
+            summary: n.summary || "",
+            time: n.time || Date.now(),
+            urgency: n.urgency || "normal"
+        };
+    }
+
     Connections {
         target: NotificationService
         function onNotify(notif) {
-            console.log(notif);
+            var notification = sanitizeNotif(notif);
+            var groupIndex = findGroupIndexByApp(notification.appName);
+
+            if (groupIndex !== -1) {
+                var group = root.notificationGroup.get(groupIndex);
+                var notifs = (group.notifications && group.notifications.slice()) || [];
+                notifs.unshift(notification);
+                var newTime = Math.max(group.time || 0, notification.time);
+                root.notificationGroup.set(groupIndex, {
+                    notifications: notifs,
+                    time: newTime
+                });
+            } else {
+                root.notificationGroup.append({
+                    appName: notification.appName,
+                    appIcon: notification.appIcon,
+                    notifications: [notification],
+                    time: notification.time
+                });
+            }
         }
     }
 
