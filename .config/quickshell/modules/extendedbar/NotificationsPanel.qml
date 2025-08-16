@@ -1,8 +1,8 @@
 import QtQuick
-import Quickshell
-
 import QtQuick.Controls
 import QtQuick.Layouts
+
+import Quickshell
 
 import qs.utils
 import qs.services
@@ -57,15 +57,25 @@ Rectangle {
                 id: delegateRect
 
                 property real dragStartX: 0
-                property bool isOpen: false
+                property bool expand: false
+                property int collapsedHeight: 40
+                property int expandedHeight: notificationItem.height
 
+                height: expand ? expandedHeight : collapsedHeight
                 implicitWidth: container.width
-                implicitHeight: notificationItem.height
+
                 color: Scripts.setOpacity(Colors.background, 0.7)
 
                 border.color: Colors.color1
                 radius: 12
                 clip: true
+
+                Behavior on height {
+                    NumberAnimation {
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                }
 
                 RowLayout {
                     id: notificationItem
@@ -74,6 +84,7 @@ Rectangle {
                     width: Math.round(parent.width * 0.9)
                     spacing: 8
 
+                    // App Icon
                     Rectangle {
                         visible: appIcon
                         Layout.preferredWidth: 48
@@ -114,8 +125,10 @@ Rectangle {
                             }
                         }
                         Rectangle {
+                            visible: delegateRect.expand
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
+                            height: 90
+                            color: 'white'
                         }
                     }
                 }
@@ -126,7 +139,7 @@ Rectangle {
                     drag.target: delegateRect
                     drag.axis: Drag.XAxis
                     onClicked: {
-                        NotificationService.discardNotification(notificationId);
+                        delegateRect.expand = !delegateRect.expand;
                     }
                     onPressed: {
                         delegateRect.dragStartX = delegateRect.x;
@@ -176,7 +189,7 @@ Rectangle {
             displaced: Transition {
                 NumberAnimation {
                     properties: "x,y"
-                    duration: 1000
+                    duration: 250
                 }
             }
 
