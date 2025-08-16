@@ -14,6 +14,7 @@ import qs.services
 
 Scope {
     id: notificationPopup
+    property ListModel notificationListModel: ListModel {}
 
     PanelWindow {
         id: root
@@ -48,7 +49,7 @@ Scope {
 
             spacing: 10
 
-            model: NotificationService.notificationListModel
+            model: notificationPopup.notificationListModel
 
             delegate: NotificationItem {}
 
@@ -85,6 +86,31 @@ Scope {
                 target: GlobalState
                 function onShowMprisChangedSignal() {
                     listview.shouldBeVisible = !listview.shouldBeVisible;
+                }
+            }
+        }
+    }
+
+    Connections {
+        target: NotificationService
+        function onNotify(notif) {
+            notificationPopup.notificationListModel.append({
+                notificationId: notif.notificationId,
+                actions: notif.actions,
+                appIcon: notif.appIcon,
+                appName: notif.appName,
+                body: notif.body,
+                image: notif.image,
+                summary: notif.summary,
+                time: notif.time,
+                urgency: notif.urgency
+            });
+        }
+        function onTimeout(id) {
+            for (var i = 0; i < notificationPopup.notificationListModel.count; ++i) {
+                if (notificationPopup.notificationListModel.get(i).notificationId === id) {
+                    notificationPopup.notificationListModel.remove(i);
+                    break;
                 }
             }
         }
