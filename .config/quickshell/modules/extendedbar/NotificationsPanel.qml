@@ -7,6 +7,8 @@ import Quickshell
 import qs.utils
 import qs.services
 import qs.components
+import qs.animations
+import qs.modules.notification
 
 Rectangle {
     id: root
@@ -39,6 +41,7 @@ Rectangle {
                 iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
                 onClicked: {
                     NotificationService.discardAllNotifications();
+                    root.notificationGroup.clear();
                 }
             }
         }
@@ -65,141 +68,68 @@ Rectangle {
                 color: Scripts.setOpacity(Colors.background, 0.7)
 
                 border.color: Colors.color1
-                radius: 12
+                radius: 8
                 clip: true
 
                 Behavior on height {
-                    NumberAnimation {
-                        duration: 250
-                        easing.type: Easing.InOutQuad
-                    }
+                    AnimatedNumber {}
                 }
 
-                RowLayout {
+                ColumnLayout {
                     id: notificationItem
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     width: Math.round(parent.width * 0.9)
                     spacing: 8
 
-                    // App Icon
-                    Rectangle {
-                        visible: appIcon
-                        Layout.preferredWidth: 48
-                        Layout.preferredHeight: 48
-                        Layout.fillHeight: true
-                        color: "transparent"
-                        clip: true
+                    RowLayout {
+                        Rectangle {
+                            visible: appIcon
+                            Layout.preferredWidth: 24
+                            Layout.preferredHeight: 24
 
-                        Image {
-                            id: image
-                            anchors.fill: parent
-                            source: Quickshell.iconPath(appIcon, "image-missing")
-                            fillMode: Image.PreserveAspectFit
+                            color: "transparent"
+                            clip: true
+
+                            Image {
+                                id: image
+                                anchors.fill: parent
+                                source: Quickshell.iconPath(appIcon, "image-missing")
+                                fillMode: Image.PreserveAspectFit
+                            }
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            spacing: 5
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 10
+
+                                Text {
+                                    text: appName
+                                    font.bold: true
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                    color: Colors.color12
+                                }
+
+                                Text {
+                                    id: timeText
+                                    text: Qt.formatDateTime(new Date(time), "hh:mm AP")
+                                    color: Colors.color11
+                                }
+                            }
                         }
                     }
 
                     ColumnLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        spacing: 5
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 10
-
-                            Text {
-                                text: appName
-                                font.bold: true
-                                Layout.fillWidth: true
-                                elide: Text.ElideRight
-                                color: Colors.color12
-                            }
-
-                            Text {
-                                id: timeText
-                                text: Qt.formatDateTime(new Date(time), "hh:mm AP")
-                                color: Colors.color11
-                            }
-                        }
-
                         Repeater {
                             model: notifications
-                            delegate: Rectangle {
-                                required property var modelData
+                            delegate: NotificationItem {
                                 visible: delegateRect.expand
-                                Layout.fillWidth: true
-                                height: 80
-                                color: Scripts.setOpacity(Colors.background, 0.7)
-                                border.color: Colors.color1
-                                radius: 12
-                                clip: true
-
-                                RowLayout {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: parent.width - 25
-                                    height: parent.height
-                                    spacing: 10
-
-                                    Rectangle {
-                                        visible: !!modelData.image || !!modelData.appIcon
-                                        Layout.preferredWidth: parent.height
-                                        Layout.preferredHeight: parent.height
-                                        Layout.fillHeight: true
-                                        color: "transparent"
-                                        clip: true
-                                        Image {
-                                            id: image
-                                            anchors.fill: parent
-                                            source: modelData.image || modelData.appIcon
-                                            fillMode: Image.PreserveAspectFit
-                                        }
-                                    }
-
-                                    ColumnLayout {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        spacing: 5
-
-                                        RowLayout {
-                                            Layout.fillWidth: true
-                                            spacing: 10
-
-                                            Text {
-                                                text: modelData.appName
-                                                font.bold: true
-                                                Layout.fillWidth: true
-                                                elide: Text.ElideRight
-                                                color: Colors.color12
-                                            }
-
-                                            Text {
-                                                id: timeText
-                                                text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
-                                                color: Colors.color11
-                                            }
-                                        }
-
-                                        Text {
-                                            text: modelData.body
-                                            Layout.fillWidth: true
-                                            wrapMode: Text.Wrap
-                                            maximumLineCount: 2
-                                            elide: Text.ElideRight
-                                            color: Colors.color11
-                                        }
-
-                                        Text {
-                                            text: modelData.summary
-                                            Layout.fillWidth: true
-                                            wrapMode: Text.Wrap
-                                            maximumLineCount: 2
-                                            elide: Text.ElideRight
-                                            color: Colors.color10
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
@@ -253,6 +183,7 @@ Rectangle {
                 }
                 NumberAnimation {
                     property: "x"
+                    from: 0
                     to: 300
                     duration: 250
                 }
@@ -311,13 +242,8 @@ Rectangle {
 
             if (groupIndex !== -1) {
                 var group = root.notificationGroup.get(groupIndex);
-                var notifs = (group.notifications && group.notifications.slice()) || [];
-                notifs.unshift(notification);
-                var newTime = Math.max(group.time || 0, notification.time);
-                root.notificationGroup.set(groupIndex, {
-                    notifications: notifs,
-                    time: newTime
-                });
+                var notifs = group.notifications || [];
+                notifs.insert(0, notification);
             } else {
                 root.notificationGroup.append({
                     appName: notification.appName,
@@ -349,6 +275,11 @@ Rectangle {
                     urgency: notif.urgency
                 });
             }
+
+            notifs.sort(function (a, b) {
+                return b.time - a.time;
+            });
+
             root.notificationGroup.append({
                 appName: group.appName,
                 appIcon: group.appIcon,
