@@ -8,7 +8,8 @@ import qs.services
 
 Rectangle {
     required property var modelData
-    width: listview.width
+
+    implicitWidth: parent.width
     height: 90
     color: Scripts.setOpacity(Colors.background, 0.7)
     border.color: Colors.color1
@@ -18,7 +19,7 @@ Rectangle {
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        width: listview.width - 25
+        width: parent.width - 25
         height: 80
         spacing: 10
 
@@ -78,14 +79,6 @@ Rectangle {
                 elide: Text.ElideRight
                 color: Colors.color10
             }
-        }
-    }
-
-    MouseArea {
-        id: itemArea
-        anchors.fill: parent
-        onClicked: {
-            NotificationService.timeoutNotification(modelData.notificationId);
         }
     }
 }

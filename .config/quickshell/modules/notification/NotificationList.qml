@@ -50,7 +50,15 @@ Scope {
 
             model: notificationPopup.notificationListModel
 
-            delegate: NotificationItem {}
+            delegate: NotificationItem {
+                MouseArea {
+                    id: itemArea
+                    anchors.fill: parent
+                    onClicked: {
+                        NotificationService.timeoutNotification(modelData.notificationId);
+                    }
+                }
+            }
 
             add: Transition {
                 NumberAnimation {
