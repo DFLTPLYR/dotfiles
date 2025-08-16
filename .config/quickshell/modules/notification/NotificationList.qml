@@ -40,7 +40,6 @@ Scope {
 
         ListView {
             id: listview
-
             property bool shouldBeVisible: true
 
             visible: shouldBeVisible
@@ -78,6 +77,13 @@ Scope {
                 NumberAnimation {
                     property: "x"
                     to: 200
+                    duration: 250
+                }
+            }
+
+            displaced: Transition {
+                NumberAnimation {
+                    properties: "x,y"
                     duration: 250
                 }
             }

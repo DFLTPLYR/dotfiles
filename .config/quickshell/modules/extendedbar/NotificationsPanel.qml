@@ -16,6 +16,7 @@ Rectangle {
     color: 'transparent'
 
     property bool isEmpty: NotificationService.list.length > 0
+    property ListModel notificationGroup: ListModel {}
 
     ColumnLayout {
         id: container
@@ -47,14 +48,19 @@ Rectangle {
         ListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             spacing: 10
 
-            model: NotificationService.list
+            model: root.notificationGroup
 
             delegate: Rectangle {
+                id: delegateRect
+
+                property real dragStartX: 0
+                property bool isOpen: false
+
                 implicitWidth: container.width
                 implicitHeight: notificationItem.height
-
                 color: Scripts.setOpacity(Colors.background, 0.7)
 
                 border.color: Colors.color1
@@ -69,9 +75,9 @@ Rectangle {
                     spacing: 8
 
                     Rectangle {
-                        visible: !!modelData.image || !!modelData.appIcon
-                        Layout.preferredWidth: parent.height
-                        Layout.preferredHeight: parent.height
+                        visible: appIcon
+                        Layout.preferredWidth: 48
+                        Layout.preferredHeight: 48
                         Layout.fillHeight: true
                         color: "transparent"
                         clip: true
@@ -79,7 +85,7 @@ Rectangle {
                         Image {
                             id: image
                             anchors.fill: parent
-                            source: modelData.image || modelData.appIcon
+                            source: Quickshell.iconPath(appIcon, "image-missing")
                             fillMode: Image.PreserveAspectFit
                         }
                     }
@@ -94,7 +100,7 @@ Rectangle {
                             spacing: 10
 
                             Text {
-                                text: modelData.appName
+                                text: appName
                                 font.bold: true
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
@@ -103,36 +109,37 @@ Rectangle {
 
                             Text {
                                 id: timeText
-                                text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
+                                text: Qt.formatDateTime(new Date(time), "hh:mm AP")
                                 color: Colors.color11
                             }
                         }
-
-                        Text {
-                            text: modelData.body
+                        Rectangle {
                             Layout.fillWidth: true
-                            wrapMode: Text.Wrap
-                            maximumLineCount: 2
-                            elide: Text.ElideRight
-                            color: Colors.color11
-                        }
-
-                        Text {
-                            text: modelData.summary
-                            Layout.fillWidth: true
-                            wrapMode: Text.Wrap
-                            maximumLineCount: 2
-                            elide: Text.ElideRight
-                            color: Colors.color10
+                            Layout.fillHeight: true
                         }
                     }
                 }
 
                 MouseArea {
-                    id: itemArea
+                    id: dragArea
                     anchors.fill: parent
+                    drag.target: delegateRect
+                    drag.axis: Drag.XAxis
                     onClicked: {
-                        NotificationService.discardNotification(modelData.notificationId);
+                        NotificationService.discardNotification(notificationId);
+                    }
+                    onPressed: {
+                        delegateRect.dragStartX = delegateRect.x;
+                    }
+                    onReleased: {
+                        if (Math.abs(delegateRect.x) > parent.width * 0.3) {
+                            for (var i = 0; i < notifications.count; ++i) {
+                                var item = notifications.get(i);
+                                NotificationService.discardNotification(item.notificationId);
+                            }
+                            root.notificationGroup.remove(index);
+                        }
+                        delegateRect.x = 0;
                     }
                 }
             }
@@ -151,6 +158,7 @@ Rectangle {
                     duration: 250
                 }
             }
+
             remove: Transition {
                 NumberAnimation {
                     property: "opacity"
@@ -162,6 +170,13 @@ Rectangle {
                     property: "x"
                     to: 300
                     duration: 250
+                }
+            }
+
+            displaced: Transition {
+                NumberAnimation {
+                    properties: "x,y"
+                    duration: 1000
                 }
             }
 
@@ -177,6 +192,42 @@ Rectangle {
                     font.pixelSize: 16
                 }
             }
+        }
+    }
+
+    Connections {
+        target: NotificationService
+        function onNotify(notif) {
+            console.log(notif);
+        }
+    }
+
+    Component.onCompleted: {
+        root.notificationGroup.clear();
+        for (var appName in NotificationService.groupsByAppName) {
+            var group = NotificationService.groupsByAppName[appName];
+
+            var notifs = [];
+            for (var i = 0; i < group.notifications.length; ++i) {
+                var notif = group.notifications[i];
+                notifs.push({
+                    notificationId: notif.notificationId,
+                    actions: notif.actions,
+                    appIcon: notif.appIcon,
+                    appName: notif.appName,
+                    body: notif.body,
+                    image: notif.image,
+                    summary: notif.summary,
+                    time: notif.time,
+                    urgency: notif.urgency
+                });
+            }
+            root.notificationGroup.append({
+                appName: group.appName,
+                appIcon: group.appIcon,
+                notifications: notifs,
+                time: group.time
+            });
         }
     }
 }
