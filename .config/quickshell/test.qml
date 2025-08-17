@@ -86,132 +86,138 @@ ShellRoot {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    Text {
-                        text: "Settings"
-                        font.pixelSize: 24
-                        color: ColorPalette.color13
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                        Layout.fillWidth: true
-                        Layout.margins: 20
-                    }
-
-                    RowLayout {
+                Loader {
+                    sourceComponent: ColumnControl {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-
-                        Text {
-                            text: "Rounding"
-                            font.pixelSize: 18
-                            color: ColorPalette.color13
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            Layout.preferredWidth: 100
-                            Layout.margins: 20
-                        }
-
-                        Slider {
-                            from: 0
-                            value: 0
-                            to: 100
-                            live: true
-                            onValueChanged: {
-                                Example.mainRect.rounding = Math.round(value);
-                                console.log("Slider moved to: " + Math.round(value));
-                            }
-                        }
                     }
+                }
+            }
+        }
+    }
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+    component ColumnControl: ColumnLayout {
+        Text {
+            text: "Settings"
+            font.pixelSize: 24
+            color: ColorPalette.color13
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            Layout.fillWidth: true
+            Layout.margins: 20
+        }
 
-                        Text {
-                            text: "Padding"
-                            font.pixelSize: 18
-                            color: ColorPalette.color13
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            Layout.preferredWidth: 100
-                            Layout.margins: 20
-                        }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-                        Slider {
-                            id: paddingSlider
-                            from: 0
-                            value: 0
-                            to: 100
-                            live: true
-                            onValueChanged: {
-                                Example.mainRect.padding = Math.round(value);
-                                console.log("Slider moved to: " + Math.round(value));
-                            }
-                        }
+            Text {
+                text: "Rounding"
+                font.pixelSize: 18
+                color: ColorPalette.color13
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: 100
+                Layout.margins: 20
+            }
+
+            Slider {
+                from: 0
+                value: 0
+                to: 100
+                live: true
+                onValueChanged: {
+                    Example.mainRect.rounding = Math.round(value);
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Text {
+                text: "Padding"
+                font.pixelSize: 18
+                color: ColorPalette.color13
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: 100
+                Layout.margins: 20
+            }
+
+            Slider {
+                id: paddingSlider
+                from: 0
+                value: 0
+                to: 100
+                live: true
+                onValueChanged: {
+                    Example.mainRect.padding = Math.round(value);
+                }
+            }
+        }
+
+        // Backing Rectangle Position
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            CheckBox {
+                text: qsTr("Enable Backing Rect")
+                Layout.margins: 20
+
+                onPressed: {
+                    rect.backingVisible = this.checked;
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Text {
+                text: "Position"
+                font.pixelSize: 18
+                color: ColorPalette.color13
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: 100
+                Layout.margins: 20
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Slider {
+                    from: 0
+                    value: 0
+                    to: Math.round(paddingSlider.value * 2)
+                    live: true
+                    onValueChanged: {
+                        Example.backingRect.x = Math.round(value);
                     }
+                }
 
-                    // Backing Rectangle Position
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        CheckBox {
-                            text: qsTr("Enable Backing Rect")
-                            Layout.margins: 20
-
-                            onPressed: {
-                                rect.backingVisible = this.checked;
-                            }
-                        }
+                Slider {
+                    from: 0
+                    value: 0
+                    to: Math.round(paddingSlider.value * 2)
+                    live: true
+                    onValueChanged: {
+                        Example.backingRect.y = Math.round(value);
                     }
+                }
+            }
+        }
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+        // Save shit
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-                        Text {
-                            text: "Position"
-                            font.pixelSize: 18
-                            color: ColorPalette.color13
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            Layout.preferredWidth: 100
-                            Layout.margins: 20
-                        }
-
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-
-                            Slider {
-                                from: 0
-                                value: 0
-                                to: Math.round(paddingSlider.value * 2)
-                                live: true
-                                onValueChanged: {
-                                    Example.backingRect.x = Math.round(value);
-                                    console.log("Slider moved to: " + Math.round(value));
-                                }
-                            }
-
-                            Slider {
-                                from: 0
-                                value: 0
-                                to: Math.round(paddingSlider.value * 2)
-                                live: true
-                                onValueChanged: {
-                                    Example.backingRect.y = Math.round(value);
-                                    console.log("Slider moved to: " + Math.round(value));
-                                }
-                            }
-                        }
-                    }
-
-                    // Save shit
-                    Button {
-                        text: "Save Settings"
-                        onClicked: {
-                            Example.saveSettings();
-                        }
-                    }
+            Button {
+                Layout.margins: 20
+                text: "Save Settings"
+                onClicked: {
+                    Example.saveSettings();
                 }
             }
         }
