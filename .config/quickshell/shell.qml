@@ -28,7 +28,6 @@ import qs.modules.notification
 
 ShellRoot {
     Variants {
-        // see Variants for details
         model: Quickshell.screens
 
         delegate: PanelWindow {
@@ -39,13 +38,6 @@ ShellRoot {
             color: "transparent"
             implicitHeight: 42
 
-            // margins {
-            //     left: 10
-            //     right: 10
-            //     top: 10
-            //     bottom: 10
-            // }
-
             Bar {}
 
             anchors {
@@ -54,73 +46,69 @@ ShellRoot {
                 right: true
             }
 
-            Scope {
-                property var modelData
+            LazyLoader {
+                active: persistStates.showMpris
+                component: ExtendedBar {}
+            }
 
-                PersistentProperties {
-                    id: persistStates
-                    reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
-                    property bool showWallpaperCarousel: false
-                    property bool showMpris: false
-                    property bool showAppMenu: false
-                    property bool showClipBoard: false
-                    property bool showWindowsOptions: false
-                }
+            LazyLoader {
+                active: persistStates.showWallpaperCarousel
+                component: WallpaperCarousel {}
+            }
 
-                LazyLoader {
-                    active: persistStates.showMpris
-                    component: ExtendedBar {}
-                }
+            LazyLoader {
+                active: persistStates.showClipBoard
+                component: ClipBoard {}
+            }
 
-                LazyLoader {
-                    active: persistStates.showWallpaperCarousel
-                    component: WallpaperCarousel {}
-                }
+            LazyLoader {
+                active: persistStates.showAppMenu
+                component: AppMenu {}
+            }
 
-                LazyLoader {
-                    active: persistStates.showClipBoard
-                    component: ClipBoard {}
-                }
+            PersistentProperties {
+                id: persistStates
+                reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
+                property bool showWallpaperCarousel: false
+                property bool showMpris: false
+                property bool showAppMenu: false
+                property bool showClipBoard: false
+                property bool showWindowsOptions: false
+            }
 
-                LazyLoader {
-                    active: persistStates.showAppMenu
-                    component: AppMenu {}
-                }
-
-                Connections {
-                    target: GlobalState
-                    function onOpenDrawersUpdated() {
-                        const drawers = [
-                            {
-                                name: 'WallpaperCarousel',
-                                property: 'showWallpaperCarousel'
-                            },
-                            {
-                                name: 'MprisDashboard',
-                                property: 'showMpris'
-                            },
-                            {
-                                name: 'AppMenu',
-                                property: 'showAppMenu'
-                            },
-                            {
-                                name: 'ClipBoard',
-                                property: 'showClipBoard'
-                            },
-                            {
-                                name: 'WindowsOptions',
-                                property: 'showWindowsOptions'
-                            }
-                        ];
-                        const monitorName = modelData.name;
-                        for (let i = 0; i < drawers.length; i++) {
-                            const drawer = drawers[i];
-                            const uniqueKey = ['WindowsOptions'];
-
-                            const key = uniqueKey.includes(drawer.name) ? drawer.name : `${drawer.name}-${monitorName}`;
-                            const exists = GlobalState.hasDrawer(key);
-                            persistStates[drawer.property] = exists;
+            Connections {
+                target: GlobalState
+                function onOpenDrawersUpdated() {
+                    const drawers = [
+                        {
+                            name: 'WallpaperCarousel',
+                            property: 'showWallpaperCarousel'
+                        },
+                        {
+                            name: 'MprisDashboard',
+                            property: 'showMpris'
+                        },
+                        {
+                            name: 'AppMenu',
+                            property: 'showAppMenu'
+                        },
+                        {
+                            name: 'ClipBoard',
+                            property: 'showClipBoard'
+                        },
+                        {
+                            name: 'WindowsOptions',
+                            property: 'showWindowsOptions'
                         }
+                    ];
+                    const monitorName = modelData.name;
+                    for (let i = 0; i < drawers.length; i++) {
+                        const drawer = drawers[i];
+                        const uniqueKey = ['WindowsOptions'];
+
+                        const key = uniqueKey.includes(drawer.name) ? drawer.name : `${drawer.name}-${monitorName}`;
+                        const exists = GlobalState.hasDrawer(key);
+                        persistStates[drawer.property] = exists;
                     }
                 }
             }
