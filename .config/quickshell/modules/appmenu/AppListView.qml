@@ -95,7 +95,7 @@ GridView {
             height: Math.floor(grid.cellHeight * 0.9)
 
             radius: 5
-            color: isHovered || isSelected ? Colors.backgroundAlt : "transparent"
+            color: rect.isHovered || isSelected ? Colors.backgroundAlt : "transparent"
 
             border.color: isSelected ? Colors.foreground : "transparent"
             border.width: isSelected ? 2 : 0
