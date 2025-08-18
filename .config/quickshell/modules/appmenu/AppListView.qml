@@ -16,6 +16,7 @@ GridView {
 
     property string searchText: ""
     property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
+    property ListModel appList: ListModel {}
 
     clip: true
 
@@ -29,29 +30,56 @@ GridView {
     boundsBehavior: Flickable.StopAtBounds
     snapMode: GridView.NoSnap
 
-    onCountChanged: {
-        grid.currentIndex = 0;
-    }
+    function updateDesktopApplicationsList(searchText) {
+        appList.clear();
+        const DesktopApplications = DesktopEntries.applications.values.filter(a => !a.noDisplay).filter(a => !(a.categories || []).includes("X-LSP-Plugins")).sort((a, b) => a.name.localeCompare(b.name));
 
-    model: ScriptModel {
-        values: {
-            const DesktopApplications = DesktopEntries.applications.values.filter(a => !a.noDisplay).filter(a => !(a.categories || []).includes("X-LSP-Plugins")).sort((a, b) => a.name.localeCompare(b.name));
-
-            if (!searchText || searchText.trim() === "")
-                return DesktopApplications;
-
+        let filteredApps = DesktopApplications;
+        if (searchText && searchText.trim() !== "") {
             const search = searchText.toLowerCase();
-
-            return DesktopApplications.filter(app => {
+            filteredApps = DesktopApplications.filter(app => {
                 const nameMatch = app.name?.toLowerCase().includes(search);
                 const commentMatch = app.comment?.toLowerCase().includes(search);
                 const categoriesMatch = (app.categories || []).join(" ").toLowerCase().includes(search);
                 return nameMatch || commentMatch || categoriesMatch;
             });
         }
+
+        for (let i = 0; i < filteredApps.length; ++i) {
+            appList.append(filteredApps[i]);
+        }
+    }
+
+    onSearchTextChanged: updateDesktopApplicationsList(searchText)
+
+    onCountChanged: {
+        grid.currentIndex = 0;
+    }
+
+    model: appList
+
+    function openApp() {
+        var entry = grid.currentItem.modelData;
+
+        // Split execString into command array (handles spaces)
+        var execArgs = entry.execString.split(" ");
+
+        if (entry.runInTerminal) {
+            Quickshell.execDetached({
+                command: ["kitty", "-e", "zsh", "-c"].concat(execArgs),
+                workingDirectory: entry.workingDirectory
+            });
+        } else {
+            Quickshell.execDetached({
+                command: execArgs,
+                workingDirectory: entry.workingDirectory
+            });
+        }
+        GlobalState.toggleDrawer("appMenu");
     }
 
     delegate: Rectangle {
+        id: rect
         required property var modelData
         width: grid.cellWidth
         height: grid.cellHeight
@@ -59,18 +87,6 @@ GridView {
 
         property bool isHovered: false
         property bool isSelected: GridView.isCurrentItem
-
-        function openApp(entry) {
-            if (entry.runInTerminal) {
-                Quickshell.execDetached({
-                    command: ["kitty", "-e", "zsh", "-c", entry.execString],
-                    workingDirectory: entry.workingDirectory
-                });
-            } else {
-                entry.execute();
-            }
-            GlobalState.toggleDrawer("appMenu");
-        }
 
         ClippingRectangle {
             anchors.centerIn: parent
@@ -137,9 +153,32 @@ GridView {
             anchors.fill: parent
             hoverEnabled: true
 
-            onEntered: isHovered = true
+            onEntered: {
+                isHovered = true;
+                grid.currentIndex = modelData.index;
+            }
             onExited: isHovered = false
-            onClicked: openApp(modelData)
+            onClicked: grid.openApp()
         }
     }
+
+    add: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 200
+        }
+    }
+
+    remove: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 200
+        }
+    }
+
+    Component.onCompleted: updateDesktopApplicationsList(searchText)
 }

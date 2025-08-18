@@ -1,7 +1,9 @@
 import QtQuick
-import QtQuick.Layouts
+
 import Quickshell
 import Quickshell.Io
+import QtQuick.Layouts
+import Quickshell.Widgets
 import Quickshell.Wayland
 
 import qs.modules.sessionmenu
@@ -45,7 +47,6 @@ Variants {
             icon: CustomIcon {
                 anchors.centerIn: parent
                 name: "\uf011"
-
                 size: 64
                 color: Colors.color9
             }
@@ -103,54 +104,64 @@ Variants {
                 anchors.fill: parent
                 onClicked: GlobalState.isSessionMenuOpen = false
 
-                GridLayout {
+                ClippingRectangle {
                     anchors.centerIn: parent
+
+                    radius: 50
+                    clip: true
 
                     width: Math.round(parent.width * 0.75)
                     height: Math.round(parent.height * 0.75)
 
-                    columns: 2
-                    columnSpacing: 0
-                    rowSpacing: 0
+                    GridLayout {
+                        anchors.fill: parent
+                        columns: 2
+                        columnSpacing: 0
+                        rowSpacing: 0
 
-                    Repeater {
-                        model: buttons
-                        delegate: Rectangle {
-                            required property LogoutButton modelData
+                        Repeater {
+                            model: buttons
+                            delegate: Rectangle {
+                                required property LogoutButton modelData
 
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
 
-                            color: ma.containsMouse ? buttonHoverColor : buttonColor
-                            border.color: "black"
-                            border.width: ma.containsMouse ? 0 : 1
+                                color: ma.containsMouse ? buttonHoverColor : buttonColor
 
-                            MouseArea {
-                                id: ma
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: modelData.exec()
-                            }
-
-                            // Replace Image with CustomIcon
-                            CustomIcon {
-                                id: icon
-                                anchors.centerIn: parent
-                                name: modelData.icon.name
-                                size: parent.width * 0.25
-                                color: ma.containsMouse ? modelData.icon.color : Colors.color12
-                            }
-
-                            Text {
-                                anchors {
-                                    top: icon.bottom
-                                    topMargin: 20
-                                    horizontalCenter: parent.horizontalCenter
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 800
+                                        easing.type: Easing.InOutQuad
+                                    }
                                 }
 
-                                text: modelData.text
-                                font.pointSize: 20
-                                color: ma.containsMouse ? modelData.icon.color : Colors.color15
+                                MouseArea {
+                                    id: ma
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: modelData.exec()
+                                }
+
+                                CustomIcon {
+                                    id: icon
+                                    anchors.centerIn: parent
+                                    name: modelData.icon.name
+                                    size: parent.width * 0.25
+                                    color: ma.containsMouse ? modelData.icon.color : Colors.color12
+                                }
+
+                                Text {
+                                    anchors {
+                                        top: icon.bottom
+                                        topMargin: 20
+                                        horizontalCenter: parent.horizontalCenter
+                                    }
+
+                                    text: modelData.text
+                                    font.pointSize: 20
+                                    color: ma.containsMouse ? modelData.icon.color : Colors.color15
+                                }
                             }
                         }
                     }
