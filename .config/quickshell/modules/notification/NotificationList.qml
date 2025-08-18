@@ -48,9 +48,13 @@ Scope {
 
             spacing: 10
 
+            leftMargin: 20
+            rightMargin: 20
+
             model: notificationPopup.notificationListModel
 
             delegate: NotificationItem {
+                implicitWidth: parent.width
                 MouseArea {
                     id: itemArea
                     anchors.fill: parent
