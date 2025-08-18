@@ -47,10 +47,7 @@ AnimatedScreenOverlay {
                 break;
             case Qt.Key_Enter:
             case Qt.Key_Return:
-                const currentItem = grid.currentItem;
-                if (currentItem) {
-                    currentItem.openApp(currentItem.modelData);
-                }
+                grid.openApp();
                 event.accepted = true;
                 break;
             case Qt.Key_Left:
