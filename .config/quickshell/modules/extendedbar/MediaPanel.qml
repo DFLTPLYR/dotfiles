@@ -132,7 +132,7 @@ Rectangle {
                     id: albumRotateFrame
                     running: MprisManager.activePlayer.isPlaying
                     onTriggered: {
-                        albumArt.albumRotation += 0.1; // Adjust speed as needed
+                        albumArt.albumRotation += 0.1;
                         if (albumArt.albumRotation > 360)
                             albumArt.albumRotation -= 360;
                     }

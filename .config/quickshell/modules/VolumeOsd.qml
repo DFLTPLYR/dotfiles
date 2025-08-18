@@ -48,6 +48,7 @@ Scope {
 
             implicitWidth: screen.width
             implicitHeight: screen.height
+
             color: "transparent"
 
             mask: Region {
@@ -60,9 +61,11 @@ Scope {
 
             Rectangle {
                 id: mainRect
+
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 40
+
                 color: Colors.background
                 opacity: 1
                 radius: 10
@@ -75,13 +78,10 @@ Scope {
                     anchors.fill: parent
                     anchors.margins: 10
 
-                    // spacing: 8
-
                     Text {
                         Layout.preferredWidth: 60
                         text: `${volumeIcon}   ${Math.round(root.volume * 100)}%`
                         color: Colors.color13
-                        // horizontalAlignment: Text.AlignRight
                         elide: Text.ElideRight
                         clip: true
                         font.family: FontAssets.fontAwesomeRegular
