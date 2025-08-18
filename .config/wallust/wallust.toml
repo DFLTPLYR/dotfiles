@@ -51,3 +51,6 @@ quickshell.target = '~/dotfiles/.config/quickshell/services/Colors.qml'
 
 cava.template = 'cava.conf'
 cava.target = '~/.config/cava/config'
+
+gtk.template = 'gtk.css'
+gtk.target = '~/.config/gtk/gtk.css'

@@ -1,0 +1,53 @@
+/* ~/.config/gtk-3.0/gtk.css or ~/.config/gtk-4.0/gtk.css */
+/* Wallust generated */
+
+window, dialog {
+    background-color: {{background}};
+    color: {{foreground}};
+}
+
+/* Buttons */
+button {
+    background-color: {{background}};
+    color: {{foreground}};
+    border: 1px solid {{color8}};
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+button:hover {
+    background-color: {{color2}};
+    color: {{background}};
+}
+
+/* Entries (text fields) */
+entry, textview {
+    background-color: {{background}};
+    color: {{foreground}};
+    border: 1px solid {{color8}};
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+/* Selected text / list items */
+selection {
+    background-color: {{color4}};
+    color: {{background}};
+}
+
+/* Header bars */
+headerbar {
+    background-color: {{background}};
+    color: {{foreground}};
+    border-bottom: 1px solid {{color8}};
+}
+
+/* Scrollbars */
+scrollbar slider {
+    background-color: {{color8}};
+    border-radius: 4px;
+}
+
+scrollbar slider:hover {
+    background-color: {{color5}};
+}
