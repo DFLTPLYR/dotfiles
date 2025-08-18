@@ -9,7 +9,6 @@ import qs.services
 Rectangle {
     required property var modelData
 
-    implicitWidth: parent.width
     height: 90
     color: Scripts.setOpacity(Colors.background, 0.7)
     border.color: Colors.color1
@@ -24,16 +23,20 @@ Rectangle {
         spacing: 10
 
         Rectangle {
-            visible: !!modelData.image || !!modelData.appIcon
+            property var iconPath: modelData.image || Quickshell.iconPath(modelData.appIcon, true)
+            visible: iconPath
+
             Layout.preferredWidth: parent.height
             Layout.preferredHeight: parent.height
             Layout.fillHeight: true
+
             color: "transparent"
             clip: true
+
             Image {
                 id: image
                 anchors.fill: parent
-                source: modelData.image || modelData.appIcon
+                source: parent.iconPath
                 fillMode: Image.PreserveAspectFit
             }
         }

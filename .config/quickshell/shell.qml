@@ -173,5 +173,6 @@ ShellRoot {
         WeatherFetcher;
         FontAssets;
         SystemResource;
+        Appearance;
     }
 }

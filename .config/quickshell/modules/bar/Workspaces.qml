@@ -58,7 +58,7 @@ Item {
                         anchors.centerIn: parent
                         text: kanjiNumber(modelData.id - 1)
                         color: monitorIndicator.hovered ? Colors.color2 : (modelData.active && modelData.focused) ? Colors.color14 : Colors.color2
-                        font.pixelSize: Appearance.fontsize
+                        font.pixelSize: 12
                         // Animate the fill color
                         Behavior on color {
                             ColorAnimation {
