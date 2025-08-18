@@ -75,7 +75,25 @@ ListView {
             function matchesKeywordColor(hex, keyword) {
                 const hsl = hexToHSL(hex);
                 const h = hsl.h;
+                const s = hsl.s;
+                const l = hsl.l;
 
+                // Normalize keyword for multi-keyword support
+                const kw = keyword.toLowerCase().trim();
+
+                // Multi-keyword: "dark blue", "light green", etc.
+                if (kw.includes("dark")) {
+                    if (l >= 0.3)
+                        return false;
+                    keyword = kw.replace("dark", "").trim();
+                }
+                if (kw.includes("light")) {
+                    if (l <= 0.7)
+                        return false;
+                    keyword = kw.replace("light", "").trim();
+                }
+
+                // Extended color ranges
                 if (keyword === "purple")
                     return h >= 270 && h <= 310;
                 if (keyword === "red")
@@ -86,14 +104,26 @@ ListView {
                     return h >= 41 && h <= 65;
                 if (keyword === "green")
                     return h >= 66 && h <= 160;
+                if (keyword === "cyan")
+                    return h >= 161 && h <= 189;
                 if (keyword === "blue")
                     return h >= 190 && h <= 250;
+                if (keyword === "pink")
+                    return (h >= 311 && h <= 344) && s > 0.2;
+                if (keyword === "brown")
+                    return h >= 10 && h <= 40 && l < 0.5 && s > 0.2;
                 if (keyword === "gray" || keyword === "grey")
-                    return hsl.s <= 0.1 && hsl.l >= 0.2 && hsl.l <= 0.8;
+                    return s <= 0.1 && l >= 0.2 && l <= 0.8;
+                if (keyword === "black")
+                    return l < 0.15;
+                if (keyword === "white")
+                    return l > 0.85;
+
+                // Fallback for brightness
                 if (keyword === "dark")
-                    return hsl.l < 0.3;
+                    return l < 0.3;
                 if (keyword === "light")
-                    return hsl.l > 0.7;
+                    return l > 0.7;
 
                 return false;
             }
