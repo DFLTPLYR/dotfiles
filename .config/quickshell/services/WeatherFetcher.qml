@@ -102,7 +102,6 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 try {
-                    console.log('test');
                     const json = JSON.parse(this.text.trim());
                     root.parseWeather(json);
                 } catch (e) {
