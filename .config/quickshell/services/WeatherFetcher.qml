@@ -97,11 +97,12 @@ Singleton {
 
     Process {
         id: weatherProc
-        running: false
+        running: true
         command: ["curl", "wttr.in/manila?format=j1"]
         stdout: StdioCollector {
             onStreamFinished: {
                 try {
+                    console.log('test');
                     const json = JSON.parse(this.text.trim());
                     root.parseWeather(json);
                 } catch (e) {
@@ -124,6 +125,4 @@ Singleton {
         triggeredOnStart: true
         onTriggered: fetchWeather()
     }
-
-    Component.onCompleted: refreshTimer.start()
 }
