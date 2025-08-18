@@ -129,6 +129,7 @@ Rectangle {
                         Repeater {
                             model: notifications
                             delegate: NotificationItem {
+                                implicitWidth: parent.width
                                 visible: delegateRect.expand
                             }
                         }
