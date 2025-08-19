@@ -1,0 +1,31 @@
+pragma Singleton
+import QtQuick
+
+import Quickshell
+import Quickshell.Io
+
+Item {
+    function start() {
+        backendSocket.connected = true;
+    }
+
+    Socket {
+        id: backendSocket
+        path: "/tmp/bun.sock"
+        connected: false
+
+        onConnectedChanged: {
+            if (connected) {
+                backendSocket.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n");
+                backendSocket.flush();
+            }
+        }
+        onError: {
+            Quickshell.execDetached({
+                command: ["bun", "run", "--hot", "src/index.ts"],
+                workingDirectory: "/home/dfltplyr/dotfiles/.config/quickshell/todoservice"
+            });
+            backendSocket.connected = true;
+        }
+    }
+}
