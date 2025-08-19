@@ -49,7 +49,9 @@ AnimatedScreenOverlay {
                 if (currentItem) {
                     const screenName = screen.name;
                     const path = currentItem.modelData.path;
+                    console.log(path);
                     WallpaperStore.setWallpaper(screenName, path);
+                    // WallpaperStore.generateTags(path);
                 }
 
                 event.accepted = true;
