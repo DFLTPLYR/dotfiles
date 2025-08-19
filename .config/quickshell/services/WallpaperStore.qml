@@ -100,7 +100,6 @@ Singleton {
     function processNextColor() {
         if (colorQueue.length === 0)
             return;
-        console.log(colorAnalyzer.running);
         const nextPath = colorQueue.shift();
         colorAnalyzer.path = nextPath;
         colorAnalyzer.running = true;
@@ -178,6 +177,46 @@ Singleton {
         const cmd = `/usr/bin/magick montage ${quotedPaths} -tile x1 -geometry +0+0 PNG32:${outputPath}`;
         combineWallpapersProc.command = ["sh", "-c", cmd];
         combineWallpapersProc.running = true;
+    }
+
+    function arrayBufferToBase64(ab) {
+        var binary = "";
+        var bytes = new Uint8Array(ab);
+        for (var i = 0; i < bytes.length; i++)
+            binary += String.fromCharCode(bytes[i]);
+        return btoa(binary);
+    }
+
+    function postImageFile(fileUrl, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", fileUrl);
+        xhr.responseType = "arraybuffer";
+        xhr.onload = function () {
+            if (xhr.status === 200 || xhr.status === 0) {
+                // local file may give 0
+                var b64 = arrayBufferToBase64(xhr.response);
+                var send = new XMLHttpRequest();
+                send.open("POST", "http://localhost:6969/image");
+                send.setRequestHeader("Content-Type", "application/json");
+                send.onreadystatechange = function () {
+                    if (send.readyState === XMLHttpRequest.DONE) {
+                        if (callback)
+                            callback(send.status, send.responseText);
+                    }
+                };
+                send.send(JSON.stringify({
+                    b64: b64
+                }));
+            } else {
+                if (callback)
+                    callback(xhr.status, null);
+            }
+        };
+        xhr.onerror = function () {
+            if (callback)
+                callback(0, null);
+        };
+        xhr.send();
     }
 
     Process {

@@ -18,7 +18,7 @@ import qs.modules
 import qs.services
 import qs.assets
 import qs.components
-import qs.todoservice
+import qs.bunservice
 
 import qs.modules.bar
 import qs.modules.appmenu
@@ -103,6 +103,7 @@ ShellRoot {
                             property: 'showWindowsOptions'
                         }
                     ];
+
                     const monitorName = modelData.name;
                     for (let i = 0; i < drawers.length; i++) {
                         const drawer = drawers[i];
@@ -154,8 +155,9 @@ ShellRoot {
     }
 
     NotificationList {}
+
     Component.onCompleted: {
-        TodoBackend.start();
+        Buns;
         NotificationService;
         MprisManager;
         WallpaperStore;
