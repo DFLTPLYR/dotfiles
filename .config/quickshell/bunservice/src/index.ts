@@ -1,21 +1,20 @@
 import { serve } from "bun";
 import { Hono } from "hono";
 import "dotenv/config";
-import { createClient } from "@supabase/supabase-js";
+import todoRouter from "./routes/todo";
+import imageRouter from "./routes/images";
 
 const app = new Hono();
 
 // hehe funny number
 const PORT = process.env.PORT ? Number(process.env.PORT) : 6969;
 
-const supabase = createClient(
-  process.env.SUPABASE_URL as string,
-  process.env.API_KEY as string
-);
-
-serve({
-  unix: "/tmp/bun.sock",
-  fetch: app.fetch,
+// allow simple CORS for browser/QML requests (optional)
+app.options("/*", (c) => {
+  c.header("Access-Control-Allow-Origin", "*");
+  c.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  c.header("Access-Control-Allow-Headers", "Content-Type");
+  return c.text("", 204);
 });
 
 // Rest Api
@@ -23,10 +22,10 @@ app.get("/", (c) => {
   return c.text("OK", 200);
 });
 
-app.get("/todos", async (c) => {
-  const { data, error } = await supabase.from("todos").select();
-  if (error) return c.json({ error }, 500);
-  return c.json(data);
-});
+app.route("/todos", todoRouter);
+app.route("/image", imageRouter);
 
-export default app;
+serve({
+  port: PORT,
+  fetch: app.fetch,
+});
