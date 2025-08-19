@@ -9,6 +9,7 @@
     "hono": "^4.9.2"
   },
   "devDependencies": {
+    "@gradio/client": "^1.17.0",
     "@types/bun": "latest"
   }
 }
