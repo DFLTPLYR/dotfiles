@@ -20,10 +20,17 @@ Item {
                 backendSocket.flush();
             }
         }
+
+        parser: SplitParser {
+            onRead: message => {
+                console.log("Response from Bun:", message);
+            }
+        }
+
         onError: {
             Quickshell.execDetached({
                 command: ["bun", "run", "--hot", "src/index.ts"],
-                workingDirectory: "/home/dfltplyr/dotfiles/.config/quickshell/todoservice"
+                workingDirectory: Qt.resolvedUrl('./').toString().replace("file://", "")
             });
             backendSocket.connected = true;
         }
