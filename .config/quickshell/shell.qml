@@ -154,29 +154,44 @@ ShellRoot {
 
     NotificationList {}
 
+    Socket {
+        id: backendSocket
+        path: "/tmp/bun.sock"
+        connected: false
+
+        onConnectedChanged: {
+            if (connected) {
+                backendSocket.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n");
+                backendSocket.flush();
+            }
+        }
+
+        parser: SplitParser {
+            onRead: message => {
+                console.log("Response from Bun:", message);
+            }
+        }
+
+        onError: socketServer.running = true
+    }
+
+    // Process {
+    //     id: socketServer
+    //     running: false
+    //     command: ["bun", "todo-service/src/index.ts"]
+    //     stdout: StdioCollector {
+    //         onStreamFinished: console.log(`Bun server output: ${this.text}`)
+    //     }
+    // }
+
     // starting singletons
     Component.onCompleted: {
-        NotificationService;
+        backendSocket.connected = true;
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
         FontAssets;
         SystemResource;
         Appearance;
-
-        // var xhr = new XMLHttpRequest();
-        // xhr.onreadystatechange = function () {
-        //     if (xhr.readyState === XMLHttpRequest.DONE) {
-        //         if (xhr.status === 200) {
-        //             var todos = JSON.stringify(xhr.responseText);
-        //             console.log("Todos:", todos);
-        //             // Use todos in your QML
-        //         } else {
-        //             console.log("Error:", xhr.status, xhr.responseText);
-        //         }
-        //     }
-        // };
-        // xhr.open("GET", "http://localhost:6969/todos");
-        // xhr.send();
     }
 }
