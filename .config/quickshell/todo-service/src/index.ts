@@ -13,6 +13,11 @@ const supabase = createClient(
   process.env.API_KEY as string
 );
 
+serve({
+  unix: "/tmp/bun.sock",
+  fetch: app.fetch,
+});
+
 // Rest Api
 app.get("/", (c) => {
   return c.text("OK", 200);
@@ -22,11 +27,6 @@ app.get("/todos", async (c) => {
   const { data, error } = await supabase.from("todos").select();
   if (error) return c.json({ error }, 500);
   return c.json(data);
-});
-
-serve({
-  fetch: app.fetch,
-  port: PORT,
 });
 
 export default app;
