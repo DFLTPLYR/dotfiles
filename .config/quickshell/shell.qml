@@ -154,10 +154,7 @@ ShellRoot {
     }
 
     NotificationList {}
-
-    // starting singletons
     Component.onCompleted: {
-        // backendSocket.connected = true;
         TodoBackend.start();
         NotificationService;
         MprisManager;
