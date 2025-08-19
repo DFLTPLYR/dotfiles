@@ -18,6 +18,7 @@ import qs.modules
 import qs.services
 import qs.assets
 import qs.components
+import qs.todoservice
 
 import qs.modules.bar
 import qs.modules.appmenu
@@ -154,39 +155,11 @@ ShellRoot {
 
     NotificationList {}
 
-    Socket {
-        id: backendSocket
-        path: "/tmp/bun.sock"
-        connected: false
-
-        onConnectedChanged: {
-            if (connected) {
-                backendSocket.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n");
-                backendSocket.flush();
-            }
-        }
-
-        parser: SplitParser {
-            onRead: message => {
-                console.log("Response from Bun:", message);
-            }
-        }
-
-        onError: socketServer.running = true
-    }
-
-    // Process {
-    //     id: socketServer
-    //     running: false
-    //     command: ["bun", "todo-service/src/index.ts"]
-    //     stdout: StdioCollector {
-    //         onStreamFinished: console.log(`Bun server output: ${this.text}`)
-    //     }
-    // }
-
     // starting singletons
     Component.onCompleted: {
-        backendSocket.connected = true;
+        // backendSocket.connected = true;
+        TodoBackend.start();
+        NotificationService;
         MprisManager;
         WallpaperStore;
         WeatherFetcher;
