@@ -1,4 +1,5 @@
 // WallpaperStore.qml (Singleton)
+
 pragma Singleton
 import QtQuick
 import Quickshell
@@ -179,44 +180,22 @@ Singleton {
         combineWallpapersProc.running = true;
     }
 
-    function arrayBufferToBase64(ab) {
-        var binary = "";
-        var bytes = new Uint8Array(ab);
-        for (var i = 0; i < bytes.length; i++)
-            binary += String.fromCharCode(bytes[i]);
-        return btoa(binary);
-    }
-
-    function postImageFile(fileUrl, callback) {
+    function generateTags(path) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", fileUrl);
-        xhr.responseType = "arraybuffer";
-        xhr.onload = function () {
-            if (xhr.status === 200 || xhr.status === 0) {
-                // local file may give 0
-                var b64 = arrayBufferToBase64(xhr.response);
-                var send = new XMLHttpRequest();
-                send.open("POST", "http://localhost:6969/image");
-                send.setRequestHeader("Content-Type", "application/json");
-                send.onreadystatechange = function () {
-                    if (send.readyState === XMLHttpRequest.DONE) {
-                        if (callback)
-                            callback(send.status, send.responseText);
-                    }
-                };
-                send.send(JSON.stringify({
-                    b64: b64
-                }));
-            } else {
-                if (callback)
-                    callback(xhr.status, null);
+        xhr.open("POST", "http://localhost:6969/image");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log("Tags response:", xhr.responseText);
+                } else {
+                    console.log("Failed to get tags. Status:", xhr.status, "Response:", xhr.responseText);
+                }
             }
         };
-        xhr.onerror = function () {
-            if (callback)
-                callback(0, null);
-        };
-        xhr.send();
+        xhr.send(JSON.stringify({
+            path: path
+        }));
     }
 
     Process {

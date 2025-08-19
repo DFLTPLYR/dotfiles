@@ -1,23 +1,33 @@
+import { readFileSync } from "fs";
 import { Client } from "@gradio/client";
 import { Hono } from "hono";
 const client = Client.connect("hysts/DeepDanbooru");
 
 const imageRouter = new Hono();
 
-imageRouter.get("/", async (c) => {
-  const response_0 = await fetch(
-    "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"
-  );
-  const exampleImage = await response_0.blob();
+imageRouter.post("/", async (c) => {
+  try {
+    const body = await c.req.json();
+    const imagePath = body.path;
+    if (!imagePath) {
+      return c.json({ error: "No image path provided" }, 400);
+    }
+    const buffer = readFileSync(imagePath);
+    const exampleImage = new Blob([buffer]);
 
-  const result = await (
-    await client
-  ).predict("/predict", {
-    image: exampleImage,
-    score_threshold: 0.5,
-  });
+    const result = await (
+      await client
+    ).predict("/predict", {
+      image: exampleImage,
+      score_threshold: 0.5,
+    });
 
-  return c.json(result.data as Record<string, unknown>, 200);
+    const data = result.data as [unknown, Record<string, unknown>, string];
+    return c.json(data[1], 200);
+  } catch (err) {
+    console.error("Image route error:", err);
+    return c.json({ error: err?.message || String(err) }, 500);
+  }
 });
 
 export default imageRouter;
