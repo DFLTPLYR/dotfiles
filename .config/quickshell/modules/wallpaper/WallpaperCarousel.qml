@@ -210,12 +210,12 @@ AnimatedScreenOverlay {
             radius: 10
             transformOrigin: Item.Center
             color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
 
             ListContent {
                 id: flick
-                width: parent.width
-                height: parent.height
+                width: morphBox.width
+                height: morphBox.height
                 visible: animProgress > 0
                 opacity: animProgress
                 searchText: toplevel.searchValue
@@ -226,7 +226,7 @@ AnimatedScreenOverlay {
 
         // Tags
         Rectangle {
-            Layout.alignment: Qt.AlignHCenter // Center this item
+            Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
             Layout.preferredHeight: Math.max(1, (targetHeight / 4) * animProgress)
 
@@ -235,7 +235,7 @@ AnimatedScreenOverlay {
             radius: 10
             transformOrigin: Item.Center
             color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
 
             Flickable {
                 id: tickerView
