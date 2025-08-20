@@ -88,7 +88,7 @@ GridView {
         property bool isHovered: false
         property bool isSelected: GridView.isCurrentItem
 
-        ClippingRectangle {
+        Rectangle {
             anchors.centerIn: parent
 
             width: Math.floor(grid.cellWidth * 0.9)

@@ -107,78 +107,91 @@ AnimatedScreenOverlay {
 
         spacing: 8
 
+        // Colors
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
-            Layout.preferredHeight: Math.max(1, (targetHeight / 4) * animProgress)
+            Layout.preferredHeight: Math.max(1, (targetHeight / 2) * animProgress)
 
             scale: animProgress
             opacity: animProgress
             radius: 10
             transformOrigin: Item.Center
             color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
 
             GridView {
                 id: topTagList
                 anchors.fill: parent
-                anchors.margins: 8
-                clip: true
 
+                clip: true
+                property var perRow: 20
                 // Grid properties
-                cellWidth: 80
-                cellHeight: 80
+                cellWidth: Math.floor(parent.width / perRow)
+                cellHeight: Math.floor(parent.width / perRow)
+
                 flow: GridView.LeftToRight
 
-                model: toplevel.isPortrait ? WallpaperStore.portraitColors : WallpaperStore.landscapeColors
+                model: (toplevel.isPortrait ? WallpaperStore.portraitColors.slice() : WallpaperStore.landscapeColors.slice()).reverse()
 
                 delegate: Rectangle {
-                    width: 70
-                    height: 70
+                    id: wrapper
+                    width: topTagList.cellWidth
+                    height: topTagList.cellHeight
                     radius: 12
+                    color: 'transparent'
 
-                    property bool isSelected: {
-                        if (toplevel.colorFilter) {
-                            for (var i = 0; i < toplevel.colorFilter.length; i++) {
-                                if (toplevel.colorFilter[i] === modelData.color)
-                                    return true;
-                            }
-                        }
-                        return false;
-                    }
+                    Rectangle {
+                        id: container
+                        anchors.centerIn: wrapper
+                        width: topTagList.cellWidth * 0.8
+                        height: width
 
-                    color: isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.4)
+                        radius: 10
 
-                    border.color: isSelected ? Colors.foreground : Scripts.hexToRgba(Colors.colors12, 0.7)
-
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 4
-
-                        // Color preview circle
-                        Rectangle {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            width: 30
-                            height: 30
-                            radius: width / 2
-                            color: modelData.color
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            if (isSelected) {
+                        property bool isSelected: {
+                            if (toplevel.colorFilter) {
                                 for (var i = 0; i < toplevel.colorFilter.length; i++) {
-                                    if (toplevel.colorFilter[i] === modelData.color) {
-                                        toplevel.colorFilter.splice(i, 1);
-                                        break;
-                                    }
+                                    if (toplevel.colorFilter[i] === modelData.color)
+                                        return true;
                                 }
-                            } else {
-                                toplevel.colorFilter.push(modelData.color);
                             }
-                            toplevel.colorFilter = toplevel.colorFilter.slice();
+                            return false;
+                        }
+
+                        color: isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.4)
+
+                        border.color: isSelected ? Colors.foreground : Scripts.hexToRgba(Colors.colors12, 0.7)
+
+                        Column {
+                            anchors.centerIn: parent
+                            spacing: 4
+
+                            // Color preview circle
+                            Rectangle {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width: wrapper.height / 2
+                                height: width
+                                radius: width / 2
+                                color: modelData.color
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                if (container.isSelected) {
+                                    for (var i = 0; i < toplevel.colorFilter.length; i++) {
+                                        if (toplevel.colorFilter[i] === modelData.color) {
+                                            toplevel.colorFilter.splice(i, 1);
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    toplevel.colorFilter.push(modelData.color);
+                                }
+                                toplevel.colorFilter = toplevel.colorFilter.slice();
+                            }
                         }
                     }
                 }
