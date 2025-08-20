@@ -38,7 +38,7 @@ Rectangle {
                 borderColor: Colors.color10
                 backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
                 hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-                iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
+                iconColor: Colors.color10
                 onClicked: {
                     NotificationService.discardAllNotifications();
                     root.notificationGroup.clear();
