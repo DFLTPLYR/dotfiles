@@ -42,9 +42,22 @@ Item {
         ColumnLayout {
             anchors.fill: parent
 
-            Item {
+            RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
+                Repeater {
+                    model: modelData.colors.slice(0,7);
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        color: modelData.color
+                        radius: 6
+                        border.color: "#444"
+                        border.width: 1
+                        Component.onCompleted: console.log(JSON.stringyfy(modelData))
+
+                    }
+                }
             }
 
             Image {
@@ -59,9 +72,20 @@ Item {
                 mipmap: true
             }
 
-            Item {
+            RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
+                Repeater {
+                    model: modelData.colors.slice(8, 16);
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        color: modelData.color
+                        radius: 6
+                        border.color: modelData.color
+                        border.width: 1
+                    }
+                }
             }
         }
 
@@ -76,10 +100,7 @@ Item {
                 WallpaperStore.setWallpaper(screenName, modelData.path);
             }
 
-            onEntered: {
-                hovered = true;
-                console.log(JSON.stringify(modelData.path));
-            }
+            onEntered: hovered = true
             onExited: hovered = false
         }
     }
