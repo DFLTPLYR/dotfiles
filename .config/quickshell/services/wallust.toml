@@ -1,0 +1,8 @@
+backend = "full"
+color_space = "labmixed"
+palette = "dark16"
+threshold = 11
+
+[templates]
+json.template = 'colors.json'
+json.target = '/tmp/colors.json'
