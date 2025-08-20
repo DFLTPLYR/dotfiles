@@ -49,9 +49,8 @@ AnimatedScreenOverlay {
                 if (currentItem) {
                     const screenName = screen.name;
                     const path = currentItem.modelData.path;
-                    console.log(path);
                     WallpaperStore.setWallpaper(screenName, path);
-                    // WallpaperStore.generateTags(path);
+                    console.log(JSON.stringify(currentItem.modelData));
                 }
 
                 event.accepted = true;
@@ -97,7 +96,7 @@ AnimatedScreenOverlay {
     property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
     property real targetHeight: screen.height * 0.5
 
-    ClippingRectangle {
+    Rectangle {
         id: morphBox
         anchors.centerIn: parent
 
