@@ -130,14 +130,26 @@ AnimatedScreenOverlay {
                 cellHeight: 80
                 flow: GridView.LeftToRight
 
-                model: WallpaperStore.availableColors
+                model: toplevel.isPortrait ? WallpaperStore.portraitColors : WallpaperStore.landscapeColors
 
                 delegate: Rectangle {
                     width: 70
                     height: 70
                     radius: 12
-                    color: Scripts.hexToRgba(Colors.background, 0.4)
-                    border.color: Scripts.hexToRgba(Colors.colors10, 0.7)
+
+                    property bool isSelected: {
+                        if (toplevel.colorFilter) {
+                            for (var i = 0; i < toplevel.colorFilter.length; i++) {
+                                if (toplevel.colorFilter[i] === modelData.color)
+                                    return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    color: isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.4)
+
+                    border.color: isSelected ? Colors.foreground : Scripts.hexToRgba(Colors.colors12, 0.7)
 
                     Column {
                         anchors.centerIn: parent
@@ -150,22 +162,25 @@ AnimatedScreenOverlay {
                             height: 30
                             radius: width / 2
                             color: modelData.color
-                            border.color: "#444"
-                            border.width: 1
                         }
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            toplevel.colorFilter.append(modelData.color);
+                            if (isSelected) {
+                                for (var i = 0; i < toplevel.colorFilter.length; i++) {
+                                    if (toplevel.colorFilter[i] === modelData.color) {
+                                        toplevel.colorFilter.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                toplevel.colorFilter.push(modelData.color);
+                            }
+                            toplevel.colorFilter = toplevel.colorFilter.slice();
                         }
                     }
-                }
-
-                ScrollBar.vertical: ScrollBar {
-                    active: true
-                    policy: ScrollBar.AsNeeded
                 }
             }
         }
@@ -190,10 +205,13 @@ AnimatedScreenOverlay {
                 height: parent.height
                 visible: animProgress > 0
                 opacity: animProgress
-                searchText: searchValue
+                searchText: toplevel.searchValue
+                colorsFilter: toplevel.colorFilter
+                tagsFilter: toplevel.tagFilter
             }
         }
 
+        // Tags
         Rectangle {
             Layout.alignment: Qt.AlignHCenter // Center this item
             Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
@@ -205,6 +223,168 @@ AnimatedScreenOverlay {
             transformOrigin: Item.Center
             color: Scripts.hexToRgba(Colors.background, 0.2)
             border.color: Scripts.hexToRgba(Colors.colors10, 1)
+
+            Flickable {
+                id: tickerView
+                anchors.fill: parent
+                anchors.margins: 10
+                contentWidth: masonryContent.width
+                contentHeight: height
+                clip: true
+
+                // Enable interactive scrolling
+                interactive: true
+                boundsBehavior: Flickable.StopAtBounds
+                flickDeceleration: 1500
+                maximumFlickVelocity: 2500
+
+                // Auto-scroll properties
+                property real lastPosition: 0
+                property bool autoScrolling: true
+                property var scrollAnimationObject: null
+
+                // Initialize animation on completion
+                Component.onCompleted: {
+                    startScrollAnimation();
+                }
+
+                function startScrollAnimation() {
+                    if (scrollAnimationObject) {
+                        scrollAnimationObject.stop();
+                    }
+
+                    // Fix potential negative duration with Math.max
+                    const duration = 20000 * (Math.max(1, contentWidth - lastPosition) / 1000);
+
+                    // Create animation dynamically
+                    scrollAnimationObject = scrollAnimationComponent.createObject(tickerView, {
+                        from: lastPosition,
+                        to: Math.max(contentWidth - width, 0),
+                        duration: duration
+                    });
+
+                    if (autoScrolling && visible && contentWidth > width) {
+                        scrollAnimationObject.start();
+                    }
+                }
+
+                // Animation component
+                Component {
+                    id: scrollAnimationComponent
+
+                    NumberAnimation {
+                        target: tickerView
+                        property: "contentX"
+                        loops: Animation.Infinite
+                        running: false
+                        onStopped: {
+                            tickerView.lastPosition = tickerView.contentX;
+                        }
+                    }
+                }
+
+                // Pause auto-scroll when user interacts with the list
+                onMovementStarted: {
+                    autoScrolling = false;
+                    if (scrollAnimationObject) {
+                        lastPosition = contentX;
+                        scrollAnimationObject.stop();
+                    }
+                }
+
+                // Resume auto-scroll after user stops interacting
+                onMovementEnded: {
+                    resumeTimer.restart();
+                }
+
+                Timer {
+                    id: resumeTimer
+                    interval: 5000
+                    onTriggered: {
+                        tickerView.autoScrolling = true;
+                        tickerView.startScrollAnimation();
+                    }
+                }
+
+                // Masonry content container
+                Item {
+                    id: masonryContent
+                    width: childrenRect.width + 20
+                    height: tickerView.height
+                    // Masonry layout properties
+                    property int rowCount: 5
+                    property int rowHeight: 50
+                    property var rowWidths: [0, 0, 0, 0]
+                    property var rowItems: [[], [], [], []]
+
+                    // Layout function - call after model changes
+                    function layoutItems() {
+
+                        // Place each item in the row with the least width so far
+                        for (let i = 0; i < repeater.count; i++) {
+                            const item = repeater.itemAt(i);
+                            if (!item)
+                                continue;
+
+                            // Find row with minimum width
+                            let minRow = 0;
+                            let minWidth = rowWidths[0];
+
+                            for (let r = 1; r < rowCount; r++) {
+                                if (rowWidths[r] < minWidth) {
+                                    minRow = r;
+                                    minWidth = rowWidths[r];
+                                }
+                            }
+
+                            // Position item in this row
+                            item.y = minRow * (rowHeight);
+                            item.x = rowWidths[minRow];
+
+                            // Update row width
+                            rowWidths[minRow] += item.width + 8;
+                            rowItems[minRow].push(item);
+                        }
+                    }
+
+                    // Masonry item repeater
+                    Repeater {
+                        id: repeater
+                        model: toplevel.isPortrait ? WallpaperStore.portraitTags : WallpaperStore.landscapeTags
+
+                        delegate: Item {
+                            id: tagItem
+                            width: wordText.width + 40
+                            height: masonryContent.rowHeight
+
+                            Text {
+                                id: wordText
+                                text: modelData
+                                color: Colors.color15
+                                font.pixelSize: 20
+                                font.bold: true
+                                anchors.centerIn: parent
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    searchValue = modelData;
+                                    showSearchInput = true;
+                                    searchTimer.restart();
+                                }
+                            }
+
+                            // Layout when ready
+                            Component.onCompleted: {
+                                if (index === repeater.count - 1) {
+                                    Qt.callLater(masonryContent.layoutItems);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             Text {
                 id: searchLabel
