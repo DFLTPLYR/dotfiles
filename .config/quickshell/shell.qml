@@ -158,12 +158,5 @@ ShellRoot {
 
     Component.onCompleted: {
         Buns;
-        NotificationService;
-        MprisManager;
-        WallpaperStore;
-        WeatherFetcher;
-        FontAssets;
-        SystemResource;
-        Appearance;
     }
 }
