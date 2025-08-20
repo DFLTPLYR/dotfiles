@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
+import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 import Quickshell
@@ -88,6 +89,8 @@ AnimatedScreenOverlay {
     }
 
     property string searchValue: ""
+    property var tagFilter: []
+    property var colorFilter: []
     property bool showSearchInput: false
 
     readonly property bool isPortrait: screen.height > screen.width
@@ -96,49 +99,127 @@ AnimatedScreenOverlay {
     property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
     property real targetHeight: screen.height * 0.5
 
-    Rectangle {
-        id: morphBox
-        anchors.centerIn: parent
-
-        width: Math.max(1, targetWidth * animProgress)
-        height: Math.max(1, targetHeight * animProgress)
-
-        scale: animProgress
-        opacity: animProgress
-
-        radius: Math.min(height, height) / 30
-
-        transformOrigin: Item.Center
-        color: Scripts.hexToRgba(Colors.background, 0.2)
-
-        border.color: Scripts.hexToRgba(Colors.colors10, 1)
-        border.width: 2
+    ColumnLayout {
+        id: myLayout
 
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
 
-        ListContent {
-            id: flick
-            width: parent.width
-            height: parent.height
-            visible: animProgress > 0
+        spacing: 8
+
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
+            Layout.preferredHeight: Math.max(1, (targetHeight / 4) * animProgress)
+
+            scale: animProgress
             opacity: animProgress
-            searchText: searchValue
+            radius: 10
+            transformOrigin: Item.Center
+            color: Scripts.hexToRgba(Colors.background, 0.2)
+            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+
+            GridView {
+                id: topTagList
+                anchors.fill: parent
+                anchors.margins: 8
+                clip: true
+
+                // Grid properties
+                cellWidth: 80
+                cellHeight: 80
+                flow: GridView.LeftToRight
+
+                model: WallpaperStore.availableColors
+
+                delegate: Rectangle {
+                    width: 70
+                    height: 70
+                    radius: 12
+                    color: Scripts.hexToRgba(Colors.background, 0.4)
+                    border.color: Scripts.hexToRgba(Colors.colors10, 0.7)
+
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 4
+
+                        // Color preview circle
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: 30
+                            height: 30
+                            radius: width / 2
+                            color: modelData.color
+                            border.color: "#444"
+                            border.width: 1
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            toplevel.colorFilter.append(modelData.color);
+                        }
+                    }
+                }
+
+                ScrollBar.vertical: ScrollBar {
+                    active: true
+                    policy: ScrollBar.AsNeeded
+                }
+            }
         }
 
-        Text {
-            id: searchLabel
-            text: qsTr(searchValue)
-            font.pixelSize: 32
-            font.bold: true
-            anchors.centerIn: parent
-            color: Colors.color15
-            opacity: showSearchInput ? 1.0 : 0.0
+        // Carousel
+        Rectangle {
+            id: morphBox
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
+            Layout.preferredHeight: Math.max(1, targetHeight * animProgress)
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
+            scale: animProgress
+            opacity: animProgress
+            radius: 10
+            transformOrigin: Item.Center
+            color: Scripts.hexToRgba(Colors.background, 0.2)
+            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+
+            ListContent {
+                id: flick
+                width: parent.width
+                height: parent.height
+                visible: animProgress > 0
+                opacity: animProgress
+                searchText: searchValue
+            }
+        }
+
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter // Center this item
+            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
+            Layout.preferredHeight: Math.max(1, (targetHeight / 4) * animProgress)
+
+            scale: animProgress
+            opacity: animProgress
+            radius: 10
+            transformOrigin: Item.Center
+            color: Scripts.hexToRgba(Colors.background, 0.2)
+            border.color: Scripts.hexToRgba(Colors.colors10, 1)
+
+            Text {
+                id: searchLabel
+                text: qsTr(searchValue)
+                font.pixelSize: 32
+                font.bold: true
+                anchors.centerIn: parent
+                color: Colors.color15
+                opacity: showSearchInput ? 1.0 : 0.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
         }

@@ -90,7 +90,6 @@ Singleton {
         const db = getDb();
         root.landscapeWallpapers = [];
         root.portraitWallpapers = [];
-
         db.readTransaction(function (tx) {
             const rs = tx.executeSql("SELECT * FROM wallpapers");
             for (let i = 0; i < rs.rows.length; i++) {
@@ -444,5 +443,8 @@ Singleton {
         getCurrentMonitorWallpapers(e => {
             root.currentWallpapers = e;
         });
+
+        root.availableColors = getAllUniqueColors();
+        root.availableTags = getAllUniqueTags();
     }
 }
