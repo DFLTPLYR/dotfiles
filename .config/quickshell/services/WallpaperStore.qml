@@ -137,41 +137,6 @@ Singleton {
         });
     }
 
-    function getAllUniqueTags() {
-        const db = getDb();
-        const tags = [];
-
-        db.readTransaction(function (tx) {
-            // Use DISTINCT to get only unique tags
-            const rs = tx.executeSql("SELECT DISTINCT tag FROM tags ORDER BY tag");
-
-            for (let i = 0; i < rs.rows.length; i++) {
-                tags.push(rs.rows.item(i).tag);
-            }
-        });
-
-        return tags;
-    }
-
-    function getAllUniqueColors() {
-        const db = getDb();
-        const colors = [];
-
-        db.readTransaction(function (tx) {
-            // Use DISTINCT to get only unique color/tag combinations
-            const rs = tx.executeSql("SELECT DISTINCT color, tag FROM wallpaper_colors ORDER BY tag");
-
-            for (let i = 0; i < rs.rows.length; i++) {
-                colors.push({
-                    color: rs.rows.item(i).color,
-                    tag: rs.rows.item(i).tag
-                });
-            }
-        });
-
-        return colors;
-    }
-
     function getAllUniqueTagsByOrientation(orientation, callback) {
         const db = getDb();
 
@@ -415,6 +380,7 @@ Singleton {
 
     FileView {
         id: jsonFile
+        preload: false
         path: Qt.resolvedUrl('/tmp/colors.json').toString().replace("file://", "")
     }
 
