@@ -42,25 +42,18 @@ Item {
         ColumnLayout {
             anchors.fill: parent
 
-            RowLayout {
+            ListView {
+                id: upperListView
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
-                Item {
-                    Layout.fillWidth: true
-                }
-                Repeater {
-                    model: modelData.colors.slice(0, 7)
-                    Rectangle {
-                        width: 24
-                        height: width
-                        color: modelData.color
-                        radius: height
-                        border.color: "#444"
-                        border.width: 1
-                    }
-                }
-                Item {
-                    Layout.fillWidth: true
+                orientation: ListView.Horizontal
+                model: modelData.colors.slice(0, 9)
+
+                delegate: Rectangle {
+                    width: upperListView.width / 8
+                    height: upperListView.height
+
+                    color: Scripts.hexToRgba(modelData.color, 0.8)
                 }
             }
 
@@ -76,26 +69,17 @@ Item {
                 mipmap: true
             }
 
-            RowLayout {
+            ListView {
+                id: bottomListView
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
-                Item {
-                    Layout.fillWidth: true
-                }
-                Repeater {
-                    model: modelData.colors.slice(8, 16)
+                orientation: ListView.Horizontal
+                model: modelData.colors.slice(10, 18)
 
-                    Rectangle {
-                        width: 24
-                        height: width
-                        color: modelData.color
-                        radius: height
-                        border.color: modelData.color
-                        border.width: 1
-                    }
-                }
-                Item {
-                    Layout.fillWidth: true
+                delegate: Rectangle {
+                    width: bottomListView.width / 8
+                    height: bottomListView.height
+                    color: Scripts.hexToRgba(modelData.color, 0.8)
                 }
             }
         }
