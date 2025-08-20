@@ -15,10 +15,17 @@ Singleton {
     property var currentWallpapers
     property var landscapeWallpapers: []
     property var portraitWallpapers: []
+
+    property var availableColors: []
+    property var availableTags: []
     property var colorQueue: []
 
     function classifyWallpapers() {
         searchFiles.running = true;
+    }
+
+    function getDb() {
+        return LocalStorage.openDatabaseSync("WallpaperCache", "1.0", "Wallpaper DB", 10000);
     }
 
     function resetDatabase() {
@@ -66,6 +73,7 @@ Singleton {
     }
 
     function cacheWallpapers(list) {
+        console.log(list);
         const db = getDb();
         db.transaction(function (tx) {
             for (const item of list) {
@@ -123,8 +131,39 @@ Singleton {
         });
     }
 
-    function getDb() {
-        return LocalStorage.openDatabaseSync("WallpaperCache", "1.0", "Wallpaper DB", 10000);
+    function getAllUniqueTags() {
+        const db = getDb();
+        const tags = [];
+
+        db.readTransaction(function (tx) {
+            // Use DISTINCT to get only unique tags
+            const rs = tx.executeSql("SELECT DISTINCT tag FROM tags ORDER BY tag");
+
+            for (let i = 0; i < rs.rows.length; i++) {
+                tags.push(rs.rows.item(i).tag);
+            }
+        });
+
+        return tags;
+    }
+
+    function getAllUniqueColors() {
+        const db = getDb();
+        const colors = [];
+
+        db.readTransaction(function (tx) {
+            // Use DISTINCT to get only unique color/tag combinations
+            const rs = tx.executeSql("SELECT DISTINCT color, tag FROM wallpaper_colors ORDER BY tag");
+
+            for (let i = 0; i < rs.rows.length; i++) {
+                colors.push({
+                    color: rs.rows.item(i).color,
+                    tag: rs.rows.item(i).tag
+                });
+            }
+        });
+
+        return colors;
     }
 
     function processNextColor() {
@@ -197,12 +236,15 @@ Singleton {
         });
     }
 
-    function generateCombinedWallpaperImage(monitorToPathMap, outputPath = "/tmp/combined_wallpaper.png") {
+    function generateCombinedWallpaperImage(monitorToPathMap) {
         const paths = Object.values(monitorToPathMap);
+        const outputPath = "/tmp/combined_wallpaper.png";
+
         if (paths.length === 0) {
             console.warn("⚠️ No wallpapers to combine");
             return;
         }
+
         const quotedPaths = paths.map(p => `'${p}'`).join(" ");
 
         const cmd = `/usr/bin/magick montage ${quotedPaths} -tile x1 -geometry +0+0 PNG32:${outputPath}`;
@@ -281,32 +323,39 @@ Singleton {
         });
     }
 
+    function generateColorPalette(path) {
+        var file = JSON.parse(jsonFile.text());
+        console.log(JSON.stringify(jsonFile.text()));
+        const db = getDb();
+        db.readTransaction(function (tx) {
+            const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [path]);
+            if (rs.rows.length > 0) {
+                const wallpaperId = rs.rows.item(0).id;
+                db.transaction(function (tx2) {
+                    for (var key in file) {
+                        if (file.hasOwnProperty(key) && file[key]) {
+                            tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag) VALUES (?, ?, ?)", [wallpaperId, file[key], key]);
+                        }
+                    }
+                    if (getColorPallete.onFinished)
+                        getColorPallete.onFinished();
+                });
+            } else {
+                console.log("No wallpaper found with path:", path);
+                if (getColorPallete.onFinished)
+                    getColorPallete.onFinished();
+            }
+        });
+    }
+
     Process {
         id: getColorPallete
         property string path
         property var onFinished
         stdout: StdioCollector {
             onStreamFinished: {
-                var file = JSON.parse(jsonFile.text());
-                const db = getDb();
-                db.readTransaction(function (tx) {
-                    const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [getColorPallete.path]);
-                    if (rs.rows.length > 0) {
-                        const wallpaperId = rs.rows.item(0).id;
-                        db.transaction(function (tx2) {
-                            for (var key in file) {
-                                if (file.hasOwnProperty(key) && file[key]) {
-                                    tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag) VALUES (?, ?, ?)", [wallpaperId, file[key], key]);
-                                }
-                            }
-                            if (getColorPallete.onFinished)
-                                getColorPallete.onFinished();
-                        });
-                    } else {
-                        if (getColorPallete.onFinished)
-                            getColorPallete.onFinished();
-                    }
-                });
+                jsonFile.reload();
+                generateColorPalette(getColorPallete.path);
             }
         }
     }
@@ -384,35 +433,11 @@ Singleton {
         }
     }
 
-    Process {
-        id: colorAnalyzer
-        property string path
-        running: false
-
-        command: ["sh", "-c", `magick "${path}" -resize 1x1\\! -format '%[pixel:u.p{0,0}]' info:- | awk -F'[(),]' '{ r=$2; g=$3; b=$4; lum=0.2126*r + 0.7152*g + 0.0722*b; tag=(lum > 128 ? "light" : "dark"); printf "#%02x%02x%02x %s\\n", r, g, b, tag }'`]
-
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const result = text.trim();
-                const [color, brightness] = result.split(" ");
-
-                console.log("🎨", colorAnalyzer.path, "→", color, "/", brightness);
-
-                const db = getDb();
-                db.transaction(function (tx) {
-                    tx.executeSql("UPDATE wallpapers SET color = ?, brightness = ? WHERE path = ?", [color, brightness, colorAnalyzer.path]);
-                });
-
-                processNextColor();
-            }
-        }
-    }
-
     Component.onCompleted: {
         // resetDatabase(); // 💣 Wipe it clean — start from zero
         // initWallpaperDb(); // 🖥️ Setup per-monitor wallpaper tracking
 
-        initializeDb(); // 🧱 Create core tables for wallpapers
+        // initializeDb(); // 🧱 Create core tables for wallpapers
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
 
         // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
