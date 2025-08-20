@@ -45,18 +45,22 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
+                Item {
+                    Layout.fillWidth: true
+                }
                 Repeater {
-                    model: modelData.colors.slice(0,7);
+                    model: modelData.colors.slice(0, 7)
                     Rectangle {
                         width: 24
-                        height: 24
+                        height: width
                         color: modelData.color
-                        radius: 6
+                        radius: height
                         border.color: "#444"
                         border.width: 1
-                        Component.onCompleted: console.log(JSON.stringyfy(modelData))
-
                     }
+                }
+                Item {
+                    Layout.fillWidth: true
                 }
             }
 
@@ -75,16 +79,23 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
+                Item {
+                    Layout.fillWidth: true
+                }
                 Repeater {
-                    model: modelData.colors.slice(8, 16);
+                    model: modelData.colors.slice(8, 16)
+
                     Rectangle {
                         width: 24
-                        height: 24
+                        height: width
                         color: modelData.color
-                        radius: 6
+                        radius: height
                         border.color: modelData.color
                         border.width: 1
                     }
+                }
+                Item {
+                    Layout.fillWidth: true
                 }
             }
         }
