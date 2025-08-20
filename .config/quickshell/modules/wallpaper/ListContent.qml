@@ -38,171 +38,56 @@ ListView {
     model: ScriptModel {
         values: {
             const wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
-
-            function hexToHSL(hex) {
-                const r = parseInt(hex.substr(1, 2), 16) / 255;
-                const g = parseInt(hex.substr(3, 2), 16) / 255;
-                const b = parseInt(hex.substr(5, 2), 16) / 255;
-
-                const max = Math.max(r, g, b), min = Math.min(r, g, b);
-                let h = 0, s = 0, l = (max + min) / 2;
-
-                if (max !== min) {
-                    const d = max - min;
-                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-                    switch (max) {
-                    case r:
-                        h = (g - b) / d + (g < b ? 6 : 0);
-                        break;
-                    case g:
-                        h = (b - r) / d + 2;
-                        break;
-                    case b:
-                        h = (r - g) / d + 4;
-                        break;
-                    }
-                    h = h * 60;
-                }
-
-                return {
-                    h,
-                    s,
-                    l
-                };
+            if (!flick.searchText || flick.searchText.trim() === "") {
+                return wallpapers;
             }
-
-            function matchesKeywordColor(hex, keyword) {
-                const hsl = hexToHSL(hex);
-                const h = hsl.h;
-                const s = hsl.s;
-                const l = hsl.l;
-
-                // Normalize keyword for multi-keyword support
-                const kw = keyword.toLowerCase().trim();
-
-                // Multi-keyword: "dark blue", "light green", etc.
-                if (kw.includes("dark")) {
-                    if (l >= 0.3)
-                        return false;
-                    keyword = kw.replace("dark", "").trim();
-                }
-                if (kw.includes("light")) {
-                    if (l <= 0.7)
-                        return false;
-                    keyword = kw.replace("light", "").trim();
-                }
-
-                // Extended color ranges
-                if (keyword === "purple")
-                    return h >= 270 && h <= 310;
-                if (keyword === "red")
-                    return h <= 15 || h >= 345;
-                if (keyword === "orange")
-                    return h >= 20 && h <= 40;
-                if (keyword === "yellow")
-                    return h >= 41 && h <= 65;
-                if (keyword === "green")
-                    return h >= 66 && h <= 160;
-                if (keyword === "cyan")
-                    return h >= 161 && h <= 189;
-                if (keyword === "blue")
-                    return h >= 190 && h <= 250;
-                if (keyword === "pink")
-                    return (h >= 311 && h <= 344) && s > 0.2;
-                if (keyword === "brown")
-                    return h >= 10 && h <= 40 && l < 0.5 && s > 0.2;
-                if (keyword === "gray" || keyword === "grey")
-                    return s <= 0.1 && l >= 0.2 && l <= 0.8;
-                if (keyword === "black")
-                    return l < 0.15;
-                if (keyword === "white")
-                    return l > 0.85;
-
-                // Fallback for brightness
-                if (keyword === "dark")
-                    return l < 0.3;
-                if (keyword === "light")
-                    return l > 0.7;
-
-                return false;
-            }
-
-            const filtered = wallpapers.filter(w => {
-                const color = (w.color ?? "").toLowerCase();
-                const brightness = (w.brightness ?? "").toLowerCase();
-
-                if (color.includes(searchText) || brightness.includes(searchText))
+            const search = flick.searchText.trim().toLowerCase();
+            return wallpapers.filter(wallpaper => {
+                // Check tags
+                if (wallpaper.tags && wallpaper.tags.some(tag => tag.toLowerCase().includes(search))) {
                     return true;
-
-                return matchesKeywordColor(color, searchText);
+                }
+                // Check color tags
+                if (wallpaper.colors && wallpaper.colors.some(c => c.tag && c.tag.toLowerCase().includes(search))) {
+                    return true;
+                }
+                return false;
             });
-
-            return filtered.sort((a, b) => a.color.localeCompare(b.color));
         }
     }
 
-    delegate: Item {
+    delegate: WallpaperItem {}
 
-        width: flick.delegateWidth
-        height: flick.delegateHeight
-        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-
-        property bool isFocused: ListView.isCurrentItem
-        required property var modelData
-
-        Rectangle {
-            id: container
-            anchors.fill: parent
-            anchors.margins: 8
-            radius: 12
-            clip: true
-
-            property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
-            property color targetColor: isFocused || itemMouse.hovered ? Scripts.hexToRgba(Colors.color14, 0.5) : Scripts.hexToRgba(Colors.color12, 0.2)
-
-            scale: targetScale
-            color: targetColor
-
-            Behavior on scale {
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on color {
-                ColorAnimation {
-                    duration: 200
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Image {
-                anchors.fill: parent
-                anchors.margins: 8
-                fillMode: Image.PreserveAspectFit
-                source: "file://" + modelData.path
-                cache: true
-                asynchronous: true
-                smooth: true
-                mipmap: true
-            }
-
-            MouseArea {
-                id: itemMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                property bool hovered: containsMouse
-
-                onClicked: {
-                    const screenName = toplevel.screen.name;
-                    WallpaperStore.setWallpaper(screenName, modelData.path);
-                }
-
-                onEntered: hovered = true
-                onExited: hovered = false
-            }
+    add: Transition {
+        NumberAnimation {
+            properties: "opacity"
+            from: 0
+            to: 1
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+        NumberAnimation {
+            properties: "scale"
+            from: 0
+            to: 1
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+    remove: Transition {
+        NumberAnimation {
+            properties: "opacity"
+            from: 1
+            to: 0
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+        NumberAnimation {
+            properties: "scale"
+            from: 1
+            to: 0
+            duration: 300
+            easing.type: Easing.InOutQuad
         }
     }
 }

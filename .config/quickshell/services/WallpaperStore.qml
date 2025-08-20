@@ -25,6 +25,8 @@ Singleton {
         const db = getDb();
         db.transaction(function (tx) {
             tx.executeSql("DROP TABLE IF EXISTS wallpapers");
+            tx.executeSql("DROP TABLE IF EXISTS wallpaper_colors");
+            tx.executeSql("DROP TABLE IF EXISTS tags");
             console.log("🧨 Dropped wallpapers table");
         });
     }
@@ -34,22 +36,30 @@ Singleton {
         db.transaction(function (tx) {
             tx.executeSql(`
                 CREATE TABLE IF NOT EXISTS wallpapers (
-                path TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                path TEXT UNIQUE,
                 width INTEGER,
                 height INTEGER,
-                orientation TEXT,
-                color TEXT,
-                brightness TEXT
+                orientation TEXT
                 )
             `);
 
-            // 🔥 Remove duplicate rows (in case of schema change or old data)
             tx.executeSql(`
-                DELETE FROM wallpapers
-                WHERE rowid NOT IN (
-                SELECT MIN(rowid)
-                FROM wallpapers
-                GROUP BY path
+                CREATE TABLE IF NOT EXISTS wallpaper_colors (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                wallpaper_id INTEGER,
+                color TEXT,
+                tag TEXT,
+                FOREIGN KEY(wallpaper_id) REFERENCES wallpapers(id)
+                )
+            `);
+
+            tx.executeSql(`
+                CREATE TABLE IF NOT EXISTS tags (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                wallpaper_id INTEGER,
+                tag TEXT,
+                FOREIGN KEY(wallpaper_id) REFERENCES wallpapers(id)
                 )
             `);
         });
@@ -61,8 +71,8 @@ Singleton {
             for (const item of list) {
                 const orientation = item.width > item.height ? "landscape" : "portrait";
                 tx.executeSql(`
-                INSERT INTO wallpapers (path, width, height, orientation)
-                VALUES (?, ?, ?, ?)
+                    INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
+                    VALUES (?, ?, ?, ?)
                 `, [item.path, item.width, item.height, orientation]);
             }
         });
@@ -74,22 +84,41 @@ Singleton {
         root.portraitWallpapers = [];
 
         db.readTransaction(function (tx) {
-            const rs = tx.executeSql("SELECT * FROM wallpapers ORDER BY color ASC");
-
+            const rs = tx.executeSql("SELECT * FROM wallpapers");
             for (let i = 0; i < rs.rows.length; i++) {
                 const row = rs.rows.item(i);
+
+                // Get all colors for this wallpaper
+                const colorRs = tx.executeSql("SELECT color, tag FROM wallpaper_colors WHERE wallpaper_id = ?", [row.id]);
+                row.colors = [];
+                for (let j = 0; j < colorRs.rows.length; j++) {
+                    row.colors.push({
+                        color: colorRs.rows.item(j).color,
+                        tag: colorRs.rows.item(j).tag
+                    });
+                }
+
+                // Get all tags for this wallpaper
+                const tagRs = tx.executeSql("SELECT tag FROM tags WHERE wallpaper_id = ?", [row.id]);
+                row.tags = [];
+                for (let j = 0; j < tagRs.rows.length; j++) {
+                    row.tags.push(tagRs.rows.item(j).tag);
+                }
+
+                // If no colors or tags, push to colorQueue
+                if (row.colors.length === 0 || row.tags.length === 0) {
+                    colorQueue.push(row.path);
+                }
+
                 if (row.orientation === "landscape")
-                    root.landscapeWallpapers.push({
-                        path: row.path,
-                        color: row.color,
-                        brightness: row.brightness
-                    });
+                    root.landscapeWallpapers.push(row);
                 else
-                    root.portraitWallpapers.push({
-                        path: row.path,
-                        color: row.color,
-                        brightness: row.brightness
-                    });
+                    root.portraitWallpapers.push(row);
+            }
+
+            // Start processing if there are wallpapers to process
+            if (colorQueue.length > 0) {
+                processNextColor();
             }
         });
     }
@@ -99,11 +128,12 @@ Singleton {
     }
 
     function processNextColor() {
-        if (colorQueue.length === 0)
+        if (colorQueue.length === 0) {
+            console.log('Finished');
             return;
+        }
         const nextPath = colorQueue.shift();
-        colorAnalyzer.path = nextPath;
-        colorAnalyzer.running = true;
+        generateTags(nextPath);
     }
 
     function initWallpaperDb() {
@@ -181,21 +211,109 @@ Singleton {
     }
 
     function generateTags(path) {
+        var completed = {
+            tags: false,
+            colors: false
+        };
+
+        function checkDone() {
+            if (completed.tags && completed.colors) {
+                console.log(`Tags: ${completed.tags}, Colors ${completed.colors}`);
+                processNextColor();
+            }
+        }
+
+        // Insert tags
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:6969/image");
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    console.log("Tags response:", xhr.responseText);
+                    insertTagsForWallpaper(path, xhr.responseText, function () {
+                        completed.tags = true;
+                        checkDone();
+                    });
                 } else {
-                    console.log("Failed to get tags. Status:", xhr.status, "Response:", xhr.responseText);
+                    completed.tags = true;
+                    checkDone();
                 }
             }
         };
         xhr.send(JSON.stringify({
             path: path
         }));
+
+        // Insert colors (palette)
+        getColorPallete.command = ["wallust", "--config-dir", Qt.resolvedUrl('./').toString().replace("file://", ""), "run", path];
+        getColorPallete.path = path;
+        getColorPallete.running = true;
+
+        getColorPallete.onFinished = function () {
+            completed.colors = true;
+            checkDone();
+            console.log(path);
+        };
+    }
+
+    function insertTagsForWallpaper(path, tagsJson, callback) {
+        var tagsObj = JSON.parse(tagsJson);
+        const db = getDb();
+        db.readTransaction(function (tx) {
+            const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [path]);
+            if (rs.rows.length > 0) {
+                const wallpaperId = rs.rows.item(0).id;
+                db.transaction(function (tx2) {
+                    for (var tag in tagsObj) {
+                        if (tagsObj.hasOwnProperty(tag)) {
+                            tx2.executeSql("INSERT INTO tags (wallpaper_id, tag) VALUES (?, ?)", [wallpaperId, tag]);
+                        }
+                    }
+                    if (callback) {
+                        callback();
+                    }
+                });
+            } else {
+                if (callback) {
+                    callback();
+                }
+            }
+        });
+    }
+
+    Process {
+        id: getColorPallete
+        property string path
+        property var onFinished
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var file = JSON.parse(jsonFile.text());
+                const db = getDb();
+                db.readTransaction(function (tx) {
+                    const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [getColorPallete.path]);
+                    if (rs.rows.length > 0) {
+                        const wallpaperId = rs.rows.item(0).id;
+                        db.transaction(function (tx2) {
+                            for (var key in file) {
+                                if (file.hasOwnProperty(key) && file[key]) {
+                                    tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag) VALUES (?, ?, ?)", [wallpaperId, file[key], key]);
+                                }
+                            }
+                            if (getColorPallete.onFinished)
+                                getColorPallete.onFinished();
+                        });
+                    } else {
+                        if (getColorPallete.onFinished)
+                            getColorPallete.onFinished();
+                    }
+                });
+            }
+        }
+    }
+
+    FileView {
+        id: jsonFile
+        path: Qt.resolvedUrl('/tmp/colors.json').toString().replace("file://", "")
     }
 
     Process {
@@ -292,9 +410,11 @@ Singleton {
 
     Component.onCompleted: {
         // resetDatabase(); // 💣 Wipe it clean — start from zero
+        // initWallpaperDb(); // 🖥️ Setup per-monitor wallpaper tracking
+
         initializeDb(); // 🧱 Create core tables for wallpapers
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
-        initWallpaperDb(); // 🖥️ Setup per-monitor wallpaper tracking
+
         // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
         getCurrentMonitorWallpapers(e => {
             root.currentWallpapers = e;
