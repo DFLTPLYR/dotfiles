@@ -17,7 +17,7 @@ Item {
         anchors.fill: parent
         anchors.margins: 8
         radius: 12
-        clip: true
+        clip: false
 
         property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
         property color targetColor: isFocused || itemMouse.hovered ? Scripts.hexToRgba(Colors.color14, 0.5) : Scripts.hexToRgba(Colors.color12, 0.2)
@@ -47,10 +47,10 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
                 orientation: ListView.Horizontal
-                model: modelData.colors.slice(0, 9)
+                model: modelData.colors.slice(0, 8)
 
                 delegate: Rectangle {
-                    width: upperListView.width / 8
+                    width: upperListView.width / 9
                     height: upperListView.height
 
                     color: Scripts.hexToRgba(modelData.color, 0.8)
@@ -74,10 +74,10 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
                 orientation: ListView.Horizontal
-                model: modelData.colors.slice(10, 18)
+                model: modelData.colors.slice(9, 19)
 
                 delegate: Rectangle {
-                    width: bottomListView.width / 8
+                    width: bottomListView.width / 10
                     height: bottomListView.height
                     color: Scripts.hexToRgba(modelData.color, 0.8)
                 }

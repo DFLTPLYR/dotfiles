@@ -28,7 +28,7 @@ ListView {
     highlightRangeMode: ListView.StrictlyEnforceRange
 
     property int delegateWidth: Math.round(isPortrait ? width * 0.4 : width * 0.5)
-    property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.8)
+    property int delegateHeight: Math.round(isPortrait ? height * 0.9 : height * 0.9)
 
     preferredHighlightBegin: (width - delegateWidth) / 2
     preferredHighlightEnd: (width + delegateWidth) / 2
