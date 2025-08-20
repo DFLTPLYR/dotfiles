@@ -12,6 +12,8 @@ import qs
 ListView {
     id: flick
     property string searchText
+    property var colorsFilter
+    property var tagsFilter
 
     clip: true
     orientation: ListView.Horizontal
@@ -37,22 +39,36 @@ ListView {
 
     model: ScriptModel {
         values: {
-            const wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
-            if (!flick.searchText || flick.searchText.trim() === "") {
-                return wallpapers;
+            let wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
+
+            if (flick.searchText && flick.searchText.trim() !== "") {
+                const search = flick.searchText.trim().toLowerCase();
+                wallpapers = wallpapers.filter(wallpaper => {
+                    if (wallpaper.tags && wallpaper.tags.some(tag => tag.toLowerCase().includes(search))) {
+                        return true;
+                    }
+                    // Check color tags
+                    if (wallpaper.colors && wallpaper.colors.some(c => c.tag && c.tag.toLowerCase().includes(search))) {
+                        return true;
+                    }
+                    return false;
+                });
             }
-            const search = flick.searchText.trim().toLowerCase();
-            return wallpapers.filter(wallpaper => {
-                // Check tags
-                if (wallpaper.tags && wallpaper.tags.some(tag => tag.toLowerCase().includes(search))) {
-                    return true;
-                }
-                // Check color tags
-                if (wallpaper.colors && wallpaper.colors.some(c => c.tag && c.tag.toLowerCase().includes(search))) {
-                    return true;
-                }
-                return false;
-            });
+
+            if (flick.colorsFilter && flick.colorsFilter.length > 0) {
+                wallpapers = wallpapers.filter(wallpaper => {
+                    if (!wallpaper.colors || wallpaper.colors.length === 0) {
+                        return false;
+                    }
+
+                    // Check if this wallpaper has at least one of the filtered colors
+                    return wallpaper.colors.some(colorObj => {
+                        return flick.colorsFilter.includes(colorObj.color);
+                    });
+                });
+            }
+
+            return wallpapers;
         }
     }
 

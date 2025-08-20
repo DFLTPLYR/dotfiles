@@ -18,6 +18,13 @@ Singleton {
 
     property var availableColors: []
     property var availableTags: []
+
+    // With these orientation-specific properties
+    property var landscapeColors: []
+    property var portraitColors: []
+    property var landscapeTags: []
+    property var portraitTags: []
+
     property var colorQueue: []
 
     function classifyWallpapers() {
@@ -163,6 +170,53 @@ Singleton {
         });
 
         return colors;
+    }
+
+    function getAllUniqueTagsByOrientation(orientation, callback) {
+        const db = getDb();
+
+        db.transaction(function (tx) {
+            // Join with wallpapers table to filter by orientation
+            const rs = tx.executeSql(`
+                            SELECT DISTINCT t.tag
+                            FROM tags t
+                            JOIN wallpapers w ON t.wallpaper_id = w.id
+                            WHERE w.orientation = ?
+                            ORDER BY t.tag
+                        `, [orientation]);
+
+            const tags = [];
+            for (let i = 0; i < rs.rows.length; i++) {
+                tags.push(rs.rows.item(i).tag);
+            }
+
+            callback(tags);
+        });
+    }
+
+    function getAllUniqueColorsByOrientation(orientation, callback) {
+        const db = getDb();
+
+        db.transaction(function (tx) {
+            // Join with wallpapers table to filter by orientation
+            const rs = tx.executeSql(`
+                            SELECT DISTINCT wc.color, wc.tag
+                            FROM wallpaper_colors wc
+                            JOIN wallpapers w ON wc.wallpaper_id = w.id
+                            WHERE w.orientation = ?
+                            ORDER BY wc.tag
+                        `, [orientation]);
+
+            const colors = [];
+            for (let i = 0; i < rs.rows.length; i++) {
+                colors.push({
+                    color: rs.rows.item(i).color,
+                    tag: rs.rows.item(i).tag
+                });
+            }
+
+            callback(colors);
+        });
     }
 
     function processNextColor() {
@@ -444,7 +498,21 @@ Singleton {
             root.currentWallpapers = e;
         });
 
-        root.availableColors = getAllUniqueColors();
-        root.availableTags = getAllUniqueTags();
+        // Load orientation-specific data
+        getAllUniqueColorsByOrientation("landscape", function (colors) {
+            root.landscapeColors = colors;
+        });
+
+        getAllUniqueColorsByOrientation("portrait", function (colors) {
+            root.portraitColors = colors;
+        });
+
+        getAllUniqueTagsByOrientation("landscape", function (tags) {
+            root.landscapeTags = tags;
+        });
+
+        getAllUniqueTagsByOrientation("portrait", function (tags) {
+            root.portraitTags = tags;
+        });
     }
 }
