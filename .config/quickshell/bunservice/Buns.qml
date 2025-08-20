@@ -131,6 +131,12 @@ Item {
     }
 
     Component.onCompleted: {
-        root.startBackendDetached();
+        tryHttpRequest(function (status) {
+            if (status === 200) {
+                return;
+            } else {
+                root.startBackendDetached();
+            }
+        });
     }
 }
