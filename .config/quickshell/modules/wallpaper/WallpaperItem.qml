@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 import QtQuick.Layouts
 
 import qs.services
@@ -46,14 +47,26 @@ Item {
                 id: upperListView
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
-                orientation: ListView.Horizontal
-                model: modelData.colors.slice(0, 8)
 
-                delegate: Rectangle {
+                orientation: ListView.Horizontal
+                clip: true
+
+                model: modelData.colors.slice(0, 9)
+
+                delegate: Item {
                     width: upperListView.width / 9
                     height: upperListView.height
 
-                    color: Scripts.hexToRgba(modelData.color, 0.8)
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: parent.width / 2
+                        height: width
+                        rotation: 45
+                        radius: 4
+                        color: Scripts.hexToRgba(modelData.color, 0.8)
+                        layer.enabled: true
+                        layer.smooth: true
+                    }
                 }
             }
 
@@ -71,15 +84,29 @@ Item {
 
             ListView {
                 id: bottomListView
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.height * 0.10
+
+                clip: true
                 orientation: ListView.Horizontal
+
                 model: modelData.colors.slice(9, 19)
 
-                delegate: Rectangle {
-                    width: bottomListView.width / 10
-                    height: bottomListView.height
-                    color: Scripts.hexToRgba(modelData.color, 0.8)
+                delegate: Item {
+                    width: upperListView.width / 9
+                    height: upperListView.height
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: parent.width / 2
+                        height: parent.height / 2
+                        rotation: 45
+                        radius: 4
+                        color: Scripts.hexToRgba(modelData.color, 0.8)
+                        layer.enabled: true
+                        layer.smooth: true
+                    }
                 }
             }
         }
