@@ -29,9 +29,7 @@ Rectangle {
             Layout.preferredWidth: parent.height
             Layout.preferredHeight: parent.height
             Layout.fillHeight: true
-
             color: "transparent"
-            clip: true
 
             Image {
                 id: image

@@ -51,15 +51,16 @@ Item {
                 orientation: ListView.Horizontal
                 clip: true
 
+                property var count: modelData.colors.slice(0, 9).length
                 model: modelData.colors.slice(0, 9)
 
                 delegate: Item {
-                    width: upperListView.width / 9
+                    width: upperListView.width / upperListView.count
                     height: upperListView.height
 
                     Rectangle {
                         anchors.centerIn: parent
-                        width: parent.width / 2
+                        width: parent.width / 3
                         height: width
                         rotation: 45
                         radius: 4
@@ -91,16 +92,17 @@ Item {
                 clip: true
                 orientation: ListView.Horizontal
 
+                property var count: modelData.colors.slice(9, 19).length
                 model: modelData.colors.slice(9, 19)
 
                 delegate: Item {
-                    width: upperListView.width / 9
+                    width: upperListView.width / bottomListView.count
                     height: upperListView.height
 
                     Rectangle {
                         anchors.centerIn: parent
-                        width: parent.width / 2
-                        height: parent.height / 2
+                        width: parent.width / 3
+                        height: width
                         rotation: 45
                         radius: 4
                         color: Scripts.hexToRgba(modelData.color, 0.8)
