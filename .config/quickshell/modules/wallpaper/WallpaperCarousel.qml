@@ -214,8 +214,10 @@ AnimatedScreenOverlay {
 
             ListContent {
                 id: flick
-                width: morphBox.width
-                height: morphBox.height
+
+                width: Math.max(1, targetWidth * animProgress)
+                height: Math.max(1, targetHeight * animProgress)
+
                 visible: animProgress > 0
                 opacity: animProgress
                 searchText: toplevel.searchValue
@@ -240,13 +242,14 @@ AnimatedScreenOverlay {
             Flickable {
                 id: tickerView
                 anchors.fill: parent
-                anchors.margins: 10
+
                 contentWidth: masonryContent.width
                 contentHeight: height
                 clip: true
 
                 // Enable interactive scrolling
-                interactive: true
+                flickableDirection: Flickable.HorizontalFlick
+                interactive: contentWidth > width
                 boundsBehavior: Flickable.StopAtBounds
                 flickDeceleration: 1500
                 maximumFlickVelocity: 2500
@@ -255,28 +258,48 @@ AnimatedScreenOverlay {
                 property real lastPosition: 0
                 property bool autoScrolling: true
                 property var scrollAnimationObject: null
+                property bool scrollForward: true
+                property real edgeEpsilon: 1.0
+                property real baseScrollSpeed: 20000
 
                 // Initialize animation on completion
-                Component.onCompleted: {
-                    startScrollAnimation();
-                }
+                Component.onCompleted: startScrollAnimation()
 
                 function startScrollAnimation() {
                     if (scrollAnimationObject) {
                         scrollAnimationObject.stop();
                     }
 
-                    // Fix potential negative duration with Math.max
-                    const duration = 20000 * (Math.max(1, contentWidth - lastPosition) / 1000);
+                    // Nothing to scroll
+                    if (contentWidth <= width)
+                        return;
 
-                    // Create animation dynamically
+                    // Clamp current position to valid range
+                    const maxX = Math.max(0, contentWidth - width);
+                    contentX = Math.min(Math.max(contentX, 0), maxX);
+
+                    // Decide direction when we're at an edge
+                    const atEnd = Math.abs(contentX - maxX) <= edgeEpsilon;
+                    const atStart = contentX <= edgeEpsilon;
+
+                    if (atEnd)
+                        scrollForward = false;
+                    if (atStart)
+                        scrollForward = true;
+
+                    const fromX = contentX;
+                    const toX = scrollForward ? maxX : 0;
+
+                    const distance = Math.max(1, Math.abs(toX - fromX));
+                    const duration = baseScrollSpeed * (distance / 1000);
+
                     scrollAnimationObject = scrollAnimationComponent.createObject(tickerView, {
-                        from: lastPosition,
-                        to: Math.max(contentWidth - width, 0),
+                        from: fromX,
+                        to: toX,
                         duration: duration
                     });
 
-                    if (autoScrolling && visible && contentWidth > width) {
+                    if (autoScrolling && visible) {
                         scrollAnimationObject.start();
                     }
                 }
@@ -288,10 +311,13 @@ AnimatedScreenOverlay {
                     NumberAnimation {
                         target: tickerView
                         property: "contentX"
-                        loops: Animation.Infinite
+                        loops: 1
                         running: false
                         onStopped: {
                             tickerView.lastPosition = tickerView.contentX;
+                            if (tickerView.autoScrolling && tickerView.visible && tickerView.contentWidth > tickerView.width) {
+                                tickerView.startScrollAnimation();
+                            }
                         }
                     }
                 }
@@ -307,12 +333,18 @@ AnimatedScreenOverlay {
 
                 // Resume auto-scroll after user stops interacting
                 onMovementEnded: {
+                    lastPosition = contentX;
                     resumeTimer.restart();
                 }
 
+                onFlickEnded: lastPosition = contentX
+                onContentXChanged: if (!autoScrolling)
+                    lastPosition = contentX
+
                 Timer {
                     id: resumeTimer
-                    interval: 5000
+                    interval: 1000
+                    repeat: false
                     onTriggered: {
                         tickerView.autoScrolling = true;
                         tickerView.startScrollAnimation();
@@ -322,27 +354,39 @@ AnimatedScreenOverlay {
                 // Masonry content container
                 Item {
                     id: masonryContent
-                    width: childrenRect.width + 20
+                    width: Math.max(childrenRect.width + 20, tickerView.width)
                     height: tickerView.height
-                    // Masonry layout properties
-                    property int rowCount: 5
-                    property int rowHeight: 50
-                    property var rowWidths: [0, 0, 0, 0]
-                    property var rowItems: [[], [], [], []]
 
-                    // Layout function - call after model changes
+                    // Spacing between rows and items
+                    property int spacing: 8
+                    // Fixed item height per row (tune this)
+                    property int rowHeight: 20
+                    // How many rows can fit vertically, given rowHeight + spacing
+                    property int rowCount: Math.max(1, Math.floor((height + spacing) / (rowHeight + spacing)))
+
+                    // Will be (rowCount)-sized
+                    property var rowWidths: []
+                    property var rowItems: []
+
+                    function resetRows() {
+                        rowWidths = Array(rowCount).fill(0);
+                        rowItems = [];
+                        for (let r = 0; r < rowCount; r++)
+                            rowItems.push([]);
+                    }
+
+                    // Layout function - call after model or size changes
                     function layoutItems() {
+                        resetRows();
 
-                        // Place each item in the row with the least width so far
                         for (let i = 0; i < repeater.count; i++) {
                             const item = repeater.itemAt(i);
                             if (!item)
                                 continue;
 
-                            // Find row with minimum width
+                            // Find row with minimum width so far
                             let minRow = 0;
                             let minWidth = rowWidths[0];
-
                             for (let r = 1; r < rowCount; r++) {
                                 if (rowWidths[r] < minWidth) {
                                     minRow = r;
@@ -350,15 +394,21 @@ AnimatedScreenOverlay {
                                 }
                             }
 
-                            // Position item in this row
-                            item.y = minRow * (rowHeight);
+                            // Position item
+                            item.height = rowHeight;
+                            item.y = minRow * (rowHeight + spacing);
                             item.x = rowWidths[minRow];
 
-                            // Update row width
-                            rowWidths[minRow] += item.width + 8;
+                            // Advance width for that row
+                            rowWidths[minRow] += item.width + spacing;
                             rowItems[minRow].push(item);
                         }
                     }
+
+                    // Re-layout on size/row changes
+                    onHeightChanged: Qt.callLater(layoutItems)
+                    onRowHeightChanged: Qt.callLater(layoutItems)
+                    onRowCountChanged: Qt.callLater(layoutItems)
 
                     // Masonry item repeater
                     Repeater {
@@ -368,7 +418,6 @@ AnimatedScreenOverlay {
                         delegate: Item {
                             id: tagItem
                             width: wordText.width + 40
-                            height: masonryContent.rowHeight
 
                             Text {
                                 id: wordText
@@ -388,7 +437,7 @@ AnimatedScreenOverlay {
                                 }
                             }
 
-                            // Layout when ready
+                            // Trigger layout after all items are created
                             Component.onCompleted: {
                                 if (index === repeater.count - 1) {
                                     Qt.callLater(masonryContent.layoutItems);
