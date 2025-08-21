@@ -23,19 +23,25 @@ Rectangle {
         spacing: 10
 
         Rectangle {
+            id: wrapper
             property var iconPath: modelData.image || Quickshell.iconPath(modelData.appIcon, true)
-            visible: iconPath
+            visible: !!iconPath
 
-            Layout.preferredWidth: parent.height
             Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.height
             Layout.fillHeight: true
+
             color: "transparent"
+            radius: width / 2
+            clip: true
 
             Image {
                 id: image
                 anchors.fill: parent
-                source: parent.iconPath
-                fillMode: Image.PreserveAspectFit
+                source: wrapper.iconPath
+                fillMode: Image.PreserveAspectCrop
+                smooth: true
+                mipmap: true
             }
         }
 
