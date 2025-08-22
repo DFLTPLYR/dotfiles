@@ -2,7 +2,7 @@
   "name": "todo-service",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "compile": "bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile myapp"
+    "compile": "bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile QsService"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
