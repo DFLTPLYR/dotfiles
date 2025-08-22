@@ -14,7 +14,7 @@ app.options("/*", (c) => {
   c.header("Access-Control-Allow-Origin", "*");
   c.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   c.header("Access-Control-Allow-Headers", "Content-Type");
-  return c.text("", 204);
+  return c.text("", 200);
 });
 
 // Rest Api
