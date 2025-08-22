@@ -4,6 +4,13 @@ import { Hono } from "hono";
 import { Database } from "bun:sqlite";
 import { Todo } from "../types/todo.types";
 
+const todoRouter = new Hono();
+
+const onlineDb = createClient(
+  Bun.env.SUPABASE_URL as string,
+  Bun.env.API_KEY as string
+);
+
 const offlineDb = new Database("offline.sqlite");
 
 offlineDb.run(`
@@ -18,13 +25,6 @@ offlineDb.run(`
     updated_at TEXT
   )
 `);
-
-const onlineDb = createClient(
-  Bun.env.SUPABASE_URL as string,
-  Bun.env.API_KEY as string
-);
-
-const todoRouter = new Hono();
 
 // Get All Todos
 todoRouter.get("/", async (c) => {
@@ -122,7 +122,7 @@ todoRouter.put("/:id", async (c) => {
         todo?.is_completed ?? (is_completed ? 1 : 0),
         error ? 0 : 1,
         todo?.updated_at || new Date().toISOString(),
-        id
+        id,
       ]
     );
 
@@ -139,16 +139,16 @@ todoRouter.delete("/:id", async (c) => {
     const id = c.req.param("id");
 
     // Delete from Supabase
-    const { error } = await onlineDb
-      .from("todos")
-      .delete()
-      .eq("id", id);
+    const { error } = await onlineDb.from("todos").delete().eq("id", id);
 
     // Delete from Offline SQLite
     offlineDb.run("DELETE FROM todos WHERE id = ?", [id]);
 
     if (error) return c.json({ error }, 500);
-    return c.json({ ok: true, message: `Todo ${id} deleted from both databases.` });
+    return c.json({
+      ok: true,
+      message: `Todo ${id} deleted from both databases.`,
+    });
   } catch (e) {
     return c.json({ error: String(e) }, 500);
   }
