@@ -21,10 +21,6 @@ AnimatedScreenOverlay {
 
     color: Scripts.hexToRgba(Colors.background, 0.2)
 
-    onClicked: {
-        return;
-    }
-
     onHidden: key => {
         GlobalState.removeDrawer(key);
     }
@@ -125,6 +121,7 @@ AnimatedScreenOverlay {
                             source: WallpaperStore.currentWallpapers[screen.name] ?? null
                         }
                     }
+
                     Rectangle {
                         id: container
 

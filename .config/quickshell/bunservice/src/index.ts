@@ -7,7 +7,7 @@ import imageRouter from "./routes/images";
 const app = new Hono();
 
 // hehe funny number
-const PORT = process.env.PORT ? Number(process.env.PORT) : 6969;
+const PORT = Bun.env.PORT ? Number(Bun.env.PORT) : 6969;
 
 // allow simple CORS for browser/QML requests (optional)
 app.options("/*", (c) => {

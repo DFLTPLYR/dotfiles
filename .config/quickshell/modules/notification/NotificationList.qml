@@ -108,6 +108,10 @@ Scope {
         }
     }
 
+    Component.onCompleted: {
+        console.log(JSON.parse(NotificationService.groupsByAppName));
+    }
+
     Connections {
         target: NotificationService
         function onNotify(notif) {
