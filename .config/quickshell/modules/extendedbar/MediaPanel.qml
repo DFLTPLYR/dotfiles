@@ -116,7 +116,8 @@ Rectangle {
                 Image {
                     id: albumArt
                     property real albumRotation: 0
-                    source: MprisManager.activePlayer ? MprisManager.activePlayer.trackArtUrl : null
+                    property string location: MprisManager.activePlayer ? Qt.resolvedUrl(MprisManager.activePlayer.trackArtUrl) : null
+                    source: location
                     fillMode: Image.PreserveAspectCrop
                     cache: true
                     smooth: true
