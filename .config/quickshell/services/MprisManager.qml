@@ -145,4 +145,10 @@ Singleton {
             root.next();
         }
     }
+
+    Component.onCompleted: {
+        Quickshell.execDetached({
+            command: "mpdris2-rs"
+        });
+    }
 }
