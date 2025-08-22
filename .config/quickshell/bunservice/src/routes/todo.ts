@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Hono } from "hono";
 
 const supabase = createClient(
-  process.env.SUPABASE_URL as string,
-  process.env.API_KEY as string
+  Bun.env.SUPABASE_URL as string,
+  Bun.env.API_KEY as string
 );
 
 const todoRouter = new Hono();

@@ -23,10 +23,6 @@ AnimatedScreenOverlay {
 
     color: Scripts.hexToRgba(Colors.background, 0.2)
 
-    onClicked: {
-        return;
-    }
-
     onHidden: key => GlobalState.removeDrawer(key)
 
     KeyboardEventHandler {
