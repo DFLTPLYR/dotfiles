@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 
 // component
+import qs
 import qs.services
 import qs.assets
 
