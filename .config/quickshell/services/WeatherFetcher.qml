@@ -95,30 +95,29 @@ Singleton {
         }
     }
 
-    Process {
-        id: weatherProc
-        running: true
-        command: ["curl", "wttr.in/manila?format=j1"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const json = JSON.parse(this.text.trim());
-                    root.parseWeather(json);
-                } catch (e) {
-                    console.warn("Failed to parse weather JSON:", e);
-                }
-                refreshTimer.interval = 600000;
-            }
-        }
-    }
-
     function fetchWeather() {
-        weatherProc.running = true;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://wttr.in/manila?format=j1");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        const json = JSON.parse(xhr.responseText);
+                        root.parseWeather(json);
+                    } catch (e) {
+                        console.warn("Failed to parse weather JSON:", e);
+                    }
+                } else {
+                    console.warn("Failed to fetch weather data:", xhr.statusText);
+                }
+            }
+        };
+        xhr.send();
     }
 
     Timer {
         id: refreshTimer
-        interval: 1
+        interval: 600000 // 10 minutes
         repeat: true
         running: true
         triggeredOnStart: true

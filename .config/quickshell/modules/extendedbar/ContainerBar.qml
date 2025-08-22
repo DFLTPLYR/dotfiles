@@ -84,7 +84,7 @@ GridLayout {
                     Layout.preferredHeight: parent.height / 3
                     Text {
                         color: Colors.color10
-                        text: Time.hoursPadded
+                        text: TimeService.hoursPadded
                         font.pixelSize: 24
                     }
                     Rectangle {
@@ -95,7 +95,7 @@ GridLayout {
                     }
                     Text {
                         color: Colors.color10
-                        text: Time.minutesPadded
+                        text: TimeService.minutesPadded
                         font.pixelSize: 24
                     }
                 }
