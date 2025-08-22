@@ -35,7 +35,8 @@ Scope {
         }
 
         color: "transparent"
-        implicitWidth: screen.width / 4
+        property bool isPortrait: screen.height > screen.width
+        implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 4)
 
         ListView {
             id: listview

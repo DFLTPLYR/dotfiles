@@ -11,8 +11,6 @@ PanelWindow {
     required property var screen
     required property string key
 
-    property string layer: "Overlay"
-    property string keyboardFocus: "Exclusive"
     property string drawerKey: `${key}-${screen.name}`
     property color backgroundColor: "black"
 

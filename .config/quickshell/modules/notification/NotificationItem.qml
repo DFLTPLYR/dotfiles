@@ -1,5 +1,7 @@
 import QtQuick
+import QtQuick.Shapes
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import Quickshell
 
@@ -32,8 +34,6 @@ Rectangle {
             Layout.fillHeight: true
 
             color: "transparent"
-            radius: width / 2
-            clip: true
 
             Image {
                 id: image
@@ -41,7 +41,20 @@ Rectangle {
                 source: wrapper.iconPath
                 fillMode: Image.PreserveAspectCrop
                 smooth: true
-                mipmap: true
+                visible: false
+            }
+
+            Rectangle {
+                id: masking
+                anchors.fill: parent
+                radius: width / 2
+                clip: true
+            }
+
+            OpacityMask {
+                anchors.fill: parent
+                source: image
+                maskSource: masking
             }
         }
 
