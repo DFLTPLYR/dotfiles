@@ -1,18 +1,22 @@
 # Todo Service Integration Guide
 
 ## Overview
+
 The TodoService provides a QML singleton for managing todo items with both online (Supabase) and offline (SQLite) synchronization.
 
 ## Setup
 
 ### 1. Start the Bun API Server
+
 ```bash
 cd bunservice
 bun run dev
 ```
+
 The server will start on http://localhost:3001
 
 ### 2. Import TodoService in QML
+
 ```qml
 import qs.services
 
@@ -22,9 +26,11 @@ import qs.services
 ## API Reference
 
 ### getAllTodos(callback)
+
 Retrieves all todos from both online and offline sources.
 
 **Callback receives:**
+
 ```javascript
 {
     online: [...],    // Todos from Supabase
@@ -34,13 +40,14 @@ Retrieves all todos from both online and offline sources.
 ```
 
 **Example:**
+
 ```qml
 TodoService.getAllTodos(function(response, error) {
     if (error) {
         console.error("Error:", error);
         return;
     }
-    
+
     var onlineTodos = response.online || [];
     var offlineTodos = response.offline || [];
     console.log("Loaded", onlineTodos.length, "online todos");
@@ -48,19 +55,22 @@ TodoService.getAllTodos(function(response, error) {
 ```
 
 ### createTodo(todoData, callback)
+
 Creates a new todo item.
 
 **Parameters:**
+
 ```javascript
 todoData = {
-    title: "Required string",
-    description: "Optional string",
-    status: "pending|ongoing|completed|archived", // optional, defaults to "pending"
-    is_completed: false // optional, defaults to false
-}
+  title: "Required string",
+  description: "Optional string",
+  status: "pending|ongoing|completed|archived", // optional, defaults to "pending"
+  is_completed: false, // optional, defaults to false
+};
 ```
 
 **Example:**
+
 ```qml
 var newTodo = {
     title: "Buy groceries",
@@ -78,13 +88,16 @@ TodoService.createTodo(newTodo, function(response, error) {
 ```
 
 ### updateTodo(id, todoData, callback)
+
 Updates an existing todo item.
 
 **Parameters:**
+
 - `id`: String UUID of the todo to update
 - `todoData`: Object with fields to update (same as createTodo)
 
 **Example:**
+
 ```qml
 var updates = {
     is_completed: true,
@@ -101,9 +114,11 @@ TodoService.updateTodo(todoId, updates, function(response, error) {
 ```
 
 ### deleteTodo(id, callback)
+
 Deletes a todo item by ID.
 
 **Example:**
+
 ```qml
 TodoService.deleteTodo(todoId, function(response, error) {
     if (error) {
@@ -115,9 +130,11 @@ TodoService.deleteTodo(todoId, function(response, error) {
 ```
 
 ### nukeAllTodos(callback)
+
 **⚠️ WARNING:** Deletes ALL todos from both online and offline databases.
 
 **Example:**
+
 ```qml
 TodoService.nukeAllTodos(function(response, error) {
     if (error) {
@@ -131,6 +148,7 @@ TodoService.nukeAllTodos(function(response, error) {
 ## Data Structure
 
 ### Todo Object
+
 ```javascript
 {
     id: "uuid-string",           // Auto-generated UUID
@@ -148,10 +166,12 @@ TodoService.nukeAllTodos(function(response, error) {
 All callbacks follow the pattern: `function(response, error)`
 
 **On Success:**
+
 - `response`: Contains the result data
 - `error`: null
 
 **On Error:**
+
 - `response`: null
 - `error`: String describing the error
 
@@ -167,6 +187,7 @@ The service automatically handles:
 ## Environment Variables
 
 Create `bunservice/.env`:
+
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_anon_key
@@ -176,22 +197,26 @@ PORT=3001
 ## Troubleshooting
 
 ### Service Not Available
+
 - Ensure the Bun server is running on port 3001
 - Check that TodoService.qml is in the services/ directory
 - Verify qs.services import is registered
 
 ### Database Connection Issues
+
 - Check Supabase credentials in .env
 - Verify network connectivity
 - Check server logs for detailed errors
 
 ### QML Import Errors
+
 - Ensure QtQuick and QtQuick.Controls are available
 - Check that XMLHttpRequest is accessible in your QML environment
 
 ## Example Usage
 
 See `examples/TodoExample.qml` for a complete working example with:
+
 - Todo creation form
 - Todo list display
 - Update/delete operations
