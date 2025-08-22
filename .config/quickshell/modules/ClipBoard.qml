@@ -129,7 +129,7 @@ AnimatedScreenOverlay {
             clip: false
             orientation: ListView.Vertical
 
-            spacing: 2
+            spacing: 10
 
             focus: true
             snapMode: ListView.SnapToItem
@@ -154,12 +154,13 @@ AnimatedScreenOverlay {
 
             delegate: Item {
                 required property var modelData
-
+                readonly property bool isImage: modelData.text.startsWith("[[ binary data")
                 property bool isSelected: ListView.isCurrentItem
                 property bool isHovered: clickableArea.containsMouse
+
                 visible: clipboardList.count !== 0
                 width: clipboardList.width
-                height: 48 // adjust height if you want else...then dont wtf
+                height: isImage ? 200 : 72
 
                 Rectangle {
                     id: container
@@ -185,15 +186,56 @@ AnimatedScreenOverlay {
                         spacing: 8
 
                         // First child: fills width and height
-                        Text {
-                            text: modelData.text.length > 80 ? modelData.text.slice(0, 80) + "..." : modelData.text
-                            color: isHovered || isSelected ? Colors.color15 : Colors.color10
-                            font.pixelSize: 18
-                            wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
+                        Item {
+                            id: clipboardDisplay
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            verticalAlignment: Text.AlignVCenter
+                            clip: true
+
+                            Image {
+                                id: clipboardImage
+                                anchors.centerIn: parent
+                                visible: false
+                                fillMode: Image.PreserveAspectFit
+                                width: parent.width
+                                height: parent.height
+                            }
+
+                            Text {
+                                id: clipboardText
+                                anchors.centerIn: parent
+                                color: isHovered || isSelected ? Colors.color15 : Colors.color10
+
+                                visible: false
+                                font.pixelSize: 18
+
+                                elide: Text.ElideRight
+                                wrapMode: Text.WordWrap
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Component.onCompleted: {
+                                var data = modelData.text;
+                                if (data.startsWith("[[ binary data")) {
+                                    decodeClipboardEntry.running = true;
+                                } else {
+                                    clipboardText.text = modelData.text.length > 80 ? modelData.text.slice(0, 80) + "..." : modelData.text;
+                                    clipboardText.visible = true;
+                                }
+                            }
+
+                            Process {
+                                id: decodeClipboardEntry
+                                running: false
+                                command: ["sh", "-c", `cliphist decode ${modelData.id} > /tmp/clipboard_image.png`]
+                                onExited: {
+                                    clipboardImage.source = "file:///tmp/clipboard_image.png";
+                                    clipboardImage.visible = true;
+                                    clipboardText.visible = false;
+                                }
+                            }
+
                             MouseArea {
                                 id: clickableArea
                                 anchors.fill: parent
