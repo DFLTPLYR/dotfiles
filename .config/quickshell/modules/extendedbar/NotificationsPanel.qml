@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import Quickshell
 
@@ -25,31 +26,26 @@ Rectangle {
         anchors.fill: parent
         clip: true
 
-        RowLayout {
-            visible: root.isEmpty
-
+        StyledButton {
+            icon: "\uf1f8"
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
-
-            StyledButton {
-                icon: "\uf1f8"
-                size: 24
-                iconRatio: 0.5
-                borderColor: Colors.color10
-                backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
-                hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-                iconColor: Colors.color10
-                onClicked: {
-                    NotificationService.discardAllNotifications();
-                    root.notificationGroup.clear();
-                }
+            size: 24
+            iconRatio: 0.5
+            borderColor: Colors.color10
+            backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
+            hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
+            iconColor: Colors.color10
+            onClicked: {
+                NotificationService.discardAllNotifications();
+                root.notificationGroup.clear();
             }
         }
 
         ListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-
+            clip: true
             spacing: 10
 
             model: root.notificationGroup
@@ -79,10 +75,14 @@ Rectangle {
                     id: notificationItem
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    width: Math.round(parent.width * 0.9)
+                    width: Math.round(parent.width * 0.95)
                     spacing: 8
 
                     RowLayout {
+                        visible: !delegateRect.expand
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
                         Rectangle {
                             visible: appIcon
                             Layout.preferredWidth: 24
