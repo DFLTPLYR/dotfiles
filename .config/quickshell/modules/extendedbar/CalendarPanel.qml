@@ -13,11 +13,11 @@ Rectangle {
     Layout.fillHeight: true
     color: "transparent"
 
-    property int year: Time.year
-    property int month: Time.month
+    property int year: TimeService.year
+    property int month: TimeService.month
 
-    property int currentYear: Time.year
-    property int currentMonth: Time.month
+    property int currentYear: TimeService.year
+    property int currentMonth: TimeService.month
 
     property bool isCurrentDate: currentYear === year && currentMonth === month
 
@@ -194,7 +194,7 @@ Rectangle {
 
             delegate: Rectangle {
                 property bool selected: {
-                    return modelData === Time.date.getDate() && calendarWrapper.isCurrentDate;
+                    return modelData === TimeService.date.getDate() && calendarWrapper.isCurrentDate;
                 }
 
                 color: selected ? Scripts.hexToRgba(Colors.color15, 0.2) : "transparent"
