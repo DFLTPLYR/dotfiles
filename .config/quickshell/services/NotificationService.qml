@@ -259,7 +259,7 @@ Singleton {
             root.idOffset = maxId;
             root.initDone();
             Quickshell.execDetached({
-                command: ["mpdris2-rs"]
+                command: "mpdris2-rs"
             });
         }
         onLoadFailed: error => {
