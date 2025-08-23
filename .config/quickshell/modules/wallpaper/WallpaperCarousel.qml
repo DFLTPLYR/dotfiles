@@ -169,7 +169,7 @@ AnimatedScreenOverlay {
                                 width: wrapper.height / 2
                                 height: width
                                 radius: width / 2
-                                color: modelData.color
+                                color: modelData.colorGroup
                             }
                         }
 
