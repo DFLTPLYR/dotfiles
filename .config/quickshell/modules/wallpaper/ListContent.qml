@@ -44,11 +44,16 @@ ListView {
             if (flick.searchText && flick.searchText.trim() !== "") {
                 const search = flick.searchText.trim().toLowerCase();
                 wallpapers = wallpapers.filter(wallpaper => {
+                    // Check tags
                     if (wallpaper.tags && wallpaper.tags.some(tag => tag.toLowerCase().includes(search))) {
                         return true;
                     }
                     // Check color tags
                     if (wallpaper.colors && wallpaper.colors.some(c => c.tag && c.tag.toLowerCase().includes(search))) {
+                        return true;
+                    }
+                    // Check colorNameGroup
+                    if (wallpaper.colors && wallpaper.colors.some(c => c.colorNameGroup && c.colorNameGroup.toLowerCase().includes(search))) {
                         return true;
                     }
                     return false;
