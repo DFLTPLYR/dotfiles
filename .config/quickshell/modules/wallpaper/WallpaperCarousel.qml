@@ -117,7 +117,7 @@ AnimatedScreenOverlay {
             border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
 
             GridView {
-                id: topTagList
+                id: colorList
                 anchors.fill: parent
 
                 clip: true
@@ -132,15 +132,15 @@ AnimatedScreenOverlay {
 
                 delegate: Rectangle {
                     id: wrapper
-                    width: topTagList.cellWidth
-                    height: topTagList.cellHeight
+                    width: colorList.cellWidth
+                    height: colorList.cellHeight
                     radius: 12
                     color: 'transparent'
 
                     Rectangle {
                         id: container
                         anchors.centerIn: wrapper
-                        width: topTagList.cellWidth * 0.8
+                        width: colorList.cellWidth * 0.8
                         height: width
 
                         radius: 10
@@ -191,6 +191,8 @@ AnimatedScreenOverlay {
                         }
                     }
                 }
+
+                Component.onCompleted: console.log(Scripts.getAllGroupColorName(colorList.model))
             }
         }
 

@@ -1,6 +1,7 @@
 // Helpers.qml
 pragma Singleton
 import QtQuick 2.15
+import "./ntc.js" as NTC
 
 QtObject {
     function hexToRgba(hex, alpha) {
@@ -30,5 +31,17 @@ QtObject {
             color = Qt.color(color);
 
         return Qt.rgba(color.r, color.g, color.b, alpha || 1);
+    }
+
+    function getHexColorName(hex) {
+        return NTC.ntc.name(hex);
+    }
+
+    function getAllGroupColorName(array) {
+        const Colors = [];
+        for (let hex of array) {
+            Colors.push(getHexColorName(hex.color));
+        }
+        return Colors;
     }
 }
