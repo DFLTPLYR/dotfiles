@@ -65,6 +65,8 @@ Singleton {
                 wallpaper_id INTEGER,
                 color TEXT,
                 tag TEXT,
+                colorGroup TEXT,
+                colorNameGroup TEXT,
                 FOREIGN KEY(wallpaper_id) REFERENCES wallpapers(id)
                 )
             `);
@@ -104,12 +106,14 @@ Singleton {
                 const row = rs.rows.item(i);
 
                 // Get all colors for this wallpaper
-                const colorRs = tx.executeSql("SELECT color, tag FROM wallpaper_colors WHERE wallpaper_id = ?", [row.id]);
+                const colorRs = tx.executeSql("SELECT color, tag, colorGroup, colorNameGroup FROM wallpaper_colors WHERE wallpaper_id = ?", [row.id]);
                 row.colors = [];
                 for (let j = 0; j < colorRs.rows.length; j++) {
                     row.colors.push({
                         color: colorRs.rows.item(j).color,
-                        tag: colorRs.rows.item(j).tag
+                        tag: colorRs.rows.item(j).tag,
+                        colorGroup: colorRs.rows.item(j).colorGroup,
+                        colorNameGroup: colorRs.rows.item(j).colorNameGroup
                     });
                 }
 
@@ -166,18 +170,21 @@ Singleton {
         db.transaction(function (tx) {
             // Join with wallpapers table to filter by orientation
             const rs = tx.executeSql(`
-                            SELECT DISTINCT wc.color, wc.tag
+                            SELECT wc.color, wc.tag, wc.colorGroup, wc.colorNameGroup
                             FROM wallpaper_colors wc
                             JOIN wallpapers w ON wc.wallpaper_id = w.id
                             WHERE w.orientation = ?
-                            ORDER BY wc.tag
+                            GROUP BY wc.colorGroup
+                            ORDER BY wc.colorGroup
                         `, [orientation]);
 
             const colors = [];
             for (let i = 0; i < rs.rows.length; i++) {
                 colors.push({
                     color: rs.rows.item(i).color,
-                    tag: rs.rows.item(i).tag
+                    tag: rs.rows.item(i).tag,
+                    colorGroup: rs.rows.item(i).colorGroup,
+                    colorNameGroup: rs.rows.item(i).colorNameGroup
                 });
             }
 
@@ -352,14 +359,17 @@ Singleton {
                 db.transaction(function (tx2) {
                     for (var key in file) {
                         if (file.hasOwnProperty(key) && file[key]) {
-                            tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag) VALUES (?, ?, ?)", [wallpaperId, file[key], key]);
+                            const n_match = Scripts.getHexColorName(file[key]);
+                            const n_rgb = n_match[0]; // RGB value of closest match
+                            const n_name = n_match[1]; // Text string: Color name
+
+                            tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag, colorGroup, colorNameGroup) VALUES (?, ?, ?, ?, ?)", [wallpaperId, file[key], key, n_rgb, n_name]);
                         }
                     }
                     if (getColorPallete.onFinished)
                         getColorPallete.onFinished();
                 });
             } else {
-                console.log("No wallpaper found with path:", path);
                 if (getColorPallete.onFinished)
                     getColorPallete.onFinished();
             }
@@ -452,6 +462,33 @@ Singleton {
         }
     }
 
+    function getUniqueColorGroups(callback) {
+        const db = getDb();
+
+        db.transaction(function (tx) {
+            // Select rows where colorGroup is unique
+            const rs = tx.executeSql(`
+                                    SELECT wc.color, wc.tag, wc.colorGroup, wc.colorNameGroup
+                                    FROM wallpaper_colors wc
+                                    GROUP BY wc.colorGroup
+                                    ORDER BY wc.colorGroup
+                                `);
+
+            const uniqueColors = [];
+            for (let i = 0; i < rs.rows.length; i++) {
+                uniqueColors.push({
+                    color: rs.rows.item(i).color,
+                    tag: rs.rows.item(i).tag,
+                    colorGroup: rs.rows.item(i).colorGroup,
+                    colorNameGroup: rs.rows.item(i).colorNameGroup
+                });
+            }
+
+            console.log(`✅ Retrieved ${uniqueColors.length} unique color groups.`);
+            callback(uniqueColors);
+        });
+    }
+
     Component.onCompleted: {
         // resetDatabase(); // 💣 Wipe it clean — start from zero
         // initWallpaperDb(); // 🖥️ Setup per-monitor wallpaper tracking
@@ -460,6 +497,7 @@ Singleton {
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
 
         // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
+
         getCurrentMonitorWallpapers(e => {
             root.currentWallpapers = e;
         });
