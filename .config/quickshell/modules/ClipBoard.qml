@@ -304,17 +304,19 @@ AnimatedScreenOverlay {
                 Image {
                     id: highlightedImage
                     visible: clipboardList.currentItem && clipboardList.currentItem.isImage
-                    source: clipboardList.currentItem?.isImage ? `file:///tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png` : ""
+                    source: Quickshell.iconPath(`/tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`, true)
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
                 }
 
                 Connections {
                     target: clipboardList
-                    function onCurrentItemChanged(){
+                    function onCurrentItemChanged() {
                         var icon = Quickshell.iconPath(`/tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`, true);
-                        if(clipboardList.currentItem.isImage && !icon){
-                                Quickshell.execDetached({command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${clipboardList.currentItem.modelData.id} > /tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`]});
+                        if (clipboardList.currentItem.isImage && !icon) {
+                            Quickshell.execDetached({
+                                command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${clipboardList.currentItem.modelData.id} > /tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`]
+                            });
                         }
                     }
                 }
@@ -323,14 +325,11 @@ AnimatedScreenOverlay {
     }
 
     property var clipboardHistory: []
+
     function copySelectedId(id) {
         const command = ['sh', '-c', `cliphist decode ${id} | wl-copy`];
         copyClipboardEntry.command = command;
         return copyClipboardEntry.running = true;
-    }
-
-    function shellSingleQuoteEscape(str) {
-        return str.replace(/'/g, "'\\''");
     }
 
     function deleteClipboardEntry(text) {
@@ -351,6 +350,11 @@ AnimatedScreenOverlay {
     Process {
         id: copyClipboardEntry
         running: false
+        stdout: StdioCollector {
+            onStreamFinished: {
+                return GlobalState.toggleDrawer("clipBoard");
+            }
+        }
     }
 
     // start up
@@ -372,9 +376,7 @@ AnimatedScreenOverlay {
         }
     }
 
-    Component.onCompleted: {
-        cbHistory.running = true;
-    }
+    Component.onCompleted: cbHistory.running = true
 
     Connections {
         target: GlobalState
@@ -384,13 +386,6 @@ AnimatedScreenOverlay {
             if (isMatch) {
                 toplevel.shouldBeVisible = value;
             }
-        }
-    }
-
-    Connections {
-        target: copyClipboardEntry
-        function onExited(exitCode, exitStatus) {
-            return GlobalState.toggleDrawer("clipBoard");
         }
     }
 }
