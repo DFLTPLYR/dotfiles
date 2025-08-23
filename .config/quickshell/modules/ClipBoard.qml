@@ -111,9 +111,6 @@ AnimatedScreenOverlay {
         opacity: animProgress
 
         Rectangle {
-
-            transformOrigin: Item.Center
-
             border.color: Scripts.hexToRgba(Colors.colors10, 0.9)
             border.width: 2
 
@@ -158,17 +155,16 @@ AnimatedScreenOverlay {
 
                 delegate: Item {
                     required property var modelData
-                    readonly property bool isImage: modelData.text.startsWith("[[ binary data")
+                    readonly property bool isImage: modelData.text.startsWith("[[ binary data") && modelData.text.includes("KiB") && (modelData.text.includes("png") || modelData.text.includes("jpeg") || modelData.text.includes("jpg"))
                     property bool isSelected: ListView.isCurrentItem
                     property bool isHovered: clickableArea.containsMouse
 
                     visible: clipboardList.count !== 0
                     width: clipboardList.width
-                    height: isImage ? 200 : 72
+                    height: 72
 
                     Rectangle {
                         id: container
-
                         anchors.fill: parent
 
                         border.color: isHovered || isSelected ? Colors.color10 : Colors.color15
@@ -196,19 +192,16 @@ AnimatedScreenOverlay {
                                 Layout.fillHeight: true
                                 clip: true
 
-                                Image {
-                                    id: clipboardImage
-                                    anchors.centerIn: parent
-                                    visible: false
-                                    fillMode: Image.PreserveAspectFit
-                                    width: parent.width
-                                    height: parent.height
-                                }
-
                                 Text {
                                     id: clipboardText
-                                    anchors.centerIn: parent
                                     color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                                    width: parent.width
+                                    height: parent.height
+
+                                    anchors {
+                                        left: parent.left // Start at the left
+                                        verticalCenter: parent.verticalCenter // Center vertically
+                                    }
 
                                     visible: false
                                     font.pixelSize: 18
@@ -222,28 +215,12 @@ AnimatedScreenOverlay {
                                 Component.onCompleted: {
                                     var data = modelData.text;
                                     if (data.startsWith("[[ binary data")) {
-                                        var icon = Quickshell.iconPath(`/tmp/clipboard/image_${modelData.id}.png`, true);
-                                        if (!icon) {
-                                            decodeClipboardEntry.running = true;
-                                        }
-                                        clipboardImage.source = icon;
-                                        clipboardImage.visible = true;
-                                        clipboardText.visible = false;
-                                    } else {
-                                        clipboardText.text = modelData.text.length > 80 ? modelData.text.slice(0, 80) + "..." : modelData.text;
+                                        clipboardText.text = "IMAGE";
+                                        clipboardText.color = Colors.color15;
                                         clipboardText.visible = true;
-                                    }
-                                }
-
-                                Process {
-                                    id: decodeClipboardEntry
-                                    running: false
-                                    command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${modelData.id} > /tmp/clipboard/image_${modelData.id}.png`]
-                                    onExited: {
-                                        console.log('tmp image created');
-                                        clipboardImage.source = `file:///tmp/clipboard/image_${modelData.id}.png`;
-                                        clipboardImage.visible = true;
-                                        clipboardText.visible = false;
+                                    } else {
+                                        clipboardText.text = modelData.text;
+                                        clipboardText.visible = true;
                                     }
                                 }
 
@@ -251,6 +228,7 @@ AnimatedScreenOverlay {
                                     id: clickableArea
                                     anchors.fill: parent
                                     propagateComposedEvents: true
+
                                     onClicked: {
                                         toplevel.copySelectedId(modelData.id);
                                     }
@@ -289,7 +267,7 @@ AnimatedScreenOverlay {
                     text: qsTr(searchValue)
                     font.pixelSize: 32
                     font.bold: true
-                    anchors.centerIn: parent
+
                     color: Colors.color15
                     opacity: showSearchInput ? 1.0 : 0.0
 
@@ -302,11 +280,45 @@ AnimatedScreenOverlay {
                 }
             }
         }
+
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Scripts.hexToRgba(Colors.background, 0.8)
             radius: 10
+
+            Item {
+                anchors.fill: parent
+
+                Text {
+                    id: highlightedText
+                    text: clipboardList.currentItem && !clipboardList.currentItem.isImage ? clipboardList.currentItem.modelData.text : ""
+                    color: Colors.color15
+                    font.pixelSize: 18
+                    wrapMode: Text.WordWrap
+                    anchors.fill: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Image {
+                    id: highlightedImage
+                    visible: clipboardList.currentItem && clipboardList.currentItem.isImage
+                    source: clipboardList.currentItem?.isImage ? `file:///tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png` : ""
+                    fillMode: Image.PreserveAspectFit
+                    anchors.fill: parent
+                }
+
+                Connections {
+                    target: clipboardList
+                    function onCurrentItemChanged(){
+                        var icon = Quickshell.iconPath(`/tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`, true);
+                        if(clipboardList.currentItem.isImage && !icon){
+                                Quickshell.execDetached({command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${clipboardList.currentItem.modelData.id} > /tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`]});
+                        }
+                    }
+                }
+            }
         }
     }
 
