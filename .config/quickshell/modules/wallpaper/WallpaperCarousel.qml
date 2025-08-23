@@ -191,8 +191,6 @@ AnimatedScreenOverlay {
                         }
                     }
                 }
-
-                Component.onCompleted: console.log(Scripts.getAllGroupColorName(colorList.model))
             }
         }
 

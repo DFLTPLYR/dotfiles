@@ -120,6 +120,30 @@ AnimatedScreenOverlay {
             radius: 10
             clip: true
 
+            Rectangle {
+                width: parent.width
+                height: 32
+                color: 'transparent'
+
+                Text {
+                    id: searchLabel
+                    text: qsTr(searchValue)
+                    font.pixelSize: 32
+
+                    font.bold: true
+
+                    color: Colors.color15
+                    opacity: showSearchInput ? 1.0 : 0.0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+            }
+
             ListView {
                 id: clipboardList
                 anchors.centerIn: parent
@@ -261,23 +285,6 @@ AnimatedScreenOverlay {
                         }
                     }
                 }
-
-                Text {
-                    id: searchLabel
-                    text: qsTr(searchValue)
-                    font.pixelSize: 32
-                    font.bold: true
-
-                    color: Colors.color15
-                    opacity: showSearchInput ? 1.0 : 0.0
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
             }
         }
 
@@ -290,35 +297,36 @@ AnimatedScreenOverlay {
             Item {
                 anchors.fill: parent
 
-                Text {
-                    id: highlightedText
-                    text: clipboardList.currentItem && !clipboardList.currentItem.isImage ? clipboardList.currentItem.modelData.text : ""
-                    color: Colors.color15
-                    font.pixelSize: 18
-                    wrapMode: Text.WordWrap
+                Flickable {
+                    id: textScroller
                     anchors.fill: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                    anchors.margins: 16
+                    contentWidth: highlightedText.width
+                    contentHeight: highlightedText.height
+                    clip: true
+
+                    Item {
+                        width: textScroller.width - 32
+                        height: highlightedText.height
+
+                        Text {
+                            id: highlightedText
+                            text: clipboardList.currentItem && !clipboardList.currentItem.isImage ? clipboardList.currentItem.modelData.text : ""
+                            color: Colors.color15
+                            font.pixelSize: 18
+                            wrapMode: Text.WordWrap
+                            elide: Text.ElideNone
+                            width: parent.width
+                        }
+                    }
                 }
 
                 Image {
                     id: highlightedImage
                     visible: clipboardList.currentItem && clipboardList.currentItem.isImage
-                    source: Quickshell.iconPath(`/tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`, true)
+                    source: Quickshell.iconPath(`${Quickshell.env("HOME")}/.cache/clipboard/image_${clipboardList.currentItem?.modelData.id}.png`, true)
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
-                }
-
-                Connections {
-                    target: clipboardList
-                    function onCurrentItemChanged() {
-                        var icon = Quickshell.iconPath(`/tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`, true);
-                        if (clipboardList.currentItem.isImage && !icon) {
-                            Quickshell.execDetached({
-                                command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${clipboardList.currentItem.modelData.id} > /tmp/clipboard/image_${clipboardList.currentItem.modelData.id}.png`]
-                            });
-                        }
-                    }
                 }
             }
         }
@@ -360,17 +368,40 @@ AnimatedScreenOverlay {
     // start up
     Process {
         id: cbHistory
-        command: ['cliphist', 'list']
+        command: ['cliphist', 'list', '-preview-width', '10000']
+        environment: ({
+                CLIPHIST_PREVIEW_WIDTH: 100000,
+                CLIPHIST_MAX_ITEMS: 1
+            })
         stdout: StdioCollector {
             onStreamFinished: {
                 const lines = this.text.trim().split('\n');
-                const clipboardArray = lines.map(line => {
+                const clipboardArray = [];
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
                     const [id, ...textParts] = line.split('\t');
-                    return {
+                    const text = textParts.join('\t');
+
+                    // Check if the entry is an image
+                    const isImage = text.startsWith("[[ binary data") && text.includes("KiB") && (text.includes("png") || text.includes("jpeg") || text.includes("jpg"));
+
+                    if (isImage) {
+                        const imagePath = `${Quickshell.env("HOME")}/.cache/clipboard/image_${id}.png`;
+                        const iconExists = Quickshell.iconPath(imagePath, true);
+
+                        if (!iconExists) {
+                            // If the image doesn't exist, decode and save it
+                            Quickshell.execDetached({
+                                command: ["sh", "-c", `mkdir -p ${Quickshell.env("HOME")}/.cache/clipboard && cliphist decode ${id} > ${imagePath}`]
+                            });
+                        }
+                    }
+
+                    clipboardArray.push({
                         id: id,
-                        text: textParts.join('\t')
-                    };
-                });
+                        text: text
+                    });
+                }
                 clipboardHistory = clipboardArray;
             }
         }
