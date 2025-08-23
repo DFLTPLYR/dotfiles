@@ -36,7 +36,7 @@ Rectangle {
             color: "transparent"
 
             Image {
-                id: image
+                id: maskee
                 anchors.fill: parent
                 source: wrapper.iconPath
                 fillMode: Image.PreserveAspectCrop
@@ -49,11 +49,12 @@ Rectangle {
                 anchors.fill: parent
                 radius: width / 2
                 clip: true
+                visible: false
             }
 
             OpacityMask {
                 anchors.fill: parent
-                source: image
+                source: maskee
                 maskSource: masking
             }
         }
