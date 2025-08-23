@@ -8,6 +8,7 @@ import QtQuick.LocalStorage
 import Quickshell.Hyprland
 
 import qs
+import qs.utils
 
 Singleton {
     id: root
@@ -343,7 +344,6 @@ Singleton {
 
     function generateColorPalette(path) {
         var file = JSON.parse(jsonFile.text());
-        console.log(JSON.stringify(jsonFile.text()));
         const db = getDb();
         db.readTransaction(function (tx) {
             const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [path]);
