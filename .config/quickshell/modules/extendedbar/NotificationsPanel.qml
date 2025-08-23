@@ -28,6 +28,7 @@ Rectangle {
 
         StyledButton {
             icon: "\uf1f8"
+            visible: root.isEmpty
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
             size: 24
