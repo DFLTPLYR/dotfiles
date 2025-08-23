@@ -93,14 +93,16 @@ AnimatedScreenOverlay {
 
     property string searchValue: ""
     property bool showSearchInput: false
-
+    readonly property bool isPortrait: screen.height > screen.width
     // Target sizes
-    property real targetWidth: 400
-    property real targetHeight: 600
+    property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
+    property real targetHeight: screen.height * 0.5
 
-    ClippingRectangle {
-        id: morphBox
-        anchors.centerIn: parent
+    RowLayout {
+        id: clipboardRoot
+
+        x: Math.round(screen.width / 2 - width / 2)
+        y: Math.round(screen.height / 2 - height / 2)
 
         width: Math.max(1, targetWidth * animProgress)
         height: Math.max(1, targetHeight * animProgress)
@@ -108,187 +110,203 @@ AnimatedScreenOverlay {
         scale: animProgress
         opacity: animProgress
 
-        radius: 2
+        Rectangle {
 
-        transformOrigin: Item.Center
-        color: Scripts.hexToRgba(Colors.background, 0.8)
+            transformOrigin: Item.Center
 
-        border.color: Scripts.hexToRgba(Colors.colors10, 1)
-        border.width: 2
+            border.color: Scripts.hexToRgba(Colors.colors10, 0.9)
+            border.width: 2
 
-        x: Math.round(screen.width / 2 - width / 2)
-        y: Math.round(screen.height / 2 - height / 2)
+            Layout.preferredWidth: clipboardRoot.width / 3
+            Layout.fillHeight: true
+            color: Scripts.hexToRgba(Colors.background, 0.8)
+            radius: 10
+            clip: true
 
-        ListView {
-            id: clipboardList
-            anchors.centerIn: parent
+            ListView {
+                id: clipboardList
+                anchors.centerIn: parent
 
-            width: Math.round(parent.width * 0.95)
-            height: Math.round(parent.height * 0.95)
+                width: Math.round(parent.width * 0.95)
+                height: Math.round(parent.height * 0.95)
 
-            clip: false
-            orientation: ListView.Vertical
+                clip: false
+                orientation: ListView.Vertical
 
-            spacing: 10
+                spacing: 10
 
-            focus: true
-            snapMode: ListView.SnapToItem
-            boundsBehavior: Flickable.StopAtBounds
+                focus: true
+                snapMode: ListView.SnapToItem
+                boundsBehavior: Flickable.StopAtBounds
 
-            preferredHighlightBegin: height / 2 - (48 / 2)
-            preferredHighlightEnd: height / 2 + (48 / 2)
-            highlightFollowsCurrentItem: true
-            highlightRangeMode: ListView.StrictlyEnforceRange
+                preferredHighlightBegin: height / 2 - (48 / 2)
+                preferredHighlightEnd: height / 2 + (48 / 2)
+                highlightFollowsCurrentItem: true
+                highlightRangeMode: ListView.StrictlyEnforceRange
 
-            onCountChanged: {
-                clipboardList.currentIndex = 0;
-            }
-
-            model: ScriptModel {
-                values: {
-                    if (!toplevel.searchValue || toplevel.searchValue.trim() === "")
-                        return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0);
-                    return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0 && obj.text.toLowerCase().includes(toplevel.searchValue.toLowerCase()));
+                onCountChanged: {
+                    clipboardList.currentIndex = 0;
                 }
-            }
 
-            delegate: Item {
-                required property var modelData
-                readonly property bool isImage: modelData.text.startsWith("[[ binary data")
-                property bool isSelected: ListView.isCurrentItem
-                property bool isHovered: clickableArea.containsMouse
-
-                visible: clipboardList.count !== 0
-                width: clipboardList.width
-                height: isImage ? 200 : 72
-
-                Rectangle {
-                    id: container
-
-                    anchors.fill: parent
-
-                    border.color: isHovered || isSelected ? Colors.color10 : Colors.color15
-
-                    color: isHovered || isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.2)
-                    radius: 4
-
-                    Behavior on border.color {
-                        ColorAnimation {
-                            duration: 200
-                            easing.type: Easing.InOutQuad
-                        }
+                model: ScriptModel {
+                    values: {
+                        if (!toplevel.searchValue || toplevel.searchValue.trim() === "")
+                            return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0);
+                        return toplevel.clipboardHistory.filter(obj => obj.text && obj.text.trim().length > 0 && obj.text.toLowerCase().includes(toplevel.searchValue.toLowerCase()));
                     }
+                }
 
-                    RowLayout {
-                        anchors.centerIn: parent
-                        width: Math.round(parent.width * 0.95)
-                        height: parent.height
-                        spacing: 8
+                delegate: Item {
+                    required property var modelData
+                    readonly property bool isImage: modelData.text.startsWith("[[ binary data")
+                    property bool isSelected: ListView.isCurrentItem
+                    property bool isHovered: clickableArea.containsMouse
 
-                        // First child: fills width and height
-                        Item {
-                            id: clipboardDisplay
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            clip: true
+                    visible: clipboardList.count !== 0
+                    width: clipboardList.width
+                    height: isImage ? 200 : 72
 
-                            Image {
-                                id: clipboardImage
-                                anchors.centerIn: parent
-                                visible: false
-                                fillMode: Image.PreserveAspectFit
-                                width: parent.width
-                                height: parent.height
+                    Rectangle {
+                        id: container
+
+                        anchors.fill: parent
+
+                        border.color: isHovered || isSelected ? Colors.color10 : Colors.color15
+
+                        color: isHovered || isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.2)
+                        radius: 4
+
+                        Behavior on border.color {
+                            ColorAnimation {
+                                duration: 200
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            width: Math.round(parent.width * 0.95)
+                            height: parent.height
+                            spacing: 8
+
+                            // First child: fills width and height
+                            Item {
+                                id: clipboardDisplay
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                clip: true
+
+                                Image {
+                                    id: clipboardImage
+                                    anchors.centerIn: parent
+                                    visible: false
+                                    fillMode: Image.PreserveAspectFit
+                                    width: parent.width
+                                    height: parent.height
+                                }
+
+                                Text {
+                                    id: clipboardText
+                                    anchors.centerIn: parent
+                                    color: isHovered || isSelected ? Colors.color15 : Colors.color10
+
+                                    visible: false
+                                    font.pixelSize: 18
+
+                                    elide: Text.ElideRight
+                                    wrapMode: Text.WordWrap
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+                                Component.onCompleted: {
+                                    var data = modelData.text;
+                                    if (data.startsWith("[[ binary data")) {
+                                        var icon = Quickshell.iconPath(`/tmp/clipboard/image_${modelData.id}.png`, true);
+                                        if (!icon) {
+                                            decodeClipboardEntry.running = true;
+                                        }
+                                        clipboardImage.source = icon;
+                                        clipboardImage.visible = true;
+                                        clipboardText.visible = false;
+                                    } else {
+                                        clipboardText.text = modelData.text.length > 80 ? modelData.text.slice(0, 80) + "..." : modelData.text;
+                                        clipboardText.visible = true;
+                                    }
+                                }
+
+                                Process {
+                                    id: decodeClipboardEntry
+                                    running: false
+                                    command: ["sh", "-c", `mkdir -p /tmp/clipboard && cliphist decode ${modelData.id} > /tmp/clipboard/image_${modelData.id}.png`]
+                                    onExited: {
+                                        console.log('tmp image created');
+                                        clipboardImage.source = `file:///tmp/clipboard/image_${modelData.id}.png`;
+                                        clipboardImage.visible = true;
+                                        clipboardText.visible = false;
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: clickableArea
+                                    anchors.fill: parent
+                                    propagateComposedEvents: true
+                                    onClicked: {
+                                        toplevel.copySelectedId(modelData.id);
+                                    }
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                }
                             }
 
+                            // Second child: example icon or placeholder
                             Text {
-                                id: clipboardText
-                                anchors.centerIn: parent
+                                id: trash
+                                text: '\uf1f8'
                                 color: isHovered || isSelected ? Colors.color15 : Colors.color10
 
-                                visible: false
-                                font.pixelSize: 18
-
-                                elide: Text.ElideRight
-                                wrapMode: Text.WordWrap
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                            }
-
-                            Component.onCompleted: {
-                                var data = modelData.text;
-                                if (data.startsWith("[[ binary data")) {
-                                    decodeClipboardEntry.running = true;
-                                } else {
-                                    clipboardText.text = modelData.text.length > 80 ? modelData.text.slice(0, 80) + "..." : modelData.text;
-                                    clipboardText.visible = true;
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        toplevel.deleteClipboardEntry(modelData.id);
+                                    }
+                                    z: 1
                                 }
                             }
 
-                            Process {
-                                id: decodeClipboardEntry
-                                running: false
-                                command: ["sh", "-c", `cliphist decode ${modelData.id} > /tmp/clipboard_image.png`]
-                                onExited: {
-                                    clipboardImage.source = "file:///tmp/clipboard_image.png";
-                                    clipboardImage.visible = true;
-                                    clipboardText.visible = false;
-                                }
-                            }
-
-                            MouseArea {
-                                id: clickableArea
-                                anchors.fill: parent
-                                propagateComposedEvents: true
-                                onClicked: {
-                                    toplevel.copySelectedId(modelData.id);
-                                }
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
+                            // Third child: example button or placeholder
+                            Text {
+                                id: copy
+                                text: '\uf0c5'
+                                color: isHovered || isSelected ? Colors.color15 : Colors.color10
                             }
                         }
+                    }
+                }
 
-                        // Second child: example icon or placeholder
-                        Text {
-                            id: trash
-                            text: '\uf1f8'
-                            color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                Text {
+                    id: searchLabel
+                    text: qsTr(searchValue)
+                    font.pixelSize: 32
+                    font.bold: true
+                    anchors.centerIn: parent
+                    color: Colors.color15
+                    opacity: showSearchInput ? 1.0 : 0.0
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    toplevel.deleteClipboardEntry(modelData.id);
-                                }
-                                z: 1
-                            }
-                        }
-
-                        // Third child: example button or placeholder
-                        Text {
-                            id: copy
-                            text: '\uf0c5'
-                            color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.InOutQuad
                         }
                     }
                 }
             }
         }
-
-        Text {
-            id: searchLabel
-            text: qsTr(searchValue)
-            font.pixelSize: 32
-            font.bold: true
-            anchors.centerIn: parent
-            color: Colors.color15
-            opacity: showSearchInput ? 1.0 : 0.0
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            color: Scripts.hexToRgba(Colors.background, 0.8)
+            radius: 10
         }
     }
 
