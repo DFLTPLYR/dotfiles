@@ -11,6 +11,7 @@ import qs.services
 
 PopupWindow {
     id: resourceSection
+    screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
     property bool isPortrait: screen.height > screen.width
 
     anchor.adjustment: PopupAdjustment.Slide
