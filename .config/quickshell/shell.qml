@@ -21,6 +21,7 @@ import qs.components
 import qs.bunservice
 
 import qs.modules.bar
+import qs.modules.sidebar
 import qs.modules.appmenu
 import qs.modules.extendedbar
 import qs.modules.wallpaper
@@ -126,6 +127,8 @@ ShellRoot {
         active: GlobalState.isSessionMenuOpen
         component: SessionMenu {}
     }
+
+    Sidebar {}
 
     Scope {
         PersistentProperties {

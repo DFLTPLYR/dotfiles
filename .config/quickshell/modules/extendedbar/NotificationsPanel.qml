@@ -74,15 +74,16 @@ Rectangle {
 
                 ColumnLayout {
                     id: notificationItem
+                    width: Math.round(parent.width * 0.95)
+
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    width: Math.round(parent.width * 0.95)
+
                     spacing: 8
 
                     RowLayout {
                         visible: !delegateRect.expand
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
+                        Layout.alignment: Qt.AlignVCenter
 
                         Rectangle {
                             visible: appIcon

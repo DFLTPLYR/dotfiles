@@ -11,7 +11,6 @@ import qs.services
 
 PopupWindow {
     id: resourceSection
-
     property bool isPortrait: screen.height > screen.width
 
     anchor.adjustment: PopupAdjustment.Slide
@@ -49,7 +48,7 @@ PopupWindow {
         }
     }
 
-    ClippingRectangle {
+    Rectangle {
         id: playerBackground
         width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
         height: Math.floor(isPortrait ? parentWindow.width / 2 : parentWindow.width / 4)
