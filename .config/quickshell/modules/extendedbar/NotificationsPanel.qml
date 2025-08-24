@@ -58,7 +58,7 @@ Rectangle {
                 property bool expand: false
                 property int collapsedHeight: 40
                 property int expandedHeight: notificationItem.height
-
+                x: 0
                 height: expand ? expandedHeight + 10 : collapsedHeight
                 implicitWidth: container.width
 
@@ -141,8 +141,10 @@ Rectangle {
                 MouseArea {
                     id: dragArea
                     anchors.fill: parent
+
                     drag.target: delegateRect
                     drag.axis: Drag.XAxis
+
                     onClicked: {
                         delegateRect.expand = !delegateRect.expand;
                     }
@@ -150,14 +152,15 @@ Rectangle {
                         delegateRect.dragStartX = delegateRect.x;
                     }
                     onReleased: {
-                        if (Math.abs(delegateRect.x) > parent.width * 0.3) {
+                        if (Math.abs(delegateRect.x) > parent.width * 0.1) {
                             for (var i = 0; i < notifications.count; ++i) {
                                 var item = notifications.get(i);
                                 NotificationService.discardNotification(item.notificationId);
                             }
                             root.notificationGroup.remove(index);
+                        } else {
+                            delegateRect.x = 0;
                         }
-                        delegateRect.x = 0;
                     }
                 }
             }
@@ -186,7 +189,6 @@ Rectangle {
                 }
                 NumberAnimation {
                     property: "x"
-                    from: 0
                     to: 300
                     duration: 250
                 }
