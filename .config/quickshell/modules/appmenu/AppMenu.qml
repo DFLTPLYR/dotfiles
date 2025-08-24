@@ -13,6 +13,7 @@ import qs
 import qs.utils
 import qs.services
 import qs.components
+import QtQuick3D
 
 AnimatedScreenOverlay {
     id: toplevel
@@ -111,13 +112,12 @@ AnimatedScreenOverlay {
                         Layout.preferredWidth: parent.width * 0.3
                         Layout.fillHeight: true
                         clip: true
+                        color: 'transparent'
 
                         Image {
                             id: name
-
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectCrop
-
                             source: WallpaperStore.currentWallpapers[screen.name] ?? null
                         }
                     }
