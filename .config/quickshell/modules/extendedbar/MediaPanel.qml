@@ -121,7 +121,6 @@ Rectangle {
                     fillMode: Image.PreserveAspectCrop
                     cache: true
                     smooth: true
-                    mipmap: true
                     width: Math.round(parent.width)
                     height: Math.round(parent.height)
                     sourceSize.width: width
@@ -366,7 +365,6 @@ Rectangle {
                         fillMode: Image.PreserveAspectCrop
                         cache: true
                         smooth: true
-                        mipmap: true
                     }
 
                     MouseArea {

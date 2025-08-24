@@ -125,7 +125,6 @@ GridView {
                         source: Quickshell.iconPath(modelData.icon, "image-missing")
                         width: 48
                         height: 48
-                        mipmap: false
                     }
                 }
 
