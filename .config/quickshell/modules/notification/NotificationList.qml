@@ -80,6 +80,7 @@ Scope {
             }
 
             remove: Transition {
+                id: removeTransition
                 NumberAnimation {
                     property: "opacity"
                     from: 1
@@ -90,6 +91,14 @@ Scope {
                     property: "x"
                     to: 200
                     duration: 250
+                }
+
+                onRunningChanged: {
+                    if (!running && removeTransition.targetItem) {
+                        let notificationId = removeTransition.targetItem.notificationId;
+                        console.log(notificationId);
+                        NotificationService.discardNotification(notificationId);
+                    }
                 }
             }
 
