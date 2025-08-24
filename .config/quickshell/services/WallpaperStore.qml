@@ -313,7 +313,7 @@ Singleton {
         }));
 
         // Insert colors (palette)
-        getColorPallete.command = ["wallust", "--config-dir", Qt.resolvedUrl('./').toString().replace("file://", ""), "run", path];
+        getColorPallete.command = ["wallust", "--config-dir", Qt.resolvedUrl('./templates/').toString().replace("file://", ""), "run", path];
         getColorPallete.path = path;
         getColorPallete.running = true;
 
