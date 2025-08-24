@@ -43,7 +43,6 @@ Item {
             WallpaperStore;
             WeatherFetcher;
             FontAssets;
-            Appearance;
             console.log('*Robot Noises*, START DIGGING IN YO BUTT TWIN');
         });
     }
