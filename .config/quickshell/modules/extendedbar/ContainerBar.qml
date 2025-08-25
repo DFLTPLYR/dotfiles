@@ -209,8 +209,8 @@ GridLayout {
         MediaPanel {}
     }
 
-    property var gifList: ["bongocat.gif", "Cat Spinning Sticker by pixel jeff.gif", "golshi.gif", "kurukuru.gif", "mambo.gif", "ogaricap.gif", "oiia.gif", "riceshower.gif", "tachyon2.gif", "tachyon3.gif", "tachyon.gif", "umamusumeprettyderby (1).gif", "umamusumeprettyderby.gif"]
-    property string selectedGif: ""
+    property var gifList: ["bongocat.gif", "ogaricap.gif", "tachyon3.gif", "umamusumeprettyderby.gif", "Cat Spinning Sticker by pixel jeff.gif", "oiia.gif", "tachyon4.gif", "uma-musume-rice-shower.gif", "golshi.gif", "riceshower.gif", "tachyon.gif", "kurukuru.gif", "seseren-umamusume.gif", "uma-musume-gold-ship.gif", "mambo.gif", "tachyon2.gif", "umamusumeprettyderby (1).gif"]
+    property string selectedGif: "bongocat.gif"
 
     Component.onCompleted: {
         selectedGif = gifList[Math.floor(Math.random() * gifList.length)];
