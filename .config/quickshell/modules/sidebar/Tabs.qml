@@ -3,10 +3,7 @@ import QtQuick.Layouts
 
 RowLayout {
     id: tabRow
-    Layout.fillWidth: true
-    Layout.maximumHeight: 32
-
-    property int currentIndex: container.currentIndex // Link to your StackLayout
+    property int currentIndex: container.currentIndex
 
     ListModel {
         id: tabModel
