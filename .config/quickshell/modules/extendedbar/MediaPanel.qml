@@ -100,7 +100,7 @@ Rectangle {
         height: width
         color: "transparent"
 
-        ClippingRectangle {
+        Rectangle {
             color: "transparent"
             anchors.centerIn: parent
             width: Math.round(isPortrait ? parent.height : parent.height) - 25
@@ -254,7 +254,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        ClippingRectangle {
+        Rectangle {
             color: "transparent"
             anchors.centerIn: parent
             width: Math.round(isPortrait ? parent.width : parent.width) - 25
