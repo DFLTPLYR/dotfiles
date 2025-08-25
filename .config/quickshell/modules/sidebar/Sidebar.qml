@@ -70,7 +70,6 @@ Scope {
 
             onShouldBeVisibleChanged: {
                 const target = shouldBeVisible ? 1.0 : 0.0;
-
                 if (anim.to !== target || !anim.running) {
                     anim.to = target;
                     anim.restart();
@@ -86,14 +85,11 @@ Scope {
                 }
             }
 
-            mask: Region {
-                item: sidebarClip
-            }
-
             Rectangle {
                 id: sidebarBackground
                 anchors.fill: parent
-                color: Scripts.hexToRgba(Colors.background, 0.5)
+
+                color: Scripts.setOpacity(Colors.background, 0.8)
                 radius: 12
                 border.color: Colors.color12
                 clip: true
@@ -108,69 +104,43 @@ Scope {
                         height: parent.height
                         anchors.centerIn: parent
 
-                        Tabs {}
-
-                        StackLayout {
+                        TabContent {
                             id: container
                             Layout.fillHeight: true
                             Layout.fillWidth: true
+                        }
 
-                            currentIndex: 0
-
-                            Rectangle {
-                                id: tealRect
-                                color: 'teal'
-                                radius: 4
-                                states: [
-                                    State {
-                                        name: "visible"
-                                        when: container.currentIndex === 0
-                                        PropertyChanges {
-                                            target: tealRect
-                                            opacity: 1
-                                        }
-                                    },
-                                    State {
-                                        name: "hidden"
-                                        when: container.currentIndex !== 0
-                                        PropertyChanges {
-                                            target: tealRect
-                                            opacity: 0
-                                        }
-                                    }
-                                ]
-
-                                transitions: [
-                                    Transition {
-                                        from: "hidden"
-                                        to: "visible"
-                                        NumberAnimation {
-                                            properties: "opacity"
-                                            duration: 500
-                                        }
-                                    },
-                                    Transition {
-                                        from: "visible"
-                                        to: "hidden"
-                                        NumberAnimation {
-                                            properties: "opacity"
-                                            duration: 500
-                                        }
-                                    }
-                                ]
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        container.currentIndex = 1;
-                                        console.log('test');
-                                    }
-                                }
-                            }
-
-                            opacity: animProgress
+                        Tabs {
+                            // for RowLayout
+                            // Layout.preferredWidth: 10
+                            // Layout.fillHeight: true
+                            // for ColumnLayout
+                            Layout.preferredHeight: 5
+                            Layout.fillWidth: true
                         }
                     }
+
+                    // RowLayout {
+                    //     id: sidebarClip
+                    //     width: parent.width
+                    //     height: parent.height
+                    //     anchors.centerIn: parent
+
+                    //     TabContent {
+                    //         id: container
+                    //         Layout.fillHeight: true
+                    //         Layout.fillWidth: true
+                    //     }
+
+                    //     Tabs {
+                    //         Layout.preferredWidth: 10
+                    //         Layout.fillHeight: true
+                    //     }
+                    // }
+                }
+
+                transform: Translate {
+                    x: (1.0 - animProgress) * width
                 }
             }
 

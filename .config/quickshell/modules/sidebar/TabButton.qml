@@ -14,6 +14,17 @@ Rectangle {
     Layout.fillHeight: true
     Layout.fillWidth: true
 
+    // Column {
+    //     anchors.centerIn: parent
+    //     Repeater {
+    //         model: label.length
+    //         Text {
+    //             text: label[index]
+    //             color: tabIndex === currentIndex ? Colors.color10 : Colors.color12
+    //         }
+    //     }
+    // }
+
     Text {
         anchors.centerIn: parent
         text: label
