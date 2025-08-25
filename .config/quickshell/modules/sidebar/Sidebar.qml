@@ -104,18 +104,18 @@ Scope {
                         height: parent.height
                         anchors.centerIn: parent
 
-                        TabContent {
-                            id: container
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                        }
-
                         Tabs {
                             // for RowLayout
                             // Layout.preferredWidth: 10
                             // Layout.fillHeight: true
                             // for ColumnLayout
                             Layout.preferredHeight: 5
+                            Layout.fillWidth: true
+                        }
+
+                        TabContent {
+                            id: container
+                            Layout.fillHeight: true
                             Layout.fillWidth: true
                         }
                     }
