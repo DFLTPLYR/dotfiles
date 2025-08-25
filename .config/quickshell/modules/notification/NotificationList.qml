@@ -141,5 +141,8 @@ Scope {
                 }
             }
         }
+        function onDiscardAll() {
+            notificationPopup.notificationListModel.clear();
+        }
     }
 }
