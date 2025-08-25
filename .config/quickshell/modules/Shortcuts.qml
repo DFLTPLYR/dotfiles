@@ -7,13 +7,6 @@ import qs
 Item {
     // WallpaperShortcut
     GlobalShortcut {
-        id: cancelKeybind
-        name: "cancel"
-        description: "Cancel current action"
-    }
-
-    // WallpaperShortcut
-    GlobalShortcut {
         id: wallpaperShortcutKeybind
         name: "showWallpaperCarousel"
         description: "Show Wallpaper Carousel to the current monitor"
