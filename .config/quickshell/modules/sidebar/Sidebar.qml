@@ -95,7 +95,7 @@ Scope {
                 anchors.fill: parent
                 color: Scripts.hexToRgba(Colors.background, 0.5)
                 radius: 12
-
+                border.color: Colors.color12
                 clip: true
 
                 Item {
@@ -166,10 +166,6 @@ Scope {
                                         console.log('test');
                                     }
                                 }
-                            }
-
-                            transform: Translate {
-                                x: (1.0 - animProgress) * width
                             }
 
                             opacity: animProgress
