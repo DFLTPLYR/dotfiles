@@ -3,23 +3,24 @@
 
 import QtQuick
 import QtQuick.Controls
+import qs.utils
+import qs.services
 
 RoundButton {
     id: button
-    implicitWidth: 48
+    implicitWidth: 72
     implicitHeight: 38
     radius: buttonRadius
     icon.source: getIcon()
     icon.width: 38
     icon.height: 38
     icon.color: getIconColor()
-    text: "bs"
 
     property bool dimmable: true
     property bool dimmed: false
-    readonly property color backgroundColor: "#222222"
-    readonly property color borderColor: "#A9A9A9"
-    readonly property color backspaceRedColor: "#DE2C2C"
+    readonly property color backgroundColor: "transparent"
+    readonly property color borderColor: Colors.color10
+    readonly property color backspaceRedColor: Colors.color12
     readonly property int buttonRadius: 8
 
     function getBackgroundColor() {

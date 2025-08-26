@@ -6,12 +6,13 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import "calculator.js" as CalcEngine
 import QtQuick.Layouts
+import qs.services
 
 Item {
     id: controller
 
-    readonly property color qtGreenColor: "#2CDE85"
-    readonly property color backspaceRedColor: "#DE2C2C"
+    readonly property color qtGreenColor: Colors.color11
+    readonly property color backspaceRedColor: Colors.color12
     readonly property int spacing: 5
 
     property int portraitModeWidth: mainGrid.width
@@ -38,8 +39,8 @@ Item {
             root.operatorPressed(text);
             updateDimmed();
         }
-        textColor: controller.qtGreenColor
-        implicitWidth: 48
+        textColor: Colors.color10
+        implicitWidth: 72
         dimmable: true
     }
 
@@ -86,7 +87,7 @@ Item {
                 DigitButton {
                     text: "e"
                     dimmable: true
-                    implicitWidth: 48
+                    implicitWidth: 72
                 }
                 OperatorButton {
                     text: "ln"
@@ -97,7 +98,7 @@ Item {
                 DigitButton {
                     text: "π"
                     dimmable: true
-                    implicitWidth: 48
+                    implicitWidth: 72
                 }
             }
 
