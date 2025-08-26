@@ -4,8 +4,9 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
-import "content"
+
 import "calculator.js" as CalcEngine
+
 import qs.services
 import qs.utils
 

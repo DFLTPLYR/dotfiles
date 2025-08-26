@@ -6,7 +6,7 @@ import qs.services
 import qs.utils
 
 ColumnLayout {
-    id: tealRect
+    id: root
     property int index: 0
     clip: true
 
@@ -15,7 +15,7 @@ ColumnLayout {
             name: "visible"
             when: container.currentIndex === index
             PropertyChanges {
-                target: tealRect
+                target: root
                 opacity: 1
                 visible: true
             }
@@ -24,7 +24,7 @@ ColumnLayout {
             name: "hidden"
             when: container.currentIndex !== index
             PropertyChanges {
-                target: tealRect
+                target: root
                 opacity: 0
                 visible: false
             }

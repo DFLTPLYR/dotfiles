@@ -24,6 +24,6 @@ RowLayout {
             label: model.label
             tabIndex: index
             currentIndex: tabRow.currentIndex
-        }
+        }s
     }
 }

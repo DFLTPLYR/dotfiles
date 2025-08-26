@@ -115,6 +115,11 @@ StackLayout {
             }
         }
     }
+    ContentWrapper {
+        index: 2
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+    }
 
     opacity: animProgress
 }
