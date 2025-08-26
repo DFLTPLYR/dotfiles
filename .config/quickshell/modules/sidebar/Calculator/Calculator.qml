@@ -22,18 +22,13 @@ Item {
 
     Display {
         id: display
-        backgroundColor: Scripts.setOpacity(Colors.background, 0.5)
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        backgroundColor: Scripts.setOpacity(Colors.background, 0.9)
         Layout.margins: 10
     }
 
     NumberPad {
         id: numberPad
         Layout.margins: 10
-        Layout.fillHeight: true
-        Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
     }
 
@@ -46,9 +41,12 @@ Item {
         LayoutItemProxy {
             target: display
             Layout.fillHeight: true
+            Layout.fillWidth: true
         }
         LayoutItemProxy {
             target: numberPad
+            Layout.fillHeight: true
+            Layout.fillWidth: true
         }
     }
 
