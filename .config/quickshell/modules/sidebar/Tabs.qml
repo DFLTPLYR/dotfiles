@@ -8,7 +8,7 @@ RowLayout {
     ListModel {
         id: tabModel
         ListElement {
-            label: "Calendar"
+            label: "Calculator"
         }
         ListElement {
             label: "Todo"
