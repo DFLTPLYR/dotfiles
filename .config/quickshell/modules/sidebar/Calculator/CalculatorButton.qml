@@ -8,8 +8,6 @@ import qs.utils
 
 RoundButton {
     id: button
-    implicitWidth: 38
-    implicitHeight: 38
     radius: buttonRadius
 
     property bool dimmable: false
