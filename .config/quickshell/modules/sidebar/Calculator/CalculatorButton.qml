@@ -3,6 +3,8 @@
 
 import QtQuick
 import QtQuick.Controls
+import qs.services
+import qs.utils
 
 RoundButton {
     id: button
@@ -14,10 +16,10 @@ RoundButton {
     property bool dimmed: false
     readonly property int fontSize: 22
     readonly property int buttonRadius: 8
-    property color textColor: "#FFFFFF"
-    property color accentColor: "#2CDE85"
-    readonly property color backgroundColor: "#222222"
-    readonly property color borderColor: "#A9A9A9"
+    property color textColor: Colors.color12
+    property color accentColor: Colors.color10
+    readonly property color backgroundColor: 'transparent'
+    readonly property color borderColor: Colors.color10
 
     function getBackgroundColor() {
         if (button.dimmable && button.dimmed)
@@ -57,9 +59,10 @@ RoundButton {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: getTextColor()
+
         Behavior on color {
             ColorAnimation {
-                duration: 120
+                duration: 200
                 easing.type: Easing.OutElastic
             }
         }

@@ -19,16 +19,6 @@ Item {
     readonly property int minLandscapeModeWidth: numberPad.landscapeModeWidth + display.minWidth + margin * 3
     property bool isPortraitMode: width < minLandscapeModeWidth
 
-    onIsPortraitModeChanged: {
-        if (isPortraitMode) {
-            portraitMode.visible = true;
-            landscapeMode.visible = false;
-        } else {
-            portraitMode.visible = false;
-            landscapeMode.visible = true;
-        }
-    }
-
     Display {
         id: display
         readonly property int minWidth: 210
