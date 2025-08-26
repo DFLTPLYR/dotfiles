@@ -8,8 +8,8 @@ import QtQuick.Window
 
 Item {
     id: display
-    property int fontSize: 22
-    readonly property int maxDigits: Math.min((width / fontSize) + 1, 9)
+    property int fontSize: 72
+    readonly property int maxDigits: Math.min((width / fontSize) + 1, 10000)
     property color backgroundColor: "#262626"
     readonly property color qtGreenColor: "#2CDE85"
     property string displayedOperand: ""
