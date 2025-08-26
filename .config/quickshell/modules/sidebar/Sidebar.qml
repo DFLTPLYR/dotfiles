@@ -89,8 +89,8 @@ Scope {
                 id: sidebarBackground
                 anchors.fill: parent
 
-                color: Scripts.setOpacity(Colors.background, 0.8)
-                radius: 12
+                color: Scripts.setOpacity(Colors.background, 0.5)
+                radius: 8
                 border.color: Colors.color12
                 clip: true
 
@@ -100,43 +100,66 @@ Scope {
 
                     ColumnLayout {
                         id: sidebarClip
-                        width: parent.width
-                        height: parent.height
-                        anchors.centerIn: parent
+                        anchors.fill: parent
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-                        Tabs {
-                            // for RowLayout
-                            // Layout.preferredWidth: 10
-                            // Layout.fillHeight: true
-                            // for ColumnLayout
-                            Layout.preferredHeight: 5
+                        TabBar {
+                            id: bar
+                            contentHeight: 32
                             Layout.fillWidth: true
+
+                            spacing: 4
+
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: 'transparent'
+                                radius: 24
+                            }
+
+                            Repeater {
+                                model: [
+                                    {
+                                        name: "Calculator",
+                                        icon: "\uf1ec"
+                                    },
+                                    {
+                                        name: "Todo",
+                                        icon: "\uf02e"
+                                    },
+                                    {
+                                        name: "System",
+                                        icon: "\uf2db"
+                                    }
+                                ]
+
+                                TabButton {
+                                    contentItem: Text {
+                                        anchors.fill: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        text: `${qsTr(modelData.icon)} ${qsTr(modelData.name)}`
+                                        color: bar.currentIndex === index ? Colors.color11 : Colors.color10
+                                        font.pixelSize: bar.contentHeight * 0.5
+                                    }
+                                    background: Rectangle {
+                                        anchors.fill: parent
+                                        color: bar.currentIndex === index ? Colors.color1 : Colors.color0
+                                        radius: 4
+                                        Behavior on color {
+                                            ColorAnimation {
+                                                duration: 250
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         TabContent {
-                            id: container
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
+                            currentIndex: bar.currentIndex
                         }
                     }
-
-                    // RowLayout {
-                    //     id: sidebarClip
-                    //     width: parent.width
-                    //     height: parent.height
-                    //     anchors.centerIn: parent
-
-                    //     TabContent {
-                    //         id: container
-                    //         Layout.fillHeight: true
-                    //         Layout.fillWidth: true
-                    //     }
-
-                    //     Tabs {
-                    //         Layout.preferredWidth: 10
-                    //         Layout.fillHeight: true
-                    //     }
-                    // }
                 }
 
                 transform: Translate {
