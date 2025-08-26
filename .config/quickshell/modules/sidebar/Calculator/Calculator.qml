@@ -22,24 +22,19 @@ Item {
 
     Display {
         id: display
-        readonly property int minWidth: 210
-        readonly property int minHeight: 60
         backgroundColor: Scripts.setOpacity(Colors.background, 0.5)
-        Layout.minimumWidth: minWidth
+
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: root.margin
-
-        // remove the margin on the side that the numberPad is on, to prevent a double margin
-        Layout.bottomMargin: root.isPortraitMode ? 0 : root.margin
-        Layout.rightMargin: root.isPortraitMode ? root.margin : 0
+        Layout.margins: 10
     }
 
     NumberPad {
         id: numberPad
-        Layout.margins: root.margin
+        Layout.margins: 10
         Layout.fillHeight: true
         Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter
     }
 
     // define the responsive layouts
@@ -50,11 +45,10 @@ Item {
 
         LayoutItemProxy {
             target: display
-            Layout.minimumHeight: display.minHeight
+            Layout.fillHeight: true
         }
         LayoutItemProxy {
             target: numberPad
-            Layout.alignment: Qt.AlignHCenter
         }
     }
 

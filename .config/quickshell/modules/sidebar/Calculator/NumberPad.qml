@@ -32,6 +32,9 @@ Item {
             root.digitPressed(text);
             updateDimmed();
         }
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: mainGrid.widthPerCol
     }
 
     component OperatorButton: CalculatorButton {
@@ -40,140 +43,141 @@ Item {
             updateDimmed();
         }
         textColor: Colors.color10
-        implicitWidth: 72
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: mainGrid.widthPerCol
         dimmable: true
     }
 
     Component.onCompleted: updateDimmed()
 
-    Rectangle {
-        id: numberPad
+    RowLayout {
         anchors.fill: parent
 
-        radius: 2
-        color: "transparent"
+        GridLayout {
+            id: scientificGrid
+            columns: 3
+            visible: false
 
-        RowLayout {
+            OperatorButton {
+                text: "x²"
+            }
+            OperatorButton {
+                text: "⅟x"
+            }
+            OperatorButton {
+                text: "√"
+            }
+            OperatorButton {
+                text: "x³"
+            }
+            OperatorButton {
+                text: "sin"
+            }
+            OperatorButton {
+                text: "|x|"
+            }
+            OperatorButton {
+                text: "log"
+            }
+            OperatorButton {
+                text: "cos"
+            }
+            DigitButton {
+                text: "e"
+                dimmable: true
+            }
+            OperatorButton {
+                text: "ln"
+            }
+            OperatorButton {
+                text: "tan"
+            }
+            DigitButton {
+                text: "π"
+                dimmable: true
+            }
+        }
 
-            anchors.centerIn: parent
-            GridLayout {
-                id: scientificGrid
-                columns: 3
+        GridLayout {
+            id: mainGrid
+            columns: 5
 
-                OperatorButton {
-                    text: "x²"
-                }
-                OperatorButton {
-                    text: "⅟x"
-                }
-                OperatorButton {
-                    text: "√"
-                }
-                OperatorButton {
-                    text: "x³"
-                }
-                OperatorButton {
-                    text: "sin"
-                }
-                OperatorButton {
-                    text: "|x|"
-                }
-                OperatorButton {
-                    text: "log"
-                }
-                OperatorButton {
-                    text: "cos"
-                }
-                DigitButton {
-                    text: "e"
-                    dimmable: true
-                    implicitWidth: 72
-                }
-                OperatorButton {
-                    text: "ln"
-                }
-                OperatorButton {
-                    text: "tan"
-                }
-                DigitButton {
-                    text: "π"
-                    dimmable: true
-                    implicitWidth: 72
-                }
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            rowSpacing: 8
+            columnSpacing: 8
+
+            property int widthPerCol: mainGrid.width / 5
+
+            BackspaceButton {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
 
-            GridLayout {
-                id: mainGrid
-                columns: 5
+            DigitButton {
+                text: "7"
+            }
+            DigitButton {
+                text: "8"
+            }
+            DigitButton {
+                text: "9"
+            }
+            OperatorButton {
+                text: "÷"
+            }
 
-                BackspaceButton {}
-                DigitButton {
-                    text: "7"
-                }
-                DigitButton {
-                    text: "8"
-                }
-                DigitButton {
-                    text: "9"
-                }
-                OperatorButton {
-                    text: "÷"
-                    implicitWidth: 38
-                }
+            OperatorButton {
+                text: "AC"
+            }
+            DigitButton {
+                text: "4"
+            }
+            DigitButton {
+                text: "5"
+            }
+            DigitButton {
+                text: "6"
+            }
+            OperatorButton {
+                text: "×"
+            }
 
-                OperatorButton {
-                    text: "AC"
-                    textColor: controller.backspaceRedColor
-                    accentColor: controller.backspaceRedColor
-                }
-                DigitButton {
-                    text: "4"
-                }
-                DigitButton {
-                    text: "5"
-                }
-                DigitButton {
-                    text: "6"
-                }
-                OperatorButton {
-                    text: "×"
-                    implicitWidth: 38
-                }
+            OperatorButton {
+                text: "="
+                Layout.rowSpan: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
 
-                OperatorButton {
-                    text: "="
-                    implicitHeight: 81
-                    Layout.rowSpan: 2
-                }
-                DigitButton {
-                    text: "1"
-                }
-                DigitButton {
-                    text: "2"
-                }
-                DigitButton {
-                    text: "3"
-                }
-                OperatorButton {
-                    text: "−"
-                    implicitWidth: 38
-                }
+            DigitButton {
+                text: "1"
+            }
+            DigitButton {
+                text: "2"
+            }
+            DigitButton {
+                text: "3"
+            }
+            OperatorButton {
+                text: "−"
+            }
 
-                OperatorButton {
-                    text: "±"
-                    implicitWidth: 38
-                }
-                DigitButton {
-                    text: "0"
-                }
-                DigitButton {
-                    text: "."
-                    dimmable: true
-                }
-                OperatorButton {
-                    text: "+"
-                    implicitWidth: 38
-                }
+            OperatorButton {
+                text: "±"
+            }
+            DigitButton {
+                text: "0"
+            }
+            DigitButton {
+                text: "."
+                dimmable: true
+                textColor: Colors.color10
+            }
+            OperatorButton {
+                text: "+"
             }
         }
     }
