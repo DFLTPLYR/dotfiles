@@ -42,7 +42,6 @@ AnimatedScreenOverlay {
             case Qt.Key_Enter:
             case Qt.Key_Return:
                 const currentItem = flick.currentItem;
-
                 if (currentItem) {
                     const screenName = screen.name;
                     const path = currentItem.modelData.path;
@@ -52,16 +51,16 @@ AnimatedScreenOverlay {
 
                 event.accepted = true;
                 break;
-            case Qt.Key_Left:
+            case Qt.Key_Right:
             case Qt.Key_Down:
-                if (flick.currentIndex > 0)
-                    flick.currentIndex -= 1;
+                if (flick.currentIndex < flick.count - 1)
+                    flick.currentIndex += 1;
                 event.accepted = true;
                 break;
             case Qt.Key_Up:
-            case Qt.Key_Right:
-                if (flick.currentIndex < flick.count - 1)
-                    flick.currentIndex += 1;
+            case Qt.Key_Left:
+                if (flick.currentIndex > 0)
+                    flick.currentIndex -= 1;
                 event.accepted = true;
                 break;
             default:
@@ -92,371 +91,226 @@ AnimatedScreenOverlay {
     readonly property bool isPortrait: screen.height > screen.width
 
     // Target sizes
-    property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
-    property real targetHeight: screen.height * 0.5
+    property real targetWidth: screen.width * 0.9
+    property real targetHeight: screen.height * 0.8
 
-    ColumnLayout {
-        id: myLayout
+    // Content
+
+    Item {
+        width: Math.max(1, targetWidth * animProgress)
+        height: Math.max(1, targetHeight * animProgress)
+
+        scale: animProgress
 
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
+        clip: true
 
-        spacing: 8
+        RowLayout {
+            anchors.fill: parent
 
-        // Colors
-        Rectangle {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
-            Layout.preferredHeight: Math.max(1, (targetHeight / 2) * animProgress)
+            // List Panel
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width / 4
+                color: Scripts.setOpacity(Colors.background, 0.8)
+                border.color: Scripts.setOpacity(Colors.colors10, 0.2)
+                radius: 10
 
-            scale: animProgress
-            opacity: animProgress
-            radius: 10
-            transformOrigin: Item.Center
-            color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
+                ListView {
+                    id: flick
+                    anchors.fill: parent
+                    spacing: 10
+                    anchors.margins: 16
 
-            GridView {
-                id: colorList
-                anchors.fill: parent
+                    snapMode: ListView.SnapToItem
+                    boundsBehavior: Flickable.StopAtBounds
 
-                clip: true
-                property var perRow: 20
-                // Grid properties
-                cellWidth: Math.floor(parent.width / perRow)
-                cellHeight: Math.floor(parent.width / perRow)
+                    highlightMoveDuration: 250
+                    highlightMoveVelocity: 400
+                    highlightFollowsCurrentItem: true
+                    highlightRangeMode: ListView.StrictlyEnforceRange
 
-                flow: GridView.LeftToRight
+                    property bool isPortrait: screen.height > screen.width
 
-                model: (toplevel.isPortrait ? WallpaperStore.portraitColors.slice() : WallpaperStore.landscapeColors.slice()).reverse()
+                    model: ScriptModel {
+                        values: {
+                            let wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
+                            return wallpapers;
+                        }
+                    }
 
-                delegate: Rectangle {
-                    id: wrapper
-                    width: colorList.cellWidth
-                    height: colorList.cellHeight
-                    radius: 12
-                    color: 'transparent'
-
-                    Rectangle {
-                        id: container
-                        anchors.centerIn: wrapper
-                        width: colorList.cellWidth * 0.8
-                        height: width
-
+                    delegate: Rectangle {
+                        id: wrapper
+                        required property var modelData
+                        implicitWidth: flick.width
+                        height: 250
                         radius: 10
+                        clip: true
+                        color: Scripts.setOpacity(Colors.foreground, 0.2)
+                        border.color: Scripts.setOpacity(Colors.colors10, 0.2)
 
-                        property bool isSelected: {
-                            if (toplevel.colorFilter) {
-                                for (var i = 0; i < toplevel.colorFilter.length; i++) {
-                                    if (toplevel.colorFilter[i] === modelData.color)
-                                        return true;
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 10
+
+                            Rectangle {
+                                Layout.preferredHeight: parent.height * 0.8
+                                Layout.fillWidth: true
+                                color: 'transparent'
+
+                                Image {
+                                    id: maskee
+                                    anchors.fill: parent
+                                    fillMode: Image.PreserveAspectCrop
+                                    source: Qt.resolvedUrl(modelData.path)
+                                    cache: true
+                                    asynchronous: true
+                                    smooth: true
+                                    visible: false
+                                }
+
+                                Rectangle {
+                                    id: masking
+                                    anchors.fill: parent
+                                    radius: 16
+                                    clip: true
+                                    visible: false
+                                }
+
+                                OpacityMask {
+                                    anchors.fill: parent
+                                    source: maskee
+                                    maskSource: masking
                                 }
                             }
-                            return false;
-                        }
 
-                        color: isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.4)
-
-                        border.color: isSelected ? Colors.foreground : Scripts.hexToRgba(Colors.colors12, 0.7)
-
-                        Column {
-                            anchors.centerIn: parent
-                            spacing: 4
-
-                            // Color preview circle
-                            Rectangle {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                width: wrapper.height / 2
-                                height: width
-                                radius: width / 2
-                                color: modelData.colorGroup
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
                             }
                         }
 
                         MouseArea {
+                            z: 10
                             anchors.fill: parent
+                            hoverEnabled: true
                             onClicked: {
-                                if (container.isSelected) {
-                                    for (var i = 0; i < toplevel.colorFilter.length; i++) {
-                                        if (toplevel.colorFilter[i] === modelData.color) {
-                                            toplevel.colorFilter.splice(i, 1);
+                                var resolvedIndex = -1;
+                                if (typeof index !== "undefined") {
+                                    resolvedIndex = index;
+                                } else if (flick && flick.model && flick.model.values) {
+                                    var arr = flick.model.values;
+                                    for (var i = 0; i < arr.length; ++i) {
+                                        if (arr[i] === modelData || (arr[i].path && modelData.path && arr[i].path === modelData.path)) {
+                                            resolvedIndex = i;
                                             break;
                                         }
                                     }
+                                }
+                                if (resolvedIndex >= 0) {
+                                    flick.currentIndex = resolvedIndex;
                                 } else {
-                                    toplevel.colorFilter.push(modelData.color);
+                                    if (flick.currentItem && flick.currentItem.modelData === modelData)
+                                        flick.currentIndex = flick.currentIndex;
                                 }
-                                toplevel.colorFilter = toplevel.colorFilter.slice();
                             }
+                        }
+                    }
+
+                    onCurrentItemChanged: {
+                        if (currentItem && currentItem.modelData) {
+                            previewImage.source = Qt.resolvedUrl(currentItem.modelData.path);
+                            previewColorPallete.model = currentItem.modelData.colors.slice(0, 19) || [];
+                        } else {
+                            previewImage.source = "";
+                            previewColorPallete.model = [];
                         }
                     }
                 }
             }
-        }
 
-        // Carousel
-        Rectangle {
-            id: morphBox
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
-            Layout.preferredHeight: Math.max(1, targetHeight * animProgress)
+            // Preview Panel
+            Rectangle {
+                id: previewPanel
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                color: Scripts.setOpacity(Colors.background, 0.8)
+                border.color: Scripts.setOpacity(Colors.colors10, 0.2)
+                radius: 10
 
-            scale: animProgress
-            opacity: animProgress
-            radius: 10
-            transformOrigin: Item.Center
-            color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
-
-            ListContent {
-                id: flick
-
-                width: Math.max(1, targetWidth * animProgress)
-                height: Math.max(1, targetHeight * animProgress)
-
-                visible: animProgress > 0
-                opacity: animProgress
-                searchText: toplevel.searchValue
-                colorsFilter: toplevel.colorFilter
-                tagsFilter: toplevel.tagFilter
-            }
-        }
-
-        // Tags
-        Rectangle {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: Math.max(1, targetWidth * animProgress)
-            Layout.preferredHeight: Math.max(1, (targetHeight / 4) * animProgress)
-
-            scale: animProgress
-            opacity: animProgress
-            radius: 10
-            transformOrigin: Item.Center
-            color: Scripts.hexToRgba(Colors.background, 0.2)
-            border.color: Scripts.hexToRgba(Colors.colors10, 0.2)
-
-            Flickable {
-                id: tickerView
-                anchors.fill: parent
-
-                contentWidth: masonryContent.width
-                contentHeight: height
-                clip: true
-
-                // Enable interactive scrolling
-                flickableDirection: Flickable.HorizontalFlick
-                interactive: contentWidth > width
-                boundsBehavior: Flickable.StopAtBounds
-                flickDeceleration: 1500
-                maximumFlickVelocity: 2500
-
-                // Auto-scroll properties
-                property real lastPosition: 0
-                property bool autoScrolling: true
-                property var scrollAnimationObject: null
-                property bool scrollForward: true
-                property real edgeEpsilon: 1.0
-                property real baseScrollSpeed: 20000
-
-                // Initialize animation on completion
-                Component.onCompleted: startScrollAnimation()
-
-                function startScrollAnimation() {
-                    if (scrollAnimationObject) {
-                        scrollAnimationObject.stop();
-                    }
-
-                    // Nothing to scroll
-                    if (contentWidth <= width)
-                        return;
-
-                    // Clamp current position to valid range
-                    const maxX = Math.max(0, contentWidth - width);
-                    contentX = Math.min(Math.max(contentX, 0), maxX);
-
-                    // Decide direction when we're at an edge
-                    const atEnd = Math.abs(contentX - maxX) <= edgeEpsilon;
-                    const atStart = contentX <= edgeEpsilon;
-
-                    if (atEnd)
-                        scrollForward = false;
-                    if (atStart)
-                        scrollForward = true;
-
-                    const fromX = contentX;
-                    const toX = scrollForward ? maxX : 0;
-
-                    const distance = Math.max(1, Math.abs(toX - fromX));
-                    const duration = baseScrollSpeed * (distance / 1000);
-
-                    scrollAnimationObject = scrollAnimationComponent.createObject(tickerView, {
-                        from: fromX,
-                        to: toX,
-                        duration: duration
-                    });
-
-                    if (autoScrolling && visible) {
-                        scrollAnimationObject.start();
-                    }
-                }
-
-                // Animation component
-                Component {
-                    id: scrollAnimationComponent
-
-                    NumberAnimation {
-                        target: tickerView
-                        property: "contentX"
-                        loops: 1
-                        running: false
-                        onStopped: {
-                            tickerView.lastPosition = tickerView.contentX;
-                            if (tickerView.autoScrolling && tickerView.visible && tickerView.contentWidth > tickerView.width) {
-                                tickerView.startScrollAnimation();
-                            }
-                        }
-                    }
-                }
-
-                // Pause auto-scroll when user interacts with the list
-                onMovementStarted: {
-                    autoScrolling = false;
-                    if (scrollAnimationObject) {
-                        lastPosition = contentX;
-                        scrollAnimationObject.stop();
-                    }
-                }
-
-                // Resume auto-scroll after user stops interacting
-                onMovementEnded: {
-                    lastPosition = contentX;
-                    resumeTimer.restart();
-                }
-
-                onFlickEnded: lastPosition = contentX
-                onContentXChanged: if (!autoScrolling)
-                    lastPosition = contentX
-
-                Timer {
-                    id: resumeTimer
-                    interval: 1000
-                    repeat: false
-                    onTriggered: {
-                        tickerView.autoScrolling = true;
-                        tickerView.startScrollAnimation();
-                    }
-                }
-
-                // Masonry content container
                 Item {
-                    id: masonryContent
-                    width: Math.max(childrenRect.width + 20, tickerView.width)
-                    height: tickerView.height
+                    anchors.fill: parent
 
-                    // Spacing between rows and items
-                    property int spacing: 8
-                    // Fixed item height per row (tune this)
-                    property int rowHeight: 20
-                    // How many rows can fit vertically, given rowHeight + spacing
-                    property int rowCount: Math.max(1, Math.floor((height + spacing) / (rowHeight + spacing)))
+                    Rectangle {
+                        id: previewCard
+                        anchors.fill: parent
+                        color: 'transparent'
 
-                    // Will be (rowCount)-sized
-                    property var rowWidths: []
-                    property var rowItems: []
+                        Image {
+                            id: previewImage
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+                            visible: false
+                        }
 
-                    function resetRows() {
-                        rowWidths = Array(rowCount).fill(0);
-                        rowItems = [];
-                        for (let r = 0; r < rowCount; r++)
-                            rowItems.push([]);
-                    }
+                        Rectangle {
+                            id: previewMask
+                            anchors.fill: parent
+                            radius: 8
+                            clip: true
+                            visible: false
+                        }
 
-                    // Layout function - call after model or size changes
-                    function layoutItems() {
-                        resetRows();
-
-                        for (let i = 0; i < repeater.count; i++) {
-                            const item = repeater.itemAt(i);
-                            if (!item)
-                                continue;
-
-                            // Find row with minimum width so far
-                            let minRow = 0;
-                            let minWidth = rowWidths[0];
-                            for (let r = 1; r < rowCount; r++) {
-                                if (rowWidths[r] < minWidth) {
-                                    minRow = r;
-                                    minWidth = rowWidths[r];
-                                }
-                            }
-
-                            // Position item
-                            item.height = rowHeight;
-                            item.y = minRow * (rowHeight + spacing);
-                            item.x = rowWidths[minRow];
-
-                            // Advance width for that row
-                            rowWidths[minRow] += item.width + spacing;
-                            rowItems[minRow].push(item);
+                        OpacityMask {
+                            anchors.fill: parent
+                            source: previewImage
+                            maskSource: previewMask
+                            visible: previewCard.width <= 16384 && previewCard.height <= 16384
                         }
                     }
 
-                    // Re-layout on size/row changes
-                    onHeightChanged: Qt.callLater(layoutItems)
-                    onRowHeightChanged: Qt.callLater(layoutItems)
-                    onRowCountChanged: Qt.callLater(layoutItems)
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        height: parent.height / 6
+                        color: Scripts.setOpacity(Colors.background, 0.8)
 
-                    // Masonry item repeater
-                    Repeater {
-                        id: repeater
-                        model: toplevel.isPortrait ? WallpaperStore.portraitTags : WallpaperStore.landscapeTags
-
-                        delegate: Item {
-                            id: tagItem
-                            width: wordText.width + 40
+                        ColumnLayout {
+                            id: previewWrapper
+                            anchors.fill: parent
 
                             Text {
-                                id: wordText
-                                text: modelData
-                                color: Colors.color15
-                                font.pixelSize: 20
-                                font.bold: true
-                                anchors.centerIn: parent
+                                id: name
+                                text: qsTr("text")
                             }
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    searchValue = modelData;
-                                    showSearchInput = true;
-                                    searchTimer.restart();
+                            RowLayout {
+                                id: previewColorPalleteRow
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 50
+                                spacing: 6
+                                Item {
+                                    Layout.fillWidth: true
                                 }
-                            }
-
-                            // Trigger layout after all items are created
-                            Component.onCompleted: {
-                                if (index === repeater.count - 1) {
-                                    Qt.callLater(masonryContent.layoutItems);
+                                Repeater {
+                                    id: previewColorPallete
+                                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                                    model: flick.currentItem.modelData.colors.slice(0, 19)
+                                    delegate: Rectangle {
+                                        radius: 4
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: width
+                                        color: modelData && modelData.color ? modelData.color : "transparent"
+                                        visible: modelData && !!modelData.color
+                                    }
+                                }
+                                Item {
+                                    Layout.fillWidth: true
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            Text {
-                id: searchLabel
-                text: qsTr(searchValue)
-                font.pixelSize: 32
-                font.bold: true
-                anchors.centerIn: parent
-                color: Colors.color15
-                opacity: showSearchInput ? 1.0 : 0.0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
                     }
                 }
             }
