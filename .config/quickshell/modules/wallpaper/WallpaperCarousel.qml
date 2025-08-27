@@ -94,8 +94,7 @@ AnimatedScreenOverlay {
     property real targetHeight: screen.height * 0.8
 
     // Content
-
-    Item {
+    ColumnLayout {
         width: Math.max(1, targetWidth * animProgress)
         height: Math.max(1, targetHeight * animProgress)
 
@@ -103,10 +102,12 @@ AnimatedScreenOverlay {
 
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
+
         clip: true
 
         RowLayout {
-            anchors.fill: parent
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
             // List Panel
             Rectangle {
@@ -115,6 +116,7 @@ AnimatedScreenOverlay {
                 color: Scripts.setOpacity(Colors.background, 0.8)
                 border.color: Scripts.setOpacity(Colors.colors10, 0.2)
                 radius: 10
+                clip: true
 
                 ListView {
                     id: flick
@@ -131,6 +133,9 @@ AnimatedScreenOverlay {
                     highlightRangeMode: ListView.StrictlyEnforceRange
 
                     property bool isPortrait: screen.height > screen.width
+
+                    preferredHighlightBegin: parent.height / 4
+                    preferredHighlightEnd: parent.height / 4
 
                     model: ScriptModel {
                         values: {
@@ -184,9 +189,36 @@ AnimatedScreenOverlay {
                                 }
                             }
 
-                            Item {
+                            ColumnLayout {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+
+                                Text {
+                                    text: qsTr("Tags:")
+                                    color: Colors.color15
+                                }
+
+                                RowLayout {
+                                    id: previewTagsFlow
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    spacing: 8
+
+                                    Repeater {
+                                        id: previewTagsRepeater
+                                        model: modelData.tags.slice(0, 5)
+                                        delegate: Text {
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            text: qsTr(modelData)
+                                            color: Colors.color10
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                            elide: Text.ElideRight
+                                            font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -222,12 +254,28 @@ AnimatedScreenOverlay {
                             previewImage.source = Qt.resolvedUrl(currentItem.modelData.path);
                             previewColorPallete.model = currentItem.modelData.colors.slice(0, 19) || [];
                             // set repeater model to a unique list so no duplicates show
-                            previewTagsRepeater.model = toplevel.uniqueTags(currentItem.modelData.tags || []);
+                            // previewTagsRepeater.model = toplevel.uniqueTags(currentItem.modelData.tags || []);
                         } else {
                             previewImage.source = "";
                             previewColorPallete.model = [];
-                            previewTagsRepeater.model = [];
+                            // previewTagsRepeater.model = [];
                         }
+                    }
+
+                    populate: Transition {
+                        NumberAnimation {
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 1000
+                        }
+                    }
+
+                    highlight: Rectangle {
+                        width: 180
+                        height: 40
+                        color: Colors.color10
+                        radius: 10
                     }
                 }
             }
@@ -255,7 +303,6 @@ AnimatedScreenOverlay {
                             fillMode: Image.PreserveAspectCrop
                             visible: false
                         }
-
                         Rectangle {
                             id: previewMask
                             anchors.fill: parent
@@ -268,7 +315,6 @@ AnimatedScreenOverlay {
                             anchors.fill: parent
                             source: previewImage
                             maskSource: previewMask
-                            visible: previewCard.width <= 16384 && previewCard.height <= 16384
                         }
                     }
 
@@ -277,54 +323,33 @@ AnimatedScreenOverlay {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
-                        height: parent.height / 6
-                        color: Scripts.setOpacity(Colors.background, 0.8)
-
+                        height: 40
+                        color: Scripts.setOpacity(Colors.background, 0.2)
+                        radius: 8
+                        anchors.margins: 10
+                        border.color: Scripts.setOpacity(Colors.foreground, 0.2)
                         ColumnLayout {
                             id: previewWrapper
                             anchors.fill: parent
-
-                            Flow {
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: 50
-                                spacing: 10
-
-                                Text {
-                                    id: previewTag
-                                    text: qsTr("Tags:")
-                                    color: Colors.color10
-                                    font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
-                                }
-
-                                Repeater {
-                                    id: previewTagsRepeater
-                                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                                    delegate: Text {
-                                        text: qsTr(modelData)
-                                        color: Colors.color10
-                                        font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
-                                    }
-                                }
-                            }
-
+                            visible: flick.currentItem.modelData.colors
                             RowLayout {
                                 id: previewColorPalleteRow
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 50
-                                spacing: 6
+                                spacing: 8
                                 Item {
                                     Layout.fillWidth: true
                                 }
                                 Repeater {
                                     id: previewColorPallete
                                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                                    model: flick.currentItem.modelData.colors.slice(0, 19)
+                                    model: flick.currentItem.modelData.colors
                                     delegate: Rectangle {
                                         radius: 4
                                         Layout.fillWidth: true
-                                        Layout.preferredHeight: width
-                                        color: modelData && modelData.color ? modelData.color : "transparent"
-                                        visible: modelData && !!modelData.color
+                                        Layout.preferredHeight: width / 2
+                                        color: modelData.color
+                                        border.color: Scripts.setOpacity(Colors.foreground, 0.1)
                                     }
                                 }
                                 Item {
@@ -335,6 +360,14 @@ AnimatedScreenOverlay {
                     }
                 }
             }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 200
+            color: Scripts.setOpacity(Colors.background, 0.8)
+            radius: 10
+            clip: true
         }
     }
 
@@ -358,7 +391,6 @@ AnimatedScreenOverlay {
 
     Connections {
         target: GlobalState
-
         function onShowWallpaperCarouselSignal(value, monitorName) {
             const isMatch = monitorName === screen.name;
             if (isMatch) {

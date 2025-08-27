@@ -20,7 +20,7 @@ imageRouter.post("/", async (c) => {
       await client
     ).predict("/predict", {
       image: exampleImage,
-      score_threshold: 0.2,
+      score_threshold: 0.1,
     });
 
     const data = result.data as [unknown, Record<string, unknown>, string];
