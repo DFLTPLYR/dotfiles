@@ -222,9 +222,12 @@ AnimatedScreenOverlay {
                         if (currentItem && currentItem.modelData) {
                             previewImage.source = Qt.resolvedUrl(currentItem.modelData.path);
                             previewColorPallete.model = currentItem.modelData.colors.slice(0, 19) || [];
+                            // set repeater model to a unique list so no duplicates show
+                            previewTagsRepeater.model = toplevel.uniqueTags(currentItem.modelData.tags || []);
                         } else {
                             previewImage.source = "";
                             previewColorPallete.model = [];
+                            previewTagsRepeater.model = [];
                         }
                     }
                 }
@@ -241,7 +244,7 @@ AnimatedScreenOverlay {
 
                 Item {
                     anchors.fill: parent
-
+                    // image preview
                     Rectangle {
                         id: previewCard
                         anchors.fill: parent
@@ -270,6 +273,7 @@ AnimatedScreenOverlay {
                         }
                     }
 
+                    // preview description
                     Rectangle {
                         anchors.left: parent.left
                         anchors.right: parent.right
@@ -281,9 +285,27 @@ AnimatedScreenOverlay {
                             id: previewWrapper
                             anchors.fill: parent
 
-                            Text {
-                                id: name
-                                text: qsTr("text")
+                            Flow {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 50
+                                spacing: 10
+
+                                Text {
+                                    id: previewTag
+                                    text: qsTr("Tags:")
+                                    color: Colors.color10
+                                    font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
+                                }
+
+                                Repeater {
+                                    id: previewTagsRepeater
+                                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                                    delegate: Text {
+                                        text: qsTr(modelData)
+                                        color: Colors.color10
+                                        font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
+                                    }
+                                }
                             }
 
                             RowLayout {
@@ -315,6 +337,24 @@ AnimatedScreenOverlay {
                 }
             }
         }
+    }
+
+    function uniqueTags(arr) {
+        if (!arr)
+            return [];
+        var seen = {};
+        var out = [];
+        for (var i = 0; i < arr.length; ++i) {
+            var t = arr[i];
+            if (typeof t === "string") {
+                t = t.replace(/^\s*rating:\s*/i, "").trim();
+            }
+            if (!t || seen[t])
+                continue;
+            seen[t] = true;
+            out.push(t);
+        }
+        return out;
     }
 
     Connections {
