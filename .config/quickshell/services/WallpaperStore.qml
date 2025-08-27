@@ -52,6 +52,7 @@ Singleton {
             tx.executeSql("DROP TABLE IF EXISTS wallpapers");
             tx.executeSql("DROP TABLE IF EXISTS wallpaper_colors");
             tx.executeSql("DROP TABLE IF EXISTS tags");
+            tx.executeSql("DROP TABLE IF EXISTS monitor_wallpapers");
             console.log("🧨 Dropped wallpapers table");
         });
     }
@@ -209,17 +210,39 @@ Singleton {
         });
     }
 
+    function asciiProgress(done, total, width) {
+        width = width || 20;
+        var fillChar = "█";
+        var emptyChar = "▓";
+        if (total <= 0) {
+            return "[" + emptyChar.repeat(width) + "] 0% (0/0)";
+        }
+        var pct = Math.round((done / total) * 100);
+        var filled = Math.round((pct / 100) * width);
+        var bar = "[" + fillChar.repeat(Math.max(0, filled)) + emptyChar.repeat(Math.max(0, width - filled)) + "] " + pct + "% (" + done + "/" + total + ")";
+        return bar;
+    }
+
     function processNextColor() {
         if (colorQueue.length === 0) {
-            console.log('Finished');
             processing = false;
             processingDone = processingTotal;
             _updateProcessingProgress();
+            console.log("WallpaperStore: processing finished", asciiProgress(processingDone, processingTotal, 25));
             return;
         }
 
+        if (processingTotal <= 0) {
+            processingTotal = colorQueue.length;
+            processingDone = 0;
+            processing = true;
+            _updateProcessingProgress();
+        }
+
+        // mark active and log ascii progress
         const nextPath = colorQueue.shift();
-        console.log("remaining:", colorQueue.length);
+        console.log("WallpaperStore:", asciiProgress(processingDone, processingTotal, 25));
+
         generateTags(nextPath);
     }
 
@@ -272,12 +295,23 @@ Singleton {
         const db = getDb();
         const result = {};
 
-        db.readTransaction(function (tx) {
-            const rs = tx.executeSql("SELECT monitor, path FROM monitor_wallpapers");
+        // build array of available monitor names from Quickshell.screens
+        var available_monitors = [];
+        try {
+            if (Quickshell && Quickshell.screens) {
+                available_monitors = Quickshell.screens.map(s => (s && s.name) ? s.name : String(s));
+            }
+        } catch (e) {
+            available_monitors = [];
+        }
 
-            for (let i = 0; i < rs.rows.length; i++) {
-                const row = rs.rows.item(i);
-                result[row.monitor] = row.path;
+        db.readTransaction(function (tx) {
+            for (var i = 0; i < available_monitors.length; ++i) {
+                var mon = available_monitors[i];
+                var rs = tx.executeSql("SELECT path FROM monitor_wallpapers WHERE monitor = ?", [mon]);
+                if (rs.rows.length > 0) {
+                    result[mon] = rs.rows.item(0).path;
+                }
             }
 
             callback(result);
@@ -293,11 +327,31 @@ Singleton {
             return;
         }
 
-        const quotedPaths = paths.map(p => `'${p}'`).join(" ");
+        // quote with single-quotes (escape any single-quote inside)
+        const quotedPaths = paths.map(p => "'" + p.replace(/'/g, "'\\''") + "'").join(" ");
+        const quotedOutput = "'" + outputPath.replace(/'/g, "'\\''") + "'";
+        const cols = paths.length;
 
-        const cmd = `/usr/bin/magick montage ${quotedPaths} -tile x1 -geometry +0+0 PNG32:${outputPath}`;
-        combineWallpapersProc.command = ["sh", "-c", cmd];
-        combineWallpapersProc.running = true;
+        // build a robust one-liner that logs, runs montage, checks file, then runs wallust
+        const cmd = [
+            // find the minimum height among all quotedPaths
+            "MINH=$(identify -format '%h\n' " + quotedPaths + " | sort -n | head -1)",
+
+            // echo for debugging
+            "echo \"CMD: /usr/bin/magick montage " + quotedPaths + " -resize x$MINH\\> -tile " + cols + "x1 -geometry +0+0 -background none PNG32:" + quotedOutput + " && wallust run " + quotedOutput + "\"",
+
+            // run montage (shrink only, never upscale)
+            "/usr/bin/magick montage " + quotedPaths + " -resize x$MINH\\> -tile " + cols + "x1 -geometry +0+0 -background none PNG32:" + quotedOutput,
+
+            // check if file was created
+            "[ -f " + quotedOutput + " ] && echo CREATED || echo MISSING",
+
+            // run wallust
+            "wallust run " + quotedOutput].join(" && ");
+
+        Quickshell.execDetached({
+            command: ["sh", "-c", cmd]
+        });
     }
 
     function generateTags(path) {
@@ -375,17 +429,89 @@ Singleton {
         id: getColorPallete
         property string path
         property var onFinished
+        property string _stdoutText: ""
         stdout: StdioCollector {
             onStreamFinished: {
-                jsonFile.reload();
-                generateColorPalette(getColorPallete.path);
+                // stash stdout and start polling the file until it contains valid JSON
+                getColorPallete._stdoutText = text;
+                // try immediate reload then start poll
+                try {
+                    jsonFile.reload();
+                } catch (e) {}
+                jsonFilePoll.attempts = 0;
+                jsonFilePoll.start();
             }
         }
     }
+
+    Timer {
+        id: jsonFilePoll
+        interval: 80
+        repeat: true
+        property int attempts: 0
+        property int maxAttempts: 30 // ~2.4s total
+        onTriggered: {
+            attempts++;
+            // try reload (may be async) then read
+            try {
+                jsonFile.reload();
+            } catch (e) {}
+            Qt.callLater(function () {
+                var fileText = "";
+                try {
+                    fileText = jsonFile.text();
+                } catch (e) {
+                    fileText = "";
+                }
+                // strip ANSI escapes
+                var cleaned = fileText.replace(/\x1b\[[0-9;]*m/g, "").trim();
+                if (cleaned.length > 0) {
+                    // try parse
+                    try {
+                        JSON.parse(cleaned);
+                        // success: stop and call generator with file present
+                        jsonFilePoll.stop();
+                        Qt.callLater(function () {
+                            generateColorPalette(getColorPallete.path);
+                        });
+                        return;
+                    } catch (e)
+                    // not valid yet, fallthrough to attempts check
+                    {}
+                }
+
+                // if exhausted attempts, fall back to parsing stdout (if present), or call generator anyway
+                if (attempts >= jsonFilePoll.maxAttempts) {
+                    jsonFilePoll.stop();
+                    console.log("generateColorPalette: file not ready, falling back to stdout or empty");
+                    // pass stdout into generateColorPalette by making it read jsonFile (no change) -
+                    // we can temporarily write stdout into jsonFile via setText if available
+                    if (getColorPallete._stdoutText && getColorPallete._stdoutText.trim().length > 0) {
+                        try {
+                            // write stdout into jsonFile so existing generateColorPalette reads it
+                            jsonFile.setText(getColorPallete._stdoutText);
+                        } catch (e) {
+                            console.log("generateColorPalette: jsonFile.setText failed", e);
+                        }
+                    }
+                    Qt.callLater(function () {
+                        generateColorPalette(getColorPallete.path);
+                    });
+                }
+            });
+        }
+    }
+
     FileView {
         id: jsonFile
-        preload: false
-        path: Qt.resolvedUrl('/tmp/colors.json')
+        preload: true
+        path: "/tmp/colors.json"
+        onLoadFailed: error => {
+            if (error == FileViewError.FileNotFound) {
+                console.log("[Colors] File not found, creating new file.");
+                jsonFile.setText("");
+            }
+        }
     }
 
     function generateColorPalette(path) {
@@ -396,8 +522,6 @@ Singleton {
         } catch (e) {
             raw = "";
         }
-        console.log(raw);
-
         var cleaned = raw.replace(/\x1b\[[0-9;]*m/g, "").trim();
 
         var file = null;
@@ -518,7 +642,7 @@ Singleton {
 
                     root.colorQueue = allWallpapers.map(item => item.path);
                 }
-                cacheWallpapers(allWallpapers);
+                root.cacheWallpapers(allWallpapers);
             }
         }
     }
@@ -561,7 +685,7 @@ Singleton {
             root.currentWallpapers = e;
         });
 
-        // // Load orientation-specific data
+        // Load orientation-specific data
         getAllUniqueColorsByOrientation("landscape", function (colors) {
             root.landscapeColors = colors;
         });
