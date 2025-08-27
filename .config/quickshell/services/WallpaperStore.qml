@@ -475,9 +475,7 @@ Singleton {
                             generateColorPalette(getColorPallete.path);
                         });
                         return;
-                    } catch (e)
-                    // not valid yet, fallthrough to attempts check
-                    {}
+                    } catch (e) {}
                 }
 
                 // if exhausted attempts, fall back to parsing stdout (if present), or call generator anyway
