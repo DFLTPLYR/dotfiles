@@ -46,7 +46,6 @@ AnimatedScreenOverlay {
                     const screenName = screen.name;
                     const path = currentItem.modelData.path;
                     WallpaperStore.setWallpaper(screenName, path);
-                    console.log(JSON.stringify(currentItem.modelData));
                 }
 
                 event.accepted = true;
