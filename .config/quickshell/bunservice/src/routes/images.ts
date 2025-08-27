@@ -1,7 +1,8 @@
 import { readFileSync } from "fs";
 import { Client } from "@gradio/client";
 import { Hono } from "hono";
-const client = Client.connect("hysts/DeepDanbooru");
+
+const client = Client.connect("http://localhost:7860/");
 
 const imageRouter = new Hono();
 
@@ -19,7 +20,7 @@ imageRouter.post("/", async (c) => {
       await client
     ).predict("/predict", {
       image: exampleImage,
-      score_threshold: 0.8,
+      score_threshold: 0.2,
     });
 
     const data = result.data as [unknown, Record<string, unknown>, string];

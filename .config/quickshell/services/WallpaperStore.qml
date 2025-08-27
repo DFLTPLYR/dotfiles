@@ -28,8 +28,18 @@ Singleton {
 
     property var colorQueue: []
 
+    property bool processing: false
+    property int processingTotal: 0
+    property int processingDone: 0
+    property real processingProgress: 0.0
+
+    function _updateProcessingProgress() {
+        processingProgress = processingTotal > 0 ? processingDone / processingTotal : 0.0;
+    }
+
     function classifyWallpapers() {
         searchFiles.running = true;
+        console.log('Searching');
     }
 
     function getDb() {
@@ -83,7 +93,6 @@ Singleton {
     }
 
     function cacheWallpapers(list) {
-        console.log(list);
         const db = getDb();
         db.transaction(function (tx) {
             for (const item of list) {
@@ -94,6 +103,7 @@ Singleton {
                 `, [item.path, item.width, item.height, orientation]);
             }
         });
+        processNextColor();
     }
 
     function loadWallpapers() {
@@ -135,11 +145,18 @@ Singleton {
                     root.portraitWallpapers.push(row);
             }
 
+            // initialize progress tracker
+            processingTotal = colorQueue.length;
+            processingDone = 0;
+            processing = processingTotal > 0;
+            _updateProcessingProgress();
+
             // Start processing if there are wallpapers to process
             if (colorQueue.length > 0) {
                 processNextColor();
             }
         });
+        console.log('loaded wallpapers now');
     }
 
     function getAllUniqueTagsByOrientation(orientation, callback) {
@@ -195,9 +212,14 @@ Singleton {
     function processNextColor() {
         if (colorQueue.length === 0) {
             console.log('Finished');
+            processing = false;
+            processingDone = processingTotal;
+            _updateProcessingProgress();
             return;
         }
+
         const nextPath = colorQueue.shift();
+        console.log("remaining:", colorQueue.length);
         generateTags(nextPath);
     }
 
@@ -286,7 +308,8 @@ Singleton {
 
         function checkDone() {
             if (completed.tags && completed.colors) {
-                console.log(`Tags: ${completed.tags}, Colors ${completed.colors}`);
+                processingDone = Math.min(processingTotal, processingDone + 1);
+                _updateProcessingProgress();
                 processNextColor();
             }
         }
@@ -313,14 +336,13 @@ Singleton {
         }));
 
         // Insert colors (palette)
-        getColorPallete.command = ["wallust", "--config-dir", Qt.resolvedUrl('./templates/').toString().replace("file://", ""), "run", path];
+        getColorPallete.command = ["wallust", "--config-dir", Qt.resolvedUrl('./').toString().replace("file://", ""), "run", path];
         getColorPallete.path = path;
         getColorPallete.running = true;
 
         getColorPallete.onFinished = function () {
             completed.colors = true;
             checkDone();
-            console.log(path);
         };
     }
 
@@ -349,33 +371,6 @@ Singleton {
         });
     }
 
-    function generateColorPalette(path) {
-        var file = JSON.parse(jsonFile.text());
-        const db = getDb();
-        db.readTransaction(function (tx) {
-            const rs = tx.executeSql("SELECT id FROM wallpapers WHERE path = ?", [path]);
-            if (rs.rows.length > 0) {
-                const wallpaperId = rs.rows.item(0).id;
-                db.transaction(function (tx2) {
-                    for (var key in file) {
-                        if (file.hasOwnProperty(key) && file[key]) {
-                            const n_match = Scripts.getHexColorName(file[key]);
-                            const n_rgb = n_match[0]; // RGB value of closest match
-                            const n_name = n_match[1]; // Text string: Color name
-
-                            tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag, colorGroup, colorNameGroup) VALUES (?, ?, ?, ?, ?)", [wallpaperId, file[key], key, n_rgb, n_name]);
-                        }
-                    }
-                    if (getColorPallete.onFinished)
-                        getColorPallete.onFinished();
-                });
-            } else {
-                if (getColorPallete.onFinished)
-                    getColorPallete.onFinished();
-            }
-        });
-    }
-
     Process {
         id: getColorPallete
         property string path
@@ -387,21 +382,89 @@ Singleton {
             }
         }
     }
-
     FileView {
         id: jsonFile
         preload: false
-        path: Qt.resolvedUrl('/tmp/colors.json').toString().replace("file://", "")
+        path: Qt.resolvedUrl('/tmp/colors.json')
     }
 
-    Process {
-        id: combineWallpapersProc
-        command: []
-        onRunningChanged: {
-            if (!running) {
-                generateTheme.running = true;
+    function generateColorPalette(path) {
+        // read raw file content
+        var raw = "";
+        try {
+            raw = jsonFile.text();
+        } catch (e) {
+            raw = "";
+        }
+        console.log(raw);
+
+        var cleaned = raw.replace(/\x1b\[[0-9;]*m/g, "").trim();
+
+        var file = null;
+        try {
+            file = JSON.parse(cleaned);
+        } catch (e) {
+            // try to find a JSON object or array inside the text
+            var objMatch = cleaned.match(/(\{[\s\S]*\})/);
+            var arrMatch = cleaned.match(/(\[[\s\S]*\])/);
+            var found = objMatch ? objMatch[1] : (arrMatch ? arrMatch[1] : null);
+            if (found) {
+                try {
+                    file = JSON.parse(found);
+                } catch (e2) {
+                    file = {};
+                }
+            } else {
+                file = {};
             }
         }
+
+        const db = getDb();
+        db.readTransaction(function (tx) {
+            // normalize path variants to improve match chances
+            var rawPath = path ? path.toString() : "";
+            var norm = rawPath.replace(/^file:\/\//, "").trim();
+            try {
+                norm = decodeURI(norm);
+            } catch (e) {}
+
+            // try exact match against raw and normalized forms
+            var rs = tx.executeSql("SELECT id, path FROM wallpapers WHERE path = ? OR path = ?", [rawPath, norm]);
+            var wallpaperId = null;
+
+            if (rs.rows.length > 0) {
+                wallpaperId = rs.rows.item(0).id;
+            } else {
+                // fallback: try matching by basename
+                var base = norm.replace(/^.*\//, "");
+                var rs2 = tx.executeSql("SELECT id, path FROM wallpapers WHERE path LIKE ?", ["%" + base + "%"]);
+                if (rs2.rows.length > 0) {
+                    wallpaperId = rs2.rows.item(0).id;
+                    console.log("generateColorPalette: fallback matched", rs2.rows.item(0).path);
+                }
+            }
+
+            if (!wallpaperId) {
+                console.log("generateColorPalette: no wallpaper found for", path);
+                if (getColorPallete.onFinished)
+                    getColorPallete.onFinished();
+                return;
+            }
+
+            db.transaction(function (tx2) {
+                for (var key in file) {
+                    if (file.hasOwnProperty(key) && file[key]) {
+                        var n_match = Scripts.getHexColorName(file[key]);
+                        var n_rgb = n_match[0];
+                        var n_name = n_match[1];
+
+                        tx2.executeSql("INSERT INTO wallpaper_colors (wallpaper_id, color, tag, colorGroup, colorNameGroup) VALUES (?, ?, ?, ?, ?)", [wallpaperId, file[key], key, n_rgb, n_name]);
+                    }
+                }
+                if (getColorPallete.onFinished)
+                    getColorPallete.onFinished();
+            });
+        });
     }
 
     Process {
@@ -453,10 +516,8 @@ Singleton {
                         VALUES (?, ?, ?, ?)`, [path, w, h, orientation]);
                     });
 
-                    colorQueue = allWallpapers.map(item => item.path);
-                    processNextColor();
+                    root.colorQueue = allWallpapers.map(item => item.path);
                 }
-
                 cacheWallpapers(allWallpapers);
             }
         }
@@ -466,7 +527,6 @@ Singleton {
         const db = getDb();
 
         db.transaction(function (tx) {
-            // Select rows where colorGroup is unique
             const rs = tx.executeSql(`
                                     SELECT wc.color, wc.tag, wc.colorGroup, wc.colorNameGroup
                                     FROM wallpaper_colors wc
@@ -484,7 +544,6 @@ Singleton {
                 });
             }
 
-            console.log(`✅ Retrieved ${uniqueColors.length} unique color groups.`);
             callback(uniqueColors);
         });
     }
@@ -502,7 +561,7 @@ Singleton {
             root.currentWallpapers = e;
         });
 
-        // Load orientation-specific data
+        // // Load orientation-specific data
         getAllUniqueColorsByOrientation("landscape", function (colors) {
             root.landscapeColors = colors;
         });
