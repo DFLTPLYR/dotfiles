@@ -274,7 +274,7 @@ AnimatedScreenOverlay {
                     highlight: Rectangle {
                         width: 180
                         height: 40
-                        color: Colors.color10
+                        color: Scripts.setOpacity(Colors.foreground, 0.1)
                         radius: 10
                     }
                 }
@@ -286,7 +286,7 @@ AnimatedScreenOverlay {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 color: Scripts.setOpacity(Colors.background, 0.8)
-                border.color: Scripts.setOpacity(Colors.colors10, 0.2)
+                border.color: Scripts.setOpacity(Colors.foreground, 0.2)
                 radius: 10
 
                 Item {
@@ -323,23 +323,38 @@ AnimatedScreenOverlay {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
-                        height: 40
-                        color: Scripts.setOpacity(Colors.background, 0.2)
+                        implicitHeight: 100
+                        color: Scripts.setOpacity(Colors.background, 0.6)
                         radius: 8
                         anchors.margins: 10
                         border.color: Scripts.setOpacity(Colors.foreground, 0.2)
+
                         ColumnLayout {
                             id: previewWrapper
                             anchors.fill: parent
                             visible: flick.currentItem.modelData.colors
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 50
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: qsTr("\uf1fc Color Pallete \uf1fc ")
+                                    color: Colors.color10
+                                }
+                            }
+
                             RowLayout {
                                 id: previewColorPalleteRow
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 50
                                 spacing: 8
+
                                 Item {
                                     Layout.fillWidth: true
                                 }
+
                                 Repeater {
                                     id: previewColorPallete
                                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -352,6 +367,7 @@ AnimatedScreenOverlay {
                                         border.color: Scripts.setOpacity(Colors.foreground, 0.1)
                                     }
                                 }
+
                                 Item {
                                     Layout.fillWidth: true
                                 }
@@ -362,13 +378,13 @@ AnimatedScreenOverlay {
             }
         }
 
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 200
-            color: Scripts.setOpacity(Colors.background, 0.8)
-            radius: 10
-            clip: true
-        }
+        // Rectangle {
+        //     Layout.fillWidth: true
+        //     Layout.preferredHeight: 200
+        //     color: Scripts.setOpacity(Colors.background, 0.8)
+        //     radius: 10
+        //     clip: true
+        // }
     }
 
     function uniqueTags(arr) {
