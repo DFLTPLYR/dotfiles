@@ -16,7 +16,7 @@ ListView {
     property var tagsFilter
 
     clip: true
-    orientation: ListView.Horizontal
+    orientation: ListView.Vertical
     spacing: 20
 
     snapMode: ListView.SnapToItem
