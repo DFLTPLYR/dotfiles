@@ -2,130 +2,102 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Layouts
 
+import Qt5Compat.GraphicalEffects
+import qs.components
 import qs.services
+import qs.assets
 import qs.utils
 
-Item {
-    width: flick.delegateWidth
-    height: flick.delegateHeight
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-
-    property bool isFocused: ListView.isCurrentItem
+Rectangle {
+    id: wrapper
     required property var modelData
+    implicitWidth: flick.width
+    height: 250
+    radius: 10
+    clip: true
+    color: Scripts.setOpacity(Colors.foreground, 0.2)
+    border.color: Scripts.setOpacity(Colors.colors10, 0.2)
 
-    Rectangle {
-        id: container
+    ColumnLayout {
         anchors.fill: parent
         anchors.margins: 8
-        radius: 12
-        clip: false
 
-        property real targetScale: isFocused || itemMouse.hovered ? 1.05 : 1.0
-        property color targetColor: isFocused || itemMouse.hovered ? Scripts.hexToRgba(Colors.color14, 0.5) : Scripts.hexToRgba(Colors.color12, 0.2)
+        Rectangle {
+            Layout.preferredHeight: parent.height * 0.8
+            Layout.fillWidth: true
+            color: 'transparent'
 
-        scale: targetScale
-        color: targetColor
-
-        Behavior on scale {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-                easing.type: Easing.InOutQuad
+            MaskWrapper {
+                radius: 8
+                anchors.fill: parent
+                sourceItem: Image {
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectCrop
+                    source: Qt.resolvedUrl(modelData.path)
+                    cache: true
+                    asynchronous: true
+                    smooth: true
+                    visible: false
+                }
             }
         }
 
         ColumnLayout {
-            anchors.fill: parent
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            ListView {
-                id: upperListView
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.10
-
-                orientation: ListView.Horizontal
-                clip: true
-
-                property var count: modelData.colors.slice(0, 9).length
-                model: modelData.colors.slice(0, 9)
-
-                delegate: Item {
-                    width: upperListView.width / upperListView.count
-                    height: upperListView.height
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width / 3
-                        height: width
-                        rotation: 45
-                        radius: 4
-                        color: Scripts.hexToRgba(modelData.color, 0.8)
-                        layer.enabled: true
-                        layer.smooth: true
-                    }
-                }
+            Text {
+                text: qsTr("Tags:")
+                color: Colors.color15
             }
 
-            Image {
+            RowLayout {
+                id: previewTagsFlow
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                anchors.margins: 8
-                fillMode: Image.PreserveAspectCrop
-                source: Qt.resolvedUrl(modelData.path)
-                cache: true
-                asynchronous: true
-                smooth: true
-                mipmap: true
-            }
+                spacing: 8
 
-            ListView {
-                id: bottomListView
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.10
-
-                clip: true
-                orientation: ListView.Horizontal
-
-                property var count: modelData.colors.slice(9, 19).length
-                model: modelData.colors.slice(9, 19)
-
-                delegate: Item {
-                    width: upperListView.width / bottomListView.count
-                    height: upperListView.height
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width / 3
-                        height: width
-                        rotation: 45
-                        radius: 4
-                        color: Scripts.hexToRgba(modelData.color, 0.8)
-                        layer.enabled: true
-                        layer.smooth: true
+                Repeater {
+                    id: previewTagsRepeater
+                    model: modelData.tags.slice(0, 5)
+                    delegate: Text {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        text: qsTr(modelData)
+                        color: Colors.color10
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                        font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
                     }
                 }
             }
         }
+    }
 
-        MouseArea {
-            id: itemMouse
-            anchors.fill: parent
-            hoverEnabled: true
-            property bool hovered: containsMouse
-
-            onClicked: {
-                const screenName = toplevel.screen.name;
-                WallpaperStore.setWallpaper(screenName, modelData.path);
+    MouseArea {
+        z: 10
+        anchors.fill: parent
+        hoverEnabled: true
+        onClicked: {
+            var resolvedIndex = -1;
+            if (typeof index !== "undefined") {
+                resolvedIndex = index;
+            } else if (flick && flick.model && flick.model.values) {
+                var arr = flick.model.values;
+                for (var i = 0; i < arr.length; ++i) {
+                    if (arr[i] === modelData || (arr[i].path && modelData.path && arr[i].path === modelData.path)) {
+                        resolvedIndex = i;
+                        break;
+                    }
+                }
             }
-
-            onEntered: hovered = true
-            onExited: hovered = false
+            if (resolvedIndex >= 0) {
+                flick.currentIndex = resolvedIndex;
+            } else {
+                if (flick.currentItem && flick.currentItem.modelData === modelData)
+                    flick.currentIndex = flick.currentIndex;
+            }
         }
     }
 }
