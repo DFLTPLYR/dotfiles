@@ -59,9 +59,9 @@ GridLayout {
                     Text {
                         Layout.fillWidth: true
                         color: Colors.color10
-                        text: "\uf0c2"
+                        text: WeatherFetcher.weatherIcon
                         font.pixelSize: 50
-                        font.family: FontAssets.fontAwesomeRegular
+                        font.family: FontAssets.fontMaterialOutlined
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
