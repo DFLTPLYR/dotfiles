@@ -27,7 +27,6 @@ AnimatedScreenOverlay {
     }
 
     KeyboardEventHandler {
-        id: keyCatcher
         anchors.fill: parent
         focus: true
 
