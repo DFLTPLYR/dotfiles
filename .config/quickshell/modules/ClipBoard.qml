@@ -301,22 +301,25 @@ AnimatedScreenOverlay {
                     id: textScroller
                     anchors.fill: parent
                     anchors.margins: 16
-                    contentWidth: highlightedText.width
-                    contentHeight: highlightedText.height
+                    contentWidth: highlightedText.contentWidth
+                    contentHeight: highlightedText.contentHeight
                     clip: true
 
                     Item {
                         width: textScroller.width - 32
-                        height: highlightedText.height
+                        height: highlightedText.contentHeight
 
-                        Text {
+                        TextEdit {
                             id: highlightedText
+                            readOnly: false
+                            textFormat: TextEdit.PlainText
+                            wrapMode: TextEdit.Wrap
                             text: clipboardList.currentItem && !clipboardList.currentItem.isImage ? clipboardList.currentItem.modelData.text : ""
                             color: Colors.color15
                             font.pixelSize: 18
-                            wrapMode: Text.WordWrap
-                            elide: Text.ElideNone
                             width: parent.width
+                            cursorVisible: false
+                            selectByMouse: true
                         }
                     }
                 }
@@ -375,22 +378,33 @@ AnimatedScreenOverlay {
             })
         stdout: StdioCollector {
             onStreamFinished: {
-                const lines = this.text.trim().split('\n');
+                const out = this.text.trim();
+                if (!out) {
+                    clipboardHistory = [];
+                    return;
+                }
+
+                const lines = out.split('\n');
                 const clipboardArray = [];
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
                     const [id, ...textParts] = line.split('\t');
-                    const text = textParts.join('\t');
+                    let raw = textParts.join('\t');
 
-                    // Check if the entry is an image
-                    const isImage = text.startsWith("[[ binary data") && text.includes("KiB") && (text.includes("png") || text.includes("jpeg") || text.includes("jpg"));
+                    // unescape common escaped sequences so "\n" becomes a real newline
+                    raw = raw.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\\r/g, "\n").replace(/\\t/g, "\t").replace(/\\\\/g, "\\");
+
+                    // trim trailing comma artifacts (cliphist sometimes includes CSV-like separators)
+                    if (raw.endsWith(','))
+                        raw = raw.slice(0, -1);
+
+                    // preserve as-is for images (keep marker)
+                    const isImage = raw.startsWith("[[ binary data") && raw.includes("KiB") && (raw.includes("png") || raw.includes("jpeg") || raw.includes("jpg"));
 
                     if (isImage) {
                         const imagePath = `${Quickshell.env("HOME")}/.cache/clipboard/image_${id}.png`;
                         const iconExists = Quickshell.iconPath(imagePath, true);
-
                         if (!iconExists) {
-                            // If the image doesn't exist, decode and save it
                             Quickshell.execDetached({
                                 command: ["sh", "-c", `mkdir -p ${Quickshell.env("HOME")}/.cache/clipboard && cliphist decode ${id} > ${imagePath}`]
                             });
@@ -399,7 +413,7 @@ AnimatedScreenOverlay {
 
                     clipboardArray.push({
                         id: id,
-                        text: text
+                        text: raw
                     });
                 }
                 clipboardHistory = clipboardArray;

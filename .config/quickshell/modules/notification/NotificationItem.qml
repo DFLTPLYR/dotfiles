@@ -7,6 +7,7 @@ import Quickshell
 
 import qs.utils
 import qs.services
+import qs.assets
 
 Rectangle {
     required property var modelData
@@ -69,6 +70,7 @@ Rectangle {
                 spacing: 10
 
                 Text {
+                    font.family: FontAssets.fontSometypeItalic
                     text: modelData.appName
                     font.bold: true
                     Layout.fillWidth: true

@@ -145,16 +145,4 @@ Singleton {
             root.next();
         }
     }
-    Component.onCompleted: {
-        Quickshell.exec({
-            command: "pgrep -x mpdris2-rs",
-            onFinished: function (result) {
-                if (result.exitCode !== 0) {
-                    Quickshell.execDetached({
-                        command: "mpdris2-rs"
-                    });
-                }
-            }
-        });
-    }
 }

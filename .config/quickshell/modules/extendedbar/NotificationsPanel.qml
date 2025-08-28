@@ -7,6 +7,7 @@ import Quickshell
 
 import qs.utils
 import qs.services
+import qs.assets
 import qs.components
 import qs.animations
 import qs.modules.notification
@@ -56,10 +57,9 @@ Rectangle {
 
                 property real dragStartX: 0
                 property bool expand: false
-                property int collapsedHeight: 40
                 property int expandedHeight: notificationItem.height
                 x: 0
-                height: expand ? expandedHeight + 10 : collapsedHeight
+                height: expand ? expandedHeight + 10 : expandedHeight
                 implicitWidth: container.width
 
                 color: Scripts.setOpacity(Colors.background, 0.7)
@@ -74,56 +74,36 @@ Rectangle {
 
                 ColumnLayout {
                     id: notificationItem
+                    anchors.centerIn: parent
                     width: Math.round(parent.width * 0.95)
-
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
 
                     spacing: 8
 
+
                     RowLayout {
                         visible: !delegateRect.expand
-                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Text {
+                            Layout.fillWidth: true
+                            text: appName
+                            font.bold: true
+                            color: Colors.color12
+                            elide: Text.ElideRight
 
-                        Rectangle {
-                            visible: appIcon
-                            Layout.preferredWidth: 24
-                            Layout.preferredHeight: 24
-
-                            color: "transparent"
-                            clip: true
-
-                            Image {
-                                id: image
-                                anchors.fill: parent
-                                source: Quickshell.iconPath(appIcon, "image-missing")
-                                fillMode: Image.PreserveAspectFit
-                            }
+                            Layout.alignment: Qt.AlignHCenter
+                            font.family: FontAssets.fontSometypeItalic
                         }
 
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            spacing: 5
+                        Text {
+                            id: timeText
+                            text: Qt.formatDateTime(new Date(time), "hh:mm AP")
+                            color: Colors.color11
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            Layout.alignment: Qt.AlignHCenter
 
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: 10
-
-                                Text {
-                                    text: appName
-                                    font.bold: true
-                                    Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                    color: Colors.color12
-                                }
-
-                                Text {
-                                    id: timeText
-                                    text: Qt.formatDateTime(new Date(time), "hh:mm AP")
-                                    color: Colors.color11
-                                }
-                            }
+                            font.family: FontAssets.fontSometypeItalic
                         }
                     }
 
