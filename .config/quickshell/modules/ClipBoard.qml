@@ -11,6 +11,7 @@ import Quickshell.Widgets
 
 import qs
 import qs.utils
+import qs.assets
 import qs.services
 import qs.components
 
@@ -134,7 +135,7 @@ AnimatedScreenOverlay {
 
                     color: Colors.color15
                     opacity: showSearchInput ? 1.0 : 0.0
-
+                    font.family: FontAssets.fontSometypeMono
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 300
@@ -320,6 +321,7 @@ AnimatedScreenOverlay {
                             width: parent.width
                             cursorVisible: false
                             selectByMouse: true
+                            font.family: FontAssets.fontSometypeMono
                         }
                     }
                 }
