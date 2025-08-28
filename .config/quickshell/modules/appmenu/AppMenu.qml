@@ -83,11 +83,10 @@ AnimatedScreenOverlay {
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
 
-        color: Scripts.hexToRgba(Colors.background, 0.6)
+        color: Scripts.setOpacity(Colors.background, 0.6)
         opacity: animProgress
 
-        radius: 20
-
+        radius: 16
         scale: animProgress
         transformOrigin: Item.Center
 
@@ -101,7 +100,7 @@ AnimatedScreenOverlay {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Scripts.hexToRgba(Colors.foreground, 0.4)
+                    color: Scripts.setOpacity(Colors.color10, 0.2)
                 }
 
                 RowLayout {
