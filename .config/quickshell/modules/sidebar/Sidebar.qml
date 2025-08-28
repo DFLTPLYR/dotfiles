@@ -107,7 +107,7 @@ Scope {
                             id: bar
                             contentHeight: 32
                             Layout.fillWidth: true
-
+                            currentIndex: 1
                             spacing: 4
 
                             background: Rectangle {
