@@ -144,121 +144,15 @@ AnimatedScreenOverlay {
                         }
                     }
 
-                    delegate: Rectangle {
-                        id: wrapper
-                        required property var modelData
-                        implicitWidth: flick.width
-                        height: 250
-                        radius: 10
-                        clip: true
-                        color: Scripts.setOpacity(Colors.foreground, 0.2)
-                        border.color: Scripts.setOpacity(Colors.colors10, 0.2)
-
-                        ColumnLayout {
-                            anchors.fill: parent
-                            anchors.margins: 10
-
-                            Rectangle {
-                                Layout.preferredHeight: parent.height * 0.8
-                                Layout.fillWidth: true
-                                color: 'transparent'
-
-                                Image {
-                                    id: maskee
-                                    anchors.fill: parent
-                                    fillMode: Image.PreserveAspectCrop
-                                    source: Qt.resolvedUrl(modelData.path)
-                                    cache: true
-                                    asynchronous: true
-                                    smooth: true
-                                    visible: false
-                                }
-
-                                Rectangle {
-                                    id: masking
-                                    anchors.fill: parent
-                                    radius: 16
-                                    clip: true
-                                    visible: false
-                                }
-
-                                OpacityMask {
-                                    anchors.fill: parent
-                                    source: maskee
-                                    maskSource: masking
-                                }
-                            }
-
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-
-                                Text {
-                                    text: qsTr("Tags:")
-                                    color: Colors.color15
-                                }
-
-                                RowLayout {
-                                    id: previewTagsFlow
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    spacing: 8
-
-                                    Repeater {
-                                        id: previewTagsRepeater
-                                        model: modelData.tags.slice(0, 5)
-                                        delegate: Text {
-                                            Layout.fillWidth: true
-                                            Layout.fillHeight: true
-                                            text: qsTr(modelData)
-                                            color: Colors.color10
-                                            horizontalAlignment: Text.AlignHCenter
-                                            verticalAlignment: Text.AlignVCenter
-                                            elide: Text.ElideRight
-                                            font.pixelSize: Math.max(10, Math.floor(parent.height * 0.45))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        MouseArea {
-                            z: 10
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: {
-                                var resolvedIndex = -1;
-                                if (typeof index !== "undefined") {
-                                    resolvedIndex = index;
-                                } else if (flick && flick.model && flick.model.values) {
-                                    var arr = flick.model.values;
-                                    for (var i = 0; i < arr.length; ++i) {
-                                        if (arr[i] === modelData || (arr[i].path && modelData.path && arr[i].path === modelData.path)) {
-                                            resolvedIndex = i;
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (resolvedIndex >= 0) {
-                                    flick.currentIndex = resolvedIndex;
-                                } else {
-                                    if (flick.currentItem && flick.currentItem.modelData === modelData)
-                                        flick.currentIndex = flick.currentIndex;
-                                }
-                            }
-                        }
-                    }
+                    delegate: WallpaperItem {}
 
                     onCurrentItemChanged: {
                         if (currentItem && currentItem.modelData) {
                             previewImage.source = Qt.resolvedUrl(currentItem.modelData.path);
                             previewColorPallete.model = currentItem.modelData.colors.slice(0, 19) || [];
-                            // set repeater model to a unique list so no duplicates show
-                            // previewTagsRepeater.model = toplevel.uniqueTags(currentItem.modelData.tags || []);
                         } else {
                             previewImage.source = "";
                             previewColorPallete.model = [];
-                            // previewTagsRepeater.model = [];
                         }
                     }
 
@@ -274,7 +168,7 @@ AnimatedScreenOverlay {
                     highlight: Rectangle {
                         width: 180
                         height: 40
-                        color: Scripts.setOpacity(Colors.foreground, 0.1)
+                        color: Scripts.setOpacity(Colors.color1, 0.4)
                         radius: 10
                     }
                 }
@@ -380,29 +274,11 @@ AnimatedScreenOverlay {
 
         // Rectangle {
         //     Layout.fillWidth: true
-        //     Layout.preferredHeight: 200
+        //     Layout.preferredHeight: screen.height / 10
         //     color: Scripts.setOpacity(Colors.background, 0.8)
         //     radius: 10
         //     clip: true
         // }
-    }
-
-    function uniqueTags(arr) {
-        if (!arr)
-            return [];
-        var seen = {};
-        var out = [];
-        for (var i = 0; i < arr.length; ++i) {
-            var t = arr[i];
-            if (typeof t === "string") {
-                t = t.replace(/^\s*rating:\s*/i, "").trim();
-            }
-            if (!t || seen[t])
-                continue;
-            seen[t] = true;
-            out.push(t);
-        }
-        return out;
     }
 
     Connections {

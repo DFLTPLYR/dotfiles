@@ -5,13 +5,14 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Window
+import qs.assets
 
 Item {
     id: display
     property int fontSize: 72
     readonly property int maxDigits: Math.min((width / fontSize) + 1, 10000)
     property color backgroundColor: "#262626"
-    readonly property color qtGreenColor: "#2CDE85"
+    property color qtGreenColor: "#2CDE85"
     property string displayedOperand: ""
     readonly property string errorString: qsTr("ERROR")
     readonly property bool isError: displayedOperand === errorString
@@ -159,12 +160,14 @@ Item {
                         font.pixelSize: display.fontSize
                         color: display.qtGreenColor
                         text: parent.operator
+                        font.family: FontAssets.fontSometypeMono
                     }
                     Text {
                         font.pixelSize: display.fontSize
                         anchors.right: parent.right
                         anchors.rightMargin: 16
                         text: parent.operand
+                        font.family: FontAssets.fontSometypeMono
                         color: "white"
                     }
                 }

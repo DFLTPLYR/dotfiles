@@ -16,7 +16,7 @@ StackLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        // Calculator {}
+        Calculator {}
     }
     ContentWrapper {
         index: 1
