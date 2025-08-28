@@ -23,11 +23,23 @@ Item {
         xhr.send();
     }
 
+    function loadAdditional() {
+        MprisManager;
+        NotificationService;
+        SystemResource;
+        WallpaperStore;
+        WeatherFetcher;
+        FontAssets;
+
+        Quickshell.execDetached({
+            command: ["sh", "-c", "pgrep -x mpdris2-rs > /dev/null || nohup mpdris2-rs > /dev/null 2>&1 &"]
+        });
+    }
+
     Component.onCompleted: {
         tryHttpRequest(function (status) {
             if (status === 200) {
                 console.log('Already Cooked Buns 😀');
-                return;
             } else {
                 var wd = Qt.resolvedUrl('./').toString().replace("file://", "");
                 Quickshell.execDetached({
@@ -36,14 +48,7 @@ Item {
                 });
                 console.log('Cooked Buns 😃');
             }
-
-            MprisManager;
-            NotificationService;
-            SystemResource;
-            WallpaperStore;
-            WeatherFetcher;
-            FontAssets;
-            console.log('*Robot Noises*, START DIGGING IN YO BUTT TWIN');
+            loadAdditional();
         });
     }
 }

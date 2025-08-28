@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.services
+import qs.assets
 import qs.utils
 import qs
 
@@ -112,7 +113,7 @@ Rectangle {
                 color: Colors.color15
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-
+                font.family: FontAssets.fontSometypeMono
                 MouseArea {
                     anchors.fill: parent
                     onClicked: calendarWrapper.goToToday()
@@ -170,6 +171,7 @@ Rectangle {
                     text: calendarGrid.dayNames[index]
                     font.bold: true
                     color: Colors.color11
+                    font.family: FontAssets.fontSometypeItalic
                 }
             }
         }
@@ -208,8 +210,9 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: modelData ? modelData : '\uf111'
-                    font.pixelSize: modelData ? 12 : 6
+                    font.pixelSize: modelData ? 12 : 8
                     color: modelData ? (selected ? Colors.color10 : Colors.color15) : Colors.color0
+                    font.family: FontAssets.fontSometypeItalic
                 }
             }
         }
