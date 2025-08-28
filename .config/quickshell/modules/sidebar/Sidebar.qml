@@ -33,8 +33,9 @@ Scope {
     LazyLoader {
         active: isVisible
         component: PanelWindow {
+            id: sidebarRoot
             screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
-            implicitWidth: Math.min(500, screen.width)
+
             color: 'transparent'
 
             anchors {
@@ -43,11 +44,7 @@ Scope {
                 bottom: true
             }
 
-            margins {
-                top: Math.round(height / 2)
-                right: 10
-                bottom: Math.round(height / 10)
-            }
+            readonly property bool isPortrait: screen.height > screen.width
 
             // Internal properties
             property bool shouldBeVisible: false
@@ -68,6 +65,110 @@ Scope {
                 easing.type: Easing.InOutQuad
             }
 
+            PopupWindow {
+                id: sidebarPopup
+                anchor.window: sidebarRoot
+                anchor.rect.x: parentWindow.width
+                anchor.rect.y: parentWindow.height / 2 - height / 2
+                implicitWidth: popupWrapper.width
+                implicitHeight: popupWrapper.height
+                visible: true
+                color: 'transparent'
+
+                Item {
+                    id: popupWrapper
+                    width: Math.max(300, sidebarRoot.isPortrait ? screen.width / 2 : screen.width / 4)
+                    height: Math.max(800, sidebarRoot.isPortrait ? screen.height / 2 : screen.height / 2)
+                    x: 500 + animProgress * -500
+
+                    Rectangle {
+                        anchors.fill: parent
+                    }
+                }
+            }
+
+            // Rectangle {
+            //     id: sidebarBackground
+            //     anchors.fill: parent
+
+            //     color: Scripts.setOpacity(Colors.background, 0.5)
+            //     radius: 8
+            //     border.color: Colors.color12
+            //     clip: true
+
+            //     Item {
+            //         anchors.fill: parent
+            //         anchors.margins: 8
+
+            //         ColumnLayout {
+            //             id: sidebarClip
+            //             anchors.fill: parent
+            //             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+            //             TabBar {
+            //                 id: bar
+            //                 contentHeight: 32
+            //                 Layout.fillWidth: true
+            //                 currentIndex: 1
+            //                 spacing: 4
+
+            //                 background: Rectangle {
+            //                     anchors.fill: parent
+            //                     color: 'transparent'
+            //                     radius: 24
+            //                 }
+
+            //                 Repeater {
+            //                     model: [
+            //                         {
+            //                             name: "Calculator",
+            //                             icon: "\uf1ec"
+            //                         },
+            //                         {
+            //                             name: "Todo",
+            //                             icon: "\uf02e"
+            //                         },
+            //                         {
+            //                             name: "System",
+            //                             icon: "\uf2db"
+            //                         }
+            //                     ]
+
+            //                     TabButton {
+            //                         contentItem: Text {
+            //                             anchors.fill: parent
+            //                             horizontalAlignment: Text.AlignHCenter
+            //                             verticalAlignment: Text.AlignVCenter
+            //                             text: `${qsTr(modelData.icon)} ${qsTr(modelData.name)}`
+            //                             color: bar.currentIndex === index ? Colors.color11 : Colors.color10
+            //                             font.pixelSize: bar.contentHeight * 0.5
+            //                         }
+            //                         background: Rectangle {
+            //                             anchors.fill: parent
+            //                             color: bar.currentIndex === index ? Colors.color1 : Colors.color0
+            //                             radius: 4
+            //                             Behavior on color {
+            //                                 ColorAnimation {
+            //                                     duration: 250
+            //                                     easing.type: Easing.InOutQuad
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+
+            //             TabContent {
+            //                 currentIndex: bar.currentIndex
+            //             }
+            //         }
+            //     }
+
+            //     transform: Translate {
+            //         x: (1.0 - animProgress) * width
+            //     }
+            // }
+
             onShouldBeVisibleChanged: {
                 const target = shouldBeVisible ? 1.0 : 0.0;
                 if (anim.to !== target || !anim.running) {
@@ -76,94 +177,16 @@ Scope {
                 }
             }
 
+            // onScreenChanged: {
+            //     popupWrapper.x = 500 + animProgress * -500;
+            // }
+
             onAnimProgressChanged: {
                 if (animProgress > 0 && !internalVisible) {
                     internalVisible = true;
                 } else if (!shouldBeVisible && animProgress === 0.00) {
                     internalVisible = false;
                     root.isVisible = false;
-                }
-            }
-
-            Rectangle {
-                id: sidebarBackground
-                anchors.fill: parent
-
-                color: Scripts.setOpacity(Colors.background, 0.5)
-                radius: 8
-                border.color: Colors.color12
-                clip: true
-
-                Item {
-                    anchors.fill: parent
-                    anchors.margins: 8
-
-                    ColumnLayout {
-                        id: sidebarClip
-                        anchors.fill: parent
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-                        TabBar {
-                            id: bar
-                            contentHeight: 32
-                            Layout.fillWidth: true
-                            currentIndex: 1
-                            spacing: 4
-
-                            background: Rectangle {
-                                anchors.fill: parent
-                                color: 'transparent'
-                                radius: 24
-                            }
-
-                            Repeater {
-                                model: [
-                                    {
-                                        name: "Calculator",
-                                        icon: "\uf1ec"
-                                    },
-                                    {
-                                        name: "Todo",
-                                        icon: "\uf02e"
-                                    },
-                                    {
-                                        name: "System",
-                                        icon: "\uf2db"
-                                    }
-                                ]
-
-                                TabButton {
-                                    contentItem: Text {
-                                        anchors.fill: parent
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        text: `${qsTr(modelData.icon)} ${qsTr(modelData.name)}`
-                                        color: bar.currentIndex === index ? Colors.color11 : Colors.color10
-                                        font.pixelSize: bar.contentHeight * 0.5
-                                    }
-                                    background: Rectangle {
-                                        anchors.fill: parent
-                                        color: bar.currentIndex === index ? Colors.color1 : Colors.color0
-                                        radius: 4
-                                        Behavior on color {
-                                            ColorAnimation {
-                                                duration: 250
-                                                easing.type: Easing.InOutQuad
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        TabContent {
-                            currentIndex: bar.currentIndex
-                        }
-                    }
-                }
-
-                transform: Translate {
-                    x: (1.0 - animProgress) * width
                 }
             }
 

@@ -107,12 +107,14 @@ ColumnLayout {
                             height: parent.height
                             width: height
                             opacity: ma.containsMouse ? 1 : 0
+
                             Behavior on opacity {
                                 NumberAnimation {
                                     duration: 180
                                     easing.type: Easing.InOutQuad
                                 }
                             }
+
                             Rectangle {
                                 anchors.centerIn: parent
                                 height: parent.height / 2
