@@ -30,6 +30,7 @@ AnimatedScreenOverlay {
     onHidden: key => GlobalState.removeDrawer(key)
 
     KeyboardEventHandler {
+        id: keyCatcher
         Keys.onPressed: event => {
             const currentItem = clipboardList.currentItem;
             switch (event.key) {
@@ -54,10 +55,18 @@ AnimatedScreenOverlay {
                 event.accepted = true;
                 break;
             case Qt.Key_Delete:
-                if (currentItem) {
-                    const id = currentItem.modelData.id;
-                    deleteClipboardEntry(id);
+                if (event.modifiers & Qt.ControlModifier) {
+                    Quickshell.execDetached({
+                        command: ["cliphist", "wipe"]
+                    });
+                    GlobalState.toggleDrawer("clipBoard");
                     event.accepted = true;
+                } else {
+                    if (currentItem) {
+                        const id = currentItem.modelData.id;
+                        deleteClipboardEntry(id);
+                        event.accepted = true;
+                    }
                 }
                 break;
             case Qt.Key_Left:
@@ -67,9 +76,12 @@ AnimatedScreenOverlay {
                 event.accepted = true;
                 break;
             case Qt.Key_Up:
-            case Qt.Key_Right:
                 if (clipboardList.currentIndex > 0)
                     clipboardList.currentIndex -= 1;
+                event.accepted = true;
+                break;
+            case Qt.Key_Right:
+                highlightedText.focus = true;
                 event.accepted = true;
                 break;
             default:
@@ -168,6 +180,35 @@ AnimatedScreenOverlay {
 
                 onCountChanged: {
                     clipboardList.currentIndex = 0;
+                }
+
+                onCurrentItemChanged: {
+                    var item_id = clipboardList.currentItem.modelData.id;
+                    if (!clipboardList.currentItem.isImage) {
+                        decodeClip.id = item_id;
+                        decodeClip.running = true;
+                    } else {
+                        textScroller.visible = false;
+                    }
+                }
+
+                Process {
+                    id: decodeClip
+                    running: false
+                    property int id
+                    command: ["cliphist", "decode", id]
+                    stdout: StdioCollector {
+                        onStreamFinished: {
+                            let raw = this.text;
+
+                            // keep indentation, only strip trailing spaces and fix newlines
+                            let pretty = raw.replace(/[ \t]+$/gm, "") // remove trailing spaces at end of line
+                            .replace(/\r\n/g, "\n"); // normalize Windows CRLF to LF
+
+                            highlightedText.text = pretty;
+                            textScroller.visible = true;
+                        }
+                    }
                 }
 
                 model: ScriptModel {
@@ -277,7 +318,6 @@ AnimatedScreenOverlay {
                                 }
                             }
 
-                            // Third child: example button or placeholder
                             Text {
                                 id: copy
                                 text: '\uf0c5'
@@ -301,27 +341,37 @@ AnimatedScreenOverlay {
                 Flickable {
                     id: textScroller
                     anchors.fill: parent
-                    anchors.margins: 16
+
                     contentWidth: highlightedText.contentWidth
                     contentHeight: highlightedText.contentHeight
                     clip: true
 
-                    Item {
-                        width: textScroller.width - 32
-                        height: highlightedText.contentHeight
-
-                        TextEdit {
-                            id: highlightedText
-                            readOnly: false
-                            textFormat: TextEdit.PlainText
-                            wrapMode: TextEdit.Wrap
-                            text: clipboardList.currentItem && !clipboardList.currentItem.isImage ? clipboardList.currentItem.modelData.text : ""
-                            color: Colors.color15
-                            font.pixelSize: 18
-                            width: parent.width
-                            cursorVisible: false
-                            selectByMouse: true
-                            font.family: FontAssets.fontSometypeMono
+                    TextEdit {
+                        id: highlightedText
+                        readOnly: false
+                        textFormat: TextEdit.PlainText
+                        wrapMode: TextEdit.NoWrap
+                        color: Colors.color15
+                        font.pixelSize: 18
+                        anchors.fill: parent
+                        cursorVisible: focus
+                        selectByMouse: false
+                        font.family: FontAssets.fontSometypeMono
+                        Keys.onPressed: function (event) {
+                            switch (event.key) {
+                            case Qt.Key_Escape:
+                                keyCatcher.focus = true;
+                                event.accepted = true;
+                                break;
+                            case Qt.Key_Left:
+                                if (event.modifiers & Qt.ControlModifier) {
+                                    keyCatcher.focus = true;
+                                    event.accepted = true;
+                                    break;
+                                }
+                            default:
+                                break;
+                            }
                         }
                     }
                 }
@@ -393,14 +443,11 @@ AnimatedScreenOverlay {
                     const [id, ...textParts] = line.split('\t');
                     let raw = textParts.join('\t');
 
-                    // unescape common escaped sequences so "\n" becomes a real newline
                     raw = raw.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\\r/g, "\n").replace(/\\t/g, "\t").replace(/\\\\/g, "\\");
 
-                    // trim trailing comma artifacts (cliphist sometimes includes CSV-like separators)
                     if (raw.endsWith(','))
                         raw = raw.slice(0, -1);
 
-                    // preserve as-is for images (keep marker)
                     const isImage = raw.startsWith("[[ binary data") && raw.includes("KiB") && (raw.includes("png") || raw.includes("jpeg") || raw.includes("jpg"));
 
                     if (isImage) {
@@ -429,7 +476,6 @@ AnimatedScreenOverlay {
         target: GlobalState
         function onShowClipBoardChangedSignal(value, monitorName) {
             const isMatch = monitorName === screen.name;
-
             if (isMatch) {
                 toplevel.shouldBeVisible = value;
             }
