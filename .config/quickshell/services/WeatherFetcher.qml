@@ -14,18 +14,25 @@ Singleton {
     property var weatherData: {}
     property var weatherForecast: []
     property var weatherIcons: ({
-            cloud: '\uf0c2',
-            partlyCloudy: '\uf6c4',
-            thunder: '\uf0e7',
-            rainy: '\uf73d',
-            wet: '\uf0e9',
-            sunny: '\uf185',
-            windy: '\uf72e',
-            snowy: '\uf2dc',
-            hail: '\uf7ad',
-            dusty: '\uf72f',
-            drizzle: '\uf52d',
-            unknown: '\uf128'
+            "Sunny": "\uE430",
+            "Clear": "\uE430",
+            "Partly cloudy": "\uE42C",
+            "Cloudy": "\uE42B",
+            "Overcast": "\uE42B",
+            "Mist": "\uE3BD",
+            "Fog": "\uE3BD",
+            "Haze": "\uE3BD",
+            "Rain": "\uE4F7",
+            "Light rain": "\uE4F7",
+            "Heavy rain": "\uE4F7",
+            "Showers": "\uE4F7",
+            "Thunderstorm": "\uE409",
+            "Snow": "\uEB3B",
+            "Light snow": "\uEB3B",
+            "Heavy snow": "\uEB3B",
+            "Sleet": "\uE50B",
+            "Windy": "\uE429",
+            "Tornado": "\uE7C9"
         })
 
     function iconKeyForDesc(desc) {
