@@ -178,10 +178,6 @@ AnimatedScreenOverlay {
                 highlightFollowsCurrentItem: true
                 highlightRangeMode: ListView.StrictlyEnforceRange
 
-                onCountChanged: {
-                    clipboardList.currentIndex = 0;
-                }
-
                 onCurrentItemChanged: {
                     var item_id = clipboardList.currentItem.modelData.id;
                     if (!clipboardList.currentItem.isImage) {
@@ -324,6 +320,43 @@ AnimatedScreenOverlay {
                                 color: isHovered || isSelected ? Colors.color15 : Colors.color10
                             }
                         }
+                    }
+                }
+
+                add: Transition {
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 250
+                    }
+                    NumberAnimation {
+                        property: "x"
+                        from: 200
+                        to: 0
+                        duration: 250
+                    }
+                }
+
+                remove: Transition {
+                    id: removeTransition
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 250
+                    }
+                    NumberAnimation {
+                        property: "x"
+                        to: -200
+                        duration: 250
+                    }
+                }
+
+                displaced: Transition {
+                    NumberAnimation {
+                        properties: "x,y"
+                        duration: 250
                     }
                 }
             }
