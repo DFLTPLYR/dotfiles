@@ -127,8 +127,4 @@ ShellRoot {
             Buns;
         }
     }
-
-    Component.onCompleted: {
-        Assets;
-    }
 }

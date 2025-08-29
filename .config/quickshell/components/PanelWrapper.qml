@@ -10,7 +10,7 @@ PanelWindow {
     readonly property bool isPortrait: screen.height > screen.width
 
     // Internal properties
-    property bool shouldBeVisible: false
+    property bool shouldBeVisible: true
     property bool internalVisible: false
     property real animProgress: 0.0
 
