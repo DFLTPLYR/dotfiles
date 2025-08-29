@@ -22,25 +22,25 @@ RowLayout {
 
                 Text {
                     text: Qt.formatDate(modelData.date, "ddd, MMM yyyy")
-                    color: Colors.color10
+                    color: Assets.color10
                     font.family: FontAssets.fontAwesomeRegular
                 }
 
                 Text {
                     text: modelData.avgTemp
-                    color: Colors.color10
+                    color: Assets.color10
                     font.family: FontAssets.fontAwesomeRegular
                 }
 
                 Text {
                     text: modelData.icon
-                    color: Colors.color10
+                    color: Assets.color10
                     font.family: FontAssets.fontAwesomeSolid
                 }
 
                 Text {
                     text: modelData.desc
-                    color: Colors.color10
+                    color: Assets.color10
                     font.family: FontAssets.fontAwesomeRegular
                 }
             }

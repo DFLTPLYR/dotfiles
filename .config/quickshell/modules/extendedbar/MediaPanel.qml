@@ -146,7 +146,7 @@ Rectangle {
                         const r = width / 2;
                         ctx.beginPath();
                         ctx.lineWidth = 6;
-                        ctx.strokeStyle = Colors.color1;
+                        ctx.strokeStyle = Assets.color1;
                         ctx.arc(width / 2, height / 2, r, 0, 2 * Math.PI);
                         ctx.stroke();
                     }
@@ -163,7 +163,7 @@ Rectangle {
                         const r = width / 2;
                         ctx.beginPath();
                         ctx.lineWidth = 6;
-                        ctx.strokeStyle = Colors.color15;
+                        ctx.strokeStyle = Assets.color15;
                         ctx.arc(width / 2, height / 2, r, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * progress);
                         ctx.stroke();
                     }
@@ -228,7 +228,7 @@ Rectangle {
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
-                    ctx.strokeStyle = Scripts.setOpacity(Colors.color12, 0.4);
+                    ctx.strokeStyle = Scripts.setOpacity(Assets.color12, 0.4);
                     ctx.lineWidth = 1;
                     ctx.stroke();
                 }
@@ -268,7 +268,7 @@ Rectangle {
                 Text {
                     id: artist
                     text: MprisManager.activeTrack.artist ?? "SYBAU"
-                    color: Colors.color10
+                    color: Assets.color10
                     font.pixelSize: 24
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
@@ -279,7 +279,7 @@ Rectangle {
                 Text {
                     id: title
                     text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
-                    color: Colors.color11
+                    color: Assets.color11
                     font.pixelSize: 12
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
@@ -303,10 +303,10 @@ Rectangle {
             icon: "\uf04a"
             size: 48
             iconRatio: 0.5
-            borderColor: Colors.color10
-            backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
-            hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-            iconColor: MprisManager.canGoPrevious ? Colors.color10 : Colors.color0
+            borderColor: Assets.color10
+            backgroundColor: Scripts.setOpacity(Assets.background, 0.4)
+            hoverColor: Scripts.setOpacity(Assets.color15, 0.7)
+            iconColor: MprisManager.canGoPrevious ? Assets.color10 : Assets.color0
             onClicked: MprisManager.previous()
         }
 
@@ -314,10 +314,10 @@ Rectangle {
             icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
             size: 48
             iconRatio: 0.5
-            borderColor: Colors.color10
-            backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
-            hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-            iconColor: MprisManager.canTogglePlaying ? Colors.color10 : Colors.color0
+            borderColor: Assets.color10
+            backgroundColor: Scripts.setOpacity(Assets.background, 0.4)
+            hoverColor: Scripts.setOpacity(Assets.color15, 0.7)
+            iconColor: MprisManager.canTogglePlaying ? Assets.color10 : Assets.color0
             onClicked: MprisManager.togglePlaying()
         }
 
@@ -325,10 +325,10 @@ Rectangle {
             icon: "\uf04e"
             size: 48
             iconRatio: 0.5
-            borderColor: Colors.color10
-            backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
-            hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-            iconColor: MprisManager.canGoNext ? Colors.color10 : Colors.color0
+            borderColor: Assets.color10
+            backgroundColor: Scripts.setOpacity(Assets.background, 0.4)
+            hoverColor: Scripts.setOpacity(Assets.color15, 0.7)
+            iconColor: MprisManager.canGoNext ? Assets.color10 : Assets.color0
             onClicked: MprisManager.next()
         }
 

@@ -15,8 +15,8 @@ Rectangle {
     height: 250
     radius: 10
     clip: true
-    color: Scripts.setOpacity(Colors.foreground, 0.2)
-    border.color: Scripts.setOpacity(Colors.colors10, 0.2)
+    color: Scripts.setOpacity(Assets.foreground, 0.2)
+    border.color: Scripts.setOpacity(Assets.colors10, 0.2)
 
     ColumnLayout {
         anchors.fill: parent
@@ -48,7 +48,7 @@ Rectangle {
 
             Text {
                 text: qsTr("Tags:")
-                color: Colors.color15
+                color: Assets.color15
             }
 
             RowLayout {
@@ -64,7 +64,7 @@ Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         text: qsTr(modelData)
-                        color: Colors.color10
+                        color: Assets.color10
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight

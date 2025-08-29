@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import qs.utils
 import qs.services
+import qs.assets
 
 RoundButton {
     id: button
@@ -19,8 +20,8 @@ RoundButton {
     property bool dimmable: true
     property bool dimmed: false
     readonly property color backgroundColor: "transparent"
-    readonly property color borderColor: Colors.color10
-    readonly property color backspaceRedColor: Colors.color12
+    readonly property color borderColor: Assets.color10
+    readonly property color backspaceRedColor: Assets.color12
     readonly property int buttonRadius: 8
 
     function getBackgroundColor() {

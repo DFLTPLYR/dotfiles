@@ -71,7 +71,7 @@ Rectangle {
             Layout.fillHeight: false
             height: 20
 
-            border.color: prevBtnMA.containsMouse ? Colors.color12 : Colors.color1
+            border.color: prevBtnMA.containsMouse ? Assets.color12 : Assets.color1
             radius: 4
 
             Behavior on border.color {
@@ -84,7 +84,7 @@ Rectangle {
             Text {
                 id: prevBtn
                 text: '\uf0d9'
-                color: Colors.color15
+                color: Assets.color15
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -110,7 +110,7 @@ Rectangle {
                 id: currentDate
                 anchors.centerIn: parent
                 text: qsTr(`${calendarWrapper.year} - ${calendarGrid.monthShort[calendarWrapper.month - 1]}`)
-                color: Colors.color15
+                color: Assets.color15
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.family: FontAssets.fontSometypeMono
@@ -129,7 +129,7 @@ Rectangle {
             Layout.fillHeight: false
             height: 20
 
-            border.color: nextBtnMA.containsMouse ? Colors.color12 : Colors.color1
+            border.color: nextBtnMA.containsMouse ? Assets.color12 : Assets.color1
             radius: 4
             Behavior on border.color {
                 ColorAnimation {
@@ -141,7 +141,7 @@ Rectangle {
             Text {
                 id: nextBtn
                 text: '\uf0da'
-                color: Colors.color15
+                color: Assets.color15
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -163,14 +163,14 @@ Rectangle {
                 Layout.fillHeight: false
                 height: 30
 
-                border.color: Colors.color1
+                border.color: Assets.color1
                 radius: 4
 
                 Text {
                     anchors.centerIn: parent
                     text: calendarGrid.dayNames[index]
                     font.bold: true
-                    color: Colors.color11
+                    color: Assets.color11
                     font.family: FontAssets.fontSometypeItalic
                 }
             }
@@ -199,19 +199,19 @@ Rectangle {
                     return modelData === TimeService.date.getDate() && calendarWrapper.isCurrentDate;
                 }
 
-                color: selected ? Scripts.hexToRgba(Colors.color15, 0.2) : "transparent"
+                color: selected ? Scripts.hexToRgba(Assets.color15, 0.2) : "transparent"
                 radius: 4
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                border.color: Colors.color1
+                border.color: Assets.color1
 
                 Text {
                     anchors.centerIn: parent
                     text: modelData ? modelData : '\uf111'
                     font.pixelSize: modelData ? 12 : 8
-                    color: modelData ? (selected ? Colors.color10 : Colors.color15) : Colors.color0
+                    color: modelData ? (selected ? Assets.color10 : Assets.color15) : Assets.color0
                     font.family: FontAssets.fontSometypeItalic
                 }
             }

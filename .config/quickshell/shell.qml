@@ -159,7 +159,14 @@ ShellRoot {
 
     NotificationList {}
 
+    Connections {
+        target: Assets
+        function onParseDone() {
+            Buns;
+        }
+    }
+
     Component.onCompleted: {
-        Buns;
+        Assets;
     }
 }

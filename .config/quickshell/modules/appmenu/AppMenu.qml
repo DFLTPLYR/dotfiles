@@ -14,13 +14,14 @@ import qs.utils
 import qs.services
 import qs.components
 import QtQuick3D
+import qs.assets
 
 AnimatedScreenOverlay {
     id: toplevel
     screen: screenRoot.modelData
     key: 'AppMenu'
 
-    color: Scripts.hexToRgba(Colors.background, 0.2)
+    color: Scripts.hexToRgba(Assets.background, 0.2)
 
     onHidden: key => {
         GlobalState.removeDrawer(key);
@@ -83,7 +84,7 @@ AnimatedScreenOverlay {
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
 
-        color: Scripts.setOpacity(Colors.background, 0.6)
+        color: Scripts.setOpacity(Assets.background, 0.6)
         opacity: animProgress
 
         radius: 16
@@ -100,7 +101,7 @@ AnimatedScreenOverlay {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Scripts.setOpacity(Colors.color10, 0.2)
+                    color: Scripts.setOpacity(Assets.color10, 0.2)
                 }
 
                 RowLayout {
@@ -143,7 +144,7 @@ AnimatedScreenOverlay {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Scripts.hexToRgba(Colors.background, 0.1)
+                    color: Scripts.hexToRgba(Assets.background, 0.1)
                 }
 
                 Text {
@@ -153,7 +154,7 @@ AnimatedScreenOverlay {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 12
-                    color: Colors.color15
+                    color: Assets.color15
                 }
             }
         }

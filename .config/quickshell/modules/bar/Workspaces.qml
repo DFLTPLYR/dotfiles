@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs
+import qs.assets
 import qs.services
 import qs.modules
 
@@ -44,7 +45,7 @@ Item {
                     // Track hover state
                     property bool hovered: false
 
-                    color: hovered ? Colors.color14 : (modelData.active && modelData.focused) ? Colors.color2 : "transparent"
+                    color: hovered ? Assets.color14 : (modelData.active && modelData.focused) ? Assets.color2 : "transparent"
 
                     // Animate the fill color
                     Behavior on color {
@@ -57,7 +58,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: kanjiNumber(modelData.id - 1)
-                        color: monitorIndicator.hovered ? Colors.color2 : (modelData.active && modelData.focused) ? Colors.color14 : Colors.color2
+                        color: monitorIndicator.hovered ? Assets.color2 : (modelData.active && modelData.focused) ? Assets.color14 : Assets.color2
                         font.pixelSize: 12
                         // Animate the fill color
                         Behavior on color {
