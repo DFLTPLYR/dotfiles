@@ -52,20 +52,6 @@ Item {
         }
     }
 
-    RowLayout {
-        id: landscapeMode
-        anchors.fill: parent
-        visible: false
-
-        LayoutItemProxy {
-            target: display
-        }
-        LayoutItemProxy {
-            target: numberPad
-            Layout.alignment: Qt.AlignVCenter
-        }
-    }
-
     function operatorPressed(operator) {
         CalcEngine.operatorPressed(operator, display);
     }
