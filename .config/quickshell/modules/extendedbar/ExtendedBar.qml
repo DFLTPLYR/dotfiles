@@ -50,16 +50,6 @@ PopupWindow {
         }
     }
 
-    onScreenChanged: {
-        const target = shouldBeVisible ? 1.0 : 0.0;
-        anim.stop();
-        animProgress = target === 1.0 ? 0.0 : 1.0;
-        anim.to = target;
-        Qt.callLater(function () {
-            anim.restart();
-        });
-    }
-
     Rectangle {
         id: playerBackground
         width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
