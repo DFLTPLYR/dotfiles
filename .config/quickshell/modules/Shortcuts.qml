@@ -34,18 +34,18 @@ Item {
     }
 
     // App Menu
-    GlobalShortcut {
-        id: appMenu
-        name: "showAppMenu"
-        description: "Show Resource Dashboard"
-    }
+    // GlobalShortcut {
+    //     id: appMenu
+    //     name: "showAppMenu"
+    //     description: "Show Resource Dashboard"
+    // }
 
-    Connections {
-        target: appMenu
-        function onPressed() {
-            GlobalState.toggleDrawer("appMenu");
-        }
-    }
+    // Connections {
+    //     target: appMenu
+    //     function onPressed() {
+    //         GlobalState.toggleDrawer("appMenu");
+    //     }
+    // }
 
     // ClipBoard
     GlobalShortcut {
