@@ -21,7 +21,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'ClipBoard'
 
-    color: Scripts.hexToRgba(Colors.background, 0.2)
+    color: Scripts.hexToRgba(Assets.background, 0.2)
 
     onClicked: {
         return GlobalState.toggleDrawer("clipBoard");
@@ -124,12 +124,12 @@ AnimatedScreenOverlay {
         opacity: animProgress
 
         Rectangle {
-            border.color: Scripts.hexToRgba(Colors.colors10, 0.9)
+            border.color: Scripts.hexToRgba(Assets.colors10, 0.9)
             border.width: 2
 
             Layout.preferredWidth: clipboardRoot.width / 3
             Layout.fillHeight: true
-            color: Scripts.hexToRgba(Colors.background, 0.8)
+            color: Scripts.hexToRgba(Assets.background, 0.8)
             radius: 10
             clip: true
 
@@ -145,7 +145,7 @@ AnimatedScreenOverlay {
 
                     font.bold: true
 
-                    color: Colors.color15
+                    color: Assets.color15
                     opacity: showSearchInput ? 1.0 : 0.0
                     font.family: FontAssets.fontSometypeMono
                     Behavior on opacity {
@@ -229,9 +229,9 @@ AnimatedScreenOverlay {
                         id: container
                         anchors.fill: parent
 
-                        border.color: isHovered || isSelected ? Colors.color10 : Colors.color15
+                        border.color: isHovered || isSelected ? Assets.color10 : Assets.color15
 
-                        color: isHovered || isSelected ? Colors.color10 : Scripts.hexToRgba(Colors.background, 0.2)
+                        color: isHovered || isSelected ? Assets.color10 : Scripts.hexToRgba(Assets.background, 0.2)
                         radius: 4
 
                         Behavior on border.color {
@@ -256,7 +256,7 @@ AnimatedScreenOverlay {
 
                                 Text {
                                     id: clipboardText
-                                    color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                                    color: isHovered || isSelected ? Assets.color15 : Assets.color10
                                     width: parent.width
                                     height: parent.height
 
@@ -278,7 +278,7 @@ AnimatedScreenOverlay {
                                     var data = modelData.text;
                                     if (data.startsWith("[[ binary data")) {
                                         clipboardText.text = "IMAGE";
-                                        clipboardText.color = Colors.color15;
+                                        clipboardText.color = Assets.color15;
                                         clipboardText.visible = true;
                                     } else {
                                         clipboardText.text = modelData.text;
@@ -303,7 +303,7 @@ AnimatedScreenOverlay {
                             Text {
                                 id: trash
                                 text: '\uf1f8'
-                                color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                                color: isHovered || isSelected ? Assets.color15 : Assets.color10
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -317,7 +317,7 @@ AnimatedScreenOverlay {
                             Text {
                                 id: copy
                                 text: '\uf0c5'
-                                color: isHovered || isSelected ? Colors.color15 : Colors.color10
+                                color: isHovered || isSelected ? Assets.color15 : Assets.color10
                             }
                         }
                     }
@@ -365,7 +365,7 @@ AnimatedScreenOverlay {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Scripts.hexToRgba(Colors.background, 0.8)
+            color: Scripts.hexToRgba(Assets.background, 0.8)
             radius: 10
 
             Item {
@@ -384,7 +384,7 @@ AnimatedScreenOverlay {
                         readOnly: false
                         textFormat: TextEdit.PlainText
                         wrapMode: TextEdit.NoWrap
-                        color: Colors.color15
+                        color: Assets.color15
                         font.pixelSize: 18
                         anchors.fill: parent
                         cursorVisible: focus

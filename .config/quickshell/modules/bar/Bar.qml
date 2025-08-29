@@ -17,7 +17,7 @@ import qs.components
 
 Rectangle {
     anchors.fill: parent
-    color: Scripts.hexToRgba(Colors.background, 0.8)
+    color: Scripts.hexToRgba(Assets.background, 0.8)
     opacity: 1
     // radius: 20
 
@@ -82,9 +82,9 @@ Rectangle {
                     icon: "\uf011"
                     size: parent.height / 1.5
                     iconRatio: 0.5
-                    backgroundColor: Colors.background
-                    hoverColor: Colors.color15
-                    iconColor: Colors.color10
+                    backgroundColor: Assets.background
+                    hoverColor: Assets.color15
+                    iconColor: Assets.color10
                     onClicked: {
                         GlobalState.isSessionMenuOpen = true;
                     }

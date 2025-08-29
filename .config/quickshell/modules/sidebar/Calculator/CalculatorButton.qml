@@ -3,7 +3,9 @@
 
 import QtQuick
 import QtQuick.Controls
+
 import qs.services
+import qs.assets
 import qs.utils
 
 RoundButton {
@@ -14,10 +16,10 @@ RoundButton {
     property bool dimmed: false
     readonly property int fontSize: 22
     readonly property int buttonRadius: 8
-    property color textColor: Colors.color12
-    property color accentColor: Colors.color10
+    property color textColor: Assets.color12
+    property color accentColor: Assets.color10
     readonly property color backgroundColor: 'transparent'
-    readonly property color borderColor: Colors.color10
+    readonly property color borderColor: Assets.color10
 
     function getBackgroundColor() {
         if (button.dimmable && button.dimmed)

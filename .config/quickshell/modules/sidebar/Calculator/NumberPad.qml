@@ -7,12 +7,13 @@ import QtQuick
 import "calculator.js" as CalcEngine
 import QtQuick.Layouts
 import qs.services
+import qs.assets
 
 Item {
     id: controller
 
-    readonly property color qtGreenColor: Colors.color11
-    readonly property color backspaceRedColor: Colors.color12
+    readonly property color qtGreenColor: Assets.color11
+    readonly property color backspaceRedColor: Assets.color12
     readonly property int spacing: 5
 
     property int portraitModeWidth: mainGrid.width
@@ -42,7 +43,7 @@ Item {
             root.operatorPressed(text);
             updateDimmed();
         }
-        textColor: Colors.color10
+        textColor: Assets.color10
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: mainGrid.widthPerCol
@@ -174,7 +175,7 @@ Item {
             DigitButton {
                 text: "."
                 dimmable: true
-                textColor: Colors.color10
+                textColor: Assets.color10
             }
             OperatorButton {
                 text: "+"

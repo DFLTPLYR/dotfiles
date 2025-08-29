@@ -487,8 +487,7 @@ Singleton {
         path: "/tmp/colors.json"
         onLoadFailed: error => {
             if (error == FileViewError.FileNotFound) {
-                console.log("[Colors] File not found, creating new file.");
-                jsonFile.setText("");
+                jsonFile.setText("{}");
             }
         }
     }
@@ -666,7 +665,7 @@ Singleton {
 
             const uniqueColors = [];
             for (let i = 0; i < rs.rows.length; i++) {
-                uniqueColors.push({
+                uniqueAssets.push({
                     color: rs.rows.item(i).color,
                     tag: rs.rows.item(i).tag,
                     colorGroup: rs.rows.item(i).colorGroup,

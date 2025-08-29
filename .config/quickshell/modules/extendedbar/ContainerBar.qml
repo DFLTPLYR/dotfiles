@@ -30,7 +30,7 @@ GridLayout {
         color: "transparent"
 
         border.width: 1
-        border.color: Colors.color1
+        border.color: Assets.color1
         radius: 10
 
         Layout.row: 0
@@ -58,7 +58,7 @@ GridLayout {
 
                     Text {
                         Layout.fillWidth: true
-                        color: Colors.color10
+                        color: Assets.color10
                         text: WeatherFetcher.weatherIcon
                         font.pixelSize: 50
                         font.family: FontAssets.fontMaterialOutlined
@@ -68,7 +68,7 @@ GridLayout {
 
                     Text {
                         Layout.fillWidth: true
-                        color: Colors.color10
+                        color: Assets.color10
                         text: WeatherFetcher.weatherInfo
                         font.pixelSize: 32
                         horizontalAlignment: Text.AlignHCenter
@@ -83,18 +83,18 @@ GridLayout {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.preferredHeight: parent.height / 3
                     Text {
-                        color: Colors.color10
+                        color: Assets.color10
                         text: TimeService.hoursPadded
                         font.pixelSize: 24
                     }
                     Rectangle {
-                        color: Colors.color15
+                        color: Assets.color15
                         height: 1
                         Layout.preferredWidth: parent.width
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Text {
-                        color: Colors.color10
+                        color: Assets.color10
                         text: TimeService.minutesPadded
                         font.pixelSize: 24
                     }
@@ -134,7 +134,7 @@ GridLayout {
         Rectangle {
             color: 'transparent'
             border.width: 1
-            border.color: Colors.color1
+            border.color: Assets.color1
             radius: 10
 
             opacity: middleTopStack.currentIndex === 0 ? 1 : 0
@@ -156,7 +156,7 @@ GridLayout {
         Rectangle {
             color: 'transparent'
             border.width: 1
-            border.color: Colors.color1
+            border.color: Assets.color1
             radius: 10
 
             opacity: middleTopStack.currentIndex === 1 ? 1 : 0
@@ -196,7 +196,7 @@ GridLayout {
         color: "transparent"
 
         border.width: 1
-        border.color: Colors.color1
+        border.color: Assets.color1
         radius: 10
 
         Layout.row: 0

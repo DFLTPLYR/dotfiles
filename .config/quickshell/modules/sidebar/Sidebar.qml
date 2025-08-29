@@ -83,9 +83,9 @@ Scope {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: Scripts.setOpacity(Colors.background, 0.6)
+                        color: Scripts.setOpacity(Assets.background, 0.6)
                         radius: 10
-                        border.color: Scripts.setOpacity(Colors.color15, 0.6)
+                        border.color: Scripts.setOpacity(Assets.color15, 0.6)
                         clip: true
 
                         Item {
@@ -132,12 +132,12 @@ Scope {
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 text: `${qsTr(modelData.icon)} ${qsTr(modelData.name)}`
-                                                color: bar.currentIndex === index ? Colors.color11 : Colors.color10
+                                                color: bar.currentIndex === index ? Assets.color11 : Assets.color10
                                                 font.pixelSize: bar.contentHeight * 0.5
                                             }
                                             background: Rectangle {
                                                 anchors.fill: parent
-                                                color: bar.currentIndex === index ? Colors.color1 : Colors.color0
+                                                color: bar.currentIndex === index ? Assets.color1 : Assets.color0
                                                 radius: 4
                                                 Behavior on color {
                                                     ColorAnimation {
