@@ -93,24 +93,12 @@ Singleton {
         });
     }
 
-    function cacheWallpapers(list) {
-        const db = getDb();
-        db.transaction(function (tx) {
-            for (const item of list) {
-                const orientation = item.width > item.height ? "landscape" : "portrait";
-                tx.executeSql(`
-                    INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
-                    VALUES (?, ?, ?, ?)
-                `, [item.path, item.width, item.height, orientation]);
-            }
-        });
-        processNextColor();
-    }
-
     function loadWallpapers() {
         const db = getDb();
+
         root.landscapeWallpapers = [];
         root.portraitWallpapers = [];
+
         db.readTransaction(function (tx) {
             const rs = tx.executeSql("SELECT * FROM wallpapers");
             for (let i = 0; i < rs.rows.length; i++) {
@@ -634,9 +622,9 @@ Singleton {
                         for (const it of newItems) {
                             const orientation = it.width > it.height ? "landscape" : "portrait";
                             tx.executeSql(`
-INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
-VALUES (?, ?, ?, ?)
-`, [it.path, it.width, it.height, orientation]);
+                                        INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
+                                        VALUES (?, ?, ?, ?)
+                            `, [it.path, it.width, it.height, orientation]);
                         }
                     });
 
@@ -661,9 +649,6 @@ VALUES (?, ?, ?, ?)
                 // update visible lists (show all found wallpapers; DB now contains new entries)
                 root.landscapeWallpapers = found.filter(f => f.width > f.height).map(f => f.path);
                 root.portraitWallpapers = found.filter(f => f.width <= f.height).map(f => f.path);
-
-                // optionally cache all found entries in memory (keeps the previously used behaviour)
-                // root.cacheWallpapers(found);
             }
         }
     }
