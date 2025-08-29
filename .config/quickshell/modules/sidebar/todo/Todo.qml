@@ -17,14 +17,14 @@ ColumnLayout {
         TextField {
             id: singleline
             text: ""
-            color: Colors.color13
+            color: Assets.color13
 
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillWidth: true
 
             background: Rectangle {
                 radius: 5
-                border.color: singleline.focus ? Colors.color12 : Colors.color10
+                border.color: singleline.focus ? Assets.color12 : Assets.color10
                 color: "transparent"
             }
 
@@ -39,7 +39,7 @@ ColumnLayout {
         Text {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             text: qsTr("\uf0fe")
-            color: Colors.color12
+            color: Assets.color12
             font.pixelSize: Math.min(parent.height, parent.width) * 0.8
         }
     }
@@ -79,7 +79,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     height: 40
                     radius: 5
-                    color: ma.containsMouse ? Scripts.setOpacity(Colors.color11, 0.2) : 'transparent'
+                    color: ma.containsMouse ? Scripts.setOpacity(Assets.color11, 0.2) : 'transparent'
 
                     RowLayout {
                         anchors.fill: parent
@@ -100,7 +100,7 @@ ColumnLayout {
                             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
                             text: model.text
-                            color: Scripts.setOpacity(Colors.color11, 1)
+                            color: Scripts.setOpacity(Assets.color11, 1)
                         }
 
                         Item {

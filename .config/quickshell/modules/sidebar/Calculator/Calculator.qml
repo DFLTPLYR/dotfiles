@@ -9,6 +9,7 @@ import "calculator.js" as CalcEngine
 
 import qs.services
 import qs.utils
+import qs.assets
 
 Item {
     id: root
@@ -22,8 +23,8 @@ Item {
 
     Display {
         id: display
-        backgroundColor: Scripts.setOpacity(Colors.background, 0.9)
-        qtGreenColor: Scripts.setOpacity(Colors.color12, 0.9)
+        backgroundColor: Scripts.setOpacity(Assets.background, 0.9)
+        qtGreenColor: Scripts.setOpacity(Assets.color12, 0.9)
         Layout.margins: 10
     }
 

@@ -34,10 +34,10 @@ Rectangle {
             Layout.alignment: Qt.AlignRight
             size: 24
             iconRatio: 0.5
-            borderColor: Colors.color10
-            backgroundColor: Scripts.setOpacity(Colors.background, 0.4)
-            hoverColor: Scripts.setOpacity(Colors.color15, 0.7)
-            iconColor: Colors.color10
+            borderColor: Assets.color10
+            backgroundColor: Scripts.setOpacity(Assets.background, 0.4)
+            hoverColor: Scripts.setOpacity(Assets.color15, 0.7)
+            iconColor: Assets.color10
             onClicked: {
                 NotificationService.discardAllNotifications();
                 root.notificationGroup.clear();
@@ -62,9 +62,9 @@ Rectangle {
                 height: expand ? expandedHeight + 10 : expandedHeight
                 implicitWidth: container.width
 
-                color: Scripts.setOpacity(Colors.background, 0.7)
+                color: Scripts.setOpacity(Assets.background, 0.7)
 
-                border.color: Colors.color1
+                border.color: Assets.color1
                 radius: 8
                 clip: true
 
@@ -79,7 +79,6 @@ Rectangle {
 
                     spacing: 8
 
-
                     RowLayout {
                         visible: !delegateRect.expand
                         Layout.fillWidth: true
@@ -88,7 +87,7 @@ Rectangle {
                             Layout.fillWidth: true
                             text: appName
                             font.bold: true
-                            color: Colors.color12
+                            color: Assets.color12
                             elide: Text.ElideRight
 
                             Layout.alignment: Qt.AlignHCenter
@@ -98,7 +97,7 @@ Rectangle {
                         Text {
                             id: timeText
                             text: Qt.formatDateTime(new Date(time), "hh:mm AP")
-                            color: Colors.color11
+                            color: Assets.color11
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             Layout.alignment: Qt.AlignHCenter
@@ -189,7 +188,7 @@ Rectangle {
                     anchors.centerIn: parent
                     text: " No notifications \uf0f3"
                     visible: NotificationService.list.length === 0
-                    color: Colors.color10
+                    color: Assets.color10
                     font.pixelSize: 16
                 }
             }

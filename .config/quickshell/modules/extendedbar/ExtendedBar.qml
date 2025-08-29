@@ -8,6 +8,7 @@ import QtQuick.Shapes
 import qs
 import qs.utils
 import qs.services
+import qs.assets
 
 PopupWindow {
     id: resourceSection
@@ -73,7 +74,7 @@ PopupWindow {
                 readonly property real roundingY: flatten ? playerBackground.height / 2 : rounding
 
                 strokeWidth: -1
-                fillColor: Scripts.hexToRgba(Colors.background, 0.8)
+                fillColor: Scripts.hexToRgba(Assets.background, 0.8)
 
                 // Top-left outward arc
                 PathArc {

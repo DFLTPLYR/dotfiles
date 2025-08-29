@@ -9,6 +9,7 @@ import Quickshell.Wayland
 import qs.modules.sessionmenu
 import qs.components
 import qs.services
+import qs.assets
 import qs
 
 Variants {
@@ -26,7 +27,7 @@ Variants {
                 anchors.centerIn: parent
                 name: "\uf28b"
                 size: 64
-                color: Colors.color9
+                color: Assets.color9
             }
         },
         LogoutButton {
@@ -37,7 +38,7 @@ Variants {
                 anchors.centerIn: parent
                 name: "\uf236"
                 size: 64
-                color: Colors.color9
+                color: Assets.color9
             }
         },
         LogoutButton {
@@ -48,7 +49,7 @@ Variants {
                 anchors.centerIn: parent
                 name: "\uf011"
                 size: 64
-                color: Colors.color9
+                color: Assets.color9
             }
         },
         LogoutButton {
@@ -59,7 +60,7 @@ Variants {
                 anchors.centerIn: parent
                 name: "\uf2f1"
                 size: 64
-                color: Colors.color9
+                color: Assets.color9
             }
         }
     ]
@@ -148,7 +149,7 @@ Variants {
                                     anchors.centerIn: parent
                                     name: modelData.icon.name
                                     size: parent.width * 0.25
-                                    color: ma.containsMouse ? modelData.icon.color : Colors.color12
+                                    color: ma.containsMouse ? modelData.icon.color : Assets.color12
                                 }
 
                                 Text {
@@ -160,7 +161,7 @@ Variants {
 
                                     text: modelData.text
                                     font.pointSize: 20
-                                    color: ma.containsMouse ? modelData.icon.color : Colors.color15
+                                    color: ma.containsMouse ? modelData.icon.color : Assets.color15
                                 }
                             }
                         }

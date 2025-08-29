@@ -8,6 +8,7 @@ import Quickshell.Widgets
 import Quickshell.Hyprland
 
 import qs.services
+import qs.assets
 import qs
 
 GridView {
@@ -95,9 +96,9 @@ GridView {
             height: Math.floor(grid.cellHeight * 0.9)
 
             radius: 5
-            color: rect.isHovered || isSelected ? Colors.backgroundAlt : "transparent"
+            color: rect.isHovered || isSelected ? Assets.backgroundAlt : "transparent"
 
-            border.color: isSelected ? Colors.foreground : "transparent"
+            border.color: isSelected ? Assets.foreground : "transparent"
             border.width: isSelected ? 2 : 0
 
             Behavior on color {
@@ -139,7 +140,7 @@ GridView {
                         font.pixelSize: 10
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.Wrap
-                        color: Colors.color15
+                        color: Assets.color15
                         smooth: false
                         layer.enabled: true
                     }
