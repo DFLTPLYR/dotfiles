@@ -130,6 +130,8 @@ ShellRoot {
 
     Sidebar {}
 
+    AppPanel {}
+
     Scope {
         PersistentProperties {
             id: panelStates
