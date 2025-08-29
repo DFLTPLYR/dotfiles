@@ -146,12 +146,6 @@ Singleton {
                     root.portraitWallpapers.push(row);
             }
 
-            // initialize progress tracker
-            processingTotal = colorQueue.length;
-            processingDone = 0;
-            processing = processingTotal > 0;
-            _updateProcessingProgress();
-
             // Start processing if there are wallpapers to process
             if (colorQueue.length > 0) {
                 processNextColor();
@@ -706,7 +700,7 @@ VALUES (?, ?, ?, ?)
         // initializeDb(); // 🧱 Create core tables for wallpapers
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
 
-        classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
+        // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
 
         getCurrentMonitorWallpapers(e => {
             root.currentWallpapers = e;
