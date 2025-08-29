@@ -30,6 +30,5 @@ StackLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
     }
-
     opacity: animProgress
 }

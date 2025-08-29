@@ -8,15 +8,16 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
-import qs.services
-import qs.assets
 import qs.utils
+import qs.assets
+import qs.services
+import qs.components
 
 Scope {
     id: root
 
     property bool isVisible: false
-    signal shouldBeVisible
+    signal toggle
 
     GlobalShortcut {
         id: cancelKeybind
@@ -25,18 +26,16 @@ Scope {
         onPressed: {
             Qt.callLater(() => {
                 root.isVisible = true;
-                root.shouldBeVisible();
+                root.toggle();
             });
         }
     }
 
     LazyLoader {
         active: isVisible
-        component: PanelWindow {
+        component: PanelWrapper {
             id: sidebarRoot
-            screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
-
-            color: 'transparent'
+            implicitWidth: 0
 
             anchors {
                 top: true
@@ -44,25 +43,11 @@ Scope {
                 bottom: true
             }
 
-            readonly property bool isPortrait: screen.height > screen.width
-
-            // Internal properties
-            property bool shouldBeVisible: false
-            property bool internalVisible: false
-            property real animProgress: 0.0
-
-            // Signals for custom behavior
-            signal hidden(string drawerKey)
-            signal visibilityChanged(bool value, string monitorName)
-
-            visible: internalVisible
-            focusable: internalVisible
-
-            // Manual animator
-            NumberAnimation on animProgress {
-                id: anim
-                duration: 300
-                easing.type: Easing.InOutQuad
+            Connections {
+                target: root
+                function onToggle() {
+                    sidebarRoot.shouldBeVisible = !sidebarRoot.shouldBeVisible;
+                }
             }
 
             PopupWindow {
@@ -123,6 +108,10 @@ Scope {
                                             {
                                                 name: "System",
                                                 icon: "\uf2db"
+                                            },
+                                            {
+                                                name: "Websearch",
+                                                icon: "\uf2db"
                                             }
                                         ]
 
@@ -156,48 +145,6 @@ Scope {
                             }
                         }
                     }
-                }
-            }
-
-            onShouldBeVisibleChanged: {
-                const target = shouldBeVisible ? 1.0 : 0.0;
-                if (anim.to !== target || !anim.running) {
-                    anim.to = target;
-                    anim.restart();
-                }
-            }
-
-            onAnimProgressChanged: {
-                if (animProgress > 0 && !internalVisible) {
-                    internalVisible = true;
-                } else if (!shouldBeVisible && animProgress === 0.00) {
-                    internalVisible = false;
-                    root.isVisible = false;
-                }
-            }
-
-            onScreenChanged: {
-                const target = shouldBeVisible ? 1.0 : 0.0;
-                anim.stop();
-                animProgress = target === 1.0 ? 0.0 : 1.0;
-                anim.to = target;
-                Qt.callLater(function () {
-                    anim.restart();
-                });
-            }
-
-            Connections {
-                target: root
-                function onShouldBeVisible() {
-                    shouldBeVisible = !shouldBeVisible;
-                }
-            }
-
-            // set up
-            Component.onCompleted: {
-                if (this.WlrLayershell != null) {
-                    this.WlrLayershell.layer = WlrLayer.Overlay;
-                    this.exclusiveZone = 0;
                 }
             }
         }
