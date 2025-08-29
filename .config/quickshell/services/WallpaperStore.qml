@@ -157,7 +157,6 @@ Singleton {
                 processNextColor();
             }
         });
-        console.log('loaded wallpapers now');
     }
 
     function getAllUniqueTagsByOrientation(orientation, callback) {
@@ -603,44 +602,74 @@ Singleton {
                     `]
         stdout: StdioCollector {
             onStreamFinished: {
-                const lines = text.trim().split("\n");
-                const allWallpapers = [];
-
-                root.landscapeWallpapers = [];
-                root.portraitWallpapers = [];
+                const lines = (text || "").trim().split("\n").filter(l => l.trim().length > 0);
+                const found = [];
 
                 for (const line of lines) {
                     const match = line.trim().match(/^(\d+)\s+(\d+)\s+(.+)$/);
                     if (!match)
                         continue;
-
                     const w = parseInt(match[1]);
                     const h = parseInt(match[2]);
                     const path = match[3];
-
-                    const item = {
+                    found.push({
                         width: w,
                         height: h,
                         path
-                    };
-                    allWallpapers.push(item);
+                    });
+                }
 
-                    const orientation = w > h ? "landscape" : "portrait";
-                    if (orientation === "landscape")
-                        root.landscapeWallpapers.push(path);
-                    else
-                        root.portraitWallpapers.push(path);
+                // read existing DB paths
+                const db = getDb();
+                const existingPaths = Object.create(null);
+                db.readTransaction(function (tx) {
+                    const rs = tx.executeSql("SELECT path FROM wallpapers");
+                    for (let i = 0; i < rs.rows.length; i++) {
+                        existingPaths[rs.rows.item(i).path] = true;
+                    }
+                });
 
-                    const db = getDb();
+                // determine new items (not present in DB)
+                const newItems = found.filter(item => !existingPaths[item.path]);
+                if (newItems.length === 0) {
+                    console.log("WallpaperStore: no new wallpapers to process");
+                } else {
+                    console.log("WallpaperStore: new wallpapers found:", newItems.length);
+                    // insert new items into DB and queue them for processing
                     db.transaction(function (tx) {
-                        tx.executeSql(`
-                        INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
-                        VALUES (?, ?, ?, ?)`, [path, w, h, orientation]);
+                        for (const it of newItems) {
+                            const orientation = it.width > it.height ? "landscape" : "portrait";
+                            tx.executeSql(`
+INSERT OR REPLACE INTO wallpapers (path, width, height, orientation)
+VALUES (?, ?, ?, ?)
+`, [it.path, it.width, it.height, orientation]);
+                        }
                     });
 
-                    root.colorQueue = allWallpapers.map(item => item.path);
+                    // append new paths to colorQueue for processing
+                    root.colorQueue = (root.colorQueue || []).concat(newItems.map(i => i.path));
+
+                    // update processing counters if needed
+                    processingTotal = Math.max(processingTotal, root.colorQueue.length);
+                    processing = root.colorQueue.length > 0;
+                    _updateProcessingProgress();
+
+                    // start processing if not already running
+                    if (root.colorQueue.length > 0 && !processing) {
+                        processNextColor();
+                    } else {
+                        // if processing already running, ensure it continues
+                        if (!processing)
+                            processNextColor();
+                    }
                 }
-                root.cacheWallpapers(allWallpapers);
+
+                // update visible lists (show all found wallpapers; DB now contains new entries)
+                root.landscapeWallpapers = found.filter(f => f.width > f.height).map(f => f.path);
+                root.portraitWallpapers = found.filter(f => f.width <= f.height).map(f => f.path);
+
+                // optionally cache all found entries in memory (keeps the previously used behaviour)
+                // root.cacheWallpapers(found);
             }
         }
     }
@@ -677,7 +706,7 @@ Singleton {
         // initializeDb(); // 🧱 Create core tables for wallpapers
         loadWallpapers(); // 📦 Load wallpapers from DB into memory
 
-        // classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
+        classifyWallpapers(); // 🎨 Analyze colors for all wallpapers
 
         getCurrentMonitorWallpapers(e => {
             root.currentWallpapers = e;

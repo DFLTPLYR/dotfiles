@@ -6,9 +6,16 @@ Item {
     property real radius: 10
     property var sourceItem: null
 
-    implicitHeight: sourceItem.height
-    implicitWidth: sourceItem.width
+    implicitWidth: content.implicitWidth
+    implicitHeight: content.implicitHeight
+
+    Item {
+        id: content
+        anchors.fill: parent
+    }
+
     focus: false
+
     Rectangle {
         id: maskRect
         anchors.fill: parent
@@ -21,5 +28,18 @@ Item {
         anchors.fill: parent
         source: sourceItem
         maskSource: maskRect
+    }
+
+    onSourceItemChanged: {
+        if (!sourceItem)
+            return;
+        // move the external item into the internal content so anchors / fillMode work
+        if (sourceItem.parent !== content)
+            sourceItem.parent = content;
+        // ensure it fills the wrapper and is visible so PreserveAspectCrop works
+        try {
+            sourceItem.anchors.fill = content;
+        } catch (e) {}
+        sourceItem.visible = true;
     }
 }
