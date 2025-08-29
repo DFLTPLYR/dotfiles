@@ -113,41 +113,11 @@ ShellRoot {
 
     VolumeOsd {}
 
-    LazyLoader {
-        active: GlobalState.isSessionMenuOpen
-        component: SessionMenu {}
-    }
+    SessionMenu {}
 
     Sidebar {}
 
     AppPanel {}
-
-    Scope {
-        PersistentProperties {
-            id: panelStates
-            reloadableId: "persistPanelStates"
-            property bool showWindowsOptions: false
-        }
-
-        Connections {
-            target: GlobalState
-            function onOpenPanelsUpdated() {
-                const panels = [
-                    {
-                        name: 'WindowsOptions',
-                        property: 'showWindowsOptions'
-                    }
-                ];
-
-                for (let i = 0; i < panels.length; i++) {
-                    const panel = panels[i];
-                    const key = panel.name;
-                    const exists = GlobalState.hasPanel(key);
-                    panelStates[panel.property] = exists ?? false;
-                }
-            }
-        }
-    }
 
     NotificationList {}
 
