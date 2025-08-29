@@ -17,7 +17,6 @@ offlineDb.run(`
   CREATE TABLE IF NOT EXISTS todos (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
-    description TEXT,
     status TEXT DEFAULT 'pending',
     is_completed INTEGER DEFAULT 0,
     is_sync INTEGER DEFAULT 0,
@@ -53,7 +52,7 @@ todoRouter.get("/", async (c) => {
 todoRouter.post("/", async (c) => {
   try {
     const body = await c.req.json();
-    const { title, description, status, is_completed } = body;
+    const { title, status, is_completed } = body;
 
     // Insert into Supabase
     const { data, error } = await onlineDb
@@ -61,7 +60,6 @@ todoRouter.post("/", async (c) => {
       .insert([
         {
           title,
-          description,
           status: status || "pending",
           is_completed: is_completed ?? false,
         },
@@ -72,10 +70,9 @@ todoRouter.post("/", async (c) => {
     const uuid = todo?.id ?? crypto.randomUUID();
     // Insert into Offline
     offlineDb.run(
-      `INSERT INTO todos (id, title, description, status, is_completed, is_sync, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO todos (id, title, status, is_completed, is_sync, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       uuid,
-      title,
-      description,
+      todo.title,
       todo?.status || status || "pending",
       todo?.is_completed ?? is_completed ? 1 : 0,
       error ? 0 : 1,
@@ -95,14 +92,13 @@ todoRouter.put("/:id", async (c) => {
   try {
     const id = c.req.param("id");
     const body = await c.req.json();
-    const { title, description, status, is_completed } = body;
+    const { title, status, is_completed } = body;
 
     // Update in Supabase
     const { data, error } = await onlineDb
       .from("todos")
       .update({
         title,
-        description,
         status: status || "pending",
         is_completed: is_completed ?? false,
         updated_at: new Date().toISOString(),
@@ -114,10 +110,9 @@ todoRouter.put("/:id", async (c) => {
 
     // Update in Offline SQLite
     offlineDb.run(
-      `UPDATE todos SET title = ?, description = ?, status = ?, is_completed = ?, is_sync = ?, updated_at = ? WHERE id = ?`,
+      `UPDATE todos SET title = ?, status = ?, is_completed = ?, is_sync = ?, updated_at = ? WHERE id = ?`,
       [
         title,
-        description,
         todo?.status || status || "pending",
         todo?.is_completed ?? (is_completed ? 1 : 0),
         error ? 0 : 1,

@@ -32,7 +32,7 @@ Scope {
     }
 
     LazyLoader {
-        active: true
+        active: isVisible
         component: PanelWrapper {
             id: sidebarRoot
             implicitWidth: 0
