@@ -38,8 +38,15 @@ ColumnLayout {
             onAccepted: {
                 if (singleline.text.trim().length === 0)
                     return;
-                todoModel.append({
-                    text: singleline.text
+                var todo = {
+                    title: singleline.text,
+                    status: 'pending',
+                    completed: false
+                };
+                TodoService.createTodo(todo, function (response, err) {
+                    if (!err) {
+                        todoModel.append(response);
+                    }
                 });
                 singleline.text = "";
             }
@@ -74,15 +81,11 @@ ColumnLayout {
         }
     }
 
-    ListModel {
-        id: todoModel
-    }
-
     ListView {
         id: todoListView
         Layout.fillHeight: true
         Layout.fillWidth: true
-
+        spacing: 1
         focus: true
         keyNavigationWraps: true
         keyNavigationEnabled: true
@@ -90,17 +93,44 @@ ColumnLayout {
         boundsBehavior: Flickable.StopAtBounds
         snapMode: GridView.NoSnap
 
+        ListModel {
+            id: todoModel
+        }
         model: todoModel
 
         delegate: Rectangle {
-            Layout.fillWidth: true
-            height: 40
+            id: delegateRect
+            width: parent.width
+            property int preferredHeight: 40
+            property int expandedHeight: 80
+
+            property bool expanded: false
+
+            height: expanded ? expandedHeight : preferredHeight
+
+            Behavior on height {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
             radius: 5
+            color: mouse.hovered ? Scripts.setOpacity(Assets.color11, 0.4) : Scripts.setOpacity(Assets.color11, 0.2)
 
-            color: isHovered ? Scripts.setOpacity(Assets.color11, 0.2) : 'transparent'
-
-            property bool isHovered: false
             property bool isSelected: ListView.isCurrentItem
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            HoverHandler {
+                id: mouse
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            }
 
             RowLayout {
                 anchors.fill: parent
@@ -114,7 +144,7 @@ ColumnLayout {
                         height: parent.height / 2
                         width: height
                         radius: 4
-                        color: isHovered ? Scripts.setOpacity(Assets.color11, 0.4) : "transparent"
+                        color: mouse.hovered ? Scripts.setOpacity(Assets.color12, 0.4) : "transparent"
 
                         Behavior on color {
                             ColorAnimation {
@@ -125,35 +155,70 @@ ColumnLayout {
 
                         Text {
                             id: checked
+                            visible: model.is_completed
                             anchors.centerIn: parent
                             text: qsTr("\ue5ca")
+                            color: Assets.color10
                             font.family: FontAssets.fontMaterialOutlined
                             font.pixelSize: Math.round(parent.height)
                         }
 
                         Text {
                             id: closed
-                            visible: false
+                            visible: !model.is_completed
+                            color: Assets.color10
                             anchors.centerIn: parent
                             text: qsTr("\ue5cd")
                             font.pixelSize: Math.round(parent.height)
                             font.family: FontAssets.fontMaterialOutlined
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                var id = model.id;
+                                var todo = {
+                                    title: model.title,
+                                    status: "completed",
+                                    is_completed: true
+                                };
+                                TodoService.updateTodo(id, todo, function (res, err) {
+                                    if (!err) {
+                                        model.id = res.id;
+                                        model.title = res.title;
+                                        model.status = res.status;
+                                        model.is_completed = !!res.is_completed;
+                                    }
+                                });
+                            }
+                        }
                     }
                 }
 
                 Text {
+                    text: model.title
+                    color: Assets.color10
+
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
 
-                    text: model.title
-                    color: Scripts.setOpacity(Assets.color11, 1)
+                    font.strikeout: model.is_completed
+
+                    elide: delegateRect.expanded ? Text.ElideNone : Text.ElideRight
+                    wrapMode: delegateRect.expanded ? Text.Wrap : Text.NoWrap
+                    clip: true
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: delegateRect.expanded = !delegateRect.expanded
+                    }
                 }
 
                 Item {
                     height: parent.height
                     width: height
-                    opacity: isHovered ? 1 : 0
+                    opacity: mouse.hovered ? 1 : 0
 
                     Behavior on opacity {
                         NumberAnimation {
@@ -174,22 +239,21 @@ ColumnLayout {
                             anchors.centerIn: parent
                             text: qsTr("\ue5cd")
                             font.family: FontAssets.fontMaterialOutlined
-                            color: Scripts.setOpacity(Assets.color11, 1)
+                            color: Assets.color10
                         }
 
                         MouseArea {
                             id: deleteAction
                             height: removeWrapper.height
                             width: removeWrapper.width
+                            cursorShape: Qt.PointingHandCursor
                             acceptedButtons: Qt.LeftButton
                             onClicked: {
                                 TodoService.deleteTodo(model.id, function (res, err) {
                                     if (!err) {
-                                        // remove the delegate from the ListModel
                                         if (typeof index !== "undefined") {
                                             todoModel.remove(index);
                                         } else {
-                                            // fallback: find by id
                                             for (var i = 0; i < todoModel.count; i++) {
                                                 if (todoModel.get(i).id === model.id) {
                                                     todoModel.remove(i);
@@ -206,26 +270,6 @@ ColumnLayout {
                         }
                     }
                 }
-            }
-
-            Behavior on color {
-                ColorAnimation {
-                    duration: 200
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            MouseArea {
-                id: hoverArea
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onEntered: {
-                    isHovered = true;
-                    grid.currentIndex = modelData.index;
-                }
-                onExited: isHovered = false
-                onClicked: grid.openApp()
             }
         }
 
@@ -270,7 +314,12 @@ ColumnLayout {
         todoListView.focus = true;
         TodoService.getAllTodos(function (response) {
             for (var todo of response.offline) {
-                todoModel.append(todo);
+                todoModel.append({
+                    id: todo.id,
+                    title: todo.title,
+                    status: todo.status,
+                    is_completed: !!todo.is_completed
+                });
             }
         });
     }
