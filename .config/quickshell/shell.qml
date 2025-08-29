@@ -64,17 +64,11 @@ ShellRoot {
                 component: ClipBoard {}
             }
 
-            LazyLoader {
-                active: persistStates.showAppMenu
-                component: AppMenu {}
-            }
-
             PersistentProperties {
                 id: persistStates
                 reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
                 property bool showWallpaperCarousel: false
                 property bool showMpris: false
-                property bool showAppMenu: false
                 property bool showClipBoard: false
                 property bool showWindowsOptions: false
             }
@@ -90,10 +84,6 @@ ShellRoot {
                         {
                             name: 'MprisDashboard',
                             property: 'showMpris'
-                        },
-                        {
-                            name: 'AppMenu',
-                            property: 'showAppMenu'
                         },
                         {
                             name: 'ClipBoard',

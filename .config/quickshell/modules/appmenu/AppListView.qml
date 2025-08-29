@@ -76,7 +76,7 @@ GridView {
                 workingDirectory: entry.workingDirectory
             });
         }
-        GlobalState.toggleDrawer("appMenu");
+        root.toggle();
     }
 
     delegate: Rectangle {
