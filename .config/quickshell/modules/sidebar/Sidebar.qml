@@ -32,7 +32,7 @@ Scope {
     }
 
     LazyLoader {
-        active: isVisible
+        active: true
         component: PanelWrapper {
             id: sidebarRoot
             implicitWidth: 0
@@ -107,10 +107,6 @@ Scope {
                                             },
                                             {
                                                 name: "System",
-                                                icon: "\uf2db"
-                                            },
-                                            {
-                                                name: "Websearch",
                                                 icon: "\uf2db"
                                             }
                                         ]

@@ -27,12 +27,21 @@ ColumnLayout {
                 border.color: singleline.focus ? Assets.color12 : Assets.color10
                 color: "transparent"
             }
-
+            placeholderText: "Add a new task..."
             Behavior on color {
                 ColorAnimation {
                     duration: 2000
                     easing.type: Easing.InOutQuad
                 }
+            }
+
+            onAccepted: {
+                if (singleline.text.trim().length === 0)
+                    return;
+                todoModel.append({
+                    text: singleline.text
+                });
+                singleline.text = "";
             }
         }
 
@@ -41,6 +50,20 @@ ColumnLayout {
             text: qsTr("\uf0fe")
             color: Assets.color12
             font.pixelSize: Math.min(parent.height, parent.width) * 0.8
+
+            MouseArea {
+                id: addBtnArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    if (singleline.text.trim().length === 0)
+                        return;
+                    todoModel.append({
+                        text: singleline.text
+                    });
+                    singleline.text = "";
+                }
+            }
         }
     }
 
@@ -56,21 +79,6 @@ ColumnLayout {
 
             ListModel {
                 id: todoModel
-                ListElement {
-                    text: "Buy groceries"
-                }
-                ListElement {
-                    text: "Finish QML project"
-                }
-                ListElement {
-                    text: "Call Alice"
-                }
-                ListElement {
-                    text: "Read documentation"
-                }
-                ListElement {
-                    text: "Walk the dog"
-                }
             }
 
             Repeater {
@@ -120,10 +128,12 @@ ColumnLayout {
                                 height: parent.height / 2
                                 width: height
                                 radius: 10
+                                color: Scripts.setOpacity(Assets.color12, 0.2)
                                 Text {
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5cd")
                                     font.family: FontAssets.fontMaterialOutlined
+                                    color: Scripts.setOpacity(Assets.color10, 1)
                                 }
                             }
                         }
