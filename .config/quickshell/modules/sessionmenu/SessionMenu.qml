@@ -12,169 +12,174 @@ import qs.services
 import qs.assets
 import qs
 
-Variants {
+Scope {
     id: root
-    property color backgroundColor: "#e60c0c0c"
-    property color buttonColor: "#1e1e1e"
-    property color buttonHoverColor: "#3700b3"
+    LazyLoader {
+        active: GlobalState.isSessionMenuOpen
+        component: Variants {
+            property color backgroundColor: "#e60c0c0c"
+            property color buttonColor: "#1e1e1e"
+            property color buttonHoverColor: "#3700b3"
 
-    default property list<LogoutButton> buttons: [
-        LogoutButton {
-            command: "systemctl suspend"
-            keybind: Qt.Key_U
-            text: "Suspend"
-            icon: CustomIcon {
-                anchors.centerIn: parent
-                name: "\uf28b"
-                size: 64
-                color: Assets.color9
-            }
-        },
-        LogoutButton {
-            command: "systemctl hibernate"
-            keybind: Qt.Key_H
-            text: "Hibernate"
-            icon: CustomIcon {
-                anchors.centerIn: parent
-                name: "\uf236"
-                size: 64
-                color: Assets.color9
-            }
-        },
-        LogoutButton {
-            command: "systemctl poweroff"
-            keybind: Qt.Key_K
-            text: "Shutdown"
-            icon: CustomIcon {
-                anchors.centerIn: parent
-                name: "\uf011"
-                size: 64
-                color: Assets.color9
-            }
-        },
-        LogoutButton {
-            command: "systemctl reboot"
-            keybind: Qt.Key_R
-            text: "Reboot"
-            icon: CustomIcon {
-                anchors.centerIn: parent
-                name: "\uf2f1"
-                size: 64
-                color: Assets.color9
-            }
-        }
-    ]
-
-    model: Quickshell.screens
-
-    PanelWindow {
-        id: window
-
-        property var modelData
-        screen: modelData
-
-        color: "transparent"
-
-        contentItem {
-            focus: true
-            Keys.onPressed: event => {
-                if (event.key == Qt.Key_Escape)
-                    GlobalState.isSessionMenuOpen = false;
-                else {
-                    for (let i = 0; i < buttons.length; i++) {
-                        let button = buttons[i];
-                        if (event.key == button.keybind)
-                            button.exec();
+            default property list<LogoutButton> buttons: [
+                LogoutButton {
+                    command: "systemctl suspend"
+                    keybind: Qt.Key_U
+                    text: "Suspend"
+                    icon: CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf28b"
+                        size: 64
+                        color: Assets.color9
+                    }
+                },
+                LogoutButton {
+                    command: "systemctl hibernate"
+                    keybind: Qt.Key_H
+                    text: "Hibernate"
+                    icon: CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf236"
+                        size: 64
+                        color: Assets.color9
+                    }
+                },
+                LogoutButton {
+                    command: "systemctl poweroff"
+                    keybind: Qt.Key_K
+                    text: "Shutdown"
+                    icon: CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf011"
+                        size: 64
+                        color: Assets.color9
+                    }
+                },
+                LogoutButton {
+                    command: "systemctl reboot"
+                    keybind: Qt.Key_R
+                    text: "Reboot"
+                    icon: CustomIcon {
+                        anchors.centerIn: parent
+                        name: "\uf2f1"
+                        size: 64
+                        color: Assets.color9
                     }
                 }
-            }
-        }
+            ]
 
-        anchors {
-            top: true
-            left: true
-            bottom: true
-            right: true
-        }
+            model: Quickshell.screens
 
-        Rectangle {
-            color: backgroundColor
-            anchors.fill: parent
+            PanelWindow {
+                id: window
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: GlobalState.isSessionMenuOpen = false
+                property var modelData
+                screen: modelData
 
-                ClippingRectangle {
-                    anchors.centerIn: parent
+                color: "transparent"
 
-                    radius: 50
-                    clip: true
+                contentItem {
+                    focus: true
+                    Keys.onPressed: event => {
+                        if (event.key == Qt.Key_Escape)
+                            GlobalState.isSessionMenuOpen = false;
+                        else {
+                            for (let i = 0; i < buttons.length; i++) {
+                                let button = buttons[i];
+                                if (event.key == button.keybind)
+                                    button.exec();
+                            }
+                        }
+                    }
+                }
 
-                    width: Math.round(parent.width * 0.75)
-                    height: Math.round(parent.height * 0.75)
+                anchors {
+                    top: true
+                    left: true
+                    bottom: true
+                    right: true
+                }
 
-                    GridLayout {
+                Rectangle {
+                    color: backgroundColor
+                    anchors.fill: parent
+
+                    MouseArea {
                         anchors.fill: parent
-                        columns: 2
-                        columnSpacing: 0
-                        rowSpacing: 0
+                        onClicked: GlobalState.isSessionMenuOpen = false
 
-                        Repeater {
-                            model: buttons
-                            delegate: Rectangle {
-                                required property LogoutButton modelData
+                        ClippingRectangle {
+                            anchors.centerIn: parent
 
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
+                            radius: 50
+                            clip: true
 
-                                color: ma.containsMouse ? buttonHoverColor : buttonColor
+                            width: Math.round(parent.width * 0.75)
+                            height: Math.round(parent.height * 0.75)
 
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: 800
-                                        easing.type: Easing.InOutQuad
+                            GridLayout {
+                                anchors.fill: parent
+                                columns: 2
+                                columnSpacing: 0
+                                rowSpacing: 0
+
+                                Repeater {
+                                    model: buttons
+                                    delegate: Rectangle {
+                                        required property LogoutButton modelData
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+
+                                        color: ma.containsMouse ? buttonHoverColor : buttonColor
+
+                                        Behavior on color {
+                                            ColorAnimation {
+                                                duration: 800
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            id: ma
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            onClicked: modelData.exec()
+                                        }
+
+                                        CustomIcon {
+                                            id: icon
+                                            anchors.centerIn: parent
+                                            name: modelData.icon.name
+                                            size: parent.width * 0.25
+                                            color: ma.containsMouse ? modelData.icon.color : Assets.color12
+                                        }
+
+                                        Text {
+                                            anchors {
+                                                top: icon.bottom
+                                                topMargin: 20
+                                                horizontalCenter: parent.horizontalCenter
+                                            }
+
+                                            text: modelData.text
+                                            font.pointSize: 20
+                                            color: ma.containsMouse ? modelData.icon.color : Assets.color15
+                                        }
                                     }
-                                }
-
-                                MouseArea {
-                                    id: ma
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    onClicked: modelData.exec()
-                                }
-
-                                CustomIcon {
-                                    id: icon
-                                    anchors.centerIn: parent
-                                    name: modelData.icon.name
-                                    size: parent.width * 0.25
-                                    color: ma.containsMouse ? modelData.icon.color : Assets.color12
-                                }
-
-                                Text {
-                                    anchors {
-                                        top: icon.bottom
-                                        topMargin: 20
-                                        horizontalCenter: parent.horizontalCenter
-                                    }
-
-                                    text: modelData.text
-                                    font.pointSize: 20
-                                    color: ma.containsMouse ? modelData.icon.color : Assets.color15
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
 
-        Component.onCompleted: {
-            if (this.WlrLayershell) {
-                this.WlrLayershell.layer = WlrLayer.Overlay;
-                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
-                this.exclusionMode = ExclusionMode.Ignore;
+                Component.onCompleted: {
+                    if (this.WlrLayershell) {
+                        this.WlrLayershell.layer = WlrLayer.Overlay;
+                        this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                        this.exclusionMode = ExclusionMode.Ignore;
+                    }
+                }
             }
         }
     }
