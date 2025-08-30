@@ -199,7 +199,7 @@ Rectangle {
                     return modelData === TimeService.date.getDate() && calendarWrapper.isCurrentDate;
                 }
 
-                color: selected ? Scripts.hexToRgba(Assets.color15, 0.2) : "transparent"
+                color: selected ? Scripts.setOpacity(Assets.color15, 0.2) : "transparent"
                 radius: 4
 
                 Layout.fillWidth: true
