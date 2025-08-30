@@ -2,11 +2,23 @@ import { readFileSync } from "fs";
 import { Client } from "@gradio/client";
 import { Hono } from "hono";
 
-const client = Client.connect("http://localhost:7860/");
+let client: Awaited<ReturnType<typeof Client.connect>> | null = null;
+
+(async () => {
+  try {
+    client = await Client.connect("http://localhost:7860/");
+  } catch (err) {
+    console.error("Could not connect to Gradio client:", err);
+    client = null;
+  }
+})();
 
 const imageRouter = new Hono();
 
 imageRouter.post("/", async (c) => {
+  if (!client) {
+    return c.json({ error: "Gradio client not available" }, 503);
+  }
   try {
     const body = await c.req.json();
     const imagePath = body.path;
@@ -16,9 +28,7 @@ imageRouter.post("/", async (c) => {
     const buffer = readFileSync(imagePath);
     const exampleImage = new Blob([buffer]);
 
-    const result = await (
-      await client
-    ).predict("/predict", {
+    const result = await client.predict("/predict", {
       image: exampleImage,
       score_threshold: 0.1,
     });
