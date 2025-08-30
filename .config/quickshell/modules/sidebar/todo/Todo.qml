@@ -102,7 +102,7 @@ ColumnLayout {
     }
     ListView {
         Layout.preferredHeight: contentHeight
-        Layout.fillWidth: true
+        width: parent.width
         spacing: 1
         focus: true
         keyNavigationWraps: true
@@ -238,9 +238,6 @@ ColumnLayout {
 
                     property bool isElided: task.contentWidth > task.width
 
-                    onIsElidedChanged: {
-                        console.log("Eliding changed:", isElided);
-                    }
                     Component.onCompleted: console.log("Eliding changed:", isElided)
                 }
 
@@ -351,7 +348,7 @@ ColumnLayout {
 
     Rectangle {
         Layout.preferredHeight: 1
-        Layout.fillWidth: true
+        width: parent.width
         color: "lightgray"
     }
 
@@ -363,7 +360,7 @@ ColumnLayout {
     // completed
     ListView {
         Layout.preferredHeight: contentHeight
-        Layout.fillWidth: true
+        width: parent.width
         spacing: 1
         focus: true
         keyNavigationWraps: true
