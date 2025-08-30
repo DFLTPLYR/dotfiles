@@ -167,7 +167,7 @@ Scope {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: Scripts.hexToRgba(Assets.background, 0.1)
+                            color: Scripts.setOpacity(Assets.background, 0.1)
                         }
 
                         Text {

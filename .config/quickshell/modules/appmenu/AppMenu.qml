@@ -21,7 +21,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'AppMenu'
 
-    color: Scripts.hexToRgba(Assets.background, 0.2)
+    color: Scripts.setOpacity(Assets.background, 0.2)
 
     onHidden: key => {
         GlobalState.removeDrawer(key);
@@ -144,7 +144,7 @@ AnimatedScreenOverlay {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Scripts.hexToRgba(Assets.background, 0.1)
+                    color: Scripts.setOpacity(Assets.background, 0.1)
                 }
 
                 Text {
