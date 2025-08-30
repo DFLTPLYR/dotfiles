@@ -151,12 +151,8 @@ todoRouter.delete("/:id", async (c) => {
 
 // Delete both online and offline
 todoRouter.delete("/nuke", async (c) => {
-  // Delete all from offline SQLite
   offlineDb.run("DELETE FROM todos");
-
-  // Delete all from Supabase
   const { error } = await onlineDb.from("todos").delete().neq("title", null);
-
   if (error) return c.json({ ok: false, error: error.message }, 500);
   return c.json({
     ok: true,
