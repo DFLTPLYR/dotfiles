@@ -117,7 +117,7 @@ ColumnLayout {
             }
 
             radius: 5
-            color: mouse.hovered ? Scripts.setOpacity(Assets.color11, 0.4) : Scripts.setOpacity(Assets.color11, 0.2)
+            color: mouse.hovered ? (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.4) : Scripts.setOpacity(Assets.color10, 0.4)) : (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.2) : Scripts.setOpacity(Assets.color11, 0.2))
 
             property bool isSelected: ListView.isCurrentItem
 
@@ -189,6 +189,24 @@ ColumnLayout {
                                         model.title = res.title;
                                         model.status = res.status;
                                         model.is_completed = !!res.is_completed;
+
+                                        var oldIndex = index;
+                                        var newIndex = -1;
+                                        if (model.is_completed) {
+                                            newIndex = todoModel.count - 1;
+                                        } else {
+                                            for (var i = 0; i < todoModel.count; ++i) {
+                                                if (todoModel.get(i).is_completed) {
+                                                    newIndex = i;
+                                                    break;
+                                                }
+                                            }
+                                            if (newIndex === -1)
+                                                newIndex = todoModel.count - 1;
+                                        }
+                                        if (oldIndex !== newIndex) {
+                                            todoModel.move(oldIndex, newIndex, 1);
+                                        }
                                     }
                                 });
                             }
@@ -290,7 +308,18 @@ ColumnLayout {
                 duration: 250
             }
         }
-
+        move: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 250
+            }
+        }
+        moveDisplaced: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 250
+            }
+        }
         remove: Transition {
             NumberAnimation {
                 property: "opacity"
@@ -304,7 +333,6 @@ ColumnLayout {
                 duration: 250
             }
         }
-
         displaced: Transition {
             NumberAnimation {
                 properties: "x,y"
@@ -316,7 +344,10 @@ ColumnLayout {
     Component.onCompleted: {
         todoListView.focus = true;
         TodoService.getAllTodos(function (response) {
-            for (var todo of response.offline) {
+            let sorted = response.offline.sort(function (a, b) {
+                return a.is_completed - b.is_completed;
+            });
+            for (var todo of sorted) {
                 todoModel.append({
                     id: todo.id,
                     title: todo.title,
