@@ -22,7 +22,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'WallpaperCarousel'
 
-    color: Scripts.hexToRgba(Assets.background, 0.2)
+    color: Scripts.setOpacity(Assets.background, 0.2)
 
     onHidden: key => GlobalState.removeDrawer(key)
 

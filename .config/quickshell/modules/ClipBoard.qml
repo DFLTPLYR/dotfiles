@@ -21,7 +21,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'ClipBoard'
 
-    color: Scripts.hexToRgba(Assets.background, 0.2)
+    color: Scripts.setOpacity(Assets.background, 0.2)
 
     onClicked: {
         return GlobalState.toggleDrawer("clipBoard");
@@ -124,12 +124,12 @@ AnimatedScreenOverlay {
         opacity: animProgress
 
         Rectangle {
-            border.color: Scripts.hexToRgba(Assets.colors10, 0.9)
+            border.color: Scripts.setOpacity(Assets.colors10, 0.9)
             border.width: 2
 
             Layout.preferredWidth: clipboardRoot.width / 3
             Layout.fillHeight: true
-            color: Scripts.hexToRgba(Assets.background, 0.8)
+            color: Scripts.setOpacity(Assets.background, 0.8)
             radius: 10
             clip: true
 
@@ -231,7 +231,7 @@ AnimatedScreenOverlay {
 
                         border.color: isHovered || isSelected ? Assets.color10 : Assets.color15
 
-                        color: isHovered || isSelected ? Assets.color10 : Scripts.hexToRgba(Assets.background, 0.2)
+                        color: isHovered || isSelected ? Assets.color10 : Scripts.setOpacity(Assets.background, 0.2)
                         radius: 4
 
                         Behavior on border.color {
@@ -365,7 +365,7 @@ AnimatedScreenOverlay {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Scripts.hexToRgba(Assets.background, 0.8)
+            color: Scripts.setOpacity(Assets.background, 0.8)
             radius: 10
 
             Item {

@@ -17,7 +17,7 @@ import qs.components
 
 Rectangle {
     anchors.fill: parent
-    color: Scripts.hexToRgba(Assets.background, 0.8)
+    color: Scripts.setOpacity(Assets.background, 0.8)
     opacity: 1
     // radius: 20
 

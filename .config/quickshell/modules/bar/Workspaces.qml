@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 
 import qs
 import qs.assets
+import qs.utils
 import qs.services
 import qs.modules
 
@@ -45,7 +46,7 @@ Item {
                     // Track hover state
                     property bool hovered: false
 
-                    color: hovered ? Assets.color14 : (modelData.active && modelData.focused) ? Assets.color2 : "transparent"
+                    color: hovered ? Scripts.setOpacity(Assets.color14, 0.4) : (modelData.active && modelData.focused) ? Assets.color2 : "transparent"
 
                     // Animate the fill color
                     Behavior on color {
