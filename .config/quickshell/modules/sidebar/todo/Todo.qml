@@ -101,8 +101,9 @@ ColumnLayout {
         delegate: Rectangle {
             id: delegateRect
             width: parent.width
+
             property int preferredHeight: 40
-            property int expandedHeight: 80
+            property int expandedHeight: task.height + preferredHeight
 
             property bool expanded: false
 
@@ -179,8 +180,8 @@ ColumnLayout {
                                 var id = model.id;
                                 var todo = {
                                     title: model.title,
-                                    status: "completed",
-                                    is_completed: true
+                                    status: !model.is_completed ? "completed" : "pending",
+                                    is_completed: !model.is_completed ? true : false
                                 };
                                 TodoService.updateTodo(id, todo, function (res, err) {
                                     if (!err) {
@@ -196,6 +197,7 @@ ColumnLayout {
                 }
 
                 Text {
+                    id: task
                     text: model.title
                     color: Assets.color10
 
@@ -207,6 +209,7 @@ ColumnLayout {
 
                     elide: delegateRect.expanded ? Text.ElideNone : Text.ElideRight
                     wrapMode: delegateRect.expanded ? Text.Wrap : Text.NoWrap
+
                     clip: true
 
                     MouseArea {
