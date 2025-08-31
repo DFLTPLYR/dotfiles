@@ -33,10 +33,8 @@ Item {
     onSourceItemChanged: {
         if (!sourceItem)
             return;
-        // move the external item into the internal content so anchors / fillMode work
         if (sourceItem.parent !== content)
             sourceItem.parent = content;
-        // ensure it fills the wrapper and is visible so PreserveAspectCrop works
         try {
             sourceItem.anchors.fill = content;
         } catch (e) {}
