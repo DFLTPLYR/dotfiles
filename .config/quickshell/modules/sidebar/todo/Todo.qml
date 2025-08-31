@@ -102,15 +102,16 @@ ColumnLayout {
 
         Column {
             width: scroll.availableWidth
-
+            height: scroll.availableHeight
             Text {
                 text: "Pending"
                 font.bold: true
                 color: Assets.color10
             }
             ListView {
+                id: pendingListView
                 width: parent.width
-                height: contentHeight
+                height: pendingListView.contentHeight
                 spacing: 1
                 focus: true
                 keyNavigationWraps: true
@@ -355,9 +356,16 @@ ColumnLayout {
             }
 
             Rectangle {
-                Layout.preferredHeight: 1
                 width: parent.width
-                color: "lightgray"
+                height: 4
+                color: "transparent"
+
+                // Add a content Item with padding
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 1
+                    color: Assets.color10
+                }
             }
 
             Text {
@@ -367,8 +375,9 @@ ColumnLayout {
             }
             // completed
             ListView {
+                id: completedListView
                 width: parent.width
-                height: contentHeight
+                height: completedListView.contentHeight
                 spacing: 1
                 focus: true
                 keyNavigationWraps: true
