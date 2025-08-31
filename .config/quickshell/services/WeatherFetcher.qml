@@ -11,86 +11,113 @@ Singleton {
     property string weatherInfo: ""
     property string weatherCondition: ""
     property string weatherIcon: ""
-    property var weatherData: {}
+    property var weatherData
+    property var currentCondition
     property var weatherForecast: []
+
     property var weatherIcons: ({
-            "Sunny": "\uE430",
-            "Clear": "\uE430",
-            "Partly cloudy": "\uE42C",
-            "Cloudy": "\uE2BD",
-            "Overcast": "\uE2BD",
-            "Mist": "\uE3BD",
-            "Fog": "\uE3BD",
-            "Haze": "\uE3BD",
-            "Rain": "\uE4F7",
-            "Light rain": "\uE4F7",
-            "Heavy rain": "\uE4F7",
-            "Showers": "\uE4F7",
-            "Thunderstorm": "\uE409",
-            "Snow": "\uEB3B",
-            "Light snow": "\uEB3B",
-            "Heavy snow": "\uEB3B",
-            "Sleet": "\uE50B",
-            "Windy": "\uE429",
-            "Tornado": "\uE7C9"
+            "Unknown": "\uf3cc",
+            "Cloudy": "\ue2bd",
+            "Fog": "\ue818",
+            "HeavyRain": "\uf61f",
+            "HeavyShowers": "\uf61f",
+            "HeavySnow": "\uf61c",
+            "HeavySnowShowers": "\uf61c",
+            "LightRain": "\uf61e",
+            "LightShowers": "\uf61e",
+            "LightSleet": "\uf61e",
+            "LightSleetShowers": "\uf61e",
+            "LightSnow": "\uf61e",
+            "LightSnowShowers": "\uf61e",
+            "PartlyCloudy": "\uf172",
+            "Sunny": "\ue81a",
+            "ThunderyHeavyRain": "\uebdb",
+            "ThunderyShowers": "\uf61f",
+            "ThunderySnowShowers": "\uf61f",
+            "VeryCloudy": "\ue2bd"
         })
 
-    function iconKeyForDesc(desc) {
-        desc = desc.toLowerCase();
-        if (desc.includes("drizzle"))
-            return "drizzle";
-        if (desc.includes("sun") || desc.includes("clear"))
-            return "sunny";
-        if (desc.includes("rain") || desc.includes("shower"))
-            return "rainy";
-        if (desc.includes("cloud") || desc.includes("overcast") || desc.includes("partly"))
-            return "cloud";
-        if (desc.includes("thunder"))
-            return "thunder";
-        if (desc.includes("mist") || desc.includes("fog"))
-            return "wet";
-        if (desc.includes("wind") || desc.includes("breeze") || desc.includes("gust"))
-            return "windy";
-        if (desc.includes("snow") || desc.includes("sleet") || desc.includes("blizzard") || desc.includes("flurries"))
-            return "snowy";
-        if (desc.includes("hail"))
-            return "hail";
-        if (desc.includes("tornado") || desc.includes("hurricane") || desc.includes("cyclone"))
-            return "extreme";
-        if (desc.includes("dust") || desc.includes("sand") || desc.includes("smoke"))
-            return "dusty";
-        return "unknown";
+    property var weatherCode: ({
+            113: "Sunny",
+            116: "PartlyCloudy",
+            119: "Cloudy",
+            122: "VeryCloudy",
+            143: "Fog",
+            176: "LightShowers",
+            179: "LightSleetShowers",
+            182: "LightSleet",
+            185: "LightSleet",
+            200: "ThunderyShowers",
+            227: "LightSnow",
+            230: "HeavySnow",
+            248: "Fog",
+            260: "Fog",
+            263: "LightShowers",
+            266: "LightRain",
+            281: "LightSleet",
+            284: "LightSleet",
+            293: "LightRain",
+            296: "LightRain",
+            299: "HeavyShowers",
+            302: "HeavyRain",
+            305: "HeavyShowers",
+            308: "HeavyRain",
+            311: "LightSleet",
+            314: "LightSleet",
+            317: "LightSleet",
+            320: "LightSnow",
+            323: "LightSnowShowers",
+            326: "LightSnowShowers",
+            329: "HeavySnow",
+            332: "HeavySnow",
+            335: "HeavySnowShowers",
+            338: "HeavySnow",
+            350: "LightSleet",
+            353: "LightShowers",
+            356: "HeavyShowers",
+            359: "HeavyRain",
+            362: "LightSleetShowers",
+            365: "LightSleetShowers",
+            368: "LightSnowShowers",
+            371: "HeavySnowShowers",
+            374: "LightSleetShowers",
+            377: "LightSleet",
+            386: "ThunderyShowers",
+            389: "ThunderyHeavyRain",
+            392: "ThunderySnowShowers",
+            395: "HeavySnowShowers"
+        })
+
+    signal parseDone
+    function getIconFromCode(code) {
+        if (!(code in weatherCode))
+            return "\uf3cc";
+        const desc = weatherCode[code];
+        if (!(desc in weatherIcons))
+            return "\uf3cc";
+        return weatherIcons[desc];
     }
 
-    // ...existing code...
     function parseWeather(json) {
         root.weatherData = json || {};
+
         const current = (json && json.current_condition && json.current_condition[0]) ? json.current_condition[0] : null;
         root.weatherInfo = current && current.temp_C ? (current.temp_C + "°C") : "";
 
-        const desc = (current && current.weatherDesc && current.weatherDesc[0] && current.weatherDesc[0].value) ? current.weatherDesc[0].value : "";
-        let condition = desc ? iconKeyForDesc(desc) : "unknown";
-        root.weatherCondition = condition;
+        root.weatherCondition = current.weatherDesc;
 
-        const ICON_LABEL_MAP = {
-            drizzle: "Showers",
-            sunny: "Sunny",
-            clear: "Clear",
-            rainy: "Rain",
-            rain: "Rain",
-            cloud: "Cloudy",
-            thunder: "Thunderstorm",
-            wet: "Mist",
-            windy: "Windy",
-            snowy: "Snow",
-            hail: "Sleet",
-            extreme: "Tornado",
-            dusty: "Haze",
-            unknown: "Clear"
+        root.currentCondition = {
+            weatherDesc: current.weatherDesc,
+            feelslike: current.FeelsLikeC,
+            temp: current.temp_C,
+            icon: getIconFromCode(weatherCode),
+            visibility: current.visibility,
+            pressure: current.pressure,
+            humidity: current.humidity,
+            windSpeed: current.windspeedKmph
         };
 
-        const iconLabel = ICON_LABEL_MAP[condition] || "Clear";
-        root.weatherIcon = (root.weatherIcons && root.weatherIcons[iconLabel]) ? root.weatherIcons[iconLabel] : "";
+        root.weatherIcon = getIconFromCode(current.weatherDesc);
         root.weatherForecast = [];
         const forecastArr = (json && json.weather) ? json.weather : [];
         const now = new Date();
@@ -99,12 +126,8 @@ Singleton {
             const day = forecastArr[i] || {};
             const hourly = day.hourly || [];
             const noonHour = hourly[4] || hourly[0] || null;
-            const noonDesc = (noonHour && noonHour.weatherDesc && noonHour.weatherDesc[0] && noonHour.weatherDesc[0].value) ? noonHour.weatherDesc[0].value : "";
-
-            const fk = noonDesc ? iconKeyForDesc(noonDesc) : "unknown";
-            const fkLabel = ICON_LABEL_MAP[fk] || "Clear";
-            const iconChar = (root.weatherIcons && root.weatherIcons[fkLabel]) ? root.weatherIcons[fkLabel] : "";
-
+            const noonDesc = (noonHour && noonHour.weatherCode && noonHour.weatherCode[0] && noonHour.weatherCode) ? noonHour.weatherCode : "";
+            const iconChar = getIconFromCode(noonDesc);
             // safe time parsing
             let timeStr = "12:00";
             if (noonHour && noonHour.time) {
@@ -124,17 +147,19 @@ Singleton {
             root.weatherForecast.push({
                 date: day.date || "",
                 avgTemp: day.avgtempC ? (day.avgtempC + "°C") : "",
-                desc: noonDesc,
+                desc: weatherCode[noonDesc],
                 icon: iconChar,
                 relativeTime: relativeTime
             });
         }
+        root.parseDone();
     }
-    // ...existing code...
 
+    property string location: "manila"
     function fetchWeather() {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://wttr.in/manila?format=j1");
+        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&_= " + Date.now();
+        xhr.open("GET", url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
