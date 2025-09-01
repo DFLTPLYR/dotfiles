@@ -102,9 +102,9 @@ Singleton {
         const current = (json && json.current_condition && json.current_condition[0]) ? json.current_condition[0] : null;
 
         root.currentCondition = {
-            weatherDesc: current.weatherDesc,
-            feelslike: current.FeelsLikeC + "°C",
-            temp: current.temp_C + "°C",
+            weatherDesc: weatherCode[current.weatherDesc],
+            feelslike: `Feels like ${current.FeelsLikeC} °C`,
+            temp: `${current.temp_C} °C`,
             icon: getIconFromCode(weatherCode),
             visibility: current.visibility,
             pressure: current.pressure,
