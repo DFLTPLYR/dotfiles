@@ -9,7 +9,7 @@ import qs.components
 ColumnLayout {
     id: weatherPanel
     anchors.fill: parent
-
+    property bool isLoading: true
     // Weather Forecast
     Item {
         Layout.preferredHeight: Math.round(parent.height * 0.7)
@@ -24,9 +24,9 @@ ColumnLayout {
                 rightMargin: 10
                 leftMargin: 10
             }
+
             Rectangle {
                 id: currentCondition
-                property bool isLoading: typeof WeatherFetcher.currentCondition === undefined
                 Layout.preferredWidth: Math.round(parent.width * 0.4)
                 Layout.fillHeight: true
                 color: Scripts.setOpacity(Assets.color0, 0.5)
@@ -34,7 +34,7 @@ ColumnLayout {
 
                 // loading
                 ColumnLayout {
-                    visible: currentCondition.isLoading
+                    visible: weatherPanel.isLoading
                     anchors.fill: parent
 
                     Item {
@@ -62,7 +62,7 @@ ColumnLayout {
                                 to: 360
                                 duration: 3000
                                 loops: Animation.Infinite
-                                running: currentCondition.isLoading
+                                running: weatherPanel.isLoading
                             }
                         }
                     }
@@ -70,19 +70,21 @@ ColumnLayout {
 
                 // loaded
                 ColumnLayout {
-                    visible: !currentCondition.isLoading
+                    visible: !weatherPanel.isLoading
                     anchors.fill: parent
+
                     Rectangle {
                         Layout.preferredHeight: parent.height * 0.3
                         Layout.preferredWidth: parent.height * 0.3
                         Layout.alignment: Qt.AlignCenter
                         radius: height / 2
                         color: Scripts.setOpacity(Assets.background, 0.8)
+
                         Text {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             anchors.fill: parent
-                            text: 'loading'
+                            text: WeatherFetcher.currentCondition.icon ?? ""
                             color: Assets.color10
                             font.family: FontAssets.fontMaterialRounded
                             font.pixelSize: Math.round(parent.height * 0.8)
@@ -92,18 +94,18 @@ ColumnLayout {
                         Layout.fillHeight: true
                         verticalAlignment: Text.AlignBottom
                         Layout.alignment: Qt.AlignCenter
-                        text: 'loading'
+                        text: WeatherFetcher.currentCondition.temp ?? ""
                         color: Assets.color10
                     }
                     Text {
                         Layout.alignment: Qt.AlignCenter
-                        text: "test2"
+                        text: WeatherFetcher.currentCondition.weatherDesc ?? ""
                         color: Assets.color10
                     }
                     Text {
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignCenter
-                        text: "test3"
+                        text: `Feels like ${WeatherFetcher.currentCondition.weatherDesc.feelslike}` ?? ""
                         color: Assets.color10
                     }
                 }
@@ -113,7 +115,6 @@ ColumnLayout {
                 model: (WeatherFetcher.weatherForecast && WeatherFetcher.weatherForecast.length > 0) ? WeatherFetcher.weatherForecast : [0, 1, 2]
                 delegate: Rectangle {
                     required property var modelData
-                    property bool isLoading: typeof modelData === "number"
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     color: Scripts.setOpacity(Assets.color0, 0.5)
@@ -121,7 +122,7 @@ ColumnLayout {
 
                     // loading
                     ColumnLayout {
-                        visible: isLoading
+                        visible: weatherPanel.isLoading
                         anchors.fill: parent
 
                         Item {
@@ -157,7 +158,7 @@ ColumnLayout {
 
                     // loaded
                     ColumnLayout {
-                        visible: !isLoading
+                        visible: !weatherPanel.isLoading
                         anchors.fill: parent
 
                         Text {
@@ -167,7 +168,9 @@ ColumnLayout {
                             verticalAlignment: Text.AlignVCenter
                             text: {
                                 const today = new Date();
-                                const forecastDate = new Date(modelData.date);
+                                today.setHours(0, 0, 0, 0);
+                                const forecastDate = new Date(modelData.date ?? new Date());
+                                forecastDate.setHours(0, 0, 0, 0);
                                 const diffDays = Math.floor((forecastDate - today) / (1000 * 60 * 60 * 24));
                                 switch (diffDays) {
                                 case 0:
@@ -177,7 +180,7 @@ ColumnLayout {
                                 case 2:
                                     return "Day After";
                                 default:
-                                    return Qt.formatDate(modelData.date, "ddd, MMM yyyy");
+                                    return Qt.formatDate(modelData.date ?? new Date(), "ddd, MMM yyyy");
                                 }
                             }
                             color: Assets.color10
@@ -192,7 +195,7 @@ ColumnLayout {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 anchors.fill: parent
-                                text: modelData.icon ? modelData?.icon : 'loading'
+                                text: modelData?.icon ?? ""
                                 color: Assets.color10
                                 font.family: FontAssets.fontMaterialRounded
                                 font.pixelSize: Math.round(parent.height * 0.8)
@@ -203,7 +206,7 @@ ColumnLayout {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            text: modelData.avgTemp ? modelData?.avgTemp : "Loading..."
+                            text: modelData.avgTemp ?? ""
                             color: Assets.color10
                         }
                         Text {
@@ -211,7 +214,7 @@ ColumnLayout {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            text: modelData?.desc ? modelData.desc : "loading"
+                            text: modelData.desc ?? ""
                             color: Assets.color10
                             wrapMode: Text.Wrap
                         }
@@ -259,5 +262,17 @@ ColumnLayout {
                 radius: 4
             }
         }
+    }
+
+    Connections {
+        target: WeatherFetcher
+        function onParseDone() {
+            weatherPanel.isLoading = false;
+            console.log('done');
+        }
+    }
+
+    Component.onCompleted: {
+        weatherPanel.isLoading = typeof WeatherFetcher.currentCondition === 'undefined';
     }
 }
