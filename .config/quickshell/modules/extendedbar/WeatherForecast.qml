@@ -105,7 +105,7 @@ ColumnLayout {
                     Text {
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignCenter
-                        text: `Feels like ${WeatherFetcher.currentCondition.weatherDesc.feelslike}` ?? ""
+                        text: WeatherFetcher.currentCondition.weatherDesc.feelslike ?? ""
                         color: Assets.color10
                     }
                 }
