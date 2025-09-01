@@ -8,8 +8,6 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property string weatherInfo: ""
-    property string weatherCondition: ""
     property string weatherIcon: ""
     property var weatherData
     property var currentCondition
@@ -102,14 +100,11 @@ Singleton {
         root.weatherData = json || {};
 
         const current = (json && json.current_condition && json.current_condition[0]) ? json.current_condition[0] : null;
-        root.weatherInfo = current && current.temp_C ? (current.temp_C + "°C") : "";
-
-        root.weatherCondition = current.weatherDesc;
 
         root.currentCondition = {
             weatherDesc: current.weatherDesc,
-            feelslike: current.FeelsLikeC,
-            temp: current.temp_C,
+            feelslike: current.FeelsLikeC + "°C",
+            temp: current.temp_C + "°C",
             icon: getIconFromCode(weatherCode),
             visibility: current.visibility,
             pressure: current.pressure,
@@ -158,7 +153,7 @@ Singleton {
     property string location: "manila"
     function fetchWeather() {
         const xhr = new XMLHttpRequest();
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&_= " + Date.now();
+        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1";
         xhr.open("GET", url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
