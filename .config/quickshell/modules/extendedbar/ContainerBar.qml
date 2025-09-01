@@ -27,10 +27,8 @@ GridLayout {
 
     // Left Panel
     Rectangle {
-        color: "transparent"
+        color: Scripts.setOpacity(Assets.color0, 0.5)
 
-        border.width: 1
-        border.color: Assets.color1
         radius: 10
 
         Layout.row: 0
@@ -135,9 +133,7 @@ GridLayout {
         Layout.fillHeight: true
 
         Rectangle {
-            color: 'transparent'
-            border.width: 1
-            border.color: Assets.color1
+            color: Scripts.setOpacity(Assets.color0, 0.5)
             radius: 10
 
             opacity: middleTopStack.currentIndex === 0 ? 1 : 0
@@ -158,8 +154,7 @@ GridLayout {
 
         Rectangle {
             color: 'transparent'
-            border.width: 1
-            border.color: Assets.color1
+
             radius: 10
 
             opacity: middleTopStack.currentIndex === 1 ? 1 : 0
@@ -196,10 +191,8 @@ GridLayout {
 
     // Right Panel
     Rectangle {
-        color: "transparent"
+        color: Scripts.setOpacity(Assets.color0, 0.5)
 
-        border.width: 1
-        border.color: Assets.color1
         radius: 10
 
         Layout.row: 0
