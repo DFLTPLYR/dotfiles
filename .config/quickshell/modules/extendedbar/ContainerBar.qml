@@ -60,7 +60,7 @@ GridLayout {
                         Layout.fillWidth: true
                         color: Assets.color10
                         text: WeatherFetcher.currentCondition?.icon ?? ""
-                        font.pixelSize: 50
+                        font.pixelSize: 24
                         font.family: FontAssets.fontMaterialOutlined
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -70,7 +70,8 @@ GridLayout {
                         Layout.fillWidth: true
                         color: Assets.color10
                         text: WeatherFetcher.currentCondition?.feelslike ?? ""
-                        font.pixelSize: 32
+                        font.pixelSize: 12
+                        wrapMode: Text.WordWrap
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
