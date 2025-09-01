@@ -12,7 +12,8 @@ Rectangle {
     id: calendarWrapper
     Layout.fillWidth: true
     Layout.fillHeight: true
-    color: "transparent"
+    color: Scripts.setOpacity(Assets.color0, 0.5)
+    radius: 10
 
     property int year: TimeService.year
     property int month: TimeService.month
@@ -60,6 +61,13 @@ Rectangle {
         rowSpacing: 4
         columnSpacing: 4
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+        anchors {
+            topMargin: 10
+            rightMargin: 10
+            leftMargin: 10
+            bottomMargin: 10
+        }
 
         property var dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         property var monthShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

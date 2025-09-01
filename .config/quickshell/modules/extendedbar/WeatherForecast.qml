@@ -19,16 +19,10 @@ ColumnLayout {
             anchors.fill: parent
             spacing: 4
 
-            anchors {
-                topMargin: 10
-                rightMargin: 10
-                leftMargin: 10
-            }
-
             Rectangle {
                 id: currentCondition
-                Layout.preferredWidth: Math.round(parent.width * 0.4)
                 Layout.fillHeight: true
+                Layout.preferredWidth: Math.round(parent.width * 0.4)
                 color: Scripts.setOpacity(Assets.color0, 0.5)
                 radius: 4
 
@@ -77,14 +71,14 @@ ColumnLayout {
                         anchors.fill: parent
 
                         Item {
-                            Layout.preferredHeight: parent.height * 0.4
+                            Layout.preferredHeight: parent.height * 0.5
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignCenter
 
                             Rectangle {
                                 anchors.bottom: parent.bottom
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                height: parent.height * 0.9
+                                height: parent.height * 0.7
                                 width: height
                                 radius: height / 2
                                 color: Scripts.setOpacity(Assets.background, 0.8)
@@ -282,12 +276,6 @@ ColumnLayout {
         RowLayout {
             anchors.fill: parent
             spacing: 4
-
-            anchors {
-                bottomMargin: 10
-                rightMargin: 10
-                leftMargin: 10
-            }
 
             Component {
                 id: weatherDetailComponent
