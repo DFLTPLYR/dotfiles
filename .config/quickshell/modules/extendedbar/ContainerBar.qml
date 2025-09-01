@@ -54,14 +54,14 @@ GridLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: parent.height / 3
-                    spacing: -50
                     Layout.alignment: Qt.AlignHCenter
 
                     Text {
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
                         color: Assets.color10
                         text: WeatherFetcher.currentCondition?.icon ?? ""
-                        font.pixelSize: 24
+                        font.pixelSize: Math.min(parent.height, parent.width) * 0.5
                         font.family: FontAssets.fontMaterialOutlined
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -69,6 +69,7 @@ GridLayout {
 
                     Text {
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
                         color: Assets.color10
                         text: WeatherFetcher.currentCondition?.feelslike ?? ""
                         font.pixelSize: 12
