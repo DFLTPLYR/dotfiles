@@ -83,25 +83,22 @@ Rectangle {
                         visible: !delegateRect.expand
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        anchors.centerIn: parent
                         Text {
                             Layout.fillWidth: true
                             text: appName
                             font.bold: true
                             color: Assets.color12
                             elide: Text.ElideRight
-
-                            Layout.alignment: Qt.AlignHCenter
                             font.family: FontAssets.fontSometypeItalic
                         }
 
                         Text {
                             id: timeText
+                            Layout.alignment: Qt.AlignVCenter
                             text: Qt.formatDateTime(new Date(time), "hh:mm AP")
                             color: Assets.color11
                             horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            Layout.alignment: Qt.AlignHCenter
-
                             font.family: FontAssets.fontSometypeItalic
                         }
                     }
