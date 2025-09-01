@@ -50,6 +50,7 @@ GridLayout {
 
                 // Weather top section
                 ColumnLayout {
+                    visible: typeof WeatherFetcher.weatherData !== 'undefined'
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: parent.height / 3

@@ -84,7 +84,7 @@ ColumnLayout {
                             Rectangle {
                                 anchors.bottom: parent.bottom
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                height: parent.height * 0.7
+                                height: parent.height * 0.9
                                 width: height
                                 radius: height / 2
                                 color: Scripts.setOpacity(Assets.background, 0.8)
@@ -93,29 +93,39 @@ ColumnLayout {
                                     anchors.centerIn: parent
                                     text: WeatherFetcher.currentCondition?.icon ?? ""
                                     color: Assets.color10
+                                    font.bold: true
                                     font.family: FontAssets.fontMaterialRounded
-                                    font.pixelSize: Math.round(parent.height * 0.8)
+                                    font.pixelSize: Math.min(parent.height, parent.width)
                                 }
                             }
                         }
 
                         Text {
                             Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignBottom
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.temp ?? ""
                             color: Assets.color10
+                            wrapMode: Text.Wrap
                         }
                         Text {
+                            Layout.fillWidth: true
                             Layout.alignment: Qt.AlignCenter
+                            horizontalAlignment: Text.AlignHCenter
                             text: WeatherFetcher.currentCondition?.weatherDesc ?? ""
                             color: Assets.color10
+                            wrapMode: Text.Wrap
                         }
                         Text {
                             Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.feelslike ?? ""
                             color: Assets.color10
+                            wrapMode: Text.Wrap
                         }
                     }
                 }
@@ -320,7 +330,7 @@ ColumnLayout {
                                 verticalAlignment: Text.AlignVCenter
                                 color: Assets.color10
                                 font.family: FontAssets.fontSometypeMono
-                                font.pixelSize: Math.min(parent.height, parent.width) * 0.8
+                                font.pixelSize: Math.min(parent.height, parent.width) * 0.5
                             }
                         }
 

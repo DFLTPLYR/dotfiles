@@ -99,7 +99,7 @@ Singleton {
     function parseWeather(json) {
         root.weatherData = json || {};
 
-        const current = (json && json.current_condition && json.current_condition[0]) ? json.current_condition[0] : null;
+        const current = json.current_condition[0];
         root.currentCondition = {
             weatherDesc: current.weatherDesc[0].value,
             feelslike: `Feels like ${current.FeelsLikeC}°C`,
@@ -113,7 +113,7 @@ Singleton {
 
         root.weatherIcon = getIconFromCode(current.weatherDesc);
         root.weatherForecast = [];
-        const forecastArr = (json && json.weather) ? json.weather : [];
+        const forecastArr = json.weather;
         const now = new Date();
 
         for (let i = 0; i < Math.min(forecastArr.length, 3); i++) {
