@@ -146,7 +146,7 @@ Singleton {
             root.updateMemoryStats();
             root.updateCpuStats();
             root.updateNetworkStats();
-            interval = 3000;
+            interval = 6000;
         }
     }
 
