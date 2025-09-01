@@ -73,39 +73,45 @@ ColumnLayout {
                     visible: !weatherPanel.isLoading
                     anchors.fill: parent
 
-                    Rectangle {
-                        Layout.preferredHeight: parent.height * 0.3
-                        Layout.preferredWidth: parent.height * 0.3
+                    Item {
+                        Layout.preferredHeight: parent.height * 0.4
+                        Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
-                        radius: height / 2
-                        color: Scripts.setOpacity(Assets.background, 0.8)
 
-                        Text {
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.fill: parent
-                            text: WeatherFetcher.currentCondition.icon ?? ""
-                            color: Assets.color10
-                            font.family: FontAssets.fontMaterialRounded
-                            font.pixelSize: Math.round(parent.height * 0.8)
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            height: parent.height * 0.7
+                            width: height
+                            radius: height / 2
+                            color: Scripts.setOpacity(Assets.background, 0.8)
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: WeatherFetcher.currentCondition?.icon ?? ""
+                                color: Assets.color10
+                                font.family: FontAssets.fontMaterialRounded
+                                font.pixelSize: Math.round(parent.height * 0.8)
+                            }
                         }
                     }
+
                     Text {
                         Layout.fillHeight: true
                         verticalAlignment: Text.AlignBottom
                         Layout.alignment: Qt.AlignCenter
-                        text: WeatherFetcher.currentCondition.temp ?? ""
+                        text: WeatherFetcher.currentCondition?.temp ?? ""
                         color: Assets.color10
                     }
                     Text {
                         Layout.alignment: Qt.AlignCenter
-                        text: WeatherFetcher.currentCondition.weatherDesc ?? ""
+                        text: WeatherFetcher.currentCondition?.weatherDesc ?? ""
                         color: Assets.color10
                     }
                     Text {
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignCenter
-                        text: WeatherFetcher.currentCondition.weatherDesc.feelslike ?? ""
+                        text: WeatherFetcher.currentCondition?.feelslike ?? ""
                         color: Assets.color10
                     }
                 }
@@ -169,7 +175,7 @@ ColumnLayout {
                             text: {
                                 const today = new Date();
                                 today.setHours(0, 0, 0, 0);
-                                const forecastDate = new Date(modelData.date ?? new Date());
+                                const forecastDate = new Date(modelData?.date ?? new Date());
                                 forecastDate.setHours(0, 0, 0, 0);
                                 const diffDays = Math.floor((forecastDate - today) / (1000 * 60 * 60 * 24));
                                 switch (diffDays) {
@@ -180,7 +186,7 @@ ColumnLayout {
                                 case 2:
                                     return "Day After";
                                 default:
-                                    return Qt.formatDate(modelData.date ?? new Date(), "ddd, MMM yyyy");
+                                    return Qt.formatDate(modelData?.date ?? new Date(), "ddd, MMM yyyy");
                                 }
                             }
                             color: Assets.color10
@@ -206,7 +212,7 @@ ColumnLayout {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            text: modelData.avgTemp ?? ""
+                            text: modelData?.avgTemp ?? ""
                             color: Assets.color10
                         }
                         Text {
@@ -214,7 +220,7 @@ ColumnLayout {
                             Layout.fillWidth: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            text: modelData.desc ?? ""
+                            text: modelData?.desc ?? ""
                             color: Assets.color10
                             wrapMode: Text.Wrap
                         }
