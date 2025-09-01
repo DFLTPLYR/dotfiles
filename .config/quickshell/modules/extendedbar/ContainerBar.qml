@@ -59,7 +59,7 @@ GridLayout {
                     Text {
                         Layout.fillWidth: true
                         color: Assets.color10
-                        text: WeatherFetcher.weatherIcon
+                        text: WeatherFetcher.currentCondition?.icon ?? ""
                         font.pixelSize: 50
                         font.family: FontAssets.fontMaterialOutlined
                         horizontalAlignment: Text.AlignHCenter
@@ -69,7 +69,7 @@ GridLayout {
                     Text {
                         Layout.fillWidth: true
                         color: Assets.color10
-                        text: WeatherFetcher.weatherInfo
+                        text: WeatherFetcher.currentCondition?.feelslike ?? ""
                         font.pixelSize: 32
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
