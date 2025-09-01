@@ -16,8 +16,8 @@ Rectangle {
     id: root
     Layout.fillWidth: true
     Layout.fillHeight: true
-
-    color: 'transparent'
+    radius: 10
+    color: Scripts.setOpacity(Assets.color0, 0.5)
 
     property bool isEmpty: NotificationService.list.length > 0
     property ListModel notificationGroup: ListModel {}
@@ -26,6 +26,13 @@ Rectangle {
         id: container
         anchors.fill: parent
         clip: true
+
+        anchors {
+            topMargin: 10
+            rightMargin: 10
+            leftMargin: 10
+            bottomMargin: 10
+        }
 
         StyledButton {
             icon: "\uf1f8"
@@ -77,29 +84,32 @@ Rectangle {
                     anchors.centerIn: parent
                     width: Math.round(parent.width * 0.95)
 
-                    spacing: 8
-
-                    RowLayout {
-                        visible: !delegateRect.expand
+                    Item {
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        anchors.centerIn: parent
-                        Text {
-                            Layout.fillWidth: true
-                            text: appName
-                            font.bold: true
-                            color: Assets.color12
-                            elide: Text.ElideRight
-                            font.family: FontAssets.fontSometypeItalic
-                        }
+                        height: row.implicitHeight
 
-                        Text {
-                            id: timeText
-                            Layout.alignment: Qt.AlignVCenter
-                            text: Qt.formatDateTime(new Date(time), "hh:mm AP")
-                            color: Assets.color11
-                            horizontalAlignment: Text.AlignHCenter
-                            font.family: FontAssets.fontSometypeItalic
+                        RowLayout {
+                            id: row
+                            anchors.centerIn: parent
+                            width: parent.width
+                            visible: !delegateRect.expand
+
+                            Text {
+                                Layout.fillWidth: true
+                                text: appName
+                                font.bold: true
+                                color: Assets.color12
+                                elide: Text.ElideRight
+                                font.family: FontAssets.fontSometypeItalic
+                            }
+
+                            Text {
+                                id: timeText
+                                text: Qt.formatDateTime(new Date(time), "hh:mm AP")
+                                color: Assets.color11
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: FontAssets.fontSometypeItalic
+                            }
                         }
                     }
 
@@ -107,7 +117,7 @@ Rectangle {
                         Repeater {
                             model: notifications
                             delegate: NotificationItem {
-                                implicitWidth: parent.width
+                                Layout.fillWidth: true
                                 visible: delegateRect.expand
                             }
                         }
