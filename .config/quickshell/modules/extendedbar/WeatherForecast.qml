@@ -81,15 +81,15 @@ ColumnLayout {
                                 height: parent.height * 0.7
                                 width: height
                                 radius: height / 2
-                                color: Scripts.setOpacity(Assets.background, 0.8)
+                                color: Scripts.setOpacity(Assets.color2, 0.4)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: WeatherFetcher.currentCondition?.icon ?? ""
-                                    color: Assets.color10
+                                    color: Assets.color14
                                     font.bold: true
                                     font.family: FontAssets.fontMaterialRounded
-                                    font.pixelSize: Math.min(parent.height, parent.width)
+                                    font.pixelSize: parent.height * 0.7
                                 }
                             }
                         }
@@ -227,13 +227,13 @@ ColumnLayout {
                                     Layout.preferredWidth: parent.height * 0.3
                                     Layout.alignment: Qt.AlignCenter
                                     radius: height / 2
-                                    color: Scripts.setOpacity(Assets.background, 0.8)
+                                    color: Scripts.setOpacity(Assets.color2, 0.4)
                                     Text {
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         anchors.fill: parent
                                         text: modelData?.icon
-                                        color: Assets.color10
+                                        color: Assets.color14
                                         font.family: FontAssets.fontMaterialRounded
                                         font.pixelSize: Math.round(parent.height * 0.8)
                                     }
@@ -331,7 +331,10 @@ ColumnLayout {
                                 text: valueText
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: Assets.color10
+                                color: Assets.color14
+                                font.bold: true
+                                font.family: FontAssets.fontSometypeMono
+                                font.pixelSize: Math.min(parent.height, parent.width)
                             }
                         }
                     }
@@ -340,46 +343,50 @@ ColumnLayout {
 
             // Humidity
             Loader {
+                id: humidityLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\ue798";
                     item.titleText = qsTr("Humidity");
-                    item.valueText = WeatherFetcher.currentCondition?.humidity ?? "";
+                    item.valueText = WeatherFetcher.currentCondition?.humidity ? `${WeatherFetcher.currentCondition?.humidity}%` : "";
                 }
             }
             // Windspeed
             Loader {
+                id: windSpeedLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\uefd8";
                     item.titleText = qsTr("Windspeed");
-                    item.valueText = WeatherFetcher.currentCondition?.windSpeed ?? "";
+                    item.valueText = WeatherFetcher.currentCondition?.windSpeed ? `${WeatherFetcher.currentCondition?.windSpeed}m/s` : "";
                 }
             }
             // Visibility
             Loader {
+                id: visibilityLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\ue8f4";
                     item.titleText = qsTr("Visibility");
-                    item.valueText = WeatherFetcher.currentCondition?.visibility ?? "";
+                    item.valueText = WeatherFetcher.currentCondition?.visibility ? `${WeatherFetcher.currentCondition?.visibility}km` : "";
                 }
             }
             // Pressure
             Loader {
+                id: pressureLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\uf6bb";
                     item.titleText = qsTr("Pressure");
-                    item.valueText = WeatherFetcher.currentCondition?.pressure ?? "";
+                    item.valueText = WeatherFetcher.currentCondition?.pressure ? `${WeatherFetcher.currentCondition?.pressure}hPa` : "";
                 }
             }
         }
@@ -389,6 +396,10 @@ ColumnLayout {
         target: WeatherFetcher
         function onParseDone() {
             weatherPanel.isLoading = false;
+            humidityLoader.item.valueText = WeatherFetcher.currentCondition?.humidity ? `${WeatherFetcher.currentCondition?.humidity}%` : "";
+            windSpeedLoader.item.valueText = WeatherFetcher.currentCondition?.windSpeed ? `${WeatherFetcher.currentCondition?.windSpeed}m/s` : "";
+            visibilityLoader.item.valueText = WeatherFetcher.currentCondition?.visibility ? `${WeatherFetcher.currentCondition?.visibility}km` : "";
+            pressureLoader.item.valueText = WeatherFetcher.currentCondition?.pressure ? `${WeatherFetcher.currentCondition?.pressure}hPa` : "";
         }
     }
 
