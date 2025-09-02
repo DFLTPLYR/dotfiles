@@ -141,7 +141,7 @@ PopupWindow {
             anchors.centerIn: parent
             spacing: 0
 
-            ClippingRectangle {
+            Rectangle {
                 color: 'transparent'
 
                 width: Math.floor(mainContent.width)
