@@ -74,12 +74,12 @@ Rectangle {
 
         // Prev Button
         Rectangle {
-            color: 'transparent'
+            color: Scripts.setOpacity(Assets.color10, 0.4)
             Layout.fillWidth: true
             Layout.fillHeight: false
             height: 20
 
-            border.color: prevBtnMA.containsMouse ? Assets.color12 : Assets.color1
+            border.color: prevBtnMA.containsMouse ? Assets.color12 : Assets.color14
             radius: 4
 
             Behavior on border.color {
@@ -92,7 +92,7 @@ Rectangle {
             Text {
                 id: prevBtn
                 text: '\uf0d9'
-                color: Assets.color15
+                color: Assets.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -118,7 +118,7 @@ Rectangle {
                 id: currentDate
                 anchors.centerIn: parent
                 text: qsTr(`${calendarWrapper.year} - ${calendarGrid.monthShort[calendarWrapper.month - 1]}`)
-                color: Assets.color15
+                color: Assets.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.family: FontAssets.fontSometypeMono
@@ -132,13 +132,14 @@ Rectangle {
 
         // Next Button
         Rectangle {
-            color: 'transparent'
+            color: Scripts.setOpacity(Assets.color10, 0.4)
             Layout.fillWidth: true
             Layout.fillHeight: false
             height: 20
 
-            border.color: nextBtnMA.containsMouse ? Assets.color12 : Assets.color1
+            border.color: nextBtnMA.containsMouse ? Assets.color12 : Assets.color14
             radius: 4
+
             Behavior on border.color {
                 ColorAnimation {
                     duration: 200
@@ -149,7 +150,7 @@ Rectangle {
             Text {
                 id: nextBtn
                 text: '\uf0da'
-                color: Assets.color15
+                color: Assets.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -166,19 +167,19 @@ Rectangle {
         Repeater {
             model: calendarGrid.columns
             delegate: Rectangle {
-                color: 'transparent'
+                color: Scripts.setOpacity(Assets.color10, 0.4)
                 Layout.fillWidth: true
                 Layout.fillHeight: false
                 height: 30
 
-                border.color: Assets.color1
+                border.color: Scripts.setOpacity(Assets.color10, 0.4)
                 radius: 4
 
                 Text {
                     anchors.centerIn: parent
                     text: calendarGrid.dayNames[index]
                     font.bold: true
-                    color: Assets.color11
+                    color: Assets.color14
                     font.family: FontAssets.fontSometypeItalic
                 }
             }
@@ -207,19 +208,17 @@ Rectangle {
                     return modelData === TimeService.date.getDate() && calendarWrapper.isCurrentDate;
                 }
 
-                color: selected ? Scripts.setOpacity(Assets.color15, 0.2) : "transparent"
+                color: selected ? Scripts.setOpacity(Assets.color15, 0.4) : (modelData ? Scripts.setOpacity(Assets.color10, 0.4) : "transparent")
                 radius: 4
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                border.color: Assets.color1
-
                 Text {
                     anchors.centerIn: parent
                     text: modelData ? modelData : '\uf111'
                     font.pixelSize: modelData ? 12 : 8
-                    color: modelData ? (selected ? Assets.color10 : Assets.color15) : Assets.color0
+                    color: modelData ? Assets.color14 : "transparent"
                     font.family: FontAssets.fontSometypeItalic
                 }
             }

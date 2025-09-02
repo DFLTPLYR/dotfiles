@@ -133,8 +133,7 @@ GridLayout {
         Layout.fillHeight: true
 
         Rectangle {
-            color: Scripts.setOpacity(Assets.color0, 0.5)
-            radius: 10
+            color: "transparent"
 
             opacity: middleTopStack.currentIndex === 0 ? 1 : 0
 
