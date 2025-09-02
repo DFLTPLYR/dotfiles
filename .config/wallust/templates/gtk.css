@@ -1,53 +1,55 @@
-/* ~/.config/gtk-3.0/gtk.css or ~/.config/gtk-4.0/gtk.css */
-/* Wallust generated */
+/* ~/.config/wallust/templates/gtk.css */
+/* Wallust GTK template */
 
-window, dialog {
-    background-color: {{background}};
-    color: {{foreground}};
+@define-color bg_color      {{background}};
+@define-color fg_color      {{foreground}};
+
+@define-color color0        {{color0}};
+@define-color color1        {{color1}};
+@define-color color2        {{color2}};
+@define-color color3        {{color3}};
+@define-color color4        {{color4}};
+@define-color color5        {{color5}};
+@define-color color6        {{color6}};
+@define-color color7        {{color7}};
+@define-color color8        {{color8}};
+@define-color color9        {{color9}};
+@define-color color10       {{color10}};
+@define-color color11       {{color11}};
+@define-color color12       {{color12}};
+@define-color color13       {{color13}};
+@define-color color14       {{color14}};
+@define-color color15       {{color15}};
+
+window {
+  background-color: @bg_color;
+  color: @fg_color;
 }
 
-/* Buttons */
 button {
-    background-color: {{background}};
-    color: {{foreground}};
-    border: 1px solid {{color8}};
-    border-radius: 4px;
-    padding: 4px 8px;
+  background: @color2;
+  color: @fg_color;
 }
 
 button:hover {
-    background-color: {{color2}};
-    color: {{background}};
+  background: @color3;
 }
 
-/* Entries (text fields) */
 entry, textview {
-    background-color: {{background}};
-    color: {{foreground}};
-    border: 1px solid {{color8}};
-    border-radius: 4px;
-    padding: 2px 4px;
+  background: @color0;
+  color: @fg_color;
+  border: 1px solid @color8;
 }
 
-/* Selected text / list items */
-selection {
-    background-color: {{color4}};
-    color: {{background}};
-}
-
-/* Header bars */
 headerbar {
-    background-color: {{background}};
-    color: {{foreground}};
-    border-bottom: 1px solid {{color8}};
+  background: @color4;
+  color: @fg_color;
 }
 
-/* Scrollbars */
+scrollbar {
+  background-color: @color0;
+}
+
 scrollbar slider {
-    background-color: {{color8}};
-    border-radius: 4px;
-}
-
-scrollbar slider:hover {
-    background-color: {{color5}};
+  background-color: @color6;
 }
