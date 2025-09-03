@@ -11,192 +11,134 @@ import qs.animations
 
 Singleton {
     id: root
-    // memory
-    property double memoryTotal: 1
-    property double memoryFree: 1
-    property double memoryUsed: memoryTotal - memoryFree
-    property double memoryUsedPercentage: memoryUsed / memoryTotal
+    // Raw data from API
+    property var systemStats: ({})
 
-    // Swap
-    property double swapTotal: 1
-    property double swapFree: 1
-    property double swapUsed: swapTotal - swapFree
-    property double swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
+    // Animated properties for CPU
+    property double cpuUsage: systemStats.cpu ? systemStats.cpu.total / 100 : 0
+    property int cpuCores: systemStats.cpu ? systemStats.cpu.cpucore : 0
+    property int cpuCtxSwitches: systemStats.cpu ? systemStats.cpu.ctx_switches_rate_per_sec : 0
 
-    function updateMemoryStats() {
-        fileMeminfo.reload();
-        const textMeminfo = fileMeminfo.text();
-        memoryTotal = Number(textMeminfo.match(/MemTotal: *(\d+)/)[1] ?? 1);
-        memoryFree = Number(textMeminfo.match(/MemAvailable: *(\d+)/)[1] ?? 0);
-        swapTotal = Number(textMeminfo.match(/SwapTotal: *(\d+)/)[1] ?? 1);
-        swapFree = Number(textMeminfo.match(/SwapFree: *(\d+)/)[1] ?? 0);
-    }
+    // Animated properties for GPU
+    property double gpuUsage: (systemStats.gpu && systemStats.gpu.length > 0) ? systemStats.gpu[0].proc / 100 : 0
+    property double gpuTemp: (systemStats.gpu && systemStats.gpu.length > 0) ? (systemStats.gpu[0].temperature) : 0
+    property double gpuMem: (systemStats.gpu && systemStats.gpu.length > 0) ? systemStats.gpu[0].mem / 100 : 0
 
-    // Cpu
-    property double cpuUsage: 0
-    property var previousCpuStats
+    // Animated properties for Memory
+    property double memUsage: systemStats.mem ? systemStats.mem.percent / 100 : 0
+    property double memUsed: systemStats.mem ? systemStats.mem.used : 0
+    property double memTotal: systemStats.mem ? systemStats.mem.total : 1
+    property double memCached: systemStats.mem ? systemStats.mem.cached : 0
+    property double memActive: systemStats.mem ? systemStats.mem.active : 0
 
-    function updateCpuStats() {
-        fileStat.reload();
-        const textStat = fileStat.text();
-        const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/);
-        if (!cpuLine)
-            return;
+    // Animated properties for Swap
+    property double swapUsage: systemStats.memswap ? systemStats.memswap.percent / 100 : 0
+    property double swapUsed: systemStats.memswap ? systemStats.memswap.used : 0
+    property double swapTotal: systemStats.memswap ? systemStats.memswap.total : 1
+    property double swapIn: systemStats.memswap ? systemStats.memswap.sin : 0
+    property double swapOut: systemStats.memswap ? systemStats.memswap.sout : 0
 
-        const stats = cpuLine.slice(1).map(Number);
-        const total = stats.reduce((a, b) => a + b, 0);
-        const idle = stats[3];
+    function getGlancesStats(callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:61208/api/4/all", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                var filtered = {
+                    cpu: data.cpu,
+                    gpu: data.gpu,
+                    mem: data.mem,
+                    memswap: data.memswap
+                };
+                root.systemStats = filtered; // Update the raw data
 
-        if (previousCpuStats) {
-            const totalDiff = total - previousCpuStats.total;
-            const idleDiff = idle - previousCpuStats.idle;
-            cpuUsage = totalDiff > 0 ? (1 - idleDiff / totalDiff) : 0;
-        }
+                // Update the animated properties
+                cpuUsage = systemStats.cpu ? systemStats.cpu.total / 100 : 0;
+                cpuCores = systemStats.cpu ? systemStats.cpu.cpucore : 0;
+                cpuCtxSwitches = systemStats.cpu ? systemStats.cpu.ctx_switches_rate_per_sec : 0;
 
-        previousCpuStats = {
-            total,
-            idle
+                gpuUsage = (systemStats.gpu && systemStats.gpu.length > 0) ? systemStats.gpu[0].proc / 100 : 0;
+                gpuTemp = (systemStats.gpu && systemStats.gpu.length > 0) ? systemStats.gpu[0].temperature : 0;
+                gpuMem = (systemStats.gpu && systemStats.gpu.length > 0) ? systemStats.gpu[0].mem / 100 : 0;
+
+                memUsage = systemStats.mem ? systemStats.mem.percent / 100 : 0;
+                memUsed = systemStats.mem ? systemStats.mem.used : 0;
+                memTotal = systemStats.mem ? systemStats.mem.total : 1;
+                memCached = systemStats.mem ? systemStats.mem.cached : 0;
+                memActive = systemStats.mem ? systemStats.mem.active : 0;
+
+                swapUsage = systemStats.memswap ? systemStats.memswap.percent / 100 : 0;
+                swapUsed = systemStats.memswap ? systemStats.memswap.used : 0;
+                swapTotal = systemStats.memswap ? systemStats.memswap.total : 1;
+                swapIn = systemStats.memswap ? systemStats.memswap.sin : 0;
+                swapOut = systemStats.memswap ? systemStats.memswap.sout : 0;
+
+                if (callback)
+                    callback(filtered);
+            }
         };
-    }
-
-    // Network
-    property string netInterface: ""
-    property var prevNet: ({
-            rx: 0,
-            tx: 0,
-            t: 0
-        })
-
-    property double netUploadValue: 0
-    property double netDownloadValue: 0
-
-    property string netUpload: humanRate(netUploadValue)
-    property string netDownload: humanRate(netDownloadValue)
-
-    function humanRate(bytesPerSec) {
-        if (bytesPerSec >= 1024 * 1024)
-            return (bytesPerSec / (1024 * 1024)).toFixed(2) + " MB/s";
-        else if (bytesPerSec >= 1024)
-            return (bytesPerSec / 1024).toFixed(1) + " KB/s";
-        else
-            return bytesPerSec.toFixed(0) + " B/s";
-    }
-
-    function detectInterface() {
-        var lines = netStat.text().trim().split("\n");
-        for (var i = 2; i < lines.length; i++) {
-            var parts = lines[i].trim().split(":");
-            if (parts.length < 2)
-                continue;
-            var iface = parts[0].trim();
-
-            if (iface !== "lo" && !iface.startsWith("vir") && !iface.startsWith("docker")) {
-                return iface;
-            }
-        }
-        return "";
-    }
-
-    function updateNetworkStats() {
-        netStat.reload();
-
-        if (netInterface === "") {
-            netInterface = detectInterface();
-            if (netInterface === "") {
-                console.warn("No active network interface found.");
-                return;
-            }
-        }
-
-        var now = Date.now();
-        var lines = netStat.text().trim().split("\n");
-        for (var i = 2; i < lines.length; i++) {
-            var parts = lines[i].trim().split(":");
-            if (parts.length < 2)
-                continue;
-
-            var iface = parts[0].trim();
-            if (iface === netInterface) {
-                var fields = parts[1].trim().split(/\s+/).map(Number);
-                var rxBytes = fields[0];
-                var txBytes = fields[8];
-
-                if (prevNet.t > 0) {
-                    var dt = (now - prevNet.t) / 1000.0;
-                    var rxRate = (rxBytes - prevNet.rx) / dt;
-                    var txRate = (txBytes - prevNet.tx) / dt;
-
-                    netDownloadValue = rxRate;
-                    netUploadValue = txRate;
-                }
-
-                prevNet.rx = rxBytes;
-                prevNet.tx = txBytes;
-                prevNet.t = now;
-                break;
-            }
-        }
+        xhr.send();
     }
 
     Timer {
-        interval: 1
+        interval: 500
         running: true
         repeat: true
         onTriggered: {
-            root.updateMemoryStats();
-            root.updateCpuStats();
-            root.updateNetworkStats();
-            interval = 6000;
+            root.getGlancesStats();
         }
     }
 
-    FileView {
-        id: fileMeminfo
-        path: "/proc/meminfo"
+    // Add behaviors for smooth animations
+    Behavior on cpuUsage {
+        AnimatedNumber {}
+    }
+    Behavior on cpuCores {
+        AnimatedNumber {}
+    }
+    Behavior on cpuCtxSwitches {
+        AnimatedNumber {}
     }
 
-    FileView {
-        id: fileStat
-        path: "/proc/stat"
+    Behavior on gpuUsage {
+        AnimatedNumber {}
+    }
+    Behavior on gpuTemp {
+        AnimatedNumber {}
+    }
+    Behavior on gpuMem {
+        AnimatedNumber {}
     }
 
-    FileView {
-        id: netStat
-        path: "/proc/net/dev"
+    Behavior on memUsage {
+        AnimatedNumber {}
+    }
+    Behavior on memUsed {
+        AnimatedNumber {}
+    }
+    Behavior on memTotal {
+        AnimatedNumber {}
+    }
+    Behavior on memCached {
+        AnimatedNumber {}
+    }
+    Behavior on memActive {
+        AnimatedNumber {}
     }
 
-    // animate
-    Behavior on memoryTotal {
-        AnimatedNumber {}
-    }
-    Behavior on memoryFree {
-        AnimatedNumber {}
-    }
-    Behavior on memoryUsed {
-        AnimatedNumber {}
-    }
-    Behavior on memoryUsedPercentage {
-        AnimatedNumber {}
-    }
-    Behavior on swapTotal {
-        AnimatedNumber {}
-    }
-    Behavior on swapFree {
+    Behavior on swapUsage {
         AnimatedNumber {}
     }
     Behavior on swapUsed {
         AnimatedNumber {}
     }
-    Behavior on swapUsedPercentage {
+    Behavior on swapTotal {
         AnimatedNumber {}
     }
-    Behavior on cpuUsage {
+    Behavior on swapIn {
         AnimatedNumber {}
     }
-    Behavior on netUploadValue {
-        AnimatedNumber {}
-    }
-    Behavior on netDownloadValue {
+    Behavior on swapOut {
         AnimatedNumber {}
     }
 }
