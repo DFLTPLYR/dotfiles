@@ -30,6 +30,7 @@ Rectangle {
 
     property string tempLabel: "Temperature"
     property string tempValue: "N/A"
+    property string tempIcon: "\ue1ff"
 
     property bool isFrequencyVisible: false
     property string freqLabel: "Frequency"
@@ -54,10 +55,13 @@ Rectangle {
                     text: root.headerIcon
                     color: Assets.color14
                     font.family: FontAssets.fontMaterialRounded
-                    font.pixelSize: 32
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: {
+                        const minSize = 10;
+                        return Math.max(minSize, Math.min(32, parent.width));
+                    }
                 }
 
                 Text {
@@ -66,9 +70,12 @@ Rectangle {
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: 24
+                    font.pixelSize: {
+                        const minSize = 10;
+                        return Math.max(minSize, Math.min(24, parent.width));
+                    }
                 }
             }
         }
@@ -91,7 +98,11 @@ Rectangle {
                     text: root.usageLabel
                     color: Assets.color14
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                 }
@@ -101,7 +112,11 @@ Rectangle {
                     color: Assets.color14
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -122,7 +137,7 @@ Rectangle {
                     anchors.margins: 1
                     width: Math.max(0, Math.min(parent.width - 2, (parent.width - 2) * root.usagePercent))
                     radius: 8
-                    color: Assets.color14
+                    color: Assets.color12
                 }
             }
 
@@ -134,7 +149,11 @@ Rectangle {
                     text: root.minValue
                     color: Assets.color14
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     font.bold: true
                     Layout.alignment: Qt.AlignLeft
                 }
@@ -143,7 +162,11 @@ Rectangle {
                     text: "/"
                     color: Assets.color14
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignCenter
                 }
 
@@ -153,7 +176,11 @@ Rectangle {
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.bold: true
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -163,10 +190,14 @@ Rectangle {
                 width: Math.round(parent.width)
                 visible: root.isTempVisible
                 Text {
-                    text: "\ue1ff"
+                    text: root.tempIcon
                     color: Assets.color14
                     font.family: FontAssets.fontMaterialRounded
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignLeft
                 }
 
@@ -174,7 +205,11 @@ Rectangle {
                     text: root.tempLabel
                     color: Assets.color14
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignCenter
                 }
@@ -184,7 +219,11 @@ Rectangle {
                     color: Assets.color14
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     font.bold: true
                     Layout.alignment: Qt.AlignRight
                 }
@@ -198,7 +237,11 @@ Rectangle {
                     text: root.freqLabel
                     color: Assets.color14
                     font.family: FontAssets.fontSometypeMono
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignLeft
                 }
 
@@ -208,7 +251,11 @@ Rectangle {
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.bold: true
-                    font.pixelSize: 12
+                    font.pixelSize: {
+                        const minSize = 10;
+                        const maxWidth = parent.width * 0.5;
+                        return Math.max(minSize, Math.min(16, maxWidth / 10));
+                    }
                     Layout.alignment: Qt.AlignRight
                 }
             }
