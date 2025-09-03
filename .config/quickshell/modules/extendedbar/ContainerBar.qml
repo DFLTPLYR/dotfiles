@@ -42,16 +42,17 @@ GridLayout {
             anchors.fill: parent
             color: "transparent"
 
-            ColumnLayout {
+            Column {
+                id: panelLeft
                 anchors.fill: parent
                 spacing: 0 // no extra gap between rows
 
-                // Weather top section
+                // Weather top section - initially invisible
                 ColumnLayout {
+                    id: weatherSection
                     visible: typeof WeatherFetcher.weatherData !== 'undefined'
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredHeight: parent.height / 3
+                    height: visible ? parent.height / 3 : 0
+                    width: parent.width
                     Layout.alignment: Qt.AlignHCenter
 
                     Text {
@@ -79,35 +80,53 @@ GridLayout {
 
                 // Middle section (time)
                 ColumnLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    id: timeSection
+                    // Adjust height based on weather section visibility
+                    height: weatherSection.visible ? parent.height / 3 : parent.height / 2
+                    width: parent.width
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredHeight: parent.height / 3
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: 300
+                        }
+                    }
+
                     Text {
                         color: Assets.color10
                         text: TimeService.hoursPadded
                         font.pixelSize: 24
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        Layout.alignment: Qt.AlignHCenter
                     }
                     Rectangle {
                         color: Assets.color15
                         height: 1
-                        Layout.preferredWidth: parent.width
+                        Layout.preferredWidth: parent.width / 4
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Text {
                         color: Assets.color10
                         text: TimeService.minutesPadded
                         font.pixelSize: 24
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        Layout.alignment: Qt.AlignHCenter
                     }
                 }
 
                 // Bottom section
                 ColumnLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredHeight: parent.height / 3
-                    spacing: 4
-                    Layout.alignment: Qt.AlignHCenter
+                    id: gifSection
+                    height: weatherSection.visible ? parent.height / 3 : parent.height / 2
+                    width: parent.width
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: 300
+                        }
+                    }
 
                     AnimatedImage {
                         source: "../../assets/gifs/" + selectedGif
@@ -116,6 +135,22 @@ GridLayout {
                         fillMode: AnimatedImage.PreserveAspectFit
                         cache: true
                         smooth: true
+                    }
+                }
+
+                // Handle weather data updates
+                Connections {
+                    target: WeatherFetcher
+                    function onParseDone() {
+                        weatherSection.visible = typeof WeatherFetcher.weatherData !== 'undefined';
+                    }
+                }
+
+                // Add smooth animation for layout changes
+                move: Transition {
+                    NumberAnimation {
+                        properties: "x,y"
+                        duration: 300
                     }
                 }
             }
