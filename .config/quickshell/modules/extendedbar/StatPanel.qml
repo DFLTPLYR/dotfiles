@@ -36,6 +36,8 @@ Rectangle {
     property string freqLabel: "Frequency"
     property string freqValue: "N/A"
 
+    // Extra
+    property var extraRows: []
     Item {
         anchors.fill: parent
 
@@ -257,6 +259,54 @@ Rectangle {
                         return Math.max(minSize, Math.min(16, maxWidth / 10));
                     }
                     Layout.alignment: Qt.AlignRight
+                }
+            }
+
+            // Extra rows (if any)
+            Repeater {
+                model: root.extraRows
+                RowLayout {
+                    width: Math.round(parent.width)
+
+                    Text {
+                        text: modelData.icon || ""
+                        visible: modelData.icon !== undefined
+                        color: Assets.color14
+                        font.family: FontAssets.fontMaterialRounded
+                        font.pixelSize: {
+                            const minSize = 10;
+                            const maxWidth = parent.width * 0.5;
+                            return Math.max(minSize, Math.min(16, maxWidth / 10));
+                        }
+                        Layout.alignment: Qt.AlignLeft
+                    }
+
+                    Text {
+                        text: modelData.label
+                        color: Assets.color14
+                        font.family: FontAssets.fontSometypeMono
+                        font.pixelSize: {
+                            const minSize = 10;
+                            const maxWidth = parent.width * 0.5;
+                            return Math.max(minSize, Math.min(16, maxWidth / 10));
+                        }
+                        Layout.fillWidth: true
+                        Layout.alignment: modelData.icon !== undefined ? Qt.AlignCenter : Qt.AlignLeft
+                    }
+
+                    Text {
+                        text: modelData.value
+                        color: Assets.color14
+                        wrapMode: Text.Wrap
+                        font.family: FontAssets.fontSometypeMono
+                        font.bold: true
+                        font.pixelSize: {
+                            const minSize = 10;
+                            const maxWidth = parent.width * 0.5;
+                            return Math.max(minSize, Math.min(16, maxWidth / 10));
+                        }
+                        Layout.alignment: Qt.AlignRight
+                    }
                 }
             }
         }
