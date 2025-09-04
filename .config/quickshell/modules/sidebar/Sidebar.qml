@@ -57,17 +57,19 @@ Scope {
                 anchor.rect.y: parentWindow.height / 2 - height / 2
                 implicitWidth: popupWrapper.width
                 implicitHeight: popupWrapper.height
-                visible: true
+                visible: root.isVisible
                 color: 'transparent'
 
-                Item {
+                RowLayout {
                     id: popupWrapper
-                    width: 75
-                    height: Math.max(800, sidebarRoot.isPortrait ? screen.height / 2 : screen.height / 2)
+                    implicitWidth: sideDock.width
+                    implicitHeight: sideDock.height
                     x: (1.0 - animProgress) * width
-
+                    layoutDirection: Qt.RightToLeft
                     Rectangle {
-                        anchors.fill: parent
+                        id: sideDock
+                        width: 50
+                        height: Math.max(800, sidebarRoot.isPortrait ? screen.height / 2 : screen.height / 2)
                         color: Scripts.setOpacity(Assets.background, 0.4)
                         radius: 10
                         border.color: Assets.color10
@@ -86,6 +88,44 @@ Scope {
 
                                 ColumnLayout {
                                     anchors.fill: parent
+                                    anchors.margins: 4
+
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
                                 }
                             }
                             // QuickToolussy
@@ -95,6 +135,40 @@ Scope {
                                 radius: 8
                                 color: 'transparent'
                                 border.color: Assets.color10
+                                ColumnLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+
+                                    Repeater {
+                                        model: [
+                                            {
+                                                name: "Calculator",
+                                                icon: "calculate"
+                                            },
+                                            {
+                                                name: "Apps",
+                                                icon: "dashboard"
+                                            },
+                                            {
+                                                name: "Todo",
+                                                icon: "list_alt"
+                                            },
+                                        ]
+                                        delegate: Text {
+                                            required property var modelData
+                                            text: modelData.icon
+                                            color: Assets.color14
+                                            font.family: FontAssets.fontMaterialRounded
+                                            Layout.fillWidth: true
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                            font.pixelSize: {
+                                                const minSize = 10;
+                                                return Math.max(minSize, Math.min(parent.height, parent.width));
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             // Miscellaneoussy
                             Rectangle {
@@ -103,71 +177,54 @@ Scope {
                                 radius: 8
                                 color: 'transparent'
                                 border.color: Assets.color10
+                                ColumnLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
+                                    Text {
+                                        text: "\ue1ff"
+                                        color: Assets.color14
+                                        font.family: FontAssets.fontMaterialRounded
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pixelSize: {
+                                            const minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+                                        }
+                                    }
+                                }
                             }
                         }
+                    }
 
-                        // Item {
-                        //     anchors.fill: parent
-                        //     anchors.margins: 8
-
-                        //     TabBar {
-                        //         id: bar
-                        //         anchors.fill: parent
-                        //         currentIndex: 0
-                        //         spacing: 4
-
-                        //         background: Rectangle {
-                        //             anchors.fill: parent
-                        //             color: 'transparent'
-                        //             radius: 24
-                        //         }
-
-                        //         Repeater {
-                        //             model: [
-                        //                 {
-                        //                     name: "Calculator",
-                        //                     icon: "\uf1ec"
-                        //                 },
-                        //                 {
-                        //                     name: "Todo",
-                        //                     icon: "\uf02e"
-                        //                 },
-                        //                 {
-                        //                     name: "System",
-                        //                     icon: "\uf2db"
-                        //                 }
-                        //             ]
-
-                        //             TabButton {
-                        //                 contentItem: Text {
-                        //                     Layout.fillWidth: true
-                        //                     Layout.fillHeight: true
-                        //                     horizontalAlignment: Text.AlignHCenter
-                        //                     verticalAlignment: Text.AlignVCenter
-                        //                     text: `${qsTr(modelData.icon)} ${qsTr(modelData.name)}`
-                        //                     color: bar.currentIndex === index ? Assets.color11 : Assets.color10
-                        //                     font.pixelSize: bar.contentHeight * 0.5
-                        //                 }
-                        //                 background: Rectangle {
-                        //                     Layout.fillWidth: true
-                        //                     Layout.fillHeight: true
-                        //                     color: bar.currentIndex === index ? Assets.color1 : Assets.color0
-                        //                     radius: 4
-                        //                     Behavior on color {
-                        //                         ColorAnimation {
-                        //                             duration: 250
-                        //                             easing.type: Easing.InOutQuad
-                        //                         }
-                        //                     }
-                        //                 }
-                        //             }
-                        //         }
-
-                        //         // TabContent {
-                        //         //     currentIndex: bar.currentIndex
-                        //         // }
-                        //     }
-                        // }
+                    Rectangle {
+                        width: 50
+                        height: 200
                     }
                 }
             }
