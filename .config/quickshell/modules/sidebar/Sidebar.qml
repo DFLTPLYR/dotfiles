@@ -67,6 +67,8 @@ Scope {
                     x: (1.0 - animProgress) * width
                     layoutDirection: Qt.RightToLeft
 
+                    property var currentWidget
+
                     Rectangle {
                         id: sideDock
                         width: 50
@@ -155,17 +157,55 @@ Scope {
                                                 icon: "list_alt"
                                             },
                                         ]
-                                        delegate: Text {
+                                        delegate: Item {
                                             required property var modelData
-                                            text: modelData.icon
-                                            color: Assets.color14
-                                            font.family: FontAssets.fontMaterialRounded
+                                            property bool isHovered: false
+                                            Layout.fillHeight: true
                                             Layout.fillWidth: true
-                                            horizontalAlignment: Text.AlignHCenter
-                                            verticalAlignment: Text.AlignVCenter
-                                            font.pixelSize: {
-                                                const minSize = 10;
-                                                return Math.max(minSize, Math.min(parent.height, parent.width));
+
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: modelData.icon
+                                                color: hoverArea.containsMouse ? Assets.color10 : Assets.color14
+                                                font.family: FontAssets.fontMaterialRounded
+                                                Layout.fillWidth: true
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                font.pixelSize: {
+                                                    const minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width));
+                                                }
+
+                                                Behavior on color {
+                                                    ColorAnimation {
+                                                        duration: 300
+                                                        easing.type: Easing.InOutQuad
+                                                    }
+                                                }
+                                            }
+
+                                            MouseArea {
+                                                id: hoverArea
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+
+                                                onEntered: {
+                                                    isHovered = true;
+                                                    cursorShape = Qt.PointingHandCursor;
+                                                }
+                                                onExited: {
+                                                    isHovered = false;
+                                                    cursorShape = Qt.ArrowCursor;
+                                                }
+                                                onClicked: {
+                                                    if (popupWrapper.currentWidget === modelData.name) {
+                                                        contentLoader.active = false;
+                                                        return popupWrapper.currentWidget = null;
+                                                    }
+                                                    popupWrapper.currentWidget = modelData.name;
+                                                    contentLoader.active = true;
+                                                    console.log('width: ', popupWrapper.implicitWidth);
+                                                }
                                             }
                                         }
                                     }
@@ -222,178 +262,48 @@ Scope {
                             }
                         }
                     }
-                }
-            }
-            PopupWindow {
-                id: sidebarPopups
-                anchor.window: sidebarPopup
-                anchor.rect.x: parentWindow.width
-                anchor.rect.y: parentWindow.height / 2 - height / 2
-                implicitWidth: popupWrappers.width
-                implicitHeight: popupWrappers.height
-                visible: root.isVisible
-                color: 'transparent'
 
-                RowLayout {
-                    id: popupWrappers
-                    implicitWidth: sideDock2.width
-                    implicitHeight: sideDock2.height
-                    x: (1.0 - animProgress) * width
-                    layoutDirection: Qt.RightToLeft
-
-                    Rectangle {
-                        id: sideDock2
-                        width: 50
-                        height: Math.max(800, sidebarRoot.isPortrait ? screen.height / 2 : screen.height / 2)
-                        color: Scripts.setOpacity(Assets.background, 0.4)
-                        radius: 10
-                        border.color: Assets.color10
-                        clip: true
-
-                        ColumnLayout {
-                            anchors.fill: parent
-                            anchors.margins: 4
-                            // Statussy
-                            Rectangle {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                radius: 8
-                                color: 'transparent'
-                                border.color: Assets.color10
-
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                }
+                    Loader {
+                        id: contentLoader
+                        sourceComponent: {
+                            switch (popupWrapper.currentWidget) {
+                            case "Calculator":
+                                return itemz;
+                            case "Apps":
+                                return apps;
+                            case "Todo":
+                                return null;
+                            default:
+                                return null;
                             }
-                            // QuickToolussy
-                            Rectangle {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                radius: 8
-                                color: 'transparent'
-                                border.color: Assets.color10
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
+                        }
+                    }
 
-                                    Repeater {
-                                        model: [
-                                            {
-                                                name: "Calculator",
-                                                icon: "calculate"
-                                            },
-                                            {
-                                                name: "Apps",
-                                                icon: "dashboard"
-                                            },
-                                            {
-                                                name: "Todo",
-                                                icon: "list_alt"
-                                            },
-                                        ]
-                                        delegate: Text {
-                                            required property var modelData
-                                            text: modelData.icon
-                                            color: Assets.color14
-                                            font.family: FontAssets.fontMaterialRounded
-                                            Layout.fillWidth: true
-                                            horizontalAlignment: Text.AlignHCenter
-                                            verticalAlignment: Text.AlignVCenter
-                                            font.pixelSize: {
-                                                const minSize = 10;
-                                                return Math.max(minSize, Math.min(parent.height, parent.width));
-                                            }
-                                        }
-                                    }
-                                }
+                    Component {
+                        id: itemz
+                        Rectangle {
+                            width: 500
+                            height: 700
+                            color: Scripts.setOpacity(Assets.background, 0.4)
+                            radius: 10
+                            border.color: Assets.color10
+                            clip: true
+                            Component.onDestruction: {
+                                popupWrapper.implicitWidth = sideDock.width;
+                                popupWrapper.implicitHeight = sideDock.height;
+                                console.log('width: ', popupWrapper.implicitWidth);
                             }
-                            // Miscellaneoussy
-                            Rectangle {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                radius: 8
-                                color: 'transparent'
-                                border.color: Assets.color10
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
-                                        Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
-                                        }
-                                    }
-                                }
-                            }
+                        }
+                    }
+                    Component {
+                        id: apps
+                        Rectangle {
+                            width: 200
+                            height: 300
+                            color: Scripts.setOpacity(Assets.background, 0.4)
+                            radius: 10
+                            border.color: Assets.color10
+                            clip: true
                         }
                     }
                 }
