@@ -62,9 +62,11 @@ Scope {
 
                 RowLayout {
                     id: popupWrapper
-                    implicitWidth: sideDock.width
-                    implicitHeight: sideDock.height
-                    x: (1.0 - animProgress) * width
+                    implicitWidth: sideDock.width + (contentLoader.item ? (contentLoader.item.implicitWidth > 0 ? contentLoader.item.implicitWidth : contentLoader.item.width) : 0)
+
+                    implicitHeight: Math.max(sideDock.height, (contentLoader.item ? (contentLoader.item.implicitHeight > 0 ? contentLoader.item.implicitHeight : contentLoader.item.height) : sideDock.height))
+
+                    x: (1.0 - animProgress) * implicitWidth
                     layoutDirection: Qt.RightToLeft
 
                     property var currentWidget
@@ -93,40 +95,112 @@ Scope {
                                     anchors.fill: parent
                                     anchors.margins: 4
 
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                    Item {
+                                        Layout.fillHeight: true
                                         Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+
+                                        Column {
+                                            width: parent.width // span full width so Text centering works
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            spacing: 0
+
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.hoursPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.minutesPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
                                         }
                                     }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                    Item {
+                                        Layout.fillHeight: true
                                         Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+
+                                        Column {
+                                            width: parent.width // span full width so Text centering works
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            spacing: 0
+
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.hoursPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.minutesPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
                                         }
                                     }
-                                    Text {
-                                        text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                    Item {
+                                        Layout.fillHeight: true
                                         Layout.fillWidth: true
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.pixelSize: {
-                                            const minSize = 10;
-                                            return Math.max(minSize, Math.min(parent.height, parent.width));
+
+                                        Column {
+                                            width: parent.width // span full width so Text centering works
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            spacing: 0
+
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.hoursPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.minutesPadded
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -283,16 +357,11 @@ Scope {
                         id: itemz
                         Rectangle {
                             width: 500
-                            height: 700
+                            height: popupWrapper.height
                             color: Scripts.setOpacity(Assets.background, 0.4)
                             radius: 10
                             border.color: Assets.color10
                             clip: true
-                            Component.onDestruction: {
-                                popupWrapper.implicitWidth = sideDock.width;
-                                popupWrapper.implicitHeight = sideDock.height;
-                                console.log('width: ', popupWrapper.implicitWidth);
-                            }
                         }
                     }
                     Component {
