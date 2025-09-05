@@ -134,38 +134,6 @@ Scope {
                                     Item {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
-
-                                        Column {
-                                            width: parent.width // span full width so Text centering works
-                                            anchors.verticalCenter: parent.verticalCenter
-                                            anchors.horizontalCenter: parent.horizontalCenter
-                                            spacing: 0
-
-                                            Text {
-                                                color: Assets.color10
-                                                font.family: FontAssets.fontMaterialRounded
-                                                text: TimeService.hoursPadded
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
-                                                width: parent.width
-                                                font.pixelSize: {
-                                                    var minSize = 10;
-                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
-                                                }
-                                            }
-                                            Text {
-                                                color: Assets.color10
-                                                font.family: FontAssets.fontMaterialRounded
-                                                text: TimeService.minutesPadded
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
-                                                width: parent.width
-                                                font.pixelSize: {
-                                                    var minSize = 10;
-                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
-                                                }
-                                            }
-                                        }
                                     }
                                     Item {
                                         Layout.fillHeight: true
