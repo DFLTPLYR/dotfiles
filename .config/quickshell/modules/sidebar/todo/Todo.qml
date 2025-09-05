@@ -7,9 +7,8 @@ import qs.assets
 import qs.utils
 
 ColumnLayout {
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-
+    anchors.fill: parent
+    anchors.margins: 10
     ListModel {
         id: pendingList
     }
@@ -246,8 +245,6 @@ ColumnLayout {
                             }
 
                             property bool isElided: task.contentWidth > task.width
-
-                            Component.onCompleted: console.log("Eliding changed:", isElided)
                         }
 
                         Item {

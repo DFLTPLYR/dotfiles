@@ -13,6 +13,9 @@ import qs.assets
 import qs.services
 import qs.components
 
+import qs.modules.sidebar.todo
+import qs.modules.sidebar.Calculator
+
 Scope {
     id: root
 
@@ -324,12 +327,14 @@ Scope {
                     Component {
                         id: itemz
                         Rectangle {
-                            width: 500
-                            height: popupWrapper.height
+                            width: 300
+                            height: 400
                             color: Scripts.setOpacity(Assets.background, 0.4)
                             radius: 10
                             border.color: Assets.color10
                             clip: true
+
+                            Todo {}
                         }
                     }
                     Component {
