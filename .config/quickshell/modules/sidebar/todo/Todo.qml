@@ -119,7 +119,7 @@ ColumnLayout {
                 snapMode: GridView.NoSnap
 
                 model: pendingList
-
+                clip: true
                 delegate: Rectangle {
                     id: delegateRect
                     width: parent.width
@@ -305,7 +305,6 @@ ColumnLayout {
                         }
                     }
                 }
-
                 add: Transition {
                     NumberAnimation {
                         property: "opacity"
@@ -369,7 +368,7 @@ ColumnLayout {
                 focus: true
                 keyNavigationWraps: true
                 keyNavigationEnabled: true
-
+                clip: true
                 boundsBehavior: Flickable.StopAtBounds
                 snapMode: GridView.NoSnap
 
@@ -548,7 +547,6 @@ ColumnLayout {
                         }
                     }
                 }
-
                 add: Transition {
                     NumberAnimation {
                         property: "opacity"
