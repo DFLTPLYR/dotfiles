@@ -146,11 +146,11 @@ Scope {
                                             anchors.verticalCenter: parent.verticalCenter
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             spacing: 0
-
+                                            // Month
                                             Text {
                                                 color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
-                                                text: dateSection.monthShort[TimeService.month]
+                                                text: dateSection.monthShort[TimeService.month - 1]
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 width: parent.width
@@ -160,6 +160,21 @@ Scope {
                                                     return Math.max(minSize, Math.min(height, width) * 0.6);
                                                 }
                                             }
+                                            // Date of the month
+                                            Text {
+                                                color: Assets.color14
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: Qt.formatDateTime(TimeService.clock.date, "dd")
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.bold: true
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
+                                                }
+                                            }
+                                            // day of the week
                                             Text {
                                                 color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
@@ -173,10 +188,11 @@ Scope {
                                                     return Math.max(minSize, Math.min(height, width) * 0.6);
                                                 }
                                             }
+                                            // Year
                                             Text {
                                                 color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
-                                                text: Qt.formatDateTime(TimeService.clock.date, "yy")
+                                                text: Qt.formatDateTime(TimeService.clock.date, "yyyy")
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 width: parent.width
