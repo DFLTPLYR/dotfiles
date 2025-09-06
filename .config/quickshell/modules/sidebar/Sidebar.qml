@@ -176,7 +176,7 @@ Scope {
                                             Text {
                                                 color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
-                                                text: TimeService.year
+                                                text: Qt.formatDateTime(TimeService.clock.date, "yy")
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 width: parent.width
