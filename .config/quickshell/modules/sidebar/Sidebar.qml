@@ -109,7 +109,7 @@ Scope {
                                             spacing: 0
 
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
                                                 text: TimeService.hoursPadded
                                                 horizontalAlignment: Text.AlignHCenter
@@ -121,7 +121,7 @@ Scope {
                                                 }
                                             }
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
                                                 text: TimeService.minutesPadded
                                                 horizontalAlignment: Text.AlignHCenter
@@ -148,7 +148,7 @@ Scope {
                                             spacing: 0
 
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
                                                 text: dateSection.monthShort[TimeService.month]
                                                 horizontalAlignment: Text.AlignHCenter
@@ -161,7 +161,7 @@ Scope {
                                                 }
                                             }
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
                                                 text: dateSection.dayNames[TimeService.day]
                                                 horizontalAlignment: Text.AlignHCenter
@@ -174,7 +174,7 @@ Scope {
                                                 }
                                             }
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
                                                 text: TimeService.year
                                                 horizontalAlignment: Text.AlignHCenter
@@ -194,33 +194,35 @@ Scope {
                                         Layout.fillWidth: true
 
                                         Column {
-                                            width: parent.width // span full width so Text centering works
+                                            width: parent.width
                                             anchors.verticalCenter: parent.verticalCenter
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             spacing: 0
 
                                             Text {
-                                                color: Assets.color10
+                                                text: "nest_farsight_weather"
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
-                                                text: TimeService.hoursPadded
+                                                Layout.fillWidth: true
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
-                                                width: parent.width
                                                 font.pixelSize: {
-                                                    var minSize = 10;
-                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                    const minSize = 10;
+                                                    return Math.max(minSize, Math.min(parent.height, parent.width));
                                                 }
                                             }
+
                                             Text {
-                                                color: Assets.color10
+                                                color: Assets.color14
                                                 font.family: FontAssets.fontMaterialRounded
-                                                text: TimeService.minutesPadded
+                                                text: WeatherFetcher.currentCondition?.temp
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 width: parent.width
+                                                font.bold: true
                                                 font.pixelSize: {
                                                     var minSize = 10;
-                                                    return Math.max(minSize, Math.min(parent.height, parent.width) * 0.5);
+                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
                                                 }
                                             }
                                         }
