@@ -13,8 +13,6 @@ import qs.assets
 
 Item {
     id: root
-    Layout.fillHeight: true
-    Layout.fillWidth: true
 
     readonly property int margin: 18
     readonly property color backgroundColor: "#222222"

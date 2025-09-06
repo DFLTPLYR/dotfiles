@@ -7,7 +7,6 @@ import qs.assets
 import qs.utils
 
 ColumnLayout {
-    anchors.fill: parent
     anchors.margins: 10
     ListModel {
         id: pendingList
@@ -241,7 +240,9 @@ ColumnLayout {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: delegateRect.expanded = !delegateRect.expanded
+                                onClicked: {
+                                    return delegateRect.expanded = !delegateRect.expanded;
+                                }
                             }
 
                             property bool isElided: task.contentWidth > task.width
@@ -312,12 +313,6 @@ ColumnLayout {
                         to: 1
                         duration: 250
                     }
-                    NumberAnimation {
-                        property: "x"
-                        from: 200
-                        to: 0
-                        duration: 250
-                    }
                 }
                 move: Transition {
                     NumberAnimation {
@@ -336,11 +331,6 @@ ColumnLayout {
                         property: "opacity"
                         from: 1
                         to: 0
-                        duration: 250
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        to: 300
                         duration: 250
                     }
                 }
@@ -566,12 +556,6 @@ ColumnLayout {
                         to: 1
                         duration: 250
                     }
-                    NumberAnimation {
-                        property: "x"
-                        from: 200
-                        to: 0
-                        duration: 250
-                    }
                 }
                 move: Transition {
                     NumberAnimation {
@@ -590,11 +574,6 @@ ColumnLayout {
                         property: "opacity"
                         from: 1
                         to: 0
-                        duration: 250
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        to: 300
                         duration: 250
                     }
                 }

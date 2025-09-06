@@ -65,9 +65,9 @@ Scope {
 
                 RowLayout {
                     id: popupWrapper
-                    implicitWidth: sideDock.width + (contentLoader.item ? (contentLoader.item.implicitWidth > 0 ? contentLoader.item.implicitWidth : contentLoader.item.width) : 0)
+                    implicitWidth: sideDock.width + (contentLoader.item ? (contentLoader.item.implicitWidth > 0 ? contentLoader.item.implicitWidth : contentLoader.item.width) : 0) + 20
 
-                    implicitHeight: Math.max(sideDock.height, (contentLoader.item ? (contentLoader.item.implicitHeight > 0 ? contentLoader.item.implicitHeight : contentLoader.item.height) : sideDock.height))
+                    implicitHeight: Math.max(sideDock.height, (contentLoader.item ? (contentLoader.item.implicitHeight > 0 ? contentLoader.item.implicitHeight : contentLoader.item.height) : sideDock.height)) + 20
 
                     x: (1.0 - animProgress) * implicitWidth
                     layoutDirection: Qt.RightToLeft
@@ -313,11 +313,11 @@ Scope {
                         sourceComponent: {
                             switch (popupWrapper.currentWidget) {
                             case "Calculator":
-                                return itemz;
+                                return calculator;
                             case "Apps":
-                                return apps;
-                            case "Todo":
                                 return null;
+                            case "Todo":
+                                return todo;
                             default:
                                 return null;
                             }
@@ -325,27 +325,42 @@ Scope {
                     }
 
                     Component {
-                        id: itemz
+                        id: todo
                         Rectangle {
-                            width: 300
-                            height: 400
+                            width: 500
+                            height: 600
                             color: Scripts.setOpacity(Assets.background, 0.4)
                             radius: 10
                             border.color: Assets.color10
                             clip: true
 
-                            Todo {}
+                            Todo {
+                                anchors {
+                                    bottom: parent.bottom
+                                    top: parent.top
+                                    right: parent.right
+                                    left: parent.left
+                                }
+                                width: parent.width
+                                height: parent.height
+                            }
                         }
                     }
                     Component {
-                        id: apps
+                        id: calculator
                         Rectangle {
-                            width: 200
-                            height: 300
+                            width: 400
+                            height: 500
                             color: Scripts.setOpacity(Assets.background, 0.4)
                             radius: 10
                             border.color: Assets.color10
                             clip: true
+
+                            Calculator {
+                                width: parent.width
+                                height: parent.height
+                                anchors.margins: 4
+                            }
                         }
                     }
                 }
