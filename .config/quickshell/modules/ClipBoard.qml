@@ -374,7 +374,7 @@ AnimatedScreenOverlay {
                 Flickable {
                     id: textScroller
                     anchors.fill: parent
-
+                    visible: clipboardList.currentItem && !clipboardList.currentItem.isImage
                     contentWidth: highlightedText.contentWidth
                     contentHeight: highlightedText.contentHeight
                     clip: true

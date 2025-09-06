@@ -57,3 +57,6 @@ cava.target = '~/.config/cava/config'
 
 gtk.template = 'gtk.css'
 gtk.target = '~/.config/gtk-3.0/gtk.css'
+
+gtk.template = 'gtk.css'
+gtk.target = '~/.config/gtk-3.0/gtk.css'
