@@ -134,10 +134,61 @@ Scope {
                                             }
                                         }
                                     }
+
                                     Item {
+                                        id: dateSection
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
+                                        property var dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                                        property var monthShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                        Column {
+                                            width: parent.width
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            spacing: 0
+
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: dateSection.monthShort[TimeService.month]
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.bold: true
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
+                                                }
+                                            }
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: dateSection.dayNames[TimeService.day]
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.bold: true
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
+                                                }
+                                            }
+                                            Text {
+                                                color: Assets.color10
+                                                font.family: FontAssets.fontMaterialRounded
+                                                text: TimeService.year
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
+                                                width: parent.width
+                                                font.bold: true
+                                                font.pixelSize: {
+                                                    var minSize = 10;
+                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
+                                                }
+                                            }
+                                        }
                                     }
+
                                     Item {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
