@@ -55,7 +55,7 @@ Rectangle {
                 anchors.margins: 100
                 Text {
                     text: root.headerIcon
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontMaterialRounded
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -68,7 +68,7 @@ Rectangle {
 
                 Text {
                     text: root.headerText
-                    color: Assets.color14
+                    color: Assets.color10
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
@@ -98,7 +98,7 @@ Rectangle {
 
                 Text {
                     text: root.usageLabel
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -111,7 +111,7 @@ Rectangle {
 
                 Text {
                     text: root.usageValue
-                    color: Assets.color14
+                    color: Assets.color10
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
@@ -129,7 +129,7 @@ Rectangle {
                 height: 8
                 radius: 10
                 color: "transparent"
-                border.color: Assets.color14
+                border.color: Assets.color10
                 border.width: 1
 
                 Rectangle {
@@ -139,7 +139,7 @@ Rectangle {
                     anchors.margins: 1
                     width: Math.max(0, Math.min(parent.width - 2, (parent.width - 2) * root.usagePercent))
                     radius: 8
-                    color: Assets.color12
+                    color: Assets.color15
                 }
             }
 
@@ -149,7 +149,7 @@ Rectangle {
 
                 Text {
                     text: root.minValue
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -162,7 +162,7 @@ Rectangle {
 
                 Text {
                     text: "/"
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -174,7 +174,7 @@ Rectangle {
 
                 Text {
                     text: root.maxValue
-                    color: Assets.color14
+                    color: Assets.color10
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.bold: true
@@ -193,7 +193,7 @@ Rectangle {
                 visible: root.isTempVisible
                 Text {
                     text: root.tempIcon
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontMaterialRounded
                     font.pixelSize: {
                         const minSize = 10;
@@ -205,7 +205,7 @@ Rectangle {
 
                 Text {
                     text: root.tempLabel
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -218,7 +218,7 @@ Rectangle {
 
                 Text {
                     text: root.tempValue
-                    color: Assets.color14
+                    color: Assets.color10
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
@@ -237,7 +237,7 @@ Rectangle {
                 visible: root.isFrequencyVisible
                 Text {
                     text: root.freqLabel
-                    color: Assets.color14
+                    color: Assets.color10
                     font.family: FontAssets.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -249,7 +249,7 @@ Rectangle {
 
                 Text {
                     text: root.freqValue
-                    color: Assets.color14
+                    color: Assets.color10
                     wrapMode: Text.Wrap
                     font.family: FontAssets.fontSometypeMono
                     font.bold: true
@@ -271,7 +271,7 @@ Rectangle {
                     Text {
                         text: modelData.icon || ""
                         visible: modelData.icon !== undefined
-                        color: Assets.color14
+                        color: Assets.color10
                         font.family: FontAssets.fontMaterialRounded
                         font.pixelSize: {
                             const minSize = 10;
@@ -283,7 +283,7 @@ Rectangle {
 
                     Text {
                         text: modelData.label
-                        color: Assets.color14
+                        color: Assets.color10
                         font.family: FontAssets.fontSometypeMono
                         font.pixelSize: {
                             const minSize = 10;
@@ -296,7 +296,7 @@ Rectangle {
 
                     Text {
                         text: modelData.value
-                        color: Assets.color14
+                        color: Assets.color10
                         wrapMode: Text.Wrap
                         font.family: FontAssets.fontSometypeMono
                         font.bold: true
