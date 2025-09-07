@@ -164,7 +164,6 @@ Item {
         onLoaded: {
             try {
                 colors = JSON.parse(colorJson.text());
-                // assign parsed values so Behaviors animate
                 if (colors.foreground)
                     foreground = colors.foreground;
                 if (colors.background)
@@ -215,8 +214,6 @@ Item {
 
         onFileChanged: {
             colorJson.reload();
-            console.log('reloaded');
         }
     }
-    // ...existing
 }
