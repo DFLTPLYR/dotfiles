@@ -66,7 +66,7 @@ Rectangle {
                 property bool expand: false
                 property int expandedHeight: notificationItem.height
                 x: 0
-                height: expand ? expandedHeight + 10 : expandedHeight
+                implicitHeight: expand ? expandedHeight : expandedHeight
                 implicitWidth: container.width
 
                 color: Scripts.setOpacity(Assets.background, 0.7)
@@ -75,7 +75,7 @@ Rectangle {
                 radius: 8
                 clip: true
 
-                Behavior on height {
+                Behavior on implicitHeight {
                     AnimatedNumber {}
                 }
 
@@ -86,7 +86,7 @@ Rectangle {
 
                     Item {
                         Layout.fillWidth: true
-                        height: row.implicitHeight
+                        height: row.height
 
                         RowLayout {
                             id: row
@@ -113,13 +113,11 @@ Rectangle {
                         }
                     }
 
-                    ColumnLayout {
-                        Repeater {
-                            model: notifications
-                            delegate: NotificationItem {
-                                Layout.fillWidth: true
-                                visible: delegateRect.expand
-                            }
+                    Repeater {
+                        model: notifications
+                        delegate: NotificationItem {
+                            Layout.fillWidth: true
+                            visible: delegateRect.expand
                         }
                     }
                 }
