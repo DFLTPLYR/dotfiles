@@ -46,9 +46,6 @@ swaync.target = '~/.config/swaync/colors-swaync.css'
 kitty.template = 'colors-kitty.conf'
 kitty.target = '~/.config/kitty/colors-kitty.conf'
 
-# quickshell.template = 'colors-quickshell.qml'
-# quickshell.target = '~/dotfiles/.config/quickshell/services/Colors.qml'
-
 quickshellJson.template = 'colors.json'
 quickshellJson.target = '~/dotfiles/.config/quickshell/services/colors.json'
 
