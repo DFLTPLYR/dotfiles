@@ -17,7 +17,8 @@ import qs.components
 
 Rectangle {
     anchors.fill: parent
-    color: Scripts.setOpacity(Assets.background, 0.8)
+    // color: Scripts.setOpacity(Assets.background, 0.8)
+    color: 'transparent'
     opacity: 1
     // radius: 20
 
@@ -40,7 +41,7 @@ Rectangle {
                 height: left.height * 0.95
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 10
+                // spacing: 10
 
                 Workspaces {}
             }
@@ -80,7 +81,7 @@ Rectangle {
                 StyledButton {
                     anchors.verticalCenter: parent.verticalCenter
                     icon: "\uf011"
-                    size: parent.height / 1.5
+                    size: parent.height
                     iconRatio: 0.5
                     backgroundColor: Assets.background
                     hoverColor: Assets.color15
