@@ -42,7 +42,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 10
 
-                // Weather {}
+                Workspaces {}
             }
         }
 
@@ -57,9 +57,9 @@ Rectangle {
             Row {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.centerIn: parent
-                spacing: 10
+                spacing: 2
 
-                Workspaces {}
+                // Workspaces {}
             }
         }
 
