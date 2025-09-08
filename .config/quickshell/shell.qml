@@ -54,10 +54,10 @@ ShellRoot {
                 component: ExtendedBar {}
             }
 
-            LazyLoader {
-                active: persistStates.showWallpaperCarousel
-                component: WallpaperCarousel {}
-            }
+            // LazyLoader {
+            //     active: persistStates.showWallpaperCarousel
+            //     component: WallpaperCarousel {}
+            // }
 
             LazyLoader {
                 active: persistStates.showClipBoard
@@ -120,6 +120,8 @@ ShellRoot {
     AppPanel {}
 
     NotificationList {}
+
+    WallpaperPicker {}
 
     Connections {
         target: Assets
