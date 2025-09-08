@@ -39,7 +39,7 @@ ShellRoot {
             screen: modelData
 
             color: "transparent"
-            implicitHeight: 42
+            implicitHeight: 24
 
             Bar {}
 
