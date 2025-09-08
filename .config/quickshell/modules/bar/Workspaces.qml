@@ -27,29 +27,36 @@ Item {
 
     Row {
         id: monitorRow
-        spacing: 8
 
         Repeater {
             model: Hyprland.workspaces
             delegate: Item {
-                width: 40
-                height: 40
+                width: 32
+                height: 32
                 visible: modelData.id >= 0
 
                 Rectangle {
                     id: monitorIndicator
                     anchors.centerIn: parent
-                    implicitWidth: parent.width / 1.25
-                    implicitHeight: parent.height / 1.25
+                    width: parent.width * 0.7
+                    height: parent.height * 0.7
                     radius: 100
 
                     // Track hover state
                     property bool hovered: false
 
                     color: hovered ? Scripts.setOpacity(Assets.color14, 0.4) : (modelData.active && modelData.focused) ? Assets.color2 : "transparent"
+                    border.color: hovered ? Scripts.setOpacity(Assets.color14, 0.4) : (modelData.active && modelData.focused) ? Assets.color2 : Assets.color3
 
                     // Animate the fill color
                     Behavior on color {
+                        ColorAnimation {
+                            duration: 250
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+
+                    Behavior on border.color {
                         ColorAnimation {
                             duration: 250
                             easing.type: Easing.InOutQuad
@@ -60,7 +67,10 @@ Item {
                         anchors.centerIn: parent
                         text: kanjiNumber(modelData.id - 1)
                         color: monitorIndicator.hovered ? Assets.color2 : (modelData.active && modelData.focused) ? Assets.color14 : Assets.color2
-                        font.pixelSize: 12
+                        font.pixelSize: {
+                            var minSize = 10;
+                            return Math.max(minSize, Math.min(height, width) * 0.6);
+                        }
                         // Animate the fill color
                         Behavior on color {
                             ColorAnimation {
