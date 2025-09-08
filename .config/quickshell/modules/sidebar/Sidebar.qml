@@ -23,9 +23,8 @@ Scope {
     signal toggle
 
     GlobalShortcut {
-        id: cancelKeybind
         name: "showSideBar"
-        description: "Cancel current action"
+        description: "Show sidebar"
         onPressed: {
             Qt.callLater(() => {
                 root.isVisible = true;
