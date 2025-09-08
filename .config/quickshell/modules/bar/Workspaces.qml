@@ -27,7 +27,6 @@ Item {
 
     Row {
         id: monitorRow
-
         Repeater {
             model: Hyprland.workspaces
             delegate: Item {
@@ -65,7 +64,8 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: kanjiNumber(modelData.id - 1)
+                        // text: kanjiNumber(modelData.id - 1)
+                        text: modelData.id
                         color: monitorIndicator.hovered ? Assets.color2 : (modelData.active && modelData.focused) ? Assets.color14 : Assets.color2
                         font.pixelSize: {
                             var minSize = 10;
@@ -88,6 +88,22 @@ Item {
                             monitorIndicator.hovered = true;
                         }
                         onExited: monitorIndicator.hovered = false
+                    }
+                }
+
+                Component.onCompleted: {
+                    Hyprland.refreshToplevels();
+                    var applications = modelData.toplevels.values;
+                    for (var i = 0; i < applications.length; i++) {
+                        var app = applications[i];
+                        if (app.lastIpcObject) {
+                            // var keys = Object.keys(app.lastIpcObject);
+                            // for (var j = 0; j < keys.length; j++) {
+                            //     var key = keys[j];
+                            //     console.log("App", i, key + ":", app.lastIpcObject[key]);
+                            // }
+                            console.log(app.lastIpcObject.class);
+                        }
                     }
                 }
             }
