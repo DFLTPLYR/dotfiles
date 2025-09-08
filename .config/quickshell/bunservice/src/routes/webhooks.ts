@@ -6,7 +6,7 @@ todoRouter.post("/notify-discord", async (c) => {
 
   const { record } = body;
 
-  await fetch(process.env.DISCORD_WEBHOOK_URL!, {
+  await fetch(Bun.env.DISCORD_WEBHOOK_URL!, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
