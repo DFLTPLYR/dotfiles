@@ -17,16 +17,16 @@ import qs.components
 
 Rectangle {
     anchors.fill: parent
-    // color: Scripts.setOpacity(Assets.background, 0.8)
-    color: 'transparent'
-    opacity: 1
-    // radius: 20
+    color: Scripts.setOpacity(Assets.background, 0.8)
 
     Item {
         id: wrapper
         anchors.fill: parent
-        anchors.leftMargin: 5
-        anchors.rightMargin: parent.width * 0.002
+
+        anchors {
+            rightMargin: 5
+            leftMargin: 5
+        }
 
         // LEFT section: 25% width
         Item {
