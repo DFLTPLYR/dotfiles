@@ -60,7 +60,7 @@ Scope {
                     switch (event.key) {
                     case Qt.Key_Escape:
                         searchValue = "";
-                        GlobalState.toggleDrawer("wallpaper");
+                        root.toggle();
                         event.accepted = true;
                         break;
                     case Qt.Key_Backspace:
@@ -76,6 +76,7 @@ Scope {
                             const screenName = screen.name;
                             const path = currentItem.modelData?.path;
                             WallpaperStore.setWallpaper(screenName, path);
+                            root.toggle();
                         }
 
                         event.accepted = true;
