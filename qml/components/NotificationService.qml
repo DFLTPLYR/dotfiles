@@ -153,13 +153,13 @@ Singleton {
 
         onNotification: notification => {
             notification.tracked = true;
+            console.log(notification);
             const newNotifObject = notifComponent.createObject(root, {
                 "notificationId": notification.id + root.idOffset,
                 "notification": notification,
                 "time": Date.now()
             });
             root.list = [...root.list, newNotifObject];
-
             // Popup
             if (!root.popupInhibited) {
                 newNotifObject.popup = true;
@@ -172,7 +172,6 @@ Singleton {
             }
 
             root.notify(newNotifObject);
-            // console.log(notifToString(newNotifObject));
             notifFileView.setText(stringifyList(root.list));
         }
     }

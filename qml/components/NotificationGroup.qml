@@ -5,7 +5,7 @@ Item {
     id: layered
     opacity: 0.5
     property bool open: false
-    property var notifications: []
+    required property var notifications
 
     height: layered.open ? notifications.length * 60 : notifications.length * 5 + 60
     width: parent.width
@@ -93,7 +93,9 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: layered.open = !layered.open
+                onClicked: {
+                    layered.open = !layered.open;
+                }
             }
         }
     }
