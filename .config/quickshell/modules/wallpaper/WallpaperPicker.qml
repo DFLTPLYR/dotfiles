@@ -244,13 +244,16 @@ Scope {
 
                             // preview description
                             Rectangle {
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
+                                anchors {
+                                    left: parent.left
+                                    right: parent.right
+                                    bottom: parent.bottom
+                                    margins: 10
+                                }
+
                                 implicitHeight: 100
                                 color: Scripts.setOpacity(Assets.background, 0.6)
                                 radius: 8
-                                anchors.margins: 10
                                 border.color: Scripts.setOpacity(Assets.foreground, 0.2)
 
                                 ColumnLayout {
