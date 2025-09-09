@@ -2,7 +2,6 @@
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
-    address: "127.0.0.1:6600",
     password: None,
     theme: "/home/dfltplyr/.config/rmpc/theme/default",
     cache_dir: None,
