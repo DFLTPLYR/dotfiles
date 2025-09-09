@@ -11,6 +11,7 @@ import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
 import qs.components
+import qs.modules.notification
 import qs.animations
 import qs.services
 import qs.assets
@@ -219,8 +220,17 @@ GridLayout {
         Layout.fillHeight: true
 
         CalendarPanel {}
-
-        NotificationsPanel {}
+        Rectangle {
+            id: root
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            radius: 10
+            color: Scripts.setOpacity(Assets.color0, 0.5)
+            NotificationPanel {
+                anchors.fill: parent
+                anchors.margins: 10
+            }
+        }
     }
 
     // Right Panel
