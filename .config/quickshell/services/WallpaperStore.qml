@@ -256,8 +256,6 @@ Singleton {
             generateCombinedWallpaperImage(wallpaperMap);
             root.currentWallpapers = wallpaperMap;
         });
-
-        return GlobalState.toggleDrawer("wallpaper");
     }
 
     function restoreWallpapers() {
