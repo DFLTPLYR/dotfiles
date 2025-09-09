@@ -1,63 +1,174 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Window
 import Quickshell
+
+import qs.components
 
 ShellRoot {
     FloatingWindow {
         title: 'test'
         minimumSize: Qt.size(screen.width / 4, screen.height / 2)
         color: 'transparent'
-        Item {
-            id: layered
-            opacity: 0.5
-            property bool open: false
-            property int rectCount: 3
+
+        ScrollView {
             anchors.fill: parent
-            anchors.margins: 1
+            ScrollBar.vertical: ScrollBar {}
 
-            ListModel {
-                id: rectModel
-            }
+            Column {
+                width: parent.width
 
-            Component.onCompleted: {
-                for (var i = 0; i < rectCount; i++) {
-                    rectModel.append({
-                        openY: (rectCount - 1 - i) * 60,
-                        closedY: (rectCount - 1 - i) * 5,
-                        offset: (rectCount - 1 - i) * 10
-                    });
-                }
-            }
-
-            Repeater {
-                model: rectModel
-                delegate: Rectangle {
-                    y: layered.open ? model.openY : model.closedY
-                    x: (parent.width - width) / 2
-                    width: layered.open ? parent.width : parent.width - model.offset
-                    height: 60
-                    border.width: 1
-
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: 200
-                            easing.type: Easing.InOutQuad
+                NotificationGroup {
+                    width: parent.width
+                    notifications: [
+                        {
+                            summary: "New Email",
+                            body: "You have a new message from John.",
+                            appName: "Mail"
+                        },
+                        {
+                            summary: "Update Available",
+                            body: "Version 2.0 is ready to install.",
+                            appName: "Updater"
+                        },
+                        {
+                            summary: "Meeting Reminder",
+                            body: "Team meeting in 10 minutes.",
+                            appName: "Calendar"
+                        },
+                        {
+                            summary: "Battery Low",
+                            body: "Battery at 15%. Please charge.",
+                            appName: "System"
+                        },
+                        {
+                            summary: "Friend Request",
+                            body: "Alice sent you a friend request.",
+                            appName: "Social"
                         }
-                    }
-
-                    Behavior on y {
-                        NumberAnimation {
-                            duration: 200
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
+                    ]
                 }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: layered.open = !layered.open
+                NotificationGroup {
+                    width: parent.width
+                    notifications: [
+                        {
+                            summary: "New Email",
+                            body: "You have a new message from John.",
+                            appName: "Mail"
+                        },
+                        {
+                            summary: "Update Available",
+                            body: "Version 2.0 is ready to install.",
+                            appName: "Updater"
+                        },
+                        {
+                            summary: "Meeting Reminder",
+                            body: "Team meeting in 10 minutes.",
+                            appName: "Calendar"
+                        },
+                        {
+                            summary: "Battery Low",
+                            body: "Battery at 15%. Please charge.",
+                            appName: "System"
+                        },
+                        {
+                            summary: "Friend Request",
+                            body: "Alice sent you a friend request.",
+                            appName: "Social"
+                        }
+                    ]
+                }
+                NotificationGroup {
+                    width: parent.width
+                    notifications: [
+                        {
+                            summary: "New Email",
+                            body: "You have a new message from John.",
+                            appName: "Mail"
+                        },
+                        {
+                            summary: "Update Available",
+                            body: "Version 2.0 is ready to install.",
+                            appName: "Updater"
+                        },
+                        {
+                            summary: "Meeting Reminder",
+                            body: "Team meeting in 10 minutes.",
+                            appName: "Calendar"
+                        },
+                        {
+                            summary: "Battery Low",
+                            body: "Battery at 15%. Please charge.",
+                            appName: "System"
+                        },
+                        {
+                            summary: "Friend Request",
+                            body: "Alice sent you a friend request.",
+                            appName: "Social"
+                        }
+                    ]
+                }
+                NotificationGroup {
+                    width: parent.width
+                    notifications: [
+                        {
+                            summary: "New Email",
+                            body: "You have a new message from John.",
+                            appName: "Mail"
+                        },
+                        {
+                            summary: "Update Available",
+                            body: "Version 2.0 is ready to install.",
+                            appName: "Updater"
+                        },
+                        {
+                            summary: "Meeting Reminder",
+                            body: "Team meeting in 10 minutes.",
+                            appName: "Calendar"
+                        },
+                        {
+                            summary: "Battery Low",
+                            body: "Battery at 15%. Please charge.",
+                            appName: "System"
+                        },
+                        {
+                            summary: "Friend Request",
+                            body: "Alice sent you a friend request.",
+                            appName: "Social"
+                        }
+                    ]
+                }
+                NotificationGroup {
+                    width: parent.width
+                    notifications: [
+                        {
+                            summary: "New Email",
+                            body: "You have a new message from John.",
+                            appName: "Mail"
+                        },
+                        {
+                            summary: "Update Available",
+                            body: "Version 2.0 is ready to install.",
+                            appName: "Updater"
+                        },
+                        {
+                            summary: "Meeting Reminder",
+                            body: "Team meeting in 10 minutes.",
+                            appName: "Calendar"
+                        },
+                        {
+                            summary: "Battery Low",
+                            body: "Battery at 15%. Please charge.",
+                            appName: "System"
+                        },
+                        {
+                            summary: "Friend Request",
+                            body: "Alice sent you a friend request.",
+                            appName: "Social"
+                        }
+                    ]
+                }
             }
         }
     }
