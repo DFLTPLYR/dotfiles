@@ -2,11 +2,12 @@
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
+    address: "127.0.0.1:6600",
     password: None,
     theme: "/home/dfltplyr/.config/rmpc/theme/small",
     cache_dir: None,
     on_resize: ["resize-player.zsh"],
-    on_song_change: ["/home/dfltplyr/.config/rmpc/scripts/onsongchange.sh"],
+    on_song_change: ["~/.config/rmpc/scripts/onsongchange.sh"],
     lyrics_dir: "/StorageBtw/Music",
     volume_step: 5,
     max_fps: 165,
