@@ -12,25 +12,21 @@ ShellRoot {
             id: layered
             opacity: 0.5
             property bool open: false
+            property int rectCount: 3
             anchors.fill: parent
             anchors.margins: 1
 
             ListModel {
                 id: rectModel
-                ListElement {
-                    openY: 120
-                    closedY: 10
-                    offset: 20
-                }
-                ListElement {
-                    openY: 60
-                    closedY: 5
-                    offset: 10
-                }
-                ListElement {
-                    openY: 0
-                    closedY: 0
-                    offset: 0
+            }
+
+            Component.onCompleted: {
+                for (var i = 0; i < rectCount; i++) {
+                    rectModel.append({
+                        openY: (rectCount - 1 - i) * 60,
+                        closedY: (rectCount - 1 - i) * 5,
+                        offset: (rectCount - 1 - i) * 10
+                    });
                 }
             }
 
