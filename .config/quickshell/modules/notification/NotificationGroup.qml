@@ -1,5 +1,12 @@
 import QtQuick
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+
+import Quickshell
+
+import qs.utils
+import qs.services
+import qs.assets
 
 Item {
     id: layered
@@ -11,17 +18,57 @@ Item {
     width: parent.width
 
     layer.enabled: true
+
     Repeater {
         model: notifications
         delegate: Rectangle {
-            color: 'lightblue'
+            color: Scripts.setOpacity(Assets.color10, 0.2)
             layer.enabled: true
+
             y: layered.open ? index * 60 : index * 5
             x: (parent.width - width) / 2
+
+            radius: 10
+
             width: layered.open ? parent.width : parent.width - (index * 10)
             height: 60
             border.width: 1
             opacity: layered.open || index < 3 ? 1 : 0
+
+            Rectangle {
+                id: wrapper
+                property var iconPath: modelData.image || Quickshell.iconPath(modelData.appIcon, true)
+                visible: !!iconPath
+                anchors.left: parent.left
+                anchors.top: parent.top
+                height: parent.height / 2
+                width: height
+
+                color: "transparent"
+
+                Image {
+                    id: maskee
+                    anchors.fill: parent
+                    source: wrapper.iconPath
+                    fillMode: Image.PreserveAspectCrop
+                    smooth: true
+                    visible: false
+                }
+
+                Rectangle {
+                    id: masking
+                    anchors.fill: parent
+                    radius: width / 2
+                    clip: true
+                    visible: false
+                }
+
+                OpacityMask {
+                    anchors.fill: parent
+                    source: maskee
+                    maskSource: masking
+                }
+            }
 
             Text {
                 text: modelData.summary
@@ -95,6 +142,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     layered.open = !layered.open;
+                    console.log(modelData);
                 }
             }
         }
