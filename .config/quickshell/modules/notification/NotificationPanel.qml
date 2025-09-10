@@ -19,7 +19,7 @@ Rectangle {
     ListView {
         anchors.fill: parent
         anchors.margins: 10
-        ScrollBar.vertical: ScrollBar {}
+
         model: NotificationService.appNameList
         delegate: NotificationGroup {
             required property var modelData
