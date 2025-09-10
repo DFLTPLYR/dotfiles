@@ -13,9 +13,10 @@ Item {
     opacity: 0.5
     property bool open: false
     property real dragStartX: 0
+    property int gap: 3
     required property var notifications
 
-    height: layered.open ? notifications.length * 60 : notifications.length * 5 + 60
+    height: layered.open ? notifications.length * (60 + gap) : notifications.length * 5 + 60
     width: parent.width
 
     layer.enabled: true
@@ -28,7 +29,7 @@ Item {
             color: Scripts.setOpacity(Assets.color10, 0.2)
             layer.enabled: true
 
-            y: layered.open ? index * 60 : index * 5
+            y: layered.open ? index * (60 + gap) : index * 5
             x: (parent.width - width) / 2
 
             radius: 10

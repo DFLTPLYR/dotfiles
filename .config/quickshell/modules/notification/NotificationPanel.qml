@@ -14,22 +14,16 @@ Rectangle {
     radius: 10
     color: Scripts.setOpacity(Assets.background, 0.5)
 
-    ScrollView {
-        ScrollBar.vertical: ScrollBar {}
+    clip: true
+
+    ListView {
         anchors.fill: parent
         anchors.margins: 10
-
-        Column {
-            width: parent.width
-
-            Repeater {
-                model: NotificationService.appNameList
-                delegate: NotificationGroup {
-                    required property var modelData
-                    width: parent.width
-                    notifications: NotificationService.groupsByAppName[modelData].notifications
-                }
-            }
+        ScrollBar.vertical: ScrollBar {}
+        model: NotificationService.appNameList
+        delegate: NotificationGroup {
+            required property var modelData
+            notifications: NotificationService.groupsByAppName[modelData].notifications
         }
     }
 }
