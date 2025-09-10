@@ -19,33 +19,40 @@ Item {
     height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
     width: parent.width
 
-    layer.enabled: true
+    clip: true
+
+    Behavior on height {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
 
     Repeater {
         model: notifications
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
-            color: Scripts.setOpacity(Assets.color10, 0.2)
+            color: Scripts.setOpacity(Assets.color10, 0.5)
             layer.enabled: true
-
+            height: 60
             y: layered.open ? index * (60 + gap) : index * 5
             x: (parent.width - width) / 2
 
             radius: 10
 
             width: layered.open ? parent.width : parent.width - (index * 10)
-            height: 60
             border.width: 1
+            border.color: Scripts.setOpacity(Assets.color14, 0.9)
             opacity: layered.open || index < 3 ? 1 : 0
 
             Rectangle {
-                id: wrapper
+                id: imageWrapper
                 property var iconPath: modelData.image || Quickshell.iconPath(modelData.appIcon, true)
                 visible: !!iconPath
-                anchors.left: parent.left
-                anchors.top: parent.top
-                height: parent.height / 2
+
+                anchors.margins: 5
+                height: parent.height
                 width: height
 
                 color: "transparent"
@@ -53,7 +60,7 @@ Item {
                 Image {
                     id: maskee
                     anchors.fill: parent
-                    source: wrapper.iconPath
+                    source: imageWrapper.iconPath
                     fillMode: Image.PreserveAspectCrop
                     smooth: true
                     visible: false
@@ -74,22 +81,35 @@ Item {
                 }
             }
 
-            Text {
-                text: modelData.summary
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.margins: 10
-                font.bold: true
-            }
+            Rectangle {
+                anchors {
+                    left: imageWrapper.right ?? parent.right
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                }
 
-            Text {
-                text: modelData.body
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                anchors.margins: 10
-                font.pixelSize: 12
-                elide: Text.ElideRight
-                width: parent.width - 20
+                bottomRightRadius: delegateRect.radius
+                topRightRadius: delegateRect.radius
+                color: Scripts.setOpacity(Assets.color10, 0.5)
+
+                Text {
+                    text: modelData.summary
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.margins: 10
+                    font.bold: true
+                }
+
+                Text {
+                    text: modelData.body
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 10
+                    font.pixelSize: 12
+                    elide: Text.ElideRight
+                    width: parent.width - 20
+                }
             }
 
             Item {
@@ -182,7 +202,6 @@ Item {
         }
         onReleased: {
             if (Math.abs(layered.x) > parent.width * 0.1) {
-                console.log(layered.group);
                 NotificationService.discardNotificationGroup(layered.group);
             }
             layered.x = 0;

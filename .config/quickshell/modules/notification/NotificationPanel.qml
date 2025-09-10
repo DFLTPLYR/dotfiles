@@ -12,7 +12,7 @@ Rectangle {
     Layout.fillWidth: true
     Layout.fillHeight: true
     radius: 10
-    color: Scripts.setOpacity(Assets.background, 0.5)
+    color: "transparent"
 
     clip: true
 
