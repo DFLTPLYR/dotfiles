@@ -66,11 +66,9 @@ Singleton {
         }
     }
 
-    property bool silent: false
     property var filePath: '/tmp/notification.json'
     property list<Notif> list: []
     property var popupList: list.filter(notif => notif.popup)
-    property bool popupInhibited: silent
     property var latestTimeForApp: ({})
     Component {
         id: notifComponent
@@ -153,22 +151,19 @@ Singleton {
 
         onNotification: notification => {
             notification.tracked = true;
-            console.log(notification);
             const newNotifObject = notifComponent.createObject(root, {
                 "notificationId": notification.id + root.idOffset,
                 "notification": notification,
                 "time": Date.now()
             });
             root.list = [...root.list, newNotifObject];
-            // Popup
-            if (!root.popupInhibited) {
-                newNotifObject.popup = true;
-                if (notification.expireTimeout != 0) {
-                    newNotifObject.timer = notifTimerComponent.createObject(root, {
-                        "notificationId": newNotifObject.notificationId,
-                        "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
-                    });
-                }
+
+            newNotifObject.popup = true;
+            if (notification.expireTimeout != 0) {
+                newNotifObject.timer = notifTimerComponent.createObject(root, {
+                    "notificationId": newNotifObject.notificationId,
+                    "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
+                });
             }
 
             root.notify(newNotifObject);
@@ -188,7 +183,16 @@ Singleton {
         if (notifServerIndex !== -1) {
             notifServer.trackedNotifications.values[notifServerIndex].dismiss();
         }
-        root.discard(id); // Emit signal
+        root.discard(id);
+    }
+
+    function discardNotificationGroup(group) {
+        if (root.groupsByAppName[group]) {
+            const notifications = root.groupsByAppName[group].notifications;
+            notifications.forEach(notif => {
+                root.discardNotification(notif.notificationId);
+            });
+        }
     }
 
     function discardAllNotifications() {

@@ -5,7 +5,6 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 
 import qs.utils
-import qs.services
 import qs.assets
 
 Item {
@@ -14,6 +13,7 @@ Item {
     property bool open: false
     property real dragStartX: 0
     property int gap: 3
+    required property var group
     required property var notifications
 
     height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
@@ -181,6 +181,10 @@ Item {
             layered.dragStartX = layered.x;
         }
         onReleased: {
+            if (Math.abs(layered.x) > parent.width * 0.1) {
+                console.log(layered.group);
+                NotificationService.discardNotificationGroup(layered.group);
+            }
             layered.x = 0;
         }
     }

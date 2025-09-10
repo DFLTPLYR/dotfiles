@@ -19,11 +19,18 @@ Rectangle {
     ListView {
         anchors.fill: parent
         anchors.margins: 10
-
         model: NotificationService.appNameList
         delegate: NotificationGroup {
             required property var modelData
+            group: modelData
             notifications: NotificationService.groupsByAppName[modelData].notifications
+        }
+
+        Connections {
+            target: NotificationService
+            function onGroupsByAppNameChanged() {
+                console.log(NotificationService.groupsByAppName);
+            }
         }
     }
 }
