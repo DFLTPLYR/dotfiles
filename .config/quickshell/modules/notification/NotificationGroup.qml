@@ -16,7 +16,7 @@ Item {
     property int gap: 3
     required property var notifications
 
-    height: layered.open ? notifications.length * (60 + gap) : notifications.length * 5 + 60
+    height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
     width: parent.width
 
     layer.enabled: true
