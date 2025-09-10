@@ -9,17 +9,15 @@ import qs.assets
 
 Item {
     id: layered
-    opacity: 0.5
+    opacity: 1
     property bool open: false
     property real dragStartX: 0
     property int gap: 3
     required property var group
     required property var notifications
-
+    layer.enabled: true
     height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
     width: parent.width
-
-    clip: true
 
     Behavior on height {
         NumberAnimation {
@@ -33,26 +31,27 @@ Item {
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
-            color: Scripts.setOpacity(Assets.color10, 0.5)
+            color: Scripts.setOpacity(Assets.color10, 0.4)
             layer.enabled: true
             height: 60
+            width: Math.round(parent.width)
             y: layered.open ? index * (60 + gap) : index * 5
             x: (parent.width - width) / 2
 
             radius: 10
 
-            width: layered.open ? parent.width : parent.width - (index * 10)
-            border.width: 1
-            border.color: Scripts.setOpacity(Assets.color14, 0.9)
+            scale: layered.open ? 1 : (parent.width - (index * 10)) / parent.width
             opacity: layered.open || index < 3 ? 1 : 0
 
             Rectangle {
                 id: imageWrapper
                 property var iconPath: modelData.image || Quickshell.iconPath(modelData.appIcon, true)
                 visible: !!iconPath
-
-                anchors.margins: 5
-                height: parent.height
+                anchors.left: parent.left
+                anchors.leftMargin: 2
+                opacity: layered.open || index < 1 ? 1 : 0.5
+                anchors.verticalCenter: parent.verticalCenter
+                height: parent.height * 0.9
                 width: height
 
                 color: "transparent"
@@ -79,6 +78,12 @@ Item {
                     source: maskee
                     maskSource: masking
                 }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
 
             Rectangle {
@@ -88,10 +93,12 @@ Item {
                     top: parent.top
                     bottom: parent.bottom
                 }
-
+                width: parent.width - imageWrapper.width
+                height: parent.height
+                opacity: layered.open || index < 1 ? 1 : 0
                 bottomRightRadius: delegateRect.radius
                 topRightRadius: delegateRect.radius
-                color: Scripts.setOpacity(Assets.color10, 0.5)
+                color: "transparent"
 
                 Text {
                     text: modelData.summary
@@ -99,6 +106,10 @@ Item {
                     anchors.top: parent.top
                     anchors.margins: 10
                     font.bold: true
+                    color: Assets.color14
+                    width: Math.round(parent.width - 20)
+                    font.family: FontAssets.fontSometypeItalic
+                    elide: Text.ElideRight
                 }
 
                 Text {
@@ -107,8 +118,16 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.margins: 10
                     font.pixelSize: 12
+                    color: Assets.color14
                     elide: Text.ElideRight
-                    width: parent.width - 20
+                    width: Math.round(parent.width - 20)
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
 
@@ -141,20 +160,24 @@ Item {
                 }
             }
 
-            Behavior on width {
+            Behavior on scale {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
             }
-
             Behavior on y {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
             }
-
+            Behavior on x {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
             Behavior on opacity {
                 NumberAnimation {
                     duration: 300
@@ -179,8 +202,9 @@ Item {
                     if (Math.abs(delegateRect.x) > parent.width * 0.1) {
                         var item = notifications[index];
                         NotificationService.discardNotification(item.notificationId);
+                    } else {
+                        delegateRect.x = (parent.width - width) / 2;
                     }
-                    delegateRect.x = 0;
                 }
             }
         }
