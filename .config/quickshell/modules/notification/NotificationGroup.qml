@@ -12,6 +12,7 @@ Item {
     id: layered
     opacity: 0.5
     property bool open: false
+    property real dragStartX: 0
     required property var notifications
 
     height: layered.open ? notifications.length * 60 : notifications.length * 5 + 60
@@ -22,6 +23,8 @@ Item {
     Repeater {
         model: notifications
         delegate: Rectangle {
+            id: delegateRect
+            property real dragStartX: 0
             color: Scripts.setOpacity(Assets.color10, 0.2)
             layer.enabled: true
 
@@ -139,12 +142,45 @@ Item {
             }
 
             MouseArea {
+                id: dragArea
                 anchors.fill: parent
+
+                drag.target: delegateRect
+                drag.axis: Drag.XAxis
+
                 onClicked: {
                     layered.open = !layered.open;
-                    console.log(modelData);
+                }
+                onPressed: {
+                    delegateRect.dragStartX = delegateRect.x;
+                }
+                onReleased: {
+                    if (Math.abs(delegateRect.x) > parent.width * 0.1) {
+                        var item = notifications[index];
+                        NotificationService.discardNotification(item.notificationId);
+                    }
+                    delegateRect.x = 0;
                 }
             }
+        }
+    }
+
+    MouseArea {
+        id: groupDragArea
+        anchors.fill: parent
+        enabled: !layered.open
+
+        drag.target: layered
+        drag.axis: Drag.XAxis
+
+        onClicked: {
+            layered.open = !layered.open;
+        }
+        onPressed: {
+            layered.dragStartX = layered.x;
+        }
+        onReleased: {
+            layered.x = 0;
         }
     }
 }

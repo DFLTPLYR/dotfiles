@@ -220,17 +220,8 @@ GridLayout {
         Layout.fillHeight: true
 
         CalendarPanel {}
-        Rectangle {
-            id: root
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            radius: 10
-            color: Scripts.setOpacity(Assets.color0, 0.5)
-            NotificationPanel {
-                anchors.fill: parent
-                anchors.margins: 10
-            }
-        }
+
+        NotificationPanel {}
     }
 
     // Right Panel
