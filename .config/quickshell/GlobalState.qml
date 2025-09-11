@@ -1,11 +1,13 @@
 // GlobalState.qml
 pragma Singleton
 pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 
-PersistentProperties {
+Singleton {
     id: root
 
     // Ui states
