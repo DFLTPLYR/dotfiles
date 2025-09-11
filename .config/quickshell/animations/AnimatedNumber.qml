@@ -1,4 +1,4 @@
-// AnimatedBehavior.qml
+// AnimatedNumber.qml
 import QtQuick
 
 NumberAnimation {

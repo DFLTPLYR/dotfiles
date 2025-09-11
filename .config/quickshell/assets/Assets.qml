@@ -156,6 +156,78 @@ Item {
         }
     }
 
+    property color primary: color12
+    Behavior on primary {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color secondary: color10
+    Behavior on secondary {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color accent: color13
+    Behavior on accent {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color text: foreground
+    Behavior on text {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color textSecondary: color8
+    Behavior on textSecondary {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color border: color0
+    Behavior on border {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color success: color2
+    Behavior on success {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color warning: color11
+    Behavior on warning {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    property color error: color1
+    Behavior on error {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     FileView {
         id: colorJson
         path: Qt.resolvedUrl("../services/colors.json")
