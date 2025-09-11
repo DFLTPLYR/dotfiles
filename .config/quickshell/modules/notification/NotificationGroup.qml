@@ -32,7 +32,10 @@ Item {
             id: delegateRect
             property real dragStartX: 0
             property bool isLeaving: false
-            color: Scripts.setOpacity(Assets.color10, 0.4)
+            color: Scripts.setOpacity(Assets.color0, 0.5)
+            border.width: 1.9
+            border.color: Scripts.setOpacity(Assets.color10, 0.4)
+
             layer.enabled: true
             height: 60
             width: Math.round(parent.width)
