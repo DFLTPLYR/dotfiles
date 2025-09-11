@@ -10,9 +10,9 @@ import qs.assets
 Item {
     id: layered
     opacity: 1
-    property bool open: false
     property real dragStartX: 0
     property int gap: 3
+    property bool open: false
     required property var group
     required property var notifications
     layer.enabled: true
@@ -31,6 +31,7 @@ Item {
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
+            property bool isLeaving: false
             color: Scripts.setOpacity(Assets.color10, 0.4)
             layer.enabled: true
             height: 60
@@ -185,6 +186,35 @@ Item {
                 }
             }
 
+            states: [
+                State {
+                    name: "leaving"
+                    PropertyChanges {
+                        target: delegateRect
+                        x: 400
+                    }
+                }
+            ]
+
+            onIsLeavingChanged: {
+                if (delegateRect.isLeaving)
+                    return delegateRect.state = "leaving";
+            }
+
+            transitions: Transition {
+                NumberAnimation {
+                    properties: "x,y,opacity,scale"
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+                onRunningChanged: {
+                    if (!running && delegateRect.isLeaving) {
+                        var item = notifications[index];
+                        NotificationService.discardNotification(item.notificationId);
+                    }
+                }
+            }
+
             MouseArea {
                 id: dragArea
                 anchors.fill: parent
@@ -200,8 +230,7 @@ Item {
                 }
                 onReleased: {
                     if (Math.abs(delegateRect.x) > parent.width * 0.1) {
-                        var item = notifications[index];
-                        NotificationService.discardNotification(item.notificationId);
+                        delegateRect.isLeaving = true;
                     } else {
                         delegateRect.x = (parent.width - width) / 2;
                     }
