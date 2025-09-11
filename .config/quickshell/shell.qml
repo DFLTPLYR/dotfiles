@@ -54,11 +54,6 @@ ShellRoot {
                 component: ExtendedBar {}
             }
 
-            // LazyLoader {
-            //     active: persistStates.showWallpaperCarousel
-            //     component: WallpaperCarousel {}
-            // }
-
             LazyLoader {
                 active: persistStates.showClipBoard
                 component: ClipBoard {}
