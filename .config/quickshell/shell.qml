@@ -119,7 +119,7 @@ ShellRoot {
     WallpaperPicker {}
 
     Connections {
-        target: Assets
+        target: ColorPalette
         function onParseDone() {
             Buns;
         }

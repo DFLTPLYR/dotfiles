@@ -13,8 +13,8 @@ Rectangle {
     required property var modelData
 
     height: 90
-    color: Scripts.setOpacity(Assets.background, 0.7)
-    border.color: Assets.color1
+    color: Scripts.setOpacity(ColorPalette.background, 0.7)
+    border.color: ColorPalette.color1
     radius: 12
     clip: true
 
@@ -70,18 +70,18 @@ Rectangle {
                 spacing: 10
 
                 Text {
-                    font.family: FontAssets.fontSometypeItalic
+                    font.family: FontProvider.fontSometypeItalic
                     text: modelData.appName
                     font.bold: true
                     Layout.fillWidth: true
                     elide: Text.ElideRight
-                    color: Assets.color12
+                    color: ColorPalette.color12
                 }
 
                 Text {
                     id: timeText
                     text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
-                    color: Assets.color11
+                    color: ColorPalette.color11
                 }
             }
 
@@ -91,7 +91,7 @@ Rectangle {
                 wrapMode: Text.Wrap
                 maximumLineCount: 2
                 elide: Text.ElideRight
-                color: Assets.color11
+                color: ColorPalette.color11
             }
 
             Text {
@@ -100,7 +100,7 @@ Rectangle {
                 wrapMode: Text.Wrap
                 maximumLineCount: 2
                 elide: Text.ElideRight
-                color: Assets.color10
+                color: ColorPalette.color10
             }
         }
     }

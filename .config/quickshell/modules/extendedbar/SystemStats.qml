@@ -6,7 +6,6 @@ import qs.components
 import qs.assets
 import qs.utils
 import qs
-import qs.animations // Add this import for AnimatedNumber
 
 GridLayout {
     id: root

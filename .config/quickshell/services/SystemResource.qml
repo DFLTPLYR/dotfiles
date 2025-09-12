@@ -5,7 +5,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import qs.animations
+import qs.assets
 
 // yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/ResourceUsage.qml but extended
 
@@ -89,56 +89,55 @@ Singleton {
         }
     }
 
-    // Add behaviors for smooth animations
     Behavior on cpuUsage {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on cpuCores {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on cpuCtxSwitches {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
 
     Behavior on gpuUsage {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on gpuTemp {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on gpuMem {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
 
     Behavior on memUsage {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on memUsed {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on memTotal {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on memCached {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on memActive {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
 
     Behavior on swapUsage {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on swapUsed {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on swapTotal {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on swapIn {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
     Behavior on swapOut {
-        AnimatedNumber {}
+        AnimationProvider.NumberAnim {}
     }
 }

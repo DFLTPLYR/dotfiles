@@ -20,7 +20,7 @@ ColumnLayout {
     Text {
         text: "Add new Todo..."
         font.bold: true
-        color: Assets.color10
+        color: ColorPalette.color10
     }
     RowLayout {
         Layout.fillWidth: true
@@ -29,14 +29,14 @@ ColumnLayout {
         TextField {
             id: singleline
             text: ""
-            color: Assets.color13
+            color: ColorPalette.color13
 
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillWidth: true
 
             background: Rectangle {
                 radius: 5
-                border.color: singleline.focus ? Assets.color12 : Assets.color10
+                border.color: singleline.focus ? ColorPalette.color12 : ColorPalette.color10
                 color: "transparent"
             }
             placeholderText: "Add a new task..."
@@ -67,7 +67,7 @@ ColumnLayout {
         Text {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             text: qsTr("\uf0fe")
-            color: Assets.color12
+            color: ColorPalette.color12
             font.pixelSize: Math.min(parent.height, parent.width) * 0.8
 
             MouseArea {
@@ -104,7 +104,7 @@ ColumnLayout {
             Text {
                 text: "Pending"
                 font.bold: true
-                color: Assets.color10
+                color: ColorPalette.color10
             }
             ListView {
                 id: pendingListView
@@ -139,7 +139,7 @@ ColumnLayout {
                     }
 
                     radius: 5
-                    color: mouse.hovered ? (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.4) : Scripts.setOpacity(Assets.color10, 0.4)) : (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.2) : Scripts.setOpacity(Assets.color11, 0.2))
+                    color: mouse.hovered ? (model.is_completed ? Scripts.setOpacity(ColorPalette.color10, 0.4) : Scripts.setOpacity(ColorPalette.color10, 0.4)) : (model.is_completed ? Scripts.setOpacity(ColorPalette.color10, 0.2) : Scripts.setOpacity(ColorPalette.color11, 0.2))
 
                     property bool isSelected: ListView.isCurrentItem
 
@@ -167,7 +167,7 @@ ColumnLayout {
                                 height: parent.height / 2
                                 width: height
                                 radius: 4
-                                color: mouse.hovered ? Scripts.setOpacity(Assets.color12, 0.4) : "transparent"
+                                color: mouse.hovered ? Scripts.setOpacity(ColorPalette.color12, 0.4) : "transparent"
 
                                 Behavior on color {
                                     ColorAnimation {
@@ -181,19 +181,19 @@ ColumnLayout {
                                     visible: model.is_completed
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5ca")
-                                    color: Assets.color10
-                                    font.family: FontAssets.fontMaterialOutlined
+                                    color: ColorPalette.color10
+                                    font.family: FontProvider.fontMaterialOutlined
                                     font.pixelSize: Math.round(parent.height)
                                 }
 
                                 Text {
                                     id: closed
                                     visible: !model.is_completed
-                                    color: Assets.color10
+                                    color: ColorPalette.color10
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5cd")
                                     font.pixelSize: Math.round(parent.height)
-                                    font.family: FontAssets.fontMaterialOutlined
+                                    font.family: FontProvider.fontMaterialOutlined
                                 }
 
                                 MouseArea {
@@ -225,7 +225,7 @@ ColumnLayout {
                         Text {
                             id: task
                             text: model.title
-                            color: Assets.color10
+                            color: ColorPalette.color10
 
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -266,13 +266,13 @@ ColumnLayout {
                                 height: parent.height / 2
                                 width: height
                                 radius: 10
-                                color: Scripts.setOpacity(Assets.color12, 0.2)
+                                color: Scripts.setOpacity(ColorPalette.color12, 0.2)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5cd")
-                                    font.family: FontAssets.fontMaterialOutlined
-                                    color: Assets.color10
+                                    font.family: FontProvider.fontMaterialOutlined
+                                    color: ColorPalette.color10
                                 }
 
                                 MouseArea {
@@ -350,14 +350,14 @@ ColumnLayout {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: 1
-                    color: Assets.color10
+                    color: ColorPalette.color10
                 }
             }
 
             Text {
                 text: "Completed"
                 font.bold: true
-                color: Assets.color10
+                color: ColorPalette.color10
             }
             // completed
             ListView {
@@ -393,7 +393,7 @@ ColumnLayout {
                     }
 
                     radius: 5
-                    color: mouse.hovered ? (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.4) : Scripts.setOpacity(Assets.color10, 0.4)) : (model.is_completed ? Scripts.setOpacity(Assets.color10, 0.2) : Scripts.setOpacity(Assets.color11, 0.2))
+                    color: mouse.hovered ? (model.is_completed ? Scripts.setOpacity(ColorPalette.color10, 0.4) : Scripts.setOpacity(ColorPalette.color10, 0.4)) : (model.is_completed ? Scripts.setOpacity(ColorPalette.color10, 0.2) : Scripts.setOpacity(ColorPalette.color11, 0.2))
 
                     property bool isSelected: ListView.isCurrentItem
 
@@ -421,7 +421,7 @@ ColumnLayout {
                                 height: parent.height / 2
                                 width: height
                                 radius: 4
-                                color: mouse.hovered ? Scripts.setOpacity(Assets.color12, 0.4) : "transparent"
+                                color: mouse.hovered ? Scripts.setOpacity(ColorPalette.color12, 0.4) : "transparent"
 
                                 Behavior on color {
                                     ColorAnimation {
@@ -435,8 +435,8 @@ ColumnLayout {
                                     visible: model.is_completed
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5ca")
-                                    color: Assets.color10
-                                    font.family: FontAssets.fontMaterialOutlined
+                                    color: ColorPalette.color10
+                                    font.family: FontProvider.fontMaterialOutlined
                                     font.pixelSize: Math.round(parent.height)
                                 }
 
@@ -469,7 +469,7 @@ ColumnLayout {
                         Text {
                             id: task
                             text: model.title
-                            color: Assets.color10
+                            color: ColorPalette.color10
 
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -508,13 +508,13 @@ ColumnLayout {
                                 height: parent.height / 2
                                 width: height
                                 radius: 10
-                                color: Scripts.setOpacity(Assets.color12, 0.2)
+                                color: Scripts.setOpacity(ColorPalette.color12, 0.2)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: qsTr("\ue5cd")
-                                    font.family: FontAssets.fontMaterialOutlined
-                                    color: Assets.color10
+                                    font.family: FontProvider.fontMaterialOutlined
+                                    color: ColorPalette.color10
                                 }
 
                                 MouseArea {

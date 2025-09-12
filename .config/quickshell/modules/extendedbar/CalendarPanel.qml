@@ -12,7 +12,7 @@ Rectangle {
     id: calendarWrapper
     Layout.fillWidth: true
     Layout.fillHeight: true
-    color: Scripts.setOpacity(Assets.color0, 0.5)
+    color: Scripts.setOpacity(ColorPalette.color0, 0.5)
     radius: 10
 
     property int year: TimeService.year
@@ -74,12 +74,12 @@ Rectangle {
 
         // Prev Button
         Rectangle {
-            color: Scripts.setOpacity(Assets.color10, 0.4)
+            color: Scripts.setOpacity(ColorPalette.color10, 0.4)
             Layout.fillWidth: true
             Layout.fillHeight: false
             height: 20
 
-            border.color: prevBtnMA.containsMouse ? Assets.color12 : Assets.color14
+            border.color: prevBtnMA.containsMouse ? ColorPalette.color12 : ColorPalette.color14
             radius: 4
 
             Behavior on border.color {
@@ -92,7 +92,7 @@ Rectangle {
             Text {
                 id: prevBtn
                 text: '\uf0d9'
-                color: Assets.color14
+                color: ColorPalette.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -118,10 +118,10 @@ Rectangle {
                 id: currentDate
                 anchors.centerIn: parent
                 text: qsTr(`${calendarWrapper.year} - ${calendarGrid.monthShort[calendarWrapper.month - 1]}`)
-                color: Assets.color14
+                color: ColorPalette.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.family: FontAssets.fontSometypeMono
+                font.family: FontProvider.fontSometypeMono
                 MouseArea {
                     anchors.fill: parent
                     onClicked: calendarWrapper.goToToday()
@@ -132,12 +132,12 @@ Rectangle {
 
         // Next Button
         Rectangle {
-            color: Scripts.setOpacity(Assets.color10, 0.4)
+            color: Scripts.setOpacity(ColorPalette.color10, 0.4)
             Layout.fillWidth: true
             Layout.fillHeight: false
             height: 20
 
-            border.color: nextBtnMA.containsMouse ? Assets.color12 : Assets.color14
+            border.color: nextBtnMA.containsMouse ? ColorPalette.color12 : ColorPalette.color14
             radius: 4
 
             Behavior on border.color {
@@ -150,7 +150,7 @@ Rectangle {
             Text {
                 id: nextBtn
                 text: '\uf0da'
-                color: Assets.color14
+                color: ColorPalette.color14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.centerIn: parent
@@ -167,20 +167,20 @@ Rectangle {
         Repeater {
             model: calendarGrid.columns
             delegate: Rectangle {
-                color: Scripts.setOpacity(Assets.color10, 0.4)
+                color: Scripts.setOpacity(ColorPalette.color10, 0.4)
                 Layout.fillWidth: true
                 Layout.fillHeight: false
                 height: 30
 
-                border.color: Scripts.setOpacity(Assets.color10, 0.4)
+                border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
                 radius: 4
 
                 Text {
                     anchors.centerIn: parent
                     text: calendarGrid.dayNames[index]
                     font.bold: true
-                    color: Assets.color14
-                    font.family: FontAssets.fontSometypeItalic
+                    color: ColorPalette.color14
+                    font.family: FontProvider.fontSometypeItalic
                 }
             }
         }
@@ -208,7 +208,7 @@ Rectangle {
                     return modelData === TimeService.date.getDate() && calendarWrapper.isCurrentDate;
                 }
 
-                color: selected ? Scripts.setOpacity(Assets.color15, 0.4) : (modelData ? Scripts.setOpacity(Assets.color10, 0.4) : "transparent")
+                color: selected ? Scripts.setOpacity(ColorPalette.color15, 0.4) : (modelData ? Scripts.setOpacity(ColorPalette.color10, 0.4) : "transparent")
                 radius: 4
 
                 Layout.fillWidth: true
@@ -218,8 +218,8 @@ Rectangle {
                     anchors.centerIn: parent
                     text: modelData ? modelData : '\uf111'
                     font.pixelSize: modelData ? 12 : 8
-                    color: modelData ? Assets.color14 : "transparent"
-                    font.family: FontAssets.fontSometypeItalic
+                    color: modelData ? ColorPalette.color14 : "transparent"
+                    font.family: FontProvider.fontSometypeItalic
                 }
             }
         }

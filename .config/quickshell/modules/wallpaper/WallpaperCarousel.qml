@@ -22,7 +22,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'WallpaperCarousel'
 
-    color: Scripts.setOpacity(Assets.background, 0.2)
+    color: Scripts.setOpacity(ColorPalette.background, 0.2)
 
     onHidden: key => GlobalState.removeDrawer(key)
 
@@ -114,8 +114,8 @@ AnimatedScreenOverlay {
             Rectangle {
                 Layout.fillHeight: true
                 Layout.preferredWidth: parent.width / 4
-                color: Scripts.setOpacity(Assets.background, 0.8)
-                border.color: Scripts.setOpacity(Assets.colors10, 0.2)
+                color: Scripts.setOpacity(ColorPalette.background, 0.8)
+                border.color: Scripts.setOpacity(ColorPalette.colors10, 0.2)
                 radius: 10
                 clip: true
 
@@ -169,7 +169,7 @@ AnimatedScreenOverlay {
                     highlight: Rectangle {
                         width: 180
                         height: 40
-                        color: Scripts.setOpacity(Assets.color1, 0.4)
+                        color: Scripts.setOpacity(ColorPalette.color1, 0.4)
                         radius: 10
                     }
                 }
@@ -180,8 +180,8 @@ AnimatedScreenOverlay {
                 id: previewPanel
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                color: Scripts.setOpacity(Assets.background, 0.8)
-                border.color: Scripts.setOpacity(Assets.foreground, 0.2)
+                color: Scripts.setOpacity(ColorPalette.background, 0.8)
+                border.color: Scripts.setOpacity(ColorPalette.foreground, 0.2)
                 radius: 10
 
                 Item {
@@ -219,10 +219,10 @@ AnimatedScreenOverlay {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         implicitHeight: 100
-                        color: Scripts.setOpacity(Assets.background, 0.6)
+                        color: Scripts.setOpacity(ColorPalette.background, 0.6)
                         radius: 8
                         anchors.margins: 10
-                        border.color: Scripts.setOpacity(Assets.foreground, 0.2)
+                        border.color: Scripts.setOpacity(ColorPalette.foreground, 0.2)
 
                         ColumnLayout {
                             id: previewWrapper
@@ -236,7 +236,7 @@ AnimatedScreenOverlay {
                                 Text {
                                     anchors.centerIn: parent
                                     text: qsTr("\uf1fc Color Pallete \uf1fc ")
-                                    color: Assets.color10
+                                    color: ColorPalette.color10
                                 }
                             }
 
@@ -259,7 +259,7 @@ AnimatedScreenOverlay {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: width / 2
                                         color: modelData.color
-                                        border.color: Scripts.setOpacity(Assets.foreground, 0.1)
+                                        border.color: Scripts.setOpacity(ColorPalette.foreground, 0.1)
                                     }
                                 }
 
@@ -276,7 +276,7 @@ AnimatedScreenOverlay {
         // Rectangle {
         //     Layout.fillWidth: true
         //     Layout.preferredHeight: screen.height / 10
-        //     color: Scripts.setOpacity(Assets.background, 0.8)
+        //     color: Scripts.setOpacity(ColorPalette.background, 0.8)
         //     radius: 10
         //     clip: true
         // }
