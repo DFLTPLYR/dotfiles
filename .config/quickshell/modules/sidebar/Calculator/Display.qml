@@ -160,14 +160,14 @@ Item {
                         font.pixelSize: display.fontSize
                         color: display.qtGreenColor
                         text: parent.operator
-                        font.family: FontAssets.fontSometypeMono
+                        font.family: FontProvider.fontSometypeMono
                     }
                     Text {
                         font.pixelSize: display.fontSize
                         anchors.right: parent.right
                         anchors.rightMargin: 16
                         text: parent.operand
-                        font.family: FontAssets.fontSometypeMono
+                        font.family: FontProvider.fontSometypeMono
                         color: "white"
                     }
                 }

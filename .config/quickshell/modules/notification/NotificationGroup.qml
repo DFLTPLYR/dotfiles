@@ -15,6 +15,7 @@ Item {
     property bool open: false
     required property var group
     required property var notifications
+    property bool isLeaving: false
     layer.enabled: true
     height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
     width: parent.width
@@ -32,9 +33,9 @@ Item {
             id: delegateRect
             property real dragStartX: 0
             property bool isLeaving: false
-            color: Scripts.setOpacity(Assets.color0, 0.5)
+            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
             border.width: 0.5
-            border.color: Scripts.setOpacity(Assets.color10, 0.4)
+            border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
 
             layer.enabled: true
             height: 60
@@ -110,9 +111,9 @@ Item {
                     anchors.top: parent.top
                     anchors.margins: 10
                     font.bold: true
-                    color: Assets.color14
+                    color: ColorPalette.color14
                     width: Math.round(parent.width - 20)
-                    font.family: FontAssets.fontSometypeItalic
+                    font.family: FontProvider.fontSometypeItalic
                     elide: Text.ElideRight
                 }
 
@@ -122,7 +123,7 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.margins: 10
                     font.pixelSize: 12
-                    color: Assets.color14
+                    color: ColorPalette.color14
                     elide: Text.ElideRight
                     width: Math.round(parent.width - 20)
                 }
@@ -242,6 +243,34 @@ Item {
         }
     }
 
+    states: [
+        State {
+            name: "leaving"
+            PropertyChanges {
+                target: layered
+                x: 400
+            }
+        }
+    ]
+
+    onIsLeavingChanged: {
+        if (layered.isLeaving)
+            return layered.state = "leaving";
+    }
+
+    transitions: Transition {
+        NumberAnimation {
+            properties: "x,y,opacity,scale"
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+        onRunningChanged: {
+            if (!running && layered.isLeaving) {
+                NotificationService.discardNotificationGroup(layered.group);
+            }
+        }
+    }
+
     MouseArea {
         id: groupDragArea
         anchors.fill: parent
@@ -258,7 +287,7 @@ Item {
         }
         onReleased: {
             if (Math.abs(layered.x) > parent.width * 0.1) {
-                NotificationService.discardNotificationGroup(layered.group);
+                layered.isLeaving = true;
             }
             layered.x = 0;
         }

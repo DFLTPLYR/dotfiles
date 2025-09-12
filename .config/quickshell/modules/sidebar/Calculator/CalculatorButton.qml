@@ -16,10 +16,10 @@ RoundButton {
     property bool dimmed: false
     readonly property int fontSize: 22
     readonly property int buttonRadius: 8
-    property color textColor: Assets.color12
-    property color accentColor: Assets.color10
+    property color textColor: ColorPalette.color12
+    property color accentColor: ColorPalette.color10
     readonly property color backgroundColor: 'transparent'
-    readonly property color borderColor: Assets.color10
+    readonly property color borderColor: ColorPalette.color10
 
     function getBackgroundColor() {
         if (button.dimmable && button.dimmed)

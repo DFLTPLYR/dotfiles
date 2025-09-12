@@ -23,7 +23,7 @@ ColumnLayout {
                 id: currentCondition
                 Layout.fillHeight: true
                 Layout.preferredWidth: Math.round(parent.width * 0.4)
-                color: Scripts.setOpacity(Assets.color0, 0.5)
+                color: Scripts.setOpacity(ColorPalette.color0, 0.5)
                 radius: 4
 
                 // loading
@@ -40,7 +40,7 @@ ColumnLayout {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: 'Loading...'
                                 font.pixelSize: 12
-                                color: Assets.color10
+                                color: ColorPalette.color10
                             }
                         }
 
@@ -49,9 +49,9 @@ ColumnLayout {
                             Layout.fillHeight: true
                             Text {
                                 text: "\ue86a"
-                                color: Assets.color10
+                                color: ColorPalette.color10
                                 font.pixelSize: 12
-                                font.family: FontAssets.fontMaterialRounded
+                                font.family: FontProvider.fontMaterialRounded
                                 RotationAnimation on rotation {
                                     from: 0
                                     to: 360
@@ -81,14 +81,14 @@ ColumnLayout {
                                 height: parent.height * 0.7
                                 width: height
                                 radius: height / 2
-                                color: Scripts.setOpacity(Assets.color2, 0.4)
+                                color: Scripts.setOpacity(ColorPalette.color2, 0.4)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: WeatherFetcher.currentCondition?.icon ?? ""
-                                    color: Assets.color14
+                                    color: ColorPalette.color14
                                     font.bold: true
-                                    font.family: FontAssets.fontMaterialRounded
+                                    font.family: FontProvider.fontMaterialRounded
                                     font.pixelSize: parent.height * 0.7
                                 }
                             }
@@ -101,7 +101,7 @@ ColumnLayout {
                             verticalAlignment: Text.AlignBottom
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.temp ?? ""
-                            color: Assets.color10
+                            color: ColorPalette.color10
                             wrapMode: Text.Wrap
                         }
                         Text {
@@ -109,7 +109,7 @@ ColumnLayout {
                             Layout.alignment: Qt.AlignCenter
                             horizontalAlignment: Text.AlignHCenter
                             text: WeatherFetcher.currentCondition?.weatherDesc ?? ""
-                            color: Assets.color10
+                            color: ColorPalette.color10
                             wrapMode: Text.Wrap
                         }
                         Text {
@@ -118,7 +118,7 @@ ColumnLayout {
                             horizontalAlignment: Text.AlignHCenter
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.feelslike ?? ""
-                            color: Assets.color10
+                            color: ColorPalette.color10
                             wrapMode: Text.Wrap
                         }
                     }
@@ -141,7 +141,7 @@ ColumnLayout {
                             required property var modelData
                             Layout.fillHeight: true
                             Layout.fillWidth: true
-                            color: Scripts.setOpacity(Assets.color0, 0.5)
+                            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
                             radius: 4
                             ColumnLayout {
                                 anchors.fill: parent
@@ -154,7 +154,7 @@ ColumnLayout {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: 'Loading...'
                                         font.pixelSize: 12
-                                        color: Assets.color10
+                                        color: ColorPalette.color10
                                     }
                                 }
 
@@ -163,9 +163,9 @@ ColumnLayout {
                                     Layout.fillHeight: true
                                     Text {
                                         text: "\ue86a"
-                                        color: Assets.color10
+                                        color: ColorPalette.color10
                                         font.pixelSize: 12
-                                        font.family: FontAssets.fontMaterialRounded
+                                        font.family: FontProvider.fontMaterialRounded
                                         RotationAnimation on rotation {
                                             from: 0
                                             to: 360
@@ -192,7 +192,7 @@ ColumnLayout {
                             required property var modelData
                             Layout.fillHeight: true
                             Layout.fillWidth: true
-                            color: Scripts.setOpacity(Assets.color0, 0.5)
+                            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
                             radius: 4
 
                             ColumnLayout {
@@ -220,21 +220,21 @@ ColumnLayout {
                                             return Qt.formatDate(modelData?.date ?? new Date(), "ddd, MMM yyyy");
                                         }
                                     }
-                                    color: Assets.color10
+                                    color: ColorPalette.color10
                                 }
                                 Rectangle {
                                     Layout.preferredHeight: parent.height * 0.3
                                     Layout.preferredWidth: parent.height * 0.3
                                     Layout.alignment: Qt.AlignCenter
                                     radius: height / 2
-                                    color: Scripts.setOpacity(Assets.color2, 0.4)
+                                    color: Scripts.setOpacity(ColorPalette.color2, 0.4)
                                     Text {
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         anchors.fill: parent
                                         text: modelData?.icon
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                        color: ColorPalette.color14
+                                        font.family: FontProvider.fontMaterialRounded
                                         font.pixelSize: Math.round(parent.height * 0.8)
                                     }
                                 }
@@ -244,7 +244,7 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: modelData?.avgTemp
-                                    color: Assets.color10
+                                    color: ColorPalette.color10
                                 }
                                 Text {
                                     Layout.fillHeight: true
@@ -252,7 +252,7 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: modelData?.desc
-                                    color: Assets.color10
+                                    color: ColorPalette.color10
                                     wrapMode: Text.Wrap
                                 }
                             }
@@ -282,7 +282,7 @@ ColumnLayout {
                 Rectangle {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: Scripts.setOpacity(Assets.color0, 0.5)
+                    color: Scripts.setOpacity(ColorPalette.color0, 0.5)
                     radius: 4
 
                     property string iconText: ""
@@ -306,8 +306,8 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: iconText
-                                    color: Assets.color10
-                                    font.family: FontAssets.fontMaterialRounded
+                                    color: ColorPalette.color10
+                                    font.family: FontProvider.fontMaterialRounded
                                     font.pixelSize: Math.min(parent.height, parent.width) * 0.8
                                 }
                             }
@@ -316,8 +316,8 @@ ColumnLayout {
                                 text: titleText
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: Assets.color10
-                                font.family: FontAssets.fontSometypeMono
+                                color: ColorPalette.color10
+                                font.family: FontProvider.fontSometypeMono
                                 font.pixelSize: Math.min(parent.height, parent.width) * 0.5
                             }
                         }
@@ -331,9 +331,9 @@ ColumnLayout {
                                 text: valueText
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: Assets.color14
+                                color: ColorPalette.color14
                                 font.bold: true
-                                font.family: FontAssets.fontSometypeMono
+                                font.family: FontProvider.fontSometypeMono
                                 font.pixelSize: Math.min(parent.height, parent.width)
                             }
                         }

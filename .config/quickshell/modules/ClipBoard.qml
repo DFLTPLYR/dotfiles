@@ -21,7 +21,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'ClipBoard'
 
-    color: Scripts.setOpacity(Assets.background, 0.2)
+    color: Scripts.setOpacity(ColorPalette.background, 0.2)
 
     onClicked: {
         return GlobalState.toggleDrawer("clipBoard");
@@ -124,12 +124,12 @@ AnimatedScreenOverlay {
         opacity: animProgress
 
         Rectangle {
-            border.color: Scripts.setOpacity(Assets.colors10, 0.9)
+            border.color: Scripts.setOpacity(ColorPalette.colors10, 0.9)
             border.width: 2
 
             Layout.preferredWidth: clipboardRoot.width / 3
             Layout.fillHeight: true
-            color: Scripts.setOpacity(Assets.background, 0.8)
+            color: Scripts.setOpacity(ColorPalette.background, 0.8)
             radius: 10
             clip: true
 
@@ -145,9 +145,9 @@ AnimatedScreenOverlay {
 
                     font.bold: true
 
-                    color: Assets.color15
+                    color: ColorPalette.color15
                     opacity: showSearchInput ? 1.0 : 0.0
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     Behavior on opacity {
                         NumberAnimation {
                             duration: 300
@@ -229,9 +229,9 @@ AnimatedScreenOverlay {
                         id: container
                         anchors.fill: parent
 
-                        border.color: isHovered || isSelected ? Assets.color10 : Assets.color15
+                        border.color: isHovered || isSelected ? ColorPalette.color10 : ColorPalette.color15
 
-                        color: isHovered || isSelected ? Assets.color10 : Scripts.setOpacity(Assets.background, 0.2)
+                        color: isHovered || isSelected ? ColorPalette.color10 : Scripts.setOpacity(ColorPalette.background, 0.2)
                         radius: 4
 
                         Behavior on border.color {
@@ -256,7 +256,7 @@ AnimatedScreenOverlay {
 
                                 Text {
                                     id: clipboardText
-                                    color: isHovered || isSelected ? Assets.color15 : Assets.color10
+                                    color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
                                     width: parent.width
                                     height: parent.height
 
@@ -278,7 +278,7 @@ AnimatedScreenOverlay {
                                     var data = modelData.text;
                                     if (data.startsWith("[[ binary data")) {
                                         clipboardText.text = "IMAGE";
-                                        clipboardText.color = Assets.color15;
+                                        clipboardText.color = ColorPalette.color15;
                                         clipboardText.visible = true;
                                     } else {
                                         clipboardText.text = modelData.text;
@@ -303,7 +303,7 @@ AnimatedScreenOverlay {
                             Text {
                                 id: trash
                                 text: '\uf1f8'
-                                color: isHovered || isSelected ? Assets.color15 : Assets.color10
+                                color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -317,7 +317,7 @@ AnimatedScreenOverlay {
                             Text {
                                 id: copy
                                 text: '\uf0c5'
-                                color: isHovered || isSelected ? Assets.color15 : Assets.color10
+                                color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
                             }
                         }
                     }
@@ -365,7 +365,7 @@ AnimatedScreenOverlay {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Scripts.setOpacity(Assets.background, 0.8)
+            color: Scripts.setOpacity(ColorPalette.background, 0.8)
             radius: 10
 
             Item {
@@ -384,12 +384,12 @@ AnimatedScreenOverlay {
                         readOnly: false
                         textFormat: TextEdit.PlainText
                         wrapMode: TextEdit.NoWrap
-                        color: Assets.color15
+                        color: ColorPalette.color15
                         font.pixelSize: 18
                         anchors.fill: parent
                         cursorVisible: focus
                         selectByMouse: false
-                        font.family: FontAssets.fontSometypeMono
+                        font.family: FontProvider.fontSometypeMono
                         Keys.onPressed: function (event) {
                             switch (event.key) {
                             case Qt.Key_Escape:

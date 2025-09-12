@@ -20,8 +20,8 @@ RoundButton {
     property bool dimmable: true
     property bool dimmed: false
     readonly property color backgroundColor: "transparent"
-    readonly property color borderColor: Assets.color10
-    readonly property color backspaceRedColor: Assets.color12
+    readonly property color borderColor: ColorPalette.color10
+    readonly property color backspaceRedColor: ColorPalette.color12
     readonly property int buttonRadius: 8
 
     function getBackgroundColor() {

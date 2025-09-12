@@ -1,4 +1,4 @@
-// Font.qml
+// FontAssets.qml
 pragma Singleton
 import QtQuick
 

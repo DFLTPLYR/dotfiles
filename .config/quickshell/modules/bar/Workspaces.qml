@@ -44,8 +44,8 @@ Item {
                     // Track hover state
                     property bool hovered: false
 
-                    color: hovered ? Scripts.setOpacity(Assets.color14, 0.4) : (modelData.active && modelData.focused) ? Assets.color2 : "transparent"
-                    border.color: hovered ? Scripts.setOpacity(Assets.color14, 0.4) : (modelData.active && modelData.focused) ? Assets.color2 : Assets.color3
+                    color: hovered ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : "transparent"
+                    border.color: hovered ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color3
 
                     // Animate the fill color
                     Behavior on color {
@@ -64,9 +64,9 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        // text: kanjiNumber(modelData.id - 1)
-                        text: modelData.id
-                        color: monitorIndicator.hovered ? Assets.color2 : (modelData.active && modelData.focused) ? Assets.color14 : Assets.color2
+                        text: romanNumber(modelData.id - 1)
+                        // text: modelData.id
+                        color: monitorIndicator.hovered ? ColorPalette.color2 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
                         font.pixelSize: {
                             var minSize = 10;
                             return Math.max(minSize, Math.min(height, width) * 0.6);
