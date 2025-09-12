@@ -25,7 +25,6 @@ Item {
 
     function loadAdditional() {
         MprisManager;
-        NotificationService;
         SystemResource;
         WallpaperStore;
         WeatherFetcher;

@@ -14,9 +14,13 @@ ALBUM_ART_PATH="$TMP_DIR/notification_cover"
 DEFAULT_ALBUM_ART_PATH="$TMP_DIR/default_album_art.jpg"
 
 # Save album art of the currently playing song to a file
+CURRENT_TIME=$(date +%s)
+ALBUM_ART_PATH="$TMP_DIR/notification_cover_$CURRENT_TIME"
 if ! rmpc albumart --output "$ALBUM_ART_PATH"; then
     # Use default album art if rmpc returns non-zero exit code
-    ALBUM_ART_PATH="${DEFAULT_ALBUM_ART_PATH}"
+    DEFAULT_ALBUM_ART_PATH_UNIQUE="$TMP_DIR/default_album_art_$CURRENT_TIME.jpg"
+    cp "$DEFAULT_ALBUM_ART_PATH" "$DEFAULT_ALBUM_ART_PATH_UNIQUE"
+    ALBUM_ART_PATH="$DEFAULT_ALBUM_ART_PATH_UNIQUE"
 fi
 
 # Send the notification
