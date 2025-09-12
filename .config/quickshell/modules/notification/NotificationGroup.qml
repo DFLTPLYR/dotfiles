@@ -28,11 +28,7 @@ Item {
     }
 
     Repeater {
-        model: ScriptModel {
-            values: {
-                return notifications.sort((a, b) => (b.time || b.timestamp || 0) - (a.time || a.timestamp || 0));
-            }
-        }
+        model: notifications.sort((a, b) => (b.time || b.timestamp || 0) - (a.time || a.timestamp || 0))
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
