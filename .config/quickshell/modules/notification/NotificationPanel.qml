@@ -62,12 +62,5 @@ Rectangle {
                 duration: 250
             }
         }
-
-        Connections {
-            target: NotificationService
-            function onGroupsByAppNameChanged() {
-                console.log(NotificationService.groupsByAppName);
-            }
-        }
     }
 }

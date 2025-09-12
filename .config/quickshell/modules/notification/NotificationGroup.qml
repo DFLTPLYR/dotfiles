@@ -12,12 +12,12 @@ Item {
     opacity: 1
     property real dragStartX: 0
     property int gap: 3
-    property bool open: false
     required property var group
     required property var notifications
-    property bool isLeaving: false
-    layer.enabled: true
-    height: layered.open ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
+    property bool expandable: notifications.length <= 1 ? true : false
+    property bool isDismissing: false
+
+    height: layered.expandable ? notifications.length * (60 + gap) : Math.min(3, notifications.length) * gap + 60
     width: parent.width
 
     Behavior on height {
@@ -28,7 +28,11 @@ Item {
     }
 
     Repeater {
-        model: notifications
+        model: ScriptModel {
+            values: {
+                return notifications.sort((a, b) => (b.time || b.timestamp || 0) - (a.time || a.timestamp || 0));
+            }
+        }
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
@@ -40,13 +44,13 @@ Item {
             layer.enabled: true
             height: 60
             width: Math.round(parent.width)
-            y: layered.open ? index * (60 + gap) : index * 5
+            y: layered.expandable ? index * (60 + gap) : index * 5
             x: (parent.width - width) / 2
 
             radius: 10
 
-            scale: layered.open ? 1 : (parent.width - (index * 10)) / parent.width
-            opacity: layered.open || index < 3 ? 1 : 0
+            scale: layered.expandable ? 1 : (parent.width - (index * 10)) / parent.width
+            opacity: layered.expandable || index < 3 ? 1 : 0
 
             Rectangle {
                 id: imageWrapper
@@ -54,7 +58,7 @@ Item {
                 visible: !!iconPath
                 anchors.left: parent.left
                 anchors.leftMargin: 2
-                opacity: layered.open || index < 1 ? 1 : 0.5
+                opacity: layered.expandable || index < 1 ? 1 : 0.5
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height * 0.9
                 width: height
@@ -100,7 +104,7 @@ Item {
                 }
                 width: parent.width - imageWrapper.width
                 height: parent.height
-                opacity: layered.open || index < 1 ? 1 : 0
+                opacity: layered.expandable || index < 1 ? 1 : 0
                 bottomRightRadius: delegateRect.radius
                 topRightRadius: delegateRect.radius
                 color: "transparent"
@@ -139,7 +143,7 @@ Item {
             Item {
                 anchors.fill: parent
                 visible: index === 0 && notifications.length > 3
-                opacity: layered.open ? 0 : 1
+                opacity: layered.expandable ? 0 : 1
                 anchors.margins: 20
 
                 Rectangle {
@@ -227,7 +231,7 @@ Item {
                 drag.axis: Drag.XAxis
 
                 onClicked: {
-                    layered.open = !layered.open;
+                    layered.expandable = !layered.expandable;
                 }
                 onPressed: {
                     delegateRect.dragStartX = delegateRect.x;
@@ -237,6 +241,7 @@ Item {
                         delegateRect.isLeaving = true;
                     } else {
                         delegateRect.x = (parent.width - width) / 2;
+                        console.log(index);
                     }
                 }
             }
@@ -253,8 +258,8 @@ Item {
         }
     ]
 
-    onIsLeavingChanged: {
-        if (layered.isLeaving)
+    onIsDismissingChanged: {
+        if (layered.isDismissing)
             return layered.state = "leaving";
     }
 
@@ -265,7 +270,7 @@ Item {
             easing.type: Easing.InOutQuad
         }
         onRunningChanged: {
-            if (!running && layered.isLeaving) {
+            if (!running && layered.isDismissing) {
                 NotificationService.discardNotificationGroup(layered.group);
             }
         }
@@ -274,22 +279,31 @@ Item {
     MouseArea {
         id: groupDragArea
         anchors.fill: parent
-        enabled: !layered.open
+        enabled: !layered.expandable
 
         drag.target: layered
         drag.axis: Drag.XAxis
 
         onClicked: {
-            layered.open = !layered.open;
+            layered.expandable = !layered.expandable;
         }
         onPressed: {
             layered.dragStartX = layered.x;
         }
         onReleased: {
             if (Math.abs(layered.x) > parent.width * 0.1) {
-                layered.isLeaving = true;
+                layered.isDismissing = true;
             }
             layered.x = 0;
+        }
+    }
+
+    Connections {
+        target: NotificationService
+        function onNotify(notif) {
+            if (notif.appName === group) {
+                notifications = NotificationService.groupsByAppName[group].notifications;
+            }
         }
     }
 }
