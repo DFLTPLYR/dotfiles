@@ -107,7 +107,7 @@ Scope {
                 x: Math.round(screen.width / 2 - width / 2)
                 y: Math.round(screen.height / 2 - height / 2)
 
-                color: Scripts.setOpacity(Assets.background, 0.6)
+                color: Scripts.setOpacity(ColorPalette.background, 0.6)
                 opacity: animProgress
 
                 radius: 16
@@ -124,7 +124,7 @@ Scope {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: Scripts.setOpacity(Assets.color10, 0.2)
+                            color: Scripts.setOpacity(ColorPalette.color10, 0.2)
                         }
 
                         RowLayout {
@@ -167,7 +167,7 @@ Scope {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: Scripts.setOpacity(Assets.background, 0.1)
+                            color: Scripts.setOpacity(ColorPalette.background, 0.1)
                         }
 
                         Text {
@@ -177,7 +177,7 @@ Scope {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.leftMargin: 12
-                            color: Assets.color15
+                            color: ColorPalette.color15
                         }
                     }
                 }

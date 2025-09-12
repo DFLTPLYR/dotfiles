@@ -21,8 +21,8 @@ Item {
 
     Display {
         id: display
-        backgroundColor: Scripts.setOpacity(Assets.background, 0.9)
-        qtGreenColor: Scripts.setOpacity(Assets.color12, 0.9)
+        backgroundColor: Scripts.setOpacity(ColorPalette.background, 0.9)
+        qtGreenColor: Scripts.setOpacity(ColorPalette.color12, 0.9)
         Layout.margins: 10
     }
 

@@ -77,9 +77,9 @@ Scope {
                         id: sideDock
                         width: 50
                         height: Math.max(800, sidebarRoot.isPortrait ? screen.height / 2 : screen.height / 2)
-                        color: Scripts.setOpacity(Assets.background, 0.4)
+                        color: Scripts.setOpacity(ColorPalette.background, 0.4)
                         radius: 10
-                        border.color: Assets.color10
+                        border.color: ColorPalette.color10
                         clip: true
 
                         ColumnLayout {
@@ -91,7 +91,7 @@ Scope {
                                 Layout.fillHeight: true
                                 radius: 8
                                 color: 'transparent'
-                                border.color: Assets.color10
+                                border.color: ColorPalette.color10
 
                                 ColumnLayout {
                                     anchors.fill: parent
@@ -108,8 +108,8 @@ Scope {
                                             spacing: 0
 
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: TimeService.hoursPadded
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -120,8 +120,8 @@ Scope {
                                                 }
                                             }
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: TimeService.minutesPadded
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -147,8 +147,8 @@ Scope {
                                             spacing: 0
                                             // Month
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: dateSection.monthShort[TimeService.month - 1]
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -161,8 +161,8 @@ Scope {
                                             }
                                             // Date of the month
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: Qt.formatDateTime(TimeService.clock.date, "dd")
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -175,8 +175,8 @@ Scope {
                                             }
                                             // day of the week
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: dateSection.dayNames[TimeService.day]
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -189,8 +189,8 @@ Scope {
                                             }
                                             // Year
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: Qt.formatDateTime(TimeService.clock.date, "yyyy")
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -216,8 +216,8 @@ Scope {
 
                                             Text {
                                                 text: "nest_farsight_weather"
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 Layout.fillWidth: true
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -228,8 +228,8 @@ Scope {
                                             }
 
                                             Text {
-                                                color: Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 text: WeatherFetcher.currentCondition?.temp
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -250,7 +250,7 @@ Scope {
                                 Layout.fillHeight: true
                                 radius: 8
                                 color: 'transparent'
-                                border.color: Assets.color10
+                                border.color: ColorPalette.color10
                                 ColumnLayout {
                                     anchors.fill: parent
                                     anchors.margins: 4
@@ -279,8 +279,8 @@ Scope {
                                             Text {
                                                 anchors.centerIn: parent
                                                 text: modelData.icon
-                                                color: hoverArea.containsMouse ? Assets.color10 : Assets.color14
-                                                font.family: FontAssets.fontMaterialRounded
+                                                color: hoverArea.containsMouse ? ColorPalette.color10 : ColorPalette.color14
+                                                font.family: FontProvider.fontMaterialRounded
                                                 Layout.fillWidth: true
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
@@ -330,15 +330,15 @@ Scope {
                                 Layout.fillHeight: true
                                 radius: 8
                                 color: 'transparent'
-                                border.color: Assets.color10
+                                border.color: ColorPalette.color10
                                 ColumnLayout {
                                     anchors.fill: parent
                                     anchors.margins: 4
 
                                     Text {
                                         text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                        color: ColorPalette.color14
+                                        font.family: FontProvider.fontMaterialRounded
                                         Layout.fillWidth: true
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
@@ -349,8 +349,8 @@ Scope {
                                     }
                                     Text {
                                         text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                        color: ColorPalette.color14
+                                        font.family: FontProvider.fontMaterialRounded
                                         Layout.fillWidth: true
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
@@ -361,8 +361,8 @@ Scope {
                                     }
                                     Text {
                                         text: "\ue1ff"
-                                        color: Assets.color14
-                                        font.family: FontAssets.fontMaterialRounded
+                                        color: ColorPalette.color14
+                                        font.family: FontProvider.fontMaterialRounded
                                         Layout.fillWidth: true
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
@@ -397,9 +397,9 @@ Scope {
                         Rectangle {
                             width: 500
                             height: 600
-                            color: Scripts.setOpacity(Assets.background, 0.4)
+                            color: Scripts.setOpacity(ColorPalette.background, 0.4)
                             radius: 10
-                            border.color: Assets.color10
+                            border.color: ColorPalette.color10
                             clip: true
 
                             Todo {
@@ -419,9 +419,9 @@ Scope {
                         Rectangle {
                             width: 400
                             height: 500
-                            color: Scripts.setOpacity(Assets.background, 0.4)
+                            color: Scripts.setOpacity(ColorPalette.background, 0.4)
                             radius: 10
-                            border.color: Assets.color10
+                            border.color: ColorPalette.color10
                             clip: true
 
                             Calculator {

@@ -12,8 +12,8 @@ import qs.assets
 Item {
     id: controller
 
-    readonly property color qtGreenColor: Assets.color11
-    readonly property color backspaceRedColor: Assets.color12
+    readonly property color qtGreenColor: ColorPalette.color11
+    readonly property color backspaceRedColor: ColorPalette.color12
     readonly property int spacing: 5
 
     property int portraitModeWidth: mainGrid.width
@@ -43,7 +43,7 @@ Item {
             root.operatorPressed(text);
             updateDimmed();
         }
-        textColor: Assets.color10
+        textColor: ColorPalette.color10
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: mainGrid.widthPerCol
@@ -175,7 +175,7 @@ Item {
             DigitButton {
                 text: "."
                 dimmable: true
-                textColor: Assets.color10
+                textColor: ColorPalette.color10
             }
             OperatorButton {
                 text: "+"

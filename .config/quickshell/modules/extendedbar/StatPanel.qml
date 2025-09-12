@@ -11,7 +11,7 @@ Rectangle {
     radius: 10
     Layout.fillWidth: true
     Layout.fillHeight: true
-    color: Scripts.setOpacity(Assets.color0, 0.5)
+    color: Scripts.setOpacity(ColorPalette.color0, 0.5)
 
     // Properties for customization
     property string headerIcon: "\ue322" // Default icon
@@ -55,8 +55,8 @@ Rectangle {
                 anchors.margins: 100
                 Text {
                     text: root.headerIcon
-                    color: Assets.color10
-                    font.family: FontAssets.fontMaterialRounded
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontMaterialRounded
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -68,10 +68,10 @@ Rectangle {
 
                 Text {
                     text: root.headerText
-                    color: Assets.color10
+                    color: ColorPalette.color10
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: {
@@ -98,8 +98,8 @@ Rectangle {
 
                 Text {
                     text: root.usageLabel
-                    color: Assets.color10
-                    font.family: FontAssets.fontSometypeMono
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -111,9 +111,9 @@ Rectangle {
 
                 Text {
                     text: root.usageValue
-                    color: Assets.color10
+                    color: ColorPalette.color10
                     wrapMode: Text.Wrap
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -129,7 +129,7 @@ Rectangle {
                 height: 8
                 radius: 10
                 color: "transparent"
-                border.color: Assets.color10
+                border.color: ColorPalette.color10
                 border.width: 1
 
                 Rectangle {
@@ -139,7 +139,7 @@ Rectangle {
                     anchors.margins: 1
                     width: Math.max(0, Math.min(parent.width - 2, (parent.width - 2) * root.usagePercent))
                     radius: 8
-                    color: Assets.color15
+                    color: ColorPalette.color15
                 }
             }
 
@@ -149,8 +149,8 @@ Rectangle {
 
                 Text {
                     text: root.minValue
-                    color: Assets.color10
-                    font.family: FontAssets.fontSometypeMono
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -162,8 +162,8 @@ Rectangle {
 
                 Text {
                     text: "/"
-                    color: Assets.color10
-                    font.family: FontAssets.fontSometypeMono
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -174,9 +174,9 @@ Rectangle {
 
                 Text {
                     text: root.maxValue
-                    color: Assets.color10
+                    color: ColorPalette.color10
                     wrapMode: Text.Wrap
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     font.bold: true
                     font.pixelSize: {
                         const minSize = 10;
@@ -193,8 +193,8 @@ Rectangle {
                 visible: root.isTempVisible
                 Text {
                     text: root.tempIcon
-                    color: Assets.color10
-                    font.family: FontAssets.fontMaterialRounded
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontMaterialRounded
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -205,8 +205,8 @@ Rectangle {
 
                 Text {
                     text: root.tempLabel
-                    color: Assets.color10
-                    font.family: FontAssets.fontSometypeMono
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -218,9 +218,9 @@ Rectangle {
 
                 Text {
                     text: root.tempValue
-                    color: Assets.color10
+                    color: ColorPalette.color10
                     wrapMode: Text.Wrap
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -237,8 +237,8 @@ Rectangle {
                 visible: root.isFrequencyVisible
                 Text {
                     text: root.freqLabel
-                    color: Assets.color10
-                    font.family: FontAssets.fontSometypeMono
+                    color: ColorPalette.color10
+                    font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
                         const maxWidth = parent.width * 0.5;
@@ -249,9 +249,9 @@ Rectangle {
 
                 Text {
                     text: root.freqValue
-                    color: Assets.color10
+                    color: ColorPalette.color10
                     wrapMode: Text.Wrap
-                    font.family: FontAssets.fontSometypeMono
+                    font.family: FontProvider.fontSometypeMono
                     font.bold: true
                     font.pixelSize: {
                         const minSize = 10;
@@ -271,8 +271,8 @@ Rectangle {
                     Text {
                         text: modelData.icon || ""
                         visible: modelData.icon !== undefined
-                        color: Assets.color10
-                        font.family: FontAssets.fontMaterialRounded
+                        color: ColorPalette.color10
+                        font.family: FontProvider.fontMaterialRounded
                         font.pixelSize: {
                             const minSize = 10;
                             const maxWidth = parent.width * 0.5;
@@ -283,8 +283,8 @@ Rectangle {
 
                     Text {
                         text: modelData.label
-                        color: Assets.color10
-                        font.family: FontAssets.fontSometypeMono
+                        color: ColorPalette.color10
+                        font.family: FontProvider.fontSometypeMono
                         font.pixelSize: {
                             const minSize = 10;
                             const maxWidth = parent.width * 0.5;
@@ -296,9 +296,9 @@ Rectangle {
 
                     Text {
                         text: modelData.value
-                        color: Assets.color10
+                        color: ColorPalette.color10
                         wrapMode: Text.Wrap
-                        font.family: FontAssets.fontSometypeMono
+                        font.family: FontProvider.fontSometypeMono
                         font.bold: true
                         font.pixelSize: {
                             const minSize = 10;

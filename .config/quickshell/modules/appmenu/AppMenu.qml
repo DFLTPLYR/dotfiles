@@ -21,7 +21,7 @@ AnimatedScreenOverlay {
     screen: screenRoot.modelData
     key: 'AppMenu'
 
-    color: Scripts.setOpacity(Assets.background, 0.2)
+    color: Scripts.setOpacity(ColorPalette.background, 0.2)
 
     onHidden: key => {
         GlobalState.removeDrawer(key);
@@ -84,10 +84,9 @@ AnimatedScreenOverlay {
         x: Math.round(screen.width / 2 - width / 2)
         y: Math.round(screen.height / 2 - height / 2)
 
-        color: Scripts.setOpacity(Assets.background, 0.6)
+        color: Scripts.setOpacity(ColorPalette.background, 0.6)
         opacity: animProgress
 
-        radius: 16
         scale: animProgress
         transformOrigin: Item.Center
 
@@ -96,13 +95,8 @@ AnimatedScreenOverlay {
 
             // Item list
             Item {
-                height: Math.round(parent.height * 0.9)
+                height: parent.height
                 width: parent.width
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: Scripts.setOpacity(Assets.color10, 0.2)
-                }
 
                 RowLayout {
                     anchors.fill: parent
@@ -115,7 +109,6 @@ AnimatedScreenOverlay {
 
                         Image {
                             id: name
-                            anchors.fill: parent
                             fillMode: Image.PreserveAspectCrop
                             source: WallpaperStore.currentWallpapers[screen.name] ?? null
                         }
@@ -144,7 +137,7 @@ AnimatedScreenOverlay {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Scripts.setOpacity(Assets.background, 0.1)
+                    color: Scripts.setOpacity(ColorPalette.background, 0.1)
                 }
 
                 Text {
@@ -154,7 +147,7 @@ AnimatedScreenOverlay {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 12
-                    color: Assets.color15
+                    color: ColorPalette.color15
                 }
             }
         }

@@ -20,7 +20,7 @@ Rectangle {
     property color hoverColor: "#444"
     property color borderColor: "#666"
     property color iconColor: "white"
-    property string fontFamily: FontAssets.fontAwesomeRegular
+    property string fontFamily: FontProvider.fontAwesomeRegular
 
     property bool hovered: false
     signal clicked

@@ -66,7 +66,7 @@ Scope {
                 anchors.top: parent.top
                 anchors.topMargin: 40
 
-                color: Assets.background
+                color: ColorPalette.background
                 opacity: 1
                 radius: 10
 
@@ -81,10 +81,10 @@ Scope {
                     Text {
                         Layout.preferredWidth: 60
                         text: `${volumeIcon}   ${Math.round(root.volume * 100)}%`
-                        color: Assets.color13
+                        color: ColorPalette.color13
                         elide: Text.ElideRight
                         clip: true
-                        font.family: FontAssets.fontAwesomeRegular
+                        font.family: FontProvider.fontAwesomeRegular
                         font.pixelSize: 14
                     }
 
@@ -125,13 +125,13 @@ Scope {
                         background: Rectangle {
                             implicitHeight: 10
                             radius: 5
-                            color: Assets.color1
+                            color: ColorPalette.color1
 
                             Rectangle {
                                 width: volumeSlider.visualPosition * (volumeSlider.width - volumeSlider.handleSize) + volumeSlider.handleSize / 2
                                 height: parent.height
                                 radius: 5
-                                color: Assets.color13
+                                color: ColorPalette.color13
                             }
                         }
 
@@ -139,8 +139,8 @@ Scope {
                             width: volumeSlider.handleSize * 1.25
                             height: volumeSlider.handleSize * 1.25
                             radius: volumeSlider.handleSize
-                            color: Assets.color13
-                            border.color: Assets.color12
+                            color: ColorPalette.color13
+                            border.color: ColorPalette.color12
 
                             y: (volumeSlider.height - height) / 2
                             x: volumeSlider.visualPosition * (volumeSlider.width - width)

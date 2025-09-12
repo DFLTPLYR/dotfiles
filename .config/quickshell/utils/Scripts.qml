@@ -23,7 +23,7 @@ QtObject {
     function getAllGroupColorName(array) {
         const Colors = [];
         for (let hex of array) {
-            Assets.push(getHexColorName(hex.color));
+            ColorPalette.push(getHexColorName(hex.color));
         }
         return Colors;
     }

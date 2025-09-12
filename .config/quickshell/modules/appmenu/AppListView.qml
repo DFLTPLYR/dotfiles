@@ -14,7 +14,6 @@ import qs
 GridView {
     id: grid
     anchors.fill: parent
-
     property string searchText: ""
     property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
     property ListModel appList: ListModel {}
@@ -96,9 +95,9 @@ GridView {
             height: Math.floor(grid.cellHeight * 0.9)
 
             radius: 5
-            color: rect.isHovered || isSelected ? Assets.backgroundAlt : "transparent"
+            color: rect.isHovered || isSelected ? ColorPalette.backgroundAlt : "transparent"
 
-            border.color: isSelected ? Assets.foreground : "transparent"
+            border.color: isSelected ? ColorPalette.foreground : "transparent"
             border.width: isSelected ? 2 : 0
 
             Behavior on color {
@@ -140,7 +139,7 @@ GridView {
                         font.pixelSize: 10
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.Wrap
-                        color: Assets.color15
+                        color: ColorPalette.color15
                         smooth: false
                         layer.enabled: true
                     }
