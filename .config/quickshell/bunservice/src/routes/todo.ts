@@ -8,7 +8,7 @@ const todoRouter = new Hono();
 
 const onlineDb = createClient(
   Bun.env.SUPABASE_URL as string,
-  Bun.env.API_KEY as string
+  Bun.env.SUPABASE_API_KEY as string
 );
 
 const offlineDb = new Database("offline.sqlite");
