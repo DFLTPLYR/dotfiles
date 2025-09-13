@@ -40,7 +40,7 @@ Item {
             layer.enabled: true
             height: 60
             width: Math.round(parent.width)
-            y: layered.expandable ? index * (60 + gap) : index * 5
+            y: layered.expandable ? index * (60 + layered.gap) : index * 5
             x: (parent.width - width) / 2
 
             radius: 10
@@ -237,7 +237,6 @@ Item {
                         delegateRect.isLeaving = true;
                     } else {
                         delegateRect.x = (parent.width - width) / 2;
-                        console.log(index);
                     }
                 }
             }
@@ -298,8 +297,7 @@ Item {
         target: NotificationService
         function onNotify(notif) {
             if (notif.appName === group) {
-                var notifs = NotificationService.groupsByAppName[group].notifications;
-                layered.notifications = notifs;
+                layered.notifications = [notif, ...layered.notifications];
             }
         }
     }
