@@ -1,94 +1,67 @@
 import QtQuick
-import QtQuick.Shapes
 import QtQuick.Layouts
-import QtQuick.Controls
-import Qt.labs.lottieqt
-
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Io
+import QtQuick.Shapes
 import Quickshell.Wayland
-import Quickshell.Widgets
 
-import qs
+// component
 import qs.utils
 import qs.assets
 import qs.services
 import qs.components
 
-Rectangle {
-    anchors.fill: parent
-    color: Scripts.setOpacity(ColorPalette.background, 0.8)
-
-    Item {
-        id: wrapper
-        anchors.fill: parent
+Variants {
+    model: Quickshell.screens
+    delegate: PanelWindow {
+        id: screenRoot
+        required property var modelData
+        screen: modelData
+        color: "transparent"
+        implicitHeight: barComponent.height
 
         anchors {
-            rightMargin: 5
-            leftMargin: 5
+            top: true
+            left: true
+            right: true
         }
 
-        // LEFT section: 25% width
-        Item {
-            id: left
-            width: parent.width * 0.25
-            height: parent.height
-            anchors.left: parent.left
-            clip: false
+        Rectangle {
+            id: barComponent
+            width: parent.width
+            height: 40
+            color: Scripts.setOpacity(ColorPalette.background, 0.8)
 
-            Row {
-                id: leftRow
-                height: left.height * 0.95
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                // spacing: 10
+            RowLayout {
+                anchors.fill: parent
 
-                Workspaces {}
-            }
-        }
+                Rectangle {
+                    Layout.preferredWidth: parent.width * 0.25
+                    height: 32
+                    color: "transparent"
 
-        // CENTER section: 50% width
-        Item {
-            id: center
-            width: parent.width * 0.5
-            height: parent.height
-            anchors.centerIn: parent
-            clip: true
+                    Workspaces {}
+                }
 
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.centerIn: parent
-                spacing: 2
-
-                // Workspaces {}
-            }
-        }
-
-        // RIGHT section: 25% width
-        Item {
-            id: right
-            width: parent.width * 0.25
-            height: parent.height
-            anchors.right: parent.right
-            clip: true
-
-            Row {
-                height: right.height * 0.95
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 2
-
-                StyledButton {
-                    anchors.verticalCenter: parent.verticalCenter
-                    icon: "\uf011"
-                    size: parent.height
-                    iconRatio: 0.5
-                    backgroundColor: ColorPalette.background
-                    hoverColor: ColorPalette.color15
-                    iconColor: ColorPalette.color10
-                    onClicked: {
-                        GlobalState.isSessionMenuOpen = true;
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 32
+                    color: "transparent"
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: qsTr("text")
+                        color: "white"
                     }
+                }
+
+                Rectangle {
+                    Layout.preferredWidth: parent.width * 0.25
+                    height: 32
+                    color: "transparent"
+
+                    NavButtons {}
                 }
             }
         }

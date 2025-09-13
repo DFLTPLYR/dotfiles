@@ -12,8 +12,8 @@ import qs.modules
 
 Item {
     id: root
-    implicitWidth: monitorRow.implicitWidth
-    implicitHeight: monitorRow.implicitHeight
+    implicitWidth: parent.width
+    implicitHeight: 32
     anchors.verticalCenter: parent.verticalCenter
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
