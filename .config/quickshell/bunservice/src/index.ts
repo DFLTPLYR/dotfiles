@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import "dotenv/config";
 import todoRouter from "./routes/todo";
 import imageRouter from "./routes/images";
+import weatherRouter from "./routes/weather";
 
 const app = new Hono();
 
@@ -24,6 +25,7 @@ app.get("/", (c) => {
 
 app.route("/todos", todoRouter);
 app.route("/image", imageRouter);
+app.route("/weather", weatherRouter);
 
 serve({
   port: PORT,

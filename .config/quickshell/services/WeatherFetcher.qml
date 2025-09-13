@@ -13,77 +13,58 @@ Singleton {
     property var currentCondition
     property var weatherForecast: []
 
+    // WeatherAPI condition codes → icons
     property var weatherIcons: ({
             "Unknown": "\uf3cc",
             "Cloudy": "\ue2bd",
             "Fog": "\ue818",
             "HeavyRain": "\uf61f",
-            "HeavyShowers": "\uf61f",
             "HeavySnow": "\uf61c",
-            "HeavySnowShowers": "\uf61c",
             "LightRain": "\uf61e",
-            "LightShowers": "\uf61e",
-            "LightSleet": "\uf61e",
-            "LightSleetShowers": "\uf61e",
             "LightSnow": "\uf61e",
-            "LightSnowShowers": "\uf61e",
             "PartlyCloudy": "\uf172",
             "Sunny": "\ue81a",
             "ThunderyHeavyRain": "\uebdb",
-            "ThunderyShowers": "\uf61f",
-            "ThunderySnowShowers": "\uf61f",
             "VeryCloudy": "\ue2bd"
         })
 
+    // Mapping of WeatherAPI condition codes to our symbolic names
+    // (See https://www.weatherapi.com/docs/ for full condition codes)
     property var weatherCode: ({
-            113: "Sunny",
-            116: "PartlyCloudy",
-            119: "Cloudy",
-            122: "VeryCloudy",
-            143: "Fog",
-            176: "LightShowers",
-            179: "LightSleetShowers",
-            182: "LightSleet",
-            185: "LightSleet",
-            200: "ThunderyShowers",
-            227: "LightSnow",
-            230: "HeavySnow",
-            248: "Fog",
-            260: "Fog",
-            263: "LightShowers",
-            266: "LightRain",
-            281: "LightSleet",
-            284: "LightSleet",
-            293: "LightRain",
-            296: "LightRain",
-            299: "HeavyShowers",
-            302: "HeavyRain",
-            305: "HeavyShowers",
-            308: "HeavyRain",
-            311: "LightSleet",
-            314: "LightSleet",
-            317: "LightSleet",
-            320: "LightSnow",
-            323: "LightSnowShowers",
-            326: "LightSnowShowers",
-            329: "HeavySnow",
-            332: "HeavySnow",
-            335: "HeavySnowShowers",
-            338: "HeavySnow",
-            350: "LightSleet",
-            353: "LightShowers",
-            356: "HeavyShowers",
-            359: "HeavyRain",
-            362: "LightSleetShowers",
-            365: "LightSleetShowers",
-            368: "LightSnowShowers",
-            371: "HeavySnowShowers",
-            374: "LightSleetShowers",
-            377: "LightSleet",
-            386: "ThunderyShowers",
-            389: "ThunderyHeavyRain",
-            392: "ThunderySnowShowers",
-            395: "HeavySnowShowers"
+            1000: "Sunny",
+            1003: "PartlyCloudy",
+            1006: "Cloudy",
+            1009: "VeryCloudy",
+            1030: "Fog",
+            1063: "LightRain",
+            1066: "LightSnow",
+            1069: "LightRain",
+            1072: "LightRain",
+            1087: "ThunderyHeavyRain",
+            1114: "HeavySnow",
+            1117: "HeavySnow",
+            1135: "Fog",
+            1147: "Fog",
+            1150: "LightRain",
+            1153: "LightRain",
+            1180: "LightRain",
+            1183: "LightRain",
+            1186: "HeavyRain",
+            1189: "HeavyRain",
+            1192: "HeavyRain",
+            1195: "HeavyRain",
+            1204: "LightSnow",
+            1207: "HeavySnow",
+            1210: "LightSnow",
+            1213: "LightSnow",
+            1216: "LightSnow",
+            1219: "LightSnow",
+            1222: "HeavySnow",
+            1225: "HeavySnow",
+            1273: "ThunderyHeavyRain",
+            1276: "ThunderyHeavyRain",
+            1279: "HeavySnow",
+            1282: "HeavySnow"
         })
 
     signal parseDone
@@ -99,35 +80,31 @@ Singleton {
     function parseWeather(json) {
         root.weatherData = json || {};
 
-        const current = json.current_condition[0];
+        const current = json.current;
         root.currentCondition = {
-            weatherDesc: current.weatherDesc[0].value,
-            feelslike: `Feels like ${current.FeelsLikeC}°C`,
-            temp: `${current.temp_C}°C`,
-            icon: getIconFromCode(weatherCode),
-            visibility: current.visibility,
-            pressure: current.pressure,
+            weatherDesc: current.condition.text,
+            feelslike: `Feels like ${current.feelslike_c}°C`,
+            temp: `${current.temp_c}°C`,
+            icon: getIconFromCode(current.condition.code),
+            visibility: current.vis_km,
+            pressure: current.pressure_mb,
             humidity: current.humidity,
-            windSpeed: current.windspeedKmph
+            windSpeed: current.wind_kph
         };
 
-        root.weatherIcon = getIconFromCode(current.weatherDesc);
+        root.weatherIcon = getIconFromCode(current.condition.code);
         root.weatherForecast = [];
-        const forecastArr = json.weather;
+
+        const forecastArr = json.forecast.forecastday || [];
         const now = new Date();
 
         for (let i = 0; i < Math.min(forecastArr.length, 3); i++) {
-            const day = forecastArr[i] || {};
-            const hourly = day.hourly || [];
-            const noonHour = hourly[4] || hourly[0] || null;
-            const noonDesc = (noonHour && noonHour.weatherCode && noonHour.weatherCode[0] && noonHour.weatherCode) ? noonHour.weatherCode : "";
-            const iconChar = getIconFromCode(noonDesc);
-            // safe time parsing
-            let timeStr = "12:00";
-            if (noonHour && noonHour.time) {
-                timeStr = noonHour.time.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2");
-            }
-            const forecastDate = new Date((day.date || "") + " " + timeStr);
+            const day = forecastArr[i];
+            const noonHour = day.hour[12]; // 12:00 noon
+            const code = noonHour ? noonHour.condition.code : day.day.condition.code;
+            const iconChar = getIconFromCode(code);
+
+            const forecastDate = new Date(day.date + " 12:00");
             const diffMs = forecastDate - now;
             const diffHours = Math.round(diffMs / (1000 * 60 * 60));
             let relativeTime = "";
@@ -139,20 +116,22 @@ Singleton {
                 relativeTime = Math.abs(diffHours) + "h ago";
 
             root.weatherForecast.push({
-                date: day.date || "",
-                avgTemp: day.avgtempC ? (day.avgtempC + "°C") : "",
-                desc: weatherCode[noonDesc],
+                date: day.date,
+                avgTemp: day.day.avgtemp_c + "°C",
+                desc: day.day.condition.text,
                 icon: iconChar,
                 relativeTime: relativeTime
             });
         }
+
         root.parseDone();
     }
 
-    property string location: "manila"
+    property string location: "Nasugbu"
+
     function fetchWeather() {
         const xhr = new XMLHttpRequest();
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1";
+        const url = "http://localhost:6969/weather?location=" + encodeURIComponent(location);
         xhr.open("GET", url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {

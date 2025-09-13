@@ -28,7 +28,7 @@ Item {
     }
 
     Repeater {
-        model: notifications.sort((a, b) => (b.time || b.timestamp || 0) - (a.time || a.timestamp || 0))
+        model: layered.notifications
         delegate: Rectangle {
             id: delegateRect
             property real dragStartX: 0
@@ -298,7 +298,8 @@ Item {
         target: NotificationService
         function onNotify(notif) {
             if (notif.appName === group) {
-                notifications = NotificationService.groupsByAppName[group].notifications;
+                var notifs = NotificationService.groupsByAppName[group].notifications;
+                layered.notifications = notifs.sort((a, b) => (b.time || b.timestamp || 0) - (a.time || a.timestamp || 0));
             }
         }
     }
