@@ -30,80 +30,80 @@ import qs.modules.notification
 
 ShellRoot {
     id: root
-    Variants {
-        model: Quickshell.screens
+    // Variants {
+    //     model: Quickshell.screens
 
-        delegate: PanelWindow {
-            id: screenRoot
-            required property var modelData
-            screen: modelData
+    //     delegate: PanelWindow {
+    //         id: screenRoot
+    //         required property var modelData
+    //         screen: modelData
 
-            color: "transparent"
-            implicitHeight: 24
+    //         color: "transparent"
+    //         implicitHeight: 24
 
-            Bar {}
+    //         Bar {}
 
-            anchors {
-                top: true
-                left: true
-                right: true
-            }
+    //         anchors {
+    //             top: true
+    //             left: true
+    //             right: true
+    //         }
 
-            LazyLoader {
-                active: persistStates.showMpris
-                component: ExtendedBar {}
-            }
+    //         LazyLoader {
+    //             active: persistStates.showMpris
+    //             component: ExtendedBar {}
+    //         }
 
-            LazyLoader {
-                active: persistStates.showClipBoard
-                component: ClipBoard {}
-            }
+    //         LazyLoader {
+    //             active: persistStates.showClipBoard
+    //             component: ClipBoard {}
+    //         }
 
-            PersistentProperties {
-                id: persistStates
-                reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
-                property bool showWallpaperCarousel: false
-                property bool showMpris: false
-                property bool showClipBoard: false
-                property bool showWindowsOptions: false
-            }
+    //         PersistentProperties {
+    //             id: persistStates
+    //             reloadableId: modelData && modelData.name ? "persistStates-" + modelData.name : "persistStates-undefined"
+    //             property bool showWallpaperCarousel: false
+    //             property bool showMpris: false
+    //             property bool showClipBoard: false
+    //             property bool showWindowsOptions: false
+    //         }
 
-            Connections {
-                target: GlobalState
-                function onOpenDrawersUpdated() {
-                    const drawers = [
-                        {
-                            name: 'WallpaperCarousel',
-                            property: 'showWallpaperCarousel'
-                        },
-                        {
-                            name: 'MprisDashboard',
-                            property: 'showMpris'
-                        },
-                        {
-                            name: 'ClipBoard',
-                            property: 'showClipBoard'
-                        },
-                        {
-                            name: 'WindowsOptions',
-                            property: 'showWindowsOptions'
-                        }
-                    ];
+    //         Connections {
+    //             target: GlobalState
+    //             function onOpenDrawersUpdated() {
+    //                 const drawers = [
+    //                     {
+    //                         name: 'WallpaperCarousel',
+    //                         property: 'showWallpaperCarousel'
+    //                     },
+    //                     {
+    //                         name: 'MprisDashboard',
+    //                         property: 'showMpris'
+    //                     },
+    //                     {
+    //                         name: 'ClipBoard',
+    //                         property: 'showClipBoard'
+    //                     },
+    //                     {
+    //                         name: 'WindowsOptions',
+    //                         property: 'showWindowsOptions'
+    //                     }
+    //                 ];
 
-                    const monitorName = modelData.name;
-                    for (let i = 0; i < drawers.length; i++) {
-                        const drawer = drawers[i];
-                        const uniqueKey = ['WindowsOptions'];
+    //                 const monitorName = modelData.name;
+    //                 for (let i = 0; i < drawers.length; i++) {
+    //                     const drawer = drawers[i];
+    //                     const uniqueKey = ['WindowsOptions'];
 
-                        const key = uniqueKey.includes(drawer.name) ? drawer.name : `${drawer.name}-${monitorName}`;
-                        const exists = GlobalState.hasDrawer(key);
-                        persistStates[drawer.property] = exists;
-                    }
-                }
-            }
-        }
-    }
-
+    //                     const key = uniqueKey.includes(drawer.name) ? drawer.name : `${drawer.name}-${monitorName}`;
+    //                     const exists = GlobalState.hasDrawer(key);
+    //                     persistStates[drawer.property] = exists;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    Bar {}
     Shortcuts {}
 
     VolumeOsd {}

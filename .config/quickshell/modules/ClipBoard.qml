@@ -175,6 +175,7 @@ AnimatedScreenOverlay {
 
                 preferredHighlightBegin: height / 2 - (48 / 2)
                 preferredHighlightEnd: height / 2 + (48 / 2)
+
                 highlightFollowsCurrentItem: true
                 highlightRangeMode: ListView.StrictlyEnforceRange
 
