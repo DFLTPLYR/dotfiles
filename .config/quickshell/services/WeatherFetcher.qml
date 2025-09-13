@@ -127,11 +127,9 @@ Singleton {
         root.parseDone();
     }
 
-    property string location: "Nasugbu"
-
     function fetchWeather() {
         const xhr = new XMLHttpRequest();
-        const url = "http://localhost:6969/weather?location=" + encodeURIComponent(location);
+        const url = "http://localhost:6969/weather";
         xhr.open("GET", url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
