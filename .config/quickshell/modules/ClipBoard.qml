@@ -196,10 +196,7 @@ AnimatedScreenOverlay {
                     stdout: StdioCollector {
                         onStreamFinished: {
                             let raw = this.text;
-
-                            // keep indentation, only strip trailing spaces and fix newlines
-                            let pretty = raw.replace(/[ \t]+$/gm, "") // remove trailing spaces at end of line
-                            .replace(/\r\n/g, "\n"); // normalize Windows CRLF to LF
+                            let pretty = raw.replace(/[ \t]+$/gm, "").replace(/\r\n/g, "\n");
 
                             highlightedText.text = pretty;
                             textScroller.visible = true;
@@ -217,7 +214,7 @@ AnimatedScreenOverlay {
 
                 delegate: Item {
                     required property var modelData
-                    readonly property bool isImage: modelData.text.startsWith("[[ binary data") && modelData.text.includes("KiB") && (modelData.text.includes("png") || modelData.text.includes("jpeg") || modelData.text.includes("jpg"))
+                    readonly property bool isImage: modelData.text.startsWith("[[ binary data")
                     property bool isSelected: ListView.isCurrentItem
                     property bool isHovered: clickableArea.containsMouse
 
@@ -381,6 +378,7 @@ AnimatedScreenOverlay {
 
                     TextEdit {
                         id: highlightedText
+                        visible: clipboardList.currentItem && !clipboardList.currentItem.isImage
                         readOnly: false
                         textFormat: TextEdit.PlainText
                         wrapMode: TextEdit.NoWrap
