@@ -1,8 +1,0 @@
-{
-    "custom/updates": {
-        "exec": "~/.local/bin/waybar-updates.sh",
-        "interval": 1200,
-        "return-type": "json",
-        "format": " Arch {} ",
-    },
-}

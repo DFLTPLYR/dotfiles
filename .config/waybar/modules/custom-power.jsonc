@@ -1,8 +1,0 @@
-{
-    "custom/power": {
-        "format": "",
-        "tooltip": true,
-        "tooltip-format": " Logout menu",
-        "on-click": "wlogout",
-    },
-}
