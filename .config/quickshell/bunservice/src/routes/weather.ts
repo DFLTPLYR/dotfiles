@@ -6,9 +6,7 @@ const weatherRouter = new Hono();
 weatherRouter.get("/", async (c) => {
   try {
     const clientIp =
-      c.req.header("x-forwarded-for") ||
-      c.req.header("x-real-ip") ||
-      "auto:ip";
+      c.req.header("x-forwarded-for") || c.req.header("x-real-ip") || "auto:ip";
 
     const url =
       "https://api.weatherapi.com/v1/forecast.json?key=" +
