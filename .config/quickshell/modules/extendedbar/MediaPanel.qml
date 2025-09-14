@@ -54,12 +54,12 @@ Rectangle {
                     height: Math.round(parent.height)
                     sourceSize.width: width
                     sourceSize.height: height
-                    rotation: MprisManager.activePlayer?.isPlaying ? albumRotation : 0
+                    rotation: MprisManager.activePlayer.isPlaying ? albumRotation : 0
                 }
 
                 FrameAnimation {
                     id: albumRotateFrame
-                    running: MprisManager.activePlayer?.isPlaying
+                    running: MprisManager.activePlayer.isPlaying
                     onTriggered: {
                         albumArt.albumRotation += 0.1;
                         if (albumArt.albumRotation > 360)
@@ -105,8 +105,8 @@ Rectangle {
                     target: MprisManager.activePlayer
                     function onPositionChanged() {
                         const player = MprisManager.activePlayer;
-                        const pos = player?.position;
-                        const len = player?.length;
+                        const pos = player.position;
+                        const len = player.length;
 
                         const safePos = Math.min(pos, len);
                         const rawProgress = safePos / len;
@@ -125,7 +125,7 @@ Rectangle {
             anchors.fill: parent
             anchors.horizontalCenter: parent.horizontalCenter
 
-            visible: MprisManager.activePlayer?.isPlaying
+            visible: MprisManager.activePlayer.isPlaying
 
             onPaint: {
                 const ctx = getContext("2d");
@@ -240,7 +240,7 @@ Rectangle {
         }
 
         StyledButton {
-            icon: MprisManager?.isPlaying ? "\uf04c" : "\uf04b"
+            icon: MprisManager.isPlaying ? "\uf04c" : "\uf04b"
             size: 48
             iconRatio: 0.5
             borderColor: ColorPalette.color10

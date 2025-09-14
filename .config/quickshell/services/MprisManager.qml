@@ -91,6 +91,7 @@ Singleton {
     property bool isPlaying: this.activePlayer && this.activePlayer.isPlaying
     property bool canTogglePlaying: this.activePlayer?.canTogglePlaying ?? false
     function togglePlaying() {
+        console.log("arturl:", JSON.stringify(activePlayer.trackTitle));
         if (this.canTogglePlaying)
             this.activePlayer.togglePlaying();
     }
@@ -148,7 +149,7 @@ Singleton {
 
     // cava
     property int count: 256
-    property int noiseReduction: 60
+    property int noiseReduction: 30
     property string channels: "stereo"
     property string monoOption: "average"
     property var config: ({
