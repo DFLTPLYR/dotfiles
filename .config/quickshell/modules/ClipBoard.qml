@@ -24,7 +24,7 @@ AnimatedScreenOverlay {
     color: Scripts.setOpacity(ColorPalette.background, 0.2)
 
     onClicked: {
-        return GlobalState.toggleDrawer("clipBoard");
+        return toplevel.shouldBeVisible = false;
     }
 
     onHidden: key => GlobalState.removeDrawer(key)
@@ -36,7 +36,7 @@ AnimatedScreenOverlay {
             switch (event.key) {
             case Qt.Key_Escape:
                 searchValue = "";
-                GlobalState.toggleDrawer("clipBoard");
+                toplevel.shouldBeVisible = false;
                 event.accepted = true;
                 break;
             case Qt.Key_Backspace:
@@ -59,7 +59,7 @@ AnimatedScreenOverlay {
                     Quickshell.execDetached({
                         command: ["cliphist", "wipe"]
                     });
-                    GlobalState.toggleDrawer("clipBoard");
+                    toplevel.shouldBeVisible = false;
                     event.accepted = true;
                 } else {
                     if (currentItem) {
@@ -447,7 +447,7 @@ AnimatedScreenOverlay {
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
-                return GlobalState.toggleDrawer("clipBoard");
+                return toplevel.shouldBeVisible = false;
             }
         }
     }
@@ -503,14 +503,4 @@ AnimatedScreenOverlay {
     }
 
     Component.onCompleted: cbHistory.running = true
-
-    Connections {
-        target: GlobalState
-        function onShowClipBoardChangedSignal(value, monitorName) {
-            const isMatch = monitorName === screen.name;
-            if (isMatch) {
-                toplevel.shouldBeVisible = value;
-            }
-        }
-    }
 }

@@ -100,6 +100,7 @@ Variants {
             }
         }
 
+        // connect this to the clipboard or create a state manager
         LazyLoader {
             id: clipBoardLoader
             active: true
@@ -125,7 +126,7 @@ Variants {
                     return;
                 }
                 clipBoardLoader.shouldBeVisible = true;
-                clipBoardLoader.animProgress = clipBoardLoader.shouldBeVisible ? 1 : 0;
+                clipBoardLoader.animProgress = 1;
             }
         }
     }
