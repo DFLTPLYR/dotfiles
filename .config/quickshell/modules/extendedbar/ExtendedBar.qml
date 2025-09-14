@@ -15,25 +15,22 @@ import qs.assets
 PopupWindow {
     id: resourceSection
 
+    property bool shouldBeVisible: false
+    property real animProgress: 0.0
     property bool isPortrait: screen.height > screen.width
-    property var focusedMonitor: Hyprland.focusedMonitor
 
     anchor.adjustment: PopupAdjustment.Slide
-
     anchor.rect.x: Math.round(parentWindow.width / 2 - width / 2)
     anchor.rect.y: Math.round(parentWindow.height)
 
     implicitHeight: Math.floor(playerBackground.height)
     implicitWidth: Math.floor(playerBackground.width)
+    visible: false
+    color: 'transparent'
 
     mask: Region {
         item: playerBackground
     }
-
-    visible: false
-    color: 'transparent'
-    property bool shouldBeVisible: false
-    property real animProgress: 0.0
 
     Behavior on animProgress {
         NumberAnimation {
@@ -47,8 +44,6 @@ PopupWindow {
             visible = true;
         if (!shouldBeVisible && Math.abs(animProgress) < 0.001) {
             visible = false;
-            const drawerKey = `MprisDashboard-${screen.name}`;
-            Qt.callLater(() => GlobalState.removeDrawer(drawerKey));
         }
     }
 
@@ -150,31 +145,6 @@ PopupWindow {
                 height: Math.floor(mainContent.height)
 
                 ContainerBar {}
-            }
-        }
-    }
-
-    Connections {
-        target: GlobalState
-        function onShowMprisChangedSignal(value, monitorName) {
-            if (!resourceSection || resourceSection.destroyed)
-                return;
-            if (shouldBeVisible) {
-                shouldBeVisible = false;
-                animProgress = 0;
-                return;
-            }
-            shouldBeVisible = value;
-            animProgress = value ? 1 : 0;
-        }
-    }
-
-    Connections {
-        target: Hyprland
-        function onRawEvent(event) {
-            if (event.name === "focusedmonv2") {
-                var parsed = event.parse(2);
-                console.log("Monitor name:", parsed[0]);
             }
         }
     }
