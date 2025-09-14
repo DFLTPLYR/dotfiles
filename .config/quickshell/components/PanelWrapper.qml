@@ -44,7 +44,6 @@ PanelWindow {
             root.isVisible = false;
         }
     }
-
     onScreenChanged: {
         const target = shouldBeVisible ? 1.0 : 0.0;
         anim.stop();

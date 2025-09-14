@@ -10,6 +10,7 @@ import Quickshell.Hyprland
 // component
 import qs.utils
 import qs.assets
+import qs.modules
 import qs.services
 import qs.components
 import qs.modules.extendedbar
@@ -70,11 +71,15 @@ Variants {
         }
 
         LazyLoader {
-            active: isExtendedBarOpen
+            id: extendedBarLoader
+            active: true
             component: ExtendedBar {
-                visible: Hyprland.focusedMonitor.name === screenRoot.screen.name
                 anchor.window: screenRoot
+                animProgress: extendedBarLoader.animProgress
+                shouldBeVisible: extendedBarLoader.shouldBeVisible
             }
+            property bool shouldBeVisible: false
+            property real animProgress: 0.0
         }
 
         GlobalShortcut {
@@ -82,9 +87,45 @@ Variants {
             name: "showResourceBoard"
             description: "Show Resource Dashboard"
             onPressed: {
-                Qt.callLater(() => {
-                    screenRoot.isExtendedBarOpen = true;
-                });
+                if (extendedBarLoader.shouldBeVisible) {
+                    extendedBarLoader.shouldBeVisible = false;
+                    extendedBarLoader.animProgress = 0;
+                    return;
+                }
+                if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
+                    return;
+                }
+                extendedBarLoader.shouldBeVisible = true;
+                extendedBarLoader.animProgress = extendedBarLoader.shouldBeVisible ? 1 : 0;
+            }
+        }
+
+        LazyLoader {
+            id: clipBoardLoader
+            active: true
+            component: ClipBoard {
+                animProgress: clipBoardLoader.animProgress
+                shouldBeVisible: clipBoardLoader.shouldBeVisible
+            }
+            property bool shouldBeVisible: false
+            property real animProgress: 0.0
+        }
+
+        GlobalShortcut {
+            id: clipBoard
+            name: "showClipBoard"
+            description: "Show Clipboard history"
+            onPressed: {
+                if (clipBoardLoader.shouldBeVisible) {
+                    clipBoardLoader.shouldBeVisible = false;
+                    clipBoardLoader.animProgress = 0;
+                    return;
+                }
+                if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
+                    return;
+                }
+                clipBoardLoader.shouldBeVisible = true;
+                clipBoardLoader.animProgress = clipBoardLoader.shouldBeVisible ? 1 : 0;
             }
         }
     }

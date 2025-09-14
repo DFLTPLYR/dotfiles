@@ -19,31 +19,17 @@ Item {
         }
     }
 
-    // Resource bar
-    GlobalShortcut {
-        id: resourceDashboard
-        name: "showResourceBoard"
-        description: "Show Resource Dashboard"
-    }
+    // // ClipBoard
+    // GlobalShortcut {
+    //     id: clipBoard
+    //     name: "showClipBoard"
+    //     description: "Show Clipboard history"
+    // }
 
-    Connections {
-        target: resourceDashboard
-        function onPressed() {
-            GlobalState.toggleDrawer("mpris");
-        }
-    }
-
-    // ClipBoard
-    GlobalShortcut {
-        id: clipBoard
-        name: "showClipBoard"
-        description: "Show Clipboard history"
-    }
-
-    Connections {
-        target: clipBoard
-        function onPressed() {
-            GlobalState.toggleDrawer("clipBoard");
-        }
-    }
+    // Connections {
+    //     target: clipBoard
+    //     function onPressed() {
+    //         GlobalState.toggleDrawer("clipBoard");
+    //     }
+    // }
 }
