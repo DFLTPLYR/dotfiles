@@ -61,8 +61,11 @@ GridView {
     function openApp() {
         var entry = grid.currentItem.modelData;
 
-        // Split execString into command array (handles spaces)
-        var execArgs = entry.execString.split(" ");
+        // Clean execString by removing placeholders like %U, %u, %f, etc.
+        var cleanedExec = entry.execString.replace(/%[a-zA-Z]/g, '').trim();
+
+        // Split into command array, filtering out empty strings
+        var execArgs = cleanedExec.split(/\s+/).filter(arg => arg !== '');
 
         if (entry.runInTerminal) {
             Quickshell.execDetached({
