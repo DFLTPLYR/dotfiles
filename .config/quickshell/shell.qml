@@ -41,7 +41,7 @@ ShellRoot {
 
     Sidebar {}
 
-    AppPanel {}
+    AppMenu {}
 
     NotificationList {}
 

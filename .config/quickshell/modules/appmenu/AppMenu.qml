@@ -1,166 +1,185 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
-import Quickshell
-import QtQuick.Shapes
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Widgets
-import Quickshell.Hyprland
-import Quickshell.Wayland
+import QtQuick.Controls
 
-import qs
+import Quickshell
+import Quickshell.Widgets
+import Quickshell.Wayland
+import Quickshell.Hyprland
+import Quickshell.Services.Pipewire
+
 import qs.utils
+import qs.assets
 import qs.services
 import qs.components
-import QtQuick3D
-import qs.assets
 
-AnimatedScreenOverlay {
-    id: toplevel
-    screen: screenRoot.modelData
-    key: 'AppMenu'
+Scope {
+    id: root
 
-    color: Scripts.setOpacity(ColorPalette.background, 0.2)
+    property bool isVisible: false
+    signal toggle
 
-    onHidden: key => {
-        GlobalState.removeDrawer(key);
-    }
-
-    KeyboardEventHandler {
-        anchors.fill: parent
-        focus: true
-
-        Keys.onPressed: event => {
-            switch (event.key) {
-            case Qt.Key_Escape:
-                searchValue = "";
-                GlobalState.toggleDrawer("appMenu");
-                event.accepted = true;
-                break;
-            case Qt.Key_Backspace:
-                searchValue = searchValue.slice(0, -1);
-                event.accepted = true;
-                break;
-            case Qt.Key_Enter:
-            case Qt.Key_Return:
-                grid.openApp();
-                event.accepted = true;
-                break;
-            case Qt.Key_Left:
-                if (grid.currentIndex > 0)
-                    grid.currentIndex -= 1;
-                event.accepted = true;
-                break;
-            case Qt.Key_Right:
-                if (grid.currentIndex < grid.count - 1)
-                    grid.currentIndex += 1;
-                event.accepted = true;
-                break;
-            case Qt.Key_Up:
-                grid.currentIndex = Math.max(0, grid.currentIndex - grid.columns);
-                event.accepted = true;
-                break;
-            case Qt.Key_Down:
-                grid.currentIndex = Math.min(grid.count - 1, grid.currentIndex + grid.columns);
-                event.accepted = true;
-                break;
-            default:
-                if (event.text.length > 0) {
-                    searchValue += event.text;
-                    event.accepted = true;
-                }
-            }
+    GlobalShortcut {
+        id: cancelKeybind
+        name: "showAppMenu"
+        description: "Show Resource Dashboard"
+        onPressed: {
+            Qt.callLater(() => {
+                root.isVisible = true;
+                root.toggle();
+            });
         }
     }
 
-    property string searchValue: ''
-    property bool isPortrait: screen.height > screen.width
+    LazyLoader {
+        active: isVisible
+        component: PanelWrapper {
+            id: appMenuRoot
+            implicitWidth: 0
 
-    Rectangle {
-        width: Math.round(isPortrait ? screen.width / 1.5 : screen.width / 2)
-        height: Math.round(isPortrait ? screen.height / 2.25 : screen.height / 2)
+            anchors {
+                top: true
+                right: true
+                bottom: true
+                left: true
+            }
 
-        x: Math.round(screen.width / 2 - width / 2)
-        y: Math.round(screen.height / 2 - height / 2)
+            Connections {
+                target: root
+                function onToggle() {
+                    appMenuRoot.shouldBeVisible = !appMenuRoot.shouldBeVisible;
+                }
+            }
 
-        color: Scripts.setOpacity(ColorPalette.background, 0.6)
-        opacity: animProgress
+            KeyboardEventHandler {
+                anchors.fill: parent
+                focus: true
 
-        scale: animProgress
-        transformOrigin: Item.Center
+                Keys.onPressed: event => {
+                    switch (event.key) {
+                    case Qt.Key_Escape:
+                        searchValue = "";
+                        GlobalState.toggleDrawer("appMenu");
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Backspace:
+                        searchValue = searchValue.slice(0, -1);
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                        grid.openApp();
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Left:
+                        if (grid.currentIndex > 0)
+                            grid.currentIndex -= 1;
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Right:
+                        if (grid.currentIndex < grid.count - 1)
+                            grid.currentIndex += 1;
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Up:
+                        grid.currentIndex = Math.max(0, grid.currentIndex - grid.columns);
+                        event.accepted = true;
+                        break;
+                    case Qt.Key_Down:
+                        grid.currentIndex = Math.min(grid.count - 1, grid.currentIndex + grid.columns);
+                        event.accepted = true;
+                        break;
+                    default:
+                        if (event.text.length > 0) {
+                            searchValue += event.text;
+                            event.accepted = true;
+                        }
+                    }
+                }
+            }
 
-        Column {
-            anchors.fill: parent
+            property string searchValue: ''
 
-            // Item list
-            Item {
-                height: parent.height
-                width: parent.width
+            Rectangle {
+                width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
+                height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
 
-                RowLayout {
+                x: Math.round(screen.width / 2 - width / 2)
+                y: Math.round(screen.height / 2 - height / 2)
+
+                color: Scripts.setOpacity(ColorPalette.background, 0.9)
+                opacity: animProgress
+
+                radius: 16
+                scale: animProgress
+
+                Column {
                     anchors.fill: parent
 
+                    // Item list
                     Rectangle {
-                        Layout.preferredWidth: parent.width * 0.3
-                        Layout.fillHeight: true
+                        height: Math.round(parent.height * 0.9)
+                        width: parent.width
+                        color: Scripts.setOpacity(ColorPalette.color10, 0.2)
+                        topLeftRadius: 16
+                        topRightRadius: 16
+
                         clip: true
-                        color: 'transparent'
+                        RowLayout {
+                            anchors.fill: parent
 
-                        Image {
-                            id: name
-                            fillMode: Image.PreserveAspectCrop
-                            source: WallpaperStore.currentWallpapers[screen.name] ?? null
+                            Rectangle {
+                                Layout.preferredWidth: parent.width * 0.4
+                                Layout.fillHeight: true
+                                color: 'transparent'
+
+                                MaskWrapper {
+                                    radius: 8
+                                    anchors.fill: parent
+                                    sourceItem: Image {
+                                        anchors.fill: parent
+                                        fillMode: Image.PreserveAspectCrop
+                                        source: WallpaperStore.currentWallpapers[screen.name] ?? null
+                                        cache: true
+                                        asynchronous: true
+                                        smooth: true
+                                        visible: false
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                id: container
+
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                color: 'transparent'
+
+                                AppListView {
+                                    id: grid
+                                    searchText: searchValue
+                                }
+                            }
                         }
                     }
 
-                    Rectangle {
-                        id: container
+                    // Search Bar
+                    Item {
+                        height: Math.round(parent.height * 0.1)
+                        width: parent.width
 
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        color: 'transparent'
-
-                        AppListView {
-                            id: grid
-                            searchText: searchValue
+                        Text {
+                            id: searchText
+                            text: qsTr(`Search: ${searchValue}`)
+                            font.pixelSize: 24
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 12
+                            color: ColorPalette.color15
                         }
                     }
                 }
-            }
-
-            // Search Bar
-            Item {
-                height: Math.round(parent.height * 0.1)
-                width: parent.width
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: Scripts.setOpacity(ColorPalette.background, 0.1)
-                }
-
-                Text {
-                    id: searchText
-                    text: qsTr(`Search: ${searchValue}`)
-                    font.pixelSize: 24
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 12
-                    color: ColorPalette.color15
-                }
-            }
-        }
-    }
-
-    Connections {
-        target: GlobalState
-
-        function onShowAppMenuChangedSignal(value, monitorName) {
-            const isMatch = monitorName === screen.name;
-
-            if (isMatch) {
-                toplevel.shouldBeVisible = value;
             }
         }
     }
