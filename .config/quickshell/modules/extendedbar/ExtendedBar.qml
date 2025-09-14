@@ -1,6 +1,8 @@
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Widgets
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
@@ -14,9 +16,9 @@ PopupWindow {
     id: resourceSection
 
     property bool isPortrait: screen.height > screen.width
+    property var focusedMonitor: Hyprland.focusedMonitor
 
     anchor.adjustment: PopupAdjustment.Slide
-    anchor.window: screenRoot
 
     anchor.rect.x: Math.round(parentWindow.width / 2 - width / 2)
     anchor.rect.y: Math.round(parentWindow.height)
@@ -154,17 +156,25 @@ PopupWindow {
 
     Connections {
         target: GlobalState
-        ignoreUnknownSignals: true
-
         function onShowMprisChangedSignal(value, monitorName) {
             if (!resourceSection || resourceSection.destroyed)
                 return;
-            if (monitorName === parentWindow.screen.name) {
-                shouldBeVisible = value;
-                animProgress = value ? 1 : 0;
-            } else if (shouldBeVisible) {
+            if (shouldBeVisible) {
                 shouldBeVisible = false;
                 animProgress = 0;
+                return;
+            }
+            shouldBeVisible = value;
+            animProgress = value ? 1 : 0;
+        }
+    }
+
+    Connections {
+        target: Hyprland
+        function onRawEvent(event) {
+            if (event.name === "focusedmonv2") {
+                var parsed = event.parse(2);
+                console.log("Monitor name:", parsed[0]);
             }
         }
     }
