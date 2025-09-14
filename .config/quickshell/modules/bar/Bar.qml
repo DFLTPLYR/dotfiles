@@ -1,22 +1,25 @@
 import QtQuick
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Hyprland
-import Quickshell.Io
 import QtQuick.Shapes
+import QtQuick.Layouts
+
+import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 
 // component
 import qs.utils
 import qs.assets
 import qs.services
 import qs.components
+import qs.modules.extendedbar
 
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: screenRoot
         required property var modelData
+        property bool isExtendedBarOpen: false
         screen: modelData
         color: "transparent"
         implicitHeight: barComponent.height
@@ -63,6 +66,25 @@ Variants {
 
                     NavButtons {}
                 }
+            }
+        }
+
+        LazyLoader {
+            active: isExtendedBarOpen
+            component: ExtendedBar {
+                visible: Hyprland.focusedMonitor.name === screenRoot.screen.name
+                anchor.window: screenRoot
+            }
+        }
+
+        GlobalShortcut {
+            id: resourceDashboard
+            name: "showResourceBoard"
+            description: "Show Resource Dashboard"
+            onPressed: {
+                Qt.callLater(() => {
+                    screenRoot.isExtendedBarOpen = true;
+                });
             }
         }
     }
