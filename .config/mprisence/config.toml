@@ -250,7 +250,7 @@ app_id = "1125077752756834314"
 icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/SMPlayer_icon.svg/1200px-SMPlayer_icon.svg.png"
 
 [player.spotify]
-ignore = true
+ignore = false
 
 [player.youtube_music]
 app_id = "1125082278339559505"
