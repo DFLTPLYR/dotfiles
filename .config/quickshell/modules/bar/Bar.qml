@@ -117,7 +117,7 @@ Variants {
         // connect this to the clipboard or create a state manager
         LazyLoader {
             id: clipBoardLoader
-            active: true
+            active: false
             component: ClipBoard {
                 animProgress: clipBoardLoader.animProgress
                 shouldBeVisible: clipBoardLoader.shouldBeVisible
@@ -134,13 +134,14 @@ Variants {
                 if (clipBoardLoader.shouldBeVisible) {
                     clipBoardLoader.shouldBeVisible = false;
                     clipBoardLoader.animProgress = 0;
-                    return;
+                    return Qt.callLater(() => clipBoardLoader.active = false, 40);
                 }
                 if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
-                    return;
+                    return Qt.callLater(() => clipBoardLoader.active = false, 40);
                 }
                 clipBoardLoader.shouldBeVisible = true;
                 clipBoardLoader.animProgress = 1;
+                return Qt.callLater(() => clipBoardLoader.active = true, 40);
             }
         }
     }
