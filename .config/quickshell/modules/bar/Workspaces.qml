@@ -39,13 +39,12 @@ Item {
                     anchors.centerIn: parent
                     width: parent.width * 0.7
                     height: parent.height * 0.7
-                    radius: 100
+                    radius: 4
 
                     // Track hover state
                     property bool hovered: false
 
                     color: hovered ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : "transparent"
-                    border.color: hovered ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color3
 
                     // Animate the fill color
                     Behavior on color {
@@ -55,18 +54,10 @@ Item {
                         }
                     }
 
-                    Behavior on border.color {
-                        ColorAnimation {
-                            duration: 250
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
                     Text {
                         anchors.centerIn: parent
                         text: romanNumber(modelData.id - 1)
-                        // text: modelData.id
-                        color: monitorIndicator.hovered ? ColorPalette.color2 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                        color: monitorIndicator.hovered ? ColorPalette.color14 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
                         font.pixelSize: {
                             var minSize = 10;
                             return Math.max(minSize, Math.min(height, width) * 0.6);
