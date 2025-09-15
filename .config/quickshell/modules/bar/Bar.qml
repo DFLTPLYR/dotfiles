@@ -48,15 +48,29 @@ Variants {
                     Workspaces {}
                 }
 
-                Rectangle {
+                Item {
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                    height: 32
-                    color: "transparent"
+                    opacity: extendedBarLoader.shouldBeVisible ? 0 : 1
+
+                    Behavior on opacity {
+                        AnimationProvider.NumberAnim {}
+                    }
+
                     Text {
+                        color: ColorPalette.color14
+                        font.family: FontProvider.fontMaterialRounded
+                        text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: qsTr("text")
-                        color: "white"
+                        width: parent.width
+                        font.bold: true
+                        font.pixelSize: {
+                            var minSize = 10;
+                            return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
+                        }
                     }
                 }
 
