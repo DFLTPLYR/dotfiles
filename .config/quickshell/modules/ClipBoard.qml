@@ -20,14 +20,13 @@ AnimatedScreenOverlay {
 
     screen: screenRoot.modelData
     key: 'ClipBoard'
-
     color: Scripts.setOpacity(ColorPalette.background, 0.2)
 
-    onClicked: {
-        return toplevel.shouldBeVisible = false;
-    }
+    onClicked: toplevel.shouldBeVisible = false
 
-    onHidden: key => GlobalState.removeDrawer(key)
+    onHidden: () => {
+        return;
+    }
 
     KeyboardEventHandler {
         id: keyCatcher
@@ -110,6 +109,7 @@ AnimatedScreenOverlay {
     // Target sizes
     property real targetWidth: isPortrait ? screen.width * 0.9 : screen.width * 0.6
     property real targetHeight: screen.height * 0.5
+    signal hide
 
     RowLayout {
         id: clipboardRoot
