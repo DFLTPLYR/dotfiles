@@ -15,6 +15,7 @@ Item {
     implicitWidth: parent.width
     implicitHeight: 32
     anchors.verticalCenter: parent.verticalCenter
+
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
         return kanji[n] !== undefined ? kanji[n] : n.toString();
@@ -30,21 +31,18 @@ Item {
         Repeater {
             model: Hyprland.workspaces
             delegate: Item {
-                width: 32
+                implicitWidth: 32
                 height: 32
                 visible: modelData.id >= 0
 
                 Rectangle {
                     id: monitorIndicator
                     anchors.centerIn: parent
-                    width: parent.width * 0.7
                     height: parent.height * 0.7
-                    radius: 4
+                    width: height
+                    radius: parent.height * 0.1
 
-                    // Track hover state
-                    property bool hovered: false
-
-                    color: hovered ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : "transparent"
+                    color: mouseArea.containsMouse ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : "transparent"
 
                     // Animate the fill color
                     Behavior on color {
@@ -57,7 +55,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: romanNumber(modelData.id - 1)
-                        color: monitorIndicator.hovered ? ColorPalette.color14 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                        color: mouseArea.containsMouse ? ColorPalette.color14 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
                         font.pixelSize: {
                             var minSize = 10;
                             return Math.max(minSize, Math.min(height, width) * 0.6);
@@ -72,31 +70,55 @@ Item {
                     }
 
                     MouseArea {
+                        id: mouseArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        onClicked: modelData.activate()
-                        onEntered: {
-                            monitorIndicator.hovered = true;
+                        onClicked: {
+                            modelData.activate();
+                            var apps = modelData.toplevels;
+                            for (var i = 0; i < apps.values.length; i++) {
+                                console.log(JSON.stringify(apps.values[i].class));
+                            }
                         }
-                        onExited: monitorIndicator.hovered = false
+                    }
+                }
+            }
+        }
+
+        Repeater {
+            model: Hyprland.toplevels
+            delegate: Item {
+                implicitWidth: 32
+                height: 32
+
+                Image {
+                    anchors.centerIn: parent
+                    height: parent.height * 0.7
+                    width: height
+                    source: Quickshell.iconPath(appIconName(modelData.lastIpcObject.class), true) || "qrc:/icons/default-app.svg"
+
+                    fillMode: Image.PreserveAspectCrop
+                    cache: true
+                    smooth: true
+                    sourceSize.width: width
+                    sourceSize.height: height
+                }
+
+                function appIconName(appClass) {
+                    switch (appClass) {
+                    case "Spotify":
+                        return "spotify";
+                    case "Code":
+                        return "visual-studio-code";
+                    case "steam_app_2073850":
+                        return "steam";
+                    // Add more mappings as needed
+                    default:
+                        return appClass;
                     }
                 }
 
-                Component.onCompleted: {
-                    Hyprland.refreshToplevels();
-                    var applications = modelData.toplevels.values;
-                    for (var i = 0; i < applications.length; i++) {
-                        var app = applications[i];
-                        if (app.lastIpcObject) {
-                            // var keys = Object.keys(app.lastIpcObject);
-                            // for (var j = 0; j < keys.length; j++) {
-                            //     var key = keys[j];
-                            //     console.log("App", i, key + ":", app.lastIpcObject[key]);
-                            // }
-                            console.log(app.lastIpcObject.class);
-                        }
-                    }
-                }
+                Component.onCompleted: console.log(modelData.lastIpcObject.class)
             }
         }
     }
