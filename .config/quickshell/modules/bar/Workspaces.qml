@@ -85,41 +85,47 @@ Item {
             }
         }
 
-        Repeater {
-            model: Hyprland.toplevels
-            delegate: Item {
-                implicitWidth: 32
-                height: 32
+        // Repeater {
+        //     model: Hyprland.toplevels
+        //     delegate: Item {
+        //         implicitWidth: 32
+        //         height: 32
 
-                Image {
-                    anchors.centerIn: parent
-                    height: parent.height * 0.7
-                    width: height
-                    source: Quickshell.iconPath(appIconName(modelData.lastIpcObject.class), true) || "qrc:/icons/default-app.svg"
+        //         Image {
+        //             anchors.centerIn: parent
+        //             height: parent.height * 0.7
+        //             width: height
+        //             source: Quickshell.iconPath(appIconName(modelData.lastIpcObject.class), true) || "qrc:/icons/default-app.svg"
 
-                    fillMode: Image.PreserveAspectCrop
-                    cache: true
-                    smooth: true
-                    sourceSize.width: width
-                    sourceSize.height: height
-                }
+        //             fillMode: Image.PreserveAspectCrop
+        //             cache: true
+        //             smooth: true
+        //             sourceSize.width: width
+        //             sourceSize.height: height
+        //         }
 
-                function appIconName(appClass) {
-                    switch (appClass) {
-                    case "Spotify":
-                        return "spotify";
-                    case "Code":
-                        return "visual-studio-code";
-                    case "steam_app_2073850":
-                        return "steam";
-                    // Add more mappings as needed
-                    default:
-                        return appClass;
-                    }
-                }
+        //         function appIconName(appClass) {
+        //             if (/^steam_app_\d+$/.test(appClass)) {
+        //                 return "steam";
+        //             }
+        //             if (/^brave(-browser)?$/i.test(appClass)) {
+        //                 return "brave-browser";
+        //             }
+        //             switch (appClass) {
+        //             case "Spotify":
+        //                 return "spotify";
+        //             case "Code":
+        //                 return "visual-studio-code";
+        //             case "steam_app_2073850":
+        //                 return "steam";
+        //             // Add more mappings as needed
+        //             default:
+        //                 return appClass;
+        //             }
+        //         }
 
-                Component.onCompleted: console.log(modelData.lastIpcObject.class)
-            }
-        }
+        //         Component.onCompleted: console.log(modelData.lastIpcObject.class)
+        //     }
+        // }
     }
 }
