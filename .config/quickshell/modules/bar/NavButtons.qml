@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import Quickshell
 
 import qs
@@ -12,6 +13,12 @@ Item {
     implicitHeight: 32
     anchors.verticalCenter: parent.verticalCenter
 
+    Material.theme: Material.Dark
+    Material.accent: ColorPalette.color10
+
+    property bool showBrightness: false
+    property bool showNightLight: false
+    property int sliderValue: 0
     Component {
         id: navButtonComponent
         Item {
@@ -21,8 +28,8 @@ Item {
             property var onClickedAction: function () {}
             RoundButton {
                 anchors.centerIn: parent
-                width: parent.width * 0.7
-                height: parent.height * 0.7
+                width: parent.width
+                height: parent.height
                 hoverEnabled: true
 
                 text: buttonText
@@ -42,13 +49,8 @@ Item {
                 background: Rectangle {
                     color: ColorPalette.color0
                     radius: width / 2
-                    border.color: ColorPalette.color10
-                    border.width: 1
 
                     Behavior on color {
-                        AnimationProvider.ColorAnim {}
-                    }
-                    Behavior on border.color {
                         AnimationProvider.ColorAnim {}
                     }
                 }
@@ -83,11 +85,61 @@ Item {
 
         Loader {
             sourceComponent: navButtonComponent
-            onLoaded: item.buttonText = "refresh"
+            onLoaded: {
+                item.buttonText = "nightlight";
+                item.onClickedAction = function () {
+                    root.showNightLight = !root.showNightLight;
+                    if (root.showBrightness)
+                        return root.showBrightness = false;
+                };
+            }
         }
         Loader {
             sourceComponent: navButtonComponent
-            onLoaded: item.buttonText = "explosion"
+            onLoaded: {
+                item.buttonText = "explosion";
+                item.onClickedAction = function () {
+                    root.showBrightness = !root.showBrightness;
+                    if (root.showNightLight)
+                        return root.showNightLight = false;
+                };
+            }
+        }
+
+        Slider {
+            id: control
+            from: 1
+            to: 100
+            opacity: root.showBrightness || root.showNightLight ? 1 : 0
+            anchors.verticalCenter: parent.verticalCenter
+            value: root.sliderValue
+            snapMode: Slider.SnapOnRelease
+            onValueChanged: root.sliderValue = value
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            handle: Rectangle {
+                x: control.leftPadding + control.visualPosition * (control.availableWidth - width)
+                y: control.topPadding + control.availableHeight / 2 - height / 2
+                implicitWidth: 8
+                implicitHeight: 8
+                color: "transparent"
+                Text {
+                    text: root.showBrightness ? "explosion" : "nightlight"
+                    color: ColorPalette.color14
+                    font.family: FontProvider.fontMaterialOutlined
+                    anchors.centerIn: parent
+                    font.pixelSize: Math.min(control.height, control.width) * 0.8
+                    Behavior on color {
+                        AnimationProvider.ColorAnim {}
+                    }
+                }
+            }
         }
     }
 }
