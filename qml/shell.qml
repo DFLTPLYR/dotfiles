@@ -1,19 +1,56 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Window
+import QtQuick.Layouts
 import Quickshell
-
-import qs.components
+import Quickshell.Services.Pipewire
 
 ShellRoot {
     FloatingWindow {
-        title: 'test'
-        minimumSize: Qt.size(screen.width / 4, screen.height / 6)
-        color: 'transparent'
+        // match the system theme background color
+        color: contentItem.palette.active.window
 
-        NotificationPanel {
+        ScrollView {
             anchors.fill: parent
+            contentWidth: availableWidth
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 10
+
+                // get a list of nodes that output to the default sink
+                PwNodeLinkTracker {
+                    id: linkTracker
+                    node: Pipewire.defaultAudioSink
+                }
+
+                MixerEntry {
+                    node: Pipewire.defaultAudioSink
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    color: palette.active.text
+                    implicitHeight: 1
+                }
+
+                Repeater {
+                    model: linkTracker.linkGroups
+
+                    MixerEntry {
+                        required property PwLinkGroup modelData
+                        // Each link group contains a source and a target.
+                        // Since the target is the default sink, we want the source.
+                        node: modelData.source
+                        Component.onCompleted: {
+                            for (let key in modelData.source) {
+                                if (modelData.target.hasOwnProperty(key)) {
+                                    console.log(key + ":", modelData.target[key]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
