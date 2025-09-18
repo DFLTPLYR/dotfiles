@@ -27,9 +27,12 @@ import qs.modules.extendedbar
 import qs.modules.wallpaper
 import qs.modules.sessionmenu
 import qs.modules.notification
+import qs.modules.sessionmanager
 
 ShellRoot {
     id: root
+
+    SessionManager {}
 
     Bar {}
 
