@@ -150,7 +150,7 @@ Singleton {
 
     Timer {
         id: refreshTimer
-        interval: 600000 // 10 minutes
+        interval: 300000 // 10 minutes
         repeat: true
         running: true
         triggeredOnStart: true
