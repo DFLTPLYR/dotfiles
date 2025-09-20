@@ -59,7 +59,7 @@ Scope {
                     switch (event.key) {
                     case Qt.Key_Escape:
                         searchValue = "";
-                        GlobalState.toggleDrawer("appMenu");
+                        root.toggle();
                         event.accepted = true;
                         break;
                     case Qt.Key_Backspace:
@@ -69,6 +69,7 @@ Scope {
                     case Qt.Key_Enter:
                     case Qt.Key_Return:
                         grid.openApp();
+                        searchValue = "";
                         event.accepted = true;
                         break;
                     case Qt.Key_Left:
