@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls.Fusion
+import QtQuick.Controls
+import QtQuick.Controls.Material
 import Quickshell.Wayland
 import Quickshell
 
@@ -15,7 +16,14 @@ Rectangle {
     required property ShellScreen contextScreen
     readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
 
+    property bool isLoading: true
+
+    Material.theme: Material.Dark
+    Material.accent: Material.Purple
+
     color: colors.window
+
+    property bool isPortrait: height > width
 
     Image {
         id: backgroundImage
@@ -27,48 +35,169 @@ Rectangle {
         visible: true
     }
 
+    Item {
+        width: Math.max(200, root.width / 6)
+        height: root.height / 4
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 10
+            radius: 8
+            layer.enabled: true
+            layer.smooth: true
+
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.0
+                    color: Qt.rgba(1, 1, 1, 0.06)
+                }
+                GradientStop {
+                    position: 1.0
+                    color: Qt.rgba(1, 1, 1, 0.02)
+                }
+            }
+
+            border.color: Qt.rgba(1, 1, 1, 0.08)
+
+            Component {
+                id: landscape
+                RowLayout {
+                    anchors.fill: parent
+
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        RoundButton {
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            font.pixelSize: width
+                            text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
+                            font.family: FontProvider.fontMaterialOutlined
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            Text {
+                                Layout.fillWidth: true
+                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: FontProvider.fontSometypeMono
+                                wrapMode: Text.Wrap
+                            }
+                            Text {
+                                Layout.fillWidth: true
+                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: FontProvider.fontSometypeMono
+                                wrapMode: Text.Wrap
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: portrait
+                ColumnLayout {
+                    anchors.fill: parent
+
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RoundButton {
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            font.pixelSize: height
+                            text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
+                            font.family: FontProvider.fontMaterialOutlined
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            Text {
+                                Layout.fillWidth: true
+                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: FontProvider.fontSometypeMono
+                                wrapMode: Text.Wrap
+                            }
+                            Text {
+                                Layout.fillWidth: true
+                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: FontProvider.fontSometypeMono
+                                wrapMode: Text.Wrap
+                            }
+                        }
+                    }
+                }
+            }
+
+            Loader {
+                anchors.fill: parent
+                sourceComponent: root.isPortrait ? portrait : landscape
+            }
+        }
+    }
+
     Button {
         text: "Its not working, let me out"
         onClicked: context.unlocked()
     }
 
-    Label {
-        id: clock
-        property var date: new Date()
-
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: 100
-        }
-
-        renderType: Text.NativeRendering
-        font.pointSize: 80
-
-        // updates the clock every second
-        Timer {
-            running: true
-            repeat: true
-            interval: 1000
-
-            onTriggered: clock.date = new Date()
-        }
-
-        // updated when the date changes
-        text: {
-            const hours = this.date.getHours().toString().padStart(2, '0');
-            const minutes = this.date.getMinutes().toString().padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-    }
-
     ColumnLayout {
         anchors {
             horizontalCenter: parent.horizontalCenter
-            top: parent.verticalCenter
+            verticalCenter: parent.verticalCenter
         }
 
-        RowLayout {
+        Label {
+            id: clock
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            property var date: new Date()
+            renderType: Text.NativeRendering
+            font.pointSize: 80
+
+            // updates the clock every second
+            Timer {
+                running: true
+                repeat: true
+                interval: 1000
+
+                onTriggered: clock.date = new Date()
+            }
+
+            // updated when the date changes
+            text: {
+                const hours = this.date.getHours().toString().padStart(2, '0');
+                const minutes = this.date.getMinutes().toString().padStart(2, '0');
+                return `${hours}:${minutes}`;
+            }
+        }
+
+        ColumnLayout {
             TextField {
                 id: passwordBox
 
@@ -100,7 +229,7 @@ Rectangle {
             Button {
                 text: "Unlock"
                 padding: 10
-
+                anchors.horizontalCenter: parent.horizontalCenter
                 // don't steal focus from the text box
                 focusPolicy: Qt.NoFocus
 
@@ -110,6 +239,7 @@ Rectangle {
         }
 
         Label {
+            anchors.horizontalCenter: parent.horizontalCenter
             visible: root.context.showFailure
             text: "Incorrect password"
         }
@@ -121,5 +251,16 @@ Rectangle {
             if (root.contextScreen)
                 backgroundImage.source = WallpaperStore.currentWallpapers[root.contextScreen.name];
         }
+    }
+
+    Connections {
+        target: WeatherFetcher
+        function onParseDone() {
+            root.isLoading = false;
+        }
+    }
+
+    Component.onCompleted: {
+        root.isLoading = typeof WeatherFetcher.currentCondition === 'undefined';
     }
 }

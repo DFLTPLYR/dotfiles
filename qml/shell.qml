@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Pipewire
@@ -12,6 +13,8 @@ ShellRoot {
     Variants {
         model: Quickshell.screens
         PanelWindow {
+            Material.theme: Material.Dark
+            Material.accent: Material.Purple
             property var modelData
             screen: modelData
             color: 'transparent'
@@ -153,77 +156,68 @@ ShellRoot {
                         }
                     }
 
-                    // ColumnLayout {
-                    //     anchors {
-                    //         horizontalCenter: parent.horizontalCenter
-                    //         verticalCenter: parent.verticalCenter
-                    //     }
-
-                    //     Label {
-                    //         id: clock
-                    //         property var date: new Date()
-                    //         renderType: Text.NativeRendering
-                    //         font.pointSize: 80
-
-                    //         // updates the clock every second
-                    //         Timer {
-                    //             running: true
-                    //             repeat: true
-                    //             interval: 1000
-
-                    //             onTriggered: clock.date = new Date()
-                    //         }
-
-                    //         // updated when the date changes
-                    //         text: {
-                    //             const hours = this.date.getHours().toString().padStart(2, '0');
-                    //             const minutes = this.date.getMinutes().toString().padStart(2, '0');
-                    //             return `${hours}:${minutes}`;
-                    //         }
-                    //     }
-
-                    //     RowLayout {
-                    //         TextField {
-                    //             id: passwordBox
-
-                    //             implicitWidth: 400
-                    //             padding: 10
-
-                    //             focus: true
-                    //             echoMode: TextInput.Password
-                    //             inputMethodHints: Qt.ImhSensitiveData
-
-                    //             // Update the text in the context when the text in the box changes.
-                    //             onTextChanged: {}
-
-                    //             // Try to unlock when enter is pressed.
-                    //             onAccepted: {}
-                    //         }
-
-                    //         Button {
-                    //             text: "Unlock"
-                    //             padding: 10
-
-                    //             // don't steal focus from the text box
-                    //             focusPolicy: Qt.NoFocus
-                    //         }
-                    //     }
-
-                    //     Label {
-                    //         visible: true
-                    //         text: "Incorrect password"
-                    //     }
-                    // }
-
                     ColumnLayout {
                         anchors {
                             horizontalCenter: parent.horizontalCenter
                             verticalCenter: parent.verticalCenter
                         }
 
-                        Rectangle {
-                            width: 400
-                            height: 200
+                        Label {
+                            id: clock
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            property var date: new Date()
+                            renderType: Text.NativeRendering
+                            font.pointSize: 80
+
+                            // updates the clock every second
+                            Timer {
+                                running: true
+                                repeat: true
+                                interval: 1000
+
+                                onTriggered: clock.date = new Date()
+                            }
+
+                            // updated when the date changes
+                            text: {
+                                const hours = this.date.getHours().toString().padStart(2, '0');
+                                const minutes = this.date.getMinutes().toString().padStart(2, '0');
+                                return `${hours}:${minutes}`;
+                            }
+                        }
+
+                        ColumnLayout {
+                            TextField {
+                                id: passwordBox
+
+                                implicitWidth: 400
+                                padding: 10
+
+                                focus: true
+                                echoMode: TextInput.Password
+                                inputMethodHints: Qt.ImhSensitiveData
+
+                                // Update the text in the context when the text in the box changes.
+                                onTextChanged: {}
+
+                                // Try to unlock when enter is pressed.
+                                onAccepted: {}
+                            }
+
+                            Button {
+
+                                anchors.horizontalCenter: parent.horizontalCenter
+
+                                text: "Unlock"
+                                focusPolicy: Qt.NoFocus
+                            }
+                        }
+
+                        Label {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            visible: true
+                            text: "Incorrect password"
                         }
                     }
                 }

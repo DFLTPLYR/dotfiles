@@ -3,18 +3,8 @@ import Quickshell
 import Quickshell.Wayland
 
 Singleton {
-    LockContext {
-        id: lockContext
-
-        onUnlocked: {
-            lock.locked = false;
-        }
-    }
-
     WlSessionLock {
         id: lock
-
-        // Lock the session immediately when quickshell starts.
         locked: true
 
         WlSessionLockSurface {
@@ -23,6 +13,13 @@ Singleton {
                 context: lockContext
                 contextScreen: screen
             }
+        }
+    }
+
+    LockContext {
+        id: lockContext
+        onUnlocked: {
+            lock.locked = false;
         }
     }
 }
