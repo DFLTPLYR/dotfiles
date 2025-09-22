@@ -17,6 +17,7 @@ Rectangle {
     readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
 
     property bool isLoading: true
+    property bool showError: context.showFailure
 
     Material.theme: Material.Dark
     Material.accent: Material.Purple
@@ -85,23 +86,118 @@ Rectangle {
                         ColumnLayout {
                             anchors.fill: parent
                             anchors.margins: 2
-                            Text {
+
+                            Item {
                                 Layout.fillWidth: true
-                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
-                                font.bold: true
-                                Layout.alignment: Qt.AlignHCenter
-                                font.family: FontProvider.fontSometypeMono
-                                wrapMode: Text.Wrap
-                                color: ColorPalette.color15
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
                             }
-                            Text {
+                            Item {
                                 Layout.fillWidth: true
-                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
-                                font.bold: true
-                                Layout.alignment: Qt.AlignHCenter
-                                font.family: FontProvider.fontSometypeMono
-                                wrapMode: Text.Wrap
-                                color: ColorPalette.color15
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: landscapeLoading
+                RowLayout {
+                    anchors.fill: parent
+
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RoundButton {
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            font.pixelSize: Math.min(width, height)
+                            text: "\ue86a"
+                            font.family: FontProvider.fontMaterialRounded
+
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                color: ColorPalette.color10
+                                font: parent.font
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+
+                                RotationAnimation on rotation {
+                                    from: 0
+                                    to: 360
+                                    duration: 3000
+                                    loops: Animation.Infinite
+                                    running: isLoading
+                                }
+                            }
+
+                            onClicked: context.unlocked()
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 2
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    Layout.alignment: Qt.AlignHCenter
+                                    text: "\ue86a"
+                                    font.family: FontProvider.fontMaterialRounded
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    Layout.alignment: Qt.AlignHCenter
+                                    text: "\ue86a"
+                                    font.family: FontProvider.fontMaterialRounded
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
                             }
                         }
                     }
@@ -146,28 +242,116 @@ Rectangle {
                         ColumnLayout {
                             anchors.fill: parent
                             anchors.margins: 2
-                            Text {
+                            Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
-                                font.bold: true
-                                font.pixelSize: Math.min(width, height)
-                                Layout.alignment: Qt.AlignHCenter
-                                font.family: FontProvider.fontSometypeMono
-                                wrapMode: Text.Wrap
-                                color: ColorPalette.color15
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
                             }
-                            Text {
+                            Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-                                text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
-                                font.bold: true
-                                font.pixelSize: Math.min(width, height)
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-                                Layout.alignment: Qt.AlignHCenter
-                                font.family: FontProvider.fontSometypeMono
-                                wrapMode: Text.Wrap
-                                color: ColorPalette.color15
+            Component {
+                id: portraitLoading
+                ColumnLayout {
+                    anchors.fill: parent
+
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RoundButton {
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            font.pixelSize: Math.min(width, height)
+                            text: "\ue86a"
+                            font.family: FontProvider.fontMaterialOutlined
+
+                            background: Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                color: ColorPalette.color10
+                                font: parent.font
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+
+                                RotationAnimation on rotation {
+                                    from: 0
+                                    to: 360
+                                    duration: 3000
+                                    loops: Animation.Infinite
+                                    running: isLoading
+                                }
+                            }
+
+                            onClicked: context.unlocked()
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Text {
+                                    anchors.fill: parent
+                                    anchors.margins: 10
+                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.bold: true
+                                    text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
+                                    Layout.alignment: Qt.AlignHCenter
+                                    font.family: FontProvider.fontSometypeMono
+                                    wrapMode: Text.Wrap
+                                    color: ColorPalette.color15
+                                }
                             }
                         }
                     }
@@ -176,7 +360,7 @@ Rectangle {
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: root.isPortrait ? portrait : landscape
+                sourceComponent: root.isPortrait ? (root.isLoading ? portraitLoading : portrait) : (root.isLoading ? landscapeLoading : landscape)
             }
         }
     }
@@ -255,11 +439,18 @@ Rectangle {
             }
 
             Label {
+                id: errorLabel
                 Layout.alignment: Qt.AlignHCenter
                 visible: root.context.showFailure
-                text: "Incorrect password"
+                font.pointSize: 12
+                renderType: Text.NativeRendering
             }
         }
+    }
+
+    onShowErrorChanged: {
+        var errorMessages = ["Tanga amputa di alam password", "Try bewbs69420", "try... 6...7", "Skill Issue try mo magMemoplus gold", "Maybe Start Digging in Yo Butt Twin", "Lesson Learned Kill yourself... litterally", "01 just called... they hit the second tower", "What are you, stupidmaxxing?", "clown school called, they'll be awarding you valedictorian"];
+        errorLabel.text = errorMessages[Math.floor(Math.random() * errorMessages.length)];
     }
 
     Connections {

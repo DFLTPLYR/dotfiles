@@ -82,25 +82,33 @@ ShellRoot {
                                         ColumnLayout {
                                             anchors.fill: parent
                                             anchors.margins: 2
-                                            Text {
+                                            Item {
                                                 Layout.fillWidth: true
                                                 Layout.fillHeight: true
-                                                text: currentCondition.weatherDesc
-                                                font.bold: true
-                                                font.pixelSize: Math.min(width, height) * 0.7
-                                                horizontalAlignment: Text.AlignHCenter
-                                                font.family: FontProvider.fontSometypeMono
-                                                wrapMode: Text.Wrap
+                                                Text {
+                                                    anchors.fill: parent
+                                                    anchors.margins: 10
+                                                    text: currentCondition.weatherDesc
+                                                    font.bold: true
+                                                    font.pixelSize: Math.min(width, height) * 0.5
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    font.family: FontProvider.fontSometypeMono
+                                                    wrapMode: Text.Wrap
+                                                }
                                             }
-                                            Text {
+                                            Item {
                                                 Layout.fillWidth: true
                                                 Layout.fillHeight: true
-                                                text: currentCondition.temp
-                                                font.bold: true
-                                                font.pixelSize: Math.min(width, height) * 0.7
-                                                horizontalAlignment: Text.AlignHCenter
-                                                font.family: FontProvider.fontSometypeMono
-                                                wrapMode: Text.Wrap
+                                                Text {
+                                                    anchors.margins: 10
+                                                    anchors.fill: parent
+                                                    text: currentCondition.temp
+                                                    font.bold: true
+                                                    font.pixelSize: Math.min(width, height) * 0.5
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    font.family: FontProvider.fontSometypeMono
+                                                    wrapMode: Text.Wrap
+                                                }
                                             }
                                         }
                                     }
@@ -134,25 +142,33 @@ ShellRoot {
                                         ColumnLayout {
                                             anchors.fill: parent
                                             anchors.margins: 2
-                                            Text {
+                                            Item {
                                                 Layout.fillWidth: true
                                                 Layout.fillHeight: true
-                                                text: currentCondition.weatherDesc
-                                                font.bold: true
-                                                font.pixelSize: Math.min(width, height) * 0.7
-                                                horizontalAlignment: Text.AlignHCenter
-                                                font.family: FontProvider.fontSometypeMono
-                                                wrapMode: Text.Wrap
+                                                Text {
+                                                    anchors.fill: parent
+                                                    anchors.margins: 10
+                                                    font.pixelSize: Math.min(width, height) * 0.5
+                                                    font.bold: true
+                                                    text: currentCondition.weatherDesc
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    font.family: FontProvider.fontSometypeMono
+                                                    wrapMode: Text.Wrap
+                                                }
                                             }
-                                            Text {
+                                            Item {
                                                 Layout.fillWidth: true
                                                 Layout.fillHeight: true
-                                                font.pixelSize: Math.min(width, height) * 0.7
-                                                text: currentCondition.temp
-                                                font.bold: true
-                                                horizontalAlignment: Text.AlignHCenter
-                                                font.family: FontProvider.fontSometypeMono
-                                                wrapMode: Text.Wrap
+                                                Text {
+                                                    anchors.margins: 10
+                                                    anchors.fill: parent
+                                                    text: currentCondition.temp
+                                                    font.bold: true
+                                                    font.pixelSize: Math.min(width, height) * 0.5
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    font.family: FontProvider.fontSometypeMono
+                                                    wrapMode: Text.Wrap
+                                                }
                                             }
                                         }
                                     }
