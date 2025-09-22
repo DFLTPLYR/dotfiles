@@ -29,6 +29,7 @@ Item {
         WallpaperStore;
         WeatherFetcher;
         FontProvider;
+        MonitorSettings;
 
         Quickshell.execDetached({
             command: ["sh", "-c", "pgrep -x mpdris2-rs > /dev/null || nohup mpdris2-rs > /dev/null 2>&1 &"]

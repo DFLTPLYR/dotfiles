@@ -25,7 +25,7 @@ AnimatedScreenOverlay {
     onClicked: toplevel.shouldBeVisible = false
 
     onHidden: () => {
-        return;
+        return toplevel.hide();
     }
 
     KeyboardEventHandler {

@@ -47,7 +47,7 @@ Scope {
             height: parent.height
 
             spacing: 10
-
+            topMargin: 10
             leftMargin: 20
             rightMargin: 20
 
