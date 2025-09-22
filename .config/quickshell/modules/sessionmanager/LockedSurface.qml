@@ -43,20 +43,8 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: 10
             radius: 8
-            layer.enabled: true
-            layer.smooth: true
 
-            gradient: Gradient {
-                GradientStop {
-                    position: 0.0
-                    color: Qt.rgba(1, 1, 1, 0.06)
-                }
-                GradientStop {
-                    position: 1.0
-                    color: Qt.rgba(1, 1, 1, 0.02)
-                }
-            }
-
+            color: Qt.rgba(0.03, 0.02, 0.02, 0.56)
             border.color: Qt.rgba(1, 1, 1, 0.08)
 
             Component {
@@ -67,16 +55,28 @@ Rectangle {
                     Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         RoundButton {
                             anchors.fill: parent
                             anchors.margins: 10
-                            font.pixelSize: width
+                            font.pixelSize: Math.min(width, height)
                             text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
                             font.family: FontProvider.fontMaterialOutlined
+
                             background: Rectangle {
                                 anchors.fill: parent
                                 color: "transparent"
                             }
+
+                            contentItem: Text {
+                                text: parent.text
+                                color: ColorPalette.color14
+                                font: parent.font
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: context.unlocked()
                         }
                     }
                     Item {
@@ -89,17 +89,19 @@ Rectangle {
                                 Layout.fillWidth: true
                                 text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                 font.bold: true
-                                horizontalAlignment: Text.AlignHCenter
+                                Layout.alignment: Qt.AlignHCenter
                                 font.family: FontProvider.fontSometypeMono
                                 wrapMode: Text.Wrap
+                                color: ColorPalette.color15
                             }
                             Text {
                                 Layout.fillWidth: true
                                 text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                 font.bold: true
-                                horizontalAlignment: Text.AlignHCenter
+                                Layout.alignment: Qt.AlignHCenter
                                 font.family: FontProvider.fontSometypeMono
                                 wrapMode: Text.Wrap
+                                color: ColorPalette.color15
                             }
                         }
                     }
@@ -118,13 +120,24 @@ Rectangle {
                         RoundButton {
                             anchors.fill: parent
                             anchors.margins: 10
-                            font.pixelSize: height
+                            font.pixelSize: Math.min(width, height)
                             text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
                             font.family: FontProvider.fontMaterialOutlined
+
                             background: Rectangle {
                                 anchors.fill: parent
                                 color: "transparent"
                             }
+
+                            contentItem: Text {
+                                text: parent.text
+                                color: ColorPalette.color14
+                                font: parent.font
+                                Layout.alignment: Qt.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            onClicked: context.unlocked()
                         }
                     }
                     Item {
@@ -135,19 +148,26 @@ Rectangle {
                             anchors.margins: 2
                             Text {
                                 Layout.fillWidth: true
+                                Layout.fillHeight: true
                                 text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                 font.bold: true
-                                horizontalAlignment: Text.AlignHCenter
+                                font.pixelSize: Math.min(width, height)
+                                Layout.alignment: Qt.AlignHCenter
                                 font.family: FontProvider.fontSometypeMono
                                 wrapMode: Text.Wrap
+                                color: ColorPalette.color15
                             }
                             Text {
                                 Layout.fillWidth: true
+                                Layout.fillHeight: true
                                 text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                 font.bold: true
-                                horizontalAlignment: Text.AlignHCenter
+                                font.pixelSize: Math.min(width, height)
+
+                                Layout.alignment: Qt.AlignHCenter
                                 font.family: FontProvider.fontSometypeMono
                                 wrapMode: Text.Wrap
+                                color: ColorPalette.color15
                             }
                         }
                     }
@@ -161,87 +181,84 @@ Rectangle {
         }
     }
 
-    Button {
-        text: "Its not working, let me out"
-        onClicked: context.unlocked()
-    }
-
-    ColumnLayout {
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            verticalCenter: parent.verticalCenter
-        }
-
-        Label {
-            id: clock
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            property var date: new Date()
-            renderType: Text.NativeRendering
-            font.pointSize: 80
-
-            // updates the clock every second
-            Timer {
-                running: true
-                repeat: true
-                interval: 1000
-
-                onTriggered: clock.date = new Date()
-            }
-
-            // updated when the date changes
-            text: {
-                const hours = this.date.getHours().toString().padStart(2, '0');
-                const minutes = this.date.getMinutes().toString().padStart(2, '0');
-                return `${hours}:${minutes}`;
-            }
-        }
-
+    Item {
+        anchors.fill: parent
         ColumnLayout {
-            TextField {
-                id: passwordBox
+            anchors.centerIn: parent
 
-                implicitWidth: 400
-                padding: 10
+            Label {
+                id: clock
+                Layout.alignment: Qt.AlignHCenter
 
-                focus: true
-                enabled: !root.context.unlockInProgress
-                echoMode: TextInput.Password
-                inputMethodHints: Qt.ImhSensitiveData
+                property var date: new Date()
+                renderType: Text.NativeRendering
+                font.pointSize: 80
 
-                // Update the text in the context when the text in the box changes.
-                onTextChanged: root.context.currentText = this.text
+                // updates the clock every second
+                Timer {
+                    running: true
+                    repeat: true
+                    interval: 1000
 
-                // Try to unlock when enter is pressed.
-                onAccepted: root.context.tryUnlock()
+                    onTriggered: clock.date = new Date()
+                }
 
-                // Update the text in the box to match the text in the context.
-                // This makes sure multiple monitors have the same text.
-                Connections {
-                    target: root.context
-
-                    function onCurrentTextChanged() {
-                        passwordBox.text = root.context.currentText;
-                    }
+                // updated when the date changes
+                text: {
+                    const hours = this.date.getHours().toString().padStart(2, '0');
+                    const minutes = this.date.getMinutes().toString().padStart(2, '0');
+                    return `${hours}:${minutes}`;
                 }
             }
 
-            Button {
-                text: "Unlock"
-                padding: 10
-                anchors.horizontalCenter: parent.horizontalCenter
-                // don't steal focus from the text box
-                focusPolicy: Qt.NoFocus
+            ColumnLayout {
+                Layout.alignment: Qt.AlignHCenter
+                TextField {
+                    id: passwordBox
 
-                enabled: !root.context.unlockInProgress && root.context.currentText !== ""
-                onClicked: root.context.tryUnlock()
+                    implicitWidth: 400
+                    padding: 10
+
+                    focus: true
+                    enabled: !root.context.unlockInProgress
+                    echoMode: TextInput.Password
+                    inputMethodHints: Qt.ImhSensitiveData
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    // Update the text in the context when the text in the box changes.
+                    onTextChanged: root.context.currentText = this.text
+
+                    // Try to unlock when enter is pressed.
+                    onAccepted: root.context.tryUnlock()
+
+                    // Update the text in the box to match the text in the context.
+                    // This makes sure multiple monitors have the same text.
+                    Connections {
+                        target: root.context
+
+                        function onCurrentTextChanged() {
+                            passwordBox.text = root.context.currentText;
+                        }
+                    }
+                }
+
+                Button {
+                    text: "Unlock"
+                    padding: 10
+                    Layout.alignment: Qt.AlignHCenter
+                    // don't steal focus from the text box
+                    focusPolicy: Qt.NoFocus
+
+                    enabled: !root.context.unlockInProgress && root.context.currentText !== ""
+                    onClicked: root.context.tryUnlock()
+                }
             }
-        }
 
-        Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: root.context.showFailure
-            text: "Incorrect password"
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                visible: root.context.showFailure
+                text: "Incorrect password"
+            }
         }
     }
 
