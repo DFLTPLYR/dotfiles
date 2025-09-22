@@ -1,11 +1,14 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
+
 import Quickshell
+import Quickshell.Io
 
 import qs
 import qs.utils
 import qs.assets
+import qs.services
 
 Item {
     id: root
@@ -82,13 +85,21 @@ Item {
                 };
             }
         }
-
         Loader {
             sourceComponent: navButtonComponent
             onLoaded: {
                 item.buttonText = "nightlight";
                 item.onClickedAction = function () {
+                    handleText.text = "nightlight";
                     root.showNightLight = !root.showNightLight;
+
+                    if (root.showNightLight) {
+                        var screenTemp = MonitorSettings.temperature;
+                        control.from = screenTemp.min;
+                        control.to = screenTemp.max;
+                        root.sliderValue = screenTemp.currentVal;
+                    }
+
                     if (root.showBrightness)
                         return root.showBrightness = false;
                 };
@@ -99,7 +110,16 @@ Item {
             onLoaded: {
                 item.buttonText = "explosion";
                 item.onClickedAction = function () {
+                    handleText.text = "explosion";
                     root.showBrightness = !root.showBrightness;
+
+                    if (root.showBrightness) {
+                        var screenGamma = MonitorSettings.gamma;
+                        control.from = screenGamma.min;
+                        control.to = screenGamma.max;
+                        root.sliderValue = screenGamma.currentVal;
+                    }
+
                     if (root.showNightLight)
                         return root.showNightLight = false;
                 };
@@ -108,13 +128,18 @@ Item {
 
         Slider {
             id: control
-            from: 1
-            to: 100
+
             opacity: root.showBrightness || root.showNightLight ? 1 : 0
             anchors.verticalCenter: parent.verticalCenter
+
             value: root.sliderValue
-            snapMode: Slider.SnapOnRelease
-            onValueChanged: root.sliderValue = value
+
+            onValueChanged: {
+                root.sliderValue = value;
+                // Quickshell.execDetached({
+                //     command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
+                // });
+            }
 
             Behavior on opacity {
                 NumberAnimation {
@@ -130,11 +155,11 @@ Item {
                 implicitHeight: 8
                 color: "transparent"
                 Text {
-                    text: root.showBrightness ? "explosion" : "nightlight"
+                    id: handleText
                     color: ColorPalette.color14
                     font.family: FontProvider.fontMaterialOutlined
                     anchors.centerIn: parent
-                    font.pixelSize: Math.min(control.height, control.width) * 0.8
+                    font.pixelSize: Math.min(control.height, control.width) * 0.5
                     Behavior on color {
                         AnimationProvider.ColorAnim {}
                     }

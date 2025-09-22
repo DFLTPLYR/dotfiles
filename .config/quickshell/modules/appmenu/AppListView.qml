@@ -15,13 +15,12 @@ GridView {
     id: grid
     anchors.fill: parent
     property string searchText: ""
-    property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
     property ListModel appList: ListModel {}
 
     clip: true
 
-    cellWidth: Math.floor(parent.width / 6)
-    cellHeight: Math.floor(parent.width / 6)
+    cellWidth: Math.floor(parent.width / 5)
+    cellHeight: Math.floor(parent.width / 5)
 
     focus: true
     keyNavigationWraps: true

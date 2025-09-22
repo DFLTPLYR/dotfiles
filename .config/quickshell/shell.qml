@@ -32,6 +32,15 @@ import qs.modules.sessionmanager
 ShellRoot {
     id: root
 
+    // Starts
+    Connections {
+        target: ColorPalette
+        function onParseDone() {
+            // http server
+            Buns;
+        }
+    }
+
     SessionManager {}
 
     Bar {}
@@ -49,11 +58,4 @@ ShellRoot {
     NotificationList {}
 
     WallpaperPicker {}
-
-    Connections {
-        target: ColorPalette
-        function onParseDone() {
-            Buns;
-        }
-    }
 }
