@@ -200,9 +200,5 @@ Item {
             }
             console.warn("Parsed");
         }
-
-        onFileChanged: {
-            colorJson.reload();
-        }
     }
 }

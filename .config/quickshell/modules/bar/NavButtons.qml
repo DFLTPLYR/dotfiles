@@ -97,7 +97,7 @@ Item {
                         var screenTemp = MonitorSettings.temperature;
                         control.from = screenTemp.min;
                         control.to = screenTemp.max;
-                        root.sliderValue = screenTemp.currentVal;
+                        control.value = screenTemp.currentVal;
                     }
 
                     if (root.showBrightness)
@@ -117,7 +117,7 @@ Item {
                         var screenGamma = MonitorSettings.gamma;
                         control.from = screenGamma.min;
                         control.to = screenGamma.max;
-                        root.sliderValue = screenGamma.currentVal;
+                        control.value = screenGamma.currentVal;
                     }
 
                     if (root.showNightLight)
@@ -131,14 +131,15 @@ Item {
 
             opacity: root.showBrightness || root.showNightLight ? 1 : 0
             anchors.verticalCenter: parent.verticalCenter
-
-            value: root.sliderValue
+            live: false
 
             onValueChanged: {
                 root.sliderValue = value;
-                // Quickshell.execDetached({
-                //     command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
-                // });
+                Quickshell.execDetached({
+                    command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
+                });
+                MonitorSettings.commandProc.command = ["sh", "-c", "hyprctl hyprsunset gamma && hyprctl hyprsunset temperature"];
+                MonitorSettings.commandProc.running = true;
             }
 
             Behavior on opacity {
