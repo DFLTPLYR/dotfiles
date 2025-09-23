@@ -41,17 +41,17 @@ Singleton {
                 const lines = out.split('\n');
                 var monitorSettings = {
                     gamma: {
-                        currentVal: lines[0],
+                        currentVal: parseInt(lines[0]),
                         min: 30,
                         max: 150
                     },
                     temperature: {
-                        currentVal: lines[1],
+                        currentVal: parseInt(lines[1]),
                         min: 1000,
                         max: 20000
                     }
                 };
-
+                console.log('done');
                 root.gamma = monitorSettings.gamma;
                 root.temperature = monitorSettings.temperature;
                 monitorJson.setText(JSON.stringify(monitorSettings));
