@@ -10,261 +10,48 @@ import qs.assets
 
 import Qt5Compat.GraphicalEffects
 
-ShellRoot {
+// FloatingWindow {
+//     maximumSize: Qt.size(400, 600)
+//     minimumSize: Qt.size(200, 300)
+//     color: 'transparent'
+//     ColumnLayout {
+//         anchors.fill: parent
+//         Button {
+//             Layout.fillWidth: true
+//             onClicked: Greetd.createSession("dfltplyr")
+//         }
+//         Button {
+//             Layout.fillWidth: true
+//             onClicked: Greetd.cancelSession()
+//         }
+//         Button {
+//             Layout.fillWidth: true
+//             onClicked: Greetd.respond("0711")
+//         }
+//         Button {
+//             Layout.fillWidth: true
+//             onClicked: {
+//                 console.log(GreetdState.toString(Greetd.state));
+//             }
+//         }
+//     }
 
-    Variants {
-        model: Quickshell.screens
-        PanelWindow {
-            Material.theme: Material.Dark
-            Material.accent: Material.Purple
-            property var modelData
-            screen: modelData
-            color: 'transparent'
-            FloatingWindow {
-                maximumSize: Qt.size(modelData.width / 2, modelData.height / 2)
-                minimumSize: Qt.size(modelData.width / 2, modelData.height / 2)
-                color: "transparent"
+//     Connections {
+//         target: Greetd
+//         function onAuthMessage(message, error, responseRequired, echoResponse) {
+//             console.log(message, error, responseRequired, echoResponse);
+//         }
+//         function onReadyToLaunch() {
+//             console.log("SYBAU");
+//         }
+//     }
 
-                Rectangle {
-                    id: root
-                    readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
-                    anchors.fill: parent
-                    color: colors.window
-                    property bool isPortrait: height > width
-
-                    Item {
-                        width: Math.max(200, root.width / 6)
-                        height: root.height / 4
-
-                        Rectangle {
-                            anchors.fill: parent
-                            anchors.margins: 10
-                            radius: 8
-                            layer.enabled: true
-                            layer.smooth: true
-
-                            gradient: Gradient {
-                                GradientStop {
-                                    position: 0.0
-                                    color: Qt.rgba(1, 1, 1, 0.06)
-                                }
-                                GradientStop {
-                                    position: 1.0
-                                    color: Qt.rgba(1, 1, 1, 0.02)
-                                }
-                            }
-
-                            border.color: Qt.rgba(1, 1, 1, 0.08)
-
-                            Component {
-                                id: landscape
-                                RowLayout {
-                                    anchors.fill: parent
-
-                                    Item {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        RoundButton {
-                                            anchors.fill: parent
-                                            anchors.margins: 10
-                                            font.pixelSize: width
-                                            text: currentCondition.icon
-                                            font.family: FontProvider.fontMaterialOutlined
-                                            background: Rectangle {
-                                                anchors.fill: parent
-                                                color: "transparent"
-                                            }
-                                        }
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        ColumnLayout {
-                                            anchors.fill: parent
-                                            anchors.margins: 2
-                                            Item {
-                                                Layout.fillWidth: true
-                                                Layout.fillHeight: true
-                                                Text {
-                                                    anchors.fill: parent
-                                                    anchors.margins: 10
-                                                    text: currentCondition.weatherDesc
-                                                    font.bold: true
-                                                    font.pixelSize: Math.min(width, height) * 0.5
-                                                    horizontalAlignment: Text.AlignHCenter
-                                                    font.family: FontProvider.fontSometypeMono
-                                                    wrapMode: Text.Wrap
-                                                }
-                                            }
-                                            Item {
-                                                Layout.fillWidth: true
-                                                Layout.fillHeight: true
-                                                Text {
-                                                    anchors.margins: 10
-                                                    anchors.fill: parent
-                                                    text: currentCondition.temp
-                                                    font.bold: true
-                                                    font.pixelSize: Math.min(width, height) * 0.5
-                                                    horizontalAlignment: Text.AlignHCenter
-                                                    font.family: FontProvider.fontSometypeMono
-                                                    wrapMode: Text.Wrap
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            Component {
-                                id: portrait
-                                ColumnLayout {
-                                    anchors.fill: parent
-
-                                    Item {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-
-                                        RoundButton {
-                                            anchors.fill: parent
-                                            anchors.margins: 10
-                                            font.pixelSize: height
-                                            text: currentCondition.icon
-                                            font.family: FontProvider.fontMaterialOutlined
-                                            background: Rectangle {
-                                                anchors.fill: parent
-                                                color: "transparent"
-                                            }
-                                        }
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        ColumnLayout {
-                                            anchors.fill: parent
-                                            anchors.margins: 2
-                                            Item {
-                                                Layout.fillWidth: true
-                                                Layout.fillHeight: true
-                                                Text {
-                                                    anchors.fill: parent
-                                                    anchors.margins: 10
-                                                    font.pixelSize: Math.min(width, height) * 0.5
-                                                    font.bold: true
-                                                    text: currentCondition.weatherDesc
-                                                    horizontalAlignment: Text.AlignHCenter
-                                                    font.family: FontProvider.fontSometypeMono
-                                                    wrapMode: Text.Wrap
-                                                }
-                                            }
-                                            Item {
-                                                Layout.fillWidth: true
-                                                Layout.fillHeight: true
-                                                Text {
-                                                    anchors.margins: 10
-                                                    anchors.fill: parent
-                                                    text: currentCondition.temp
-                                                    font.bold: true
-                                                    font.pixelSize: Math.min(width, height) * 0.5
-                                                    horizontalAlignment: Text.AlignHCenter
-                                                    font.family: FontProvider.fontSometypeMono
-                                                    wrapMode: Text.Wrap
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            Loader {
-                                anchors.fill: parent
-                                sourceComponent: root.isPortrait ? portrait : landscape
-                            }
-                        }
-                    }
-
-                    ColumnLayout {
-                        anchors {
-                            horizontalCenter: parent.horizontalCenter
-                            verticalCenter: parent.verticalCenter
-                        }
-
-                        Label {
-                            id: clock
-                            anchors.horizontalCenter: parent.horizontalCenter
-
-                            property var date: new Date()
-                            renderType: Text.NativeRendering
-                            font.pointSize: 80
-
-                            // updates the clock every second
-                            Timer {
-                                running: true
-                                repeat: true
-                                interval: 1000
-
-                                onTriggered: clock.date = new Date()
-                            }
-
-                            // updated when the date changes
-                            text: {
-                                const hours = this.date.getHours().toString().padStart(2, '0');
-                                const minutes = this.date.getMinutes().toString().padStart(2, '0');
-                                return `${hours}:${minutes}`;
-                            }
-                        }
-
-                        ColumnLayout {
-                            TextField {
-                                id: passwordBox
-
-                                implicitWidth: 400
-                                padding: 10
-
-                                focus: true
-                                echoMode: TextInput.Password
-                                inputMethodHints: Qt.ImhSensitiveData
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                // Update the text in the context when the text in the box changes.
-                                onTextChanged: {}
-
-                                // Try to unlock when enter is pressed.
-                                onAccepted: {}
-                            }
-
-                            Button {
-
-                                anchors.horizontalCenter: parent.horizontalCenter
-
-                                text: "Unlock"
-                                focusPolicy: Qt.NoFocus
-                            }
-                        }
-
-                        Label {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            visible: true
-                            text: "Incorrect password"
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    property var currentCondition
-
-    Component.onCompleted: {
-        console.log(Greetd.user);
-        currentCondition = {
-            weatherDesc: "Partly Cloudy",
-            feelslike: "Feels like 22°C",
-            temp: "69°C",
-            icon: "\uf172",
-            visibility: 10,
-            pressure: 1013,
-            humidity: 65,
-            windSpeed: 15
-        };
-    }
-}
+//     Component.onCompleted: {
+//         var obj = Greetd;
+//         obj.cancelSession();
+//         console.log(GreetdState.toString(obj.state));
+//         console.log(obj.user);
+//         console.log(obj.available);
+//     }
+// }
+ShellRoot {}

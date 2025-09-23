@@ -93,7 +93,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     Layout.alignment: Qt.AlignHCenter
@@ -108,7 +108,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     Layout.alignment: Qt.AlignHCenter
@@ -175,7 +175,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     Layout.alignment: Qt.AlignHCenter
                                     text: "\ue86a"
@@ -190,7 +190,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     Layout.alignment: Qt.AlignHCenter
                                     text: "\ue86a"
@@ -248,7 +248,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     Layout.alignment: Qt.AlignHCenter
@@ -263,7 +263,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     Layout.alignment: Qt.AlignHCenter
@@ -329,7 +329,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     Layout.alignment: Qt.AlignHCenter
@@ -344,7 +344,7 @@ Rectangle {
                                 Text {
                                     anchors.fill: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.5
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     Layout.alignment: Qt.AlignHCenter
