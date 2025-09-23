@@ -22,6 +22,10 @@ Item {
     property bool showBrightness: false
     property bool showNightLight: false
     property int sliderValue: 0
+
+    property bool ignoreValueChange: false
+    property int lastNightLightValue: 50
+    property int lastBrightnessValue: 50
     Component {
         id: navButtonComponent
         Item {
@@ -97,14 +101,19 @@ Item {
                         var screenTemp = MonitorSettings.temperature;
                         control.from = screenTemp.min;
                         control.to = screenTemp.max;
-                        control.value = screenTemp.currentVal;
+                        root.ignoreValueChange = true;
+                        control.value = root.lastNightLightValue;
+                        Qt.callLater(() => {
+                            root.ignoreValueChange = false;
+                        });
                     }
 
                     if (root.showBrightness)
-                        return root.showBrightness = false;
+                        root.showBrightness = false;
                 };
             }
         }
+
         Loader {
             sourceComponent: navButtonComponent
             onLoaded: {
@@ -117,11 +126,15 @@ Item {
                         var screenGamma = MonitorSettings.gamma;
                         control.from = screenGamma.min;
                         control.to = screenGamma.max;
-                        control.value = screenGamma.currentVal;
+                        root.ignoreValueChange = true;
+                        control.value = root.lastBrightnessValue;
+                        Qt.callLater(() => {
+                            root.ignoreValueChange = false;
+                        });
                     }
 
                     if (root.showNightLight)
-                        return root.showNightLight = false;
+                        root.showNightLight = false;
                 };
             }
         }
@@ -130,16 +143,30 @@ Item {
             id: control
 
             opacity: root.showBrightness || root.showNightLight ? 1 : 0
+            enabled: root.showBrightness || root.showNightLight
             anchors.verticalCenter: parent.verticalCenter
             live: false
 
             onValueChanged: {
-                root.sliderValue = value;
-                Quickshell.execDetached({
-                    command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
-                });
-                MonitorSettings.commandProc.command = ["sh", "-c", "hyprctl hyprsunset gamma && hyprctl hyprsunset temperature"];
-                MonitorSettings.commandProc.running = true;
+                console.log("onValueChanged called - value:", control.value, "ignoreValueChange:", root.ignoreValueChange, "showBrightness:", root.showBrightness, "showNightLight:", root.showNightLight);
+                if (root.ignoreValueChange)
+                    return;
+                root.sliderValue = control.value;
+                if (root.showNightLight) {
+                    root.lastNightLightValue = control.value;
+                } else if (root.showBrightness) {
+                    root.lastBrightnessValue = control.value;
+                }
+
+                if ((root.showBrightness || root.showNightLight) && !root.ignoreValueChange) {
+                    console.log("Executing detached command for", root.showBrightness ? "brightness" : "nightlight", "with value", root.sliderValue);
+                    Quickshell.execDetached({
+                        command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
+                    });
+
+                    MonitorSettings.commandProc.command = ["sh", "-c", "hyprctl hyprsunset gamma && hyprctl hyprsunset temperature"];
+                    MonitorSettings.commandProc.running = true;
+                }
             }
 
             Behavior on opacity {
