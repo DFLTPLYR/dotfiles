@@ -198,6 +198,7 @@ Item {
             } catch (e) {
                 console.warn("Failed to parse colors.json:", e);
             }
+            console.warn("Parsed");
         }
 
         onFileChanged: {
