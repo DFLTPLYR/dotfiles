@@ -58,8 +58,7 @@ Rectangle {
                         Layout.fillHeight: true
 
                         RoundButton {
-                            anchors.fill: parent
-                            anchors.margins: 10
+                            anchors.centerIn: parent
                             font.pixelSize: Math.min(width, height)
                             text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
                             font.family: FontProvider.fontMaterialOutlined
@@ -92,8 +91,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     font.family: FontProvider.fontSometypeMono
@@ -106,8 +104,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     font.family: FontProvider.fontSometypeMono
@@ -130,8 +127,7 @@ Rectangle {
                         Layout.fillHeight: true
 
                         RoundButton {
-                            anchors.fill: parent
-                            anchors.margins: 10
+                            anchors.centerIn: parent
                             font.pixelSize: Math.min(width, height)
                             text: "\ue86a"
                             font.family: FontProvider.fontMaterialRounded
@@ -172,8 +168,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: "\ue86a"
                                     font.family: FontProvider.fontMaterialRounded
@@ -186,8 +181,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: "\ue86a"
                                     font.family: FontProvider.fontMaterialRounded
@@ -210,8 +204,7 @@ Rectangle {
                         Layout.fillHeight: true
 
                         RoundButton {
-                            anchors.fill: parent
-                            anchors.margins: 10
+                            anchors.centerIn: parent
                             font.pixelSize: Math.min(width, height)
                             text: root.isLoading ? "" : WeatherFetcher.currentCondition?.icon
                             font.family: FontProvider.fontMaterialOutlined
@@ -243,8 +236,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     font.family: FontProvider.fontSometypeMono
@@ -257,8 +249,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     font.family: FontProvider.fontSometypeMono
@@ -281,8 +272,7 @@ Rectangle {
                         Layout.fillHeight: true
 
                         RoundButton {
-                            anchors.fill: parent
-                            anchors.margins: 10
+                            anchors.centerIn: parent
                             font.pixelSize: Math.min(width, height)
                             text: "\ue86a"
                             font.family: FontProvider.fontMaterialOutlined
@@ -322,7 +312,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.7
+                                    font.pixelSize: Math.min(parent.width, parent.height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
                                     font.family: FontProvider.fontSometypeMono
@@ -335,8 +325,7 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Text {
                                     anchors.centerIn: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(width, height) * 0.7
+                                    font.pixelSize: Math.min(width, height)
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
                                     font.family: FontProvider.fontSometypeMono
