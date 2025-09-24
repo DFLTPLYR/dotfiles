@@ -91,12 +91,11 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
@@ -106,12 +105,11 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
@@ -173,11 +171,10 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
-                                    Layout.alignment: Qt.AlignHCenter
                                     text: "\ue86a"
                                     font.family: FontProvider.fontMaterialRounded
                                     wrapMode: Text.Wrap
@@ -188,11 +185,10 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
-                                    Layout.alignment: Qt.AlignHCenter
                                     text: "\ue86a"
                                     font.family: FontProvider.fontMaterialRounded
                                     wrapMode: Text.Wrap
@@ -246,12 +242,11 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
@@ -261,12 +256,11 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
@@ -327,12 +321,10 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
-                                    anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    anchors.centerIn: parent
+                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.weatherDesc
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
@@ -342,12 +334,11 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Text {
-                                    anchors.fill: parent
+                                    anchors.centerIn: parent
                                     anchors.margins: 10
-                                    font.pixelSize: Math.min(parent.width, parent.height) * 0.5
+                                    font.pixelSize: Math.min(width, height) * 0.7
                                     font.bold: true
                                     text: root.isLoading ? "" : WeatherFetcher.currentCondition?.temp
-                                    Layout.alignment: Qt.AlignHCenter
                                     font.family: FontProvider.fontSometypeMono
                                     wrapMode: Text.Wrap
                                     color: ColorPalette.color15
