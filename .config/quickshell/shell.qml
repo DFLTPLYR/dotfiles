@@ -37,7 +37,7 @@ ShellRoot {
         target: ColorPalette
         function onParseDone() {
             // http server
-            Buns;
+            Buns.startup();
         }
     }
 
