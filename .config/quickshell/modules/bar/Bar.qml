@@ -19,7 +19,7 @@ Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: screenRoot
-        required property var modelData
+        required property ShellScreen modelData
         property bool isExtendedBarOpen: false
         screen: modelData
         color: "transparent"

@@ -54,4 +54,26 @@ import Qt5Compat.GraphicalEffects
 //         console.log(obj.available);
 //     }
 // }
-ShellRoot {}
+ShellRoot {
+    Variants {
+        model: Quickshell.screens
+        delegate: PanelWindow {
+            required property ShellScreen modelData
+            screen: modelData
+            anchors {
+                left: true
+                bottom: true
+                right: true
+                top: true
+            }
+            color: 'transparent'
+            exclusiveZone: ExclusionMode.Ignore
+            aboveWindows: false
+
+            Rectangle {
+                anchors.fill: parent
+                color: 'transparent'
+            }
+        }
+    }
+}
