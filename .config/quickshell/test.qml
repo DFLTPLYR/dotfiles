@@ -15,6 +15,7 @@ ShellRoot {
     Variants {
         model: Quickshell.screens
         delegate: PanelWindow {
+            id: root
             required property ShellScreen modelData
             screen: modelData
             property bool isPortrait: screen.height > screen.width
@@ -30,6 +31,7 @@ ShellRoot {
             exclusiveZone: ExclusionMode.Ignore
             aboveWindows: false
 
+            // Window panel per screen
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
@@ -40,23 +42,42 @@ ShellRoot {
                 visible: false
             }
 
+            // back shadow of the login ui
             RectangularShadow {
-                anchors.fill: myRectangle
+                anchors.fill: uiLogin
                 offset.x: -10
                 offset.y: -5
-                radius: myRectangle.radius
+                radius: uiLogin.radius
                 blur: 30
                 spread: 10
-                color: Qt.darker(myRectangle.color, 1.6)
+                color: Qt.darker(uiLogin.color, 0.4)
             }
+
+            // log in ui
             Rectangle {
-                id: myRectangle
+                id: uiLogin
                 anchors.centerIn: parent
-                width: isPortrait ? screen.width / 4 : screen.width / 2
-                height: isPortrait ? screen.height / 2 : screen.height / 2
+                width: isPortrait ? screen.width / 1.5 : screen.width / 2
+                height: isPortrait ? screen.height / 2.5 : screen.height / 2
                 radius: 14
+                layer.enabled: true
                 color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
                 border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
+            }
+
+            // widget
+            Item {
+                width: 300
+                height: Math.min(200, root.isPortrait ? root.height / 4 : root.height / 2)
+
+                // Background
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    radius: 10
+                    color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
+                    border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
+                }
             }
         }
     }
