@@ -41,21 +41,29 @@ ShellRoot {
         }
     }
 
-    // SessionManager {}
+    SessionManager {}
 
+    // NavBar
     Bar {}
 
+    // Shortcuts
+    // needs to be remove
     Shortcuts {}
 
+    // Volume overlay
     VolumeOsd {}
 
+    // Logout
     SessionMenu {}
 
+    // right sidebar
     Sidebar {}
 
+    // App menu
     AppMenu {}
 
-    NotificationList {}
+    // Notification Overlay
+    NotificationOsd {}
 
     WallpaperPicker {}
 }
