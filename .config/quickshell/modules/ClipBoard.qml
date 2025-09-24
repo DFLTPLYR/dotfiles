@@ -274,7 +274,7 @@ AnimatedScreenOverlay {
 
                                 Component.onCompleted: {
                                     var data = modelData.text;
-                                    if (data.startsWith("[[ binary data")) {
+                                    if (modelData.isImage) {
                                         clipboardText.text = "IMAGE";
                                         clipboardText.color = ColorPalette.color15;
                                         clipboardText.visible = true;
@@ -326,12 +326,6 @@ AnimatedScreenOverlay {
                         property: "opacity"
                         from: 0
                         to: 1
-                        duration: 250
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        from: 200
-                        to: 0
                         duration: 250
                     }
                 }
@@ -494,7 +488,8 @@ AnimatedScreenOverlay {
 
                     clipboardArray.push({
                         id: id,
-                        text: raw
+                        text: raw,
+                        isImage
                     });
                 }
                 clipboardHistory = clipboardArray;
