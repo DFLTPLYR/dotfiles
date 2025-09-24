@@ -30,9 +30,9 @@ GridView {
     snapMode: GridView.NoSnap
 
     function updateDesktopApplicationsList(searchText) {
-        appList.clear();
+        grid.appList.clear();
         const DesktopApplications = DesktopEntries.applications.values.filter(a => !a.noDisplay).filter(a => !(a.categories || []).includes("X-LSP-Plugins")).sort((a, b) => a.name.localeCompare(b.name));
-
+        console.log(DesktopApplications);
         let filteredApps = DesktopApplications;
         if (searchText && searchText.trim() !== "") {
             const search = searchText.toLowerCase();
@@ -49,7 +49,7 @@ GridView {
         }
     }
 
-    onSearchTextChanged: updateDesktopApplicationsList(searchText)
+    onSearchTextChanged: updateDesktopApplicationsList(grid.searchText)
 
     onCountChanged: {
         grid.currentIndex = 0;
@@ -181,5 +181,7 @@ GridView {
         }
     }
 
-    Component.onCompleted: updateDesktopApplicationsList(searchText)
+    Component.onCompleted: {
+        grid.updateDesktopApplicationsList("");
+    }
 }

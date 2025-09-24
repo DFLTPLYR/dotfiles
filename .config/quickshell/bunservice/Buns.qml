@@ -36,7 +36,7 @@ Item {
         });
     }
 
-    Component.onCompleted: {
+    function startup() {
         tryHttpRequest(function (status) {
             if (status === 200) {
                 console.log('Already Cooked Buns 😀');
