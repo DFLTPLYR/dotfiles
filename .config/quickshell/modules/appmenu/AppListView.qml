@@ -31,8 +31,9 @@ GridView {
 
     function updateDesktopApplicationsList(searchText) {
         grid.appList.clear();
+
         const DesktopApplications = DesktopEntries.applications.values.filter(a => !a.noDisplay).filter(a => !(a.categories || []).includes("X-LSP-Plugins")).sort((a, b) => a.name.localeCompare(b.name));
-        console.log(DesktopApplications);
+
         let filteredApps = DesktopApplications;
         if (searchText && searchText.trim() !== "") {
             const search = searchText.toLowerCase();

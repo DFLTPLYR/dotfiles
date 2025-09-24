@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell.Io
 
 Item {
+    id: root
     signal parseDone
 
     property var colors: {}
@@ -194,7 +195,7 @@ Item {
                 if (colors.color15)
                     color15 = colors.color15;
 
-                parseDone();
+                root.parseDone();
             } catch (e) {
                 console.warn("Failed to parse colors.json:", e);
             }
