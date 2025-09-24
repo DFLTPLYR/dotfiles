@@ -14,6 +14,7 @@ import qs
 GridView {
     id: grid
     anchors.fill: parent
+    property int columns: cellWidth > 0 ? Math.max(1, Math.floor(width / cellWidth)) : 1
     property string searchText: ""
     property ListModel appList: ListModel {}
 
