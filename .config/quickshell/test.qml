@@ -72,23 +72,114 @@ ShellRoot {
             Rectangle {
                 id: uiLogin
                 anchors.centerIn: parent
-                width: isPortrait ? screen.width / 2 : screen.width / 2
-                height: isPortrait ? screen.height / 2.5 : screen.height / 2
+                width: isPortrait ? screen.width / 2 : screen.width / 2.5
+                height: screen.height / 2.5
                 radius: 14
                 layer.enabled: true
                 color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
                 border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
-
                 // Items
 
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 10
 
+                    Label {
+                        id: clock
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: uiLogin.height / 6
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        property var date: new Date()
+
+                        renderType: Text.NativeRendering
+                        font.pointSize: Math.round(Math.min(width, height))
+                        font.pixelSize: Math.round(height)
+                        font.weight: Font.Black
+                        font.family: FontProvider.fontSometypeMono
+                        font.bold: true
+                        color: ColorPalette.text
+                        // updates the clock every second
+                        Timer {
+                            running: true
+                            repeat: true
+                            interval: 1000
+
+                            onTriggered: clock.date = new Date()
+                        }
+
+                        // updated when the date changes
+                        text: {
+                            const hours = this.date.getHours().toString().padStart(2, '0');
+                            const minutes = this.date.getMinutes().toString().padStart(2, '0');
+                            return `${hours}:${minutes}`;
+                        }
+                    }
+
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter
+                        TextField {
+                            id: passwordBox
+
+                            implicitWidth: uiLogin.width * 0.75
+                            padding: 10
+
+                            focus: true
+                            enabled: true
+                            echoMode: TextInput.Password
+                            inputMethodHints: Qt.ImhSensitiveData
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            Material.accent: ColorPalette.primary
+                            // Update the text in the context when the text in the box changes.
+                            onTextChanged: root.context.currentText = this.text
+
+                            // Try to unlock when enter is pressed.
+                            onAccepted: {
+                                return;
+                            }
+                        }
+
+                        Button {
+                            text: "Unlock"
+                            padding: 10
+                            Layout.alignment: Qt.AlignHCenter
+                            focusPolicy: Qt.NoFocus
+                            enabled: !root.context.unlockInProgress && root.context.currentText !== ""
+
+                            Material.background: ColorPalette.color12
+                            Material.foreground: ColorPalette.text
+                            Material.roundedScale: Material.ExtraSmallScale
+                            onClicked: {
+                                return;
+                            }
+                        }
+                    }
+
+                    Label {
+                        id: errorLabel
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: uiLogin.height / 8
+                        Layout.alignment: Qt.AlignHCenter
+                        visible: true
+
+                        renderType: Text.NativeRendering
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+
+                        wrapMode: Text.Wrap
+
+                        font.pointSize: Math.round(Math.min(width, height))
+                        font.pixelSize: Math.round(height * 0.5)
+                        font.weight: Font.Black
+                        font.family: FontProvider.fontSometypeMono
+                        font.bold: true
+                        color: ColorPalette.color15
                     }
                 }
             }

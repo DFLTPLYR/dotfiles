@@ -207,6 +207,8 @@ Rectangle {
 
             Label {
                 id: clock
+                property var date: new Date()
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: uiLogin.height / 6
                 Layout.alignment: Qt.AlignHCenter
@@ -214,10 +216,15 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
 
-                property var date: new Date()
+                color: ColorPalette.text
 
                 renderType: Text.NativeRendering
-                font.pointSize: 24
+
+                font.pointSize: Math.round(Math.min(width, height))
+                font.pixelSize: Math.round(height)
+                font.weight: Font.Black
+                font.family: FontProvider.fontSometypeMono
+                font.bold: true
 
                 // updates the clock every second
                 Timer {
@@ -243,7 +250,9 @@ Rectangle {
                 TextField {
                     id: passwordBox
 
-                    implicitWidth: 400
+                    Material.accent: ColorPalette.primary
+
+                    implicitWidth: uiLogin.width * 0.75
                     padding: 10
 
                     focus: true
@@ -252,6 +261,7 @@ Rectangle {
                     inputMethodHints: Qt.ImhSensitiveData
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+
                     // Update the text in the context when the text in the box changes.
                     onTextChanged: root.context.currentText = this.text
 
@@ -277,20 +287,34 @@ Rectangle {
                     focusPolicy: Qt.NoFocus
 
                     enabled: !root.context.unlockInProgress && root.context.currentText !== ""
+
+                    Material.background: ColorPalette.color12
+                    Material.foreground: ColorPalette.text
+                    Material.roundedScale: Material.ExtraSmallScale
+
                     onClicked: root.context.tryUnlock()
                 }
             }
 
             Label {
                 id: errorLabel
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: uiLogin.height / 8
                 Layout.alignment: Qt.AlignHCenter
+
                 visible: true
-                font.pointSize: 12
+
                 renderType: Text.NativeRendering
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+
+                font.pointSize: Math.round(Math.min(width, height))
+                font.pixelSize: Math.round(height * 0.5)
+                font.weight: Font.Black
+                font.family: FontProvider.fontSometypeMono
+                font.bold: true
+                color: ColorPalette.color15
             }
         }
     }
