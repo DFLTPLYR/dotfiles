@@ -15,3 +15,6 @@ Personal dotfiles for managing user-level config files and executable scripts us
         ├── select-wallpaper.zsh
         └── ...
 ```
+
+
+just stow my location sir
