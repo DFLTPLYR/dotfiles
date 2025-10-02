@@ -231,13 +231,14 @@ Scope {
                                                 color: ColorPalette.color14
                                                 font.family: FontProvider.fontMaterialRounded
                                                 text: WeatherFetcher.currentCondition?.temp
+                                                wrapMode: Text.WordWrap
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
                                                 width: parent.width
                                                 font.bold: true
                                                 font.pixelSize: {
-                                                    var minSize = 10;
-                                                    return Math.max(minSize, Math.min(height, width) * 0.6);
+                                                    var minSize = 8;
+                                                    return Math.max(minSize, Math.min(height, width));
                                                 }
                                             }
                                         }
