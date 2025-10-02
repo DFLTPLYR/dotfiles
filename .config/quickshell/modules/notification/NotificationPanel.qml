@@ -17,6 +17,7 @@ Rectangle {
     clip: true
 
     ListView {
+        id: notificationListView
         anchors.fill: parent
         anchors.margins: 10
         model: NotificationService.appNameList
@@ -62,5 +63,16 @@ Rectangle {
                 duration: 250
             }
         }
+    }
+
+    Text {
+        anchors.centerIn: parent
+        text: "No notifications"
+        color: "white"
+        font.pixelSize: Math.round(Math.min(width, height))
+        font.bold: true
+        font.family: FontProvider.fontSometypeMono
+        font.weight: Font.Black
+        visible: notificationListView.count == 0
     }
 }

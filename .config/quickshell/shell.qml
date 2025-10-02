@@ -41,14 +41,10 @@ ShellRoot {
         }
     }
 
-    // SessionManager {}
+    SessionManager {}
 
     // NavBar
     Bar {}
-
-    // Shortcuts
-    // needs to be remove
-    Shortcuts {}
 
     // Volume overlay
     VolumeOsd {}
