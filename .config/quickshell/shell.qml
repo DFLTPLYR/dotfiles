@@ -41,7 +41,7 @@ ShellRoot {
         }
     }
 
-    SessionManager {}
+    // SessionManager {}
 
     // NavBar
     Bar {}
