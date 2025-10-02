@@ -81,6 +81,7 @@ Rectangle {
         hoverEnabled: true
         onClicked: {
             var resolvedIndex = -1;
+
             if (typeof index !== "undefined") {
                 resolvedIndex = index;
             } else if (flick && flick.model && flick.model.values) {
@@ -90,6 +91,15 @@ Rectangle {
                         resolvedIndex = i;
                         break;
                     }
+                }
+            }
+            if (flick.currentIndex === resolvedIndex) {
+                const currentItem = flick.currentItem;
+                if (currentItem) {
+                    const screenName = screen.name;
+                    const path = currentItem.modelData?.path;
+                    WallpaperStore.setWallpaper(screenName, path);
+                    root.toggle();
                 }
             }
             if (resolvedIndex >= 0) {
