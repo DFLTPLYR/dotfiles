@@ -69,165 +69,165 @@ ShellRoot {
             }
 
             // log in ui
-            Rectangle {
-                id: uiLogin
-                anchors.centerIn: parent
-                width: isPortrait ? screen.width / 2 : screen.width / 2.5
-                height: screen.height / 2.5
-                radius: 14
-                layer.enabled: true
-                color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
-                border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
-                // Items
+            // Rectangle {
+            //     id: uiLogin
+            //     anchors.centerIn: parent
+            //     width: isPortrait ? screen.width / 2 : screen.width / 2.5
+            //     height: screen.height / 2.5
+            //     radius: 14
+            //     layer.enabled: true
+            //     color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
+            //     border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
+            //     // Items
 
-                // ColumnLayout {
-                //     anchors.fill: parent
-                //     anchors.margins: 10
+            //     state: "Show"
 
-                //     Label {
-                //         id: clock
-                //         Layout.fillWidth: true
-                //         Layout.preferredHeight: uiLogin.height / 6
-                //         Layout.alignment: Qt.AlignHCenter
+            //     states: [
+            //         State {
+            //             name: "Show"
+            //             PropertyChanges {
+            //                 target: uiLogin
+            //                 border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
+            //             }
+            //         },
+            //         State {
+            //             name: "hide"
+            //             PropertyChanges {
+            //                 target: uiLogin
+            //                 border.color: Qt.rgba(0.06, 0.06, 0.43, 0.66)
+            //             }
+            //         }
+            //     ]
 
-                //         horizontalAlignment: Text.AlignHCenter
-                //         verticalAlignment: Text.AlignVCenter
+            //     transitions: [
+            //         Transition {
+            //             from: "Show"
+            //             to: "hide"
+            //             ColorAnimation {
+            //                 property: "border.color"
+            //                 duration: 300
+            //             }
+            //         },
+            //         Transition {
+            //             from: "hide"
+            //             to: "Show"
+            //             ColorAnimation {
+            //                 property: "border.color"
+            //                 duration: 300
+            //             }
+            //         }
+            //     ]
 
-                //         property var date: new Date()
+            //     ColumnLayout {
+            //         anchors.fill: parent
+            //         anchors.margins: 10
 
-                //         renderType: Text.NativeRendering
-                //         font.pointSize: Math.round(Math.min(width, height))
-                //         font.pixelSize: Math.round(height)
-                //         font.weight: Font.Black
-                //         font.family: FontProvider.fontSometypeMono
-                //         font.bold: true
-                //         color: ColorPalette.text
-                //         // updates the clock every second
-                //         Timer {
-                //             running: true
-                //             repeat: true
-                //             interval: 1000
+            //         Label {
+            //             id: clock
+            //             Layout.fillWidth: true
+            //             Layout.preferredHeight: uiLogin.height / 6
+            //             Layout.alignment: Qt.AlignHCenter
 
-                //             onTriggered: clock.date = new Date()
-                //         }
+            //             horizontalAlignment: Text.AlignHCenter
+            //             verticalAlignment: Text.AlignVCenter
 
-                //         // updated when the date changes
-                //         text: {
-                //             const hours = this.date.getHours().toString().padStart(2, '0');
-                //             const minutes = this.date.getMinutes().toString().padStart(2, '0');
-                //             return `${hours}:${minutes}`;
-                //         }
-                //     }
+            //             property var date: new Date()
 
-                //     ColumnLayout {
-                //         Layout.fillWidth: true
-                //         Layout.fillHeight: true
-                //         Layout.alignment: Qt.AlignHCenter
-                //         TextField {
-                //             id: passwordBox
+            //             renderType: Text.NativeRendering
+            //             font.pointSize: Math.round(Math.min(width, height))
+            //             font.pixelSize: Math.round(height)
+            //             font.weight: Font.Black
+            //             font.family: FontProvider.fontSometypeMono
+            //             font.bold: true
+            //             color: ColorPalette.text
+            //             // updates the clock every second
+            //             Timer {
+            //                 running: true
+            //                 repeat: true
+            //                 interval: 1000
 
-                //             implicitWidth: uiLogin.width * 0.75
-                //             padding: 10
+            //                 onTriggered: clock.date = new Date()
+            //             }
 
-                //             focus: true
-                //             enabled: true
-                //             echoMode: TextInput.Password
-                //             inputMethodHints: Qt.ImhSensitiveData
-                //             horizontalAlignment: Text.AlignHCenter
-                //             verticalAlignment: Text.AlignVCenter
-                //             Material.accent: ColorPalette.primary
-                //             // Update the text in the context when the text in the box changes.
-                //             onTextChanged: root.context.currentText = this.text
+            //             // updated when the date changes
+            //             text: {
+            //                 const hours = this.date.getHours().toString().padStart(2, '0');
+            //                 const minutes = this.date.getMinutes().toString().padStart(2, '0');
+            //                 return `${hours}:${minutes}`;
+            //             }
+            //         }
 
-                //             // Try to unlock when enter is pressed.
-                //             onAccepted: {
-                //                 return;
-                //             }
-                //         }
+            //         ColumnLayout {
+            //             Layout.fillWidth: true
+            //             Layout.fillHeight: true
+            //             Layout.alignment: Qt.AlignHCenter
+            //             TextField {
+            //                 id: passwordBox
 
-                //         Button {
-                //             text: "Unlock"
-                //             padding: 10
-                //             Layout.alignment: Qt.AlignHCenter
-                //             focusPolicy: Qt.NoFocus
-                //             enabled: !root.context.unlockInProgress && root.context.currentText !== ""
+            //                 implicitWidth: uiLogin.width * 0.75
+            //                 padding: 10
 
-                //             Material.background: ColorPalette.color12
-                //             Material.foreground: ColorPalette.text
-                //             Material.roundedScale: Material.ExtraSmallScale
-                //             onClicked: {
-                //                 return;
-                //             }
-                //         }
-                //     }
+            //                 focus: true
+            //                 enabled: true
+            //                 echoMode: TextInput.Password
+            //                 inputMethodHints: Qt.ImhSensitiveData
+            //                 horizontalAlignment: Text.AlignHCenter
+            //                 verticalAlignment: Text.AlignVCenter
+            //                 Material.accent: ColorPalette.primary
+            //                 // Update the text in the context when the text in the box changes.
+            //                 onTextChanged: root.context.currentText = this.text
 
-                //     Label {
-                //         id: errorLabel
-                //         Layout.fillWidth: true
-                //         Layout.preferredHeight: uiLogin.height / 8
-                //         Layout.alignment: Qt.AlignHCenter
-                //         visible: true
+            //                 // Try to unlock when enter is pressed.
+            //                 onAccepted: {
+            //                     return;
+            //                 }
+            //             }
 
-                //         renderType: Text.NativeRendering
-                //         horizontalAlignment: Text.AlignHCenter
-                //         verticalAlignment: Text.AlignVCenter
+            //             Button {
+            //                 text: "Unlock"
+            //                 padding: 10
+            //                 Layout.alignment: Qt.AlignHCenter
+            //                 focusPolicy: Qt.NoFocus
+            //                 enabled: !root.context.unlockInProgress && root.context.currentText !== ""
 
-                //         wrapMode: Text.Wrap
+            //                 Material.background: ColorPalette.color12
+            //                 Material.foreground: ColorPalette.text
+            //                 Material.roundedScale: Material.ExtraSmallScale
+            //                 onClicked: {
+            //                     if (uiLogin.state == "Show")
+            //                         uiLogin.state = "hide";
+            //                     else
+            //                         uiLogin.state = "Show";
+            //                 }
+            //             }
+            //         }
 
-                //         font.pointSize: Math.round(Math.min(width, height))
-                //         font.pixelSize: Math.round(height * 0.5)
-                //         font.weight: Font.Black
-                //         font.family: FontProvider.fontSometypeMono
-                //         font.bold: true
-                //         color: ColorPalette.color15
-                //     }
-                // }
+            //         Label {
+            //             id: errorLabel
+            //             Layout.fillWidth: true
+            //             Layout.preferredHeight: uiLogin.height / 8
+            //             Layout.alignment: Qt.AlignHCenter
+            //             visible: true
 
-                Canvas {
-                    id: ecgCanvas
-                    width: 600
-                    height: 200
-                    property var data: (function () {
-                            var arr = [];
-                            for (var i = 0; i < ecgCanvas.width; i++)
-                                arr.push(ecgCanvas.height / 2);
-                            return arr;
-                        })()
+            //             renderType: Text.NativeRendering
+            //             horizontalAlignment: Text.AlignHCenter
+            //             verticalAlignment: Text.AlignVCenter
 
-                    Timer {
-                        interval: 30
-                        running: true
-                        repeat: true
-                        onTriggered: {
-                            var arr = ecgCanvas.data.slice(); // clone array
-                            var newVal = ecgCanvas.height / 2 + Math.random() * 10 - 5;
+            //             wrapMode: Text.Wrap
 
-                            // simulate occasional ECG spikes
-                            if (Math.random() < 0.02)
-                                newVal = ecgCanvas.height / 4;
-                            if (Math.random() < 0.01)
-                                newVal = ecgCanvas.height * 0.75;
+            //             font.pointSize: Math.round(Math.min(width, height))
+            //             font.pixelSize: Math.round(height * 0.5)
+            //             font.weight: Font.Black
+            //             font.family: FontProvider.fontSometypeMono
+            //             font.bold: true
+            //             color: ColorPalette.color15
+            //         }
+            //     }
+            // }
 
-                            arr.push(newVal); // add new sample to right
-                            arr.shift(); // remove oldest sample (left)
-                            ecgCanvas.data = arr;
-                            ecgCanvas.requestPaint();
-                        }
-                    }
-
-                    onPaint: {
-                        var ctx = getContext("2d");
-                        ctx.clearRect(0, 0, width, height);
-                        ctx.beginPath();
-                        ctx.moveTo(0, data[0]);
-                        for (var i = 1; i < data.length; i++) {
-                            ctx.lineTo(i, data[i]);
-                        }
-                        ctx.strokeStyle = "lime";
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-                    }
-                }
+            FloatingWindow {
+                minimumSize: Qt.size(Math.min(350, root.screen.width / 4), Math.min(500, root.screen.height / 2))
+                maximumSize: Qt.size(Math.min(350, root.screen.width / 2), Math.min(500, root.screen.height / 2))
             }
 
             Connections {

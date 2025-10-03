@@ -1,35 +1,57 @@
 import QtQuick
 
 Item {
-    // Internal animation state
+    id: root
     property real animationProgress: 0.0
     property bool shouldBeVisible: false
     property bool internalVisible: false
 
     signal hide
 
-    // Manual animator
-    NumberAnimation on animProgress {
-        id: anim
-        duration: 300
-        easing.type: Easing.InOutQuad
-    }
+    state: shouldBeVisible ? "visible" : "hidden"
 
-    onShouldBeVisibleChanged: {
-        const target = shouldBeVisible ? 1.0 : 0.0;
-
-        if (anim.to !== target || !anim.running) {
-            anim.to = target;
-            anim.restart();
+    states: [
+        State {
+            name: "visible"
+            PropertyChanges {
+                target: root
+                animationProgress: 1.0
+                internalVisible: true
+            }
+        },
+        State {
+            name: "hidden"
+            PropertyChanges {
+                target: root
+                animationProgress: 0.0
+                internalVisible: false
+            }
         }
-    }
+    ]
 
-    onAnimProgressChanged: {
-        if (animProgress > 0 && !internalVisible) {
-            internalVisible = true;
-        } else if (!shouldBeVisible && animProgress === 0.00) {
-            internalVisible = false;
-            root.hide();
+    transitions: [
+        Transition {
+            from: "hidden"
+            to: "visible"
+            NumberAnimation {
+                property: "animationProgress"
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        },
+        Transition {
+            from: "visible"
+            to: "hidden"
+            NumberAnimation {
+                property: "animationProgress"
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+            onRunningChanged: {
+                if (!running && root.state === "hidden") {
+                    root.hide();
+                }
+            }
         }
-    }
+    ]
 }
