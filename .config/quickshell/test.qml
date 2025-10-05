@@ -68,166 +68,33 @@ ShellRoot {
                 color: Qt.darker(uiLogin.color, 0.4)
             }
 
-            // log in ui
-            // Rectangle {
-            //     id: uiLogin
-            //     anchors.centerIn: parent
-            //     width: isPortrait ? screen.width / 2 : screen.width / 2.5
-            //     height: screen.height / 2.5
-            //     radius: 14
-            //     layer.enabled: true
-            //     color: Qt.rgba(0.72, 0.72, 0.76, 0.23)
-            //     border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
-            //     // Items
-
-            //     state: "Show"
-
-            //     states: [
-            //         State {
-            //             name: "Show"
-            //             PropertyChanges {
-            //                 target: uiLogin
-            //                 border.color: Qt.rgba(0.13, 0.13, 0.14, 0.31)
-            //             }
-            //         },
-            //         State {
-            //             name: "hide"
-            //             PropertyChanges {
-            //                 target: uiLogin
-            //                 border.color: Qt.rgba(0.06, 0.06, 0.43, 0.66)
-            //             }
-            //         }
-            //     ]
-
-            //     transitions: [
-            //         Transition {
-            //             from: "Show"
-            //             to: "hide"
-            //             ColorAnimation {
-            //                 property: "border.color"
-            //                 duration: 300
-            //             }
-            //         },
-            //         Transition {
-            //             from: "hide"
-            //             to: "Show"
-            //             ColorAnimation {
-            //                 property: "border.color"
-            //                 duration: 300
-            //             }
-            //         }
-            //     ]
-
-            //     ColumnLayout {
-            //         anchors.fill: parent
-            //         anchors.margins: 10
-
-            //         Label {
-            //             id: clock
-            //             Layout.fillWidth: true
-            //             Layout.preferredHeight: uiLogin.height / 6
-            //             Layout.alignment: Qt.AlignHCenter
-
-            //             horizontalAlignment: Text.AlignHCenter
-            //             verticalAlignment: Text.AlignVCenter
-
-            //             property var date: new Date()
-
-            //             renderType: Text.NativeRendering
-            //             font.pointSize: Math.round(Math.min(width, height))
-            //             font.pixelSize: Math.round(height)
-            //             font.weight: Font.Black
-            //             font.family: FontProvider.fontSometypeMono
-            //             font.bold: true
-            //             color: ColorPalette.text
-            //             // updates the clock every second
-            //             Timer {
-            //                 running: true
-            //                 repeat: true
-            //                 interval: 1000
-
-            //                 onTriggered: clock.date = new Date()
-            //             }
-
-            //             // updated when the date changes
-            //             text: {
-            //                 const hours = this.date.getHours().toString().padStart(2, '0');
-            //                 const minutes = this.date.getMinutes().toString().padStart(2, '0');
-            //                 return `${hours}:${minutes}`;
-            //             }
-            //         }
-
-            //         ColumnLayout {
-            //             Layout.fillWidth: true
-            //             Layout.fillHeight: true
-            //             Layout.alignment: Qt.AlignHCenter
-            //             TextField {
-            //                 id: passwordBox
-
-            //                 implicitWidth: uiLogin.width * 0.75
-            //                 padding: 10
-
-            //                 focus: true
-            //                 enabled: true
-            //                 echoMode: TextInput.Password
-            //                 inputMethodHints: Qt.ImhSensitiveData
-            //                 horizontalAlignment: Text.AlignHCenter
-            //                 verticalAlignment: Text.AlignVCenter
-            //                 Material.accent: ColorPalette.primary
-            //                 // Update the text in the context when the text in the box changes.
-            //                 onTextChanged: root.context.currentText = this.text
-
-            //                 // Try to unlock when enter is pressed.
-            //                 onAccepted: {
-            //                     return;
-            //                 }
-            //             }
-
-            //             Button {
-            //                 text: "Unlock"
-            //                 padding: 10
-            //                 Layout.alignment: Qt.AlignHCenter
-            //                 focusPolicy: Qt.NoFocus
-            //                 enabled: !root.context.unlockInProgress && root.context.currentText !== ""
-
-            //                 Material.background: ColorPalette.color12
-            //                 Material.foreground: ColorPalette.text
-            //                 Material.roundedScale: Material.ExtraSmallScale
-            //                 onClicked: {
-            //                     if (uiLogin.state == "Show")
-            //                         uiLogin.state = "hide";
-            //                     else
-            //                         uiLogin.state = "Show";
-            //                 }
-            //             }
-            //         }
-
-            //         Label {
-            //             id: errorLabel
-            //             Layout.fillWidth: true
-            //             Layout.preferredHeight: uiLogin.height / 8
-            //             Layout.alignment: Qt.AlignHCenter
-            //             visible: true
-
-            //             renderType: Text.NativeRendering
-            //             horizontalAlignment: Text.AlignHCenter
-            //             verticalAlignment: Text.AlignVCenter
-
-            //             wrapMode: Text.Wrap
-
-            //             font.pointSize: Math.round(Math.min(width, height))
-            //             font.pixelSize: Math.round(height * 0.5)
-            //             font.weight: Font.Black
-            //             font.family: FontProvider.fontSometypeMono
-            //             font.bold: true
-            //             color: ColorPalette.color15
-            //         }
-            //     }
+            // FloatingWindow {
+            //     minimumSize: Qt.size(Math.min(350, root.screen.width / 4), Math.min(500, root.screen.height / 2))
+            //     maximumSize: Qt.size(Math.min(350, root.screen.width / 2), Math.min(500, root.screen.height / 2))
             // }
 
-            FloatingWindow {
-                minimumSize: Qt.size(Math.min(350, root.screen.width / 4), Math.min(500, root.screen.height / 2))
-                maximumSize: Qt.size(Math.min(350, root.screen.width / 2), Math.min(500, root.screen.height / 2))
+            Item {
+                layer.enabled: true
+                anchors {
+                    margins: 10
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+                width: parent.width
+                height: 120
+
+                Rectangle {
+                    width: parent.width - 20
+                    height: 40
+                }
+                Rectangle {
+                    x: 10
+                    y: 10
+                    width: parent.width - 20
+                    height: 40
+                    border.width: 1
+                }
             }
 
             Connections {
