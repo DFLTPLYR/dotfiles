@@ -58,7 +58,7 @@ ShellRoot {
             }
 
             // back shadow of the login ui
-            RectangularShadow {
+           RectangularShadow {
                 anchors.fill: uiLogin
                 offset.x: -10
                 offset.y: -5
@@ -68,10 +68,6 @@ ShellRoot {
                 color: Qt.darker(uiLogin.color, 0.4)
             }
 
-            // FloatingWindow {
-            //     minimumSize: Qt.size(Math.min(350, root.screen.width / 4), Math.min(500, root.screen.height / 2))
-            //     maximumSize: Qt.size(Math.min(350, root.screen.width / 2), Math.min(500, root.screen.height / 2))
-            // }
 
             Item {
                 layer.enabled: true
@@ -82,17 +78,19 @@ ShellRoot {
                     top: parent.top
                 }
                 width: parent.width
-                height: 120
+                implicitHeight: 120
 
                 Rectangle {
                     width: parent.width - 20
-                    height: 40
+                    height: 30
+                    radius: 2
                 }
                 Rectangle {
                     x: 10
                     y: 10
+                    radius: 2
                     width: parent.width - 20
-                    height: 40
+                    height: 30
                     border.width: 1
                 }
             }
