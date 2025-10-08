@@ -18,3 +18,4 @@ alias .5='cd ../../../../..'
 alias mkdir='mkdir -p'
 alias docker='podman'
 alias vc='code'
+alias docker=podman
