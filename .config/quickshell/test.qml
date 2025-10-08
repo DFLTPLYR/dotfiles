@@ -58,7 +58,7 @@ ShellRoot {
             }
 
             // back shadow of the login ui
-           RectangularShadow {
+            RectangularShadow {
                 anchors.fill: uiLogin
                 offset.x: -10
                 offset.y: -5
@@ -68,30 +68,51 @@ ShellRoot {
                 color: Qt.darker(uiLogin.color, 0.4)
             }
 
-
             Item {
                 layer.enabled: true
+
                 anchors {
-                    margins: 10
+                    topMargin: 10
+                    leftMargin: 5
+                    rightMargin: 5
+                    bottomMargin: 10
                     left: parent.left
                     right: parent.right
                     top: parent.top
                 }
+
                 width: parent.width
                 implicitHeight: 120
 
                 Rectangle {
-                    width: parent.width - 20
+                    width: parent.width - 5
                     height: 30
                     radius: 2
                 }
                 Rectangle {
-                    x: 10
-                    y: 10
+                    x: 5
+                    y: 5
                     radius: 2
-                    width: parent.width - 20
+                    width: parent.width
                     height: 30
                     border.width: 1
+
+                    ColumnLayout {
+                        anchors.fill: parent
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
                 }
             }
 
