@@ -7,59 +7,67 @@
 //@ pragma Env QT_QPA_PLATFORM=wayland
 
 import QtQuick
+import QtQuick.Shapes
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
-import QtQuick.Shapes
 import Quickshell.Wayland
-
+import qs.assets
+import qs.bunservice
+import qs.components
 // component
 import qs.modules
-import qs.services
-import qs.assets
-import qs.components
-import qs.bunservice
-
-import qs.modules.bar
-import qs.modules.sidebar
 import qs.modules.appmenu
+import qs.modules.bar
 import qs.modules.extendedbar
-import qs.modules.wallpaper
-import qs.modules.sessionmenu
 import qs.modules.notification
 import qs.modules.sessionmanager
+import qs.modules.sessionmenu
+import qs.modules.sidebar
+import qs.modules.wallpaper
+import qs.services
 
 ShellRoot {
     id: root
 
     // Starts
     Connections {
-        target: ColorPalette
         function onParseDone() {
             // http server
             Buns.startup();
         }
+
+        target: ColorPalette
     }
 
-    // SessionManager {}
+    SessionManager {
+    }
 
     // NavBar
-    Bar {}
+    Bar {
+    }
 
     // Volume overlay
-    VolumeOsd {}
+    VolumeOsd {
+    }
 
     // Logout
-    SessionMenu {}
+    SessionMenu {
+    }
 
     // right sidebar
-    Sidebar {}
+    Sidebar {
+    }
 
     // App menu
-    AppMenu {}
+    AppMenu {
+    }
 
     // Notification Overlay
-    NotificationOsd {}
+    NotificationOsd {
+    }
 
-    WallpaperPicker {}
+    WallpaperPicker {
+    }
+
 }
