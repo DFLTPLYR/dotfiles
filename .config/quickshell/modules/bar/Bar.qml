@@ -14,51 +14,34 @@ import qs.services
 import qs.utils
 
 Variants {
-    // Rectangle {
+    // Item {
     //     id: barComponent
+    //     layer.enabled: true
     //     width: parent.width
-    //     height: 40
-    //     color: Scripts.setOpacity(ColorPalette.background, 0.8)
-    //     RowLayout {
-    //         anchors.fill: parent
-    //         Rectangle {
-    //             Layout.preferredWidth: parent.width * 0.25
-    //             height: 32
-    //             color: "transparent"
-    //             Workspaces {
-    //             }
-    //         }
-    //         Item {
-    //             Layout.fillHeight: true
-    //             Layout.fillWidth: true
-    //             opacity: extendedBarLoader.shouldBeVisible ? 0 : 1
-    //             Text {
-    //                 color: ColorPalette.color14
-    //                 font.family: FontProvider.fontMaterialRounded
-    //                 text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
-    //                 horizontalAlignment: Text.AlignHCenter
-    //                 verticalAlignment: Text.AlignVCenter
-    //                 anchors.verticalCenter: parent.verticalCenter
-    //                 anchors.horizontalCenter: parent.horizontalCenter
-    //                 width: parent.width
-    //                 font.bold: true
-    //                 font.pixelSize: {
-    //                     var minSize = 10;
-    //                     return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
-    //                 }
-    //             }
-    //             Behavior on opacity {
-    //                 AnimationProvider.NumberAnim {
-    //                 }
-    //             }
-    //         }
-    //         Rectangle {
-    //             Layout.preferredWidth: parent.width * 0.25
-    //             height: 32
-    //             color: "transparent"
-    //             NavButtons {
-    //             }
-    //         }
+    //     implicitHeight: 40
+    //     anchors {
+    //         topMargin: 5
+    //         leftMargin: 5
+    //         rightMargin: 5
+    //         bottomMargin: 5
+    //         left: parent.left
+    //         right: parent.right
+    //         top: parent.top
+    //     }
+    //     Rectangle {
+    //         width: parent.width - 10
+    //         height: 30
+    //         radius: 2
+    //         color: Scripts.setOpacity(ColorPalette.background, 0.8)
+    //     }
+    //     Rectangle {
+    //         x: 5
+    //         y: 5
+    //         radius: 2
+    //         width: parent.width - 10
+    //         height: 30
+    //         border.width: 1
+    //         color: Scripts.setOpacity(ColorPalette.background, 0.8)
     //     }
     // }
 
@@ -80,88 +63,56 @@ Variants {
             right: true
         }
 
-        Item {
+        StyledRect {
             id: barComponent
 
-            layer.enabled: true
-            width: parent.width
-            implicitHeight: 40
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: 2
+                spacing: 4
 
-            anchors {
-                topMargin: 5
-                leftMargin: 5
-                rightMargin: 5
-                bottomMargin: 5
-                left: parent.left
-                right: parent.right
-                top: parent.top
-            }
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-            Rectangle {
-                width: parent.width - 10
-                height: 30
-                radius: 2
-                color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            }
+                    Row {
+                        spacing: 2
+                        anchors.fill: parent
 
-            Rectangle {
-                x: 5
-                y: 5
-                radius: 2
-                width: parent.width - 10
-                height: 30
-                border.width: 1
-                color: Scripts.setOpacity(ColorPalette.background, 0.8)
+                        Repeater {
+                            model: Hyprland.workspaces
 
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    spacing: 4
+                            delegate: Item {
+                                layer.enabled: true
+                                width: parent.height
+                                height: parent.height
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        Row {
-                            spacing: 2
-                            anchors.fill: parent
-
-                            Repeater {
-                                model: Hyprland.workspaces
-
-                                delegate: Item {
-                                    layer.enabled: true
+                                Rectangle {
                                     width: parent.height
                                     height: parent.height
+                                    color: (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color14
+                                    radius: 4
+                                    border.width: (modelData.active && modelData.focused) ? 1 : 0.5
+                                    border.color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
 
-                                    Rectangle {
-                                        width: parent.height
-                                        height: parent.height
-                                        color: (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color14
-                                        radius: 4
-                                        border.width: (modelData.active && modelData.focused) ? 1 : 0.5
-                                        border.color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
-
-                                        Text {
-                                            color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
-                                            anchors.centerIn: parent
-                                            text: modelData.id >= -1 ? modelData.id : "S"
-                                            font.family: FontProvider.fontSometypeMono
-                                            font.pixelSize: {
-                                                var minSize = 10;
-                                                return Math.max(minSize, Math.min(parent.height, parent.width) * 0.7);
-                                            }
-                                        }
-
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            modelData.active();
+                                    Text {
+                                        color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                                        anchors.centerIn: parent
+                                        text: modelData.id >= -1 ? modelData.id : "S"
+                                        font.family: FontProvider.fontSometypeMono
+                                        font.pixelSize: {
+                                            var minSize = 10;
+                                            return Math.max(minSize, Math.min(parent.height, parent.width) * 0.7);
                                         }
                                     }
 
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        modelData.active();
+                                    }
                                 }
 
                             }
@@ -170,42 +121,42 @@ Variants {
 
                     }
 
-                    Item {
-                        Layout.preferredWidth: Math.round(parent.width * 0.7)
-                        Layout.fillHeight: true
-                        layer.enabled: true
+                }
 
-                        Text {
-                            color: ColorPalette.color14
-                            font.family: FontProvider.fontMaterialRounded
-                            text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            width: parent.width
-                            font.bold: true
-                            font.pixelSize: {
-                                var minSize = 10;
-                                return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
-                            }
+                Item {
+                    Layout.preferredWidth: Math.round(parent.width * 0.7)
+                    Layout.fillHeight: true
+                    layer.enabled: true
+
+                    Text {
+                        color: ColorPalette.color14
+                        font.family: FontProvider.fontMaterialRounded
+                        text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width
+                        font.bold: true
+                        font.pixelSize: {
+                            var minSize = 10;
+                            return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
                         }
+                    }
 
-                        Behavior on opacity {
-                            AnimationProvider.NumberAnim {
-                            }
-
+                    Behavior on opacity {
+                        AnimationProvider.NumberAnim {
                         }
 
                     }
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                }
 
-                        NavButtons {
-                        }
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
+                    NavButtons {
                     }
 
                 }
