@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Pipewire
 import Quickshell.Services.Greetd
-
+import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Wayland
 
@@ -13,6 +13,7 @@ import qs.assets
 import qs.services
 import Qt5Compat.GraphicalEffects
 import QtQuick.Effects
+import QtQuick3D
 
 ShellRoot {
     Variants {
@@ -49,12 +50,6 @@ ShellRoot {
                     asynchronous: true
                     smooth: true
                 }
-            }
-
-            // additional blur for sigma effect :D
-            Rectangle {
-                anchors.fill: parent
-                color: Qt.rgba(0.33, 0.33, 0.41, 0.2)
             }
 
             // back shadow of the login ui
@@ -97,20 +92,62 @@ ShellRoot {
                     height: 30
                     border.width: 1
 
-                    ColumnLayout {
+                    RowLayout {
                         anchors.fill: parent
+                        anchors.margins: 2
+                        spacing: 4
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Repeater {
+                                model: Hyprland.workspaces
+                                delegate: Item {
+                                    layer.enabled: true
+                                    Layout.fillHeight: true
+                                    Layout.preferredWidth: 32
 
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                                    Rectangle {
+                                        anchors.centerIn: parent
+                                        width: parent.height
+                                        height: parent.height
+                                        color: (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color14
+
+                                        radius: 4
+                                        border.width: (modelData.active && modelData.focused) ? 1 : 0.8
+                                        Text {
+                                            color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                                            anchors.centerIn: parent
+                                            text: modelData.id >= -1 ? modelData.id : "S"
+                                            font.family: FontProvider.fontSometypeMono
+                                            font.pixelSize: {
+                                                var minSize = 10;
+                                                return Math.max(minSize, Math.min(parent.height, parent.width) * 0.7);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        RowLayout {
+                        Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            Text {
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                text: WeatherFetcher.currentCondition ? WeatherFetcher.currentCondition.temp_c + "°C" : "--°C"
+                            }
+                            Rectangle {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                color: "gray"
+                            }
                         }
-                        RowLayout {
+                        Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            Item {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                            }
                         }
                     }
                 }
