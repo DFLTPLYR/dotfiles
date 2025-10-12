@@ -101,6 +101,7 @@ Variants {
                 width: parent.width - 10
                 height: 30
                 radius: 2
+                color: Scripts.setOpacity(ColorPalette.background, 0.8)
             }
 
             Rectangle {
@@ -110,6 +111,7 @@ Variants {
                 width: parent.width - 10
                 height: 30
                 border.width: 1
+                color: Scripts.setOpacity(ColorPalette.background, 0.8)
 
                 RowLayout {
                     anchors.fill: parent
@@ -174,7 +176,7 @@ Variants {
                         layer.enabled: true
 
                         Text {
-                            color: ColorPalette.color2
+                            color: ColorPalette.color14
                             font.family: FontProvider.fontMaterialRounded
                             text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
                             horizontalAlignment: Text.AlignHCenter
