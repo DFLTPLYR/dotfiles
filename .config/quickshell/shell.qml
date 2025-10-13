@@ -28,6 +28,9 @@ import qs.modules.wallpaper
 import qs.services
 
 ShellRoot {
+    // SessionManager {
+    // }
+
     id: root
 
     // Starts
@@ -38,9 +41,6 @@ ShellRoot {
         }
 
         target: ColorPalette
-    }
-
-    SessionManager {
     }
 
     // NavBar
