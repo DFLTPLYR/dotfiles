@@ -22,7 +22,7 @@ Item {
 
     Rectangle {
         width: childContainer.width + 10
-        height: 30
+        height: 50
         radius: 2
         color: Scripts.setOpacity(ColorPalette.background, 0.8)
         border.width: 1
@@ -36,7 +36,7 @@ Item {
         y: 5
         radius: 2
         color: Scripts.setOpacity(ColorPalette.background, 0.8)
-        height: 30
+        height: 50
         border.width: 1
         border.color: Scripts.setOpacity(ColorPalette.color10, 0.6)
 

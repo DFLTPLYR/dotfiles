@@ -30,7 +30,7 @@ ShellRoot {
 
             screen: modelData
             color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
-            exclusiveZone: ExclusionMode.Ignore
+            // exclusiveZone: ExclusionMode.Ignore
             aboveWindows: false
             Component.onCompleted: {
                 root.isLoading = typeof WeatherFetcher.currentCondition === 'undefined';
@@ -60,13 +60,7 @@ ShellRoot {
 
             }
 
-            StyledRect {
-                Text {
-                    id: name
-
-                    text: qsTr("text")
-                }
-
+            StyledRectTest {
             }
 
             Connections {

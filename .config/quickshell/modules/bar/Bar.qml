@@ -111,7 +111,7 @@ Variants {
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: {
-                                        modelData.active();
+                                        modelData.activate();
                                     }
                                 }
 
