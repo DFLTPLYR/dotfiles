@@ -5,120 +5,109 @@ import qs.utils
 Item {
     id: root
 
-    default property alias content: childContainer.data
-    property alias childContainerHeight: childContainer.height
+    // These properties will be used to connect to the loaded component
+    property var styleLoader: loader
+    property var innerContainer: loader.item ? loader.item.childContainer : null
+
+    default property alias content: contentHolder.data
+    property real childContainerHeight: innerContainer ? innerContainer.height : 30
     property real childContainerWidth: width
     property string style: "neumorphic"
 
     layer.enabled: true
     width: parent.width
-    implicitHeight: childContainer.height + 10
+    implicitHeight: childContainerHeight + 10
 
     anchors {
         topMargin: 2
-        leftMargin: 5
-        rightMargin: 5
+        leftMargin: 10
+        rightMargin: 10
         left: parent.left
         right: parent.right
         top: parent.top
     }
 
-    Rectangle {
-        width: childContainer.width + 10
-        height: 30
-        radius: 2
-        color: Scripts.setOpacity(ColorPalette.background, 0.8)
-        border.width: 1
-        border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
+    Item {
+        id: contentHolder
+        visible: false
     }
 
-    Rectangle {
-        id: childContainer
+    Loader {
+        id: loader
+        anchors.fill: parent
+        sourceComponent: style === "neumorphic" ? neuStyle : glassStyle
 
-        x: 5
-        y: 5
-        radius: 2
-        color: Scripts.setOpacity(ColorPalette.background, 0.8)
-        height: 30
-        border.width: 1
-        border.color: Scripts.setOpacity(ColorPalette.color10, 0.6)
-
-        Binding {
-            target: childContainer
-            property: "width"
-            value: root.childContainerWidth - 10
+        onLoaded: {
+            if (item && item.childContainer && contentHolder.data.length > 0) {
+                for (var i = 0; i < contentHolder.data.length; i++) {
+                    contentHolder.data[i].parent = item.childContainer;
+                }
+            }
         }
+    }
 
+    Component {
+        id: neuStyle
+        NeumorphicStyle {}
+    }
+
+    Component {
+        id: glassStyle
+        GlassStyle {}
     }
 
     component NeumorphicStyle: Item {
-        default property alias content: childContainer.data
+        property alias childContainer: childContainer
 
-        anchors.fill: parent
+        anchors {
+            topMargin: 2
+            left: parent.left
+            right: parent.right
+            top: parent.top
+        }
 
         Rectangle {
-            width: childContainer.width + 10
-            height: 30
+            width: childContainer.width - 10
+            height: childContainer.height
             radius: 2
-            color: Scripts.setOpacity(ColorPalette.background, 0.8)
+            color: Scripts.setOpacity(ColorPalette.background, 0.9)
             border.width: 1
-            border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
+            border.color: Scripts.setOpacity(ColorPalette.accent, 0.4)
         }
 
         Rectangle {
             id: childContainer
-
             x: 5
             y: 5
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
             height: 30
             border.width: 1
-            border.color: Scripts.setOpacity(ColorPalette.color10, 0.6)
-
-            Binding {
-                target: childContainer
-                property: "width"
-                value: root.childContainerWidth - 10
-            }
-
+            border.color: Scripts.setOpacity(ColorPalette.accent, 0.6)
+            width: root.childContainerWidth - 10
         }
-
     }
 
     component GlassStyle: Item {
-        default property alias content: childContainer.data
+        property alias childContainer: childContainer
 
-        anchors.fill: parent
-
-        Rectangle {
-            width: childContainer.width + 10
-            height: 30
-            radius: 2
-            color: Scripts.setOpacity(ColorPalette.background, 0.5)
-            border.width: 1
-            border.color: Scripts.setOpacity(ColorPalette.color10, 0.2)
+        anchors {
+            topMargin: 5
+            leftMargin: 5
+            rightMargin: 5
+            left: parent.left
+            right: parent.right
+            top: parent.top
         }
 
         Rectangle {
             id: childContainer
-
-            x: 5
-            y: 5
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.5)
             height: 30
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
-
-            Binding {
-                target: childContainer
-                property: "width"
-                value: root.childContainerWidth - 10
-            }
-
+            width: root.childContainerWidth - 10
         }
-
     }
-
 }
