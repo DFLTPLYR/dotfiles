@@ -28,8 +28,7 @@ import qs.modules.wallpaper
 import qs.services
 
 ShellRoot {
-    // SessionManager {
-    // }
+
 
     id: root
 
@@ -45,6 +44,9 @@ ShellRoot {
 
     // NavBar
     Bar {
+    }
+
+    SessionManager {
     }
 
     // Volume overlay
