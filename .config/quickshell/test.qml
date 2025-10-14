@@ -60,8 +60,8 @@ ShellRoot {
 
             }
 
-            StyledRectTest {
-            }
+
+
 
             Connections {
                 function onParseDone() {
