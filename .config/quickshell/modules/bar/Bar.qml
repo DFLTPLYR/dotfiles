@@ -14,37 +14,6 @@ import qs.services
 import qs.utils
 
 Variants {
-    // Item {
-    //     id: barComponent
-    //     layer.enabled: true
-    //     width: parent.width
-    //     implicitHeight: 40
-    //     anchors {
-    //         topMargin: 5
-    //         leftMargin: 5
-    //         rightMargin: 5
-    //         bottomMargin: 5
-    //         left: parent.left
-    //         right: parent.right
-    //         top: parent.top
-    //     }
-    //     Rectangle {
-    //         width: parent.width - 10
-    //         height: 30
-    //         radius: 2
-    //         color: Scripts.setOpacity(ColorPalette.background, 0.8)
-    //     }
-    //     Rectangle {
-    //         x: 5
-    //         y: 5
-    //         radius: 2
-    //         width: parent.width - 10
-    //         height: 30
-    //         border.width: 1
-    //         color: Scripts.setOpacity(ColorPalette.background, 0.8)
-    //     }
-    // }
-
     model: Quickshell.screens
 
     delegate: PanelWindow {
