@@ -1,4 +1,8 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
+
+import Quickshell.Io
 import qs.assets
 import qs.utils
 
@@ -18,13 +22,18 @@ Item {
     width: parent.width
     implicitHeight: childContainerHeight + 10
 
-    anchors {
-        topMargin: 2
-        leftMargin: 10
-        rightMargin: 10
-        left: parent.left
-        right: parent.right
-        top: parent.top
+    FileView {
+        id: settingsWatcher
+        path: Qt.resolvedUrl("../settings.json")
+        watchChanges: true
+        onFileChanged: settingsWatcher.reload()
+        onLoaded: {
+            const settings = JSON.parse(settingsWatcher.text());
+            root.style = settings.theme || "neumorphic";
+        }
+        onLoadFailed: {
+            console.log("Failed to load settings");
+        }
     }
 
     Item {
@@ -35,25 +44,55 @@ Item {
     Loader {
         id: loader
         anchors.fill: parent
-        sourceComponent: style === "neumorphic" ? neuStyle : glassStyle
-
         onLoaded: {
-            if (item && item.childContainer && contentHolder.data.length > 0) {
-                for (var i = 0; i < contentHolder.data.length; i++) {
-                    contentHolder.data[i].parent = item.childContainer;
+                if (item && (item as Item).childContainer && contentHolder.data.length > 0) {
+                    var cc = (item as Item).childContainer;
+                    for (var i = contentHolder.data.length - 1; i >= 0; i--) {
+                        contentHolder.data[i].parent = cc;
+                    }
                 }
             }
+    }
+
+    onStyleChanged: {
+        var prevCC = loader.item && loader.item.childContainer;
+        if (prevCC && prevCC.children.length > 0) {
+            for (var i = prevCC.children.length - 1; i >= 0; i--) {
+                prevCC.children[i].parent = contentHolder;
+            }
+        }
+        loader.active = false;
+        setLoaderSourceFromStyle();
+        loader.active = true;
+
+    }
+
+    function setLoaderSourceFromStyle() {
+            switch (style) {
+                case "neumorphic":
+                    loader.sourceComponent = neuStyle;
+                    break;
+                case "glass":
+                    loader.sourceComponent = glassStyle;
+                    break;
+                // Add more cases here for future styles
+                default:
+                    loader.sourceComponent = neuStyle;
+            }
+    }
+
+
+    // Components
+    Component {
+        id: neuStyle
+        NeumorphicStyle {
         }
     }
 
     Component {
-        id: neuStyle
-        NeumorphicStyle {}
-    }
-
-    Component {
         id: glassStyle
-        GlassStyle {}
+        GlassStyle {
+        }
     }
 
     component NeumorphicStyle: Item {
@@ -67,7 +106,7 @@ Item {
         }
 
         Rectangle {
-            width: childContainer.width - 10
+            width: root.width - 10
             height: childContainer.height
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.9)
@@ -84,7 +123,7 @@ Item {
             height: 30
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.accent, 0.6)
-            width: root.childContainerWidth - 10
+            width: root.width - 10
         }
     }
 
@@ -107,7 +146,11 @@ Item {
             height: 30
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
-            width: root.childContainerWidth - 10
+            width: root.width - 10
         }
+    }
+
+    Component.onCompleted: {
+        setLoaderSourceFromStyle()
     }
 }

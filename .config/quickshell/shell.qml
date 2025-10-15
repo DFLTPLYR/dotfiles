@@ -46,8 +46,8 @@ ShellRoot {
     Bar {
     }
 
-    SessionManager {
-    }
+    // SessionManager {
+    // }
 
     // Volume overlay
     VolumeOsd {
