@@ -66,6 +66,15 @@ Variants {
         StyledRect {
             id: barComponent
 
+            anchors {
+                topMargin: 2
+                leftMargin: 10
+                rightMargin: 10
+                left: parent.left
+                right: parent.right
+                top: parent.top
+            }
+
             RowLayout {
                 anchors.fill: parent
                 anchors.margins: 2
