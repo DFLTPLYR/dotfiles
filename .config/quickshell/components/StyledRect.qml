@@ -1,7 +1,8 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import qs.assets
 import qs.utils
@@ -138,6 +139,13 @@ Item {
             right: parent.right
             top: parent.top
         }
+
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.rgba(0.33, 0.33, 0.41, 0.2)
+        }
+
+
 
         Rectangle {
             id: childContainer
