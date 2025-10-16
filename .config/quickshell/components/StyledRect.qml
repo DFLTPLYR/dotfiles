@@ -113,15 +113,15 @@ Item {
             color: Scripts.setOpacity(ColorPalette.background, 0.9)
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.accent, 0.4)
+            x: 5
+            y: 5
         }
 
         Rectangle {
             id: childContainer
-            x: 5
-            y: 5
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            height: 30
+            height: parent.height - 10
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.accent, 0.6)
             width: root.width - 10
