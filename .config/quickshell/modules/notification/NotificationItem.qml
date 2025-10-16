@@ -8,21 +8,18 @@ import Quickshell
 import qs.utils
 import qs.services
 import qs.assets
+import qs.components
 
-Rectangle {
+StyledRect {
     required property var modelData
 
-    height: 90
-    color: Scripts.setOpacity(ColorPalette.background, 0.7)
-    border.color: ColorPalette.color1
-    radius: 12
-    clip: true
+    childContainerHeight: 80
 
-    RowLayout {
+     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width - 25
-        height: 80
+
         spacing: 10
 
         Rectangle {
@@ -105,3 +102,6 @@ Rectangle {
         }
     }
 }
+
+
+
