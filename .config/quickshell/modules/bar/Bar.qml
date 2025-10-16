@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Hyprland
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell.Wayland
 import qs.assets
@@ -82,7 +83,10 @@ Variants {
                                             var minSize = 10;
                                             return Math.max(minSize, Math.min(parent.height, parent.width) * 0.7);
                                         }
+                                        font.bold: true
                                     }
+
+
 
                                 }
 
