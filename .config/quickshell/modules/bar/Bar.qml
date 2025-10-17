@@ -35,14 +35,12 @@ Variants {
 
         StyledRect {
             id: barComponent
-
+            childContainerHeight: 40
             anchors {
-                topMargin: 2
                 leftMargin: 10
                 rightMargin: 10
                 left: parent.left
                 right: parent.right
-                top: parent.top
             }
 
             RowLayout {
@@ -85,9 +83,6 @@ Variants {
                                         }
                                         font.bold: true
                                     }
-
-
-
                                 }
 
                                 MouseArea {
@@ -96,13 +91,9 @@ Variants {
                                         modelData.activate();
                                     }
                                 }
-
                             }
-
                         }
-
                     }
-
                 }
 
                 Item {
@@ -127,24 +118,17 @@ Variants {
                     }
 
                     Behavior on opacity {
-                        AnimationProvider.NumberAnim {
-                        }
-
+                        AnimationProvider.NumberAnim {}
                     }
-
                 }
 
                 Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    NavButtons {
-                    }
-
+                    NavButtons {}
                 }
-
             }
-
         }
 
         LazyLoader {
@@ -160,7 +144,6 @@ Variants {
                 animProgress: extendedBarLoader.animProgress
                 shouldBeVisible: extendedBarLoader.shouldBeVisible
             }
-
         }
 
         GlobalShortcut {
@@ -172,10 +155,10 @@ Variants {
                 if (extendedBarLoader.shouldBeVisible) {
                     extendedBarLoader.shouldBeVisible = false;
                     extendedBarLoader.animProgress = 0;
-                    return ;
+                    return;
                 }
                 if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
-                    return ;
+                    return;
 
                 extendedBarLoader.shouldBeVisible = true;
                 extendedBarLoader.animProgress = extendedBarLoader.shouldBeVisible ? 1 : 0;
@@ -200,7 +183,6 @@ Variants {
                     }, 40);
                 }
             }
-
         }
 
         GlobalShortcut {
@@ -230,7 +212,5 @@ Variants {
                 }, 40);
             }
         }
-
     }
-
 }

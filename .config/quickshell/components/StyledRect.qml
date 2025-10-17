@@ -46,13 +46,13 @@ Item {
         id: loader
         anchors.fill: parent
         onLoaded: {
-                if (item && (item as Item).childContainer && contentHolder.data.length > 0) {
-                    var cc = (item as Item).childContainer;
-                    for (var i = contentHolder.data.length - 1; i >= 0; i--) {
-                        contentHolder.data[i].parent = cc;
-                    }
+            if (item && (item as Item).childContainer && contentHolder.data.length > 0) {
+                var cc = (item as Item).childContainer;
+                for (var i = contentHolder.data.length - 1; i >= 0; i--) {
+                    contentHolder.data[i].parent = cc;
                 }
             }
+        }
     }
 
     onStyleChanged: {
@@ -65,44 +65,43 @@ Item {
         loader.active = false;
         setLoaderSourceFromStyle();
         loader.active = true;
-
     }
 
     function setLoaderSourceFromStyle() {
-            switch (style) {
-                case "neumorphic":
-                    loader.sourceComponent = neuStyle;
-                    break;
-                case "glass":
-                    loader.sourceComponent = glassStyle;
-                    break;
-                // Add more cases here for future styles
-                default:
-                    loader.sourceComponent = neuStyle;
-            }
+        switch (style) {
+        case "neumorphic":
+            loader.sourceComponent = neuStyle;
+            break;
+        case "glass":
+            loader.sourceComponent = glassStyle;
+            break;
+        // Add more cases here for future styles
+        default:
+            loader.sourceComponent = defaultStyle;
+        }
     }
-
 
     // Components
     Component {
         id: neuStyle
-        NeumorphicStyle {
-        }
+        NeumorphicStyle {}
     }
 
     Component {
         id: glassStyle
-        GlassStyle {
-        }
+        GlassStyle {}
+    }
+
+    Component {
+        id: defaultStyle
+        DefaultStyle {}
     }
 
     component NeumorphicStyle: Item {
         property alias childContainer: childContainer
 
         anchors {
-            topMargin: 2
-            left: parent.left
-            right: parent.right
+            topMargin: 5
             top: parent.top
         }
 
@@ -145,13 +144,24 @@ Item {
             color: Qt.rgba(0.33, 0.33, 0.41, 0.2)
         }
 
-
-
         Rectangle {
             id: childContainer
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.5)
-            height: 30
+            height: parent.height - 10
+            border.width: 1
+            border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
+            width: root.width - 10
+        }
+    }
+
+    component DefaultStyle: Item {
+        property alias childContainer: childContainer
+        Rectangle {
+            id: childContainer
+            radius: 2
+            color: Scripts.setOpacity(ColorPalette.background, 0.5)
+            height: parent.height - 10
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
             width: root.width - 10
@@ -159,6 +169,6 @@ Item {
     }
 
     Component.onCompleted: {
-        setLoaderSourceFromStyle()
+        setLoaderSourceFromStyle();
     }
 }
