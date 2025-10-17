@@ -100,11 +100,93 @@ Scope {
             }
 
             property string searchValue: ''
+            Item {
+                width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
+                height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
+               
+                StyledRect {
+                    x: Math.round(screen.width / 2 - width / 2)
+                    y: Math.round(screen.height / 2 - height / 2)
+                    childContainerHeight: parent.height * animProgress
+                    
+                    // Display
+                    ColumnLayout {
+                      anchors.fill: parent
+                      Item {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: parent.height * 0.9
+                        RowLayout {
+                          anchors.fill: parent
 
+
+                          //Wallpaper Preview
+                          Item {
+                            Layout.preferredWidth: parent.width * 0.4
+                            Layout.fillHeight: true
+
+                            Rectangle {
+                              anchors.fill: parent
+                              color: 'transparent'
+
+                                MaskWrapper {
+                                    radius: 8
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    sourceItem: Image {
+                                        anchors.fill: parent
+                                        fillMode: Image.PreserveAspectCrop
+                                        source: WallpaperStore.currentWallpapers[screen.name] ?? null
+                                        cache: true
+                                        asynchronous: true
+                                        smooth: true
+                                        visible: false
+                                    }
+                                }
+
+                            }
+                          }
+
+                        
+                          // App Grid
+                          Item {
+                            Layout.preferredWidth: parent.width * 0.6
+                            Layout.fillHeight: true
+
+                            Rectangle {
+                              id: container
+
+                              anchors.fill: parent
+                              color: 'transparent'
+
+                              AppListView {
+                                id: grid
+                                searchText: searchValue
+                              }
+                            }
+                          }
+                                                  }
+                      }
+                      // Search Bar
+                    Item {
+                        Layout.preferredHeight: parent.height * 0.1
+                        Layout.fillWidth: true
+                        Text {
+                            id: searchText
+                            text: qsTr(`Search: ${searchValue}`)
+                            font.pixelSize: 24
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 12
+                            color: ColorPalette.color15
+                        }
+                      }                    
+                    }
+                }  
+              }
             Rectangle {
                 width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
                 height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
-
+                visible: false
                 x: Math.round(screen.width / 2 - width / 2)
                 y: Math.round(screen.height / 2 - height / 2)
 
@@ -149,37 +231,10 @@ Scope {
                                 }
                             }
 
-                            Rectangle {
-                                id: container
-
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-
-                                color: 'transparent'
-
-                                AppListView {
-                                    id: grid
-                                    searchText: searchValue
-                                }
-                            }
                         }
                     }
 
-                    // Search Bar
-                    Item {
-                        height: Math.round(parent.height * 0.1)
-                        width: parent.width
 
-                        Text {
-                            id: searchText
-                            text: qsTr(`Search: ${searchValue}`)
-                            font.pixelSize: 24
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: parent.left
-                            anchors.leftMargin: 12
-                            color: ColorPalette.color15
-                        }
-                    }
                 }
             }
         }
