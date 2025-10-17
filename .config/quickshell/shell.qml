@@ -28,8 +28,6 @@ import qs.modules.wallpaper
 import qs.services
 
 ShellRoot {
-
-
     id: root
 
     // Starts
@@ -43,33 +41,25 @@ ShellRoot {
     }
 
     // NavBar
-    Bar {
-    }
+    Bar {}
 
     SessionManager {
     }
 
     // Volume overlay
-    VolumeOsd {
-    }
+    VolumeOsd {}
 
     // Logout
-    SessionMenu {
-    }
+    SessionMenu {}
 
     // right sidebar
-    Sidebar {
-    }
+    Sidebar {}
 
     // App menu
-    AppMenu {
-    }
+    AppMenu {}
 
     // Notification Overlay
-    NotificationOsd {
-    }
+    NotificationOsd {}
 
-    WallpaperPicker {
-    }
-
+    WallpaperPicker {}
 }
