@@ -41,11 +41,12 @@ Variants {
                 rightMargin: 10
                 left: parent.left
                 right: parent.right
+                top: parent.top
             }
 
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 2
+                anchors.margins: 5
                 spacing: 4
 
                 Item {
@@ -68,9 +69,7 @@ Variants {
                                     width: parent.height
                                     height: parent.height
                                     color: (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color14
-                                    radius: 4
-                                    border.width: (modelData.active && modelData.focused) ? 1 : 0.5
-                                    border.color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                                    radius: 2
 
                                     Text {
                                         color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
