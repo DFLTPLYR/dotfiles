@@ -75,6 +75,9 @@ Item {
         case "glass":
             loader.sourceComponent = glassStyle;
             break;
+        case "brutalist":
+            loader.sourceComponent = brutalistStyle;
+            break;
         // Add more cases here for future styles
         default:
             loader.sourceComponent = defaultStyle;
@@ -93,6 +96,11 @@ Item {
     }
 
     Component {
+        id: brutalistStyle
+        BrutalistStyle {}
+    }
+
+    Component {
         id: defaultStyle
         DefaultStyle {}
     }
@@ -106,24 +114,21 @@ Item {
         }
 
         Rectangle {
-            width: root.width - 10
-            height: childContainer.height
-            radius: 2
-            color: Scripts.setOpacity(ColorPalette.background, 0.9)
-            border.width: 1
-            border.color: Scripts.setOpacity(ColorPalette.accent, 0.4)
-            x: 8
-            y: 8
-        }
-
-        Rectangle {
             id: childContainer
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
             height: parent.height - 15
             border.width: 1
-            border.color: Scripts.setOpacity(ColorPalette.accent, 0.6)
+            border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
             width: root.width - 10
+            layer.enabled: true
+            layer.effect: DropShadow {
+                color: Scripts.setOpacity(ColorPalette.background, 0.8)
+
+                transparentBorder: false
+                horizontalOffset: 8
+                verticalOffset: 8
+            }
         }
     }
 
@@ -151,6 +156,19 @@ Item {
             height: parent.height - 10
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
+            width: root.width - 10
+        }
+    }
+
+    component BrutalistStyle: Item {
+        property alias childContainer: childContainer
+        Rectangle {
+            id: childContainer
+            radius: 0
+            color: ColorPalette.background
+            height: parent.height - 10
+            border.width: 2
+            border.color: ColorPalette.color1
             width: root.width - 10
         }
     }
