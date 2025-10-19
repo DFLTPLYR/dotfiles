@@ -31,6 +31,7 @@ Item {
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
             root.style = settings.theme || "neumorphic";
+            console.log("Settings loaded: ", settingsWatcher.text());
         }
         onLoadFailed: {
             console.log("Failed to load settings");
@@ -132,7 +133,7 @@ Item {
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
             width: root.width - 13
-            layer.enabled: true
+            layer.enabled: true 
         }
     }
 

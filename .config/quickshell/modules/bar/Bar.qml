@@ -27,6 +27,21 @@ Variants {
         color: "transparent"
         implicitHeight: barComponent.height
 
+        FileView {
+            id: settingsWatcher
+            path: Qt.resolvedUrl("../settings.json")
+            watchChanges: true
+            onFileChanged: settingsWatcher.reload()
+            onLoaded: {
+                const settings = JSON.parse(settingsWatcher.text());
+                root.style = settings.theme || "neumorphic";
+                console.log("Settings loaded: ", settingsWatcher.text());
+            }
+            onLoadFailed: {
+                console.log("Failed to load settings");
+            }
+        }
+
         anchors {
             top: true
             left: true
