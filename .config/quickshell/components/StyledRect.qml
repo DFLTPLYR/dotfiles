@@ -112,6 +112,16 @@ Item {
             topMargin: 5
             top: parent.top
         }
+        Rectangle {
+            radius: 2
+            color: Scripts.setOpacity(ColorPalette.background, 0.8)
+            height: parent.height - 15
+            border.width: 1
+            border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
+            width: root.width - 10
+            x: 8
+            y: 8
+        }
 
         Rectangle {
             id: childContainer
@@ -120,15 +130,8 @@ Item {
             height: parent.height - 15
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            width: root.width - 10
+            width: root.width - 13
             layer.enabled: true
-            layer.effect: DropShadow {
-                color: Scripts.setOpacity(ColorPalette.background, 0.8)
-
-                transparentBorder: false
-                horizontalOffset: 8
-                verticalOffset: 8
-            }
         }
     }
 
