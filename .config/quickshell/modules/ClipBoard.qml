@@ -123,15 +123,9 @@ AnimatedScreenOverlay {
         scale: animProgress
         opacity: animProgress
 
-        Rectangle {
-            border.color: Scripts.setOpacity(ColorPalette.colors10, 0.9)
-            border.width: 2
-
+        Item {
             Layout.preferredWidth: clipboardRoot.width / 3
             Layout.fillHeight: true
-            color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            radius: 10
-            clip: true
 
             Rectangle {
                 width: parent.width
@@ -156,8 +150,9 @@ AnimatedScreenOverlay {
                     }
                 }
             }
-
-            ListView {
+            StyledRect {
+              anchors.fill: parent
+                          ListView {
                 id: clipboardList
                 anchors.centerIn: parent
 
@@ -352,14 +347,15 @@ AnimatedScreenOverlay {
                     }
                 }
             }
+
+            }
         }
 
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            radius: 10
-
+        Item {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        StyledRect {
+          childContainerHeight: parent.height
             Item {
                 anchors.fill: parent
 
@@ -410,6 +406,7 @@ AnimatedScreenOverlay {
                     anchors.fill: parent
                 }
             }
+        }
         }
     }
 
