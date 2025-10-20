@@ -125,6 +125,7 @@ Item {
 
         Rectangle {
             id: childContainer
+            clip: true
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
             height: parent.height - 15

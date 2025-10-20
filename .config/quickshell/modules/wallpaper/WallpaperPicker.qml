@@ -141,15 +141,15 @@ Scope {
                     Layout.fillWidth: true
 
                     // List Panel
-                    Rectangle {
+                    Item {
                         Layout.fillHeight: true
                         Layout.preferredWidth: parent.width / 4
-                        color: Scripts.setOpacity(ColorPalette.background, 0.8)
-                        border.color: Scripts.setOpacity(ColorPalette.colors10, 0.2)
-                        radius: 10
-                        clip: true
 
-                        ListView {
+                        clip: true
+                        StyledRect {
+                          childContainerHeight: parent.height
+                          
+                          ListView {
                             id: flick
                             anchors.fill: parent
                             spacing: 10
@@ -203,19 +203,18 @@ Scope {
                                 radius: 10
                             }
                         }
-                    }
+                        }
+                      }
 
                     // Preview Panel
-                    Rectangle {
+                    Item {
                         id: previewPanel
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        color: Scripts.setOpacity(ColorPalette.background, 0.8)
-                        border.color: Scripts.setOpacity(ColorPalette.foreground, 0.2)
-                        radius: 10
 
-                        Item {
-                            anchors.fill: parent
+                        StyledRect {
+                            childContainerHeight: parent.height
+
                             // image preview
                             Rectangle {
                                 id: previewCard
@@ -231,7 +230,7 @@ Scope {
                                 Rectangle {
                                     id: previewMask
                                     anchors.fill: parent
-                                    radius: 8
+                                    
                                     clip: true
                                     visible: false
                                 }
