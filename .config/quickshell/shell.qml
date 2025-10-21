@@ -43,7 +43,7 @@ ShellRoot {
     // NavBar
     Bar {}
 
-    // SessionManager {}
+    SessionManager {}
 
     // Volume overlay
     VolumeOsd {}
