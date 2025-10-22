@@ -18,6 +18,7 @@ import qs.components
 // component
 import qs.modules
 import qs.modules.appmenu
+import qs.modules.volume
 import qs.modules.bar
 import qs.modules.extendedbar
 import qs.modules.notification
