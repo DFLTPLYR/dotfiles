@@ -9,6 +9,7 @@ import Quickshell.Services.Pipewire
 
 import qs.services
 import qs.assets
+import qs.components
 
 Scope {
     id: root
@@ -59,21 +60,20 @@ Scope {
 
             property string volumeIcon: Math.round(root.volume * 100) > 0 ? (Math.round(root.volume * 100) < 70 ? '\uf027' : '\uf028') : '\uf026'
 
-            Rectangle {
+            Item {
                 id: mainRect
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 40
 
-                color: ColorPalette.background
-                opacity: 1
-                radius: 10
-
                 implicitWidth: isPortrait ? parent.width * 0.3 : parent.width / 6
                 implicitHeight: 40
-
-                RowLayout {
+                
+                StyledRect {
+                  childContainerHeight: parent.height
+                  
+                  RowLayout {
                     id: layout
                     anchors.fill: parent
                     anchors.margins: 10
@@ -147,6 +147,7 @@ Scope {
                         }
                     }
                 }
+              }
             }
 
             Component.onCompleted: {
@@ -157,3 +158,4 @@ Scope {
         }
     }
 }
+
