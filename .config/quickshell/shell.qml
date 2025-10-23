@@ -39,20 +39,7 @@ ShellRoot {
         }
 
         target: ColorPalette
-      }
-
-    // FileView {
-    //     id: settingsWatcher
-    //     path: Qt.resolvedUrl("./settings.json");
-    //     watchChanges: true
-    //     onFileChanged: settingsWatcher.reload()
-    //     onLoaded: {
-    //        console.log("Settings loaded: ", settingsWatcher.text());
-    //     }
-    //     onLoadFailed: {
-    //         console.log("Failed to load settings");
-    //     }
-    // }
+    }
 
     // NavBar
     Bar {}

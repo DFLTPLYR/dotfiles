@@ -16,13 +16,31 @@ import qs.components
 import qs.services
 
 ShellRoot {
+    id: root
+
+    property var style: "neumorphic"
+
+    FileView {
+        id: settingsWatcher
+        path: Qt.resolvedUrl("./settings.json")
+        watchChanges: true
+        onFileChanged: settingsWatcher.reload()
+        onLoaded: {
+            const settings = JSON.parse(settingsWatcher.text());
+            root.style = settings.theme || "neumorphic";
+            console.log("Settings loaded: ", settingsWatcher.text());
+        }
+        onLoadFailed: {
+            console.log("Failed to load settings");
+        }
+    }
+
     Variants {
         // back shadow of the login ui
 
         model: Quickshell.screens
 
         delegate: PanelWindow {
-            id: root
 
             required property ShellScreen modelData
             property bool isPortrait: screen.height > screen.width
@@ -30,49 +48,8 @@ ShellRoot {
 
             screen: modelData
             color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
-            // exclusiveZone: ExclusionMode.Ignore
+            exclusiveZone: ExclusionMode.Ignore
             aboveWindows: false
-            Component.onCompleted: {
-                root.isLoading = typeof WeatherFetcher.currentCondition === 'undefined';
-            }
-
-            anchors {
-                left: true
-                bottom: true
-                right: true
-                top: true
-            }
-
-            // blur per screen
-            GaussianBlur {
-                anchors.fill: parent
-                radius: 20
-                samples: 20
-
-                source: Image {
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectCrop
-                    source: WallpaperStore.currentWallpapers[screen.name] ?? null
-                    cache: true
-                    asynchronous: true
-                    smooth: true
-                }
-
-            }
-
-
-
-
-            Connections {
-                function onParseDone() {
-                    root.isLoading = false;
-                }
-
-                target: WeatherFetcher
-            }
-
         }
-
     }
-
 }
