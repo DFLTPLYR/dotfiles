@@ -5,12 +5,14 @@ import QtQuick.Controls.Material
 import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick3D
+
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Greetd
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
+
 import qs.assets
 import qs.components
 import qs.services
@@ -35,21 +37,55 @@ ShellRoot {
         }
     }
 
-    Variants {
-        // back shadow of the login ui
+    FloatingWindow {
+        minimumSize: Qt.size(800, 600)
+        maximumSize: Qt.size(800, 600)
+        color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
 
-        model: Quickshell.screens
+        ColumnLayout {
+            anchors.fill: parent
 
-        delegate: PanelWindow {
-
-            required property ShellScreen modelData
-            property bool isPortrait: screen.height > screen.width
-            property bool isLoading: true
-
-            screen: modelData
-            color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
-            exclusiveZone: ExclusionMode.Ignore
-            aboveWindows: false
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                StyledRect {
+                    childContainerHeight: parent.height
+                    childContainerWidth: parent.width
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        bottom: parent.bottom
+                        top: parent.top
+                        margins: 10
+                    }
+                }
+            }
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
         }
     }
+
+    // Variants {
+    //     model: Quickshell.screens
+    //
+    //     delegate: PanelWindow {
+    //
+    //         required property ShellScreen modelData
+    //         property bool isPortrait: screen.height > screen.width
+    //         property bool isLoading: true
+    //
+    //         screen: modelData
+    //         color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
+    //         exclusiveZone: ExclusionMode.Ignore
+    //         aboveWindows: false
+    //
+    //         Rectangle {
+    //             anchors.fill: parent
+    //             color: "transparent"
+    //
+    //         }
+    //     }
+    // }
 }

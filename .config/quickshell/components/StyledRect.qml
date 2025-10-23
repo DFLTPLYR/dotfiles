@@ -31,7 +31,6 @@ Item {
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
             root.style = settings.theme || "neumorphic";
-            console.log("Settings loaded: ", settingsWatcher.text());
         }
         onLoadFailed: {
             console.log("Failed to load settings");
@@ -109,10 +108,6 @@ Item {
     component NeumorphicStyle: Item {
         property alias childContainer: childContainer
 
-        anchors {
-            topMargin: 5
-            top: parent.top
-        }
         Rectangle {
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
@@ -133,26 +128,12 @@ Item {
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
             width: root.width - 13
-            layer.enabled: true 
+            layer.enabled: true
         }
     }
 
     component GlassStyle: Item {
         property alias childContainer: childContainer
-
-        anchors {
-            topMargin: 5
-            leftMargin: 5
-            rightMargin: 5
-            left: parent.left
-            right: parent.right
-            top: parent.top
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: Qt.rgba(0.33, 0.33, 0.41, 0.2)
-        }
 
         Rectangle {
             id: childContainer
