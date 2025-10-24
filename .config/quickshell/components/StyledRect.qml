@@ -111,12 +111,12 @@ Item {
         Rectangle {
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            height: parent.height - 15
+            height: parent.height
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
             width: root.width - 10
-            x: 8
-            y: 8
+            x: 10
+            y: 10
         }
 
         Rectangle {
@@ -124,10 +124,10 @@ Item {
             clip: true
             radius: 2
             color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            height: parent.height - 15
+            height: parent.height - 8
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
-            width: root.width - 13
+            width: root.width - 10
         }
     }
 
