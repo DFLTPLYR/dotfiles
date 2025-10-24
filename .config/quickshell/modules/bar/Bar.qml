@@ -10,6 +10,7 @@ import qs.assets
 import qs.components
 import qs.modules
 import qs.modules.extendedbar
+import qs.modules.clipboard
 import qs.services
 // component
 import qs.utils
