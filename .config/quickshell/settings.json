@@ -1,7 +1,7 @@
 {
   "theme": "neumorphic",
   "navbar": {
-    "theme": "neumorphic",
+    "theme": "neumorphis",
     "rounding": 0,
     "layout": {
       "workspace": "left",

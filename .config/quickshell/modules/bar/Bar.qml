@@ -8,9 +8,9 @@ import Quickshell.Io
 import Quickshell.Wayland
 import qs.assets
 import qs.components
-import qs.modules
 import qs.modules.extendedbar
 import qs.modules.clipboard
+import qs.modules.bar
 import qs.services
 // component
 import qs.utils
@@ -48,6 +48,7 @@ Variants {
             left: true
             right: true
         }
+
         Item {
             id: barComponent
             width: parent.width
@@ -61,7 +62,9 @@ Variants {
                     left: parent.left
                     bottom: parent.bottom
                     right: parent.right
-                    margins: 1
+                    topMargin: 10
+                    leftMargin: 10
+                    rightMargin: 10
                 }
 
                 RowLayout {
@@ -69,50 +72,9 @@ Variants {
                     anchors.margins: 5
                     spacing: 4
 
-                    Item {
-                        Layout.fillWidth: true
+                    Workspaces {
                         Layout.fillHeight: true
-
-                        Row {
-                            spacing: 2
-                            anchors.fill: parent
-
-                            Repeater {
-                                model: Hyprland.workspaces
-
-                                delegate: Item {
-                                    layer.enabled: true
-                                    width: parent.height
-                                    height: parent.height
-
-                                    Rectangle {
-                                        width: parent.height
-                                        height: parent.height
-                                        color: (modelData.active && modelData.focused) ? ColorPalette.color2 : ColorPalette.color14
-                                        radius: 2
-
-                                        Text {
-                                            color: (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
-                                            anchors.centerIn: parent
-                                            text: modelData.id >= -1 ? modelData.id : "S"
-                                            font.family: FontProvider.fontSometypeMono
-                                            font.pixelSize: {
-                                                var minSize = 10;
-                                                return Math.max(minSize, Math.min(parent.height, parent.width) * 0.7);
-                                            }
-                                            font.bold: true
-                                        }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            modelData.activate();
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        Layout.fillWidth: true
                     }
 
                     Item {

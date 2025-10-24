@@ -16,7 +16,7 @@ import qs.assets
 import qs.bunservice
 import qs.components
 // component
-import qs.modules
+
 import qs.modules.appmenu
 import qs.modules.volume
 import qs.modules.bar
