@@ -128,12 +128,16 @@ Item {
             border.width: 1
             border.color: Scripts.setOpacity(ColorPalette.background, 0.8)
             width: root.width - 13
-            layer.enabled: true
         }
     }
 
     component GlassStyle: Item {
         property alias childContainer: childContainer
+
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.rgba(0.33, 0.33, 0.41, 0.2)
+        }
 
         Rectangle {
             id: childContainer
