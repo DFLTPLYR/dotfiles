@@ -24,6 +24,17 @@ ShellRoot {
     property var style: "neumorphic"
     property real rounding: 20
 
+    QtObject {
+        id: rectprops
+        property int radius: 0
+        property bool backingrectenabled: false
+        property bool showintersection: false
+        property int backingrectx: 0
+        property int backingrecty: 0
+        property int padding: 0
+        property real bgOpacity: 1.0
+    }
+
     FileView {
         id: settingsWatcher
         path: Qt.resolvedUrl("./settings.json")
@@ -52,48 +63,17 @@ ShellRoot {
         ColumnLayout {
             anchors.fill: parent
 
-            Item {
-                id: layoutHandler
-                property bool enabledBackingRect: true
+            StyledRectangle {
+                id: rect
                 Layout.fillWidth: true
-                Layout.preferredHeight: floatingPanel.isPortrait ? parent.height * 0.2 : parent.height * 0.3
-                Rectangle {
-                    id: rect
-                    height: parent.height
-                    width: parent.width
-                    color: Scripts.setOpacity(ColorPalette.background, 1)
-                    anchors.margins: 0
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                }
-                Rectangle {
-                    id: backgroundRect
-                    visible: layoutHandler.enabledBackingRect
-                    height: rect.height
-                    width: rect.width
-                    radius: rect.radius
-                    color: Scripts.setOpacity(ColorPalette.background, 1)
-                }
-                Rectangle {
-                    id: intersectionRect
-
-                    x: Math.max(rect.x, backgroundRect.x)
-                    y: Math.max(rect.y, backgroundRect.y)
-                    width: Math.max(0, Math.min(rect.x + rect.width, backgroundRect.x + backgroundRect.width) - Math.max(rect.x, backgroundRect.x))
-                    height: Math.max(0, Math.min(rect.y + rect.height, backgroundRect.y + backgroundRect.height) - Math.max(rect.y, backgroundRect.y))
-                    color: "green"
-                    opacity: 0.7
-                    visible: layoutHandler.enabledBackingRect && width > 0 && height > 0
-
-                    border.color: "black"
-                    border.width: 2
-                }
+                Layout.preferredHeight: 200
+                bgColor: ColorPalette.background
             }
+
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -110,6 +90,7 @@ ShellRoot {
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         Text {
                             text: "Rounding"
                             font.pixelSize: 18
@@ -118,20 +99,23 @@ ShellRoot {
                             Layout.preferredWidth: 100
                             Layout.margins: 20
                         }
+
                         Slider {
                             from: 0
                             value: 0
                             to: 100
                             live: true
                             onValueChanged: {
-                                rect.radius = Math.round(value);
+                                rect.rounding = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
                     }
+
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         Text {
                             text: "Padding"
                             font.pixelSize: 18
@@ -140,48 +124,72 @@ ShellRoot {
                             Layout.preferredWidth: 100
                             Layout.margins: 20
                         }
+
                         Slider {
                             from: 0
                             value: 0
                             to: 100
                             live: true
                             onValueChanged: {
-                                rect.anchors.margins = Math.round(value);
+                                rect.padding = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
                     }
+
+                    // Backing Rectangle Position
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        CheckBox {
+                            text: qsTr("Enable Backing Rect")
+                            Layout.margins: 20
+
+                            onPressed: {
+                                rect.backingVisible = this.checked;
+                            }
+                        }
+                        CheckBox {
+                            text: qsTr("Second")
+                            Layout.margins: 20
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
                         Text {
-                            text: "Padding"
+                            text: "Position"
                             font.pixelSize: 18
                             color: ColorPalette.color13
                             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                             Layout.preferredWidth: 100
                             Layout.margins: 20
                         }
+
                         ColumnLayout {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+
                             Slider {
                                 from: 0
                                 value: 0
                                 to: 100
                                 live: true
                                 onValueChanged: {
-                                    backgroundRect.x = Math.round(value);
+                                    rect.backingRectX = Math.round(value);
                                     console.log("Slider moved to: " + Math.round(value));
                                 }
                             }
+
                             Slider {
                                 from: 0
                                 value: 0
                                 to: 100
                                 live: true
                                 onValueChanged: {
-                                    backgroundRect.y = Math.round(value);
+                                    rect.backingRectY = Math.round(value);
                                     console.log("Slider moved to: " + Math.round(value));
                                 }
                             }
