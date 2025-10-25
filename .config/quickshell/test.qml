@@ -46,7 +46,7 @@ ShellRoot {
                 transparency: 1
                 rounding: Example.mainRect.rounding
                 padding: Example.mainRect.padding
-                backingVisible: Example.backingRect.opcacity > 0.1
+                backingVisible: true
                 backingRectX: Example.backingRect.x
                 backingRectY: Example.backingRect.y
                 backingRectOpacity: Example.backingRect.opacity
@@ -89,7 +89,7 @@ ShellRoot {
                             to: 100
                             live: true
                             onValueChanged: {
-                                rect.rounding = Math.round(value);
+                                Example.mainRect.rounding = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
@@ -109,12 +109,13 @@ ShellRoot {
                         }
 
                         Slider {
+                            id: paddingSlider
                             from: 0
                             value: 0
                             to: 100
                             live: true
                             onValueChanged: {
-                                rect.padding = Math.round(value);
+                                Example.mainRect.padding = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
@@ -131,10 +132,6 @@ ShellRoot {
                             onPressed: {
                                 rect.backingVisible = this.checked;
                             }
-                        }
-                        CheckBox {
-                            text: qsTr("Second")
-                            Layout.margins: 20
                         }
                     }
 
@@ -158,10 +155,10 @@ ShellRoot {
                             Slider {
                                 from: 0
                                 value: 0
-                                to: 100
+                                to: Math.round(paddingSlider.value * 2)
                                 live: true
                                 onValueChanged: {
-                                    rect.backingRectX = Math.round(value);
+                                    Example.backingRect.x = Math.round(value);
                                     console.log("Slider moved to: " + Math.round(value));
                                 }
                             }
@@ -169,10 +166,10 @@ ShellRoot {
                             Slider {
                                 from: 0
                                 value: 0
-                                to: 100
+                                to: Math.round(paddingSlider.value * 2)
                                 live: true
                                 onValueChanged: {
-                                    rect.backingRectY = Math.round(value);
+                                    Example.backingRect.y = Math.round(value);
                                     console.log("Slider moved to: " + Math.round(value));
                                 }
                             }
