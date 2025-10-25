@@ -97,10 +97,6 @@ Variants {
                                 return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
                             }
                         }
-
-                        Behavior on opacity {
-                            AnimationProvider.NumberAnim {}
-                        }
                     }
 
                     Item {

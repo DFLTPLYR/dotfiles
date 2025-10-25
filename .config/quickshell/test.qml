@@ -16,11 +16,13 @@ import Quickshell.Wayland
 import qs.assets
 import qs.components
 import qs.services
+import qs.utils
 
 ShellRoot {
     id: root
 
     property var style: "neumorphic"
+    property real rounding: 20
 
     FileView {
         id: settingsWatcher
@@ -51,20 +53,42 @@ ShellRoot {
             anchors.fill: parent
 
             Item {
+                id: layoutHandler
+                property bool enabledBackingRect: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: floatingPanel.isPortrait ? parent.height * 0.2 : parent.height * 0.3
+                Rectangle {
+                    id: rect
+                    height: parent.height
+                    width: parent.width
+                    color: Scripts.setOpacity(ColorPalette.background, 1)
+                    anchors.margins: 0
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                }
+                Rectangle {
+                    id: backgroundRect
+                    visible: layoutHandler.enabledBackingRect
+                    height: rect.height
+                    width: rect.width
+                    radius: rect.radius
+                    color: Scripts.setOpacity(ColorPalette.background, 1)
+                }
+                Rectangle {
+                    id: intersectionRect
 
-                StyledRect {
-                    childContainerHeight: parent.height
-                    childContainerWidth: parent.width
+                    x: Math.max(rect.x, backgroundRect.x)
+                    y: Math.max(rect.y, backgroundRect.y)
+                    width: Math.max(0, Math.min(rect.x + rect.width, backgroundRect.x + backgroundRect.width) - Math.max(rect.x, backgroundRect.x))
+                    height: Math.max(0, Math.min(rect.y + rect.height, backgroundRect.y + backgroundRect.height) - Math.max(rect.y, backgroundRect.y))
+                    color: "green"
+                    opacity: 0.7
+                    visible: layoutHandler.enabledBackingRect && width > 0 && height > 0
 
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
-                        top: parent.top
-                        margins: 20
-                    }
+                    border.color: "black"
+                    border.width: 2
                 }
             }
             Item {
@@ -95,12 +119,12 @@ ShellRoot {
                             Layout.margins: 20
                         }
                         Slider {
-                            Layout.fillWidth: true
                             from: 0
                             value: 0
                             to: 100
-                            live: false
+                            live: true
                             onValueChanged: {
+                                rect.radius = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
@@ -117,12 +141,12 @@ ShellRoot {
                             Layout.margins: 20
                         }
                         Slider {
-                            Layout.fillWidth: true
                             from: 0
                             value: 0
                             to: 100
-                            live: false
+                            live: true
                             onValueChanged: {
+                                rect.anchors.margins = Math.round(value);
                                 console.log("Slider moved to: " + Math.round(value));
                             }
                         }
@@ -131,43 +155,35 @@ ShellRoot {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Text {
-                            text: "Offset"
+                            text: "Padding"
                             font.pixelSize: 18
                             color: ColorPalette.color13
                             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                             Layout.preferredWidth: 100
                             Layout.margins: 20
                         }
-                        Slider {
+                        ColumnLayout {
                             Layout.fillWidth: true
-                            from: 0
-                            value: 0
-                            to: 100
-                            live: false
-                            onValueChanged: {
-                                console.log("Slider moved to: " + Math.round(value));
+                            Layout.fillHeight: true
+                            Slider {
+                                from: 0
+                                value: 0
+                                to: 100
+                                live: true
+                                onValueChanged: {
+                                    backgroundRect.x = Math.round(value);
+                                    console.log("Slider moved to: " + Math.round(value));
+                                }
                             }
-                        }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Text {
-                            text: "Volume"
-                            font.pixelSize: 18
-                            color: ColorPalette.color13
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            Layout.preferredWidth: 100
-                            Layout.margins: 20
-                        }
-                        Slider {
-                            Layout.fillWidth: true
-                            from: 0
-                            value: 0
-                            to: 100
-                            live: false
-                            onValueChanged: {
-                                console.log("Slider moved to: " + Math.round(value));
+                            Slider {
+                                from: 0
+                                value: 0
+                                to: 100
+                                live: true
+                                onValueChanged: {
+                                    backgroundRect.y = Math.round(value);
+                                    console.log("Slider moved to: " + Math.round(value));
+                                }
                             }
                         }
                     }
