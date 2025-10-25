@@ -1,0 +1,12 @@
+{
+  "color": "background",
+  "opacity": 1,
+  "rounding": 0,
+  "backingRect": {
+    "enabled": true,
+    "x": 0,
+    "y": 0,
+    "opacity": 1,
+    "showIntersection": true
+  }
+}
