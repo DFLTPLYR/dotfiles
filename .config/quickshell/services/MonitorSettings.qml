@@ -1,4 +1,4 @@
-// MonitorSettings.qml
+// MonitorExample.qml
 pragma Singleton
 
 import QtQuick
@@ -52,8 +52,8 @@ Singleton {
                     }
                 };
                 console.log('done');
-                root.gamma = monitorSettings.gamma;
-                root.temperature = monitorSettings.temperature;
+                root.gamma = monitorExample.gamma;
+                root.temperature = monitorExample.temperature;
                 monitorJson.setText(JSON.stringify(monitorSettings));
             }
         }

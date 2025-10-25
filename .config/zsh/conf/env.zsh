@@ -40,6 +40,7 @@ DOTFILES_SCRIPTS="$HOME/dotfiles/Scripts"
 CARGO_BIN="$HOME/.cargo/bin"
 
 # Updated PATH and PHP config
+HERD_LITE_BIN="/home/dfltplyr/.config/herd-lite/bin:$PATH"
 PATH="$HERD_LITE_BIN:$COMPOSER_BIN:$CARGO_BIN:$DOTFILES_SCRIPTS:$PATH"
 PHP_INI_SCAN_DIR="$HERD_PHP_INI"
 

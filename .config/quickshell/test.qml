@@ -17,38 +17,13 @@ import qs.assets
 import qs.components
 import qs.services
 import qs.utils
+import qs.config
 
 ShellRoot {
     id: root
 
     property var style: "neumorphic"
     property real rounding: 20
-
-    QtObject {
-        id: rectprops
-        property int radius: 0
-        property bool backingrectenabled: false
-        property bool showintersection: false
-        property int backingrectx: 0
-        property int backingrecty: 0
-        property int padding: 0
-        property real bgOpacity: 1.0
-    }
-
-    FileView {
-        id: settingsWatcher
-        path: Qt.resolvedUrl("./settings.json")
-        watchChanges: true
-        onFileChanged: settingsWatcher.reload()
-        onLoaded: {
-            const settings = JSON.parse(settingsWatcher.text());
-            root.style = settings.theme || "neumorphic";
-            console.log("Settings loaded: ", settingsWatcher.text());
-        }
-        onLoadFailed: {
-            console.log("Failed to load settings");
-        }
-    }
 
     FloatingWindow {
         id: floatingPanel
@@ -67,7 +42,15 @@ ShellRoot {
                 id: rect
                 Layout.fillWidth: true
                 Layout.preferredHeight: 200
-                bgColor: ColorPalette.background
+                bgColor: "black"
+                transparency: 1
+                rounding: Example.mainRect.rounding
+                padding: Example.mainRect.padding
+                backingVisible: Example.backingRect.opcacity > 0.1
+                backingRectX: Example.backingRect.x
+                backingRectY: Example.backingRect.y
+                backingRectOpacity: Example.backingRect.opacity
+                intersectionVisible: Example.intersection.opacity > 0.1
             }
 
             Item {

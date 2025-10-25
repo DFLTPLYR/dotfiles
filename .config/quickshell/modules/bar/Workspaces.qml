@@ -25,7 +25,7 @@ Item {
     Row {
         id: monitorRow
         anchors.fill: parent
-
+        spacing: 2
         Repeater {
             model: Hyprland.workspaces
             delegate: Item {
