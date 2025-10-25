@@ -98,7 +98,7 @@ Item {
                     root.showNightLight = !root.showNightLight;
 
                     if (root.showNightLight) {
-                        var screenTemp = MonitorSettings.temperature;
+                        var screenTemp = MonitorExample.temperature;
                         control.from = screenTemp.min;
                         control.to = screenTemp.max;
                         root.ignoreValueChange = true;
@@ -123,7 +123,7 @@ Item {
                     root.showBrightness = !root.showBrightness;
 
                     if (root.showBrightness) {
-                        var screenGamma = MonitorSettings.gamma;
+                        var screenGamma = MonitorExample.gamma;
                         control.from = screenGamma.min;
                         control.to = screenGamma.max;
                         root.ignoreValueChange = true;
@@ -164,8 +164,8 @@ Item {
                         command: ["sh", "-c", `hyprctl hyprsunset ${root.showBrightness ? "gamma" : "temperature"} ${root.sliderValue}`]
                     });
 
-                    MonitorSettings.commandProc.command = ["sh", "-c", "hyprctl hyprsunset gamma && hyprctl hyprsunset temperature"];
-                    MonitorSettings.commandProc.running = true;
+                    MonitorExample.commandProc.command = ["sh", "-c", "hyprctl hyprsunset gamma && hyprctl hyprsunset temperature"];
+                    MonitorExample.commandProc.running = true;
                 }
             }
 
