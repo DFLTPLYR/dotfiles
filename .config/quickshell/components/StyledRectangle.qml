@@ -55,7 +55,7 @@ Item {
         opacity: 0.7
         visible: layoutHandler.backingRectShowIntersection && width > 0 && height > 0
 
-        border.color: "black"
+        border.color: "green"
         border.width: 2
     }
 }
