@@ -32,9 +32,7 @@ Item {
             const settings = JSON.parse(settingsWatcher.text());
             root.style = settings.theme || "neumorphic";
         }
-        onLoadFailed: {
-            console.log("Failed to load settings");
-        }
+        onLoadFailed: {}
     }
 
     Item {
