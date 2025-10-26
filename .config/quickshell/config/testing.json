@@ -1,13 +1,15 @@
 {
   "rounding": 4,
-  "padding": 17,
+  "padding": 0,
   "backingRect": {
+    "enabled": true,
     "color": "background",
-    "x": 25,
-    "y": 22,
+    "x": 0,
+    "y": 0,
     "opacity": 1
   },
   "intersection": {
+    "enabled": true,
     "opacity": 1,
     "color": "background",
     "border": {
