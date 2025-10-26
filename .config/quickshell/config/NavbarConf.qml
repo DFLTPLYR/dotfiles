@@ -28,7 +28,7 @@ Item {
 
     FileView {
         id: settingsWatcher
-        path: Qt.resolvedUrl("./testing.json")
+        path: Qt.resolvedUrl("./navbar.json")
         watchChanges: true
         onFileChanged: settingsWatcher.reload()
         onLoaded: {
@@ -52,16 +52,16 @@ Item {
 
     function saveSettings() {
         const settings = {
-            rounding: root.mainRect.rounding,
-            padding: root.mainRect.padding,
+            rounding: root.mainRect.rounding || 0,
+            padding: root.mainRect.padding || 0,
             backingRect: {
-                color: root.backingRect.color,
-                x: root.backingRect.x,
-                y: root.backingRect.y,
-                opacity: root.backingRect.opacity
+                color: root.backingRect.color || ColorPalette.background,
+                x: root.backingRect.x || 0,
+                y: root.backingRect.y || 0,
+                opacity: root.backingRect.opacity || 0
             },
             intersection: {
-                opacity: root.intersection.opacity,
+                opacity: root.intersection.opacity || 0,
                 color: root.intersection.color,
                 border: {
                     color: root.intersection.border.color,
