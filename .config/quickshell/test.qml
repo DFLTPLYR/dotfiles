@@ -1,7 +1,6 @@
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick3D
@@ -51,6 +50,32 @@ ShellRoot {
                 backingRectY: Example.backingRect.y
                 backingRectOpacity: Example.backingRect.opacity
                 intersectionVisible: Example.intersection.opacity > 0.1
+
+                RowLayout {
+                    spacing: 10
+                    anchors.fill: parent
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        color: ColorPalette.color5
+                        Text {
+                            text: "Demo Area"
+                            anchors.centerIn: parent
+                            color: ColorPalette.color13
+                            font.pixelSize: 20
+                        }
+                    }
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        color: ColorPalette.color5
+                    }
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        color: ColorPalette.color5
+                    }
+                }
             }
 
             Item {
@@ -173,6 +198,14 @@ ShellRoot {
                                     console.log("Slider moved to: " + Math.round(value));
                                 }
                             }
+                        }
+                    }
+
+                    // Save shit
+                    Button {
+                        text: "Save Settings"
+                        onClicked: {
+                            Example.saveSettings();
                         }
                     }
                 }

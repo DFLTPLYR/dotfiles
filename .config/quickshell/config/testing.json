@@ -1,11 +1,10 @@
 {
-  "theme": "neumorphic",
-  "rounding": 0,
-  "padding": 0,
+  "rounding": 4,
+  "padding": 17,
   "backingRect": {
     "color": "background",
-    "x": 0,
-    "y": 0,
+    "x": 25,
+    "y": 22,
     "opacity": 1
   },
   "intersection": {

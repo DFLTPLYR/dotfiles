@@ -20,6 +20,8 @@ Item {
     property alias intersectionVisible: intersectionRect.visible
     property alias intersectBorder: intersectionRect.border
 
+    default property alias intersectionContent: intersectionRect.children
+
     Rectangle {
         id: rect
         height: parent.height
@@ -45,7 +47,6 @@ Item {
     }
 
     Rectangle {
-        id: intersectionRect
 
         x: Math.max(rect.x, backgroundRect.x)
         y: Math.max(rect.y, backgroundRect.y)
@@ -57,5 +58,11 @@ Item {
 
         border.color: "green"
         border.width: 2
+        Rectangle {
+            id: intersectionRect
+            anchors.fill: parent
+            color: "green"
+            anchors.bottomMargin: 10
+        }
     }
 }
