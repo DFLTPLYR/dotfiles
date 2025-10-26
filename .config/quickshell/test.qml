@@ -45,15 +45,19 @@ ShellRoot {
                 transparency: 1
                 rounding: Example.mainRect.rounding
                 padding: Example.mainRect.padding
-                backingVisible: true
+
+                backingVisible: Example.backingRect.enabled
                 backingRectX: Example.backingRect.x
                 backingRectY: Example.backingRect.y
                 backingRectOpacity: Example.backingRect.opacity
-                intersectionVisible: Example.intersection.opacity > 0.1
+
+                intersectionVisible: Example.intersection.enabled
+                intersectionPadding: 10
 
                 RowLayout {
                     spacing: 10
                     anchors.fill: parent
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true

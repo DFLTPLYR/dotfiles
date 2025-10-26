@@ -19,6 +19,7 @@ Item {
 
     property alias intersectionVisible: intersectionRect.visible
     property alias intersectBorder: intersectionRect.border
+    property alias intersectionPadding: intersectionRect.anchors.margins
 
     default property alias intersectionContent: intersectionRect.children
 
@@ -56,13 +57,11 @@ Item {
         opacity: 0.7
         visible: layoutHandler.backingRectShowIntersection && width > 0 && height > 0
 
-        border.color: "green"
-        border.width: 2
         Rectangle {
             id: intersectionRect
             anchors.fill: parent
             color: "green"
-            anchors.bottomMargin: 10
+            anchors.margins: layoutHandler.rounding
         }
     }
 }
