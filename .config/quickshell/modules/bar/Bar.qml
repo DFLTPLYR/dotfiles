@@ -110,7 +110,7 @@ Variants {
         }
 
         LazyLoader {
-            id: extendedBarLoader
+            id: panelLoader
 
             property bool shouldBeVisible: false
             property real animProgress: 0
@@ -119,8 +119,8 @@ Variants {
 
             component: ExtendedBar {
                 anchor.window: screenRoot
-                animProgress: extendedBarLoader.animProgress
-                shouldBeVisible: extendedBarLoader.shouldBeVisible
+                animProgress: panelLoader.animProgress
+                shouldBeVisible: panelLoader.shouldBeVisible
             }
         }
 
@@ -130,16 +130,16 @@ Variants {
             name: "showResourceBoard"
             description: "Show Resource Dashboard"
             onPressed: {
-                if (extendedBarLoader.shouldBeVisible) {
-                    extendedBarLoader.shouldBeVisible = false;
-                    extendedBarLoader.animProgress = 0;
+                if (panelLoader.shouldBeVisible) {
+                    panelLoader.shouldBeVisible = false;
+                    panelLoader.animProgress = 0;
                     return;
                 }
                 if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
                     return;
 
-                extendedBarLoader.shouldBeVisible = true;
-                extendedBarLoader.animProgress = extendedBarLoader.shouldBeVisible ? 1 : 0;
+                panelLoader.shouldBeVisible = true;
+                panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
             }
         }
 
