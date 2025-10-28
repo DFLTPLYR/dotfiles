@@ -17,6 +17,7 @@ import qs.bunservice
 import qs.components
 // component
 
+import qs.services
 import qs.modules.appmenu
 import qs.modules.volume
 import qs.modules.bar
@@ -25,8 +26,8 @@ import qs.modules.notification
 import qs.modules.sessionmanager
 import qs.modules.sessionmenu
 import qs.modules.sidebar
+import qs.modules.settings
 import qs.modules.wallpaper
-import qs.services
 
 ShellRoot {
     id: root
@@ -62,4 +63,7 @@ ShellRoot {
     NotificationOsd {}
 
     WallpaperPicker {}
+
+    // Settings Panel
+    ConfigPanel {}
 }
