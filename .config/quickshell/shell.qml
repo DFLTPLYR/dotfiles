@@ -65,5 +65,5 @@ ShellRoot {
     WallpaperPicker {}
 
     // Settings Panel
-    // ConfigPanel {}
+    ConfigPanel {}
 }
