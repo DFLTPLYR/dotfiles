@@ -43,13 +43,13 @@ ShellRoot {
                 Layout.preferredHeight: 200
                 bgColor: "black"
                 transparency: 1
-                rounding: Example.mainRect.rounding
-                padding: Example.mainRect.padding
+                rounding: Example.mainrect.rounding
+                padding: Example.mainrect.padding
 
-                backingVisible: Example.backingRect.enabled
-                backingRectX: Example.backingRect.x
-                backingRectY: Example.backingRect.y
-                backingRectOpacity: Example.backingRect.opacity
+                backingVisible: Example.backingrect.enabled
+                backingrectX: Example.backingrect.x
+                backingrectY: Example.backingrect.y
+                backingrectOpacity: Example.backingrect.opacity
 
                 intersectionVisible: Example.intersection.enabled
                 intersectionPadding: 10
@@ -125,7 +125,7 @@ ShellRoot {
                 to: 100
                 live: true
                 onValueChanged: {
-                    Example.mainRect.rounding = Math.round(value);
+                    Example.mainrect.rounding = Math.round(value);
                 }
             }
         }
@@ -150,7 +150,7 @@ ShellRoot {
                 to: 100
                 live: true
                 onValueChanged: {
-                    Example.mainRect.padding = Math.round(value);
+                    Example.mainrect.padding = Math.round(value);
                 }
             }
         }
@@ -165,45 +165,6 @@ ShellRoot {
 
                 onPressed: {
                     rect.backingVisible = this.checked;
-                }
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            Text {
-                text: "Position"
-                font.pixelSize: 18
-                color: ColorPalette.color13
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                Layout.preferredWidth: 100
-                Layout.margins: 20
-            }
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                Slider {
-                    from: 0
-                    value: 0
-                    to: Math.round(paddingSlider.value * 2)
-                    live: true
-                    onValueChanged: {
-                        Example.backingRect.x = Math.round(value);
-                    }
-                }
-
-                Slider {
-                    from: 0
-                    value: 0
-                    to: Math.round(paddingSlider.value * 2)
-                    live: true
-                    onValueChanged: {
-                        Example.backingRect.y = Math.round(value);
-                    }
                 }
             }
         }

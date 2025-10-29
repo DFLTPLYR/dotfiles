@@ -5,12 +5,12 @@ import Quickshell.Io
 
 Item {
     id: root
-    property QtObject mainRect: QtObject {
+    property QtObject mainrect: QtObject {
         property int rounding: 0
         property int padding: 0
     }
 
-    property QtObject backingRect: QtObject {
+    property QtObject backingrect: QtObject {
         property bool enabled: true
         property string color: "background"
         property int x: 0
@@ -36,15 +36,15 @@ Item {
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
             console.log("Loaded settings:", settings);
-            root.mainRect.rounding = settings.rounding || root.mainRect.rounding;
-            root.mainRect.padding = settings.padding || root.mainRect.padding;
+            root.mainrect.rounding = settings.rounding || root.mainrect.rounding;
+            root.mainrect.padding = settings.padding || root.mainrect.padding;
 
-            // Assign backingRect properties
-            root.backingRect.enabled = settings.backingRect?.enabled || root.backingRect.enabled;
-            root.backingRect.color = settings.backingRect?.color || root.backingRect.color;
-            root.backingRect.x = settings.backingRect?.x || root.backingRect.x;
-            root.backingRect.y = settings.backingRect?.y || root.backingRect.y;
-            root.backingRect.opacity = settings.backingRect?.opacity || root.backingRect.opacity;
+            // Assign backingrect properties
+            root.backingrect.enabled = settings.backingrect?.enabled || root.backingrect.enabled;
+            root.backingrect.color = settings.backingrect?.color || root.backingrect.color;
+            root.backingrect.x = settings.backingrect?.x || root.backingrect.x;
+            root.backingrect.y = settings.backingrect?.y || root.backingrect.y;
+            root.backingrect.opacity = settings.backingrect?.opacity || root.backingrect.opacity;
 
             // Assign intersection properties
             root.intersection.enabled = settings.intersection?.enabled || root.intersection.enabled;
@@ -58,14 +58,14 @@ Item {
 
     function saveSettings() {
         const settings = {
-            rounding: root.mainRect.rounding,
-            padding: root.mainRect.padding,
-            backingRect: {
-                enabled: root.backingRect.enabled,
-                color: root.backingRect.color,
-                x: root.backingRect.x,
-                y: root.backingRect.y,
-                opacity: root.backingRect.opacity
+            rounding: root.mainrect.rounding,
+            padding: root.mainrect.padding,
+            backingrect: {
+                enabled: root.backingrect.enabled,
+                color: root.backingrect.color,
+                x: root.backingrect.x,
+                y: root.backingrect.y,
+                opacity: root.backingrect.opacity
             },
             intersection: {
                 enabled: root.intersection.enabled,

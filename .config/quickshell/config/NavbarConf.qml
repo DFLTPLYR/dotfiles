@@ -5,12 +5,12 @@ import Quickshell.Io
 
 Item {
     id: root
-    property QtObject mainRect: QtObject {
+    property QtObject mainrect: QtObject {
         property int rounding: 0
         property int padding: 0
     }
 
-    property QtObject backingRect: QtObject {
+    property QtObject backingrect: QtObject {
         property string color: "background"
         property int x: 0
         property int y: 0
@@ -34,13 +34,13 @@ Item {
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
             console.log("Loaded settings:", settings);
-            root.mainRect.rounding = settings.rounding || root.mainRect.rounding;
-            root.mainRect.padding = settings.padding || root.mainRect.padding;
-            // Assign backingRect properties
-            root.backingRect.color = settings.backingRect?.color || root.backingRect.color;
-            root.backingRect.x = settings.backingRect?.x || root.backingRect.x;
-            root.backingRect.y = settings.backingRect?.y || root.backingRect.y;
-            root.backingRect.opacity = settings.backingRect?.opacity || root.backingRect.opacity;
+            root.mainrect.rounding = settings.rounding || root.mainrect.rounding;
+            root.mainrect.padding = settings.padding || root.mainrect.padding;
+            // Assign backingrect properties
+            root.backingrect.color = settings.backingrect?.color || root.backingrect.color;
+            root.backingrect.x = settings.backingrect?.x || root.backingrect.x;
+            root.backingrect.y = settings.backingrect?.y || root.backingrect.y;
+            root.backingrect.opacity = settings.backingrect?.opacity || root.backingrect.opacity;
             // Assign intersection properties
             root.intersection.opacity = settings.intersection?.opacity || root.intersection.opacity;
             root.intersection.color = settings.intersection?.color || root.intersection.color;
@@ -52,13 +52,13 @@ Item {
 
     function saveSettings() {
         const settings = {
-            rounding: root.mainRect.rounding || 0,
-            padding: root.mainRect.padding || 0,
-            backingRect: {
-                color: root.backingRect.color || ColorPalette.background,
-                x: root.backingRect.x || 0,
-                y: root.backingRect.y || 0,
-                opacity: root.backingRect.opacity || 0
+            rounding: root.mainrect.rounding || 0,
+            padding: root.mainrect.padding || 0,
+            backingrect: {
+                color: root.backingrect.color || ColorPalette.background,
+                x: root.backingrect.x || 0,
+                y: root.backingrect.y || 0,
+                opacity: root.backingrect.opacity || 0
             },
             intersection: {
                 opacity: root.intersection.opacity || 0,
