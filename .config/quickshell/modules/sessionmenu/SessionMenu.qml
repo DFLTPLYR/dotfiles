@@ -1,7 +1,6 @@
 import QtQuick
 
 import Quickshell
-import Quickshell.Io
 import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Wayland
