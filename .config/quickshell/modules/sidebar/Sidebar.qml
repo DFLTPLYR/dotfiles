@@ -85,6 +85,7 @@ Scope {
                         ColumnLayout {
                             anchors.fill: parent
                             anchors.margins: 4
+
                             // Statussy
                             Rectangle {
                                 Layout.fillWidth: true
@@ -318,7 +319,6 @@ Scope {
                                                     }
                                                     popupWrapper.currentWidget = modelData.name;
                                                     contentLoader.active = true;
-                                                    console.log('width: ', popupWrapper.implicitWidth);
                                                 }
                                             }
                                         }

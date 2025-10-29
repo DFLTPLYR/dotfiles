@@ -5,6 +5,9 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Hyprland
 
+import qs.modules.settings
+import qs.components
+
 Scope {
     id: root
 
@@ -59,22 +62,31 @@ Scope {
             anchors.fill: parent
 
             Item {
+                id: previewArea
                 Layout.fillWidth: true
 
                 Layout.preferredHeight: screen.height * 0.2
                 Layout.margins: 10
 
-                Rectangle {
+                Loader {
+                    id: previewLoader
                     anchors.fill: parent
-                    color: "lightgray"
-                    radius: 10
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Settings Panel Content"
-                        font.pixelSize: 24
-                    }
                 }
+
+                // StyledRectangle {
+                //     anchors.fill: parent
+                //     transparency: 1
+                //     rounding: navbarConfig.mainRect.rounding
+                //     padding: navbarConfig.mainRect.anchors.margins
+                //
+                //     backingVisible: navbarConfig.backgroundRect.visible
+                //     backingRectX: navbarConfig.backgroundRect.x
+                //     backingRectY: navbarConfig.backgroundRect.y
+                //     backingRectOpacity: navbarConfig.backgroundRect.opacity
+                //
+                //     intersectionVisible: navbarConfig.intersectionRect.visible
+                //     intersectionPadding: navbarConfig.intersectionRect.anchors.margins
+                // }
             }
 
             ColumnLayout {
@@ -85,21 +97,27 @@ Scope {
                 TabBar {
                     id: tabBar
                     Layout.fillWidth: true
+
                     TabButton {
                         text: qsTr("Navbar")
                     }
+
                     TabButton {
                         text: qsTr("Extra Navbar")
                     }
+
                     TabButton {
                         text: qsTr("Sidebar")
                     }
+
                     TabButton {
                         text: qsTr("App Menu")
                     }
+
                     TabButton {
                         text: qsTr("Wallpaper Menu")
                     }
+
                     TabButton {
                         text: qsTr("Clipboard")
                     }
@@ -113,14 +131,29 @@ Scope {
 
                     // Todo: replace with actual settings components
 
-                    Text {
-                        text: "Additional Settings Here"
-                        font.pixelSize: 18
+                    NavbarConfig {
+                        id: navbarConfig
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                     }
 
                     Text {
                         text: "2"
                         font.pixelSize: 18
+                    }
+
+                    onCurrentIndexChanged: {
+                        previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
+                        console.log("Current Index on Completed: " + contentLayout.children[currentIndex].previewComponent);
+                    }
+
+                    Component.onCompleted: {
+                        if (contentLayout.children && contentLayout.children.length > currentIndex) {
+                            previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
+                            console.log("Current Index on Completed: " + contentLayout.children[currentIndex].previewComponent);
+                        } else {
+                            console.log("No child at currentIndex or children not ready.");
+                        }
                     }
                 }
             }
