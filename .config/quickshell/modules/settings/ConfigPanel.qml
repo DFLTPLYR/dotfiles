@@ -63,8 +63,8 @@ Scope {
 
             Item {
                 id: previewArea
+                visible: previewLoader.sourceComponent !== null
                 Layout.fillWidth: true
-
                 Layout.preferredHeight: screen.height * 0.2
                 Layout.margins: 10
 
@@ -72,21 +72,6 @@ Scope {
                     id: previewLoader
                     anchors.fill: parent
                 }
-
-                // StyledRectangle {
-                //     anchors.fill: parent
-                //     transparency: 1
-                //     rounding: navbarConfig.mainRect.rounding
-                //     padding: navbarConfig.mainRect.anchors.margins
-                //
-                //     backingVisible: navbarConfig.backgroundRect.visible
-                //     backingRectX: navbarConfig.backgroundRect.x
-                //     backingRectY: navbarConfig.backgroundRect.y
-                //     backingRectOpacity: navbarConfig.backgroundRect.opacity
-                //
-                //     intersectionVisible: navbarConfig.intersectionRect.visible
-                //     intersectionPadding: navbarConfig.intersectionRect.anchors.margins
-                // }
             }
 
             ColumnLayout {
@@ -143,14 +128,16 @@ Scope {
                     }
 
                     onCurrentIndexChanged: {
-                        previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
-                        console.log("Current Index on Completed: " + contentLayout.children[currentIndex].previewComponent);
+                        if (contentLayout.children && contentLayout.children.length > currentIndex) {
+                            previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
+                        } else {
+                            previewLoader.sourceComponent = null;
+                        }
                     }
 
                     Component.onCompleted: {
                         if (contentLayout.children && contentLayout.children.length > currentIndex) {
                             previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
-                            console.log("Current Index on Completed: " + contentLayout.children[currentIndex].previewComponent);
                         } else {
                             console.log("No child at currentIndex or children not ready.");
                         }
