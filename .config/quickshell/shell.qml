@@ -7,19 +7,14 @@
 //@ pragma Env QT_QPA_PLATFORM=wayland
 
 import QtQuick
-import QtQuick.Shapes
 import Quickshell
-import Quickshell.Hyprland
-import Quickshell.Io
-import Quickshell.Wayland
 import qs.assets
-import qs.bunservice
 import qs.components
 // component
 
 import qs.services
+
 import qs.modules.appmenu
-import qs.modules.volume
 import qs.modules.bar
 import qs.modules.extendedbar
 import qs.modules.notification
@@ -27,7 +22,9 @@ import qs.modules.sessionmanager
 import qs.modules.sessionmenu
 import qs.modules.sidebar
 import qs.modules.settings
+import qs.modules.volume
 import qs.modules.wallpaper
+import qs.modules.webserver
 
 ShellRoot {
     id: root
