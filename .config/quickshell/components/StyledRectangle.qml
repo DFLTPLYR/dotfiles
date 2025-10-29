@@ -13,13 +13,14 @@ Item {
     property alias padding: rect.anchors.margins
 
     property alias backingVisible: backgroundRect.visible
-    property alias backingRectX: backgroundRect.x
-    property alias backingRectY: backgroundRect.y
-    property alias backingRectOpacity: backgroundRect.opacity
+    property alias backingrectX: backgroundRect.x
+    property alias backingrectY: backgroundRect.y
+    property alias backingrectOpacity: backgroundRect.opacity
 
-    property alias intersectionVisible: intersectionRect.visible
+    property alias intersectionOpacity: intersectionRect.opacity
     property alias intersectBorder: intersectionRect.border
     property alias intersectionPadding: intersectionRect.anchors.margins
+    property alias intersectionColor: intersectionRect.color
 
     default property alias intersectionContent: intersectionRect.children
 
@@ -37,13 +38,13 @@ Item {
 
     Rectangle {
         id: backgroundRect
-        visible: layoutHandler.backingRectEnabled
+        visible: layoutHandler.backingrectEnabled
         height: rect.height
         width: rect.width
         radius: rect.radius
-        x: layoutHandler.backingRectX
-        y: layoutHandler.backingRectY
-        opacity: layoutHandler.backingRectOpacity
+        x: layoutHandler.backingrectX
+        y: layoutHandler.backingrectY
+        opacity: layoutHandler.backingrectOpacity
         color: rect.color
     }
 
@@ -55,7 +56,7 @@ Item {
         height: Math.max(0, Math.min(rect.y + rect.height, backgroundRect.y + backgroundRect.height) - Math.max(rect.y, backgroundRect.y))
         color: rect.color
         opacity: 0.7
-        visible: layoutHandler.backingRectShowIntersection && width > 0 && height > 0
+        visible: width > 0 && height > 0
 
         Rectangle {
             id: intersectionRect

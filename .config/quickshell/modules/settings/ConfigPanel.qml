@@ -65,7 +65,7 @@ Scope {
                 id: previewArea
                 visible: previewLoader.sourceComponent !== null
                 Layout.fillWidth: true
-                Layout.preferredHeight: screen.height * 0.2
+                Layout.preferredHeight: Math.min(100, screen.height * 0.2)
                 Layout.margins: 10
 
                 Loader {

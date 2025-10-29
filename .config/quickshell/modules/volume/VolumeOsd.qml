@@ -61,7 +61,7 @@ Scope {
             property string volumeIcon: Math.round(root.volume * 100) > 0 ? (Math.round(root.volume * 100) < 70 ? '\uf027' : '\uf028') : '\uf026'
 
             Item {
-                id: mainRect
+                id: mainrect
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
