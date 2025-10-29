@@ -34,11 +34,26 @@ Scope {
     component SettingPanel: FloatingWindow {
         id: floatingPanel
 
+        minimumSize: Qt.size(screen.width / 2, screen.height / 1.5)
+        maximumSize: Qt.size(screen.width / 2, screen.height / 1.5)
+
         property bool isPortrait: screen.height > screen.width
 
         color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
-        minimumSize: Qt.size(screen.width / 2, screen.height / 1.5)
-        maximumSize: Qt.size(screen.width / 2, screen.height / 1.5)
+
+        Behavior on height {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -99,13 +114,11 @@ Scope {
                     // Todo: replace with actual settings components
 
                     Text {
-                        anchors.centerIn: parent
                         text: "Additional Settings Here"
                         font.pixelSize: 18
                     }
 
                     Text {
-                        anchors.centerIn: parent
                         text: "2"
                         font.pixelSize: 18
                     }
