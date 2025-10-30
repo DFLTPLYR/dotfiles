@@ -101,12 +101,12 @@ Item {
 
     ScrollView {
         width: parent.width
-        height: parent.height // or set a specific height
+        height: parent.height
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 10
         contentWidth: width - 20
-        clip: true // Important: prevents content from rendering outside bounds
+        clip: true
 
         ColumnLayout {
             width: parent.width

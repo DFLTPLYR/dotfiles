@@ -128,31 +128,32 @@ AnimatedScreenOverlay {
             Layout.preferredWidth: clipboardRoot.width / 3
             Layout.fillHeight: true
 
-            Item {
-                width: parent.width
-                height: 32
+            StyledRect {
+                childContainerHeight: parent.height
 
-                Text {
-                    id: searchLabel
-                    text: qsTr(searchValue)
-                    font.pixelSize: 32
+                Item {
+                    width: parent.width
+                    height: 32
 
-                    font.bold: true
+                    Text {
+                        id: searchLabel
+                        text: qsTr(toplevel.searchValue)
+                        font.pixelSize: 32
 
-                    color: ColorPalette.color15
-                    opacity: showSearchInput ? 1.0 : 0.0
-                    font.family: FontProvider.fontSometypeMono
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
+                        font.bold: true
+
+                        color: ColorPalette.color15
+                        opacity: toplevel.showSearchInput ? 1.0 : 0.0
+                        font.family: FontProvider.fontSometypeMono
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
                         }
                     }
                 }
-            }
 
-            StyledRect {
-                childContainerHeight: parent.height
                 ListView {
                     id: clipboardList
                     anchors.centerIn: parent
@@ -379,6 +380,7 @@ AnimatedScreenOverlay {
                             cursorVisible: focus
                             selectByMouse: false
                             font.family: FontProvider.fontSometypeMono
+
                             Keys.onPressed: function (event) {
                                 switch (event.key) {
                                 case Qt.Key_Escape:
