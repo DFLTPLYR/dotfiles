@@ -18,15 +18,17 @@ Scope {
         name: "showSettingsPanel"
         description: "Show Settings Panel"
 
-        onPressed: {
-            if (root.shouldBeVisible) {
-                root.shouldBeVisible = false;
-                root.animProgress = 0;
-                return;
-            }
-            root.shouldBeVisible = true;
-            root.animProgress = root.shouldBeVisible ? 1 : 0;
+        onPressed: root.toggle()
+    }
+
+    function toggle() {
+        if (root.shouldBeVisible) {
+            root.shouldBeVisible = false;
+            root.animProgress = 0;
+            return;
         }
+        root.shouldBeVisible = true;
+        root.animProgress = root.shouldBeVisible ? 1 : 0;
     }
 
     Loader {
