@@ -268,6 +268,7 @@ ColumnLayout {
             }
         }
     }
+
     // Other details
     Item {
         Layout.fillHeight: true
@@ -405,5 +406,9 @@ ColumnLayout {
 
     Component.onCompleted: {
         weatherPanel.isLoading = typeof WeatherFetcher.currentCondition === 'undefined';
+        humidityLoader.item.valueText = WeatherFetcher.currentCondition?.humidity ? `${WeatherFetcher.currentCondition?.humidity}%` : "";
+        windSpeedLoader.item.valueText = WeatherFetcher.currentCondition?.windSpeed ? `${WeatherFetcher.currentCondition?.windSpeed}m/s` : "";
+        visibilityLoader.item.valueText = WeatherFetcher.currentCondition?.visibility ? `${WeatherFetcher.currentCondition?.visibility}km` : "";
+        pressureLoader.item.valueText = WeatherFetcher.currentCondition?.pressure ? `${WeatherFetcher.currentCondition?.pressure}hPa` : "";
     }
 }
