@@ -44,6 +44,7 @@ PanelWindow {
             root.isVisible = false;
         }
     }
+
     onScreenChanged: {
         const target = shouldBeVisible ? 1.0 : 0.0;
         anim.stop();
@@ -52,13 +53,5 @@ PanelWindow {
         Qt.callLater(function () {
             anim.restart();
         });
-    }
-
-    // set up
-    Component.onCompleted: {
-        if (this.WlrLayershell != null) {
-            this.WlrLayershell.layer = WlrLayer.Overlay;
-            this.exclusiveZone = 0;
-        }
     }
 }

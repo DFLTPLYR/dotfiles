@@ -1,0 +1,10 @@
+{
+  "screen": "",
+  "settings": {
+    "resolution": "1920x1080",
+    "framerate": 30,
+    "bitrate": "4000k",
+    "output_format": "mp4",
+    "audio_source": "system"
+  }
+}

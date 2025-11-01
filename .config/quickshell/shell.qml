@@ -18,6 +18,7 @@ import qs.modules.bar
 import qs.modules.extendedbar
 import qs.modules.notification
 import qs.modules.sessionmanager
+import qs.modules.screenrecorder
 import qs.modules.sessionmenu
 import qs.modules.sidebar
 import qs.modules.settings
@@ -62,4 +63,7 @@ ShellRoot {
 
     // Settings Panel
     ConfigPanel {}
+
+    // Screen Overlay
+    ScreenOverLay {}
 }

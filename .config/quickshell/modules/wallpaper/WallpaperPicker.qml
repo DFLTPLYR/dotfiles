@@ -147,64 +147,64 @@ Scope {
 
                         clip: true
                         StyledRect {
-                          childContainerHeight: parent.height
-                          
-                          ListView {
-                            id: flick
-                            anchors.fill: parent
-                            spacing: 10
-                            anchors.margins: 16
+                            childContainerHeight: parent.height
 
-                            snapMode: ListView.SnapToItem
-                            boundsBehavior: Flickable.StopAtBounds
+                            ListView {
+                                id: flick
+                                anchors.fill: parent
+                                spacing: 10
+                                anchors.margins: 16
 
-                            highlightMoveDuration: 250
-                            highlightMoveVelocity: 400
-                            highlightFollowsCurrentItem: true
-                            highlightRangeMode: ListView.StrictlyEnforceRange
+                                snapMode: ListView.SnapToItem
+                                boundsBehavior: Flickable.StopAtBounds
 
-                            property bool isPortrait: screen.height > screen.width
+                                highlightMoveDuration: 250
+                                highlightMoveVelocity: 400
+                                highlightFollowsCurrentItem: true
+                                highlightRangeMode: ListView.StrictlyEnforceRange
 
-                            preferredHighlightBegin: parent.height / 4
-                            preferredHighlightEnd: parent.height / 4
+                                property bool isPortrait: screen.height > screen.width
 
-                            model: ScriptModel {
-                                values: {
-                                    let wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
-                                    return wallpapers;
+                                preferredHighlightBegin: parent.height / 4
+                                preferredHighlightEnd: parent.height / 4
+
+                                model: ScriptModel {
+                                    values: {
+                                        let wallpapers = isPortrait ? WallpaperStore.portraitWallpapers : WallpaperStore.landscapeWallpapers;
+                                        return wallpapers;
+                                    }
                                 }
-                            }
 
-                            delegate: WallpaperItem {}
+                                delegate: WallpaperItem {}
 
-                            onCurrentItemChanged: {
-                                if (currentItem && currentItem.modelData) {
-                                    previewImage.source = Qt.resolvedUrl(currentItem.modelData?.path);
-                                    previewColorPallete.model = currentItem.modelData?.colors.slice(0, 19) || [];
-                                } else {
-                                    previewImage.source = "";
-                                    previewColorPallete.model = [];
+                                onCurrentItemChanged: {
+                                    if (currentItem && currentItem.modelData) {
+                                        previewImage.source = Qt.resolvedUrl(currentItem.modelData?.path);
+                                        previewColorPallete.model = currentItem.modelData?.colors.slice(0, 19) || [];
+                                    } else {
+                                        previewImage.source = "";
+                                        previewColorPallete.model = [];
+                                    }
                                 }
-                            }
 
-                            populate: Transition {
-                                NumberAnimation {
-                                    property: "opacity"
-                                    from: 0
-                                    to: 1
-                                    duration: 1000
+                                populate: Transition {
+                                    NumberAnimation {
+                                        property: "opacity"
+                                        from: 0
+                                        to: 1
+                                        duration: 1000
+                                    }
                                 }
-                            }
 
-                            highlight: Rectangle {
-                                width: 180
-                                height: 40
-                                color: Scripts.setOpacity(ColorPalette.color1, 0.4)
-                                radius: 10
+                                highlight: Rectangle {
+                                    width: 180
+                                    height: 40
+                                    color: Scripts.setOpacity(ColorPalette.color1, 0.4)
+                                    radius: 10
+                                }
                             }
                         }
-                        }
-                      }
+                    }
 
                     // Preview Panel
                     Item {
@@ -230,7 +230,7 @@ Scope {
                                 Rectangle {
                                     id: previewMask
                                     anchors.fill: parent
-                                    
+
                                     clip: true
                                     visible: false
                                 }
@@ -318,6 +318,14 @@ Scope {
                 target: root
                 function onToggle() {
                     sidebarRoot.shouldBeVisible = !sidebarRoot.shouldBeVisible;
+                }
+            }
+            // set up
+            Component.onCompleted: {
+                if (this.WlrLayershell) {
+                    this.WlrLayershell.layer = WlrLayer.Overlay;
+                    this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                    this.exclusionMode = ExclusionMode.Ignore;
                 }
             }
         }
