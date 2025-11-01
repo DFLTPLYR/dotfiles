@@ -1,7 +1,13 @@
 import QtQuick
 import QtQuick.Controls
+
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
+
+import qs.assets
+import qs.utils
 
 Scope {
     id: root
@@ -9,8 +15,10 @@ Scope {
 
     GlobalShortcut {
         name: "showScreenOverLay"
+        description: "Show the Custom OSD something idk still"
         onPressed: {
             root.isVisible = !root.isVisible;
+            console.log("Screen Overlay Toggled: " + root.isVisible);
         }
     }
 
@@ -22,16 +30,21 @@ Scope {
 
     component OverLayComponent: PanelWindow {
         id: screenOSD
+
+        color: Scripts.setOpacity(ColorPalette.background, 0.4)
+
         anchors {
-            left: true
+            top: true
             bottom: true
             right: true
-            top: true
+            left: true
         }
+
         Component.onCompleted: {
-            if (this.WlrLayershell != null) {
+            if (this.WlrLayershell) {
                 this.WlrLayershell.layer = WlrLayer.Overlay;
-                this.wlrLayershell.keyboardFocus = KeyboardFocus.Exclusive;
+                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                this.exclusionMode = ExclusionMode.Ignore;
             }
         }
     }
