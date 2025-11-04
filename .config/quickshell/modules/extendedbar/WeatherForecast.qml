@@ -262,6 +262,7 @@ ColumnLayout {
             }
 
             Loader {
+                id: predictLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 sourceComponent: weatherPanel.isLoading ? loadingRepeater : loadedRepeater
@@ -347,6 +348,7 @@ ColumnLayout {
                 id: humidityLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                active: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\ue798";
@@ -359,6 +361,7 @@ ColumnLayout {
                 id: windSpeedLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                active: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\uefd8";
@@ -371,6 +374,7 @@ ColumnLayout {
                 id: visibilityLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                active: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\ue8f4";
@@ -383,6 +387,7 @@ ColumnLayout {
                 id: pressureLoader
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                active: true
                 sourceComponent: weatherDetailComponent
                 onLoaded: {
                     item.iconText = "\uf6bb";

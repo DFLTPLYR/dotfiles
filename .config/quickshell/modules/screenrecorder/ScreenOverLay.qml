@@ -27,7 +27,6 @@ Scope {
         description: "save replay idk isnt this self explanatory"
         onPressed: {
             replayProcess.running = true;
-            console.log("Saving Replay");
         }
     }
 
@@ -56,10 +55,13 @@ Scope {
 
         PopupWindow {
             anchor.window: screenOSD
+
             anchor.rect.x: parentWindow.width
             anchor.rect.y: -parentWindow.height
+
             implicitWidth: 300
             implicitHeight: 400
+
             visible: true
             color: 'transparent'
 
@@ -68,7 +70,7 @@ Scope {
                 bgColor: ColorPalette.background
                 transparency: 1
                 rounding: 0
-                padding: 10
+                padding: 5
 
                 backingVisible: true
                 backingrectX: 0
@@ -76,7 +78,7 @@ Scope {
                 backingrectOpacity: 1
 
                 intersectionOpacity: 1
-                intersectionPadding: 10
+                intersectionPadding: 0
                 intersectionColor: ColorPalette.accent
             }
         }
