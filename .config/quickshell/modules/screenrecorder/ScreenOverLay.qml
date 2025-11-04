@@ -57,9 +57,9 @@ Scope {
         PopupWindow {
             anchor.window: screenOSD
             anchor.rect.x: parentWindow.width
-            anchor.rect.y: 0
-            implicitWidth: 500
-            implicitHeight: 500
+            anchor.rect.y: -parentWindow.height
+            implicitWidth: 300
+            implicitHeight: 400
             visible: true
             color: 'transparent'
 
