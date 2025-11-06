@@ -26,6 +26,7 @@ Item {
     property bool ignoreValueChange: false
     property int lastNightLightValue: 50
     property int lastBrightnessValue: 50
+
     Component {
         id: navButtonComponent
         Item {
