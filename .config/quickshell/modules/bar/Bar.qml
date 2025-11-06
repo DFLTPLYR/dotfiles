@@ -101,12 +101,17 @@ Variants {
             property bool shouldBeVisible: false
             property real animProgress: 0
 
-            active: true
-
+            active: false
             component: ExtendedBar {
                 anchor.window: screenRoot
                 animProgress: panelLoader.animProgress
                 shouldBeVisible: panelLoader.shouldBeVisible
+                onHide: {
+                    panelLoader.shouldBeVisible = false;
+                    return Qt.callLater(() => {
+                        return panelLoader.active = false;
+                    }, 400);
+                }
             }
         }
 
@@ -125,6 +130,7 @@ Variants {
                     return;
 
                 panelLoader.shouldBeVisible = true;
+                panelLoader.active = true;
                 panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
             }
         }

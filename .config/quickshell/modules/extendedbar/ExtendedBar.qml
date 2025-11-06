@@ -18,7 +18,7 @@ PopupWindow {
     property bool shouldBeVisible: false
     property real animProgress: 0.0
     property bool isPortrait: screen.height > screen.width
-
+    signal hide
     anchor.adjustment: PopupAdjustment.Slide
     anchor.rect.x: Math.round(parentWindow.width / 2 - width / 2)
     anchor.rect.y: Math.round(parentWindow.height)
@@ -44,6 +44,7 @@ PopupWindow {
             visible = true;
         if (!shouldBeVisible && Math.abs(animProgress) < 0.001) {
             visible = false;
+            resourceSection.hide();
         }
     }
 
