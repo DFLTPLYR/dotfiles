@@ -39,8 +39,8 @@ Scope {
     component SettingPanel: FloatingWindow {
         id: floatingPanel
 
-        minimumSize: Qt.size(screen.width / 2, screen.height / 1.5)
-        maximumSize: Qt.size(screen.width / 2, screen.height / 1.5)
+        minimumSize: Qt.size(screen.width / 2, screen.height / 2)
+        maximumSize: Qt.size(screen.width / 2, screen.height / 2)
 
         property bool isPortrait: screen.height > screen.width
 
@@ -67,7 +67,7 @@ Scope {
                 id: previewArea
                 visible: previewLoader.sourceComponent !== null
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(100, screen.height * 0.2)
+                Layout.preferredHeight: 40
                 Layout.margins: 10
 
                 Loader {

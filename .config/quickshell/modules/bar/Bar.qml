@@ -2,17 +2,18 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
 import Quickshell
-import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 import Quickshell.Io
-import Quickshell.Wayland
-import qs.assets
-import qs.components
+import Quickshell.Hyprland
+
+// Modules
 import qs.modules.extendedbar
 import qs.modules.clipboard
 import qs.modules.bar
-import qs.services
+
 // component
+import qs.components
+import qs.services
+import qs.assets
 import qs.utils
 
 Variants {
