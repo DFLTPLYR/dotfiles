@@ -26,7 +26,8 @@ Scope {
         name: "saveReplay"
         description: "save replay idk isnt this self explanatory"
         onPressed: {
-            replayProcess.running = true;
+            recorderProcess.running = true;
+            recorderStatus.running = true;
         }
     }
 
@@ -37,8 +38,13 @@ Scope {
     }
 
     Process {
-        id: replayProcess
-        command: ["sh", "-c", "killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u high -- `GPU Screen Recorder` `Replay saved`"]
+        id: recorderProcess
+        command: ["sh", "-c", "killall -SIGUSR1 gpu-screen-recorder"]
+    }
+
+    Process {
+        id: recorderStatus
+        command: ["zsh", "-c", "StartReplay.zsh"]
     }
 
     component OverLayComponent: PanelWindow {
