@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 
 function backupMega() {
     if [[ -z "$1" ]]; then
