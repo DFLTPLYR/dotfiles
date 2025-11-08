@@ -27,7 +27,6 @@ Scope {
         description: "save replay idk isnt this self explanatory"
         onPressed: {
             recorderProcess.running = true;
-            recorderStatus.running = true;
         }
     }
 
@@ -44,7 +43,7 @@ Scope {
 
     Process {
         id: recorderStatus
-        command: ["zsh", "-c", "StartReplay.zsh"]
+        command: ["zsh", "-c", "~/.config/quickshell/modules/screenrecorder/StartReplay.zsh"]
     }
 
     component OverLayComponent: PanelWindow {
@@ -96,5 +95,9 @@ Scope {
                 this.exclusionMode = ExclusionMode.Ignore;
             }
         }
+    }
+
+    Component.onCompleted: {
+        recorderStatus.running = true;
     }
 }
