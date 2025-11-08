@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 cols=$(tput cols)
 rows=$(tput lines)
 

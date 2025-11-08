@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/zsh
 
 if (( ROWS < 50 )); then
     rmpc remote --pid "$PID" set config /home/dfltplyr/.config/rmpc/layout/config.ron
