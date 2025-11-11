@@ -1,0 +1,38 @@
+{
+  "color": "background",
+  "rounding": 0,
+  "padding": 0,
+  "mainrect": {
+    "color": "background",
+    "rounding": {
+      "objectName": "",
+      "left": 0,
+      "right": 0,
+      "bottom": 0,
+      "top": 0
+    },
+    "padding": {
+      "objectName": "",
+      "left": 0,
+      "right": 0,
+      "bottom": 0,
+      "top": 0
+    }
+  },
+  "backingrect": {
+    "enabled": true,
+    "color": "background",
+    "x": 0,
+    "y": 0,
+    "opacity": 1
+  },
+  "intersection": {
+    "enabled": true,
+    "opacity": 1,
+    "color": "background",
+    "border": {
+      "color": "background",
+      "width": 2
+    }
+  }
+}

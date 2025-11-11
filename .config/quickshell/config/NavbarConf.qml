@@ -5,6 +5,7 @@ import Quickshell.Io
 
 Item {
     id: root
+
     property QtObject mainrect: QtObject {
         property int rounding: 0
         property int padding: 0
@@ -33,7 +34,6 @@ Item {
         onFileChanged: settingsWatcher.reload()
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
-            console.log("Loaded settings:", settings);
             root.mainrect.rounding = settings.rounding || root.mainrect.rounding;
             root.mainrect.padding = settings.padding || root.mainrect.padding;
             // Assign backingrect properties
@@ -46,6 +46,7 @@ Item {
             root.intersection.color = settings.intersection?.color || root.intersection.color;
             root.intersection.border.color = settings.intersection?.border?.color || root.intersection.border.color;
             root.intersection.border.width = settings.intersection?.border?.width || root.intersection.border.width;
+            console.log(root.mainconf);
         }
         onLoadFailed: console.log("Failed to load settings")
     }
