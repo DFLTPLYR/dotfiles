@@ -56,13 +56,23 @@ PopupWindow {
         }
     }
 
-    property QtObject mainrect: QtObject {
-        property string color: "background"
-        property int rounding: 0
-        property int padding: 0
+    property RectProperties mainrect: RectProperties {
+        color: "background"
+        padding {
+            left: 0
+            right: 0
+            bottom: 0
+            top: 0
+        }
+        rounding {
+            left: 0
+            right: 0
+            bottom: 0
+            top: 0
+        }
     }
 
-    property RectProperties mainconf: RectProperties {
+    property RectProperties backingrectconf: RectProperties {
         color: "background"
         padding {
             left: 0
@@ -103,9 +113,18 @@ PopupWindow {
         onFileChanged: settingsWatcher.reload()
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
-            root.mainrect.color = settings.color || root.mainrect.color;
-            root.mainrect.rounding = settings.rounding || root.mainrect.rounding;
-            root.mainrect.padding = settings.padding || root.mainrect.padding;
+            // main rect conf
+            root.mainrect.color = settings.mainrect.color || root.mainrect.color;
+
+            root.mainrect.padding.left = settings.mainrect.padding.left;
+            root.mainrect.padding.right = settings.mainrect.padding.right;
+            root.mainrect.padding.top = settings.mainrect.padding.top;
+            root.mainrect.padding.bottom = settings.mainrect.padding.bottom;
+
+            root.mainrect.rounding.left = settings.mainrect.rounding.left;
+            root.mainrect.rounding.right = settings.mainrect.rounding.right;
+            root.mainrect.rounding.top = settings.mainrect.rounding.top;
+            root.mainrect.rounding.bottom = settings.mainrect.rounding.bottom;
 
             // Assign backingrect properties
             root.backingrect.enabled = settings.backingrect?.enabled || root.backingrect.enabled;
@@ -126,21 +145,43 @@ PopupWindow {
 
     function saveSettings() {
         const settings = {
-            color: root.mainrect.color,
-            rounding: root.mainrect.rounding,
-            padding: root.mainrect.padding,
+            // mainrect
             mainrect: {
-                color: root.mainconf.color,
-                rounding: root.mainconf.rounding,
-                padding: root.mainconf.padding
+                color: root.mainrect.color,
+                rounding: {
+                    left: root.mainrect.rounding.left,
+                    right: root.mainrect.rounding.right,
+                    top: root.mainrect.rounding.top,
+                    bottom: root.mainrect.rounding.bottom
+                },
+                padding: {
+                    left: root.mainrect.padding.left,
+                    right: root.mainrect.padding.right,
+                    top: root.mainrect.padding.top,
+                    bottom: root.mainrect.padding.bottom
+                }
             },
+            // backingrect
             backingrect: {
                 enabled: root.backingrect.enabled,
                 color: root.backingrect.color,
                 x: root.backingrect.x,
                 y: root.backingrect.y,
-                opacity: root.backingrect.opacity
+                opacity: root.backingrect.opacity,
+                rounding: {
+                    left: root.mainrect.rounding.left,
+                    right: root.mainrect.rounding.right,
+                    top: root.mainrect.rounding.top,
+                    bottom: root.mainrect.rounding.bottom
+                },
+                padding: {
+                    left: root.mainrect.padding.left,
+                    right: root.mainrect.padding.right,
+                    top: root.mainrect.padding.top,
+                    bottom: root.mainrect.padding.bottom
+                }
             },
+            //container rect
             intersection: {
                 enabled: root.intersection.enabled,
                 opacity: root.intersection.opacity,
@@ -148,6 +189,18 @@ PopupWindow {
                 border: {
                     color: root.intersection.border.color,
                     width: root.intersection.border.width
+                },
+                rounding: {
+                    left: root.mainrect.rounding.left,
+                    right: root.mainrect.rounding.right,
+                    top: root.mainrect.rounding.top,
+                    bottom: root.mainrect.rounding.bottom
+                },
+                padding: {
+                    left: root.mainrect.padding.left,
+                    right: root.mainrect.padding.right,
+                    top: root.mainrect.padding.top,
+                    bottom: root.mainrect.padding.bottom
                 }
             }
         };
@@ -159,9 +212,11 @@ PopupWindow {
 
         // mainrect
         transparency: 1
-        rounding: mainrect.rounding
-        padding: mainrect.padding
+        rounding: 10
+        padding: 10
         bgColor: root.mainrect.color
+
+        paddingLeft: 1
 
         backingVisible: backingrect.enabled
         backingrectX: backingrect.x

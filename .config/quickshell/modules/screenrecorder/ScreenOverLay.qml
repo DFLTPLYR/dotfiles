@@ -27,7 +27,6 @@ Scope {
         description: "save replay idk isnt this self explanatory"
         onPressed: {
             recorderProcess.running = true;
-            recorderProcess.running = true;
         }
     }
 
@@ -40,21 +39,6 @@ Scope {
     Process {
         id: recorderProcess
         command: ["sh", "-c", "killall -SIGUSR1 gpu-screen-recorder"]
-    }
-
-    Process {
-        id: recorderStatus
-        command: ["zsh", "-c", "~/.config/quickshell/modules/screenrecorder/StartReplay.zsh"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                console.log(text);
-            }
-        }
-        stderr: StdioCollector {
-            onStreamFinished: {
-                console.log(text);
-            }
-        }
     }
 
     component OverLayComponent: PanelWindow {
@@ -114,6 +98,9 @@ Scope {
     }
 
     Component.onCompleted: {
-        recorderStatus.running = true;
+        // start the script as detach oncompleted
+        Quickshell.execDetached({
+            command: ["zsh", "-c", "~/.config/quickshell/modules/screenrecorder/StartReplay.zsh"]
+        });
     }
 }
