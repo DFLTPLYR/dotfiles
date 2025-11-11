@@ -32,7 +32,7 @@ Item {
         }
     }
 
-    component PreviewNavbar: StyledRectangle {
+    component Container: StyledRectangle {
         anchors.fill: parent
 
         // mainrect
@@ -50,7 +50,7 @@ Item {
         intersectionColor: intersection.color
     }
 
-    property Component previewComponent: PreviewNavbar {}
+    property Component previewComponent: Container {}
 
     FileView {
         id: settingsWatcher

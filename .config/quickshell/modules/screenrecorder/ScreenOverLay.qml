@@ -70,10 +70,15 @@ Scope {
         }
 
         PopupWindow {
-            anchor.window: screenOSD
 
-            anchor.rect.x: parentWindow.width
-            anchor.rect.y: -parentWindow.height
+            anchor {
+                window: screenOSD
+                adjustment: PopupAdjustment.All
+                rect {
+                    x: parentWindow.width
+                    y: -parentWindow.height
+                }
+            }
 
             implicitWidth: 300
             implicitHeight: 400

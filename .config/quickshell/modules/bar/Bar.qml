@@ -54,9 +54,12 @@ Variants {
                 }
 
                 RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 5
-                    spacing: 4
+
+                    spacing: 5
+                    anchors {
+                        fill: parent
+                        margins: 5
+                    }
 
                     Workspaces {
                         Layout.fillHeight: true
@@ -69,13 +72,16 @@ Variants {
                         layer.enabled: true
 
                         Text {
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                            }
+
                             color: ColorPalette.color14
                             font.family: FontProvider.fontMaterialRounded
                             text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
                             width: parent.width
                             font.bold: true
                             font.pixelSize: {
