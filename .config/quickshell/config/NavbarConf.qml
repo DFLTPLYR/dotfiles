@@ -46,7 +46,7 @@ Item {
             root.intersection.color = settings.intersection?.color || root.intersection.color;
             root.intersection.border.color = settings.intersection?.border?.color || root.intersection.border.color;
             root.intersection.border.width = settings.intersection?.border?.width || root.intersection.border.width;
-            console.log(root.mainconf);
+            console.log(root.mainrect);
         }
         onLoadFailed: console.log("Failed to load settings")
     }

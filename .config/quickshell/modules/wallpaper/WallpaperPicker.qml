@@ -81,12 +81,16 @@ Scope {
 
                         event.accepted = true;
                         break;
+                    case Qt.Key_L:
+                    case Qt.Key_J:
                     case Qt.Key_Right:
                     case Qt.Key_Down:
                         if (flick.currentIndex < flick.count - 1)
                             flick.currentIndex += 1;
                         event.accepted = true;
                         break;
+                    case Qt.Key_H:
+                    case Qt.Key_K:
                     case Qt.Key_Up:
                     case Qt.Key_Left:
                         if (flick.currentIndex > 0)

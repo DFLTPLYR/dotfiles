@@ -12,6 +12,16 @@ Item {
     property alias rounding: rect.radius
     property alias padding: rect.anchors.margins
 
+    property alias paddingLeft: rect.anchors.leftMargin
+    property alias paddingRight: rect.anchors.rightMargin
+    property alias paddingTop: rect.anchors.topMargin
+    property alias paddingBottom: rect.anchors.bottomMargin
+
+    property alias roundingTopLeft: rect.topRightRadius
+    property alias roundingTopRight: rect.topLeftRadius
+    property alias roundingBottomLeft: rect.bottomLeftRadius
+    property alias roundingBottomRight: rect.bottomLeftRadius
+
     property alias backingVisible: backgroundRect.visible
     property alias backingrectX: backgroundRect.x
     property alias backingrectY: backgroundRect.y
