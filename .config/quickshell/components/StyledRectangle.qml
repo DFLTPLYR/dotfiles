@@ -39,7 +39,6 @@ Item {
         height: parent.height
         width: parent.width
         opacity: layoutHandler.opacity
-        anchors.margins: 0
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -59,7 +58,6 @@ Item {
     }
 
     Rectangle {
-
         x: Math.max(rect.x, backgroundRect.x)
         y: Math.max(rect.y, backgroundRect.y)
         width: Math.max(0, Math.min(rect.x + rect.width, backgroundRect.x + backgroundRect.width) - Math.max(rect.x, backgroundRect.x))

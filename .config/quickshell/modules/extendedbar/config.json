@@ -1,6 +1,6 @@
 {
   "mainrect": {
-    "color": "background",
+    "color": "green",
     "rounding": {
       "left": 0,
       "right": 0,
@@ -16,15 +16,15 @@
   },
   "backingrect": {
     "enabled": true,
-    "color": "background",
+    "color": "green",
     "x": 0,
     "y": 0,
     "opacity": 1,
     "rounding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
+      "left": 20,
+      "right": 20,
+      "top": 20,
+      "bottom": 20
     },
     "padding": {
       "left": 0,
