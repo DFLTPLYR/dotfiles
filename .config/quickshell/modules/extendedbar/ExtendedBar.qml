@@ -207,134 +207,141 @@ PopupWindow {
         settingsWatcher.setText(JSON.stringify(settings, null, 2));
     }
 
-    component Container: StyledRectangle {
-        anchors.fill: parent
-
-        // mainrect
-        transparency: 1
-        rounding: 10
-        padding: 10
-        bgColor: root.mainrect.color
-
-        paddingLeft: 1
-
-        backingVisible: backingrect.enabled
-        backingrectX: backingrect.x
-        backingrectY: backingrect.y
-        backingrectOpacity: backingrect.opacity
-
-        intersectionOpacity: intersection.opacity
-        intersectionColor: intersection.color
-    }
-
-    Item {
-        id: extendedBarContainer
-        width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
-        height: Math.floor(isPortrait ? parentWindow.width / 2 : parentWindow.width / 4)
-        Container {
-            opacity: animProgress
-        }
-    }
-    // Rectangle {
-    //     id: extendedBarContainer
+    // component Container: StyledRectangle {
+    //     anchors.fill: parent
     //
+    //     // mainrect
+    //     transparency: 1
+    //
+    //     bgColor: root.mainrect.color
+    //
+    //     paddingLeft: 10
+    //     paddingRight: 10
+    //     paddingTop: 10
+    //     paddingBottom: 10
+    //
+    //     roundingTopLeft: 10
+    //     roundingTopRight: 10
+    //     roundingBottomLeft: 10
+    //     roundingBottomRight: 10
+    //
+    //     backingVisible: backingrect.enabled
+    //     backingrectX: backingrect.x
+    //     backingrectY: backingrect.y
+    //     backingrectOpacity: backingrect.opacity
+    //
+    //     intersectionOpacity: intersection.opacity
+    //     intersectionColor: intersection.color
+    // }
+    //
+    // Item {
+    //     id: extendedBarContainer
     //     width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
     //     height: Math.floor(isPortrait ? parentWindow.width / 2 : parentWindow.width / 4)
-    //
-    //     color: 'transparent'
-    //     opacity: animProgress
-    //
-    //     y: -500 + animProgress * 500
-    //
-    //     scale: animProgress
-    //     transformOrigin: Item.Center
-    //
-    //     Shape {
-    //         anchors.fill: parent
-    //         scale: animProgress
-    //
-    //         ShapePath {
-    //             id: shapeBackground
-    //             readonly property real rounding: 20
-    //             readonly property bool flatten: extendedBarContainer.height < rounding * 2
-    //             readonly property real roundingY: flatten ? extendedBarContainer.height / 2 : rounding
-    //
-    //             strokeWidth: -1
-    //             fillColor: Scripts.setOpacity(ColorPalette.background, 0.8)
-    //
-    //             // Top-left outward arc
-    //             PathArc {
-    //                 relativeX: shapeBackground.rounding
-    //                 relativeY: shapeBackground.roundingY
-    //                 radiusX: shapeBackground.rounding
-    //                 radiusY: shapeBackground.roundingY
-    //             }
-    //
-    //             PathLine {
-    //                 relativeX: 0
-    //                 relativeY: extendedBarContainer.height - shapeBackground.roundingY * 2
-    //             }
-    //
-    //             // Bottom-left outward arc
-    //             PathArc {
-    //                 relativeX: shapeBackground.rounding
-    //                 relativeY: shapeBackground.roundingY
-    //                 radiusX: shapeBackground.rounding
-    //                 radiusY: shapeBackground.roundingY
-    //                 direction: PathArc.Counterclockwise
-    //             }
-    //
-    //             PathLine {
-    //                 relativeX: extendedBarContainer.width - shapeBackground.rounding * 4
-    //                 relativeY: 0
-    //             }
-    //
-    //             // Bottom-right outward arc
-    //             PathArc {
-    //                 relativeX: shapeBackground.rounding
-    //                 relativeY: -shapeBackground.roundingY
-    //                 radiusX: shapeBackground.rounding
-    //                 radiusY: shapeBackground.roundingY
-    //                 direction: PathArc.Counterclockwise
-    //             }
-    //
-    //             PathLine {
-    //                 relativeX: 0
-    //                 relativeY: -(extendedBarContainer.height - shapeBackground.roundingY * 2)
-    //             }
-    //
-    //             // Top-right outward arc
-    //             PathArc {
-    //                 relativeX: shapeBackground.rounding
-    //                 relativeY: -shapeBackground.roundingY
-    //                 radiusX: shapeBackground.rounding
-    //                 radiusY: shapeBackground.roundingY
-    //             }
-    //
-    //             Behavior on fillColor {
-    //                 ColorAnimation {
-    //                     duration: 250
-    //                     easing.type: Easing.InOutQuad
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     Row {
-    //         id: mainContent
-    //         width: Math.floor(parent.width - (shapeBackground.rounding * 3))
-    //         height: Math.floor(parent.height - shapeBackground.rounding)
-    //         anchors.centerIn: parent
-    //         spacing: 0
-    //
-    //         Rectangle {
-    //             color: 'transparent'
-    //
-    //             width: Math.floor(mainContent.width)
-    //             height: Math.floor(mainContent.height)
-    //
-    //             ContainerBar {}
-    //         }
+    //     Container {
+    //         opacity: animProgress
     //     }
     // }
+    Rectangle {
+        id: extendedBarContainer
+
+        width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
+        height: Math.floor(isPortrait ? parentWindow.width / 2 : parentWindow.width / 4)
+
+        color: 'transparent'
+        opacity: animProgress
+
+        y: -500 + animProgress * 500
+
+        scale: animProgress
+        transformOrigin: Item.Center
+
+        Shape {
+            anchors.fill: parent
+            scale: animProgress
+
+            ShapePath {
+                id: shapeBackground
+                readonly property real rounding: 10
+                readonly property bool flatten: extendedBarContainer.height < rounding * 2
+                readonly property real roundingY: flatten ? extendedBarContainer.height / 2 : rounding
+
+                strokeWidth: -1
+                fillColor: Scripts.setOpacity(ColorPalette.background, 0.8)
+
+                // Top-left outward arc
+                PathArc {
+                    relativeX: shapeBackground.rounding
+                    relativeY: shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
+                }
+
+                PathLine {
+                    relativeX: 0
+                    relativeY: extendedBarContainer.height - shapeBackground.roundingY * 2
+                }
+
+                // Bottom-left outward arc
+                PathArc {
+                    relativeX: shapeBackground.rounding
+                    relativeY: shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
+                    direction: PathArc.Counterclockwise
+                }
+
+                PathLine {
+                    relativeX: extendedBarContainer.width - shapeBackground.rounding * 4
+                    relativeY: 0
+                }
+
+                // Bottom-right outward arc
+                PathArc {
+                    relativeX: shapeBackground.rounding
+                    relativeY: -shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
+                    direction: PathArc.Counterclockwise
+                }
+
+                PathLine {
+                    relativeX: 0
+                    relativeY: -(extendedBarContainer.height - shapeBackground.roundingY * 2)
+                }
+
+                // Top-right outward arc
+                PathArc {
+                    relativeX: shapeBackground.rounding
+                    relativeY: -shapeBackground.roundingY
+                    radiusX: shapeBackground.rounding
+                    radiusY: shapeBackground.roundingY
+                }
+
+                Behavior on fillColor {
+                    ColorAnimation {
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        }
+
+        Row {
+            id: mainContent
+            width: Math.floor(parent.width - (shapeBackground.rounding * 3))
+            height: Math.floor(parent.height - shapeBackground.rounding)
+            anchors.centerIn: parent
+            spacing: 0
+
+            Rectangle {
+                color: 'transparent'
+
+                width: Math.floor(mainContent.width)
+                height: Math.floor(mainContent.height)
+
+                ContainerBar {}
+            }
+        }
+    }
 }
