@@ -11,6 +11,7 @@ QtObject {
     property bool clip: false
     property bool antialiasing: true
 
+    // idk what to call this positioning/layout or something something
     property Anchors anchors: Anchors {}
     property Layout layout: Layout {}
 }
