@@ -56,7 +56,58 @@ PopupWindow {
         }
     }
 
-    property RectProperties mainrect: RectProperties {
+    property QtObject container: QtObject {
+        property Properties main: Properties {
+            color: "background"
+
+            padding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+            rounding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+        }
+        property Properties background: Properties {
+            color: "background"
+
+            padding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+            rounding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+        }
+        property Properties intersection: Properties {
+            color: "background"
+
+            padding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+            rounding {
+                left: 0
+                right: 0
+                bottom: 0
+                top: 0
+            }
+        }
+    }
+
+    property Properties mainrect: Properties {
         color: "background"
         padding {
             left: 0
@@ -72,7 +123,7 @@ PopupWindow {
         }
     }
 
-    property RectProperties backingrectconf: RectProperties {
+    property Properties backingrectconf: Properties {
         color: "background"
         padding {
             left: 0
@@ -114,126 +165,103 @@ PopupWindow {
         onLoaded: {
             const settings = JSON.parse(settingsWatcher.text());
             // main rect conf
-            root.mainrect.color = settings.mainrect.color || root.mainrect.color;
-
-            root.mainrect.padding.left = settings.mainrect.padding.left;
-            root.mainrect.padding.right = settings.mainrect.padding.right;
-            root.mainrect.padding.top = settings.mainrect.padding.top;
-            root.mainrect.padding.bottom = settings.mainrect.padding.bottom;
-
-            root.mainrect.rounding.left = settings.mainrect.rounding.left;
-            root.mainrect.rounding.right = settings.mainrect.rounding.right;
-            root.mainrect.rounding.top = settings.mainrect.rounding.top;
-            root.mainrect.rounding.bottom = settings.mainrect.rounding.bottom;
-
-            // Assign backingrect properties
-            root.backingrect.enabled = settings.backingrect?.enabled || root.backingrect.enabled;
-            root.backingrect.color = settings.backingrect?.color || root.backingrect.color;
-            root.backingrect.x = settings.backingrect?.x || root.backingrect.x;
-            root.backingrect.y = settings.backingrect?.y || root.backingrect.y;
-            root.backingrect.opacity = settings.backingrect?.opacity || root.backingrect.opacity;
-
-            // Assign intersection properties
-            root.intersection.enabled = settings.intersection?.enabled || root.intersection.enabled;
-            root.intersection.opacity = settings.intersection?.opacity || root.intersection.opacity;
-            root.intersection.color = settings.intersection?.color || root.intersection.color;
-            root.intersection.border.color = settings.intersection?.border?.color || root.intersection.border.color;
-            root.intersection.border.width = settings.intersection?.border?.width || root.intersection.border.width;
+            // root.mainrect.color = settings.mainrect.color || root.mainrect.color;
+            //
+            // root.mainrect.padding.left = settings.mainrect.padding.left;
+            // root.mainrect.padding.right = settings.mainrect.padding.right;
+            // root.mainrect.padding.top = settings.mainrect.padding.top;
+            // root.mainrect.padding.bottom = settings.mainrect.padding.bottom;
+            //
+            // root.mainrect.rounding.left = settings.mainrect.rounding.left;
+            // root.mainrect.rounding.right = settings.mainrect.rounding.right;
+            // root.mainrect.rounding.top = settings.mainrect.rounding.top;
+            // root.mainrect.rounding.bottom = settings.mainrect.rounding.bottom;
+            //
+            // // Assign backingrect properties
+            // root.backingrect.enabled = settings.backingrect?.enabled || root.backingrect.enabled;
+            // root.backingrect.color = settings.backingrect?.color || root.backingrect.color;
+            // root.backingrect.x = settings.backingrect?.x || root.backingrect.x;
+            // root.backingrect.y = settings.backingrect?.y || root.backingrect.y;
+            // root.backingrect.opacity = settings.backingrect?.opacity || root.backingrect.opacity;
+            //
+            // // Assign intersection properties
+            // root.intersection.enabled = settings.intersection?.enabled || root.intersection.enabled;
+            // root.intersection.opacity = settings.intersection?.opacity || root.intersection.opacity;
+            // root.intersection.color = settings.intersection?.color || root.intersection.color;
+            // root.intersection.border.color = settings.intersection?.border?.color || root.intersection.border.color;
+            // root.intersection.border.width = settings.intersection?.border?.width || root.intersection.border.width;
         }
         onLoadFailed: root.saveSettings()
     }
 
     function saveSettings() {
-        const settings = {
-            // mainrect
-            mainrect: {
-                color: root.mainrect.color,
-                rounding: {
-                    left: root.mainrect.rounding.left,
-                    right: root.mainrect.rounding.right,
-                    top: root.mainrect.rounding.top,
-                    bottom: root.mainrect.rounding.bottom
-                },
-                padding: {
-                    left: root.mainrect.padding.left,
-                    right: root.mainrect.padding.right,
-                    top: root.mainrect.padding.top,
-                    bottom: root.mainrect.padding.bottom
-                }
-            },
-            // backingrect
-            backingrect: {
-                enabled: root.backingrect.enabled,
-                color: root.backingrect.color,
-                x: root.backingrect.x,
-                y: root.backingrect.y,
-                opacity: root.backingrect.opacity,
-                rounding: {
-                    left: root.mainrect.rounding.left,
-                    right: root.mainrect.rounding.right,
-                    top: root.mainrect.rounding.top,
-                    bottom: root.mainrect.rounding.bottom
-                },
-                padding: {
-                    left: root.mainrect.padding.left,
-                    right: root.mainrect.padding.right,
-                    top: root.mainrect.padding.top,
-                    bottom: root.mainrect.padding.bottom
-                }
-            },
-            //container rect
-            intersection: {
-                enabled: root.intersection.enabled,
-                opacity: root.intersection.opacity,
-                color: root.intersection.color,
-                border: {
-                    color: root.intersection.border.color,
-                    width: root.intersection.border.width
-                },
-                rounding: {
-                    left: root.mainrect.rounding.left,
-                    right: root.mainrect.rounding.right,
-                    top: root.mainrect.rounding.top,
-                    bottom: root.mainrect.rounding.bottom
-                },
-                padding: {
-                    left: root.mainrect.padding.left,
-                    right: root.mainrect.padding.right,
-                    top: root.mainrect.padding.top,
-                    bottom: root.mainrect.padding.bottom
-                }
-            }
-        };
+        const settings =
+        // mainrect
+        // mainrect: {
+        //     color: root.mainrect.color,
+        //     rounding: {
+        //         left: root.mainrect.rounding.left,
+        //         right: root.mainrect.rounding.right,
+        //         top: root.mainrect.rounding.top,
+        //         bottom: root.mainrect.rounding.bottom
+        //     },
+        //     padding: {
+        //         left: root.mainrect.padding.left,
+        //         right: root.mainrect.padding.right,
+        //         top: root.mainrect.padding.top,
+        //         bottom: root.mainrect.padding.bottom
+        //     }
+        // },
+        // // backingrect
+        // backingrect: {
+        //     enabled: root.backingrect.enabled,
+        //     color: root.backingrect.color,
+        //     x: root.backingrect.x,
+        //     y: root.backingrect.y,
+        //     opacity: root.backingrect.opacity,
+        //     rounding: {
+        //         left: root.mainrect.rounding.left,
+        //         right: root.mainrect.rounding.right,
+        //         top: root.mainrect.rounding.top,
+        //         bottom: root.mainrect.rounding.bottom
+        //     },
+        //     padding: {
+        //         left: root.mainrect.padding.left,
+        //         right: root.mainrect.padding.right,
+        //         top: root.mainrect.padding.top,
+        //         bottom: root.mainrect.padding.bottom
+        //     }
+        // },
+        // //container rect
+        // intersection: {
+        //     enabled: root.intersection.enabled,
+        //     opacity: root.intersection.opacity,
+        //     color: root.intersection.color,
+        //     border: {
+        //         color: root.intersection.border.color,
+        //         width: root.intersection.border.width
+        //     },
+        //     rounding: {
+        //         left: root.mainrect.rounding.left,
+        //         right: root.mainrect.rounding.right,
+        //         top: root.mainrect.rounding.top,
+        //         bottom: root.mainrect.rounding.bottom
+        //     },
+        //     padding: {
+        //         left: root.mainrect.padding.left,
+        //         right: root.mainrect.padding.right,
+        //         top: root.mainrect.padding.top,
+        //         bottom: root.mainrect.padding.bottom
+        //     }
+        // }
+        {};
         settingsWatcher.setText(JSON.stringify(settings, null, 2));
     }
 
     // component Container: StyledRectangle {
     //     anchors.fill: parent
-    //
-    //     // mainrect
-    //     transparency: 1
-    //
-    //     bgColor: root.mainrect.color
-    //
-    //     paddingLeft: 10
-    //     paddingRight: 10
-    //     paddingTop: 10
-    //     paddingBottom: 10
-    //
-    //     roundingTopLeft: 10
-    //     roundingTopRight: 10
-    //     roundingBottomLeft: 10
-    //     roundingBottomRight: 10
-    //
-    //     backingVisible: backingrect.enabled
-    //     backingrectX: backingrect.x
-    //     backingrectY: backingrect.y
-    //     backingrectOpacity: backingrect.opacity
-    //
-    //     intersectionOpacity: intersection.opacity
-    //     intersectionColor: intersection.color
-    // }
-    //
+    //     }
+
     // Item {
     //     id: extendedBarContainer
     //     width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
@@ -242,6 +270,7 @@ PopupWindow {
     //         opacity: animProgress
     //     }
     // }
+
     Rectangle {
         id: extendedBarContainer
 
