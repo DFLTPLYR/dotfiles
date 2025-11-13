@@ -78,7 +78,6 @@ Scope {
                             WallpaperStore.setWallpaper(screenName, path);
                             root.toggle();
                         }
-
                         event.accepted = true;
                         break;
                     case Qt.Key_L:
@@ -89,8 +88,8 @@ Scope {
                             flick.currentIndex += 1;
                         event.accepted = true;
                         break;
-                    case Qt.Key_H:
                     case Qt.Key_K:
+                    case Qt.Key_H:
                     case Qt.Key_Up:
                     case Qt.Key_Left:
                         if (flick.currentIndex > 0)
@@ -150,6 +149,7 @@ Scope {
                         Layout.preferredWidth: parent.width / 4
 
                         clip: true
+
                         StyledRect {
                             childContainerHeight: parent.height
 
@@ -254,7 +254,7 @@ Scope {
                                     bottom: parent.bottom
                                     margins: 10
                                 }
-
+                                z: 10
                                 implicitHeight: 100
                                 color: Scripts.setOpacity(ColorPalette.background, 0.6)
                                 radius: 8
@@ -289,7 +289,7 @@ Scope {
                                         Repeater {
                                             id: previewColorPallete
                                             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                                            model: flick.currentItem.modelData?.colors
+                                            model: flick.currentItem.modelData.colors
                                             delegate: Rectangle {
                                                 radius: 4
                                                 Layout.fillWidth: true
