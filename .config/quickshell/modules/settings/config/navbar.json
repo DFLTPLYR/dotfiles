@@ -1,10 +1,10 @@
 {
-  "rounding": 0,
+  "rounding": 4,
   "padding": 0,
   "backingrect": {
     "color": "background",
     "x": 0,
-    "y": 14,
+    "y": 0,
     "opacity": 1
   },
   "intersection": {

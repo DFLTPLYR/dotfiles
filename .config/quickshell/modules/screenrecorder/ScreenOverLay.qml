@@ -85,6 +85,11 @@ Scope {
                 intersectionOpacity: 1
                 intersectionPadding: 0
                 intersectionColor: ColorPalette.accent
+
+                Text {
+                    id: screenrecorder
+                    text: "idk what to put here"
+                }
             }
         }
 
