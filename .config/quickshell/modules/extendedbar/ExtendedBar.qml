@@ -55,7 +55,8 @@ PopupWindow {
             root.hide();
         }
     }
-          Rectangle {
+
+    Rectangle {
         id: extendedBarContainer
 
         width: Math.floor(isPortrait ? parentWindow.width : parentWindow.width / 1.75)
