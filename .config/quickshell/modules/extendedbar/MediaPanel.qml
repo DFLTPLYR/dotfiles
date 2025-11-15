@@ -54,7 +54,7 @@ Rectangle {
                     height: Math.round(parent.height)
                     sourceSize.width: width
                     sourceSize.height: height
-                    rotation:MprisManager.activePlayer && MprisManager.activePlayer?.isPlaying ? albumRotation : 0
+                    rotation: MprisManager.activePlayer && MprisManager.activePlayer?.isPlaying ? albumRotation : 0
                 }
 
                 FrameAnimation {
