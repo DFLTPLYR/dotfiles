@@ -12,11 +12,12 @@ import Quickshell.Services.Notifications
 * - Popup notifications, with timeout
 * - Notification groups by app
 */
+
 Singleton {
     id: root
     component Notif: QtObject {
         id: wrapper
-        required property int notificationId // Could just be `id` but it conflicts with the default prop in QtObject
+        required property int notificationId
         property Notification notification
         property list<var> actions: notification?.actions.map(action => ({
                     "identifier": action.identifier,
