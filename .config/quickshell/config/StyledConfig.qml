@@ -2,7 +2,7 @@ import QtQuick
 
 QtObject {
     // generics
-    property string color: "transparent"
+    property string color: "green"
     property real radius: 0
     property real opacity: 1.0
     property bool visible: true

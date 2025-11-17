@@ -47,17 +47,8 @@ ShellRoot {
         minimumSize: Qt.size(screen.width / 2, screen.height / 1.5)
         maximumSize: Qt.size(screen.width / 2, screen.height / 1.5)
 
-        Rectangle {
-            id: testing
-            anchors.fill: parent
-            Component.onCompleted: {
-                for (let key in testing) {
-                    console.log(key, testing[key]);
-                }
-            }
-        }
         StyledContainer {
-
+            id: testing
             Component.onCompleted: {
                 for (let key in testing) {
                     console.log(key, testing[key]);
