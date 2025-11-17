@@ -248,12 +248,14 @@ Scope {
 
                             // preview description
                             Rectangle {
+
                                 anchors {
                                     left: parent.left
                                     right: parent.right
                                     bottom: parent.bottom
                                     margins: 10
                                 }
+
                                 z: 10
                                 implicitHeight: 100
                                 color: Scripts.setOpacity(ColorPalette.background, 0.6)
