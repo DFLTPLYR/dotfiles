@@ -71,6 +71,8 @@ PopupWindow {
     }
 
     // Sync animation state with toggle
-    Component.onCompleted: {animProgress = shouldBeVisible ? 1 : 0}
+    Component.onCompleted: {
+        animProgress = shouldBeVisible ? 1 : 0;
+    }
     onShouldBeVisibleChanged: animProgress = shouldBeVisible ? 1 : 0
 }
