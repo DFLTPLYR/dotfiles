@@ -7,7 +7,6 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Widgets
 
-
 Item {
     Layout.fillWidth: true
 }
