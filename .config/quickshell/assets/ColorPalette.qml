@@ -1,13 +1,13 @@
-import QtQuick
-import Quickshell.Io
 // ColorPalette.qml
 pragma Singleton
+
+import QtQuick
+import Quickshell.Io
 
 Item {
     id: root
 
-    property var colors: {
-    }
+    property var colors: {}
     // make these writable so Behaviors can be attached
     property color foreground: (colors && colors.foreground) || "#F2FCCA"
     property color background: (colors && colors.background) || "#282523"
@@ -40,7 +40,7 @@ Item {
     property color warning: color11
     property color error: color1
 
-    signal parseDone()
+    signal parseDone
 
     FileView {
         id: colorJson
@@ -126,177 +126,118 @@ Item {
     }
 
     Behavior on foreground {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on background {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on backgroundAlt {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on cursor {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color0 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color1 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color2 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color3 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color4 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color5 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color6 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color7 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color8 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color9 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color10 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color11 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color12 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color13 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color14 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on color15 {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on primary {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on secondary {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on accent {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on text {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on textSecondary {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on border {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on success {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on warning {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
 
     Behavior on error {
-        AnimationProvider.ColorAnim {
-        }
-
+        AnimationProvider.ColorAnim {}
     }
-
 }
