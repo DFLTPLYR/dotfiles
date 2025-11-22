@@ -14,6 +14,7 @@ Item {
     property QtObject mainrect: QtObject {
         property int rounding: 0
         property int padding: 0
+        property string color: "background"
     }
 
     property QtObject backingrect: QtObject {
@@ -166,6 +167,7 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
                 Text {
                     text: "Position"
                     font.pixelSize: 18
@@ -174,9 +176,11 @@ Item {
                     Layout.preferredWidth: 100
                     Layout.margins: 20
                 }
+
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
                     Slider {
                         from: 0
                         value: 0
@@ -187,6 +191,7 @@ Item {
                             root.backingrect.x = Math.round(value);
                         }
                     }
+
                     Slider {
                         from: 0
                         value: 0
