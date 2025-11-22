@@ -1,6 +1,6 @@
 {
   "rounding": 4,
-  "padding": 0,
+  "padding": 3,
   "backingrect": {
     "color": "background",
     "x": 0,
