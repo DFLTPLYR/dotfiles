@@ -19,41 +19,44 @@ import qs.utils
 import qs.config
 
 ShellRoot {
-    id: root
-
-    FileView {
-        id: settingsWatcher
-        path: Qt.resolvedUrl("./test.json")
-        watchChanges: true
-        onFileChanged: settingsWatcher.reload()
-        onLoaded: {
-            const settings = JSON.parse(settingsWatcher.text());
-        }
-        onLoadFailed: root.saveSettings()
-    }
-
-    function saveSettings() {
-        const settings = {};
-        settingsWatcher.setText(JSON.stringify(settings, null, 2));
-    }
-
+  id: root
     FloatingWindow {
-        id: floatingPanel
+      id: floatingWindow
+      property var isPortrait: screen.height > screen.width
+      property var landscapeSize: Qt.size(screen.width / 3, screen.height / 2)
+      property var portraitSize: Qt.size(screen.width / 2, screen.height / 3)
+      
+      maximumSize: isPortrait ? portraitSize : landscapeSize
+      minimumSize: isPortrait ? portraitSize : landscapeSize
+      
+      color: "transparent"
 
-        color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
-
-        property bool isPortrait: screen.height > screen.width
-
-        minimumSize: Qt.size(screen.width / 2, screen.height / 1.5)
-        maximumSize: Qt.size(screen.width / 2, screen.height / 1.5)
-
-        StyledContainer {
-            id: testing
-            Component.onCompleted: {
-                for (let key in testing) {
-                    console.log(key, testing[key]);
-                }
-            }
+      // content
+      Rectangle {
+        id: contentRect
+        
+        anchors  {
+          left: parent.left
+          right: parent.right
+          top: parent.top
         }
+
+        width: parent.width
+        height: parent.height / 4
+      }
+
+      Rectangle {
+        id: settingsRect
+
+        anchors {
+          left: parent.left
+          right: parent.right
+          bottom: parent.bottom
+          top: contentRect.bottom
+        }
+
+        width: parent.width
+        height: parent.height / 4
+      }
     }
 }
