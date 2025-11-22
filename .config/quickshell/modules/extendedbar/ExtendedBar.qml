@@ -9,8 +9,8 @@ import QtQuick.Shapes
 
 import qs
 import qs.utils
-import qs.services
 import qs.assets
+import qs.services
 import qs.components
 
 PopupWindow {
@@ -53,6 +53,68 @@ PopupWindow {
             visible = false;
             root.hide();
         }
+    }
+
+    property QtObject mainrect: QtObject {
+        property int rounding: 0
+        property int padding: 0
+        property string color: "background"
+    }
+
+    property QtObject backingrect: QtObject {
+        property string color: "background"
+        property int x: 0
+        property int y: 0
+        property real opacity: 1
+    }
+
+    property QtObject intersection: QtObject {
+        property real opacity: 1
+        property string color: "background"
+        property QtObject border: QtObject {
+            property string color: "background"
+            property int width: 2
+        }
+    }
+
+    component Container: StyledRectangle {
+        anchors.fill: parent
+
+        // mainrect
+        transparency: 1
+        rounding: mainrect.rounding
+        padding: mainrect.padding
+        bgColor: ColorPalette.background
+
+        backingVisible: backingrect.visible !== 0 ? true : false
+        backingrectX: backingrect.x
+        backingrectY: backingrect.y
+        backingrectOpacity: backingrect.opacity
+
+        intersectionOpacity: intersection.opacity
+        intersectionColor: intersection.color
+    }
+
+    function saveSettings() {
+        const settings = {
+            rounding: root.mainrect.rounding || 0,
+            padding: root.mainrect.padding || 0,
+            backingrect: {
+                color: root.backingrect.color || ColorPalette.background,
+                x: root.backingrect.x || 0,
+                y: root.backingrect.y || 0,
+                opacity: root.backingrect.opacity || 0
+            },
+            intersection: {
+                opacity: root.intersection.opacity || 0,
+                color: root.intersection.color,
+                border: {
+                    color: root.intersection.border.color,
+                    width: root.intersection.border.width
+                }
+            }
+        };
+        settingsWatcher.setText(JSON.stringify(settings, null, 2));
     }
 
     Rectangle {
@@ -155,6 +217,23 @@ PopupWindow {
 
                 ContainerBar {}
             }
+        }
+    }
+    FileView {
+        id: settingsWatcher
+        path: Qt.resolvedUrl("./config.json")
+        watchChanges: true
+        onFileChanged: settingsWatcher.reload()
+        onAdapterUpdated: writeAdapter()
+        JsonAdapter {
+            property string contentHandler: "main"
+            property StyledConfig mainrectAppearance: StyledConfig {}
+            property StyledConfig backingAppearance: StyledConfig {}
+            property StyledConfig intersectionAppearance: StyledConfig {}
+        }
+        onLoadFailed: {
+            settingsWatcher.setText("{}");
+            writeAdapter();
         }
     }
 }

@@ -1,57 +1,69 @@
 {
-  "mainrect": {
-    "color": "green",
-    "rounding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
+    "backingAppearance": {
+        "anchors": {
+            "fill": false,
+            "margins": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            }
+        },
+        "border": {
+            "color": "transparent",
+            "radius": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            },
+            "width": 0
+        },
+        "color": "background"
     },
-    "padding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
+    "contentHandler": "main",
+    "intersectionAppearance": {
+        "anchors": {
+            "fill": false,
+            "margins": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            }
+        },
+        "border": {
+            "color": "transparent",
+            "radius": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            },
+            "width": 0
+        },
+        "color": "background"
+    },
+    "mainrectAppearance": {
+        "anchors": {
+            "fill": false,
+            "margins": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            }
+        },
+        "border": {
+            "color": "transparent",
+            "radius": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            },
+            "width": 0
+        },
+        "color": "background"
     }
-  },
-  "backingrect": {
-    "enabled": true,
-    "color": "green",
-    "x": 0,
-    "y": 0,
-    "opacity": 1,
-    "rounding": {
-      "left": 20,
-      "right": 20,
-      "top": 20,
-      "bottom": 20
-    },
-    "padding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
-    }
-  },
-  "intersection": {
-    "enabled": true,
-    "opacity": 1,
-    "color": "background",
-    "border": {
-      "color": "background",
-      "width": 2
-    },
-    "rounding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
-    },
-    "padding": {
-      "left": 0,
-      "right": 0,
-      "top": 0,
-      "bottom": 0
-    }
-  }
 }
