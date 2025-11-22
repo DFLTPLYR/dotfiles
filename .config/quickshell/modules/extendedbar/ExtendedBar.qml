@@ -12,7 +12,6 @@ import qs.utils
 import qs.services
 import qs.assets
 import qs.components
-import qs.config
 
 PopupWindow {
     id: root

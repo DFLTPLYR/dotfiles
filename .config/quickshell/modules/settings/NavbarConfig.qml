@@ -210,12 +210,6 @@ Item {
                         root.saveSettings();
                     }
                 }
-                Button {
-                    text: qsTr("Save Settings and Quit")
-                    onClicked: {
-                        root.saveSettings();
-                    }
-                }
             }
         }
     }

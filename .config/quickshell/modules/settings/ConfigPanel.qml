@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -39,10 +41,12 @@ Scope {
     component SettingPanel: FloatingWindow {
         id: floatingPanel
 
-        minimumSize: Qt.size(screen.width / 2, screen.height / 2)
-        maximumSize: Qt.size(screen.width / 2, screen.height / 2)
-
         property bool isPortrait: screen.height > screen.width
+        property var portraitSize: Qt.size(screen.width / 2, screen.height / 4)
+        property var landscapeSize: Qt.size(screen.width / 3, screen.height / 2)
+
+        minimumSize: isPortrait ? portraitSize : landscapeSize
+        maximumSize: isPortrait ? portraitSize : landscapeSize
 
         color: Qt.rgba(0.33, 0.33, 0.41, 0.78)
 
@@ -88,26 +92,6 @@ Scope {
                     TabButton {
                         text: qsTr("Navbar")
                     }
-
-                    TabButton {
-                        text: qsTr("Extra Navbar")
-                    }
-
-                    TabButton {
-                        text: qsTr("Sidebar")
-                    }
-
-                    TabButton {
-                        text: qsTr("App Menu")
-                    }
-
-                    TabButton {
-                        text: qsTr("Wallpaper Menu")
-                    }
-
-                    TabButton {
-                        text: qsTr("Clipboard")
-                    }
                 }
 
                 StackLayout {
@@ -117,16 +101,10 @@ Scope {
                     Layout.fillHeight: true
 
                     // Todo: replace with actual settings components
-
                     NavbarConfig {
                         id: navbarConfig
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                    }
-
-                    Text {
-                        text: "2"
-                        font.pixelSize: 18
                     }
 
                     onCurrentIndexChanged: {
