@@ -4,17 +4,18 @@ import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-
+import QtQuick.Controls
 // Modules
 import qs.modules.extendedbar
 import qs.modules.clipboard
 import qs.modules.bar
 
 // component
-import qs.components
-import qs.services
-import qs.assets
+import qs.config
 import qs.utils
+import qs.assets
+import qs.services
+import qs.components
 
 Variants {
     model: Quickshell.screens
@@ -38,24 +39,25 @@ Variants {
         Item {
             id: barComponent
             width: parent.width
-            height: 50
+            height: Config.navbar.height
 
             StyledRect {
-                childContainerHeight: parent.height
+                childContainerHeight: Config.navbar.height
 
                 anchors {
-                    top: parent.top
-                    left: parent.left
-                    bottom: parent.bottom
-                    right: parent.right
-                    topMargin: 10
-                    leftMargin: 10
-                    rightMargin: 10
+                    top: Config.navbar.anchors.top ? parent.top : undefined
+                    left: Config.navbar.anchors.left ? parent.left : undefined
+                    bottom: Config.navbar.anchors.bottom ? parent.bottom : undefined
+                    right: Config.navbar.anchors.right ? parent.right : undefined
+                    topMargin: Config.navbar.margins.top
+                    leftMargin: Config.navbar.margins.left
+                    rightMargin: Config.navbar.margins.right
                 }
 
                 RowLayout {
 
                     spacing: 5
+
                     anchors {
                         fill: parent
                         margins: 5
