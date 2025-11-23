@@ -50,7 +50,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     Behavior on color {
-                        AnimationProvider.ColorAnim {}
+                        ColorAnim {}
                     }
                 }
 
@@ -59,7 +59,7 @@ Item {
                     radius: width / 2
 
                     Behavior on color {
-                        AnimationProvider.ColorAnim {}
+                        ColorAnim {}
                     }
                 }
 
@@ -190,7 +190,7 @@ Item {
                     anchors.centerIn: parent
                     font.pixelSize: Math.min(control.height, control.width) * 0.5
                     Behavior on color {
-                        AnimationProvider.ColorAnim {}
+                        ColorAnim {}
                     }
                 }
             }

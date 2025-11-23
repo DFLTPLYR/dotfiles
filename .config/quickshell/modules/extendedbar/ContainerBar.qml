@@ -173,7 +173,7 @@ GridLayout {
             opacity: middleTopStack.currentIndex === 0 ? 1 : 0
 
             Behavior on opacity {
-                AnimationProvider.NumberAnim {}
+                NumberAnim {}
             }
 
             MouseArea {
@@ -194,7 +194,7 @@ GridLayout {
             opacity: middleTopStack.currentIndex === 1 ? 1 : 0
 
             Behavior on opacity {
-                AnimationProvider.NumberAnim {}
+                NumberAnim {}
             }
 
             MouseArea {

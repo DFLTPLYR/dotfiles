@@ -90,54 +90,54 @@ Singleton {
     }
 
     Behavior on cpuUsage {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on cpuCores {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on cpuCtxSwitches {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
 
     Behavior on gpuUsage {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on gpuTemp {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on gpuMem {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
 
     Behavior on memUsage {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on memUsed {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on memTotal {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on memCached {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on memActive {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
 
     Behavior on swapUsage {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on swapUsed {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on swapTotal {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on swapIn {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
     Behavior on swapOut {
-        AnimationProvider.NumberAnim {}
+        NumberAnim {}
     }
 }
