@@ -6,9 +6,7 @@ import Quickshell.Io
 
 Item {
     id: root
-
     property var colors: {}
-    // make these writable so Behaviors can be attached
     property color foreground: (colors && colors.foreground) || "#F2FCCA"
     property color background: (colors && colors.background) || "#282523"
     property color backgroundAlt: (colors && colors.backgroundAlt) || "transparent"
@@ -126,118 +124,118 @@ Item {
     }
 
     Behavior on foreground {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on background {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on backgroundAlt {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on cursor {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color0 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color1 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color2 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color3 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color4 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color5 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color6 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color7 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color8 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color9 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color10 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color11 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color12 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color13 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color14 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on color15 {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on primary {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on secondary {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on accent {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on text {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on textSecondary {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on border {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on success {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on warning {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 
     Behavior on error {
-        AnimationProvider.ColorAnim {}
+        ColorAnim {}
     }
 }

@@ -1,7 +1,8 @@
 import Quickshell.Io
+import qs.assets
 
 JsonObject {
-    property string color: "background"
+    property string color: ColorPalette.background
     property int height: 50
     property JsonObject anchors: JsonObject {
         property bool top: true
