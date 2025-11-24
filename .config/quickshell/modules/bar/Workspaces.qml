@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs
-import qs.configj
+import qs.config
 import qs.assets
 import qs.utils
 import qs.services
