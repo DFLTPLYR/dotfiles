@@ -219,6 +219,7 @@ PopupWindow {
             }
         }
     }
+
     FileView {
         id: settingsWatcher
         path: Qt.resolvedUrl("./config.json")
