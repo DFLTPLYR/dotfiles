@@ -8,6 +8,8 @@ import qs.services
 import qs.assets
 import qs.utils
 
+import qs.config
+
 Rectangle {
     id: wrapper
     required property var modelData
@@ -15,8 +17,8 @@ Rectangle {
     height: 250
     radius: 10
     clip: true
-    color: Scripts.setOpacity(ColorPalette.foreground, 0.2)
-    border.color: Scripts.setOpacity(ColorPalette.colors10, 0.2)
+    color: Scripts.setOpacity(Color.foreground, 0.2)
+    border.color: Scripts.setOpacity(Color.colors10, 0.2)
 
     ColumnLayout {
         anchors.fill: parent
@@ -48,7 +50,7 @@ Rectangle {
 
             Text {
                 text: qsTr("Tags:")
-                color: ColorPalette.color15
+                color: Color.color15
             }
 
             RowLayout {
@@ -64,7 +66,7 @@ Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         text: qsTr(modelData)
-                        color: ColorPalette.color10
+                        color: Color.color10
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight

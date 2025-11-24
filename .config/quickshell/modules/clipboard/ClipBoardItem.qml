@@ -20,9 +20,9 @@ Item {
         id: container
         anchors.fill: parent
 
-        border.color: isHovered || isSelected ? ColorPalette.color10 : ColorPalette.color15
+        border.color: isHovered || isSelected ? Color.color10 : Color.color15
 
-        color: isHovered || isSelected ? ColorPalette.color10 : Scripts.setOpacity(ColorPalette.background, 0.2)
+        color: isHovered || isSelected ? Color.color10 : Scripts.setOpacity(Color.background, 0.2)
         radius: 4
 
         Behavior on border.color {
@@ -47,7 +47,7 @@ Item {
 
                 Text {
                     id: clipboardText
-                    color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
+                    color: isHovered || isSelected ? Color.color15 : Color.color10
                     width: parent.width
                     height: parent.height
 
@@ -69,7 +69,7 @@ Item {
                     var data = modelData.text;
                     if (modelData.isImage) {
                         clipboardText.text = "IMAGE";
-                        clipboardText.color = ColorPalette.color15;
+                        clipboardText.color = Color.color15;
                         clipboardText.visible = true;
                     } else {
                         clipboardText.text = modelData.text;
@@ -94,7 +94,7 @@ Item {
             Text {
                 id: trash
                 text: '\uf1f8'
-                color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
+                color: isHovered || isSelected ? Color.color15 : Color.color10
 
                 MouseArea {
                     anchors.fill: parent
@@ -108,7 +108,7 @@ Item {
             Text {
                 id: copy
                 text: '\uf0c5'
-                color: isHovered || isSelected ? ColorPalette.color15 : ColorPalette.color10
+                color: isHovered || isSelected ? Color.color15 : Color.color10
             }
         }
     }

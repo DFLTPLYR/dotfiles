@@ -10,6 +10,7 @@ import qs.components
 import qs.services
 import qs.assets
 import qs
+import qs.config
 
 Scope {
     id: root
@@ -29,7 +30,7 @@ Scope {
                         anchors.centerIn: parent
                         name: "\uf28b"
                         size: 64
-                        color: ColorPalette.color9
+                        color: Color.color9
                     }
                 },
                 LogoutButton {
@@ -40,7 +41,7 @@ Scope {
                         anchors.centerIn: parent
                         name: "\uf236"
                         size: 64
-                        color: ColorPalette.color9
+                        color: Color.color9
                     }
                 },
                 LogoutButton {
@@ -51,7 +52,7 @@ Scope {
                         anchors.centerIn: parent
                         name: "\uf011"
                         size: 64
-                        color: ColorPalette.color9
+                        color: Color.color9
                     }
                 },
                 LogoutButton {
@@ -62,7 +63,7 @@ Scope {
                         anchors.centerIn: parent
                         name: "\uf2f1"
                         size: 64
-                        color: ColorPalette.color9
+                        color: Color.color9
                     }
                 }
             ]
@@ -151,7 +152,7 @@ Scope {
                                             anchors.centerIn: parent
                                             name: modelData.icon.name
                                             size: parent.width * 0.25
-                                            color: ma.containsMouse ? modelData.icon.color : ColorPalette.color12
+                                            color: ma.containsMouse ? modelData.icon.color : Color.color12
                                         }
 
                                         Text {
@@ -163,7 +164,7 @@ Scope {
 
                                             text: modelData.text
                                             font.pointSize: 20
-                                            color: ma.containsMouse ? modelData.icon.color : ColorPalette.color15
+                                            color: ma.containsMouse ? modelData.icon.color : Color.color15
                                         }
                                     }
                                 }

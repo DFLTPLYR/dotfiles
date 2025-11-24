@@ -66,13 +66,13 @@ Rectangle {
     }
 
     Text {
-      id: placeholderText
-      anchors.centerIn: parent
-      text: "No notifications"
-      color: "white" 
-      font.bold: true
-      font.family: FontProvider.fontSometypeMono
-      font.weight: Font.Black
-      visible: notificationListView.count == 0
+        id: placeholderText
+        anchors.centerIn: parent
+        text: "No notifications"
+        color: "white"
+        font.bold: true
+        font.family: FontProvider.fontSometypeMono
+        font.weight: Font.Black
+        visible: notificationListView.count == 0
     }
 }

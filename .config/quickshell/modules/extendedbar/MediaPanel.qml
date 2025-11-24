@@ -11,6 +11,7 @@ import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
 import qs.services
+import qs.config
 import qs.components
 import qs.assets
 import qs.utils
@@ -75,7 +76,7 @@ Rectangle {
                         const r = width / 2;
                         ctx.beginPath();
                         ctx.lineWidth = 6;
-                        ctx.strokeStyle = ColorPalette.color1;
+                        ctx.strokeStyle = Color.color1;
                         ctx.arc(width / 2, height / 2, r, 0, 2 * Math.PI);
                         ctx.stroke();
                     }
@@ -92,7 +93,7 @@ Rectangle {
                         const r = width / 2;
                         ctx.beginPath();
                         ctx.lineWidth = 6;
-                        ctx.strokeStyle = ColorPalette.color15;
+                        ctx.strokeStyle = Color.color15;
                         ctx.arc(width / 2, height / 2, r, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * progress);
                         ctx.stroke();
                     }
@@ -157,7 +158,7 @@ Rectangle {
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
-                    ctx.strokeStyle = Scripts.setOpacity(ColorPalette.color12, 0.4);
+                    ctx.strokeStyle = Scripts.setOpacity(Color.color12, 0.4);
                     ctx.lineWidth = 1;
                     ctx.stroke();
                 }
@@ -197,7 +198,7 @@ Rectangle {
                 Text {
                     id: artist
                     text: MprisManager.activeTrack.artist ?? "SYBAU"
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.pixelSize: 24
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
@@ -208,7 +209,7 @@ Rectangle {
                 Text {
                     id: title
                     text: qsTr(MprisManager.activeTrack.title) ?? "SYBAU"
-                    color: ColorPalette.color11
+                    color: Color.color11
                     font.pixelSize: 12
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
@@ -232,10 +233,10 @@ Rectangle {
             icon: "\uf04a"
             size: 48
             iconRatio: 0.5
-            borderColor: ColorPalette.color10
-            backgroundColor: Scripts.setOpacity(ColorPalette.background, 0.4)
-            hoverColor: Scripts.setOpacity(ColorPalette.color15, 0.7)
-            iconColor: MprisManager.canGoPrevious ? ColorPalette.color10 : ColorPalette.color0
+            borderColor: Color.color10
+            backgroundColor: Scripts.setOpacity(Color.background, 0.4)
+            hoverColor: Scripts.setOpacity(Color.color15, 0.7)
+            iconColor: MprisManager.canGoPrevious ? Color.color10 : Color.color0
             onClicked: MprisManager.previous()
         }
 
@@ -243,10 +244,10 @@ Rectangle {
             icon: MprisManager.activePlayer && MprisManager.isPlaying ? "\uf04c" : "\uf04b"
             size: 48
             iconRatio: 0.5
-            borderColor: ColorPalette.color10
-            backgroundColor: Scripts.setOpacity(ColorPalette.background, 0.4)
-            hoverColor: Scripts.setOpacity(ColorPalette.color15, 0.7)
-            iconColor: MprisManager.canTogglePlaying ? ColorPalette.color10 : ColorPalette.color0
+            borderColor: Color.color10
+            backgroundColor: Scripts.setOpacity(Color.background, 0.4)
+            hoverColor: Scripts.setOpacity(Color.color15, 0.7)
+            iconColor: MprisManager.canTogglePlaying ? Color.color10 : Color.color0
             onClicked: MprisManager.togglePlaying()
         }
 
@@ -254,10 +255,10 @@ Rectangle {
             icon: "\uf04e"
             size: 48
             iconRatio: 0.5
-            borderColor: ColorPalette.color10
-            backgroundColor: Scripts.setOpacity(ColorPalette.background, 0.4)
-            hoverColor: Scripts.setOpacity(ColorPalette.color15, 0.7)
-            iconColor: MprisManager.canGoNext ? ColorPalette.color10 : ColorPalette.color0
+            borderColor: Color.color10
+            backgroundColor: Scripts.setOpacity(Color.background, 0.4)
+            hoverColor: Scripts.setOpacity(Color.color15, 0.7)
+            iconColor: MprisManager.canGoNext ? Color.color10 : Color.color0
             onClicked: MprisManager.next()
         }
 

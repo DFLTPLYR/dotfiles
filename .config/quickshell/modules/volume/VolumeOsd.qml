@@ -11,6 +11,8 @@ import qs.services
 import qs.assets
 import qs.components
 
+import qs.config
+
 Scope {
     id: root
     PwObjectTracker {
@@ -69,85 +71,85 @@ Scope {
 
                 implicitWidth: isPortrait ? parent.width * 0.3 : parent.width / 6
                 implicitHeight: 40
-                
+
                 StyledRect {
-                  childContainerHeight: parent.height
-                  
-                  RowLayout {
-                    id: layout
-                    anchors.fill: parent
-                    anchors.margins: 10
+                    childContainerHeight: parent.height
 
-                    Text {
-                        Layout.preferredWidth: 60
-                        text: `${volumeIcon}   ${Math.round(root.volume * 100)}%`
-                        color: ColorPalette.color13
-                        elide: Text.ElideRight
-                        clip: true
-                        font.family: FontProvider.fontAwesomeRegular
-                        font.pixelSize: 14
-                    }
+                    RowLayout {
+                        id: layout
+                        anchors.fill: parent
+                        anchors.margins: 10
 
-                    Slider {
-                        id: volumeSlider
-                        property real handleSize: 14
-
-                        from: 0
-                        to: 1
-                        value: Pipewire.defaultAudioSink?.audio.volume ?? 0
-                        stepSize: 0.01
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
-
-                        hoverEnabled: true
-
-                        onActiveFocusChanged: {
-                            if (!activeFocus)
-                                hideTimer.start();
+                        Text {
+                            Layout.preferredWidth: 60
+                            text: `${volumeIcon}   ${Math.round(root.volume * 100)}%`
+                            color: Color.color13
+                            elide: Text.ElideRight
+                            clip: true
+                            font.family: FontProvider.fontAwesomeRegular
+                            font.pixelSize: 14
                         }
 
-                        onHoveredChanged: {
-                            if (hovered) {
-                                root.shouldShowOsd = true;
-                                hideTimer.stop();
-                            } else {
-                                hideTimer.start();
+                        Slider {
+                            id: volumeSlider
+                            property real handleSize: 14
+
+                            from: 0
+                            to: 1
+                            value: Pipewire.defaultAudioSink?.audio.volume ?? 0
+                            stepSize: 0.01
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignVCenter
+
+                            hoverEnabled: true
+
+                            onActiveFocusChanged: {
+                                if (!activeFocus)
+                                    hideTimer.start();
                             }
-                        }
 
-                        onValueChanged: {
-                            if (Pipewire.defaultAudioSink?.audio) {
-                                Pipewire.defaultAudioSink.audio.volume = value;
+                            onHoveredChanged: {
+                                if (hovered) {
+                                    root.shouldShowOsd = true;
+                                    hideTimer.stop();
+                                } else {
+                                    hideTimer.start();
+                                }
                             }
-                            root.volume = value;
-                        }
 
-                        background: Rectangle {
-                            implicitHeight: 10
-                            radius: 5
-                            color: ColorPalette.color1
+                            onValueChanged: {
+                                if (Pipewire.defaultAudioSink?.audio) {
+                                    Pipewire.defaultAudioSink.audio.volume = value;
+                                }
+                                root.volume = value;
+                            }
 
-                            Rectangle {
-                                width: volumeSlider.visualPosition * (volumeSlider.width - volumeSlider.handleSize) + volumeSlider.handleSize / 2
-                                height: parent.height
+                            background: Rectangle {
+                                implicitHeight: 10
                                 radius: 5
-                                color: ColorPalette.color13
+                                color: Color.color1
+
+                                Rectangle {
+                                    width: volumeSlider.visualPosition * (volumeSlider.width - volumeSlider.handleSize) + volumeSlider.handleSize / 2
+                                    height: parent.height
+                                    radius: 5
+                                    color: Color.color13
+                                }
                             }
-                        }
 
-                        handle: Rectangle {
-                            width: volumeSlider.handleSize * 1.25
-                            height: volumeSlider.handleSize * 1.25
-                            radius: volumeSlider.handleSize
-                            color: ColorPalette.color13
-                            border.color: ColorPalette.color12
+                            handle: Rectangle {
+                                width: volumeSlider.handleSize * 1.25
+                                height: volumeSlider.handleSize * 1.25
+                                radius: volumeSlider.handleSize
+                                color: Color.color13
+                                border.color: Color.color12
 
-                            y: (volumeSlider.height - height) / 2
-                            x: volumeSlider.visualPosition * (volumeSlider.width - width)
+                                y: (volumeSlider.height - height) / 2
+                                x: volumeSlider.visualPosition * (volumeSlider.width - width)
+                            }
                         }
                     }
                 }
-              }
             }
 
             Component.onCompleted: {
@@ -158,4 +160,3 @@ Scope {
         }
     }
 }
-

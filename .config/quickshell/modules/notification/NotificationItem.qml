@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 
 import Quickshell
 
+import qs.config
 import qs.utils
 import qs.services
 import qs.assets
@@ -15,7 +16,7 @@ StyledRect {
 
     childContainerHeight: 80
 
-     RowLayout {
+    RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width - 25
@@ -72,13 +73,13 @@ StyledRect {
                     font.bold: true
                     Layout.fillWidth: true
                     elide: Text.ElideRight
-                    color: ColorPalette.color12
+                    color: Color.color12
                 }
 
                 Text {
                     id: timeText
                     text: Qt.formatDateTime(new Date(modelData.time), "hh:mm AP")
-                    color: ColorPalette.color11
+                    color: Color.color11
                 }
             }
 
@@ -88,7 +89,7 @@ StyledRect {
                 wrapMode: Text.Wrap
                 maximumLineCount: 2
                 elide: Text.ElideRight
-                color: ColorPalette.color11
+                color: Color.color11
             }
 
             Text {
@@ -97,11 +98,8 @@ StyledRect {
                 wrapMode: Text.Wrap
                 maximumLineCount: 2
                 elide: Text.ElideRight
-                color: ColorPalette.color10
+                color: Color.color10
             }
         }
     }
 }
-
-
-
