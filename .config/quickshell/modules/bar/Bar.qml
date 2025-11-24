@@ -39,19 +39,19 @@ Variants {
         Item {
             id: barComponent
             width: parent.width
-            height: Config.navbar.height
+            height: Config.navbar.main.height
 
             StyledRect {
-                childContainerHeight: Config.navbar.height
+                childContainerHeight: Config.navbar.main.height
 
                 anchors {
-                    top: Config.navbar.anchors.top ? parent.top : undefined
-                    left: Config.navbar.anchors.left ? parent.left : undefined
-                    bottom: Config.navbar.anchors.bottom ? parent.bottom : undefined
-                    right: Config.navbar.anchors.right ? parent.right : undefined
-                    topMargin: Config.navbar.margins.top
-                    leftMargin: Config.navbar.margins.left
-                    rightMargin: Config.navbar.margins.right
+                    top: Config.navbar.main.anchors.top ? parent.top : undefined
+                    left: Config.navbar.main.anchors.left ? parent.left : undefined
+                    bottom: Config.navbar.main.anchors.bottom ? parent.bottom : undefined
+                    right: Config.navbar.main.anchors.right ? parent.right : undefined
+                    topMargin: Config.navbar.main.margins.top
+                    leftMargin: Config.navbar.main.margins.left
+                    rightMargin: Config.navbar.main.margins.right
                 }
 
                 RowLayout {
