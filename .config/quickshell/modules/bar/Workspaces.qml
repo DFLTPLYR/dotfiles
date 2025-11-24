@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs
+import qs.configj
 import qs.assets
 import qs.utils
 import qs.services
@@ -40,7 +41,7 @@ Item {
                     height: parent.height
                     width: height
                     radius: height * 0.2
-                    color: mouseArea.containsMouse ? Scripts.setOpacity(ColorPalette.color14, 0.4) : (modelData.active && modelData.focused) ? ColorPalette.color2 : "transparent"
+                    color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
 
                     // Animate the fill color
                     Behavior on color {
@@ -53,7 +54,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: romanNumber(modelData.id - 1)
-                        color: mouseArea.containsMouse ? ColorPalette.color14 : (modelData.active && modelData.focused) ? ColorPalette.color14 : ColorPalette.color2
+                        color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
                         font.pixelSize: {
                             var minSize = 10;
                             return Math.max(minSize, Math.min(height, width) * 0.6);
