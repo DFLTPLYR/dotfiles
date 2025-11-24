@@ -31,9 +31,10 @@ Variants {
         implicitHeight: barComponent.height
 
         anchors {
-            top: true
-            left: true
-            right: true
+            left: Config.navbar.position === "left" || Config.navbar.position === "top" || Config.navbar.position === "bottom"
+            right: Config.navbar.position === "right" || Config.navbar.position === "top" || Config.navbar.position === "bottom"
+            top: Config.navbar.position === "top" || Config.navbar.position === "left" || Config.navbar.position === "right"
+            bottom: Config.navbar.position === "bottom" || Config.navbar.position === "left" || Config.navbar.position === "right"
         }
 
         Item {

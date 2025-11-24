@@ -4,6 +4,7 @@ import QtQuick.Controls
 import Quickshell
 
 import qs.assets
+import qs.config
 import qs.utils
 
 Item {
