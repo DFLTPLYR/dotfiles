@@ -15,6 +15,7 @@ import qs.assets
 import qs.utils
 import qs.services
 import qs.components
+import qs.config
 
 Scope {
     id: root
@@ -39,7 +40,7 @@ Scope {
         component: PanelWrapper {
             id: sidebarRoot
             implicitWidth: 0
-            color: isVisible ? Scripts.setOpacity(ColorPalette.background, 0.4) : "transparent"
+            color: isVisible ? Scripts.setOpacity(Color.background, 0.4) : "transparent"
 
             Behavior on color {
                 ColorAnimation {
@@ -203,7 +204,7 @@ Scope {
                                 highlight: Rectangle {
                                     width: 180
                                     height: 40
-                                    color: Scripts.setOpacity(ColorPalette.color1, 0.4)
+                                    color: Scripts.setOpacity(Color.color1, 0.4)
                                     radius: 10
                                 }
                             }
@@ -258,9 +259,9 @@ Scope {
 
                                 z: 10
                                 implicitHeight: 100
-                                color: Scripts.setOpacity(ColorPalette.background, 0.6)
+                                color: Scripts.setOpacity(Color.background, 0.6)
                                 radius: 8
-                                border.color: Scripts.setOpacity(ColorPalette.foreground, 0.2)
+                                border.color: Scripts.setOpacity(Color.foreground, 0.2)
 
                                 ColumnLayout {
                                     id: previewWrapper
@@ -274,7 +275,7 @@ Scope {
                                         Text {
                                             anchors.centerIn: parent
                                             text: qsTr("\uf1fc Color Pallete \uf1fc ")
-                                            color: ColorPalette.color10
+                                            color: Color.color10
                                         }
                                     }
 
@@ -297,7 +298,7 @@ Scope {
                                                 Layout.fillWidth: true
                                                 Layout.preferredHeight: width / 2
                                                 color: modelData?.color
-                                                border.color: Scripts.setOpacity(ColorPalette.foreground, 0.1)
+                                                border.color: Scripts.setOpacity(Color.foreground, 0.1)
                                             }
                                         }
 
@@ -314,7 +315,7 @@ Scope {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: screen.height / 10
-                    color: Scripts.setOpacity(ColorPalette.background, 0.8)
+                    color: Scripts.setOpacity(Color.background, 0.8)
                     radius: 10
                     clip: true
                 }

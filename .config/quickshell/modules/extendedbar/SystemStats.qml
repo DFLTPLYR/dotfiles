@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.services
+import qs.config
 import qs.components
 import qs.assets
 import qs.utils

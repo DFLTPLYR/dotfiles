@@ -8,6 +8,8 @@ import Quickshell.Io
 import qs.components
 import qs.assets
 
+import qs.config
+
 Item {
     id: root
 
@@ -40,7 +42,7 @@ Item {
         transparency: 1
         rounding: mainrect.rounding
         padding: mainrect.padding
-        bgColor: ColorPalette.background
+        bgColor: Color.background
 
         backingVisible: backingrect.visible !== 0 ? true : false
         backingrectX: backingrect.x
@@ -83,7 +85,7 @@ Item {
             rounding: root.mainrect.rounding || 0,
             padding: root.mainrect.padding || 0,
             backingrect: {
-                color: root.backingrect.color || ColorPalette.background,
+                color: root.backingrect.color || Color.background,
                 x: root.backingrect.x || 0,
                 y: root.backingrect.y || 0,
                 opacity: root.backingrect.opacity || 0
@@ -114,7 +116,7 @@ Item {
 
             Text {
                 text: qsTr("Main Rect Settings")
-                color: ColorPalette.color13
+                color: Color.color13
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 Layout.preferredWidth: 100
                 Layout.margins: 20
@@ -124,7 +126,7 @@ Item {
                 Layout.preferredHeight: 40
                 Text {
                     text: qsTr("Padding:")
-                    color: ColorPalette.color13
+                    color: Color.color13
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     Layout.preferredWidth: 100
                     Layout.margins: 20
@@ -147,7 +149,7 @@ Item {
                 Layout.preferredHeight: 40
                 Text {
                     text: qsTr("Rounding:")
-                    color: ColorPalette.color13
+                    color: Color.color13
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     Layout.preferredWidth: 100
                     Layout.margins: 20
@@ -171,7 +173,7 @@ Item {
                 Text {
                     text: "Position"
                     font.pixelSize: 18
-                    color: ColorPalette.color13
+                    color: Color.color13
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     Layout.preferredWidth: 100
                     Layout.margins: 20

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.services
 import qs.components
+import qs.config
 import qs.assets
 import qs.utils
 import qs
@@ -11,7 +12,7 @@ Rectangle {
     radius: 10
     Layout.fillWidth: true
     Layout.fillHeight: true
-    color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+    color: Scripts.setOpacity(Color.color0, 0.5)
 
     // Properties for customization
     property string headerIcon: "\ue322" // Default icon
@@ -55,7 +56,7 @@ Rectangle {
                 anchors.margins: 100
                 Text {
                     text: root.headerIcon
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontMaterialRounded
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -68,7 +69,7 @@ Rectangle {
 
                 Text {
                     text: root.headerText
-                    color: ColorPalette.color10
+                    color: Color.color10
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
                     font.family: FontProvider.fontSometypeMono
@@ -98,7 +99,7 @@ Rectangle {
 
                 Text {
                     text: root.usageLabel
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -111,7 +112,7 @@ Rectangle {
 
                 Text {
                     text: root.usageValue
-                    color: ColorPalette.color10
+                    color: Color.color10
                     wrapMode: Text.Wrap
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
@@ -129,7 +130,7 @@ Rectangle {
                 height: 8
                 radius: 10
                 color: "transparent"
-                border.color: ColorPalette.color10
+                border.color: Color.color10
                 border.width: 1
 
                 Rectangle {
@@ -139,7 +140,7 @@ Rectangle {
                     anchors.margins: 1
                     width: Math.max(0, Math.min(parent.width - 2, (parent.width - 2) * root.usagePercent))
                     radius: 8
-                    color: ColorPalette.color15
+                    color: Color.color15
                 }
             }
 
@@ -149,7 +150,7 @@ Rectangle {
 
                 Text {
                     text: root.minValue
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -162,7 +163,7 @@ Rectangle {
 
                 Text {
                     text: "/"
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -174,7 +175,7 @@ Rectangle {
 
                 Text {
                     text: root.maxValue
-                    color: ColorPalette.color10
+                    color: Color.color10
                     wrapMode: Text.Wrap
                     font.family: FontProvider.fontSometypeMono
                     font.bold: true
@@ -193,7 +194,7 @@ Rectangle {
                 visible: root.isTempVisible
                 Text {
                     text: root.tempIcon
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontMaterialRounded
                     font.pixelSize: {
                         const minSize = 10;
@@ -205,7 +206,7 @@ Rectangle {
 
                 Text {
                     text: root.tempLabel
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -218,7 +219,7 @@ Rectangle {
 
                 Text {
                     text: root.tempValue
-                    color: ColorPalette.color10
+                    color: Color.color10
                     wrapMode: Text.Wrap
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
@@ -237,7 +238,7 @@ Rectangle {
                 visible: root.isFrequencyVisible
                 Text {
                     text: root.freqLabel
-                    color: ColorPalette.color10
+                    color: Color.color10
                     font.family: FontProvider.fontSometypeMono
                     font.pixelSize: {
                         const minSize = 10;
@@ -249,7 +250,7 @@ Rectangle {
 
                 Text {
                     text: root.freqValue
-                    color: ColorPalette.color10
+                    color: Color.color10
                     wrapMode: Text.Wrap
                     font.family: FontProvider.fontSometypeMono
                     font.bold: true
@@ -271,7 +272,7 @@ Rectangle {
                     Text {
                         text: modelData.icon || ""
                         visible: modelData.icon !== undefined
-                        color: ColorPalette.color10
+                        color: Color.color10
                         font.family: FontProvider.fontMaterialRounded
                         font.pixelSize: {
                             const minSize = 10;
@@ -283,7 +284,7 @@ Rectangle {
 
                     Text {
                         text: modelData.label
-                        color: ColorPalette.color10
+                        color: Color.color10
                         font.family: FontProvider.fontSometypeMono
                         font.pixelSize: {
                             const minSize = 10;
@@ -296,7 +297,7 @@ Rectangle {
 
                     Text {
                         text: modelData.value
-                        color: ColorPalette.color10
+                        color: Color.color10
                         wrapMode: Text.Wrap
                         font.family: FontProvider.fontSometypeMono
                         font.bold: true

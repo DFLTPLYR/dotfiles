@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.utils
+import qs.config
 import qs.assets
 import qs.services
 import qs.components
@@ -23,7 +24,7 @@ ColumnLayout {
                 id: currentCondition
                 Layout.fillHeight: true
                 Layout.preferredWidth: Math.round(parent.width * 0.4)
-                color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+                color: Scripts.setOpacity(Color.color0, 0.5)
                 radius: 4
 
                 // loading
@@ -40,7 +41,7 @@ ColumnLayout {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: 'Loading...'
                                 font.pixelSize: 12
-                                color: ColorPalette.color10
+                                color: Color.color10
                             }
                         }
 
@@ -49,7 +50,7 @@ ColumnLayout {
                             Layout.fillHeight: true
                             Text {
                                 text: "\ue86a"
-                                color: ColorPalette.color10
+                                color: Color.color10
                                 font.pixelSize: 12
                                 font.family: FontProvider.fontMaterialRounded
                                 RotationAnimation on rotation {
@@ -81,12 +82,12 @@ ColumnLayout {
                                 height: parent.height * 0.7
                                 width: height
                                 radius: height / 2
-                                color: Scripts.setOpacity(ColorPalette.color2, 0.4)
+                                color: Scripts.setOpacity(Color.color2, 0.4)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: WeatherFetcher.currentCondition?.icon ?? ""
-                                    color: ColorPalette.color14
+                                    color: Color.color14
                                     font.bold: true
                                     font.family: FontProvider.fontMaterialRounded
                                     font.pixelSize: parent.height * 0.7
@@ -101,7 +102,7 @@ ColumnLayout {
                             verticalAlignment: Text.AlignBottom
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.temp ?? ""
-                            color: ColorPalette.color10
+                            color: Color.color10
                             wrapMode: Text.Wrap
                         }
                         Text {
@@ -109,7 +110,7 @@ ColumnLayout {
                             Layout.alignment: Qt.AlignCenter
                             horizontalAlignment: Text.AlignHCenter
                             text: WeatherFetcher.currentCondition?.weatherDesc ?? ""
-                            color: ColorPalette.color10
+                            color: Color.color10
                             wrapMode: Text.Wrap
                         }
                         Text {
@@ -118,7 +119,7 @@ ColumnLayout {
                             horizontalAlignment: Text.AlignHCenter
                             Layout.alignment: Qt.AlignCenter
                             text: WeatherFetcher.currentCondition?.feelslike ?? ""
-                            color: ColorPalette.color10
+                            color: Color.color10
                             wrapMode: Text.Wrap
                         }
                     }
@@ -141,7 +142,7 @@ ColumnLayout {
                             required property var modelData
                             Layout.fillHeight: true
                             Layout.fillWidth: true
-                            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+                            color: Scripts.setOpacity(Color.color0, 0.5)
                             radius: 4
                             ColumnLayout {
                                 anchors.fill: parent
@@ -154,7 +155,7 @@ ColumnLayout {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: 'Loading...'
                                         font.pixelSize: 12
-                                        color: ColorPalette.color10
+                                        color: Color.color10
                                     }
                                 }
 
@@ -163,7 +164,7 @@ ColumnLayout {
                                     Layout.fillHeight: true
                                     Text {
                                         text: "\ue86a"
-                                        color: ColorPalette.color10
+                                        color: Color.color10
                                         font.pixelSize: 12
                                         font.family: FontProvider.fontMaterialRounded
                                         RotationAnimation on rotation {
@@ -192,7 +193,7 @@ ColumnLayout {
                             required property var modelData
                             Layout.fillHeight: true
                             Layout.fillWidth: true
-                            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+                            color: Scripts.setOpacity(Color.color0, 0.5)
                             radius: 4
 
                             ColumnLayout {
@@ -220,20 +221,20 @@ ColumnLayout {
                                             return Qt.formatDate(modelData?.date ?? new Date(), "ddd, MMM yyyy");
                                         }
                                     }
-                                    color: ColorPalette.color10
+                                    color: Color.color10
                                 }
                                 Rectangle {
                                     Layout.preferredHeight: parent.height * 0.3
                                     Layout.preferredWidth: parent.height * 0.3
                                     Layout.alignment: Qt.AlignCenter
                                     radius: height / 2
-                                    color: Scripts.setOpacity(ColorPalette.color2, 0.4)
+                                    color: Scripts.setOpacity(Color.color2, 0.4)
                                     Text {
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         anchors.fill: parent
                                         text: modelData?.icon
-                                        color: ColorPalette.color14
+                                        color: Color.color14
                                         font.family: FontProvider.fontMaterialRounded
                                         font.pixelSize: Math.round(parent.height * 0.8)
                                     }
@@ -244,7 +245,7 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: modelData?.avgTemp
-                                    color: ColorPalette.color10
+                                    color: Color.color10
                                 }
                                 Text {
                                     Layout.fillHeight: true
@@ -252,7 +253,7 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: modelData?.desc
-                                    color: ColorPalette.color10
+                                    color: Color.color10
                                     wrapMode: Text.Wrap
                                 }
                             }
@@ -285,7 +286,7 @@ ColumnLayout {
                     id: detailComponent
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+                    color: Scripts.setOpacity(Color.color0, 0.5)
                     radius: 4
 
                     property string iconText: ""
@@ -309,7 +310,7 @@ ColumnLayout {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: detailComponent.iconText
-                                    color: ColorPalette.color10
+                                    color: Color.color10
                                     font.family: FontProvider.fontMaterialRounded
                                     font.pixelSize: Math.min(parent.height, parent.width) * 0.8
                                 }
@@ -319,7 +320,7 @@ ColumnLayout {
                                 text: detailComponent.titleText
                                 horizontalAlignment: Text.AlignHCenter | Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
-                                color: ColorPalette.color10
+                                color: Color.color10
                                 font.family: FontProvider.fontSometypeMono
                                 font.pixelSize: Math.min(parent.height, parent.width) * 0.5
                             }
@@ -335,7 +336,7 @@ ColumnLayout {
                                 text: detailComponent.valueText
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: ColorPalette.color14
+                                color: Color.color14
                                 font.bold: true
                                 font.family: FontProvider.fontSometypeMono
                                 font.pixelSize: Math.min(height, width)

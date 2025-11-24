@@ -10,12 +10,13 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
+import qs
+import qs.utils
+import qs.config
+import qs.assets
+import qs.services
 import qs.components
 import qs.modules.notification
-import qs.services
-import qs.assets
-import qs.utils
-import qs
 
 GridLayout {
     id: parentGrid
@@ -27,7 +28,7 @@ GridLayout {
 
     // Left Panel
     Rectangle {
-        color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+        color: Scripts.setOpacity(Color.color0, 0.5)
 
         radius: 10
 
@@ -58,7 +59,7 @@ GridLayout {
                     Text {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: ColorPalette.color10
+                        color: Color.color10
                         text: WeatherFetcher.currentCondition?.icon ?? ""
                         font.pixelSize: Math.min(parent.height, parent.width) * 0.5
                         font.family: FontProvider.fontMaterialOutlined
@@ -69,7 +70,7 @@ GridLayout {
                     Text {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: ColorPalette.color10
+                        color: Color.color10
                         text: WeatherFetcher.currentCondition?.feelslike ?? ""
                         font.pixelSize: 12
                         wrapMode: Text.WordWrap
@@ -93,7 +94,7 @@ GridLayout {
                     }
 
                     Text {
-                        color: ColorPalette.color10
+                        color: Color.color10
                         text: TimeService.hoursPadded
                         font.pixelSize: 24
                         horizontalAlignment: Text.AlignHCenter
@@ -101,13 +102,13 @@ GridLayout {
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Rectangle {
-                        color: ColorPalette.color15
+                        color: Color.color15
                         height: 1
                         Layout.preferredWidth: parent.width / 4
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Text {
-                        color: ColorPalette.color10
+                        color: Color.color10
                         text: TimeService.minutesPadded
                         font.pixelSize: 24
                         horizontalAlignment: Text.AlignHCenter
@@ -225,7 +226,7 @@ GridLayout {
 
     // Right Panel
     Rectangle {
-        color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+        color: Scripts.setOpacity(Color.color0, 0.5)
 
         radius: 10
 

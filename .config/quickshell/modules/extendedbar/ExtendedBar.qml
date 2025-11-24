@@ -9,6 +9,7 @@ import QtQuick.Shapes
 
 import qs
 import qs.utils
+import qs.config
 import qs.assets
 import qs.services
 import qs.components
@@ -84,7 +85,7 @@ PopupWindow {
         transparency: 1
         rounding: mainrect.rounding
         padding: mainrect.padding
-        bgColor: ColorPalette.background
+        bgColor: Color.background
 
         backingVisible: backingrect.visible !== 0 ? true : false
         backingrectX: backingrect.x
@@ -100,7 +101,7 @@ PopupWindow {
             rounding: root.mainrect.rounding || 0,
             padding: root.mainrect.padding || 0,
             backingrect: {
-                color: root.backingrect.color || ColorPalette.background,
+                color: root.backingrect.color || Color.background,
                 x: root.backingrect.x || 0,
                 y: root.backingrect.y || 0,
                 opacity: root.backingrect.opacity || 0
@@ -142,7 +143,7 @@ PopupWindow {
                 readonly property real roundingY: flatten ? extendedBarContainer.height / 2 : rounding
 
                 strokeWidth: -1
-                fillColor: Scripts.setOpacity(ColorPalette.background, 0.8)
+                fillColor: Scripts.setOpacity(Color.background, 0.8)
 
                 // Top-left outward arc
                 PathArc {

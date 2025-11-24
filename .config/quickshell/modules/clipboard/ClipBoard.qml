@@ -11,6 +11,7 @@ import Quickshell.Widgets
 
 import qs
 import qs.utils
+import qs.config
 import qs.assets
 import qs.services
 import qs.components
@@ -20,7 +21,7 @@ AnimatedScreenOverlay {
 
     screen: screenRoot.modelData
     key: 'ClipBoard'
-    color: Scripts.setOpacity(ColorPalette.background, 0.2)
+    color: Scripts.setOpacity(Color.background, 0.2)
 
     onClicked: toplevel.shouldBeVisible = false
 
@@ -142,7 +143,7 @@ AnimatedScreenOverlay {
 
                         font.bold: true
 
-                        color: ColorPalette.color15
+                        color: Color.color15
                         opacity: toplevel.showSearchInput ? 1.0 : 0.0
                         font.family: FontProvider.fontSometypeMono
                         Behavior on opacity {
@@ -268,7 +269,7 @@ AnimatedScreenOverlay {
                             readOnly: false
                             textFormat: TextEdit.PlainText
                             wrapMode: TextEdit.NoWrap
-                            color: ColorPalette.color15
+                            color: Color.color15
                             font.pixelSize: 18
                             anchors.fill: parent
                             cursorVisible: focus

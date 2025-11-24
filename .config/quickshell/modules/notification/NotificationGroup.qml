@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 
 import qs.utils
+import qs.config
 import qs.assets
 
 Item {
@@ -33,9 +34,9 @@ Item {
             id: delegateRect
             property real dragStartX: 0
             property bool isLeaving: false
-            color: Scripts.setOpacity(ColorPalette.color0, 0.5)
+            color: Scripts.setOpacity(Color.color0, 0.5)
             border.width: 0.5
-            border.color: Scripts.setOpacity(ColorPalette.color10, 0.4)
+            border.color: Scripts.setOpacity(Color.color10, 0.4)
 
             layer.enabled: true
             height: 60
@@ -111,7 +112,7 @@ Item {
                     anchors.top: parent.top
                     anchors.margins: 10
                     font.bold: true
-                    color: ColorPalette.color14
+                    color: Color.color14
                     width: Math.round(parent.width - 20)
                     font.family: FontProvider.fontSometypeItalic
                     elide: Text.ElideRight
@@ -123,7 +124,7 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.margins: 10
                     font.pixelSize: 12
-                    color: ColorPalette.color14
+                    color: Color.color14
                     elide: Text.ElideRight
                     width: Math.round(parent.width - 20)
                 }

@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 import qs.components
 import qs.assets
 import qs.utils
+import qs.config
 
 Scope {
     id: root
@@ -44,7 +45,7 @@ Scope {
     component OverLayComponent: PanelWindow {
         id: screenOSD
 
-        color: Scripts.setOpacity(ColorPalette.background, 0.4)
+        color: Scripts.setOpacity(Color.background, 0.4)
 
         anchors {
             top: true
@@ -72,7 +73,7 @@ Scope {
 
             StyledRectangle {
                 anchors.fill: parent
-                bgColor: ColorPalette.background
+                bgColor: Color.background
                 transparency: 1
                 rounding: 0
                 padding: 5
@@ -84,7 +85,7 @@ Scope {
 
                 intersectionOpacity: 1
                 intersectionPadding: 0
-                intersectionColor: ColorPalette.accent
+                intersectionColor: Color.accent
 
                 Text {
                     id: screenrecorder
