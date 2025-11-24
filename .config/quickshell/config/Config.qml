@@ -16,7 +16,6 @@ Singleton {
         onLoaded: {
             try {
                 JSON.parse(text());
-                console.log(Quickshell.workingDirectory);
             } catch (e) {
                 fileView.setText("{}");
                 fileView.writeAdapter();
