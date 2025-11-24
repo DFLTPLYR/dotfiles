@@ -34,6 +34,7 @@ Singleton {
     }
 
     property color background: fileView.adapter.color.background
+    property color backgroundAlt: fileView.adapter.color.backgroundAlt
     property color foreground: fileView.adapter.color.foreground
     property color color0: fileView.adapter.color.color0
     property color color1: fileView.adapter.color.color1

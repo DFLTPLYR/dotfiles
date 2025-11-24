@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
 import qs.utils
+import qs.config
 import qs.assets
 import qs.services
 import qs.components
