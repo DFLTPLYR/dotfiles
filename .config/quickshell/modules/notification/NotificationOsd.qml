@@ -108,13 +108,6 @@ Scope {
                     duration: 250
                 }
             }
-
-            Connections {
-                target: GlobalState
-                function onShowMprisChangedSignal() {
-                    listview.shouldBeVisible = !listview.shouldBeVisible;
-                }
-            }
         }
     }
 
