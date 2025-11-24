@@ -1,24 +1,70 @@
 {
     "navbarConfig": {
-        "anchors": {
-            "bottom": true,
-            "left": true,
-            "right": true,
-            "top": true
+        "backing": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#282523",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
         },
-        "color": "#222122",
-        "height": 50,
-        "margins": {
-            "bottom": 0,
-            "left": 10,
-            "right": 10,
-            "top": 10
+        "intersection": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#232022",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
         },
-        "rounding": {
-            "bottomLeft": 0,
-            "bottomRight": 0,
-            "topLeft": 0,
-            "topRight": 0
+        "main": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#232022",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
         }
     }
 }
