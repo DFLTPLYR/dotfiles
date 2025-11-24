@@ -103,86 +103,83 @@ Scope {
             Item {
                 width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
                 height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
-               
+
                 StyledRect {
                     x: Math.round(screen.width / 2 - width / 2)
                     y: Math.round(screen.height / 2 - height / 2)
                     childContainerHeight: parent.height * animProgress
-                    
+
                     // Display
                     ColumnLayout {
-                      anchors.fill: parent
-                      Item {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: parent.height * 0.9
-                        RowLayout {
-                          anchors.fill: parent
+                        anchors.fill: parent
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: parent.height * 0.9
+                            RowLayout {
+                                anchors.fill: parent
 
+                                //Wallpaper Preview
+                                Item {
+                                    Layout.preferredWidth: parent.width * 0.4
+                                    Layout.fillHeight: true
 
-                          //Wallpaper Preview
-                          Item {
-                            Layout.preferredWidth: parent.width * 0.4
-                            Layout.fillHeight: true
-
-                            Rectangle {
-                              anchors.fill: parent
-                              color: 'transparent'
-
-                                MaskWrapper {
-                                    radius: 8
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    sourceItem: Image {
+                                    Rectangle {
                                         anchors.fill: parent
-                                        fillMode: Image.PreserveAspectCrop
-                                        source: WallpaperStore.currentWallpapers[screen.name] ?? null
-                                        cache: true
-                                        asynchronous: true
-                                        smooth: true
-                                        visible: false
+                                        color: 'transparent'
+
+                                        MaskWrapper {
+                                            radius: 8
+                                            anchors.fill: parent
+                                            anchors.margins: 4
+                                            sourceItem: Image {
+                                                anchors.fill: parent
+                                                fillMode: Image.PreserveAspectCrop
+                                                source: WallpaperStore.currentWallpapers[screen.name] ?? null
+                                                cache: true
+                                                asynchronous: true
+                                                smooth: true
+                                                visible: false
+                                            }
+                                        }
                                     }
                                 }
 
+                                // App Grid
+                                Item {
+                                    Layout.preferredWidth: parent.width * 0.6
+                                    Layout.fillHeight: true
+
+                                    Rectangle {
+                                        id: container
+
+                                        anchors.fill: parent
+                                        color: 'transparent'
+
+                                        AppListView {
+                                            id: grid
+                                            searchText: searchValue
+                                        }
+                                    }
+                                }
                             }
-                          }
-
-                        
-                          // App Grid
-                          Item {
-                            Layout.preferredWidth: parent.width * 0.6
-                            Layout.fillHeight: true
-
-                            Rectangle {
-                              id: container
-
-                              anchors.fill: parent
-                              color: 'transparent'
-
-                              AppListView {
-                                id: grid
-                                searchText: searchValue
-                              }
-                            }
-                          }
-                                                  }
-                      }
-                      // Search Bar
-                    Item {
-                        Layout.preferredHeight: parent.height * 0.1
-                        Layout.fillWidth: true
-                        Text {
-                            id: searchText
-                            text: qsTr(`Search: ${searchValue}`)
-                            font.pixelSize: 24
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: parent.left
-                            anchors.leftMargin: 12
-                            color: ColorPalette.color15
                         }
-                      }                    
+                        // Search Bar
+                        Item {
+                            Layout.preferredHeight: parent.height * 0.1
+                            Layout.fillWidth: true
+                            Text {
+                                id: searchText
+                                text: qsTr(`Search: ${searchValue}`)
+                                font.pixelSize: 24
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.leftMargin: 12
+                                color: Color.color15
+                            }
+                        }
                     }
-                }  
-              }
+                }
+            }
             Rectangle {
                 width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
                 height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
@@ -190,7 +187,7 @@ Scope {
                 x: Math.round(screen.width / 2 - width / 2)
                 y: Math.round(screen.height / 2 - height / 2)
 
-                color: Scripts.setOpacity(ColorPalette.background, 0.9)
+                color: Scripts.setOpacity(Color.background, 0.9)
                 opacity: animProgress
 
                 radius: 16
@@ -203,7 +200,7 @@ Scope {
                     Rectangle {
                         height: Math.round(parent.height * 0.9)
                         width: parent.width
-                        color: Scripts.setOpacity(ColorPalette.color10, 0.2)
+                        color: Scripts.setOpacity(Color.color10, 0.2)
                         topLeftRadius: 16
                         topRightRadius: 16
 
@@ -230,11 +227,8 @@ Scope {
                                     }
                                 }
                             }
-
                         }
                     }
-
-
                 }
             }
         }

@@ -79,7 +79,7 @@ Variants {
                                 horizontalCenter: parent.horizontalCenter
                             }
 
-                            color: Color.color.color14
+                            color: Color.color14
                             font.family: FontProvider.fontMaterialRounded
                             text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
                             horizontalAlignment: Text.AlignHCenter
