@@ -7,6 +7,7 @@ import Quickshell.Io
 
 import qs
 import qs.utils
+import qs.config
 import qs.assets
 import qs.services
 
@@ -17,7 +18,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
 
     Material.theme: Material.Dark
-    Material.accent: ColorPalette.color10
+    Material.accent: Color.color10
 
     property bool showBrightness: false
     property bool showNightLight: false
@@ -45,7 +46,7 @@ Item {
                 font.family: FontProvider.fontMaterialOutlined
                 contentItem: Text {
                     text: parent.text
-                    color: ColorPalette.color14
+                    color: Color.color14
                     font: parent.font
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -55,7 +56,7 @@ Item {
                 }
 
                 background: Rectangle {
-                    color: ColorPalette.color0
+                    color: Color.color0
                     radius: width / 2
 
                     Behavior on color {
@@ -65,11 +66,11 @@ Item {
 
                 onHoveredChanged: {
                     if (hovered) {
-                        background.color = ColorPalette.color2;
-                        contentItem.color = ColorPalette.color15;
+                        background.color = Color.color2;
+                        contentItem.color = Color.color15;
                     } else {
-                        background.color = ColorPalette.color0;
-                        contentItem.color = ColorPalette.color14;
+                        background.color = Color.color0;
+                        contentItem.color = Color.color14;
                     }
                 }
                 onClicked: onClickedAction()
@@ -185,7 +186,7 @@ Item {
                 color: "transparent"
                 Text {
                     id: handleText
-                    color: ColorPalette.color14
+                    color: Color.color14
                     font.family: FontProvider.fontMaterialOutlined
                     anchors.centerIn: parent
                     font.pixelSize: Math.min(control.height, control.width) * 0.5
