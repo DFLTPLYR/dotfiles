@@ -6,6 +6,7 @@ JsonObject {
     property bool side: position === "left" || position === "right"
     property int width: 50
     property int height: 50
+    property list<string> modules: ["workspaces", "clock", "buttons"]
     property RectProps main: RectProps {}
     property RectProps backing: RectProps {}
     property RectProps intersection: RectProps {}
