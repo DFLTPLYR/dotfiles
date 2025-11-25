@@ -69,42 +69,69 @@ Variants {
                         margins: 5
                     }
 
-                    Workspaces {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                    }
-
-                    Item {
-                        Layout.preferredWidth: Math.round(parent.width * 0.7)
-                        Layout.fillHeight: true
-                        layer.enabled: true
-
-                        Text {
-                            anchors {
-                                verticalCenter: parent.verticalCenter
-                                horizontalCenter: parent.horizontalCenter
-                            }
-
-                            color: Color.color14
-                            font.family: FontProvider.fontMaterialRounded
-                            text: `${TimeService.hoursPadded}:${TimeService.minutesPadded}... ${TimeService.ampm}`
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            width: parent.width
-                            font.bold: true
-                            font.pixelSize: {
-                                var minSize = 10;
-                                return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
+                    Repeater {
+                        model: Config.navbar.modules
+                        Loader {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            sourceComponent: {
+                                if (modelData === "workspaces")
+                                    return workspacesComponent;
+                                if (modelData === "clock")
+                                    return timeDisplayComponent;
+                                if (modelData === "buttons")
+                                    return sysButtonComponent;
+                                return null;
                             }
                         }
                     }
+                }
+              }
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+            Component {
+                id: workspacesComponent
+                Workspaces {
+                    id: workspaces
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                }
+            }
 
-                        NavButtons {}
+            Component {
+                id: timeDisplayComponent
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    layer.enabled: true
+
+                    Text {
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                        }
+
+                        color: Color.color14
+                        font.family: FontProvider.fontMaterialRounded
+                        text: `${TimeService.hoursPadded}:${TimeService.minutesPadded}... ${TimeService.ampm}`
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        width: parent.width
+                        font.bold: true
+                        font.pixelSize: {
+                            var minSize = 10;
+                            return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
+                        }
                     }
+                }
+            }
+
+            Component {
+                id: sysButtonComponent
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    NavButtons {}
                 }
             }
 

@@ -20,6 +20,11 @@ Singleton {
                 fileView.writeAdapter();
             }
         }
+        onAdapterUpdated: {
+            if (loaded)
+                return writeAdapter();
+        }
+
         JsonAdapter {
             id: adapter
             property color foreground: "#F2FCCA"

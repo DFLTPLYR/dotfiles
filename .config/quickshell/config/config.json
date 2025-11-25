@@ -1,74 +1,79 @@
 {
-  "navbarConfig": {
-    "backing": {
-      "anchors": {
-        "bottom": true,
-        "left": true,
-        "right": true,
-        "top": true
-      },
-      "color": "#282523",
-      "height": 50,
-      "margins": {
-        "bottom": 0,
-        "left": 10,
-        "right": 10,
-        "top": 10
-      },
-      "rounding": {
-        "bottomLeft": 0,
-        "bottomRight": 0,
-        "topLeft": 0,
-        "topRight": 0
-      }
-    },
-    "height": 50,
-    "intersection": {
-      "anchors": {
-        "bottom": true,
-        "left": true,
-        "right": true,
-        "top": true
-      },
-      "color": "#181618",
-      "height": 50,
-      "margins": {
-        "bottom": 0,
-        "left": 10,
-        "right": 10,
-        "top": 10
-      },
-      "rounding": {
-        "bottomLeft": 0,
-        "bottomRight": 0,
-        "topLeft": 0,
-        "topRight": 0
-      }
-    },
-    "main": {
-      "anchors": {
-        "bottom": true,
-        "left": true,
-        "right": true,
-        "top": true
-      },
-      "color": "#181618",
-      "height": 50,
-      "margins": {
-        "bottom": 0,
-        "left": 10,
-        "right": 10,
-        "top": 10
-      },
-      "rounding": {
-        "bottomLeft": 0,
-        "bottomRight": 0,
-        "topLeft": 0,
-        "topRight": 0
-      }
-    },
-    "position": "top",
-    "side": false,
-    "width": 50
-  }
+    "navbarConfig": {
+        "backing": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#282523",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
+        },
+        "height": 50,
+        "intersection": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#181618",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
+        },
+        "main": {
+            "anchors": {
+                "bottom": true,
+                "left": true,
+                "right": true,
+                "top": true
+            },
+            "color": "#181618",
+            "height": 50,
+            "margins": {
+                "bottom": 0,
+                "left": 10,
+                "right": 10,
+                "top": 10
+            },
+            "rounding": {
+                "bottomLeft": 0,
+                "bottomRight": 0,
+                "topLeft": 0,
+                "topRight": 0
+            }
+        },
+        "modules": [
+            "workspaces",
+            "clock",
+            "buttons"
+        ],
+        "position": "top",
+        "side": false,
+        "width": 50
+    }
 }

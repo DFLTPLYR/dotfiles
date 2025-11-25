@@ -66,29 +66,18 @@ Scope {
 
         ColumnLayout {
             anchors.fill: parent
-
-            Item {
-                id: previewArea
-                visible: previewLoader.sourceComponent !== null
-                Layout.fillWidth: true
-                Layout.preferredHeight: 40
-                Layout.margins: 10
-
-                Loader {
-                    id: previewLoader
-                    anchors.fill: parent
-                }
-            }
-
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.margins: 10
+                Layout.margins: 2
 
                 TabBar {
                     id: tabBar
                     Layout.fillWidth: true
 
+                    TabButton {
+                        text: qsTr("General")
+                    }
                     TabButton {
                         text: qsTr("Navbar")
                     }
@@ -99,28 +88,18 @@ Scope {
                     currentIndex: tabBar.currentIndex
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    Layout.margins: 5
 
-                    // Todo: replace with actual settings components
-                    NavbarConfig {
-                        id: navbarConfig
+                    GeneralSettings {
+                        id: generalConfig
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
-
-                    onCurrentIndexChanged: {
-                        if (contentLayout.children && contentLayout.children.length > currentIndex) {
-                            previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
-                        } else {
-                            previewLoader.sourceComponent = null;
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        if (contentLayout.children && contentLayout.children.length > currentIndex) {
-                            previewLoader.sourceComponent = contentLayout.children[currentIndex].previewComponent;
-                        } else {
-                            console.log("No child at currentIndex or children not ready.");
-                        }
+                    // Todo: replace with actual settings components
+                    NavbarSettings {
+                        id: navbarConfig
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                     }
                 }
             }
