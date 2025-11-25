@@ -5,11 +5,11 @@ Item {
     id: styledLayoutRoot
     property bool isPortrait: false
     property real spacing: layoutLoader.item ? layoutLoader.item.spacing : 0
-    default property alias content: contentHolder.data
+    default property alias content: contentHolder.children
 
-    Item {
+    QtObject {
         id: contentHolder
-        visible: false
+        property list<Item> children
     }
 
     Loader {
@@ -17,19 +17,16 @@ Item {
         anchors.fill: parent
         active: true
         sourceComponent: styledLayoutRoot.isPortrait ? portraitLayout : landscapeLayout
-        onLoaded: {
-            if (item && (item as Item) && contentHolder.data.length > 0) {
-                var cc = item;
-                var childrenArray = [];
-                for (let i = 0; i < contentHolder.data.length; i++) {
-                    childrenArray.push(contentHolder.data[i]);
-                }
+        onLoaded: styledLayoutRoot.reparentChildren()
+    }
 
-                for (let child of childrenArray) {
-                    if (child instanceof Item)
-                        child.parent = cc;
-                }
-            }
+    function reparentChildren() {
+        const layoutItem = layoutLoader.item;
+        if (!layoutItem)
+            return;
+        for (let c of contentHolder.children) {
+            if (c.parent !== layoutItem)
+                c.parent = layoutItem;
         }
     }
 

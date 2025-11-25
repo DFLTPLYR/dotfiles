@@ -86,7 +86,7 @@ Variants {
                         }
                     }
                 }
-              }
+            }
 
             Component {
                 id: workspacesComponent
@@ -99,39 +99,17 @@ Variants {
 
             Component {
                 id: timeDisplayComponent
-                Item {
-                    Layout.fillWidth: true
+                Clock {
                     Layout.fillHeight: true
-                    layer.enabled: true
-
-                    Text {
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
-                        }
-
-                        color: Color.color14
-                        font.family: FontProvider.fontMaterialRounded
-                        text: `${TimeService.hoursPadded}:${TimeService.minutesPadded}... ${TimeService.ampm}`
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        width: parent.width
-                        font.bold: true
-                        font.pixelSize: {
-                            var minSize = 10;
-                            return Math.max(minSize, Math.min(parent.height, parent.width) * 0.2);
-                        }
-                    }
+                    Layout.fillWidth: true
                 }
             }
 
             Component {
                 id: sysButtonComponent
-                Item {
-                    Layout.fillWidth: true
+                NavButtons {
                     Layout.fillHeight: true
-
-                    NavButtons {}
+                    Layout.fillWidth: true
                 }
             }
 

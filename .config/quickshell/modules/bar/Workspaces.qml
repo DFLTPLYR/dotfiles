@@ -23,42 +23,28 @@ Item {
         return roman[n] !== undefined ? roman[n] : n.toString();
     }
 
-    Row {
-        id: monitorRow
-        anchors.fill: parent
-        spacing: 2
-        Repeater {
-            model: Hyprland.workspaces
-            delegate: Item {
-                required property var modelData
-                height: parent.height
-                width: height
-                visible: modelData.id >= 0
+    Component {
+        id: portrait
+        Column {
+            anchors.fill: parent
+            spacing: 2
 
-                Rectangle {
-                    id: monitorIndicator
-                    anchors.centerIn: parent
-                    height: parent.height
-                    width: height
-                    radius: height * 0.2
-                    color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
+            Repeater {
+                model: Hyprland.workspaces
+                delegate: Item {
+                    required property var modelData
+                    height: parent.width
+                    width: parent.width
+                    visible: modelData.id >= 0
 
-                    // Animate the fill color
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 250
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Text {
+                    Rectangle {
+                        id: monitorIndicator
                         anchors.centerIn: parent
-                        text: romanNumber(modelData.id - 1)
-                        color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
-                        font.pixelSize: {
-                            var minSize = 10;
-                            return Math.max(minSize, Math.min(height, width) * 0.6);
-                        }
+                        height: parent.height
+                        width: height
+                        radius: height * 0.2
+                        color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
+
                         // Animate the fill color
                         Behavior on color {
                             ColorAnimation {
@@ -66,22 +52,110 @@ Item {
                                 easing.type: Easing.InOutQuad
                             }
                         }
-                    }
 
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            modelData.activate();
-                            var apps = modelData.toplevels;
-                            for (var i = 0; i < apps.values.length; i++) {
-                                console.log(JSON.stringify(apps.values[i].class));
+                        Text {
+                            anchors.centerIn: parent
+                            text: romanNumber(modelData.id - 1)
+                            color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
+                            font.pixelSize: {
+                                var minSize = 10;
+                                return Math.max(minSize, Math.min(height, width) * 0.6);
+                            }
+                            // Animate the fill color
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 250
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
+
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                modelData.activate();
+                                var apps = modelData.toplevels;
+                                for (var i = 0; i < apps.values.length; i++) {
+                                    console.log(JSON.stringify(apps.values[i].class));
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    Component {
+        id: landscape
+        Row {
+            id: monitorRow
+            anchors.fill: parent
+            spacing: 2
+
+            Repeater {
+                model: Hyprland.workspaces
+                delegate: Item {
+                    required property var modelData
+                    height: parent.height
+                    width: height
+                    visible: modelData.id >= 0
+
+                    Rectangle {
+                        id: monitorIndicator
+                        anchors.centerIn: parent
+                        height: parent.height
+                        width: height
+                        radius: height * 0.2
+                        color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
+
+                        // Animate the fill color
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 250
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: romanNumber(modelData.id - 1)
+                            color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
+                            font.pixelSize: {
+                                var minSize = 10;
+                                return Math.max(minSize, Math.min(height, width) * 0.6);
+                            }
+                            // Animate the fill color
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 250
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
+
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                modelData.activate();
+                                var apps = modelData.toplevels;
+                                for (var i = 0; i < apps.values.length; i++) {
+                                    console.log(JSON.stringify(apps.values[i].class));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Loader {
+        anchors.fill: parent
+        sourceComponent: Config.navbar.side ? portrait : landscape
     }
 }
