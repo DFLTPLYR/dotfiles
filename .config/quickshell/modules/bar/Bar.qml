@@ -37,6 +37,7 @@ Variants {
             top: Config.navbar.position === "top" || Config.navbar.position === "left" || Config.navbar.position === "right"
             bottom: Config.navbar.position === "bottom" || Config.navbar.position === "left" || Config.navbar.position === "right"
         }
+
         Item {
             id: barComponent
             width: Config.navbar.side ? Config.navbar.main.height : parent.width
@@ -54,8 +55,29 @@ Variants {
                     leftMargin: Config.navbar.main.margins.left
                     rightMargin: Config.navbar.main.margins.right
                     bottomMargin: Config.navbar.main.margins.bottom
-                  }
+                }
 
+                Loader {
+                    active: true
+                    anchors.fill: parent
+                    sourceComponent: Config.navbar.side ? landscapeLayout : portraitLayout
+                }
+            }
+
+            Component {
+                id: landscapeLayout
+                ColumnLayout {
+                    spacing: 5
+
+                    anchors {
+                        fill: parent
+                        margins: 5
+                    }
+                }
+            }
+
+            Component {
+                id: portraitLayout
                 RowLayout {
                     spacing: 5
 
@@ -63,7 +85,7 @@ Variants {
                         fill: parent
                         margins: 5
                     }
-
+                    // rework this to a single layoutChildren component that takes in the layout type and adjusts accordingly
                     Workspaces {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
@@ -100,7 +122,7 @@ Variants {
 
                         NavButtons {}
                     }
-                  }
+                }
             }
 
             LazyLoader {
