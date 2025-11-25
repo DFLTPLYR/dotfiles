@@ -13,6 +13,7 @@ Singleton {
         id: fileView
         path: Qt.resolvedUrl("./config.json")
         watchChanges: true
+        preload: true
         onFileChanged: {
             reload();
         }
@@ -21,6 +22,10 @@ Singleton {
                 fileView.setText("{}");
                 fileView.writeAdapter();
             }
+        }
+        onAdapterUpdated: {
+            if (loaded)
+                return writeAdapter();
         }
         JsonAdapter {
             id: adapter

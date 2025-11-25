@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
@@ -29,8 +30,8 @@ Variants {
         screen: modelData
         color: "transparent"
 
-        implicitHeight: barComponent.height
-        implicitWidth: barComponent.width
+        implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
+        implicitWidth: Config.navbar.side ? Config.navbar.width : screen.width
 
         anchors {
             left: ["left", "top", "bottom"].includes(Config.navbar.position)
@@ -46,7 +47,7 @@ Variants {
             height: Config.navbar.side ? parent.height : Config.navbar.height
 
             StyledRect {
-                childContainerHeight: Config.navbar.main.height
+                childContainerHeight: parent.height
 
                 anchors {
                     top: Config.navbar.main.anchors.top ? parent.top : undefined
@@ -86,7 +87,7 @@ Variants {
 
                             color: Color.color14
                             font.family: FontProvider.fontMaterialRounded
-                            text: `${TimeService.hoursPadded} : ${TimeService.minutesPadded}... ${TimeService.ampm}`
+                            text: `${TimeService.hoursPadded}:${TimeService.minutesPadded}... ${TimeService.ampm}`
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             width: parent.width
