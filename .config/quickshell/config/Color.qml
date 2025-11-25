@@ -11,23 +11,14 @@ Singleton {
         id: fileView
         path: Qt.resolvedUrl("../services/colors.json")
         watchChanges: true
-        onLoaded: {
-            try {
-                JSON.parse(text());
-            } catch (e) {
-                fileView.setText("{}");
-                fileView.writeAdapter();
-            }
-        }
         onFileChanged: {
             reload();
         }
-        onLoadFailed: {
-            setText("{}");
-            fileView.writeAdapter();
-        }
-        onAdapterUpdated: {
-            writeAdapter();
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) {
+                fileView.setText("{}");
+                fileView.writeAdapter();
+            }
         }
         JsonAdapter {
             id: adapter

@@ -28,20 +28,22 @@ Variants {
 
         screen: modelData
         color: "transparent"
+
         implicitHeight: barComponent.height
         implicitWidth: barComponent.width
 
         anchors {
-            left: Config.navbar.position === "left" || Config.navbar.position === "top" || Config.navbar.position === "bottom"
-            right: Config.navbar.position === "right" || Config.navbar.position === "top" || Config.navbar.position === "bottom"
-            top: Config.navbar.position === "top" || Config.navbar.position === "left" || Config.navbar.position === "right"
-            bottom: Config.navbar.position === "bottom" || Config.navbar.position === "left" || Config.navbar.position === "right"
+            left: ["left", "top", "bottom"].includes(Config.navbar.position)
+            right: ["right", "top", "bottom"].includes(Config.navbar.position)
+            top: ["right", "top", "left"].includes(Config.navbar.position)
+            bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
         }
 
         Item {
             id: barComponent
-            width: Config.navbar.side ? Config.navbar.main.height : parent.width
-            height: Config.navbar.side ? parent.height : Config.navbar.main.height
+
+            width: Config.navbar.side ? Config.navbar.width : parent.width
+            height: Config.navbar.side ? parent.height : Config.navbar.height
 
             StyledRect {
                 childContainerHeight: Config.navbar.main.height

@@ -4,8 +4,9 @@ import QtQuick.Layouts
 Item {
     id: styledLayoutRoot
     property bool isPortrait: false
-    default property alias content: contentHolder.data
     property real spacing: layoutLoader.item ? layoutLoader.item.spacing : 0
+    default property alias content: contentHolder.data
+
     Item {
         id: contentHolder
         visible: false
