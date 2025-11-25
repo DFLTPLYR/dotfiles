@@ -13,22 +13,15 @@ Singleton {
         id: fileView
         path: Qt.resolvedUrl("./config.json")
         watchChanges: true
-        onLoaded: {
-            try {
-                JSON.parse(text());
-            } catch (e) {
+        onFileChanged: {
+            reload();
+        }
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) {
                 fileView.setText("{}");
                 fileView.writeAdapter();
             }
         }
-        onFileChanged: {
-            reload();
-        }
-        onLoadFailed: {
-            setText("{}");
-            fileView.writeAdapter();
-        }
-        onAdapterUpdated: writeAdapter()
         JsonAdapter {
             id: adapter
             property NavbarConfig navbarConfig: NavbarConfig {}
