@@ -57,35 +57,15 @@ Variants {
                     bottomMargin: Config.navbar.main.margins.bottom
                 }
 
-                Loader {
-                    active: true
-                    anchors.fill: parent
-                    sourceComponent: Config.navbar.side ? landscapeLayout : portraitLayout
-                }
-            }
-
-            Component {
-                id: landscapeLayout
-                ColumnLayout {
-                    spacing: 5
+                StyledLayout {
+                    isPortrait: Config.navbar.side
+                    spacing: 10
 
                     anchors {
                         fill: parent
                         margins: 5
                     }
-                }
-            }
 
-            Component {
-                id: portraitLayout
-                RowLayout {
-                    spacing: 5
-
-                    anchors {
-                        fill: parent
-                        margins: 5
-                    }
-                    // rework this to a single layoutChildren component that takes in the layout type and adjusts accordingly
                     Workspaces {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
