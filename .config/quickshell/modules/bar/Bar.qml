@@ -29,6 +29,7 @@ Variants {
         screen: modelData
         color: "transparent"
         implicitHeight: barComponent.height
+        implicitWidth: barComponent.width
 
         anchors {
             left: Config.navbar.position === "left" || Config.navbar.position === "top" || Config.navbar.position === "bottom"
@@ -36,11 +37,10 @@ Variants {
             top: Config.navbar.position === "top" || Config.navbar.position === "left" || Config.navbar.position === "right"
             bottom: Config.navbar.position === "bottom" || Config.navbar.position === "left" || Config.navbar.position === "right"
         }
-
         Item {
             id: barComponent
-            width: parent.width
-            height: Config.navbar.main.height
+            width: Config.navbar.side ? Config.navbar.main.height : parent.width
+            height: Config.navbar.side ? parent.height : Config.navbar.main.height
 
             StyledRect {
                 childContainerHeight: Config.navbar.main.height
@@ -53,10 +53,10 @@ Variants {
                     topMargin: Config.navbar.main.margins.top
                     leftMargin: Config.navbar.main.margins.left
                     rightMargin: Config.navbar.main.margins.right
-                }
+                    bottomMargin: Config.navbar.main.margins.bottom
+                  }
 
                 RowLayout {
-
                     spacing: 5
 
                     anchors {
@@ -100,95 +100,95 @@ Variants {
 
                         NavButtons {}
                     }
+                  }
+            }
+
+            LazyLoader {
+                id: panelLoader
+
+                property bool shouldBeVisible: false
+                property real animProgress: 0
+
+                active: false
+                component: ExtendedBar {
+                    anchor.window: screenRoot
+                    animProgress: panelLoader.animProgress
+                    shouldBeVisible: panelLoader.shouldBeVisible
+                    onHide: {
+                        panelLoader.shouldBeVisible = false;
+                        return Qt.callLater(() => {
+                            return panelLoader.active = false;
+                        }, 400);
+                    }
                 }
             }
-        }
 
-        LazyLoader {
-            id: panelLoader
+            GlobalShortcut {
+                id: resourceDashboard
 
-            property bool shouldBeVisible: false
-            property real animProgress: 0
+                name: "showResourceBoard"
+                description: "Show Resource Dashboard"
+                onPressed: {
+                    if (panelLoader.shouldBeVisible) {
+                        panelLoader.shouldBeVisible = false;
+                        panelLoader.animProgress = 0;
+                        return;
+                    }
+                    if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
+                        return;
 
-            active: false
-            component: ExtendedBar {
-                anchor.window: screenRoot
-                animProgress: panelLoader.animProgress
-                shouldBeVisible: panelLoader.shouldBeVisible
-                onHide: {
-                    panelLoader.shouldBeVisible = false;
+                    panelLoader.shouldBeVisible = true;
+                    panelLoader.active = true;
+                    panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
+                }
+            }
+
+            LazyLoader {
+                id: clipBoardLoader
+
+                property bool shouldBeVisible: false
+                property real animProgress: 0
+
+                active: false
+
+                component: ClipBoard {
+                    animProgress: clipBoardLoader.animProgress
+                    shouldBeVisible: clipBoardLoader.shouldBeVisible
+                    onHide: () => {
+                        clipBoardLoader.shouldBeVisible = false;
+                        return Qt.callLater(() => {
+                            return clipBoardLoader.active = false;
+                        }, 40);
+                    }
+                }
+            }
+
+            GlobalShortcut {
+                id: clipBoard
+
+                name: "showClipBoard"
+                description: "Show Clipboard history"
+                onPressed: {
+                    if (clipBoardLoader.shouldBeVisible) {
+                        clipBoardLoader.animProgress = 0;
+                        clipBoardLoader.shouldBeVisible = false;
+                        return Qt.callLater(() => {
+                            return clipBoardLoader.active = false;
+                        }, 40);
+                    }
+                    if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
+                        clipBoardLoader.animProgress = 0;
+                        clipBoardLoader.shouldBeVisible = false;
+                        return Qt.callLater(() => {
+                            return clipBoardLoader.active = false;
+                        }, 40);
+                    }
+                    clipBoardLoader.shouldBeVisible = true;
+                    clipBoardLoader.animProgress = 1;
                     return Qt.callLater(() => {
-                        return panelLoader.active = false;
-                    }, 400);
-                }
-            }
-        }
-
-        GlobalShortcut {
-            id: resourceDashboard
-
-            name: "showResourceBoard"
-            description: "Show Resource Dashboard"
-            onPressed: {
-                if (panelLoader.shouldBeVisible) {
-                    panelLoader.shouldBeVisible = false;
-                    panelLoader.animProgress = 0;
-                    return;
-                }
-                if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
-                    return;
-
-                panelLoader.shouldBeVisible = true;
-                panelLoader.active = true;
-                panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
-            }
-        }
-
-        LazyLoader {
-            id: clipBoardLoader
-
-            property bool shouldBeVisible: false
-            property real animProgress: 0
-
-            active: false
-
-            component: ClipBoard {
-                animProgress: clipBoardLoader.animProgress
-                shouldBeVisible: clipBoardLoader.shouldBeVisible
-                onHide: () => {
-                    clipBoardLoader.shouldBeVisible = false;
-                    return Qt.callLater(() => {
-                        return clipBoardLoader.active = false;
+                        return clipBoardLoader.active = true;
                     }, 40);
                 }
-            }
-        }
-
-        GlobalShortcut {
-            id: clipBoard
-
-            name: "showClipBoard"
-            description: "Show Clipboard history"
-            onPressed: {
-                if (clipBoardLoader.shouldBeVisible) {
-                    clipBoardLoader.animProgress = 0;
-                    clipBoardLoader.shouldBeVisible = false;
-                    return Qt.callLater(() => {
-                        return clipBoardLoader.active = false;
-                    }, 40);
-                }
-                if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
-                    clipBoardLoader.animProgress = 0;
-                    clipBoardLoader.shouldBeVisible = false;
-                    return Qt.callLater(() => {
-                        return clipBoardLoader.active = false;
-                    }, 40);
-                }
-                clipBoardLoader.shouldBeVisible = true;
-                clipBoardLoader.animProgress = 1;
-                return Qt.callLater(() => {
-                    return clipBoardLoader.active = true;
-                }, 40);
             }
         }
     }

@@ -11,7 +11,7 @@ Singleton {
 
     FileView {
         id: fileView
-        path: "./config.json"
+        path: Qt.resolvedUrl("./config.json")
         watchChanges: true
         onLoaded: {
             try {

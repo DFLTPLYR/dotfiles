@@ -23,18 +23,6 @@ Item {
     width: parent.width
     implicitHeight: childContainerHeight + 10
 
-    FileView {
-        id: settingsWatcher
-        path: Qt.resolvedUrl("../settings.json")
-        watchChanges: true
-        onFileChanged: settingsWatcher.reload()
-        onLoaded: {
-            const settings = JSON.parse(settingsWatcher.text());
-            root.style = settings.theme || "neumorphic";
-        }
-        onLoadFailed: {}
-    }
-
     Item {
         id: contentHolder
         visible: false
