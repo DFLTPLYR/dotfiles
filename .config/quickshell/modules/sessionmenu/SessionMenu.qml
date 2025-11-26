@@ -9,7 +9,6 @@ import qs.modules.sessionmenu
 import qs.components
 import qs.services
 import qs.assets
-import qs
 import qs.config
 
 Scope {

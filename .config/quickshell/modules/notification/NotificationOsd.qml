@@ -8,7 +8,6 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-import qs
 import qs.config
 import qs.utils
 import qs.services

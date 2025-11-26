@@ -7,7 +7,6 @@ import Quickshell.Io
 import QtQuick.LocalStorage
 import Quickshell.Hyprland
 
-import qs
 import qs.utils
 
 Singleton {

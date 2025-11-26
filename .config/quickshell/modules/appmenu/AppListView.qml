@@ -7,7 +7,6 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Hyprland
 
-import qs
 import qs.config
 import qs.assets
 import qs.services

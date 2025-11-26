@@ -6,7 +6,6 @@ import qs.config
 import qs.components
 import qs.assets
 import qs.utils
-import qs
 
 GridLayout {
     id: root

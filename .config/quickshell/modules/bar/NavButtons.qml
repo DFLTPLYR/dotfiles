@@ -6,7 +6,6 @@ import QtQuick.Controls.Material
 import Quickshell
 import Quickshell.Io
 
-import qs
 import qs.config
 import qs.utils
 import qs.config

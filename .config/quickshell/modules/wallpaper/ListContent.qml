@@ -7,7 +7,6 @@ import Quickshell.Hyprland
 
 import qs.services
 import qs.utils
-import qs
 
 ListView {
     id: flick
