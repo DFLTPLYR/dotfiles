@@ -44,7 +44,7 @@ Item {
         id: landscapeLayout
         RowLayout {
             anchors.fill: parent
-            layoutDirection: Qt.RightToLeft   // Ensures button is on the right
+            layoutDirection: Qt.RightToLeft
 
             Loader {
                 Layout.fillHeight: true

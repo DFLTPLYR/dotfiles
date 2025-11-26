@@ -22,7 +22,7 @@
                 "topRight": 0
             }
         },
-        "height": 77,
+        "height": 50,
         "intersection": {
             "anchors": {
                 "bottom": true,
@@ -72,8 +72,15 @@
             "clock",
             "buttons"
         ],
-        "position": "left",
-        "side": true,
-        "width": 77
+        "position": "top",
+        "side": false,
+        "width": 77,
+        "workspaces": {
+            "style": "kanji",
+            "styles": [
+                "roman",
+                "kanji"
+            ]
+        }
     }
 }
