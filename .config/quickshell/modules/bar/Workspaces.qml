@@ -4,7 +4,6 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Hyprland
 
-import qs
 import qs.config
 import qs.assets
 import qs.utils
@@ -56,13 +55,13 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: {
-                              switch (Config.navbar.workspaces.style) {
-                                  case "kanji":
-                                      return kanjiNumber(modelData.id - 1);
-                                  case "roman":
-                                  default:
-                                      return romanNumber(modelData.id - 1);
-                              }
+                                switch (Config.navbar.workspaces.style) {
+                                case "kanji":
+                                    return kanjiNumber(modelData.id - 1);
+                                case "roman":
+                                default:
+                                    return romanNumber(modelData.id - 1);
+                                }
                             }
                             color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
                             font.pixelSize: {
@@ -130,14 +129,15 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: {
-                              switch (Config.navbar.workspaces.style) {
-                                  case "kanji":
-                                      return kanjiNumber(modelData.id - 1);
-                                  case "roman":
-                                  default:
-                                      return romanNumber(modelData.id - 1);
-                              }
-                            }                            color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
+                                switch (Config.navbar.workspaces.style) {
+                                case "kanji":
+                                    return kanjiNumber(modelData.id - 1);
+                                case "roman":
+                                default:
+                                    return romanNumber(modelData.id - 1);
+                                }
+                            }
+                            color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
                             font.pixelSize: {
                                 var minSize = 10;
                                 return Math.max(minSize, Math.min(height, width) * 0.6);

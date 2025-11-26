@@ -10,7 +10,6 @@ import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Services.Mpris
 
-import qs
 import qs.utils
 import qs.config
 import qs.assets

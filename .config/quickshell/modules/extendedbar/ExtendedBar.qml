@@ -7,7 +7,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
 
-import qs
 import qs.utils
 import qs.config
 import qs.assets
