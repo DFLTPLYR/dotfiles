@@ -21,9 +21,10 @@ Item {
 
         ColumnLayout {
             anchors.fill: parent
-
             Loader {
                 Layout.fillWidth: true
+                Layout.preferredHeight: parent.width
+
                 Layout.alignment: Qt.AlignBottom
 
                 height: parent.width
@@ -41,7 +42,6 @@ Item {
 
     Component {
         id: landscapeLayout
-
         RowLayout {
             anchors.fill: parent
             layoutDirection: Qt.RightToLeft   // Ensures button is on the right

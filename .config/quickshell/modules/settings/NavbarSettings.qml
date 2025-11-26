@@ -73,9 +73,45 @@ Item {
                     }
                 }
             }
+
+            // width/height settings
             RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
+
+                RowLayout {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Label {
+                        visible: !Config.navbar.side
+                        text: "Height"
+                    }
+                    Slider {
+                        visible: !Config.navbar.side
+                        Layout.fillWidth: true
+                        from: 40
+                        value: Config.navbar.height
+                        to: 100
+                        onValueChanged: {
+                            Config.navbar.height = value;
+                        }
+                    }
+                    Label {
+                        visible: Config.navbar.side
+                        text: "Width"
+                    }
+                    Slider {
+
+                        visible: Config.navbar.side
+                        Layout.fillWidth: true
+                        from: 40
+                        value: Config.navbar.width
+                        to: 100
+                        onValueChanged: {
+                            Config.navbar.width = value;
+                        }
+                    }
+                }
             }
         }
     }

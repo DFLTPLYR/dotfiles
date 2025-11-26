@@ -14,6 +14,7 @@ Singleton {
         path: Qt.resolvedUrl("./config.json")
         watchChanges: true
         preload: true
+        onLoaded: console.log("Default Config Loaded")
         onFileChanged: {
             reload();
         }
