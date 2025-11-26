@@ -11,6 +11,7 @@ Singleton {
         id: fileView
         path: Qt.resolvedUrl("../services/colors.json")
         watchChanges: true
+        preload: true
         onFileChanged: {
             reload();
         }
