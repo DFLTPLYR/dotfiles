@@ -7,6 +7,7 @@ import Quickshell.Io
 import qs.config
 
 Singleton {
+    property bool sessionMenuOpen: false
     property alias loaded: fileView.loaded
     property alias navbar: adapter.navbarConfig
 

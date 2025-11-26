@@ -15,7 +15,7 @@ import qs.config
 Scope {
     id: root
     LazyLoader {
-        active: GlobalState.isSessionMenuOpen
+        active: Config.sessionMenuOpen
         component: Variants {
             property color backgroundColor: "#e60c0c0c"
             property color buttonColor: "#1e1e1e"
@@ -82,7 +82,7 @@ Scope {
                     focus: true
                     Keys.onPressed: event => {
                         if (event.key == Qt.Key_Escape)
-                            GlobalState.isSessionMenuOpen = false;
+                            Config.sessionMenuOpen = false;
                         else {
                             for (let i = 0; i < buttons.length; i++) {
                                 let button = buttons[i];
@@ -106,7 +106,7 @@ Scope {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: GlobalState.isSessionMenuOpen = false
+                        onClicked: Config.sessionMenuOpen = false
 
                         ClippingRectangle {
                             anchors.centerIn: parent

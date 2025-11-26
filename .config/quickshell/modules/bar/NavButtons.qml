@@ -56,7 +56,7 @@ Item {
                 onLoaded: {
                     item.buttonText = "power_settings_new";
                     item.onClickedAction = function () {
-                        GlobalState.isSessionMenuOpen = true;
+                        Config.sessionMenuOpen = true;
                     };
                 }
             }
