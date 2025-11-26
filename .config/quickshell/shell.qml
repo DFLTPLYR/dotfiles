@@ -37,7 +37,7 @@ ShellRoot {
     }
 
     // Clipboard Overlay
-    Clip {}
+    Clipboard {}
 
     // SessionManager {}
 
