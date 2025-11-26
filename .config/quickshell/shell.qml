@@ -15,6 +15,7 @@ import qs.services
 import qs.config
 import qs.modules.appmenu
 import qs.modules.bar
+import qs.modules.clipboard
 import qs.modules.extendedbar
 import qs.modules.notification
 import qs.modules.sessionmanager
@@ -31,9 +32,12 @@ ShellRoot {
 
     // NavBar
     LazyLoader {
-      active: Config.loaded
-      Bar{}
+        active: Config.loaded
+        Bar {}
     }
+
+    // Clipboard Overlay
+    Clip {}
 
     // SessionManager {}
 
@@ -52,7 +56,6 @@ ShellRoot {
     // Notification Overlay
 
     NotificationOsd {}
-
 
     WallpaperPicker {}
 

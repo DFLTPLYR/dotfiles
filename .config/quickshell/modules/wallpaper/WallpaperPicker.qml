@@ -310,14 +310,6 @@ Scope {
                         }
                     }
                 }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: screen.height / 10
-                    color: Scripts.setOpacity(Color.background, 0.8)
-                    radius: 10
-                    clip: true
-                }
             }
 
             Connections {
