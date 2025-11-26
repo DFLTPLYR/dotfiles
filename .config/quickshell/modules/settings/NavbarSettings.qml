@@ -113,6 +113,24 @@ Item {
                     }
                 }
             }
+
+            // workspace style settings
+            RowLayout {
+                Layout.fillWidth: true
+                Repeater {
+                    model: Config.navbar.workspaces.styles
+                    delegate: RadioButton {
+                        required property var modelData
+                        checked: Config.navbar.workspaces.style === modelData
+                        text: modelData
+                        onCheckedChanged: {
+                            if (checked) {
+                                Config.navbar.workspaces.style = modelData;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

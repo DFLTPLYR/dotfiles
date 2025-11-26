@@ -76,7 +76,7 @@
         "side": false,
         "width": 77,
         "workspaces": {
-            "style": "kanji",
+            "style": "roman",
             "styles": [
                 "roman",
                 "kanji"
