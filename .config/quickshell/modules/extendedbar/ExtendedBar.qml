@@ -219,22 +219,4 @@ PopupWindow {
             }
         }
     }
-
-    FileView {
-        id: settingsWatcher
-        path: Qt.resolvedUrl("./config.json")
-        watchChanges: true
-        onFileChanged: settingsWatcher.reload()
-        onAdapterUpdated: writeAdapter()
-        JsonAdapter {
-            property string contentHandler: "main"
-            property StyledConfig mainrectAppearance: StyledConfig {}
-            property StyledConfig backingAppearance: StyledConfig {}
-            property StyledConfig intersectionAppearance: StyledConfig {}
-        }
-        onLoadFailed: {
-            settingsWatcher.setText("{}");
-            writeAdapter();
-        }
-    }
 }

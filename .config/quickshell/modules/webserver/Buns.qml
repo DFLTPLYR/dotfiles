@@ -37,7 +37,7 @@ Item {
     function startup() {
         tryHttpRequest(function (status) {
             if (status === 200) {
-                console.log('Already Cooked Buns 😀');
+                return;
             } else {
                 var wd = Qt.resolvedUrl('./').toString().replace("file://", "");
                 Quickshell.execDetached({
