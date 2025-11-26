@@ -12,7 +12,7 @@ import qs.components
 // component
 
 import qs.services
-
+import qs.config
 import qs.modules.appmenu
 import qs.modules.bar
 import qs.modules.extendedbar
@@ -29,18 +29,11 @@ import qs.modules.webserver
 ShellRoot {
     id: root
 
-    // Starts
-    Connections {
-        function onParseDone() {
-            // http server
-            Buns.startup();
-        }
-
-        target: ColorPalette
-    }
-
     // NavBar
-    Bar {}
+    LazyLoader {
+      active: Config.loaded
+      Bar{}
+    }
 
     // SessionManager {}
 
@@ -48,21 +41,23 @@ ShellRoot {
     VolumeOsd {}
 
     // Logout
-    SessionMenu {}
 
+    SessionMenu {}
     // right sidebar
     // Sidebar {}
 
     // App menu
-    AppMenu {}
 
+    AppMenu {}
     // Notification Overlay
+
     NotificationOsd {}
+
 
     WallpaperPicker {}
 
-    // Settings Panel
     ConfigPanel {}
+    // Settings Panel
 
     // Screen Overlay
     ScreenOverLay {}

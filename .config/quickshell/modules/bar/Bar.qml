@@ -26,7 +26,6 @@ Variants {
 
         required property ShellScreen modelData
         property bool isExtendedBarOpen: false
-
         screen: modelData
         color: "transparent"
 

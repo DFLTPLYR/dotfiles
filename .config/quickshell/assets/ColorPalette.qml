@@ -3,6 +3,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell.Io
+import qs.modules.webserver
 
 Item {
     id: root
@@ -37,8 +38,6 @@ Item {
     property color success: color2
     property color warning: color11
     property color error: color1
-
-    signal parseDone
 
     FileView {
         id: colorJson
@@ -110,7 +109,7 @@ Item {
                 if (colors.color15)
                     color15 = colors.color15;
 
-                root.parseDone();
+                Buns.startup();
             } catch (e) {
                 console.warn("Failed to parse colors.json:", e);
             }
