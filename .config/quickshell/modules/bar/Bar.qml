@@ -151,54 +151,6 @@ Variants {
                     panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
                 }
             }
-
-            // LazyLoader {
-            //     id: clipBoardLoader
-            //
-            //     property bool shouldBeVisible: false
-            //     property real animProgress: 0
-            //
-            //     active: false
-            //
-            //     component: ClipBoard {
-            //         animProgress: clipBoardLoader.animProgress
-            //         shouldBeVisible: clipBoardLoader.shouldBeVisible
-            //         onHide: () => {
-            //             clipBoardLoader.shouldBeVisible = false;
-            //             return Qt.callLater(() => {
-            //                 return clipBoardLoader.active = false;
-            //             }, 40);
-            //         }
-            //     }
-            // }
-            //
-            // GlobalShortcut {
-            //     id: clipBoard
-            //
-            //     name: "showClipBoard"
-            //     description: "Show Clipboard history"
-            //     onPressed: {
-            //         if (clipBoardLoader.shouldBeVisible) {
-            //             clipBoardLoader.animProgress = 0;
-            //             clipBoardLoader.shouldBeVisible = false;
-            //             return Qt.callLater(() => {
-            //                 return clipBoardLoader.active = false;
-            //             }, 40);
-            //         }
-            //         if (Hyprland.focusedMonitor.name !== screenRoot.screen.name) {
-            //             clipBoardLoader.animProgress = 0;
-            //             clipBoardLoader.shouldBeVisible = false;
-            //             return Qt.callLater(() => {
-            //                 return clipBoardLoader.active = false;
-            //             }, 40);
-            //         }
-            //         clipBoardLoader.shouldBeVisible = true;
-            //         clipBoardLoader.animProgress = 1;
-            //         return Qt.callLater(() => {
-            //             return clipBoardLoader.active = true;
-            //         }, 40);
-            //     }
-            // }
         }
     }
 }
