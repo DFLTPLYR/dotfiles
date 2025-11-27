@@ -1,93 +1,93 @@
 {
-    "navbarConfig": {
-        "backing": {
-            "anchors": {
-                "bottom": true,
-                "left": true,
-                "right": true,
-                "top": true
-            },
-            "color": "#181618",
-            "height": 50,
-            "margins": {
-                "bottom": 0,
-                "left": 10,
-                "right": 10,
-                "top": 10
-            },
-            "rounding": {
-                "bottomLeft": 0,
-                "bottomRight": 0,
-                "topLeft": 0,
-                "topRight": 0
-            }
-        },
-        "height": 61,
-        "intersection": {
-            "anchors": {
-                "bottom": true,
-                "left": true,
-                "right": true,
-                "top": true
-            },
-            "color": "#181618",
-            "height": 50,
-            "margins": {
-                "bottom": 0,
-                "left": 10,
-                "right": 10,
-                "top": 10
-            },
-            "rounding": {
-                "bottomLeft": 0,
-                "bottomRight": 0,
-                "topLeft": 0,
-                "topRight": 0
-            }
-        },
-        "main": {
-            "anchors": {
-                "bottom": true,
-                "left": true,
-                "right": true,
-                "top": true
-            },
-            "color": "#181618",
-            "height": 50,
-            "margins": {
-                "bottom": 0,
-                "left": 10,
-                "right": 10,
-                "top": 10
-            },
-            "rounding": {
-                "bottomLeft": 0,
-                "bottomRight": 0,
-                "topLeft": 0,
-                "topRight": 0
-            }
-        },
-        "modules": [
-            "workspaces",
-            "clock",
-            "buttons"
-        ],
-        "popup": {
-            "color": "#181618",
-            "height": 70,
-            "width": 29,
-            "x": 0,
-            "y": 9
-        },
-        "position": "left",
-        "side": true,
-        "width": 69,
-        "workspaces": {
-            "style": "roman",
-            "styles": [
-                "roman",
-                "kanji"
-            ]
-        }
+  "navbarConfig": {
+    "backing": {
+      "anchors": {
+        "bottom": true,
+        "left": true,
+        "right": true,
+        "top": true
+      },
+      "color": "#222122",
+      "height": 50,
+      "margins": {
+        "bottom": 0,
+        "left": 10,
+        "right": 10,
+        "top": 10
+      },
+      "rounding": {
+        "bottomLeft": 0,
+        "bottomRight": 0,
+        "topLeft": 0,
+        "topRight": 0
+      }
+    },
+    "height": 64,
+    "intersection": {
+      "anchors": {
+        "bottom": true,
+        "left": true,
+        "right": true,
+        "top": true
+      },
+      "color": "#222122",
+      "height": 50,
+      "margins": {
+        "bottom": 0,
+        "left": 10,
+        "right": 10,
+        "top": 10
+      },
+      "rounding": {
+        "bottomLeft": 0,
+        "bottomRight": 0,
+        "topLeft": 0,
+        "topRight": 0
+      }
+    },
+    "main": {
+      "anchors": {
+        "bottom": true,
+        "left": true,
+        "right": true,
+        "top": true
+      },
+      "color": "#222122",
+      "height": 50,
+      "margins": {
+        "bottom": 0,
+        "left": 10,
+        "right": 10,
+        "top": 10
+      },
+      "rounding": {
+        "bottomLeft": 0,
+        "bottomRight": 0,
+        "topLeft": 0,
+        "topRight": 0
+      }
+    },
+    "modules": [
+      "workspaces",
+      "clock",
+      "buttons"
+    ],
+    "popup": {
+      "color": "#222122",
+      "height": 60,
+      "width": 33,
+      "x": 40,
+      "y": 9
+    },
+    "position": "top",
+    "side": false,
+    "width": 69,
+    "workspaces": {
+      "style": "roman",
+      "styles": [
+        "roman",
+        "kanji"
+      ]
     }
+  }
 }
