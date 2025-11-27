@@ -77,15 +77,20 @@ PopupWindow {
     Item {
         id: extendedBarContainer
 
-        width: {
-            return Math.floor(parentWindow.screen.width * Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100);
-        }
+width: {
+    let percent = Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100;
+    let baseWidth = isPortrait
+        ? parentWindow.screen.width * percent * 1.5
+        : parentWindow.screen.width * percent;
+    return Math.min(Math.floor(baseWidth), parentWindow.screen.width);
+}
 
         height: {
-            if (Config.navbar.side) {
-                return Math.floor(parentWindow.screen.height * Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100);
+            let percent = Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100;
+            if (isPortrait) {
+                return Math.floor(parentWindow.screen.height * percent / 2);
             } else {
-                return Math.floor(parentWindow.screen.height * Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100 - (parentWindow.height * 1));
+                return Math.floor(parentWindow.screen.height * percent);
             }
         }
 
@@ -111,9 +116,13 @@ PopupWindow {
 
         StyledRect {
             anchors {
-                fill: parent
-                margins: 10
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+                margins: 0
             }
+            ContainerBar {}
         }
 
         opacity: animProgress
@@ -204,7 +213,6 @@ PopupWindow {
         //         width: Math.floor(mainContent.width)
         //         height: Math.floor(mainContent.height)
         //
-        //         ContainerBar {}
         //     }
         // }
     }
