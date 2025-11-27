@@ -7,8 +7,6 @@ import Quickshell.Io
 
 import qs.assets
 
-// yoinked at https://github.com/end-4/dots-hyprland/blob/main/.config/quickshell/ii/services/ResourceUsage.qml but extended
-
 Singleton {
     id: root
     // Raw data from API

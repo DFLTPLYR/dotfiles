@@ -22,7 +22,7 @@
                 "topRight": 0
             }
         },
-        "height": 50,
+        "height": 53,
         "intersection": {
             "anchors": {
                 "bottom": true,
@@ -72,7 +72,14 @@
             "clock",
             "buttons"
         ],
-        "position": "top",
+        "popup": {
+            "color": "#181618",
+            "height": 400,
+            "width": 300,
+            "x": 55,
+            "y": 100
+        },
+        "position": "bottom",
         "side": false,
         "width": 77,
         "workspaces": {
