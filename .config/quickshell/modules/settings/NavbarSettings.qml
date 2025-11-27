@@ -23,12 +23,32 @@ Item {
 
         ColumnLayout {
             width: parent.width
+
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
                 text: "Navbar Configurations"
                 color: Color.text
             }
+
+            // workspace style settings
+            RowLayout {
+                Layout.fillWidth: true
+                Repeater {
+                    model: Config.navbar.workspaces.styles
+                    delegate: RadioButton {
+                        required property var modelData
+                        checked: Config.navbar.workspaces.style === modelData
+                        text: modelData
+                        onCheckedChanged: {
+                            if (checked) {
+                                Config.navbar.workspaces.style = modelData;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Position Settings
             RowLayout {
                 Layout.fillWidth: true
@@ -180,24 +200,6 @@ Item {
                         to: 100
                         onValueChanged: {
                             Config.navbar.popup.width = value;
-                        }
-                    }
-                }
-            }
-
-            // workspace style settings
-            RowLayout {
-                Layout.fillWidth: true
-                Repeater {
-                    model: Config.navbar.workspaces.styles
-                    delegate: RadioButton {
-                        required property var modelData
-                        checked: Config.navbar.workspaces.style === modelData
-                        text: modelData
-                        onCheckedChanged: {
-                            if (checked) {
-                                Config.navbar.workspaces.style = modelData;
-                            }
                         }
                     }
                 }
