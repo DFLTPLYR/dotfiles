@@ -8,6 +8,7 @@ JsonObject {
     property int height: 50
     property list<string> modules: ["workspaces", "clock", "buttons"]
     property WorkspaceConfig workspaces: WorkspaceConfig {}
+    property PopupProps popup: PopupProps {}
     property RectProps main: RectProps {}
     property RectProps backing: RectProps {}
     property RectProps intersection: RectProps {}

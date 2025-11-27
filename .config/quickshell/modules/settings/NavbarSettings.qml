@@ -114,6 +114,40 @@ Item {
                 }
             }
 
+            RowLayout {
+                visible: Config.navbar.position === "top" || Config.navbar.position === "bottom"
+                Layout.fillWidth: true
+                Label {
+                    text: "Popup X Position"
+                }
+                Slider {
+                    Layout.fillWidth: true
+                    from: 0
+                    to: 100
+                    value: Config.navbar.popup.x
+                    onValueChanged: {
+                        Config.navbar.popup.x = value;
+                    }
+                }
+            }
+
+            RowLayout {
+                visible: Config.navbar.position === "left" || Config.navbar.position === "right"
+                Layout.fillWidth: true
+                Label {
+                    text: "Popup Y Position"
+                }
+                Slider {
+                    Layout.fillWidth: true
+                    from: 0
+                    to: 100
+                    value: Config.navbar.popup.y
+                    onValueChanged: {
+                        Config.navbar.popup.y = value;
+                    }
+                }
+            }
+
             // workspace style settings
             RowLayout {
                 Layout.fillWidth: true
