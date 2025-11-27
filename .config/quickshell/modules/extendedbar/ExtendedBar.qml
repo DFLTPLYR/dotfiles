@@ -33,17 +33,16 @@ PopupWindow {
 
     anchor {
 
-
         adjustment: PopupAdjustment.All
 
         rect {
             x: {
                 if (Config.navbar.position === "right") {
-                  return -parentWindow.width + parentWindow.width;
+                    return -parentWindow.width + parentWindow.width;
                 } else if (Config.navbar.position === "left") {
-                  return parentWindow.width;
+                    return parentWindow.width;
                 } else {
-                    return Math.round(parentWindow.width * Config.navbar.popup.x / 100 - width / 2);
+                    return Math.round((parentWindow.width - width) * (Config.navbar.popup.x / 100));
                 }
             }
 
@@ -53,7 +52,7 @@ PopupWindow {
                 } else if (Config.navbar.position === "bottom") {
                     return -parentWindow.height + parentWindow.height;
                 } else {
-                    return Math.round(parentWindow.height * Config.navbar.popup.y / 100 - height / 2);
+                    return Math.round((parentWindow.height - height) * Config.navbar.popup.y / 100);
                 }
             }
         }
@@ -79,18 +78,15 @@ PopupWindow {
         id: extendedBarContainer
 
         width: {
-          if(!Config.navbar.side) {
-            return 400
-          } else {
-            return parentWindow.screen.width - parentWindow.width
-          }
+            return Math.floor(parentWindow.screen.width * Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100);
         }
+
         height: {
-          if(Config.navbar.side) {
-            return 400
-          } else {
-            return  parentWindow.screen.height - parentWindow.height
-          }
+            if (Config.navbar.side) {
+                return Math.floor(parentWindow.screen.height * Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100);
+            } else {
+                return Math.floor(parentWindow.screen.height * Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100 - (parentWindow.height * 1));
+            }
         }
 
         y: {
@@ -101,25 +97,26 @@ PopupWindow {
             } else {
                 return 0;
             }
-          }
-
-          x: {
-            if(Config.navbar.position === "left") {
-              return -parentWindow.screen.width + animProgress * parentWindow.screen.width;
-            } else if (Config.navbar.position === "right") {
-              return +parentWindow.screen.width + animProgress * -parentWindow.screen.width;
-            } else {
-              return 0;
-            }
-          }
-
-          StyledRect {
-            anchors.fill: parent
         }
-  
-        opacity: animProgress
 
-    
+        x: {
+            if (Config.navbar.position === "left") {
+                return -parentWindow.screen.width + animProgress * parentWindow.screen.width;
+            } else if (Config.navbar.position === "right") {
+                return +parentWindow.screen.width + animProgress * -parentWindow.screen.width;
+            } else {
+                return 0;
+            }
+        }
+
+        StyledRect {
+            anchors {
+                fill: parent
+                margins: 10
+            }
+        }
+
+        opacity: animProgress
 
         scale: animProgress
 

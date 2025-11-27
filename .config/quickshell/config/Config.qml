@@ -26,13 +26,13 @@ Singleton {
                 fileView.writeAdapter();
             }
         }
-        onAdapterUpdated: {
-            if (loaded)
-                return writeAdapter();
-        }
         JsonAdapter {
             id: adapter
             property NavbarConfig navbarConfig: NavbarConfig {}
         }
+    }
+
+    function saveSettings() {
+        fileView.writeAdapter();
     }
 }
