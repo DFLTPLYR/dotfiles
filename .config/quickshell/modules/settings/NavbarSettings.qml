@@ -114,6 +114,7 @@ Item {
                 }
             }
 
+            // Axis position extendedbar settings
             RowLayout {
                 visible: Config.navbar.position === "top" || Config.navbar.position === "bottom"
                 Layout.fillWidth: true
@@ -123,7 +124,7 @@ Item {
                 Slider {
                     Layout.fillWidth: true
                     from: 0
-                    to: 100
+                    to: 99
                     value: Config.navbar.popup.x
                     onValueChanged: {
                         Config.navbar.popup.x = value;
@@ -148,6 +149,42 @@ Item {
                 }
             }
 
+            RowLayout {
+                Layout.fillWidth: true
+                RowLayout {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Label {
+                        text: "Popup Height"
+                    }
+                    Slider {
+                        Layout.fillWidth: true
+                        from: 10
+                        value: Config.navbar.popup.height
+                        to: 100
+                        onValueChanged: {
+                            Config.navbar.popup.height = value;
+                        }
+                    }
+                }
+                RowLayout {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Label {
+                        text: "Popup Width"
+                    }
+                    Slider {
+                        Layout.fillWidth: true
+                        from: 10
+                        value: Config.navbar.popup.width
+                        to: 100
+                        onValueChanged: {
+                            Config.navbar.popup.width = value;
+                        }
+                    }
+                }
+            }
+
             // workspace style settings
             RowLayout {
                 Layout.fillWidth: true
@@ -162,6 +199,19 @@ Item {
                                 Config.navbar.workspaces.style = modelData;
                             }
                         }
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Label {
+                    text: "Save Settings"
+                }
+                Button {
+                    text: "Save"
+                    onClicked: {
+                        Config.saveSettings();
                     }
                 }
             }
