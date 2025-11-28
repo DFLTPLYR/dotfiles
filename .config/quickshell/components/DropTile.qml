@@ -30,7 +30,6 @@ DropArea {
             function clamp(val, min, max) {
                 return Math.max(min, Math.min(max, val));
             }
-
             switch (mouse.button) {
             case Qt.LeftButton:
                 if (mouse.modifiers & Qt.ShiftModifier) {

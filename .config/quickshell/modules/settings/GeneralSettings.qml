@@ -23,12 +23,13 @@ Item {
 
         ColumnLayout {
             width: parent.width
+
             // Controls
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
 
-                RowLayout {
+                Flow {
                     Layout.fillWidth: true
                     Label {
                         text: "column count"
@@ -46,6 +47,14 @@ Item {
                         from: 2
                         to: 10
                     }
+                    Label {
+                        text: "Layout Ammount"
+                    }
+                    SpinBox {
+                        id: layoutAmmountBox
+                        from: 1
+                        to: columnCountBox.value * rowCountBox.value
+                    }
                 }
             }
 
@@ -55,37 +64,25 @@ Item {
                 Layout.preferredHeight: grid.implicitHeight
                 visible: true
 
-                Grid {
+                FlexboxLayout {
                     id: grid
-
-                    anchors {
-                        left: redSource.right
-                        top: parent.top
-                        right: parent.right
-                        margins: 5
-                    }
-
-                    spacing: 2
-                    opacity: 0.5
-
-                    columns: columnCountBox.value
-                    rows: rowCountBox.value
-
                     Repeater {
                         id: gridRepeater
                         model: ScriptModel {
                             values: {
-                                const count = columnCountBox.value * rowCountBox.value;
-                                return Array(count).fill(null);
+                                return Array.from({
+                                    length: layoutAmmountBox.value
+                                }, (_, i) => i);
                             }
                         }
+
                         delegate: DropTile {
                             colorKey: "red"
                         }
                     }
                 }
 
-                Column {
+                Row {
                     id: redSource
 
                     anchors {
@@ -99,10 +96,55 @@ Item {
                     spacing: -16
 
                     Repeater {
+                        id: sourceRepeater
                         model: 2
                         delegate: DragTile {
                             colorKey: "red"
                         }
+                    }
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 600
+                FlexboxLayout {
+                    id: flexLayout
+                    anchors.fill: parent
+
+                    wrap: FlexboxLayout.Wrap
+                    direction: FlexboxLayout.Row
+
+                    rowGap: 0
+                    Rectangle {
+                        color: 'teal'
+                        implicitWidth: 200
+                        implicitHeight: 200
+                    }
+                    Rectangle {
+                        color: 'plum'
+                        implicitWidth: 400
+                        implicitHeight: 200
+                    }
+                    Rectangle {
+                        color: 'olive'
+                        implicitWidth: 200
+                        implicitHeight: 200
+                    }
+                    Rectangle {
+                        color: 'beige'
+                        implicitWidth: 200
+                        implicitHeight: 200
+                    }
+                    Rectangle {
+                        color: 'darkseagreen'
+                        implicitWidth: 200
+                        implicitHeight: 200
+                    }
+                    Rectangle {
+                        color: 'darkseagreen'
+                        implicitWidth: 200
+                        implicitHeight: 200
                     }
                 }
             }
