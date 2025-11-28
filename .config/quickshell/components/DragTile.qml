@@ -14,8 +14,8 @@ Item {
     MouseArea {
         id: mouseArea
 
-        width: 64 * row
-        height: 64 * column
+        width: root.width
+        height: root.height
         anchors.centerIn: parent
 
         drag.target: tile
@@ -29,8 +29,8 @@ Item {
         Rectangle {
             id: tile
 
-            width: parent ? parent.width : 64 * row
-            height: parent ? parent.height : 64 * column
+            width: parent.width
+            height: parent.height
 
             anchors {
                 verticalCenter: parent.verticalCenter

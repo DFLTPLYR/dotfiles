@@ -58,14 +58,57 @@ Item {
                 }
             }
 
+            // Layout Preview
+            Item {
+                visible: false
+                Layout.fillWidth: true
+                Layout.preferredHeight: 600
+
+                GridLayout {
+                    id: gridLayout
+                    width: parent.width
+                    height: 400
+                    columns: columnCountBox.value
+                    rows: rowCountBox.value
+
+                    Repeater {
+                        model: layoutAmmountBox.value
+
+                        delegate: DropTile {
+                            colorKey: "red"
+                            column: 1
+                            row: 1
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.columnSpan: column
+                            Layout.rowSpan: row
+                        }
+                    }
+                }
+            }
+
             // Drag and Drop Grid
             Item {
                 Layout.fillWidth: true
-                Layout.preferredHeight: grid.implicitHeight
-                visible: true
+                Layout.preferredHeight: 600
+                visible: visible
 
-                FlexboxLayout {
+                GridLayout {
                     id: grid
+
+                    anchors {
+                        top: redSource.bottom
+                        left: parent.left
+                        right: parent.right
+                        margins: 5
+                    }
+                    width: parent.width
+                    height: 400
+                    columns: columnCountBox.value
+                    rows: rowCountBox.value
+
+                    property int gridWidth: grid.width * columnCountBox.value + (columnCountBox.value - 1) * grid.gap
+                    property int gridHeight: grid.height * rowCountBox.value + (rowCountBox.value - 1) * grid.gap
                     Repeater {
                         id: gridRepeater
                         model: ScriptModel {
@@ -78,6 +121,21 @@ Item {
 
                         delegate: DropTile {
                             colorKey: "red"
+                            column: 1
+                            row: 1
+
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.columnSpan: column
+                            Layout.rowSpan: row
+
+                            Text {
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                                text: `${modelData + 1} \n(${column}x${row})`
+                            }
                         }
                     }
                 }
@@ -88,7 +146,7 @@ Item {
                     anchors {
                         left: parent.left
                         top: parent.top
-                        bottom: parent.bottom
+                        right: parent.right
                         margins: 5
                     }
 
@@ -101,50 +159,6 @@ Item {
                         delegate: DragTile {
                             colorKey: "red"
                         }
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 600
-                FlexboxLayout {
-                    id: flexLayout
-                    anchors.fill: parent
-
-                    wrap: FlexboxLayout.Wrap
-                    direction: FlexboxLayout.Row
-
-                    rowGap: 0
-                    Rectangle {
-                        color: 'teal'
-                        implicitWidth: 200
-                        implicitHeight: 200
-                    }
-                    Rectangle {
-                        color: 'plum'
-                        implicitWidth: 400
-                        implicitHeight: 200
-                    }
-                    Rectangle {
-                        color: 'olive'
-                        implicitWidth: 200
-                        implicitHeight: 200
-                    }
-                    Rectangle {
-                        color: 'beige'
-                        implicitWidth: 200
-                        implicitHeight: 200
-                    }
-                    Rectangle {
-                        color: 'darkseagreen'
-                        implicitWidth: 200
-                        implicitHeight: 200
-                    }
-                    Rectangle {
-                        color: 'darkseagreen'
-                        implicitWidth: 200
-                        implicitHeight: 200
                     }
                 }
             }

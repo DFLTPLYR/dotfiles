@@ -8,9 +8,8 @@ DropArea {
     property int row: 1
     property int column: 1
     property bool isHovered: false
-
-    width: 64 * row
-    height: 64 * column
+    property int gridHeight
+    property int gridWidth
 
     keys: [colorKey, row, column]
 
@@ -19,6 +18,7 @@ DropArea {
 
         anchors.fill: parent
         color: dragTarget.containsDrag || dragTarget.isHovered ? "grey" : dragTarget.colorKey
+        opacity: 0.5
     }
 
     MouseArea {
@@ -34,19 +34,19 @@ DropArea {
             case Qt.LeftButton:
                 if (mouse.modifiers & Qt.ShiftModifier) {
                     // Shift + LeftClick → increase column
-                    dragTarget.column = clamp(dragTarget.column + 1, 1, grid.columns);
+                    dragTarget.column = clamp(dragTarget.column + 1, 1, columnCountBox.value);
                 } else if (mouse.modifiers & Qt.ControlModifier) {
                     // Ctrl + LeftClick → decrease column
-                    dragTarget.column = clamp(dragTarget.column - 1, 1, grid.columns);
+                    dragTarget.column = clamp(dragTarget.column - 1, 1, rowCountBox.value);
                 }
                 break;
             case Qt.RightButton:
                 if (mouse.modifiers & Qt.ShiftModifier) {
                     // Shift + RightClick → increase row
-                    dragTarget.row = clamp(dragTarget.row + 1, 1, grid.rows);
+                    dragTarget.row = clamp(dragTarget.row + 1, 1, columnCountBox.value);
                 } else if (mouse.modifiers & Qt.ControlModifier) {
                     // Ctrl + RightClick → decrease row
-                    dragTarget.row = clamp(dragTarget.row - 1, 1, grid.rows);
+                    dragTarget.row = clamp(dragTarget.row - 1, 1, rowCountBox.value);
                 }
                 break;
             }
