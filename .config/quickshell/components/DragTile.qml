@@ -35,9 +35,10 @@ Item {
 
             Drag.keys: [root.colorKey]
             Drag.active: mouseArea.drag.active
+
             Drag.hotSpot.x: 32
             Drag.hotSpot.y: 32
-            //! [0]
+
             Text {
                 anchors.fill: parent
                 color: "white"
@@ -46,7 +47,6 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-            //! [1]
             states: State {
                 when: mouseArea.drag.active
                 AnchorChanges {
