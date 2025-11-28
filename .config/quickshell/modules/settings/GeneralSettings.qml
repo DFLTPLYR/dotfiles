@@ -34,7 +34,7 @@ Item {
                     }
                     SpinBox {
                         id: columnCountBox
-                        from: 1
+                        from: 4
                         to: 10
                     }
                     Label {
@@ -42,7 +42,7 @@ Item {
                     }
                     SpinBox {
                         id: rowCountBox
-                        from: 1
+                        from: 4
                         to: 10
                     }
                 }
@@ -54,91 +54,140 @@ Item {
                     anchors.fill: parent
                 }
             }
+
             ListModel {
                 id: colorModel
                 ListElement {
-                    color: "blue"
-                    column: 1
-                    span: 1
-                }
-                ListElement {
-                    color: "green"
-                    column: 1
-                    span: 1
-                }
-                ListElement {
+                    row: 0
+                    col: 0
                     color: "red"
-                    column: 1
                     span: 1
+                    column: 1
                 }
                 ListElement {
-                    color: "yellow"
-                    column: 1
+                    row: 1
+                    col: 1
+                    color: "blue"
                     span: 1
-                }
-                ListElement {
-                    color: "orange"
                     column: 1
-                    span: 1
                 }
             }
+
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: grid.implicitHeight
+                visible: true
 
                 GridLayout {
                     id: grid
-                    columns: columnCountBox.value
-                    rows: rowCountBox.value
-                    columnSpacing: 5
-                    rowSpacing: 5
-                    uniformCellHeights: true
-                    uniformCellWidths: true
+
+                    columns: Math.max(4, columnCountBox.value)
+                    rows: Math.max(4, rowCountBox.value)
+
                     Repeater {
+                        id: inst
                         model: colorModel
+
                         delegate: Item {
                             id: delegateItem
-                            Layout.minimumWidth: 50
-                            Layout.minimumHeight: 50
+                            // NOTE: Instantiator does not parent automatically.
 
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-
+                            Layout.row: model.row
+                            Layout.column: model.col
                             Layout.rowSpan: model.span
                             Layout.columnSpan: model.column
+                            width: 50 * model.column
+                            height: 50 * model.span
 
                             Rectangle {
+                                id: rectTarget
                                 anchors.fill: parent
                                 color: model.color
                                 border.color: "gray"
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "C: " + column + "\nS: " + span
+                                }
                             }
 
                             MouseArea {
+                                id: mouseArea
                                 anchors.fill: parent
+                                drag.target: delegateItem
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                                Drag.active: mouseArea.drag.active
+                                Drag.hotSpot.x: mouseArea.x
+                                Drag.hotSpot.y: mouseArea.y
+                                Drag.keys: [index]
+
+                                onReleased: Drag.drop()
+
                                 onClicked: mouse => {
-                                    // Helper functions for clamping
+                                    if (mouseArea.drag.active)
+                                        return;
                                     function clamp(val, min, max) {
                                         return Math.max(min, Math.min(max, val));
                                     }
 
-                                    if (mouse.modifiers & Qt.ShiftModifier) {
-                                        console.log("Shift clicked");
-                                        if (mouse.button === Qt.RightButton) {
-                                            model.span = clamp(model.span + 1, 1, grid.rows);
-                                        } else if (mouse.button === Qt.LeftButton) {
-                                            model.span = clamp(model.span - 1, 1, grid.rows);
-                                        }
-                                    } else if (mouse.modifiers & Qt.ControlModifier) {
-                                        // ColumnSpan modification
-                                        if (mouse.button === Qt.RightButton) {
-                                            model.column = clamp(model.column + 1, 1, grid.columns);
-                                        } else if (mouse.button === Qt.LeftButton) {
-                                            model.column = clamp(model.column - 1, 1, grid.columns);
-                                        }
+                                    switch (mouse.button) {
+                                    case Qt.RightButton:
+                                        if (mouse.modifiers & Qt.ShiftModifier)
+                                            span = clamp(span + 1, 1, grid.rows);
+                                        else if (mouse.modifiers & Qt.ControlModifier)
+                                            column = clamp(column + 1, 1, grid.columns);
+                                        break;
+                                    case Qt.LeftButton:
+                                        if (mouse.modifiers & Qt.ShiftModifier)
+                                            span = clamp(span - 1, 1, grid.rows);
+                                        else if (mouse.modifiers & Qt.ControlModifier)
+                                            column = clamp(column - 1, 1, grid.columns);
+                                        break;
                                     }
                                 }
                             }
                         }
+                    }
+                }
+
+                GridLayout {
+                    id: blackGrid
+                    columns: Math.max(1, columnCountBox.value)
+                    rows: Math.max(1, rowCountBox.value)
+
+                    Repeater {
+                        model: grid.rows * grid.columns
+                        delegate: DropArea {
+                            id: dragTarget
+                            property int dropRow: index / parent.columns
+                            property int dropCol: index % parent.columns
+
+                            Layout.minimumWidth: dragTarget.containsDrag ? 60 : 50
+                            Layout.minimumHeight: dragTarget.containsDrag ? 60 : 50
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: dragTarget.containsDrag ? "grey" : "transparent"
+                                border.color: "gray"
+                            }
+
+                            onDropped: drag => {
+                                const itemIndex = drag.keys[0];
+                                colorModel.setProperty(itemIndex, "row", dropRow);
+                                colorModel.setProperty(itemIndex, "col", dropCol);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Button {
+                text: "test"
+                Layout.preferredWidth: 50
+                Layout.fillHeight: true
+                onClicked: {
+                    for (let i = 0; i < colorModel.count; i++) {
+                        console.log("Item " + i + ": row=" + colorModel.get(i).row + ", col=" + colorModel.get(i).col);
                     }
                 }
             }
