@@ -9,6 +9,7 @@ import qs.components
 import qs.assets
 
 import qs.config
+import qs.utils
 
 Item {
 
@@ -22,7 +23,7 @@ Item {
 
         ColumnLayout {
             width: parent.width
-
+            // Controls
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
@@ -34,7 +35,7 @@ Item {
                     }
                     SpinBox {
                         id: columnCountBox
-                        from: 4
+                        from: 2
                         to: 10
                     }
                     Label {
@@ -42,152 +43,66 @@ Item {
                     }
                     SpinBox {
                         id: rowCountBox
-                        from: 4
+                        from: 2
                         to: 10
                     }
                 }
             }
 
-            Item {
-                Layout.fillWidth: true
-                Rectangle {
-                    anchors.fill: parent
-                }
-            }
-
-            ListModel {
-                id: colorModel
-                ListElement {
-                    row: 0
-                    col: 0
-                    color: "red"
-                    span: 1
-                    column: 1
-                }
-                ListElement {
-                    row: 1
-                    col: 1
-                    color: "blue"
-                    span: 1
-                    column: 1
-                }
-            }
-
+            // Drag and Drop Grid
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: grid.implicitHeight
                 visible: true
 
-                GridLayout {
+                Grid {
                     id: grid
 
-                    columns: Math.max(4, columnCountBox.value)
-                    rows: Math.max(4, rowCountBox.value)
+                    anchors {
+                        left: redSource.right
+                        top: parent.top
+                        right: parent.right
+                        margins: 5
+                    }
+
+                    spacing: 2
+                    opacity: 0.5
+
+                    columns: columnCountBox.value
+                    rows: rowCountBox.value
 
                     Repeater {
-                        id: inst
-                        model: colorModel
-
-                        delegate: Item {
-                            id: delegateItem
-                            // NOTE: Instantiator does not parent automatically.
-
-                            Layout.row: model.row
-                            Layout.column: model.col
-                            Layout.rowSpan: model.span
-                            Layout.columnSpan: model.column
-                            width: 50 * model.column
-                            height: 50 * model.span
-
-                            Rectangle {
-                                id: rectTarget
-                                anchors.fill: parent
-                                color: model.color
-                                border.color: "gray"
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "C: " + column + "\nS: " + span
-                                }
+                        id: gridRepeater
+                        model: ScriptModel {
+                            values: {
+                                const count = columnCountBox.value * rowCountBox.value;
+                                return Array(count).fill(null);
                             }
-
-                            MouseArea {
-                                id: mouseArea
-                                anchors.fill: parent
-                                drag.target: delegateItem
-                                acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-                                Drag.active: mouseArea.drag.active
-                                Drag.hotSpot.x: mouseArea.x
-                                Drag.hotSpot.y: mouseArea.y
-                                Drag.keys: [index]
-
-                                onReleased: Drag.drop()
-
-                                onClicked: mouse => {
-                                    if (mouseArea.drag.active)
-                                        return;
-                                    function clamp(val, min, max) {
-                                        return Math.max(min, Math.min(max, val));
-                                    }
-
-                                    switch (mouse.button) {
-                                    case Qt.RightButton:
-                                        if (mouse.modifiers & Qt.ShiftModifier)
-                                            span = clamp(span + 1, 1, grid.rows);
-                                        else if (mouse.modifiers & Qt.ControlModifier)
-                                            column = clamp(column + 1, 1, grid.columns);
-                                        break;
-                                    case Qt.LeftButton:
-                                        if (mouse.modifiers & Qt.ShiftModifier)
-                                            span = clamp(span - 1, 1, grid.rows);
-                                        else if (mouse.modifiers & Qt.ControlModifier)
-                                            column = clamp(column - 1, 1, grid.columns);
-                                        break;
-                                    }
-                                }
-                            }
+                        }
+                        delegate: DropTile {
+                            colorKey: "red"
                         }
                     }
                 }
 
-                GridLayout {
-                    id: blackGrid
-                    columns: Math.max(1, columnCountBox.value)
-                    rows: Math.max(1, rowCountBox.value)
+                Column {
+                    id: redSource
+
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                        margins: 5
+                    }
+
+                    width: 64
+                    spacing: -16
 
                     Repeater {
-                        model: grid.rows * grid.columns
-                        delegate: DropArea {
-                            id: dragTarget
-                            property int dropRow: index / parent.columns
-                            property int dropCol: index % parent.columns
-
-                            Layout.minimumWidth: dragTarget.containsDrag ? 60 : 50
-                            Layout.minimumHeight: dragTarget.containsDrag ? 60 : 50
-
-                            Rectangle {
-                                anchors.fill: parent
-                                color: dragTarget.containsDrag ? "grey" : "transparent"
-                                border.color: "gray"
-                            }
-
-                            onDropped: drag => {
-                                const itemIndex = drag.keys[0];
-                                colorModel.setProperty(itemIndex, "row", dropRow);
-                                colorModel.setProperty(itemIndex, "col", dropCol);
-                            }
+                        model: 2
+                        delegate: DragTile {
+                            colorKey: "red"
                         }
-                    }
-                }
-            }
-
-            Button {
-                text: "test"
-                Layout.preferredWidth: 50
-                Layout.fillHeight: true
-                onClicked: {
-                    for (let i = 0; i < colorModel.count; i++) {
-                        console.log("Item " + i + ": row=" + colorModel.get(i).row + ", col=" + colorModel.get(i).col);
                     }
                 }
             }

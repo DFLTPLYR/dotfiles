@@ -6,26 +6,33 @@ Item {
 
     required property string colorKey
     required property int modelData
+    property int row: 1
+    property int column: 1
 
-    width: 64
-    height: 64
+    width: 64 * row
+    height: 64 * column
 
     MouseArea {
         id: mouseArea
 
-        width: 64
-        height: 64
+        width: 64 * row
+        height: 64 * column
         anchors.centerIn: parent
 
         drag.target: tile
 
-        onReleased: parent = tile.Drag.target !== null ? tile.Drag.target : root
+        onReleased: {
+            parent = tile.Drag.target !== null ? tile.Drag.target : root;
+        }
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         Rectangle {
             id: tile
 
-            width: 64
-            height: 64
+            width: 64 * row
+            height: 64 * column
+
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
@@ -33,11 +40,11 @@ Item {
 
             color: root.colorKey
 
-            Drag.keys: [root.colorKey]
+            Drag.keys: [root.colorKey, root.row, root.column]
             Drag.active: mouseArea.drag.active
 
-            Drag.hotSpot.x: 32
-            Drag.hotSpot.y: 32
+            Drag.hotSpot.x: parent.width / 4
+            Drag.hotSpot.y: parent.height / 4
 
             Text {
                 anchors.fill: parent
@@ -47,6 +54,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
+
             states: State {
                 when: mouseArea.drag.active
                 AnchorChanges {
