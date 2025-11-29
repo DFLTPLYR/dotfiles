@@ -226,7 +226,8 @@ Item {
                 Layout.fillHeight: true
                 Layout.preferredHeight: 400
 
-                Grid {
+                GridLayout {
+                    id: previewGrid
                     anchors.fill: parent
                     columns: Math.max(1, columnCountBox.value)
                     rows: Math.max(1, rowCountBox.value)
@@ -234,8 +235,6 @@ Item {
                     Repeater {
                         model: persistentLayoutView.adapter.layoutItems
                         Rectangle {
-                            width: 100
-                            height: 100
                             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.2)
                             border.color: "black"
                             border.width: 2
@@ -245,6 +244,13 @@ Item {
                             Layout.column: modelData.col
                             Layout.rowSpan: modelData.rowspan
                             Layout.columnSpan: modelData.colspan
+                            // Use preferred sizes, not width/height
+                            Layout.preferredWidth: modelData.colspan * (previewGrid.width / previewGrid.columns)
+                            Layout.preferredHeight: modelData.rowspan * (previewGrid.height / previewGrid.rows)
+
+                            // optional to avoid auto stretching
+                            Layout.fillWidth: false
+                            Layout.fillHeight: false
                         }
                     }
                 }
