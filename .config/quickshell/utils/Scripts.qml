@@ -27,4 +27,22 @@ QtObject {
         }
         return Colors;
     }
+
+    function rectBounds(item) {
+        let p = item.mapToItem(null, 0, 0);
+        return {
+            x: p.x,
+            y: p.y,
+            width: item.width,
+            height: item.height
+        };
+    }
+
+    function intersects(a, b) {
+        return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max) + 1;
+    }
 }
