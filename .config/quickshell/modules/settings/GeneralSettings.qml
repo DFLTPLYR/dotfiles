@@ -13,6 +13,26 @@ import qs.utils
 
 Item {
 
+    FileView {
+        id: persistentLayoutView
+        path: Qt.resolvedUrl("./layout.json")
+        watchChanges: true
+        preload: true
+        onFileChanged: {
+            reload();
+        }
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) {
+                persistentLayoutView.setText("{}");
+                persistentLayoutView.writeAdapter();
+            }
+        }
+        JsonAdapter {
+            id: adapter
+            property var layoutItems: []
+        }
+    }
+
     ScrollView {
         width: parent.width
         height: parent.height
@@ -26,13 +46,17 @@ Item {
 
             // Controls
             Item {
+                id: controls
+
                 Layout.fillWidth: true
-                Layout.preferredHeight: 40
-                width: parent.width   // Add this
+                Layout.preferredHeight: controlFlow.implicitHeight
 
                 Flow {
+                    id: controlFlow
                     anchors.fill: parent
                     spacing: 20
+                    width: parent.width
+
                     Column {
                         Label {
                             text: "column count"
@@ -64,26 +88,36 @@ Item {
                         }
                     }
                     Button {
-                        text: "Reset Grid"
+                        text: "Reset"
                         onClicked: {
-                            for (let i = 0; i < overlay.children.length; i++) {
-                                let child = overlay.children[i];
+                            persistentLayoutView.adapter.layoutItems = [];
+                            persistentLayoutView.writeAdapter();
+                        }
+                    }
+                    Button {
+                        text: "Save Layout"
+                        onClicked: {
+                            let items = persistentLayoutView.adapter.layoutItems.slice(); // copy
 
+                            for (let child of overlay.children) {
                                 if (child instanceof Dragger) {
-                                    for (let j in child.positions) {
-                                        console.log(j, child.positions[j]);
-                                    }
+                                    // deep copy positions if needed
+                                    const snapshot = JSON.parse(JSON.stringify(child.positions));
+                                    items.push(snapshot);
                                 }
                             }
+                            persistentLayoutView.adapter.layoutItems = items;
+                            persistentLayoutView.writeAdapter();
                         }
                     }
                 }
             }
 
             Row {
+                id: draggablesContainer
                 Layout.fillWidth: true
-                Layout.preferredHeight: 60
                 z: 10
+
                 Repeater {
                     model: ScriptModel {
                         values: {
@@ -94,7 +128,21 @@ Item {
                     }
                     delegate: Dragger {
                         parentItem: overlay
-                        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        col: Scripts.getRandomInt(3)
+                        row: Scripts.getRandomInt(3)
+                        width: row * 50
+                        height: col * 50
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                            border.color: "black"
+                            border.width: 1
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Mpris"
+                            }
+                        }
                     }
                 }
             }
@@ -110,20 +158,6 @@ Item {
                     color: "#444444"
                 }
 
-                function rectBounds(item) {
-                    let p = item.mapToItem(null, 0, 0);
-                    return {
-                        x: p.x,
-                        y: p.y,
-                        width: item.width,
-                        height: item.height
-                    };
-                }
-
-                function intersects(a, b) {
-                    return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
-                }
-
                 Rectangle {
                     anchors.fill: parent
                     color: "#0000ff22"
@@ -133,6 +167,11 @@ Item {
                     id: overlay
                     anchors.fill: parent
                     z: 10
+                    onChildrenChanged: {
+                        for (let child of children) {
+                            console.log(" Child:", child);
+                        }
+                    }
                 }
 
                 Grid {
@@ -149,10 +188,10 @@ Item {
                             if (!cell)
                                 continue;
 
-                            let a = gridPreviewContainer.rectBounds(dragItem);
-                            let b = gridPreviewContainer.rectBounds(cell);
+                            let a = Scripts.rectBounds(dragItem);
+                            let b = Scripts.rectBounds(cell);
 
-                            if (gridPreviewContainer.intersects(a, b)) {
+                            if (Scripts.intersects(a, b)) {
                                 overlaps.push([Math.floor(i / columns), i % columns]);
                                 cell.color = "#22ddff33";
                             } else {
@@ -182,80 +221,30 @@ Item {
                 }
             }
 
-            // Drag and Drop Grid
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                visible: false
+                Layout.preferredHeight: 400
 
-                GridLayout {
-                    id: grid
-
-                    anchors {
-                        top: modules.bottom
-                        left: parent.left
-                        right: parent.right
-                        margins: 5
-                    }
-
-                    width: parent.width
-                    height: 400
-                    columns: columnCountBox.value
-                    rows: rowCountBox.value
-
-                    property int gridWidth: grid.width * columnCountBox.value + (columnCountBox.value - 1) * grid.gap
-                    property int gridHeight: grid.height * rowCountBox.value + (rowCountBox.value - 1) * grid.gap
-                    Repeater {
-                        id: gridRepeater
-                        model: ScriptModel {
-                            values: {
-                                return Array.from({
-                                    length: layoutAmmountBox.value
-                                }, (_, i) => i);
-                            }
-                        }
-
-                        delegate: DropTile {
-                            colorKey: "red"
-                            column: 1
-                            row: 1
-
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.preferredWidth: grid.gridWidth / columnCountBox.value
-                            Layout.preferredHeight: grid.gridHeight / rowCountBox.value
-                            Layout.columnSpan: column
-                            Layout.rowSpan: row
-
-                            Text {
-                                anchors {
-                                    verticalCenter: parent.verticalCenter
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: `${modelData + 1} \n(${column}x${row})`
-                            }
-                        }
-                    }
-                }
-
-                Row {
-                    id: modules
-
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        right: parent.right
-                        margins: 5
-                    }
-
-                    width: 64
-                    spacing: -16
+                Grid {
+                    anchors.fill: parent
+                    columns: Math.max(1, columnCountBox.value)
+                    rows: Math.max(1, rowCountBox.value)
 
                     Repeater {
-                        id: sourceRepeater
-                        model: 2
-                        delegate: DragTile {
-                            colorKey: "red"
+                        model: persistentLayoutView.adapter.layoutItems
+                        Rectangle {
+                            width: 100
+                            height: 100
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.2)
+                            border.color: "black"
+                            border.width: 2
+
+                            // Map JSON layout properties to GridLayout
+                            Layout.row: modelData.row
+                            Layout.column: modelData.col
+                            Layout.rowSpan: modelData.rowspan
+                            Layout.columnSpan: modelData.colspan
                         }
                     }
                 }
@@ -263,13 +252,24 @@ Item {
         }
     }
 
-    component Dragger: Rectangle {
+    component Dragger: Item {
         id: dragger
         property Item parentItem: parent
         property var positions
-        width: 50
-        height: 50
-        z: 999
+        property int col: 1
+        property int row: 1
+
+        width: 50 * row
+        height: 50 * col
+
+        z: 2
+
+        onRowChanged: {
+            width = Math.min(50, 50 * row);
+        }
+        onColChanged: {
+            height = Math.min(50, 50 * col);
+        }
 
         Behavior on height {
             NumberAnimation {
@@ -286,6 +286,7 @@ Item {
         }
 
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
             drag.target: parent
 
@@ -298,8 +299,14 @@ Item {
             onReleased: {
                 // Get overlaps
                 let overlaps = gridPreview.updateCollision(dragger);
-                if (overlaps.length === 0)
+                if (overlaps.length === 0) {
+                    dragger.x = 0;
+                    dragger.y = 0;
+                    dragger.width = 50 * dragger.row;
+                    dragger.height = 50 * dragger.col;
+                    dragger.parent = draggablesContainer;
                     return;
+                }
 
                 // Compute bounding cells
                 let rows = overlaps.map(c => c[0]);
@@ -310,15 +317,14 @@ Item {
                 let col = Math.min(...cols);
                 let lastCol = Math.max(...cols);
                 let colspan = lastCol - col + 1;
+                positions = {
+                    row: row,
+                    col: col,
+                    rowspan: rowspan,
+                    colspan: colspan
+                };
                 dragger.parent = dragger.parentItem;
-                if (dragger.parent) {
-                    positions = {
-                        row: row,
-                        col: col,
-                        rowspan: rowspan,
-                        colspan: colspan
-                    };
-                }
+
                 // Cell sizes
                 let cellWidth = gridPreview.width / gridPreview.columns;
                 let cellHeight = gridPreview.height / gridPreview.rows;
@@ -326,8 +332,33 @@ Item {
                 // Snap to grid
                 dragger.x = col * cellWidth;
                 dragger.y = row * cellHeight;
+                dragger.row = rowspan;
+                dragger.col = colspan;
                 dragger.width = colspan * cellWidth;
                 dragger.height = rowspan * cellHeight;
+            }
+        }
+
+        WheelHandler {
+            id: wheelHandler
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+
+            onWheel: event => {
+                if (mouseArea.drag.active) {
+                    const isShift = event.modifiers & Qt.ShiftModifier;
+                    const isCtrl = event.modifiers & Qt.ControlModifier;
+                    const scrollup = event.angleDelta.y > 0;
+
+                    if (scrollup && isShift) {
+                        dragger.col = Math.min(dragger.col + 1, gridPreview.columns);
+                    } else if (!scrollup && isShift) {
+                        dragger.col = Math.max(dragger.col - 1, 1);
+                    } else if (scrollup && isCtrl) {
+                        dragger.row = Math.min(dragger.row + 1, gridPreview.rows);
+                    } else if (!scrollup && isCtrl) {
+                        dragger.row = Math.max(dragger.row - 1, 1);
+                    }
+                }
             }
         }
     }
