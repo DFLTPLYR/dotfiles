@@ -7,7 +7,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222122",
+            "color": "#212020",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -30,7 +30,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222122",
+            "color": "#212020",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -52,7 +52,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222122",
+            "color": "#212020",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -73,10 +73,10 @@
             "buttons"
         ],
         "popup": {
-            "color": "#222122",
+            "color": "#212020",
             "height": 49,
             "width": 50,
-            "x": 25,
+            "x": 51,
             "y": 9
         },
         "position": "top",
