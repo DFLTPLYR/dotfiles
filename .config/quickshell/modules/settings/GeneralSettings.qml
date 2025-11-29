@@ -58,33 +58,21 @@ Item {
                 }
             }
 
-            Rectangle {
-                id: dragger
-                width: 60
-                height: 100
-                color: "red"
-                z: 999
-
-                // When dragger moves, tell the grid to update collisions
-                onXChanged: gridPreview.updateCollision()
-                onYChanged: gridPreview.updateCollision()
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag.target: parent
-                    onReleased: {
-                        let overlaps = gridPreview.updateCollision(); // [[row, col], ...]
-                        if (overlaps.length === 0)
-                            return;
-                        overlaps.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-
-                        let first = overlaps[0];
-                        let last = overlaps[overlaps.length - 1];
-
-                        let row = first[0];
-                        let rowspan = last[0] - first[0] + 1;
-                        let col = first[1];
-                        let colspan = last[1] - first[1] + 1;
+            Row {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 40
+                z: 1000
+                Repeater {
+                    model: ScriptModel {
+                        values: {
+                            return Array.from({
+                                length: layoutAmmountBox.value
+                            }, (_, i) => i);
+                        }
+                    }
+                    delegate: Dragger {
+                        parentItem: gridPreview
+                        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                     }
                 }
             }
@@ -114,22 +102,34 @@ Item {
                     return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
                 }
 
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#0000ff22"
+                }
+
                 Grid {
                     id: gridPreview
                     anchors.fill: parent
                     columns: columnCountBox.value
+                    rows: rowCountBox.value
+                    spacing: 0
 
-                    // Function called whenever dragger moves
-                    function updateCollision() {
+                    function updateCollision(dragItem) {
                         let overlaps = [];
                         for (let i = 0; i < repeater.count; i++) {
                             let cell = repeater.itemAt(i);
                             if (!cell)
                                 continue;
 
-                            let pos = cell.updateOverlap(i);
-                            if (pos)
-                                overlaps.push(pos);
+                            let a = gridPreviewContainer.rectBounds(dragItem);
+                            let b = gridPreviewContainer.rectBounds(cell);
+
+                            if (gridPreviewContainer.intersects(a, b)) {
+                                overlaps.push([Math.floor(i / columns), i % columns]);
+                                cell.color = "#22ddff33";
+                            } else {
+                                cell.color = "transparent";
+                            }
                         }
                         return overlaps;
                     }
@@ -139,11 +139,8 @@ Item {
                         model: columnCountBox.value * rowCountBox.value
 
                         delegate: Rectangle {
-                            id: cell
-
-                            width: gridPreview.width / columnCountBox.value
-                            height: gridPreview.height / rowCountBox.value
-
+                            width: gridPreview.width / gridPreview.columns
+                            height: gridPreview.height / gridPreview.rows
                             color: "transparent"
                             border.color: "green"
                             border.width: 1
@@ -151,22 +148,6 @@ Item {
                             Text {
                                 anchors.centerIn: parent
                                 text: modelData + 1
-                            }
-
-                            // Update overlap and log row/column
-                            function updateOverlap(index) {
-                                let a = gridPreviewContainer.rectBounds(dragger);
-                                let b = gridPreviewContainer.rectBounds(cell);
-
-                                if (gridPreviewContainer.intersects(a, b)) {
-                                    cell.color = "#22ddff33";
-                                    let row = Math.floor(index / columnCountBox.value);
-                                    let column = index % columnCountBox.value;
-                                    console.log("Overlap at row:", row, "column:", column);
-                                    return [row, column];
-                                } else {
-                                    cell.color = "transparent";
-                                }
                             }
                         }
                     }
@@ -250,6 +231,46 @@ Item {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component Dragger: Rectangle {
+        id: dragger
+        property Item parentItem: parent
+        width: 50
+        height: 50
+        z: 999
+
+        MouseArea {
+            anchors.fill: parent
+            drag.target: parent
+            onReleased: {
+                // Get overlaps
+                let overlaps = gridPreview.updateCollision(dragger);
+                if (overlaps.length === 0)
+                    return;
+
+                // Compute bounding cells
+                let rows = overlaps.map(c => c[0]);
+                let cols = overlaps.map(c => c[1]);
+                let row = Math.min(...rows);
+                let lastRow = Math.max(...rows);
+                let rowspan = lastRow - row + 1;
+                let col = Math.min(...cols);
+                let lastCol = Math.max(...cols);
+                let colspan = lastCol - col + 1;
+                dragger.parent = dragger.parentItem;
+
+                // Cell sizes
+                let cellWidth = gridPreview.width / gridPreview.columns;
+                let cellHeight = gridPreview.height / gridPreview.rows;
+
+                // Snap to grid
+                dragger.x = col * cellWidth;
+                dragger.y = row * cellHeight;
+                dragger.width = colspan * cellWidth;
+                dragger.height = rowspan * cellHeight;
             }
         }
     }
