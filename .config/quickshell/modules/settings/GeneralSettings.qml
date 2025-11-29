@@ -28,40 +28,62 @@ Item {
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
+                width: parent.width   // Add this
 
                 Flow {
-                    Layout.fillWidth: true
-                    Label {
-                        text: "column count"
+                    anchors.fill: parent
+                    spacing: 20
+                    Column {
+                        Label {
+                            text: "column count"
+                        }
+                        SpinBox {
+                            id: columnCountBox
+                            from: 2
+                            to: 10
+                        }
                     }
-                    SpinBox {
-                        id: columnCountBox
-                        from: 2
-                        to: 10
+                    Column {
+                        Label {
+                            text: "row count"
+                        }
+                        SpinBox {
+                            id: rowCountBox
+                            from: 2
+                            to: 10
+                        }
                     }
-                    Label {
-                        text: "row count"
+                    Column {
+                        Label {
+                            text: "layout ammount"
+                        }
+                        SpinBox {
+                            id: layoutAmmountBox
+                            from: 1
+                            to: 20
+                        }
                     }
-                    SpinBox {
-                        id: rowCountBox
-                        from: 2
-                        to: 10
-                    }
-                    Label {
-                        text: "Layout Ammount"
-                    }
-                    SpinBox {
-                        id: layoutAmmountBox
-                        from: 1
-                        to: columnCountBox.value * rowCountBox.value
+                    Button {
+                        text: "Reset Grid"
+                        onClicked: {
+                            for (let i = 0; i < overlay.children.length; i++) {
+                                let child = overlay.children[i];
+
+                                if (child instanceof Dragger) {
+                                    for (let j in child.positions) {
+                                        console.log(j, child.positions[j]);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
 
             Row {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 40
-                z: 1000
+                Layout.preferredHeight: 60
+                z: 10
                 Repeater {
                     model: ScriptModel {
                         values: {
@@ -71,7 +93,7 @@ Item {
                         }
                     }
                     delegate: Dragger {
-                        parentItem: gridPreview
+                        parentItem: overlay
                         color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                     }
                 }
@@ -107,11 +129,17 @@ Item {
                     color: "#0000ff22"
                 }
 
+                Item {
+                    id: overlay
+                    anchors.fill: parent
+                    z: 10
+                }
+
                 Grid {
                     id: gridPreview
                     anchors.fill: parent
-                    columns: columnCountBox.value
-                    rows: rowCountBox.value
+                    columns: Math.max(1, columnCountBox.value)
+                    rows: Math.max(1, rowCountBox.value)
                     spacing: 0
 
                     function updateCollision(dragItem) {
@@ -238,13 +266,35 @@ Item {
     component Dragger: Rectangle {
         id: dragger
         property Item parentItem: parent
+        property var positions
         width: 50
         height: 50
         z: 999
 
+        Behavior on height {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutQuad
+            }
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutQuad
+            }
+        }
+
         MouseArea {
             anchors.fill: parent
             drag.target: parent
+
+            drag.onActiveChanged: {
+                if (drag.active) {
+                    parent.width = width * 0.9;
+                    parent.height = height * 0.9;
+                }
+            }
             onReleased: {
                 // Get overlaps
                 let overlaps = gridPreview.updateCollision(dragger);
@@ -261,7 +311,14 @@ Item {
                 let lastCol = Math.max(...cols);
                 let colspan = lastCol - col + 1;
                 dragger.parent = dragger.parentItem;
-
+                if (dragger.parent) {
+                    positions = {
+                        row: row,
+                        col: col,
+                        rowspan: rowspan,
+                        colspan: colspan
+                    };
+                }
                 // Cell sizes
                 let cellWidth = gridPreview.width / gridPreview.columns;
                 let cellHeight = gridPreview.height / gridPreview.rows;
