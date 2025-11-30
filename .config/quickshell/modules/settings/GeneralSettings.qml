@@ -113,145 +113,21 @@ Item {
                 }
             }
 
-            Row {
-                id: draggablesContainer
-                Layout.fillWidth: true
-                z: 10
-
-                Repeater {
-                    model: ScriptModel {
-                        values: {
-                            return Array.from({
-                                length: layoutAmmountBox.value
-                            }, (_, i) => i);
-                        }
-                    }
-                    delegate: Dragger {
-                        parentItem: overlay
-                        col: Scripts.getRandomInt(3)
-                        row: Scripts.getRandomInt(3)
-                        width: row * 50
-                        height: col * 50
-                        Rectangle {
-                            anchors.fill: parent
-                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                            border.color: "black"
-                            border.width: 1
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: "Mpris"
-                            }
-                        }
-                    }
-                }
-            }
-
-            Item {
+            GridContainer {
                 id: gridPreviewContainer
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredHeight: 400
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#444444"
-                }
+                cellColumns: columnCountBox.value
+                cellRows: rowCountBox.value
+                layoutAmmount: layoutAmmountBox.value
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#0000ff22"
-                }
-
-                Item {
-                    id: overlay
-                    anchors.fill: parent
-                    z: 10
-                    onChildrenChanged: {
-                        for (let child of children) {
-                            console.log(" Child:", child);
-                        }
-                    }
-                }
-
-                Grid {
-                    id: gridPreview
-                    anchors.fill: parent
-                    columns: Math.max(1, columnCountBox.value)
-                    rows: Math.max(1, rowCountBox.value)
-                    spacing: 0
-
-                    function updateCollision(dragItem) {
-                        let overlaps = [];
-                        for (let i = 0; i < repeater.count; i++) {
-                            let cell = repeater.itemAt(i);
-                            if (!cell)
-                                continue;
-
-                            let a = Scripts.rectBounds(dragItem);
-                            let b = Scripts.rectBounds(cell);
-
-                            if (Scripts.intersects(a, b)) {
-                                overlaps.push([Math.floor(i / columns), i % columns]);
-                                cell.color = "#22ddff33";
-                            } else {
-                                cell.color = "transparent";
-                            }
-                        }
-                        return overlaps;
-                    }
-
-                    Repeater {
-                        id: repeater
-                        model: columnCountBox.value * rowCountBox.value
-
-                        delegate: Rectangle {
-                            width: gridPreview.width / gridPreview.columns
-                            height: gridPreview.height / gridPreview.rows
-                            color: "transparent"
-                            border.color: "green"
-                            border.width: 1
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: modelData + 1
-                            }
-                        }
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredHeight: 400
-
-                GridLayout {
-                    id: previewGrid
-                    anchors.fill: parent
-                    columns: Math.max(1, columnCountBox.value)
-                    rows: Math.max(1, rowCountBox.value)
-
-                    Repeater {
-                        model: persistentLayoutView.adapter.layoutItems
-                        Rectangle {
-                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.2)
-                            border.color: "black"
-                            border.width: 2
-
-                            // Map JSON layout properties to GridLayout
-                            Layout.row: modelData.row
-                            Layout.column: modelData.col
-                            Layout.rowSpan: modelData.rowspan
-                            Layout.columnSpan: modelData.colspan
-                            // Use preferred sizes, not width/height
-                            Layout.preferredWidth: modelData.colspan * (previewGrid.width / previewGrid.columns)
-                            Layout.preferredHeight: modelData.rowspan * (previewGrid.height / previewGrid.rows)
-
-                            // optional to avoid auto stretching
-                            Layout.fillWidth: false
-                            Layout.fillHeight: false
-                        }
+                z: 5
+                onDraggableChanged: (item, positions) => {
+                    console.log(" Draggables changed:", positions, item);
+                    for (let key in item.positions) {
+                        console.log("  ", key, ":", item.positions[key]);
                     }
                 }
             }
