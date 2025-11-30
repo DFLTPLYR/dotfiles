@@ -113,7 +113,7 @@ Item {
                 }
             }
 
-            GridContainer {
+            GridManager {
                 id: gridPreviewContainer
                 Layout.fillWidth: true
                 Layout.fillHeight: true
