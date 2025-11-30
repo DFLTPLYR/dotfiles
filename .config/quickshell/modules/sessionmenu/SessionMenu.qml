@@ -2,7 +2,6 @@ import QtQuick
 
 import Quickshell
 import QtQuick.Layouts
-import Quickshell.Widgets
 import Quickshell.Wayland
 
 import qs.modules.sessionmenu
@@ -107,11 +106,10 @@ Scope {
                         anchors.fill: parent
                         onClicked: Config.sessionMenuOpen = false
 
-                        ClippingRectangle {
+                        Rectangle {
                             anchors.centerIn: parent
 
                             radius: 50
-                            clip: true
 
                             width: Math.round(parent.width * 0.75)
                             height: Math.round(parent.height * 0.75)
