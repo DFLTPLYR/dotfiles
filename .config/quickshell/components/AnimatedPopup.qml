@@ -2,7 +2,6 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Widgets
 
 PopupWindow {
     id: root

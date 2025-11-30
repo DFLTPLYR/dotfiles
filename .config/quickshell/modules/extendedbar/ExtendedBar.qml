@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import Quickshell.Widgets
 
 import QtQuick
 import QtQuick.Controls
@@ -77,13 +76,11 @@ PopupWindow {
     Item {
         id: extendedBarContainer
 
-width: {
-    let percent = Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100;
-    let baseWidth = isPortrait
-        ? parentWindow.screen.width * percent * 1.5
-        : parentWindow.screen.width * percent;
-    return Math.min(Math.floor(baseWidth), parentWindow.screen.width);
-}
+        width: {
+            let percent = Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100;
+            let baseWidth = isPortrait ? parentWindow.screen.width * percent * 1.5 : parentWindow.screen.width * percent;
+            return Math.min(Math.floor(baseWidth), parentWindow.screen.width);
+        }
 
         height: {
             let percent = Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100;
