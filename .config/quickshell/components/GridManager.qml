@@ -14,6 +14,7 @@ ColumnLayout {
     property int cellRows: 1
     property int layoutAmmount: 1
     signal draggableChanged(var item, var positions)
+
     // draggables container
     Row {
         id: layoutItemContainer
@@ -34,10 +35,24 @@ ColumnLayout {
                 }
             }
             delegate: DraggableArea {
+                id: dragItem
                 parentItem: overlay
+
                 Rectangle {
-                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height
                     color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                }
+                Connections {
+                    target: gridCellsContainer
+                    function onColumnsChanged() {
+                        if (dragItem.parent === parentItem)
+                            dragItem.width = gridCellsContainer.width / gridCellsContainer.columns * dragItem.col;
+                    }
+                    function onRowsChanged() {
+                        if (dragItem.parent === parentItem)
+                            dragItem.height = gridCellsContainer.height / gridCellsContainer.rows * dragItem.row;
+                    }
                 }
             }
         }
@@ -89,7 +104,13 @@ ColumnLayout {
 
             Repeater {
                 id: cellRepeater
-                model: gridCellsContainer.columns * gridCellsContainer.rows
+                model: ScriptModel {
+                    values: {
+                        return Array.from({
+                            length: gridCellsContainer.columns * gridCellsContainer.rows
+                        }, (_, i) => i);
+                    }
+                }
                 delegate: Rectangle {
                     width: gridCellsContainer.width / gridCellsContainer.columns
                     height: gridCellsContainer.height / gridCellsContainer.rows
@@ -105,6 +126,8 @@ ColumnLayout {
             }
         }
     }
+
+    // Draggable component
     component DraggableArea: Item {
         id: dragger
         property Item parentItem: parent
@@ -117,11 +140,10 @@ ColumnLayout {
 
         z: 2
 
-        onRowChanged: {
-            width = Math.min(50, 50 * row);
-        }
-        onColChanged: {
-            height = Math.min(50, 50 * col);
+        onParentChanged: {
+            if (parent === parentItem) {
+                console.log("Resetting draggable");
+            }
         }
 
         Behavior on height {
@@ -149,6 +171,7 @@ ColumnLayout {
                     parent.height = height * 0.9;
                 }
             }
+
             onReleased: {
                 // Get overlaps
                 let overlaps = gridCellsContainer.updateCollision(dragger);
@@ -171,12 +194,14 @@ ColumnLayout {
                 let col = Math.min(...cols);
                 let lastCol = Math.max(...cols);
                 let colspan = lastCol - col + 1;
+
                 positions = {
                     row: row,
                     col: col,
                     rowspan: rowspan,
                     colspan: colspan
                 };
+
                 dragger.parent = dragger.parentItem;
 
                 // Cell sizes
@@ -199,21 +224,33 @@ ColumnLayout {
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
 
             onWheel: event => {
-                if (mouseArea.drag.active) {
-                    const isShift = event.modifiers & Qt.ShiftModifier;
-                    const isCtrl = event.modifiers & Qt.ControlModifier;
-                    const scrollup = event.angleDelta.y > 0;
+                if (!mouseArea.drag.active)
+                    return;
 
-                    if (scrollup && isShift) {
+                const isShift = event.modifiers & Qt.ShiftModifier;
+                const isCtrl = event.modifiers & Qt.ControlModifier;
+                const scrollup = event.angleDelta.y > 0;
+                if (!isShift && !isCtrl)
+                    return;
+                if (isShift) {
+                    if (scrollup)
                         dragger.col = Math.min(dragger.col + 1, gridCellsContainer.columns);
-                    } else if (!scrollup && isShift) {
+                    else
                         dragger.col = Math.max(dragger.col - 1, 1);
-                    } else if (scrollup && isCtrl) {
-                        dragger.row = Math.min(dragger.row + 1, gridCellsContainer.rows);
-                    } else if (!scrollup && isCtrl) {
-                        dragger.row = Math.max(dragger.row - 1, 1);
-                    }
                 }
+
+                if (isCtrl) {
+                    if (scrollup)
+                        dragger.row = Math.min(dragger.row + 1, gridCellsContainer.rows);
+                    else
+                        dragger.row = Math.max(dragger.row - 1, 1);
+                }
+
+                let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
+                let cellHeight = gridCellsContainer.height / gridCellsContainer.rows;
+
+                dragger.width = dragger.col * cellWidth;
+                dragger.height = dragger.row * cellHeight;
             }
         }
     }
