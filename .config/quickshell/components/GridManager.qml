@@ -38,8 +38,7 @@ ColumnLayout {
             // Create wrapper
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
                 width: child.width,
-                height: child.height,
-                parentItem: overlay
+                height: child.height
             });
 
             if ("parent" in child) {
@@ -56,9 +55,10 @@ ColumnLayout {
         onChildrenChanged: {
             console.log("Children changed, wrapping new children.");
             for (let i = 0; i < layoutItemContainer.data.length; i++) {
-                var child = layoutItemContainer.data[i];
-                if (child.reparent)
-                    wrapChild(child);
+                let child = layoutItemContainer.data[i];
+                if (child.reparent) {
+                    Qt.callLater(() => wrapChild(child));  // <- defer creation
+                }
             }
         }
     }
@@ -135,7 +135,6 @@ ColumnLayout {
     // Draggable component
     component DraggableArea: Rectangle {
         id: dragger
-        property Item parentItem: parent
         property var positions
         property int col: 1
         property int row: 1
@@ -147,7 +146,7 @@ ColumnLayout {
         z: 2
 
         onParentChanged: {
-            if (parent === parentItem) {
+            if (parent === overlay) {
                 console.log("Resetting draggable");
             }
         }
@@ -155,11 +154,11 @@ ColumnLayout {
         Connections {
             target: gridCellsContainer
             function onColumnsChanged() {
-                if (dragger.parent === parentItem)
+                if (dragger.parent === overlay)
                     dragger.width = gridCellsContainer.width / gridCellsContainer.columns * dragger.col;
             }
             function onRowsChanged() {
-                if (dragger.parent === parentItem)
+                if (dragger.parent === overlay)
                     dragger.height = gridCellsContainer.height / gridCellsContainer.rows * dragger.row;
             }
         }
@@ -219,7 +218,7 @@ ColumnLayout {
                     colspan: colspan
                 };
 
-                dragger.parent = dragger.parentItem;
+                dragger.parent = overlay;
 
                 // Cell sizes
                 let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
@@ -266,8 +265,8 @@ ColumnLayout {
                 let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
                 let cellHeight = gridCellsContainer.height / gridCellsContainer.rows;
 
-                dragger.width = dragger.col * cellWidth;
-                dragger.height = dragger.row * cellHeight;
+                dragger.width = (dragger.col * cellWidth) * 0.9;
+                dragger.height = (dragger.row * cellHeight) * 0.9;
             }
         }
     }
