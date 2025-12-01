@@ -15,45 +15,50 @@ ColumnLayout {
     property int layoutAmmount: 1
     signal draggableChanged(var item, var positions)
 
-    // draggables container
+    default property alias data: layoutItemContainer.data
+
     Row {
         id: layoutItemContainer
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        z: 10
-        Item {
-            width: 1
-            height: 50
-        }
-        Repeater {
-            id: layoutItemRepeater
-            model: ScriptModel {
-                values: {
-                    return Array.from({
-                        length: root.layoutAmmount
-                    }, (_, i) => i);
-                }
-            }
-            delegate: DraggableArea {
-                id: dragItem
-                parentItem: overlay
+        property var wrappedChildren: []
+        property var withWrappers: []
 
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                }
-                Connections {
-                    target: gridCellsContainer
-                    function onColumnsChanged() {
-                        if (dragItem.parent === parentItem)
-                            dragItem.width = gridCellsContainer.width / gridCellsContainer.columns * dragItem.col;
-                    }
-                    function onRowsChanged() {
-                        if (dragItem.parent === parentItem)
-                            dragItem.height = gridCellsContainer.height / gridCellsContainer.rows * dragItem.row;
-                    }
-                }
+        Layout.fillWidth: true
+        Layout.preferredHeight: 50
+
+        Component {
+            id: draggableWrapperComponent
+            DraggableArea {}
+        }
+
+        function wrapChild(child) {
+            // Skip if already wrapped
+            if (wrappedChildren.indexOf(child) !== -1)
+                return;
+
+            // Create wrapper
+            let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
+                width: child.width,
+                height: child.height,
+                parentItem: overlay
+            });
+
+            if ("parent" in child) {
+                child.parent = dragWrapper;
+            } else {
+                console.warn("Cannot reparent child:", child);
+            }
+
+            // Track
+            wrappedChildren.push(child);
+            withWrappers.push(dragWrapper);
+        }
+
+        onChildrenChanged: {
+            console.log("Children changed, wrapping new children.");
+            for (let i = 0; i < layoutItemContainer.data.length; i++) {
+                var child = layoutItemContainer.data[i];
+                if (child.reparent)
+                    wrapChild(child);
             }
         }
     }
@@ -128,12 +133,13 @@ ColumnLayout {
     }
 
     // Draggable component
-    component DraggableArea: Item {
+    component DraggableArea: Rectangle {
         id: dragger
         property Item parentItem: parent
         property var positions
         property int col: 1
         property int row: 1
+        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
 
         width: 50 * row
         height: 50 * col
@@ -143,6 +149,18 @@ ColumnLayout {
         onParentChanged: {
             if (parent === parentItem) {
                 console.log("Resetting draggable");
+            }
+        }
+
+        Connections {
+            target: gridCellsContainer
+            function onColumnsChanged() {
+                if (dragger.parent === parentItem)
+                    dragger.width = gridCellsContainer.width / gridCellsContainer.columns * dragger.col;
+            }
+            function onRowsChanged() {
+                if (dragger.parent === parentItem)
+                    dragger.height = gridCellsContainer.height / gridCellsContainer.rows * dragger.row;
             }
         }
 
@@ -184,7 +202,6 @@ ColumnLayout {
                     root.draggableChanged(dragger, null);
                     return;
                 }
-
                 // Compute bounding cells
                 let rows = overlaps.map(c => c[0]);
                 let cols = overlaps.map(c => c[1]);

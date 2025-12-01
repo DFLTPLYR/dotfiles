@@ -127,118 +127,26 @@ Item {
                 onDraggableChanged: (item, positions) => {
                     console.log(" Draggables changed:", positions, item);
                     for (let key in item.positions) {
-                        console.log("  ", key, ":", item.positions[key]);
+                        console.log(" ", key, ":", item.positions[key]);
                     }
                 }
-            }
-        }
-    }
-
-    component Dragger: Item {
-        id: dragger
-        property Item parentItem: parent
-        property var positions
-        property int col: 1
-        property int row: 1
-
-        width: 50 * row
-        height: 50 * col
-
-        z: 2
-
-        onRowChanged: {
-            width = Math.min(50, 50 * row);
-        }
-        onColChanged: {
-            height = Math.min(50, 50 * col);
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutQuad
-            }
-        }
-
-        Behavior on width {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutQuad
-            }
-        }
-
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            drag.target: parent
-
-            drag.onActiveChanged: {
-                if (drag.active) {
-                    parent.width = width * 0.9;
-                    parent.height = height * 0.9;
-                }
-            }
-            onReleased: {
-                // Get overlaps
-                let overlaps = gridPreview.updateCollision(dragger);
-                if (overlaps.length === 0) {
-                    dragger.x = 0;
-                    dragger.y = 0;
-                    dragger.width = 50 * dragger.row;
-                    dragger.height = 50 * dragger.col;
-                    dragger.parent = draggablesContainer;
-                    return;
-                }
-
-                // Compute bounding cells
-                let rows = overlaps.map(c => c[0]);
-                let cols = overlaps.map(c => c[1]);
-                let row = Math.min(...rows);
-                let lastRow = Math.max(...rows);
-                let rowspan = lastRow - row + 1;
-                let col = Math.min(...cols);
-                let lastCol = Math.max(...cols);
-                let colspan = lastCol - col + 1;
-                positions = {
-                    row: row,
-                    col: col,
-                    rowspan: rowspan,
-                    colspan: colspan
-                };
-                dragger.parent = dragger.parentItem;
-
-                // Cell sizes
-                let cellWidth = gridPreview.width / gridPreview.columns;
-                let cellHeight = gridPreview.height / gridPreview.rows;
-
-                // Snap to grid
-                dragger.x = col * cellWidth;
-                dragger.y = row * cellHeight;
-                dragger.row = rowspan;
-                dragger.col = colspan;
-                dragger.width = colspan * cellWidth;
-                dragger.height = rowspan * cellHeight;
-            }
-        }
-
-        WheelHandler {
-            id: wheelHandler
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-
-            onWheel: event => {
-                if (mouseArea.drag.active) {
-                    const isShift = event.modifiers & Qt.ShiftModifier;
-                    const isCtrl = event.modifiers & Qt.ControlModifier;
-                    const scrollup = event.angleDelta.y > 0;
-
-                    if (scrollup && isShift) {
-                        dragger.col = Math.min(dragger.col + 1, gridPreview.columns);
-                    } else if (!scrollup && isShift) {
-                        dragger.col = Math.max(dragger.col - 1, 1);
-                    } else if (scrollup && isCtrl) {
-                        dragger.row = Math.min(dragger.row + 1, gridPreview.rows);
-                    } else if (!scrollup && isCtrl) {
-                        dragger.row = Math.max(dragger.row - 1, 1);
+                Repeater {
+                    model: ScriptModel {
+                        values: {
+                            return Array.from({
+                                length: layoutAmmountBox.value
+                            }, (_, i) => {
+                                return {
+                                    id: "item_" + i,
+                                    name: "Item " + (i + 1)
+                                };
+                            });
+                        }
+                    }
+                    delegate: Item {
+                        width: 50
+                        height: 50
+                        property bool reparent: true
                     }
                 }
             }
