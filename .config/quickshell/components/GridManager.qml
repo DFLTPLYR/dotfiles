@@ -133,12 +133,11 @@ ColumnLayout {
     }
 
     // Draggable component
-    component DraggableArea: Rectangle {
+    component DraggableArea: Item {
         id: dragger
         property var positions
         property int col: 1
         property int row: 1
-        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
 
         width: 50 * row
         height: 50 * col
@@ -177,10 +176,40 @@ ColumnLayout {
             }
         }
 
+        Rectangle {
+            id: tile
+
+            width: parent.width
+            height: parent.height
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.8)
+
+            Drag.active: mouseArea.drag.active
+
+            Drag.hotSpot.x: parent.width / 4
+            Drag.hotSpot.y: parent.height / 4
+
+            states: State {
+                when: mouseArea.drag.active
+                AnchorChanges {
+                    target: tile
+                    anchors {
+                        verticalCenter: undefined
+                        horizontalCenter: undefined
+                    }
+                }
+            }
+        }
+
         MouseArea {
             id: mouseArea
             anchors.fill: parent
-            drag.target: parent
+            drag.target: tile
 
             drag.onActiveChanged: {
                 if (drag.active) {
@@ -191,7 +220,7 @@ ColumnLayout {
 
             onReleased: {
                 // Get overlaps
-                let overlaps = gridCellsContainer.updateCollision(dragger);
+                let overlaps = gridCellsContainer.updateCollision(tile);
                 if (overlaps.length === 0) {
                     dragger.x = 0;
                     dragger.y = 0;
