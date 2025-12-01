@@ -98,10 +98,8 @@ Item {
                         text: "Save Layout"
                         onClicked: {
                             let items = persistentLayoutView.adapter.layoutItems.slice(); // copy
-
                             for (let child of overlay.children) {
                                 if (child instanceof Dragger) {
-                                    // deep copy positions if needed
                                     const snapshot = JSON.parse(JSON.stringify(child.positions));
                                     items.push(snapshot);
                                 }
