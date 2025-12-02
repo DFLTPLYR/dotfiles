@@ -147,6 +147,16 @@ Item {
                         property bool reparent: true
                     }
                 }
+
+                Item {
+                    width: 50
+                    height: 50
+                    property bool reparent: true
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Extra"
+                    }
+                }
             }
         }
     }
