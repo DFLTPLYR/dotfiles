@@ -12,7 +12,6 @@ ColumnLayout {
     id: root
     property int cellColumns: 1
     property int cellRows: 1
-    property int layoutAmmount: 1
     signal draggableChanged(var item, var positions)
 
     default property alias data: layoutItemContainer.data
@@ -57,7 +56,7 @@ ColumnLayout {
             for (let i = 0; i < layoutItemContainer.data.length; i++) {
                 let child = layoutItemContainer.data[i];
                 if (child.reparent) {
-                    Qt.callLater(() => wrapChild(child));  // <- defer creation
+                    Qt.callLater(() => wrapChild(child));
                 }
             }
         }
@@ -138,16 +137,14 @@ ColumnLayout {
         property var positions
         property int col: 1
         property int row: 1
-
+        default property alias content: tile.data
         width: 50 * row
         height: 50 * col
 
         z: 2
 
         onParentChanged: {
-            if (parent === overlay) {
-                console.log("Resetting draggable");
-            }
+            if (parent === overlay) {}
         }
 
         Connections {
@@ -159,20 +156,6 @@ ColumnLayout {
             function onRowsChanged() {
                 if (dragger.parent === overlay)
                     dragger.height = gridCellsContainer.height / gridCellsContainer.rows * dragger.row;
-            }
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutQuad
-            }
-        }
-
-        Behavior on width {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutQuad
             }
         }
 
@@ -296,6 +279,20 @@ ColumnLayout {
 
                 dragger.width = (dragger.col * cellWidth) * 0.9;
                 dragger.height = (dragger.row * cellHeight) * 0.9;
+            }
+        }
+
+        Behavior on height {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutQuad
+            }
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutQuad
             }
         }
     }

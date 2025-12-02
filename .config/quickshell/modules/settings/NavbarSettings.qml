@@ -207,6 +207,50 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
+
+                Column {
+                    Label {
+                        text: "column count"
+                    }
+                    SpinBox {
+                        id: columnCountBox
+                        from: 2
+                        to: 10
+                    }
+                }
+
+                Column {
+                    Label {
+                        text: "row count"
+                    }
+                    SpinBox {
+                        id: rowCountBox
+                        from: 2
+                        to: 10
+                    }
+                }
+            }
+
+            GridManager {
+                id: gridPreviewContainer
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredHeight: 400
+
+                cellColumns: columnCountBox.value
+                cellRows: rowCountBox.value
+
+                z: 5
+                onDraggableChanged: (item, positions) => {
+                    console.log(" Draggables changed:", positions, item);
+                    for (let key in item.positions) {
+                        console.log(" ", key, ":", item.positions[key]);
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
                 Label {
                     text: "Save Settings"
                 }
