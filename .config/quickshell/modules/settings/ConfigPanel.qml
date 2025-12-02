@@ -42,8 +42,8 @@ Scope {
         id: floatingPanel
 
         property bool isPortrait: screen.height > screen.width
-        property var portraitSize: Qt.size(screen.width / 2, screen.height / 4)
-        property var landscapeSize: Qt.size(screen.width / 3, screen.height / 2)
+        property var portraitSize: Qt.size(screen.width / 1.5, screen.height / 3)
+        property var landscapeSize: Qt.size(screen.width / 2, screen.height / 1.5)
 
         minimumSize: isPortrait ? portraitSize : landscapeSize
         maximumSize: isPortrait ? portraitSize : landscapeSize
@@ -75,9 +75,9 @@ Scope {
                     id: tabBar
                     Layout.fillWidth: true
 
-                    TabButton {
-                        text: qsTr("General")
-                    }
+                    // TabButton {
+                    //     text: qsTr("General")
+                    // }
                     TabButton {
                         text: qsTr("Navbar")
                     }
@@ -90,11 +90,11 @@ Scope {
                     Layout.fillHeight: true
                     Layout.margins: 5
 
-                    GeneralSettings {
-                        id: generalConfig
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
+                    // GeneralSettings {
+                    //     id: generalConfig
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    // }
                     // Todo: replace with actual settings components
                     NavbarSettings {
                         id: navbarConfig
