@@ -224,8 +224,8 @@ ColumnLayout {
                 if (overlaps.length === 0) {
                     dragger.x = 0;
                     dragger.y = 0;
-                    dragger.width = 50 * dragger.row;
-                    dragger.height = 50 * dragger.col;
+                    dragger.width = 50 * dragger.col;
+                    dragger.height = 50 * dragger.row;
                     dragger.parent = layoutItemContainer;
                     root.draggableChanged(dragger, null);
                     return;
