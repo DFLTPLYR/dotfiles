@@ -55,7 +55,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: {
-                                switch (Config.navbar.workspaces.style) {
+                                switch (Config.navbar.extendedBar.style) {
                                 case "kanji":
                                     return kanjiNumber(modelData.id - 1);
                                 case "roman":
@@ -129,10 +129,11 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: {
-                                switch (Config.navbar.workspaces.style) {
+                                switch (Config.navbar.extended.style) {
                                 case "kanji":
                                     return kanjiNumber(modelData.id - 1);
                                 case "roman":
+                                    return romanNumber(modelData.id - 1);
                                 default:
                                     return romanNumber(modelData.id - 1);
                                 }
