@@ -7,7 +7,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#212020",
+            "color": "#222427",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -38,7 +38,7 @@
                 "clock"
             ]
         },
-        "height": 64,
+        "height": 48,
         "intersection": {
             "anchors": {
                 "bottom": true,
@@ -46,7 +46,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#212020",
+            "color": "#222427",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -68,7 +68,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#212020",
+            "color": "#222427",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -83,20 +83,37 @@
                 "topRight": 0
             }
         },
+        "module": [
+            {
+                "activeStyle": "roman",
+                "location": "left",
+                "module": "workspaces",
+                "styles": [
+                    "roman",
+                    "kanji"
+                ]
+            },
+            {
+                "module": "clock"
+            },
+            {
+                "module": "powerbtn"
+            }
+        ],
         "modules": [
             "workspaces",
             "clock",
             "buttons"
         ],
         "popup": {
-            "color": "#212020",
-            "height": 49,
-            "width": 50,
-            "x": 51,
-            "y": 9
+            "color": "#222427",
+            "height": 40,
+            "width": 40,
+            "x": 50,
+            "y": 0
         },
         "position": "top",
         "side": false,
-        "width": 69
+        "width": 50
     }
 }

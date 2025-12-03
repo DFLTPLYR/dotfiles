@@ -7,6 +7,22 @@ JsonObject {
     property int width: 50
     property int height: 50
     property list<string> modules: ["workspaces", "clock", "buttons"]
+    property list<var> module: [
+        {
+            module: "workspaces",
+            styles: ["roman", "kanji"],
+            activeStyle: "roman",
+            location: "left"
+        },
+        {
+            module: "clock",
+            location: "center"
+        },
+        {
+            module: "powerbtn",
+            location: "right"
+        }
+    ]
     property ExtendedBarConfig extended: ExtendedBarConfig {}
     property PopupProps popup: PopupProps {}
     property RectProps main: RectProps {}
