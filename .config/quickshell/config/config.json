@@ -100,11 +100,6 @@
                 "module": "powerbtn"
             }
         ],
-        "modules": [
-            "workspaces",
-            "clock",
-            "buttons"
-        ],
         "popup": {
             "color": "#222427",
             "height": 40,
