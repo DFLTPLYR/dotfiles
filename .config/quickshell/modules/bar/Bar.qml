@@ -69,7 +69,9 @@ Variants {
                     }
 
                     Repeater {
-                        model: Config.navbar.module
+                        model: ScriptModel {
+                            values: Config.navbar.module
+                        }
                         Loader {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
@@ -83,8 +85,54 @@ Variants {
                                     return sysButtonComponent;
                                 return null;
                             }
+                            onLoaded: {
+                                if (item)
+                                    console.log(modelData);
+                            }
                         }
                     }
+
+                    // RowLayout {
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //
+                    //     Rectangle {
+                    //         Layout.fillHeight: true
+                    //         Layout.preferredWidth: height
+                    //         color: 'green'
+                    //     }
+                    //     Rectangle {
+                    //         Layout.fillHeight: true
+                    //         Layout.preferredWidth: height
+                    //         color: 'green'
+                    //     }
+                    // }
+                    // RowLayout {
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //
+                    //     Rectangle {
+                    //         Layout.fillHeight: true
+                    //         Layout.preferredWidth: height
+                    //         color: 'green'
+                    //     }
+                    //     Rectangle {
+                    //         Layout.fillHeight: true
+                    //         Layout.preferredWidth: height
+                    //         color: 'green'
+                    //     }
+                    // }
+                    // RowLayout {
+                    //     Layout.alignment: Qt.RightToLeft
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //
+                    //     Rectangle {
+                    //         Layout.fillHeight: true
+                    //         Layout.preferredWidth: height
+                    //         color: 'green'
+                    //     }
+                    // }
                 }
             }
 
