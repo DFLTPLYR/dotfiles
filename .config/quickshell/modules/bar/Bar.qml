@@ -69,16 +69,17 @@ Variants {
                     }
 
                     Repeater {
-                        model: Config.navbar.modules
+                        model: Config.navbar.module
                         Loader {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             sourceComponent: {
-                                if (modelData === "workspaces")
+                                var component = modelData.module;
+                                if (component === "workspaces")
                                     return workspacesComponent;
-                                if (modelData === "clock")
+                                if (component === "clock")
                                     return timeDisplayComponent;
-                                if (modelData === "buttons")
+                                if (component === "powerbtn")
                                     return sysButtonComponent;
                                 return null;
                             }
@@ -124,7 +125,6 @@ Variants {
                     animProgress: panelLoader.animProgress
                     shouldBeVisible: panelLoader.shouldBeVisible
                     onHide: {
-                        panelLoader.shouldBeVisible = false;
                         return Qt.callLater(() => {
                             return panelLoader.active = false;
                         }, 400);

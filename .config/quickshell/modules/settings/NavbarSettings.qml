@@ -35,14 +35,14 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Repeater {
-                    model: Config.navbar.workspaces.styles
+                    model: Config.navbar.extended.styles
                     delegate: RadioButton {
                         required property var modelData
-                        checked: Config.navbar.workspaces.style === modelData
+                        checked: Config.navbar.extended.style === modelData
                         text: modelData
                         onCheckedChanged: {
                             if (checked) {
-                                Config.navbar.workspaces.style = modelData;
+                                Config.navbar.extended.style = modelData;
                             }
                         }
                     }
@@ -216,6 +216,10 @@ Item {
                         id: columnCountBox
                         from: 2
                         to: 10
+                        value: Config.navbar.extended.columns
+                        onValueChanged: {
+                            Config.navbar.extended.columns = value;
+                        }
                     }
                 }
 
@@ -227,6 +231,10 @@ Item {
                         id: rowCountBox
                         from: 2
                         to: 10
+                        value: Config.navbar.extended.rows
+                        onValueChanged: {
+                            Config.navbar.extended.rows = value;
+                        }
                     }
                 }
             }
