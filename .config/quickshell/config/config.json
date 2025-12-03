@@ -22,6 +22,22 @@
                 "topRight": 0
             }
         },
+        "extended": {
+            "activeWidgets": [
+            ],
+            "columns": 2,
+            "rows": 2,
+            "style": "roman",
+            "styles": [
+                "roman",
+                "kanji"
+            ],
+            "widgets": [
+                "powerBtn",
+                "workSpaces",
+                "clock"
+            ]
+        },
         "height": 64,
         "intersection": {
             "anchors": {
@@ -81,22 +97,6 @@
         },
         "position": "top",
         "side": false,
-        "width": 69,
-        "workspaces": {
-            "activeWidgets": [
-            ],
-            "columns": 2,
-            "rows": 2,
-            "style": "roman",
-            "styles": [
-                "roman",
-                "kanji"
-            ],
-            "widgets": [
-                "powerBtn",
-                "workSpaces",
-                "clock"
-            ]
-        }
+        "width": 69
     }
 }

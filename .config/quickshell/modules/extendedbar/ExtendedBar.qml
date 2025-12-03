@@ -3,6 +3,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Shapes
 
@@ -117,100 +118,17 @@ PopupWindow {
                 bottom: parent.bottom
                 left: parent.left
                 right: parent.right
-                margins: 0
+                margins: 10
             }
-            ContainerBar {}
+            GridLayout {
+              anchors.fill: parent
+              columns: 1
+              rows: 1
+            }
         }
 
         opacity: animProgress
 
         scale: animProgress
-
-        // Shape {
-        //     anchors.fill: parent
-        //     scale: animProgress
-        //
-        //     ShapePath {
-        //         id: shapeBackground
-        //         readonly property real rounding: 10
-        //         readonly property bool flatten: extendedBarContainer.height < rounding * 2
-        //         readonly property real roundingY: flatten ? extendedBarContainer.height / 2 : rounding
-        //
-        //         strokeWidth: -1
-        //         fillColor: Scripts.setOpacity(Color.background, 0.8)
-        //
-        //         // Top-left outward arc
-        //         PathArc {
-        //             relativeX: shapeBackground.rounding
-        //             relativeY: shapeBackground.roundingY
-        //             radiusX: shapeBackground.rounding
-        //             radiusY: shapeBackground.roundingY
-        //         }
-        //
-        //         PathLine {
-        //             relativeX: 0
-        //             relativeY: extendedBarContainer.height - shapeBackground.roundingY * 2
-        //         }
-        //
-        //         // Bottom-left outward arc
-        //         PathArc {
-        //             relativeX: shapeBackground.rounding
-        //             relativeY: shapeBackground.roundingY
-        //             radiusX: shapeBackground.rounding
-        //             radiusY: shapeBackground.roundingY
-        //             direction: PathArc.Counterclockwise
-        //         }
-        //
-        //         PathLine {
-        //             relativeX: extendedBarContainer.width - shapeBackground.rounding * 4
-        //             relativeY: 0
-        //         }
-        //
-        //         // Bottom-right outward arc
-        //         PathArc {
-        //             relativeX: shapeBackground.rounding
-        //             relativeY: -shapeBackground.roundingY
-        //             radiusX: shapeBackground.rounding
-        //             radiusY: shapeBackground.roundingY
-        //             direction: PathArc.Counterclockwise
-        //         }
-        //
-        //         PathLine {
-        //             relativeX: 0
-        //             relativeY: -(extendedBarContainer.height - shapeBackground.roundingY * 2)
-        //         }
-        //
-        //         // Top-right outward arc
-        //         PathArc {
-        //             relativeX: shapeBackground.rounding
-        //             relativeY: -shapeBackground.roundingY
-        //             radiusX: shapeBackground.rounding
-        //             radiusY: shapeBackground.roundingY
-        //         }
-        //
-        //         Behavior on fillColor {
-        //             ColorAnimation {
-        //                 duration: 250
-        //                 easing.type: Easing.InOutQuad
-        //             }
-        //         }
-        //     }
-        // }
-        //
-        // Row {
-        //     id: mainContent
-        //     width: Math.floor(parent.width - (shapeBackground.rounding * 3))
-        //     height: Math.floor(parent.height - shapeBackground.rounding)
-        //     anchors.centerIn: parent
-        //     spacing: 0
-        //
-        //     Rectangle {
-        //         color: 'transparent'
-        //
-        //         width: Math.floor(mainContent.width)
-        //         height: Math.floor(mainContent.height)
-        //
-        //     }
-        // }
     }
 }
