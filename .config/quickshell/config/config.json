@@ -83,10 +83,19 @@
         "side": false,
         "width": 69,
         "workspaces": {
+            "activeWidgets": [
+            ],
+            "columns": 2,
+            "rows": 2,
             "style": "roman",
             "styles": [
                 "roman",
                 "kanji"
+            ],
+            "widgets": [
+                "powerBtn",
+                "workSpaces",
+                "clock"
             ]
         }
     }
