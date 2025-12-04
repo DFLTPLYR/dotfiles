@@ -45,8 +45,11 @@ ShellRoot {
     VolumeOsd {}
 
     // Logout
+    LazyLoader {
+        active: Config.loaded
+        component: SessionMenu {}
+    }
 
-    SessionMenu {}
     // right sidebar
     // Sidebar {}
 

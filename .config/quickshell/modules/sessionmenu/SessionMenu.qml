@@ -1,7 +1,9 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
-import QtQuick.Layouts
 import Quickshell.Wayland
 
 import qs.modules.sessionmenu
