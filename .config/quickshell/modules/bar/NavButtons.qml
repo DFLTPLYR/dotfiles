@@ -16,11 +16,11 @@ Item {
     id: root
     property var module
     property string location
+
     Component {
         id: portraitLayout
-
         ColumnLayout {
-            anchors.fill: parent
+            height: parent.height
             Loader {
                 Layout.fillWidth: true
                 Layout.preferredHeight: parent.width
@@ -43,7 +43,7 @@ Item {
     Component {
         id: landscapeLayout
         RowLayout {
-            anchors.fill: parent
+            height: parent.height
             layoutDirection: Qt.RightToLeft
 
             Loader {
@@ -112,7 +112,7 @@ Item {
 
     Loader {
         id: layoutLoader
-        anchors.fill: parent
+        height: parent.height
         sourceComponent: Config.navbar.side ? portraitLayout : landscapeLayout
     }
 }

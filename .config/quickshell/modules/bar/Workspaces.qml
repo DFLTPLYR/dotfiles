@@ -28,7 +28,7 @@ Item {
     Component {
         id: portrait
         Column {
-            anchors.fill: parent
+            height: parent.height
             spacing: 2
 
             Repeater {
@@ -102,7 +102,7 @@ Item {
         id: landscape
         Row {
             id: monitorRow
-            anchors.fill: parent
+            height: parent.height
             spacing: 2
 
             Repeater {

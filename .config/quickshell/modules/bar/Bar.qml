@@ -1,5 +1,3 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -62,12 +60,13 @@ Variants {
                 }
 
                 StyledLayout {
+                    id: layoutContainer
                     isPortrait: Config.navbar.side
                     spacing: 10
 
                     anchors {
                         fill: parent
-                        margins: 5
+                        margins: 0
                     }
 
                     Repeater {
@@ -96,51 +95,8 @@ Variants {
                             }
                         }
                     }
-
-                    // RowLayout {
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-                    //
-                    //     Rectangle {
-                    //         Layout.fillHeight: true
-                    //         Layout.preferredWidth: height
-                    //         color: 'green'
-                    //     }
-                    //     Rectangle {
-                    //         Layout.fillHeight: true
-                    //         Layout.preferredWidth: height
-                    //         color: 'green'
-                    //     }
-                    // }
-                    // RowLayout {
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-                    //
-                    //     Rectangle {
-                    //         Layout.fillHeight: true
-                    //         Layout.preferredWidth: height
-                    //         color: 'green'
-                    //     }
-                    //     Rectangle {
-                    //         Layout.fillHeight: true
-                    //         Layout.preferredWidth: height
-                    //         color: 'green'
-                    //     }
-                    // }
-                    // RowLayout {
-                    //     Layout.alignment: Qt.RightToLeft
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-                    //
-                    //     Rectangle {
-                    //         Layout.fillHeight: true
-                    //         Layout.preferredWidth: height
-                    //         color: 'green'
-                    //     }
-                    // }
                 }
             }
-
             Component {
                 id: workspacesComponent
                 Workspaces {
@@ -204,6 +160,13 @@ Variants {
                     panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
                 }
             }
+        }
+    }
+    component LayoutSlot: Item {
+        default property alias content: slotContent.data
+        RowLayout {
+            id: slotContent
+            anchors.fill: parent
         }
     }
 }
