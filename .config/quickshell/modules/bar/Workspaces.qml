@@ -11,7 +11,10 @@ import qs.services
 
 Item {
     id: root
-
+    property string location
+    property string activeStyle
+    property string styles
+    property string style
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
         return kanji[n] !== undefined ? kanji[n] : n.toString();

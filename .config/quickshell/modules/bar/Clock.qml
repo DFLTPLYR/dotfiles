@@ -7,6 +7,8 @@ import qs.assets
 import qs.services
 
 Item {
+    property var module
+    property string location
     Component {
         id: portrait
         Column {

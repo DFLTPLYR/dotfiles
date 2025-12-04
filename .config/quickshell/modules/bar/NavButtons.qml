@@ -14,7 +14,8 @@ import qs.services
 
 Item {
     id: root
-
+    property var module
+    property string location
     Component {
         id: portraitLayout
 
