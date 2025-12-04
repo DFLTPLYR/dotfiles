@@ -16,7 +16,6 @@ Item {
     id: root
     property var module
     property string location
-
     Component {
         id: portraitLayout
         ColumnLayout {
@@ -49,7 +48,6 @@ Item {
             Loader {
                 Layout.fillHeight: true
                 Layout.preferredWidth: parent.height
-
                 height: parent.height
                 sourceComponent: CustomButton {}
 
