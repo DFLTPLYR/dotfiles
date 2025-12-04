@@ -33,7 +33,7 @@ ShellRoot {
     // NavBar
     LazyLoader {
         active: Config.loaded
-        Bar {}
+        component: Bar {}
     }
 
     // Clipboard Overlay
