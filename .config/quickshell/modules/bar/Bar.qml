@@ -62,12 +62,47 @@ Variants {
                 StyledLayout {
                     id: layoutContainer
                     isPortrait: Config.navbar.side
-                    spacing: 10
 
                     anchors {
                         fill: parent
                         margins: 0
                     }
+                    //
+                    // LandscapeLayoutSlot {
+                    //     alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    //     Repeater {
+                    //         model: 3
+                    //         delegate: Rectangle {
+                    //             height: parent.height
+                    //             width: height
+                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
+                    //         }
+                    //     }
+                    // }
+                    //
+                    // LandscapeLayoutSlot {
+                    //     alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    //     Repeater {
+                    //         model: 3
+                    //         delegate: Rectangle {
+                    //             height: parent.height
+                    //             width: height
+                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
+                    //         }
+                    //     }
+                    // }
+                    //
+                    // LandscapeLayoutSlot {
+                    //     alignment: Qt.AlignRight | Qt.AlignVCenter
+                    //     Repeater {
+                    //         model: 3
+                    //         delegate: Rectangle {
+                    //             height: parent.height
+                    //             width: height
+                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
+                    //         }
+                    //     }
+                    // }
 
                     Repeater {
                         model: ScriptModel {
@@ -162,11 +197,19 @@ Variants {
             }
         }
     }
-    component LayoutSlot: Item {
-        default property alias content: slotContent.data
-        RowLayout {
-            id: slotContent
-            anchors.fill: parent
+    component LandscapeLayoutSlot: RowLayout {
+        id: slotRoot
+        property bool isPortrait: Config.navbar.side
+        default property alias content: contentHolder.children
+        property var alignment: Qt.AlignLeft | Qt.AlignVCenter
+        Layout.maximumWidth: parent.width / 3
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        Row {
+            id: contentHolder
+            Layout.fillHeight: true
+            Layout.alignment: slotRoot.alignment
         }
     }
 }
