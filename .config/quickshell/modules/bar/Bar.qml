@@ -87,7 +87,10 @@ Variants {
                             }
                             onLoaded: {
                                 if (item)
-                                    console.log(modelData);
+                                    for (var key in modelData) {
+                                        if (key !== "module")
+                                            item[key] = modelData[key];
+                                    }
                             }
                         }
                     }
