@@ -7,7 +7,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222427",
+            "color": "#1e1c1b",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -38,7 +38,7 @@
                 "clock"
             ]
         },
-        "height": 48,
+        "height": 58,
         "intersection": {
             "anchors": {
                 "bottom": true,
@@ -46,7 +46,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222427",
+            "color": "#1e1c1b",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -68,7 +68,7 @@
                 "right": true,
                 "top": true
             },
-            "color": "#222427",
+            "color": "#1e1c1b",
             "height": 50,
             "margins": {
                 "bottom": 0,
@@ -101,7 +101,7 @@
             }
         ],
         "popup": {
-            "color": "#222427",
+            "color": "#1e1c1b",
             "height": 40,
             "width": 40,
             "x": 50,

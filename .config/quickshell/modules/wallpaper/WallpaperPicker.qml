@@ -27,15 +27,13 @@ Scope {
         name: "showWallpaperCarousel"
         description: "Show Wallpaper Carousel to the current monitor"
         onPressed: {
-            Qt.callLater(() => {
-                root.isVisible = true;
-                root.toggle();
-            });
+            root.isVisible = true;
+            root.toggle();
         }
     }
 
     LazyLoader {
-        active: isVisible
+        active: root.isVisible
         component: PanelWrapper {
             id: sidebarRoot
             implicitWidth: 0
