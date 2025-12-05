@@ -27,10 +27,8 @@ Scope {
         name: "showAppMenu"
         description: "Show Resource Dashboard"
         onPressed: {
-            Qt.callLater(() => {
-                root.isVisible = true;
-                root.toggle();
-            });
+            root.isVisible = true;
+            root.toggle();
         }
     }
 
@@ -103,6 +101,7 @@ Scope {
             }
 
             property string searchValue: ''
+
             Item {
                 width: Math.round(appMenuRoot.isPortrait ? screen.width / 1.5 : screen.width / 2)
                 height: Math.round(appMenuRoot.isPortrait ? screen.height / 2.25 : screen.height / 2)
@@ -148,16 +147,9 @@ Scope {
                                     Layout.preferredWidth: parent.width * 0.6
                                     Layout.fillHeight: true
 
-                                    Rectangle {
-                                        id: container
-
-                                        anchors.fill: parent
-                                        color: 'transparent'
-
-                                        AppListView {
-                                            id: grid
-                                            searchText: searchValue
-                                        }
+                                    AppListView {
+                                        id: grid
+                                        searchText: searchValue
                                     }
                                 }
                             }

@@ -185,6 +185,6 @@ GridView {
     }
 
     Component.onCompleted: {
-        grid.updateDesktopApplicationsList("");
+        grid.updateDesktopApplicationsList();
     }
 }
