@@ -65,41 +65,22 @@ Variants {
 
                     anchors {
                         fill: parent
-                        margins: 0
+                        leftMargin: 0
+                        rightMargin: 0
                     }
+
+                    // RowSlot {
+                    //     id: leftSlot
+                    //     Layout.fillHeight: true
                     //
-                    // LandscapeLayoutSlot {
                     //     alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    //     spacing: 4
                     //     Repeater {
                     //         model: 3
                     //         delegate: Rectangle {
                     //             height: parent.height
                     //             width: height
-                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
-                    //         }
-                    //     }
-                    // }
-                    //
-                    // LandscapeLayoutSlot {
-                    //     alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    //     Repeater {
-                    //         model: 3
-                    //         delegate: Rectangle {
-                    //             height: parent.height
-                    //             width: height
-                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
-                    //         }
-                    //     }
-                    // }
-                    //
-                    // LandscapeLayoutSlot {
-                    //     alignment: Qt.AlignRight | Qt.AlignVCenter
-                    //     Repeater {
-                    //         model: 3
-                    //         delegate: Rectangle {
-                    //             height: parent.height
-                    //             width: height
-                    //             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.9)
+                    //             color: "red"
                     //         }
                     //     }
                     // }
@@ -197,14 +178,15 @@ Variants {
             }
         }
     }
-    component LandscapeLayoutSlot: RowLayout {
+
+    component RowSlot: RowLayout {
         id: slotRoot
         property bool isPortrait: Config.navbar.side
+        property alias spacing: contentHolder.spacing
         default property alias content: contentHolder.children
         property var alignment: Qt.AlignLeft | Qt.AlignVCenter
-        Layout.maximumWidth: parent.width / 3
         Layout.fillHeight: true
-        Layout.fillWidth: true
+        Layout.maximumWidth: parent.width / 3
 
         Row {
             id: contentHolder
