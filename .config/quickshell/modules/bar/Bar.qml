@@ -69,70 +69,65 @@ Variants {
                         rightMargin: 0
                     }
 
-                    StyledSlot {
-                        id: left
-                        alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
-
-                        Rectangle {
-                            width: Config.navbar.side ? parent.width : parent.height
-                            height: width
-                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                        }
-                        Rectangle {
-                            width: Config.navbar.side ? parent.width : parent.height
-                            height: width
-                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                        }
-                    }
-
-                    StyledSlot {
-                        id: center
-                        alignment: Qt.AlignCenter
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
-                    }
-
-                    StyledSlot {
-                        id: right
-                        alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
-                    }
-
-                    // Repeater {
-                    //     model: ScriptModel {
-                    //         values: Config.navbar.module
-                    //     }
-                    //     Loader {
-                    //         Layout.fillWidth: true
-                    //         Layout.fillHeight: true
-                    //         sourceComponent: {
-                    //             var component = modelData.module;
-                    //             if (component === "workspaces")
-                    //                 return workspacesComponent;
-                    //             if (component === "clock")
-                    //                 return timeDisplayComponent;
-                    //             if (component === "powerbtn")
-                    //                 return sysButtonComponent;
-                    //             return null;
-                    //         }
-                    //         onLoaded: {
-                    //             if (item)
-                    //                 for (var key in modelData) {
-                    //                     if (key !== "module")
-                    //                         item[key] = modelData[key];
-                    //                 }
-                    //         }
+                    // StyledSlot {
+                    //     id: left
+                    //     alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //     Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
+                    //     Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+                    //
+                    //     Rectangle {
+                    //         width: Config.navbar.side ? parent.width : parent.height
+                    //         height: width
+                    //         color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                     //     }
                     // }
+                    //
+                    // StyledSlot {
+                    //     id: center
+                    //     alignment: Qt.AlignCenter
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //     Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
+                    //     Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+                    // }
+                    //
+                    // StyledSlot {
+                    //     id: right
+                    //     alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //     Layout.maximumHeight: Config.navbar.side && parent ? parent.height / 3 : parent.height
+                    //     Layout.maximumWidth: Config.navbar.side && parent ? parent.width : parent.width / 3
+                    // }
+
+                    Repeater {
+                        model: ScriptModel {
+                            values: Config.navbar.module
+                        }
+                        Loader {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            sourceComponent: {
+                                var component = modelData.module;
+                                if (component === "workspaces")
+                                    return workspacesComponent;
+                                if (component === "clock")
+                                    return timeDisplayComponent;
+                                if (component === "powerbtn")
+                                    return sysButtonComponent;
+                                return null;
+                            }
+                            onLoaded: {
+                                if (item)
+                                    for (var key in modelData) {
+                                        if (key !== "module")
+                                            item[key] = modelData[key];
+                                    }
+                            }
+                        }
+                    }
                 }
             }
             Component {
