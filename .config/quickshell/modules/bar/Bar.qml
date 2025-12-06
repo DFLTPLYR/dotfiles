@@ -69,22 +69,16 @@ Variants {
                         rightMargin: 0
                     }
 
-                    // RowSlot {
-                    //     id: leftSlot
-                    //     Layout.fillHeight: true
+                    // StyledSlot {
+                    //     Layout.preferredHeight: parent.height / 3
+                    //     Layout.fillWidth: true
                     //
-                    //     alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    //     spacing: 4
-                    //     Repeater {
-                    //         model: 3
-                    //         delegate: Rectangle {
-                    //             height: parent.height
-                    //             width: height
-                    //             color: "red"
-                    //         }
+                    //     Rectangle {
+                    //         width: parent.width
+                    //         height: 50
+                    //         color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                     //     }
                     // }
-
                     Repeater {
                         model: ScriptModel {
                             values: Config.navbar.module
@@ -176,22 +170,6 @@ Variants {
                     panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
                 }
             }
-        }
-    }
-
-    component RowSlot: RowLayout {
-        id: slotRoot
-        property bool isPortrait: Config.navbar.side
-        property alias spacing: contentHolder.spacing
-        default property alias content: contentHolder.children
-        property var alignment: Qt.AlignLeft | Qt.AlignVCenter
-        Layout.fillHeight: true
-        Layout.maximumWidth: parent.width / 3
-
-        Row {
-            id: contentHolder
-            Layout.fillHeight: true
-            Layout.alignment: slotRoot.alignment
         }
     }
 }
