@@ -103,12 +103,12 @@
         "popup": {
             "color": "#1e1c1b",
             "height": 40,
-            "width": 40,
+            "width": 26,
             "x": 50,
             "y": 0
         },
         "position": "top",
         "side": false,
-        "width": 50
+        "width": 81
     }
 }

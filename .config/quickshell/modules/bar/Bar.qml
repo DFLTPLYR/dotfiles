@@ -69,42 +69,70 @@ Variants {
                         rightMargin: 0
                     }
 
-                    // StyledSlot {
-                    //     Layout.preferredHeight: parent.height / 3
-                    //     Layout.fillWidth: true
-                    //
-                    //     Rectangle {
-                    //         width: parent.width
-                    //         height: 50
-                    //         color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                    //     }
-                    // }
-                    Repeater {
-                        model: ScriptModel {
-                            values: Config.navbar.module
+                    StyledSlot {
+                        id: left
+                        alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
+                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+
+                        Rectangle {
+                            width: Config.navbar.side ? parent.width : parent.height
+                            height: width
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                         }
-                        Loader {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            sourceComponent: {
-                                var component = modelData.module;
-                                if (component === "workspaces")
-                                    return workspacesComponent;
-                                if (component === "clock")
-                                    return timeDisplayComponent;
-                                if (component === "powerbtn")
-                                    return sysButtonComponent;
-                                return null;
-                            }
-                            onLoaded: {
-                                if (item)
-                                    for (var key in modelData) {
-                                        if (key !== "module")
-                                            item[key] = modelData[key];
-                                    }
-                            }
+                        Rectangle {
+                            width: Config.navbar.side ? parent.width : parent.height
+                            height: width
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                         }
                     }
+
+                    StyledSlot {
+                        id: center
+                        alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
+                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+                    }
+
+                    StyledSlot {
+                        id: right
+                        alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
+                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+                    }
+
+                    // Repeater {
+                    //     model: ScriptModel {
+                    //         values: Config.navbar.module
+                    //     }
+                    //     Loader {
+                    //         Layout.fillWidth: true
+                    //         Layout.fillHeight: true
+                    //         sourceComponent: {
+                    //             var component = modelData.module;
+                    //             if (component === "workspaces")
+                    //                 return workspacesComponent;
+                    //             if (component === "clock")
+                    //                 return timeDisplayComponent;
+                    //             if (component === "powerbtn")
+                    //                 return sysButtonComponent;
+                    //             return null;
+                    //         }
+                    //         onLoaded: {
+                    //             if (item)
+                    //                 for (var key in modelData) {
+                    //                     if (key !== "module")
+                    //                         item[key] = modelData[key];
+                    //                 }
+                    //         }
+                    //     }
+                    // }
                 }
             }
             Component {
