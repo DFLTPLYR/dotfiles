@@ -34,7 +34,6 @@ Item {
                 model: Hyprland.workspaces
                 delegate: Item {
                     required property var modelData
-                    visible: modelData.id >= 0
 
                     implicitHeight: parent.height
                     implicitWidth: parent.height
@@ -56,9 +55,8 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: {
-                                if (modelData.id === 0) {
-                                    console.log("Using bullet for workspace 0");
-                                    return "•";
+                                if (modelData.id <= 0) {
+                                    return "S";
                                 }
                                 switch (Config.navbar.extended.style) {
                                 case "kanji":
