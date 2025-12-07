@@ -1,5 +1,3 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -7,13 +5,15 @@ import qs.config
 
 Item {
     id: slotRoot
+    Layout.fillWidth: true
+    Layout.fillHeight: true
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
 
     Item {
         id: childHandler
         anchors.fill: parent
-        visible: false
+        visible: true
     }
 
     component RowSlot: RowLayout {
@@ -25,16 +25,21 @@ Item {
             Layout.fillHeight: true
             Layout.alignment: rootRowSlot.alignment
             spacing: 4
-            Component.onDestruction: {
-                console.log("RowSlot destroyed", children);
+            onChildrenChanged: {
+                for (let c = 0; c < childrenHolder.children.length; c++) {
+                    const child = childrenHolder.children[c];
+                    child.implicitHeight = childrenHolder.height;
+                    child.y = 0;
+                    child.x = 0;
+                }
             }
         }
         Component.onDestruction: {
-            const arr = childrenHolder.children.slice();
-            Qt.callLater(() => {
-                for (let c of arr)
-                    c.parent = slotRoot.childHandler;
-            });
+            const copy = childrenHolder.children.slice();
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                child.parent = childHandler;
+            }
         }
     }
 
@@ -47,13 +52,21 @@ Item {
             Layout.fillWidth: true
             Layout.alignment: rootColSlot.alignment
             spacing: 4
+            onChildrenChanged: {
+                for (let c = 0; c < childrenHolder.children.length; c++) {
+                    const child = childrenHolder.children[c];
+                    child.implicitWidth = childrenHolder.width;
+                    child.y = 0;
+                    child.x = 0;
+                }
+            }
         }
         Component.onDestruction: {
-            const arr = childrenHolder.children.slice();
-            Qt.callLater(() => {
-                for (let c of arr)
-                    c.parent = slotRoot.childHandler;
-            });
+            const copy = childrenHolder.children.slice();
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                child.parent = childHandler;
+            }
         }
     }
 
@@ -74,45 +87,13 @@ Item {
     Loader {
         id: slotLayoutLoader
         anchors.fill: parent
-        onLoaded: slotRoot.reparentChildren()
-    }
-
-    function reparentChildren() {
-        const layoutItem = slotLayoutLoader.item;
-        if (!layoutItem)
-            return;
-        const reparent = layoutItem.children[0];
-        const arrayCopy = childHandler.children.slice();
-        for (let c of arrayCopy) {
-            if (c.parent !== reparent) {
-                c.parent = reparent;
+        sourceComponent: Config.navbar.side ? colSlot : rowSlot
+        onLoaded: {
+            const copy = childHandler.children.slice();
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                child.parent = item.children[0];
             }
         }
-    }
-
-    Connections {
-        target: Config.navbar
-        function onPositionChanged() {
-            const oldLayout = slotLayoutLoader.item;
-            if (!oldLayout)
-                return;
-            const oldContainer = oldLayout.children[0];
-            if (!oldContainer)
-                return;
-            const childrenToMove = oldContainer.children.slice();
-
-            for (let c of childrenToMove) {
-                c.parent = childHandler;
-            }
-
-            slotLayoutLoader.sourceComponent = Config.navbar.side ? colSlot : rowSlot;
-            slotLayoutLoader.active = true;
-        }
-    }
-
-    Component.onCompleted: {
-        slotLayoutLoader.sourceComponent = Config.navbar.side ? colSlot : rowSlot;
-        slotLayoutLoader.active = true;
-        slotRoot.reparentChildren();
     }
 }
