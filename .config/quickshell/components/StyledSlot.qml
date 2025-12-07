@@ -7,6 +7,7 @@ Item {
     id: slotRoot
     Layout.fillWidth: true
     Layout.fillHeight: true
+
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
 

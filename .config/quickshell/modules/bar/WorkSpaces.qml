@@ -6,8 +6,8 @@ import qs.config
 import qs.utils
 
 Item {
-    height: Config.navbar.side ? Config.navbar.height : parent.height
-    width: Config.navbar.side ? parent.width : Config.navbar.width
+    height: Config.navbar.side ? parent.width * Hyprland.workspaces.values.length : parent.height
+    width: Config.navbar.side ? parent.width : parent.height * Hyprland.workspaces.values.length
 
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
