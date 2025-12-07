@@ -6,8 +6,8 @@ import qs.config
 import qs.utils
 
 Item {
-    height: Config.navbar.side ? parent.width * Hyprland.workspaces.values.length : parent.height
-    width: Config.navbar.side ? parent.width : parent.height * Hyprland.workspaces.values.length
+    height: Config.navbar.side ? loader.implicitWidth : parent.height
+    width: Config.navbar.side ? parent.width : loader.implicitWidth
 
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
@@ -20,8 +20,9 @@ Item {
     }
 
     Loader {
-        id: compLoader
-        anchors.fill: parent
+        id: loader
+        height: parent.height
+        width: parent.width
         sourceComponent: Config.navbar.side ? portrait : landscape
     }
 

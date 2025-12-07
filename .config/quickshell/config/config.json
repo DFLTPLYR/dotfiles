@@ -117,8 +117,8 @@
             "x": 50,
             "y": 0
         },
-        "position": "top",
+        "position": "bottom",
         "side": false,
-        "width": 60
+        "width": 61
     }
 }
