@@ -7,15 +7,16 @@ import qs.assets
 import qs.services
 
 Item {
-    property var module
-    property string location
+    height: Config.navbar.side ? parent.width : parent.height
+    width: Config.navbar.side ? parent.width : parent.height
+
     Component {
         id: portrait
         Column {
             anchors.centerIn: parent
             spacing: 4
-            width: parent.width    // give it size
-            height: parent.height  // give it size
+            width: parent.width
+            height: parent.height
 
             Text {
                 color: Color.color14
@@ -57,7 +58,7 @@ Item {
 
             color: Color.color14
             font.family: FontProvider.fontMaterialRounded
-            text: `${TimeService.hoursPadded}:${TimeService.minutesPadded}... ${TimeService.ampm}`
+            text: `${TimeService.hoursPadded}:${TimeService.minutesPadded} ${TimeService.ampm}`
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: parent.width
