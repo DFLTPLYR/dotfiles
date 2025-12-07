@@ -12,11 +12,20 @@ JsonObject {
             styles: ["roman", "kanji"],
             style: "roman",
             showSpecial: true,
-            location: "left"
+            location: "left",
+            setting: {
+                styles: ["roman", "kanji"],
+                style: "roman",
+                showSpecial: true
+            }
         },
         {
             module: "clock",
-            location: "center"
+            location: "center",
+            setting: {
+                availableFormats: ["HH:mm", "hh:mm AP", "hh:mm:ss AP", "YYYY-MM-DD HH:mm", "DD/MM/YYYY HH:mm"],
+                format: "HH:mm AP"
+            }
         },
         {
             module: "powerbtn",

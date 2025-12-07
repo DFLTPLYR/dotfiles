@@ -75,8 +75,6 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
 
                         WorkSpaces {}
                     }
@@ -86,9 +84,6 @@ Variants {
                         alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
-
                         Clock {}
                     }
 
@@ -97,8 +92,7 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.maximumHeight: Config.navbar.side && parent ? parent.height / 3 : parent.height
-                        Layout.maximumWidth: Config.navbar.side && parent ? parent.width : parent.width / 3
+                        PowerButton {}
                     }
                 }
             }
