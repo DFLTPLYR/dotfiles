@@ -77,6 +77,8 @@ Variants {
                         Layout.fillHeight: true
                         Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
                         Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
+
+                        WorkSpaces {}
                     }
 
                     StyledSlot {
