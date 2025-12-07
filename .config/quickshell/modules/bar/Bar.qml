@@ -1,11 +1,12 @@
 import QtQuick
+import QtQml.Models
+import QtQuick.Shapes
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Shapes
+
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import QtQuick.Controls
 // Modules
 import qs.modules.extendedbar
 import qs.modules.clipboard
@@ -76,7 +77,6 @@ Variants {
                         Layout.fillHeight: true
                         Layout.maximumHeight: Config.navbar.side ? parent.height / 3 : parent.height
                         Layout.maximumWidth: Config.navbar.side ? parent.width : parent.width / 3
-                        WorkSpaces {}
                     }
 
                     StyledSlot {
@@ -96,57 +96,6 @@ Variants {
                         Layout.maximumHeight: Config.navbar.side && parent ? parent.height / 3 : parent.height
                         Layout.maximumWidth: Config.navbar.side && parent ? parent.width : parent.width / 3
                     }
-
-                    // Repeater {
-                    //     model: ScriptModel {
-                    //         values: Config.navbar.module
-                    //     }
-                    //     Loader {
-                    //         Layout.fillWidth: true
-                    //         Layout.fillHeight: true
-                    //         sourceComponent: {
-                    //             var component = modelData.module;
-                    //             if (component === "workspaces")
-                    //                 return workspacesComponent;
-                    //             if (component === "clock")
-                    //                 return timeDisplayComponent;
-                    //             if (component === "powerbtn")
-                    //                 return sysButtonComponent;
-                    //             return null;
-                    //         }
-                    //         onLoaded: {
-                    //             if (item)
-                    //                 for (var key in modelData) {
-                    //                     if (key !== "module")
-                    //                         item[key] = modelData[key];
-                    //                 }
-                    //         }
-                    //     }
-                    // }
-                }
-            }
-            Component {
-                id: workspacesComponent
-                Workspaces {
-                    id: workspaces
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-            }
-
-            Component {
-                id: timeDisplayComponent
-                Clock {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-            }
-
-            Component {
-                id: sysButtonComponent
-                NavButtons {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
                 }
             }
 

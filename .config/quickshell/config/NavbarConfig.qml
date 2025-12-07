@@ -11,6 +11,7 @@ JsonObject {
             module: "workspaces",
             styles: ["roman", "kanji"],
             style: "roman",
+            showSpecial: true,
             location: "left"
         },
         {

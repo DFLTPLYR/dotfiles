@@ -24,10 +24,17 @@
         },
         "extended": {
             "activeWidgets": [
+                {
+                    "position": {
+                        "column": 0,
+                        "row": 0
+                    },
+                    "widget": "powerBtn"
+                }
             ],
             "columns": 2,
             "rows": 2,
-            "style": "kanji",
+            "style": "roman",
             "styles": [
                 "roman",
                 "kanji"
@@ -38,7 +45,7 @@
                 "clock"
             ]
         },
-        "height": 58,
+        "height": 50,
         "intersection": {
             "anchors": {
                 "bottom": true,
@@ -85,30 +92,33 @@
         },
         "module": [
             {
-                "activeStyle": "roman",
                 "location": "left",
                 "module": "workspaces",
+                "showSpecial": true,
+                "style": "roman",
                 "styles": [
                     "roman",
                     "kanji"
                 ]
             },
             {
+                "location": "center",
                 "module": "clock"
             },
             {
+                "location": "right",
                 "module": "powerbtn"
             }
         ],
         "popup": {
             "color": "#1e1c1b",
             "height": 40,
-            "width": 26,
+            "width": 40,
             "x": 50,
             "y": 0
         },
-        "position": "bottom",
+        "position": "top",
         "side": false,
-        "width": 81
+        "width": 50
     }
 }
