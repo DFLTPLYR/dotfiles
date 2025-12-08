@@ -14,7 +14,7 @@ Item {
     Item {
         id: childHandler
         anchors.fill: parent
-        visible: true
+        visible: false
     }
 
     component RowSlot: RowLayout {
