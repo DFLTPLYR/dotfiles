@@ -99,11 +99,6 @@ Variants {
                 }
             }
 
-            Component {
-                id: clockModule
-                Clock {}
-            }
-
             LazyLoader {
                 id: panelLoader
 
