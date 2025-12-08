@@ -250,9 +250,6 @@ Singleton {
 
     Component.onCompleted: {
         refresh();
-        Quickshell.execDetached({
-            command: ["sh", "-c", "while true; do sleep 20m; notify-send -i dialog-information 'Break Reminder' 'Stand up and stretch'; done"]
-        });
     }
 
     FileView {
