@@ -41,7 +41,7 @@ Item {
         id: landscape
         Row {
             Text {
-                text: Qt.formatDateTime(TimeService.clock.date, "HH:mm AP")
+                text: Qt.formatDateTime(TimeService.clock.date, "hh:mm AP")
                 color: Color.color14
                 font {
                     pixelSize: Math.max(10, Math.min(parent.width, parent.height))

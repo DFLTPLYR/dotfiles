@@ -84,6 +84,7 @@ Variants {
                         alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         Clock {}
                     }
 
@@ -92,9 +93,15 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+
                         PowerButton {}
                     }
                 }
+            }
+
+            Component {
+                id: clockModule
+                Clock {}
             }
 
             LazyLoader {
