@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -121,9 +122,9 @@ PopupWindow {
                 margins: 10
             }
             GridLayout {
-              anchors.fill: parent
-              columns: 1
-              rows: 1
+                anchors.fill: parent
+                columns: 1
+                rows: 1
             }
         }
 
