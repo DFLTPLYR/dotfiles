@@ -16,8 +16,7 @@ Item {
         const copy = children.slice();
         for (let i = 0; i < copy.length; i++) {
             const child = copy[i];
-            if (child.hasOwnProperty("module") && slotLayoutLoader.item) {
-                console.log("Reparenting child module to slot layout");
+            if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
                 child.parent = slotLayoutLoader.item.children[0];
             }
         }
@@ -44,6 +43,7 @@ Item {
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
+                    child.isSlotted = true;
                 }
             }
         }
@@ -51,6 +51,7 @@ Item {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
+                child.isSlotted = false;
                 child.parent = childHandler;
             }
         }
@@ -71,6 +72,7 @@ Item {
                     child.implicitWidth = childrenHolder.width;
                     child.y = 0;
                     child.x = 0;
+                    child.isSlotted = true;
                 }
             }
         }
@@ -78,6 +80,7 @@ Item {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
+                child.isSlotted = false;
                 child.parent = childHandler;
             }
         }

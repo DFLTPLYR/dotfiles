@@ -4,7 +4,6 @@
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 //@ pragma Env QT_QPA_PLATFORM=wayland
-
 import QtQuick
 import Quickshell
 import qs.assets

@@ -91,26 +91,28 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        PowerButton {}
                     }
                 }
             }
-            Repeater {
-                model: ScriptModel {
-                    values: Config.navbar.module
-                }
-                delegate: Item {
-                    visible: false
+
+            Variants {
+                model: Config.navbar.module
+                delegate: LazyLoader {
+                    id: loader
+                    property var modelData
                     Component.onCompleted: {
-                        const comp = barComponent.getComponentByName(modelData.module);
-                        const parentMap = {
+                        const model = modelData.module;
+                        const comp = barComponent.getComponentByName(model);
+                        component = comp;
+                        active = true;
+                    }
+                    onItemChanged: {
+                        const parent = {
                             "left": left,
-                            "center": center,
-                            "right": right
+                            "right": right,
+                            "center": center
                         };
-                        const parent = parentMap[modelData.position];
-                        if (comp && parent)
-                            comp.createObject(parent);
+                        item.parent = parent[modelData.position];
                     }
                 }
             }
@@ -121,7 +123,7 @@ Variants {
                 case "workspaces":
                     return workspacesModule;
                 case "powerbtn":
-                    return clockModule;
+                    return powerButtonModule;
                 default:
                     return null;
                 }
@@ -129,16 +131,16 @@ Variants {
 
             Component {
                 id: clockModule
-                Clock {
-                    property bool module: true
-                }
+                Clock {}
             }
 
             Component {
                 id: workspacesModule
-                WorkSpaces {
-                    property bool module: true
-                }
+                WorkSpaces {}
+            }
+            Component {
+                id: powerButtonModule
+                PowerButton {}
             }
 
             LazyLoader {

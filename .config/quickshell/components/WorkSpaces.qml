@@ -7,8 +7,9 @@ import qs.utils
 
 Item {
     id: root
-    height: Config.navbar.side ? loader.implicitWidth : parent.height
-    width: Config.navbar.side ? parent.width : loader.implicitWidth
+    property bool isSlotted: false
+    width: (Config.navbar.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
+    height: (Config.navbar.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
 
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
