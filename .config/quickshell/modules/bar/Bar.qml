@@ -7,6 +7,7 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+
 // Modules
 import qs.modules.extendedbar
 import qs.modules.clipboard
@@ -84,8 +85,28 @@ Variants {
                         alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        debug: true
 
-                        Clock {}
+                        Variants {
+                            model: Config.navbar.module.filter(m => m.location === "center")
+                            Loader {
+                                property var modelData
+                                sourceComponent: {
+                                    console.log(JSON.stringify(modelData));
+                                    switch (modelData.module) {
+                                    case "clock":
+                                        return clockModule;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                onLoaded: {
+                                    if (item) {
+                                        item.parent = center;
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     StyledSlot {
@@ -96,6 +117,13 @@ Variants {
 
                         PowerButton {}
                     }
+                }
+            }
+
+            Component {
+                id: clockModule
+                Clock {
+                    property bool module: true
                 }
             }
 

@@ -10,6 +10,19 @@ Item {
 
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
+    property bool debug: false
+
+    onChildrenChanged: {
+        if (slotRoot.debug === true) {
+            const copy = children.slice();
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                if (child.hasOwnProperty("module") && slotLayoutLoader.item) {
+                    child.parent = slotLayoutLoader.item.children[0];
+                }
+            }
+        }
+    }
 
     Item {
         id: childHandler
