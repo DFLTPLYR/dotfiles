@@ -13,14 +13,11 @@ Item {
     property bool debug: false
 
     onChildrenChanged: {
-        if (slotRoot.debug === true) {
-            const copy = children.slice();
-            for (let i = 0; i < copy.length; i++) {
-                const child = copy[i];
-                if (child.hasOwnProperty("module") && slotLayoutLoader.item) {
-                    child.parent = slotLayoutLoader.item.children[0];
-                }
-            }
+        const copy = children.slice();
+        for (let i = 0; i < copy.length; i++) {
+            const child = copy[i];
+            child.parent = slotLayoutLoader.item.children[0];
+            if (child.hasOwnProperty("module") && slotLayoutLoader.item) {}
         }
     }
 
