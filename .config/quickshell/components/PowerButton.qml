@@ -7,9 +7,10 @@ import qs.config
 import qs.assets
 
 Item {
+    id: root
     property bool isSlotted: false
-    height: Config.navbar.side ? parent.width : parent.height
-    width: Config.navbar.side ? parent.width : parent.height
+    height: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
+    width: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
 
     Button {
         id: actionBtn
