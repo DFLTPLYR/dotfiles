@@ -250,6 +250,9 @@ Singleton {
 
     Component.onCompleted: {
         refresh();
+        Quickshell.execDetached({
+            command: ["sh", "-c", 'pgrep -x screen-time > /dev/null || exec -a screen-time sh -c "while true; do sleep 20m; notify-send \\"20 minutes are up\\"; done"']
+        });
     }
 
     FileView {
