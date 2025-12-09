@@ -8,8 +8,9 @@ import qs.services
 
 Item {
     id: root
-    width: Config.navbar.side ? parent.width : loader.implicitWidth
-    height: Config.navbar.side ? loader.implicitHeight : parent.height
+    property bool isSlotted: false
+    width: (Config.navbar.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
+    height: (Config.navbar.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
 
     Loader {
         id: loader

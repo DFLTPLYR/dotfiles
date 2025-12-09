@@ -7,6 +7,7 @@ import qs.config
 import qs.assets
 
 Item {
+    property bool isSlotted: false
     height: Config.navbar.side ? parent.width : parent.height
     width: Config.navbar.side ? parent.width : parent.height
 
