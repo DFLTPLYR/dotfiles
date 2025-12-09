@@ -85,28 +85,7 @@ Variants {
                         alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        debug: true
-
-                        Variants {
-                            model: Config.navbar.module.filter(m => m.location === "center")
-                            Loader {
-                                property var modelData
-                                sourceComponent: {
-                                    console.log(JSON.stringify(modelData));
-                                    switch (modelData.module) {
-                                    case "clock":
-                                        return clockModule;
-                                    default:
-                                        break;
-                                    }
-                                }
-                                onLoaded: {
-                                    if (item) {
-                                        item.parent = center;
-                                    }
-                                }
-                            }
-                        }
+                        Clock {}
                     }
 
                     StyledSlot {
@@ -114,19 +93,21 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-
+                        // Button {
+                        //     height: parent.height
+                        //     width: height
+                        //     onClicked: {
+                        //         clockModule.createObject(center);
+                        //     }
+                        // }
                         PowerButton {}
                     }
                 }
             }
-
             Component {
                 id: clockModule
-                Clock {
-                    property bool module: true
-                }
+                Clock {}
             }
-
             LazyLoader {
                 id: panelLoader
 
