@@ -6,6 +6,7 @@ import qs.config
 import qs.utils
 
 Item {
+    id: root
     height: Config.navbar.side ? loader.implicitWidth : parent.height
     width: Config.navbar.side ? parent.width : loader.implicitWidth
 
@@ -61,10 +62,10 @@ Item {
                                 }
                                 switch (Config.navbar.extended.style) {
                                 case "kanji":
-                                    return kanjiNumber(modelData.id - 1);
+                                    return root.kanjiNumber(modelData.id - 1);
                                 case "roman":
                                 default:
-                                    return romanNumber(modelData.id - 1);
+                                    return root.romanNumber(modelData.id - 1);
                                 }
                             }
                             color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
@@ -131,10 +132,10 @@ Item {
                                 }
                                 switch (Config.navbar.extended.style) {
                                 case "kanji":
-                                    return kanjiNumber(modelData.id - 1);
+                                    return root.kanjiNumber(modelData.id - 1);
                                 case "roman":
                                 default:
-                                    return romanNumber(modelData.id - 1);
+                                    return root.romanNumber(modelData.id - 1);
                                 }
                             }
                             color: mouseArea.containsMouse ? Color.color14 : (modelData.active && modelData.focused) ? Color.color14 : Color.color2
