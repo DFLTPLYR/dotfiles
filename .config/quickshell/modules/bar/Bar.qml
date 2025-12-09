@@ -48,6 +48,7 @@ Variants {
             height: Config.navbar.side ? parent.height : Config.navbar.height
 
             StyledRect {
+                id: layoutSlotContainer
                 childContainerHeight: parent.height
 
                 anchors {
@@ -76,8 +77,6 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-
-                        WorkSpaces {}
                     }
 
                     StyledSlot {
@@ -85,7 +84,6 @@ Variants {
                         alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Clock {}
                     }
 
                     StyledSlot {
@@ -93,21 +91,56 @@ Variants {
                         alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        // Button {
-                        //     height: parent.height
-                        //     width: height
-                        //     onClicked: {
-                        //         clockModule.createObject(center);
-                        //     }
-                        // }
                         PowerButton {}
                     }
                 }
             }
+            Repeater {
+                model: ScriptModel {
+                    values: Config.navbar.module
+                }
+                delegate: Item {
+                    visible: false
+                    Component.onCompleted: {
+                        const comp = barComponent.getComponentByName(modelData.module);
+                        const parentMap = {
+                            "left": left,
+                            "center": center,
+                            "right": right
+                        };
+                        const parent = parentMap[modelData.position];
+                        if (comp && parent)
+                            comp.createObject(parent);
+                    }
+                }
+            }
+            function getComponentByName(name) {
+                switch (name.toLowerCase()) {
+                case "clock":
+                    return clockModule;
+                case "workspaces":
+                    return workspacesModule;
+                case "powerbtn":
+                    return clockModule;
+                default:
+                    return null;
+                }
+            }
+
             Component {
                 id: clockModule
-                Clock {}
+                Clock {
+                    property bool module: true
+                }
             }
+
+            Component {
+                id: workspacesModule
+                WorkSpaces {
+                    property bool module: true
+                }
+            }
+
             LazyLoader {
                 id: panelLoader
 

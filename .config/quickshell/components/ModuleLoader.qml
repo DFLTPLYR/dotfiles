@@ -1,18 +1,21 @@
 import QtQuick
-
 import qs.assets
 import qs.config
 
-Loader {
-    id: root
-    property string moduleName
-    width: parent.width
-    height: parent.height
-    sourceComponent: {
-        return workSpacesModule;
-        switch (root.moduleName) {
-        default:
+Singleton {
+    function testFunc() {
+        return "ModuleLoader testFunc called";
+    }
+    function returnModule(comp) {
+        switch (comp) {
+        case "powerButton":
+            return powerButtonModule;
+        case "workSpaces":
             return workSpacesModule;
+        case "clock":
+            return clockModule;
+        default:
+            return null;
         }
     }
     Component {

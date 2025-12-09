@@ -12,7 +12,7 @@ JsonObject {
             styles: ["roman", "kanji"],
             style: "roman",
             showSpecial: true,
-            location: "left",
+            position: "left",
             setting: {
                 styles: ["roman", "kanji"],
                 style: "roman",
@@ -21,7 +21,7 @@ JsonObject {
         },
         {
             module: "clock",
-            location: "center",
+            position: "center",
             setting: {
                 availableFormats: ["HH:mm", "hh:mm AP", "hh:mm:ss AP", "YYYY-MM-DD HH:mm", "DD/MM/YYYY HH:mm"],
                 format: "HH:mm AP"
@@ -29,7 +29,7 @@ JsonObject {
         },
         {
             module: "powerbtn",
-            location: "right"
+            position: "right"
         }
     ]
     property ExtendedBarConfig extended: ExtendedBarConfig {}

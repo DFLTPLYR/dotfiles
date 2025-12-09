@@ -16,8 +16,10 @@ Item {
         const copy = children.slice();
         for (let i = 0; i < copy.length; i++) {
             const child = copy[i];
-            child.parent = slotLayoutLoader.item.children[0];
-            if (child.hasOwnProperty("module") && slotLayoutLoader.item) {}
+            if (child.hasOwnProperty("module") && slotLayoutLoader.item) {
+                console.log("Reparenting child module to slot layout");
+                child.parent = slotLayoutLoader.item.children[0];
+            }
         }
     }
 
@@ -104,6 +106,13 @@ Item {
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
                 child.parent = item.children[0];
+            }
+            const copyparent = slotRoot.children.slice();
+            for (let i = 0; i < copyparent.length; i++) {
+                const child = copyparent[i];
+                if (child.hasOwnProperty("module") && item) {
+                    child.parent = slotLayoutLoader.item.children[0];
+                }
             }
         }
     }
