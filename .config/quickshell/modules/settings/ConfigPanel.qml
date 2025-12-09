@@ -9,6 +9,8 @@ import Quickshell.Hyprland
 
 import qs.modules.settings
 import qs.components
+import qs.config
+import qs.utils
 
 Scope {
     id: root
@@ -64,8 +66,60 @@ Scope {
             }
         }
 
+        GridLayout {
+            id: gridLayout
+            anchors.fill: parent
+            columns: 2
+            columnSpacing: 1
+
+            Rectangle {
+                Layout.preferredWidth: parent.width * 0.3
+                Layout.fillHeight: true
+                color: Qt.rgba(0, 0, 0, 0.6)
+                border.color: Color.accent
+                border.width: 1
+
+                Column {
+                    anchors {
+                        fill: parent
+                        margins: 2
+                    }
+                    spacing: 10
+
+                    Button {
+                        width: parent.width
+                        height: 40
+                        text: qsTr("Close")
+                        hoverEnabled: true
+                        background: Rectangle {
+                            color: Scripts.setOpacity(Color.accent, 0.8)
+                            radius: 5
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 150
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
+                        onHoveredChanged: {
+                            background.color = hovered ? Color.accent : Scripts.setOpacity(Color.accent, 0.8);
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: Qt.rgba(0, 0, 0, 0.6)
+                border.color: Color.accent
+                border.width: 1
+            }
+        }
+
         ColumnLayout {
             anchors.fill: parent
+            visible: false
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true

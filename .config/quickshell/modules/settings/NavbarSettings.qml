@@ -134,6 +134,11 @@ Item {
                 }
             }
 
+            Label {
+                Layout.fillWidth: true
+                text: "Extended Bar Settings"
+            }
+
             // Axis position extendedbar settings
             RowLayout {
                 visible: Config.navbar.position === "top" || Config.navbar.position === "bottom"
