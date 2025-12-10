@@ -72,7 +72,7 @@ ColumnLayout {
         id: gridComponentContainer
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: 400
+        Layout.preferredHeight: 50
 
         //Bg color
         Rectangle {
@@ -161,12 +161,18 @@ ColumnLayout {
         Connections {
             target: gridCellsContainer
             function onColumnsChanged() {
-                if (dragger.parent === overlay)
+                if (dragger.parent === overlay) {
                     dragger.width = gridCellsContainer.width / gridCellsContainer.columns * dragger.col;
+                    dragger.subject.x = 0;
+                    dragger.subject.y = 0;
+                }
             }
             function onRowsChanged() {
-                if (dragger.parent === overlay)
+                if (dragger.parent === overlay) {
                     dragger.height = gridCellsContainer.height / gridCellsContainer.rows * dragger.row;
+                    dragger.x = 0;
+                    dragger.y = 0;
+                }
             }
         }
 

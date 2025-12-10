@@ -6,6 +6,8 @@ JsonObject {
     property bool side: position === "left" || position === "right"
     property int width: 50
     property int height: 50
+    property int row: 2
+    property int column: 2
     property list<var> module: [
         {
             module: "workspaces",

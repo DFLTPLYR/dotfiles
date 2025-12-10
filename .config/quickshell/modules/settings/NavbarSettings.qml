@@ -54,14 +54,25 @@ Item {
                     id: gridManager
 
                     Layout.fillWidth: true
-                    Layout.maximumHeight: 200
-                    cellColumns: testCount.value
-                    cellRows: 1
+                    Layout.fillHeight: true
+
+                    cellColumns: Config.navbar.side ? 1 : testCount.value
+                    cellRows: Config.navbar.side ? testCount.value : 1
 
                     z: 5
                     onDraggableChanged: (item, positions) => {
                         for (let key in item.positions) {
                             console.log(" ", key, ":", item.positions[key]);
+                        }
+                    }
+
+                    Component {
+                        id: testRect
+                        Rectangle {
+                            width: reparent ? parent.width : 0
+                            height: reparent ? parent.height : 0
+                            property bool reparent: false
+                            property var position
                         }
                     }
 
@@ -72,21 +83,13 @@ Item {
                             property var modelData
                             Component.onCompleted: {
                                 const model = modelData.module;
-                                console.log(JSON.stringify(modelData.position));
                                 component = testRect;
                                 active = true;
                             }
                             onItemChanged: {
                                 item.parent = gridManager;
+                                item.position = modelData.position;
                             }
-                        }
-                    }
-                    Component {
-                        id: testRect
-                        Rectangle {
-                            width: reparent ? parent.width : 0
-                            height: reparent ? parent.height : 0
-                            property bool reparent: false
                         }
                     }
                 }
