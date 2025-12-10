@@ -37,15 +37,64 @@ Item {
             ColumnLayout {
                 Layout.fillWidth: true
                 GridManager {
-                    Clock {
-                        width: 50
-                        height: 50
-                        property bool reparent: true
+                    id: gridManager
+                    Variants {
+                        model: Config.navbar.module
+                        delegate: LazyLoader {
+                            id: loader
+                            property var modelData
+                            Component.onCompleted: {
+                                const model = modelData.module;
+                                const comp = gridManager.getComponentByName(model);
+                                component = comp;
+                                active = true;
+                            }
+                            onItemChanged: {
+                                item.parent = gridManager;
+                            }
+                        }
+                    }
+
+                    function getComponentByName(name) {
+                        switch (name.toLowerCase()) {
+                        case "clock":
+                            return clockModule;
+                        case "workspaces":
+                            return workspacesModule;
+                        case "powerbtn":
+                            return powerButtonModule;
+                        default:
+                            return null;
+                        }
+                    }
+
+                    Component {
+                        id: clockModule
+                        Clock {
+                            height: parent.height / 4
+                            property bool reparent: true
+                        }
+                    }
+
+                    Component {
+                        id: workspacesModule
+                        WorkSpaces {
+                            height: parent.height / 4
+
+                            property bool reparent: true
+                        }
+                    }
+                    Component {
+                        id: powerButtonModule
+                        PowerButton {
+                            height: parent.height / 4
+
+                            property bool reparent: true
+                        }
                     }
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.preferredHeight: Config.navbar.height * 2
-
+                    Layout.preferredHeight: gridManager.implicitHeight / 5
                     cellColumns: columnCountBox.value
                     cellRows: 1
                     z: 5
