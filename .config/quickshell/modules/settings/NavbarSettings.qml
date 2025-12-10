@@ -33,6 +33,30 @@ Item {
                 color: Color.text
             }
 
+            // Navbar modules
+            ColumnLayout {
+                Layout.fillWidth: true
+                GridManager {
+                    Clock {
+                        width: 50
+                        height: 50
+                        property bool reparent: true
+                    }
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: Config.navbar.height * 2
+
+                    cellColumns: columnCountBox.value
+                    cellRows: 1
+                    z: 5
+                    onDraggableChanged: (item, positions) => {
+                        for (let key in item.positions) {
+                            console.log(" ", key, ":", item.positions[key]);
+                        }
+                    }
+                }
+            }
+
             // workspace style settings
             RowLayout {
                 Layout.fillWidth: true
@@ -138,7 +162,7 @@ Item {
 
             Label {
                 Layout.fillWidth: true
-                text: "Extended Bar Settings"
+                text: "<h2>Extended Bar Settings</h2>"
             }
 
             // Axis position extendedbar settings
@@ -248,6 +272,7 @@ Item {
 
             GridManager {
                 id: gridPreviewContainer
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredHeight: 400
@@ -257,7 +282,6 @@ Item {
 
                 z: 5
                 onDraggableChanged: (item, positions) => {
-                    console.log(" Draggables changed:", positions, item);
                     for (let key in item.positions) {
                         console.log(" ", key, ":", item.positions[key]);
                     }
