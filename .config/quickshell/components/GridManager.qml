@@ -45,6 +45,7 @@ ColumnLayout {
             } else {
                 console.warn("Cannot reparent child:", child);
             }
+            console.log("Wrapped child:", child, "into", dragWrapper);
 
             // Track
             wrappedChildren.push(child);
@@ -52,11 +53,11 @@ ColumnLayout {
         }
 
         onChildrenChanged: {
-            console.log("Children changed, wrapping new children.");
             for (let i = 0; i < layoutItemContainer.data.length; i++) {
                 let child = layoutItemContainer.data[i];
                 if (child.reparent) {
                     Qt.callLater(() => wrapChild(child));
+                    child.isSlotted = true;
                 }
             }
         }
@@ -144,7 +145,9 @@ ColumnLayout {
         z: 2
 
         onParentChanged: {
-            if (parent === overlay) {}
+            if (parent === overlay) {
+                console.log("Dragger moved to overlay");
+            }
         }
 
         Connections {
