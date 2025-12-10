@@ -19,7 +19,7 @@ ColumnLayout {
     onChildrenChanged: {
         for (let i = 0; i < root.children.length; i++) {
             const child = root.children[i];
-            if (child.hasOwnProperty("reparent") && child.reparent) {
+            if (child.hasOwnProperty("reparent")) {
                 Qt.callLater(() => layoutItemContainer.wrapChild(child));
             }
         }
@@ -43,12 +43,9 @@ ColumnLayout {
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
 
-            // Create wrapper
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
-                width: child.width,
-                height: child.height,
-                originalWidth: child.width,
-                originalHeight: child.height,
+                width: 50,
+                height: 50,
                 subject: child
             });
             child.parent = dragWrapper;
@@ -145,12 +142,21 @@ ColumnLayout {
 
         property Item subject
         property var positions
-        property int originalWidth
-        property int originalHeight
+        default property alias data: tile.data
         property int col: 1
         property int row: 1
-
+        width: 50 * col
+        height: 50 * row
         z: 2
+
+        onChildrenChanged: {
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.reparent) {
+                    child.parent = tile;
+                }
+            }
+        }
 
         Connections {
             target: gridCellsContainer
@@ -175,7 +181,7 @@ ColumnLayout {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.2)
+            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
 
             Drag.active: mouseArea.drag.active
 
@@ -212,11 +218,12 @@ ColumnLayout {
                 if (overlaps.length === 0) {
                     dragger.x = 0;
                     dragger.y = 0;
-                    dragger.width = dragger.originalWidth;
-                    dragger.height = dragger.originalHeight;
+                    dragger.width = 50 * dragger.col;
+                    dragger.height = 50 * dragger.row;
                     dragger.parent = layoutItemContainer;
                     root.draggableChanged(dragger, null);
                     dragger.subject.visible = false;
+                    dragger.subject.reparent = false;
                     return;
                 }
                 // Compute bounding cells
@@ -249,6 +256,7 @@ ColumnLayout {
                 dragger.col = colspan;
                 dragger.width = colspan * cellWidth;
                 dragger.height = rowspan * cellHeight;
+                dragger.subject.reparent = true;
                 dragger.subject.visible = true;
                 dragger.subject.x = 0;
                 dragger.subject.y = 0;
