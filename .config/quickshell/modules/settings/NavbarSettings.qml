@@ -36,17 +36,44 @@ Item {
             // Navbar modules
             ColumnLayout {
                 Layout.fillWidth: true
+
+                Column {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Label {
+                        text: "column count"
+                    }
+                    SpinBox {
+                        id: testCount
+                        from: 2
+                        value: 2
+                    }
+                }
+
                 GridManager {
                     id: gridManager
+
+                    Layout.fillWidth: true
+                    Layout.maximumHeight: 200
+                    cellColumns: testCount.value
+                    cellRows: 1
+
+                    z: 5
+                    onDraggableChanged: (item, positions) => {
+                        for (let key in item.positions) {
+                            console.log(" ", key, ":", item.positions[key]);
+                        }
+                    }
+
                     Variants {
-                        model: Config.navbar.module
+                        model: Config.navbar.modules
                         delegate: LazyLoader {
                             id: loader
                             property var modelData
                             Component.onCompleted: {
                                 const model = modelData.module;
-                                const comp = gridManager.getComponentByName(model);
-                                component = comp;
+                                console.log(JSON.stringify(modelData.position));
+                                component = testRect;
                                 active = true;
                             }
                             onItemChanged: {
@@ -54,53 +81,12 @@ Item {
                             }
                         }
                     }
-
-                    function getComponentByName(name) {
-                        switch (name.toLowerCase()) {
-                        case "clock":
-                            return clockModule;
-                        case "workspaces":
-                            return workspacesModule;
-                        case "powerbtn":
-                            return powerButtonModule;
-                        default:
-                            return null;
-                        }
-                    }
-
                     Component {
-                        id: clockModule
-                        Clock {
-                            height: parent.height / 4
-                            property bool reparent: true
-                        }
-                    }
-
-                    Component {
-                        id: workspacesModule
-                        WorkSpaces {
-                            height: parent.height / 4
-
-                            property bool reparent: true
-                        }
-                    }
-                    Component {
-                        id: powerButtonModule
-                        PowerButton {
-                            height: parent.height / 4
-
-                            property bool reparent: true
-                        }
-                    }
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredHeight: gridManager.implicitHeight / 5
-                    cellColumns: columnCountBox.value
-                    cellRows: 1
-                    z: 5
-                    onDraggableChanged: (item, positions) => {
-                        for (let key in item.positions) {
-                            console.log(" ", key, ":", item.positions[key]);
+                        id: testRect
+                        Rectangle {
+                            width: reparent ? parent.width : 0
+                            height: reparent ? parent.height : 0
+                            property bool reparent: false
                         }
                     }
                 }

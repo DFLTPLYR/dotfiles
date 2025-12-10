@@ -32,6 +32,47 @@ JsonObject {
             position: "right"
         }
     ]
+    property list<var> modules: [
+        {
+            module: "workspaces",
+            styles: ["roman", "kanji"],
+            style: "roman",
+            showSpecial: true,
+            position: {
+                row: null,
+                rowSpan: null,
+                column: null,
+                columnSpan: null
+            },
+            setting: {
+                styles: ["roman", "kanji"],
+                style: "roman",
+                showSpecial: true
+            }
+        },
+        {
+            module: "clock",
+            position: {
+                row: null,
+                rowSpan: null,
+                column: null,
+                columnSpan: null
+            },
+            setting: {
+                availableFormats: ["HH:mm", "hh:mm AP", "hh:mm:ss AP", "YYYY-MM-DD HH:mm", "DD/MM/YYYY HH:mm"],
+                format: "HH:mm AP"
+            }
+        },
+        {
+            module: "powerbtn",
+            position: {
+                row: null,
+                rowSpan: null,
+                column: null,
+                columnSpan: null
+            }
+        }
+    ]
     property ExtendedBarConfig extended: ExtendedBarConfig {}
     property PopupProps popup: PopupProps {}
     property RectProps main: RectProps {}
