@@ -19,7 +19,8 @@ Item {
         text: "power_settings_new"
         font.family: FontProvider.fontMaterialOutlined
         onClicked: {
-            Config.sessionMenuOpen = true;
+            if (isSlotted)
+                Config.sessionMenuOpen = true;
         }
     }
 }

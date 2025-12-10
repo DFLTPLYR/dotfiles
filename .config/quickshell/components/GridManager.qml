@@ -16,13 +16,22 @@ ColumnLayout {
 
     default property alias data: layoutItemContainer.data
 
+    onChildrenChanged: {
+        for (let i = 0; i < root.children.length; i++) {
+            const child = root.children[i];
+            if (child.hasOwnProperty("reparent") && child.reparent) {
+                Qt.callLater(() => layoutItemContainer.wrapChild(child));
+            }
+        }
+    }
+
     Row {
         id: layoutItemContainer
         property var wrappedChildren: []
         property var withWrappers: []
 
         Layout.fillWidth: true
-        Layout.preferredHeight: 50
+        Layout.preferredHeight: layoutItemContainer.implicitHeight
 
         Component {
             id: draggableWrapperComponent
@@ -37,16 +46,15 @@ ColumnLayout {
             // Create wrapper
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
                 width: child.width,
-                height: child.height
+                height: child.height,
+                originalWidth: child.width,
+                originalHeight: child.height,
+                subject: child
             });
-
-            if ("parent" in child) {
-                child.parent = dragWrapper;
-            } else {
-                console.warn("Cannot reparent child:", child);
-            }
-            console.log("Wrapped child:", child, "into", dragWrapper);
-
+            child.parent = dragWrapper;
+            child.visible = false;
+            child.x = 0;
+            child.y = 0;
             // Track
             wrappedChildren.push(child);
             withWrappers.push(dragWrapper);
@@ -57,7 +65,6 @@ ColumnLayout {
                 let child = layoutItemContainer.data[i];
                 if (child.reparent) {
                     Qt.callLater(() => wrapChild(child));
-                    child.isSlotted = true;
                 }
             }
         }
@@ -135,20 +142,15 @@ ColumnLayout {
     // Draggable component
     component DraggableArea: Item {
         id: dragger
+
+        property Item subject
         property var positions
+        property int originalWidth
+        property int originalHeight
         property int col: 1
         property int row: 1
-        default property alias content: tile.data
-        width: 50 * row
-        height: 50 * col
 
         z: 2
-
-        onParentChanged: {
-            if (parent === overlay) {
-                console.log("Dragger moved to overlay");
-            }
-        }
 
         Connections {
             target: gridCellsContainer
@@ -173,7 +175,7 @@ ColumnLayout {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.8)
+            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.2)
 
             Drag.active: mouseArea.drag.active
 
@@ -210,10 +212,11 @@ ColumnLayout {
                 if (overlaps.length === 0) {
                     dragger.x = 0;
                     dragger.y = 0;
-                    dragger.width = 50 * dragger.col;
-                    dragger.height = 50 * dragger.row;
+                    dragger.width = dragger.originalWidth;
+                    dragger.height = dragger.originalHeight;
                     dragger.parent = layoutItemContainer;
                     root.draggableChanged(dragger, null);
+                    dragger.subject.visible = false;
                     return;
                 }
                 // Compute bounding cells
@@ -246,42 +249,10 @@ ColumnLayout {
                 dragger.col = colspan;
                 dragger.width = colspan * cellWidth;
                 dragger.height = rowspan * cellHeight;
+                dragger.subject.visible = true;
+                dragger.subject.x = 0;
+                dragger.subject.y = 0;
                 root.draggableChanged(dragger, positions);
-            }
-        }
-
-        WheelHandler {
-            id: wheelHandler
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-
-            onWheel: event => {
-                if (!mouseArea.drag.active)
-                    return;
-
-                const isShift = event.modifiers & Qt.ShiftModifier;
-                const isCtrl = event.modifiers & Qt.ControlModifier;
-                const scrollup = event.angleDelta.y > 0;
-                if (!isShift && !isCtrl)
-                    return;
-                if (isShift) {
-                    if (scrollup)
-                        dragger.col = Math.min(dragger.col + 1, gridCellsContainer.columns);
-                    else
-                        dragger.col = Math.max(dragger.col - 1, 1);
-                }
-
-                if (isCtrl) {
-                    if (scrollup)
-                        dragger.row = Math.min(dragger.row + 1, gridCellsContainer.rows);
-                    else
-                        dragger.row = Math.max(dragger.row - 1, 1);
-                }
-
-                let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
-                let cellHeight = gridCellsContainer.height / gridCellsContainer.rows;
-
-                dragger.width = (dragger.col * cellWidth) * 0.9;
-                dragger.height = (dragger.row * cellHeight) * 0.9;
             }
         }
 
