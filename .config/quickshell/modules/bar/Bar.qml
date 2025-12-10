@@ -116,6 +116,7 @@ Variants {
                     }
                 }
             }
+
             function getComponentByName(name) {
                 switch (name.toLowerCase()) {
                 case "clock":
@@ -143,8 +144,28 @@ Variants {
                 PowerButton {}
             }
 
+            GlobalShortcut {
+                id: resourceDashboard
+
+                name: "showResourceBoard"
+                description: "Show Resource Dashboard"
+                onPressed: {
+                    if (extendedBarLoader.shouldBeVisible) {
+                        extendedBarLoader.shouldBeVisible = false;
+                        extendedBarLoader.animProgress = 0;
+                        return;
+                    }
+                    if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
+                        return;
+
+                    extendedBarLoader.shouldBeVisible = true;
+                    extendedBarLoader.active = true;
+                    extendedBarLoader.animProgress = extendedBarLoader.shouldBeVisible ? 1 : 0;
+                }
+            }
+
             LazyLoader {
-                id: panelLoader
+                id: extendedBarLoader
 
                 property bool shouldBeVisible: false
                 property real animProgress: 0
@@ -152,33 +173,13 @@ Variants {
                 active: false
                 component: ExtendedBar {
                     anchor.window: screenRoot
-                    animProgress: panelLoader.animProgress
-                    shouldBeVisible: panelLoader.shouldBeVisible
+                    animProgress: extendedBarLoader.animProgress
+                    shouldBeVisible: extendedBarLoader.shouldBeVisible
                     onHide: {
                         return Qt.callLater(() => {
-                            return panelLoader.active = false;
-                        }, 400);
+                            return extendedBarLoader.active = false;
+                        }, 10);
                     }
-                }
-            }
-
-            GlobalShortcut {
-                id: resourceDashboard
-
-                name: "showResourceBoard"
-                description: "Show Resource Dashboard"
-                onPressed: {
-                    if (panelLoader.shouldBeVisible) {
-                        panelLoader.shouldBeVisible = false;
-                        panelLoader.animProgress = 0;
-                        return;
-                    }
-                    if (Hyprland.focusedMonitor.name !== screenRoot.screen.name)
-                        return;
-
-                    panelLoader.shouldBeVisible = true;
-                    panelLoader.active = true;
-                    panelLoader.animProgress = panelLoader.shouldBeVisible ? 1 : 0;
                 }
             }
         }

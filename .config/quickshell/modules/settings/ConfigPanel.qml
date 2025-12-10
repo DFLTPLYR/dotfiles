@@ -1,5 +1,3 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -73,9 +71,11 @@ Scope {
             columnSpacing: 1
 
             Rectangle {
-                Layout.preferredWidth: parent.width * 0.3
+                id: tabContainer
+                property int selectedIndex: 1
+                Layout.preferredWidth: parent.width * 0.25
                 Layout.fillHeight: true
-                color: Qt.rgba(0, 0, 0, 0.6)
+                color: Color.backgroundAlt
                 border.color: Color.accent
                 border.width: 1
 
@@ -84,25 +84,39 @@ Scope {
                         fill: parent
                         margins: 2
                     }
-                    spacing: 10
+                    spacing: 1
 
-                    Button {
-                        width: parent.width
-                        height: 40
-                        text: qsTr("Close")
-                        hoverEnabled: true
-                        background: Rectangle {
-                            color: Scripts.setOpacity(Color.accent, 0.8)
-                            radius: 5
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: 150
-                                    easing.type: Easing.InOutQuad
+                    Repeater {
+                        model: ["General", "Navbar"]
+                        delegate: Button {
+                            property bool selected: tabContainer.selectedIndex === index
+                            width: parent.width
+                            height: 40
+                            text: qsTr(modelData)
+                            hoverEnabled: true
+                            background: Rectangle {
+                                color: Scripts.setOpacity(Color.accent, 0.8)
+                                radius: 0
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 150
+                                        easing.type: Easing.InOutQuad
+                                    }
                                 }
                             }
-                        }
-                        onHoveredChanged: {
-                            background.color = hovered ? Color.accent : Scripts.setOpacity(Color.accent, 0.8);
+                            onSelectedChanged: {
+                                if (selected) {
+                                    background.color = Color.accent;
+                                } else {
+                                    background.color = Scripts.setOpacity(Color.accent, 0.8);
+                                }
+                            }
+                            onHoveredChanged: {
+                                background.color = hovered || selected ? Color.accent : Scripts.setOpacity(Color.accent, 0.8);
+                            }
+                            onClicked: {
+                                tabContainer.selectedIndex = index;
+                            }
                         }
                     }
                 }
@@ -111,49 +125,36 @@ Scope {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: Qt.rgba(0, 0, 0, 0.6)
+                color: Color.backgroundAlt
                 border.color: Color.accent
                 border.width: 1
-            }
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-            visible: false
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.margins: 2
-
-                TabBar {
-                    id: tabBar
-                    Layout.fillWidth: true
-
-                    // TabButton {
-                    //     text: qsTr("General")
-                    // }
-                    TabButton {
-                        text: qsTr("Navbar")
-                    }
-                }
 
                 StackLayout {
-                    id: contentLayout
-                    currentIndex: tabBar.currentIndex
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.margins: 5
-
-                    // GeneralSettings {
-                    //     id: generalConfig
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-                    // }
-                    // Todo: replace with actual settings components
-                    NavbarSettings {
-                        id: navbarConfig
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                    anchors.fill: parent
+                    currentIndex: tabContainer.selectedIndex
+                    Item {
+                        id: homeTab
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        }
+                    }
+                    Item {
+                        id: discoverTab
+                        NavbarSettings {
+                            id: navbarConfig
+                            anchors {
+                                fill: parent
+                                margins: 5
+                            }
+                        }
+                    }
+                    Item {
+                        id: activityTab
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        }
                     }
                 }
             }

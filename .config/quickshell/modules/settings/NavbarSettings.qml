@@ -27,7 +27,9 @@ Item {
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
-                text: "Navbar Configurations"
+                text: "<h1>Navbar Configurations</h1>"
+                font.bold: true
+                font.pointSize: 12
                 color: Color.text
             }
 
