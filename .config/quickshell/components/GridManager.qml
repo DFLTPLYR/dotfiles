@@ -42,10 +42,10 @@ ColumnLayout {
             // Skip if already wrapped
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
-
+            console.log(child.cellSize);
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
-                width: 50,
-                height: 50,
+                width: Config.navbar.side ? 50 : 50 * child.cellSize,
+                height: Config.navbar.side ? 50 * child.cellSize : 50,
                 subject: child
             });
             child.parent = dragWrapper;
@@ -163,7 +163,6 @@ ColumnLayout {
             function onColumnsChanged() {
                 if (dragger.parent === overlay) {
                     dragger.width = gridCellsContainer.width / gridCellsContainer.columns * dragger.col;
-                    console.log("testing");
                 }
             }
             function onRowsChanged() {
@@ -209,15 +208,30 @@ ColumnLayout {
             drag.target: tile
 
             drag.onActiveChanged: {
-                if (drag.active) {
+                if (dragger.parent === overlay) {
+                    return;
+                } else if (drag.active) {
                     parent.width = width * 0.9;
                     parent.height = height * 0.9;
+                } else {
+                    dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
+                    dragger.height = Config.navbar.side ? 50 * dragger.subject.cellSize : 50;
                 }
             }
 
             onReleased: {
                 // Get overlaps
                 let overlaps = gridCellsContainer.updateCollision(tile);
+                console.log(overlaps.length < dragger.subject.cellSize);
+                if (overlaps.length < dragger.subject.cellSize) {
+                    dragger.parent = layoutItemContainer;
+                    dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
+                    dragger.height = Config.navbar.side ? 50 * dragger.subject.cellSize : 50;
+                    root.draggableChanged(dragger, null);
+                    dragger.subject.visible = false;
+                    dragger.subject.reparent = false;
+                    return;
+                }
                 if (overlaps.length === 0) {
                     dragger.x = 0;
                     dragger.y = 0;
