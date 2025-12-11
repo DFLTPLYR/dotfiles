@@ -41,12 +41,15 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Label {
-                        text: "column count"
+                        text: "Cell count"
                     }
                     SpinBox {
-                        id: testCount
+                        id: cellCount
                         from: 2
-                        value: 2
+                        value: Config.navbar.cell
+                        onValueChanged: {
+                            Config.navbar.cell = value;
+                        }
                     }
                 }
 
@@ -56,8 +59,8 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    cellColumns: Config.navbar.side ? 1 : testCount.value
-                    cellRows: Config.navbar.side ? testCount.value : 1
+                    cellColumns: Config.navbar.side ? 1 : Config.navbar.cell
+                    cellRows: Config.navbar.side ? Config.navbar.cell : 1
 
                     z: 5
                     onDraggableChanged: (item, positions) => {
@@ -68,7 +71,7 @@ Item {
 
                     Component {
                         id: testRect
-                        Rectangle {
+                        Item {
                             width: reparent ? parent.width : 0
                             height: reparent ? parent.height : 0
                             property bool reparent: false
