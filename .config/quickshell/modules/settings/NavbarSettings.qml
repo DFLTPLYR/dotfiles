@@ -74,8 +74,23 @@ Item {
                         Item {
                             width: reparent ? parent.width : 0
                             height: reparent ? parent.height : 0
+                            property int cellSize: 1
                             property bool reparent: false
                             property var position
+                        }
+                    }
+
+                    Component {
+                        id: clock
+                        Item {
+                            width: reparent ? parent.width : 0
+                            height: reparent ? parent.height : 0
+                            property int cellSize: 2
+                            property bool reparent: false
+                            property var position
+                            Text {
+                              text: "clock"
+                            }
                         }
                     }
 
@@ -85,8 +100,15 @@ Item {
                             id: loader
                             property var modelData
                             Component.onCompleted: {
-                                const model = modelData.module;
+                              const model = modelData.module;
+                              switch(model) {
+                                case "clock":
+                                    component = clock;
+                                    break;
+                                default:
                                 component = testRect;
+                                break;
+                              }
                                 active = true;
                             }
                             onItemChanged: {
