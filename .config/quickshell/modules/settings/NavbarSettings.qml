@@ -116,9 +116,6 @@ Item {
                                         anchors.centerIn: parent
                                         text: modelData.id
                                     }
-                                    Component.onCompleted: {
-                                        console.log(Object.keys(modelData));
-                                    }
                                 }
                             }
                         }
