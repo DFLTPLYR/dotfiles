@@ -42,7 +42,6 @@ ColumnLayout {
             // Skip if already wrapped
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
-            console.log(child.cellSize);
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
                 width: Config.navbar.side ? 50 : 50 * child.cellSize,
                 height: Config.navbar.side ? 50 * child.cellSize : 50,
