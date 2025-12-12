@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 import qs.components
 import qs.assets
@@ -89,7 +89,37 @@ Item {
                             property bool reparent: false
                             property var position
                             Text {
-                              text: "clock"
+                                text: "clock"
+                            }
+                        }
+                    }
+
+                    Component {
+                        id: workspace
+                        Row {
+                            width: reparent ? parent.width : 0
+                            height: reparent ? parent.height : 0
+                            property int cellSize: 1
+                            property bool reparent: false
+                            property var position
+                            Repeater {
+                                model: Hyprland.workspaces
+                                delegate: Rectangle {
+                                    required property var modelData
+                                    visible: modelData.id !== 0 && modelData.focused && modelData.active
+                                    width: parent.height
+                                    height: parent.height
+                                    color: "red"
+                                    border.color: "black"
+                                    border.width: 1
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: modelData.id
+                                    }
+                                    Component.onCompleted: {
+                                        console.log(Object.keys(modelData));
+                                    }
+                                }
                             }
                         }
                     }
@@ -100,15 +130,18 @@ Item {
                             id: loader
                             property var modelData
                             Component.onCompleted: {
-                              const model = modelData.module;
-                              switch(model) {
+                                const model = modelData.module;
+                                switch (model) {
                                 case "clock":
                                     component = clock;
                                     break;
+                                case "workspaces":
+                                    component = workspace;
+                                    break;
                                 default:
-                                component = testRect;
-                                break;
-                              }
+                                    component = testRect;
+                                    break;
+                                }
                                 active = true;
                             }
                             onItemChanged: {

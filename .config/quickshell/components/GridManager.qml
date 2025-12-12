@@ -222,7 +222,6 @@ ColumnLayout {
             onReleased: {
                 // Get overlaps
                 let overlaps = gridCellsContainer.updateCollision(tile);
-                console.log(overlaps.length < dragger.subject.cellSize);
                 if (overlaps.length < dragger.subject.cellSize) {
                     dragger.parent = layoutItemContainer;
                     dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
