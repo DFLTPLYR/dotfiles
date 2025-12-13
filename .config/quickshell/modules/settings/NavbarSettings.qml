@@ -63,6 +63,7 @@ Item {
                     cellRows: Config.navbar.side ? Config.navbar.cell : 1
 
                     z: 5
+
                     onDraggableChanged: (item, positions) => {
                         for (let key in item.positions) {
                             console.log(" ", key, ":", item.positions[key]);
@@ -83,8 +84,8 @@ Item {
                     Component {
                         id: clock
                         Item {
-                            width: reparent ? parent.width : 0
-                            height: reparent ? parent.height : 0
+                            width: reparent ? parent.width : 50
+                            height: reparent ? parent.height : 50
                             property int cellSize: 2
                             property bool reparent: false
                             property var position
@@ -97,8 +98,8 @@ Item {
                     Component {
                         id: workspace
                         Row {
-                            width: reparent ? parent.width : 0
-                            height: reparent ? parent.height : 0
+                            width: reparent ? parent.width : 50
+                            height: reparent ? parent.height : 50
                             property int cellSize: 1
                             property bool reparent: false
                             property var position

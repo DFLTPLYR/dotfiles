@@ -90,26 +90,6 @@ ColumnLayout {
             columns: Math.max(1, root.cellColumns)
             rows: Math.max(1, root.cellRows)
 
-            function updateCollision(dragItem) {
-                let overlaps = [];
-                for (let i = 0; i < cellRepeater.count; i++) {
-                    let cell = cellRepeater.itemAt(i);
-                    if (!cell)
-                        continue;
-
-                    let a = Scripts.rectBounds(dragItem);
-                    let b = Scripts.rectBounds(cell);
-
-                    if (Scripts.intersects(a, b)) {
-                        overlaps.push([Math.floor(i / columns), i % columns]);
-                        cell.color = "#22ddff33";
-                    } else {
-                        cell.color = "transparent";
-                    }
-                }
-                return overlaps;
-            }
-
             Repeater {
                 id: cellRepeater
                 model: ScriptModel {
@@ -125,7 +105,19 @@ ColumnLayout {
                     color: "transparent"
                     border.color: "green"
                     border.width: 1
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 200
+                            easing.type: Easing.OutQuad
+                        }
+                    }
 
+                    Behavior on border.color {
+                        ColorAnimation {
+                            duration: 200
+                            easing.type: Easing.OutQuad
+                        }
+                    }
                     Text {
                         anchors.centerIn: parent
                         text: modelData
@@ -133,6 +125,61 @@ ColumnLayout {
                 }
             }
         }
+    }
+
+    function updateCollisionVisual(dragItem) {
+        let requiredCount = dragItem.parent.subject.cellSize;
+        let overlaps = [];
+        let highlightColor;
+
+        for (let i = 0; i < cellRepeater.count; i++) {
+            let cell = cellRepeater.itemAt(i);
+            if (cell) {
+                cell.color = "transparent";
+                cell.border.color = "green";
+            }
+        }
+
+        for (let i = 0; i < cellRepeater.count; i++) {
+            let cell = cellRepeater.itemAt(i);
+            if (!cell)
+                continue;
+
+            let a = Scripts.rectBounds(dragItem);
+            let b = Scripts.rectBounds(cell);
+
+            if (Scripts.intersects(a, b)) {
+                overlaps.push(cell);
+            }
+        }
+
+        if (overlaps.length !== requiredCount) {
+            highlightColor = Scripts.setOpacity("red", 0.2);
+        } else {
+            highlightColor = Scripts.setOpacity(Color.accent, 0.5);
+        }
+
+        for (let cell of overlaps) {
+            cell.color = highlightColor;
+            cell.border.color = highlightColor;
+        }
+    }
+
+    function updateCollision(dragItem) {
+        let overlaps = [];
+        for (let i = 0; i < cellRepeater.count; i++) {
+            let cell = cellRepeater.itemAt(i);
+            if (!cell)
+                continue;
+
+            let a = Scripts.rectBounds(dragItem);
+            let b = Scripts.rectBounds(cell);
+
+            if (Scripts.intersects(a, b)) {
+                overlaps.push([Math.floor(i / gridCellsContainer.columns), i % gridCellsContainer.columns]);
+            }
+        }
+        return overlaps;
     }
 
     // Draggable component
@@ -189,6 +236,13 @@ ColumnLayout {
             Drag.hotSpot.x: parent.width / 4
             Drag.hotSpot.y: parent.height / 4
 
+            onXChanged: {
+                root.updateCollisionVisual(tile);
+            }
+            onYChanged: {
+                root.updateCollisionVisual(tile);
+            }
+
             states: State {
                 when: mouseArea.drag.active
                 AnchorChanges {
@@ -220,7 +274,7 @@ ColumnLayout {
 
             onReleased: {
                 // Get overlaps
-                let overlaps = gridCellsContainer.updateCollision(tile);
+                let overlaps = root.updateCollision(tile);
                 if (overlaps.length < dragger.subject.cellSize) {
                     dragger.parent = layoutItemContainer;
                     dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
