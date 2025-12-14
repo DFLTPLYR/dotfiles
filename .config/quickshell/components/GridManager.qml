@@ -69,23 +69,18 @@ ColumnLayout {
     Item {
         id: gridComponentContainer
         Layout.fillWidth: true
-        Layout.fillHeight: true
         Layout.preferredHeight: 50
 
-        //Bg color
         Rectangle {
-            anchors.fill: parent
-            color: Scripts.setOpacity(Color.background, 0.5)
-        }
-
-        Item {
             id: overlay
-            anchors.fill: parent
+            anchors.fill: gridCellsContainer
+            color: Scripts.setOpacity(Color.background, 0.5)
         }
 
         Grid {
             id: gridCellsContainer
-            anchors.fill: parent
+            width: parent.width
+            height: parent.height
             columns: Math.max(1, root.cellColumns)
             rows: Math.max(1, root.cellRows)
 
