@@ -1,9 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import Quickshell
-import Quickshell.Io
 
 import qs.utils
 import qs.config
@@ -100,11 +98,17 @@ ColumnLayout {
                     }
                 }
                 delegate: Rectangle {
-                    width: gridCellsContainer.width / gridCellsContainer.columns
-                    height: gridCellsContainer.height / gridCellsContainer.rows
+                    width: parent.width / parent.columns
+                    height: parent.height / parent.rows
                     color: "transparent"
                     border.color: "green"
                     border.width: 1
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData
+                    }
+
                     Behavior on color {
                         ColorAnimation {
                             duration: 200
@@ -117,10 +121,6 @@ ColumnLayout {
                             duration: 200
                             easing.type: Easing.OutQuad
                         }
-                    }
-                    Text {
-                        anchors.centerIn: parent
-                        text: modelData
                     }
                 }
             }
@@ -261,14 +261,14 @@ ColumnLayout {
             drag.target: tile
 
             drag.onActiveChanged: {
-                if (dragger.parent === overlay) {
+                if (dragger.parent === overlay && drag.active) {
+                    parent.width = width * 0.9;
+                    parent.height = height * 0.9;
                     return;
                 } else if (drag.active) {
                     parent.width = width * 0.9;
                     parent.height = height * 0.9;
-                } else {
-                    dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
-                    dragger.height = Config.navbar.side ? 50 * dragger.subject.cellSize : 50;
+                    return;
                 }
             }
 
