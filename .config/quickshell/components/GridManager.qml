@@ -153,7 +153,7 @@ ColumnLayout {
             }
         }
 
-        if (overlaps.length !== requiredCount) {
+        if (overlaps.length < requiredCount) {
             highlightColor = Scripts.setOpacity("red", 0.2);
         } else {
             highlightColor = Scripts.setOpacity(Color.accent, 0.5);
