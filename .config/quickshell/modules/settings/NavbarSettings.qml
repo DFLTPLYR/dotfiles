@@ -35,6 +35,7 @@ Item {
             // Navbar modules
             ColumnLayout {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
 
                 Column {
                     Layout.fillWidth: true
