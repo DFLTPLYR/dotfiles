@@ -23,7 +23,7 @@ ColumnLayout {
         }
     }
 
-    Row {
+    Flow {
         id: layoutItemContainer
         property var wrappedChildren: []
         property var withWrappers: []
@@ -40,11 +40,13 @@ ColumnLayout {
             // Skip if already wrapped
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
+            const multiplier = Config.navbar.side ? child.row : child.column;
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
-                width: Config.navbar.side ? 50 : 50 * child.cellSize,
-                height: Config.navbar.side ? 50 * child.cellSize : 50,
+                width: Config.navbar.side ? 50 : 50 * multiplier,
+                height: Config.navbar.side ? 50 * multiplier : 50,
                 subject: child
             });
+
             child.parent = dragWrapper;
             child.x = 0;
             child.y = 0;
@@ -127,7 +129,8 @@ ColumnLayout {
     }
 
     function updateCollisionVisual(dragItem, reset = false) {
-        let requiredCount = dragItem.parent.subject.cellSize;
+        const requiredCount = Config.navbar.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
+
         let overlaps = [];
         let highlightColor;
 
@@ -195,13 +198,13 @@ ColumnLayout {
         property int row: 1
         width: 50 * col
         height: 50 * row
-        z: 2
 
         onChildrenChanged: {
             for (let i = 0; i < children.length; i++) {
-                const child = children[i];
-                if (child.reparent) {
-                    child.parent = tile;
+                if (children[i].hasOwnProperty("reparent")) {
+                    const child = children[i];
+                    if (child.reparent)
+                        children[i].parent = tile;
                 }
             }
         }
@@ -231,7 +234,23 @@ ColumnLayout {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+            color: "transparent"
+            border.width: 1
+            border.color: Color.foreground
+
+            Behavior on border.color {
+                ColorAnimation {
+                    duration: 200
+                    easing.type: Easing.OutQuad
+                }
+            }
+
+            Behavior on border.width {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutQuad
+                }
+            }
 
             Drag.active: mouseArea.drag.active
 
@@ -258,6 +277,11 @@ ColumnLayout {
                         horizontalCenter: undefined
                     }
                 }
+                PropertyChanges {
+                    target: tile
+                    border.width: 2
+                    border.color: Color.primary
+                }
             }
         }
 
@@ -281,11 +305,11 @@ ColumnLayout {
             onReleased: {
                 // Get overlaps
                 let overlaps = root.updateCollision(tile);
-
-                if (overlaps.length < dragger.subject.cellSize) {
+                const requiredMultiplier = Config.navbar.side ? dragger.subject.row : dragger.subject.column;
+                if (overlaps.length < requiredMultiplier) {
                     dragger.parent = layoutItemContainer;
-                    dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
-                    dragger.height = Config.navbar.side ? 50 * dragger.subject.cellSize : 50;
+                    dragger.width = Config.navbar.side ? 50 : 50 * requiredMultiplier;
+                    dragger.height = Config.navbar.side ? 50 * requiredMultiplier : 50;
                     root.draggableChanged(dragger, null);
                     dragger.subject.reparent = false;
                     return;

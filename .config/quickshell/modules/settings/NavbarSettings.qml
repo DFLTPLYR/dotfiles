@@ -85,7 +85,8 @@ Item {
                         Item {
                             width: reparent ? parent.width : 50
                             height: reparent ? parent.height : 50
-                            property int cellSize: 2
+                            property int row: 2
+                            property int column: 2
                             property bool reparent: false
                             property var position
                             Text {
@@ -100,7 +101,8 @@ Item {
                         Row {
                             width: reparent ? parent.width : 50
                             height: reparent ? parent.height : 50
-                            property int cellSize: 1
+                            property int row: 1
+                            property int column: 1
                             property bool reparent: false
                             property var position
                             Repeater {
@@ -109,6 +111,7 @@ Item {
                                     required property var modelData
                                     width: parent.height
                                     height: parent.height
+                                    visible: modelData.focused
                                     color: "red"
                                     border.color: "black"
                                     border.width: 1
