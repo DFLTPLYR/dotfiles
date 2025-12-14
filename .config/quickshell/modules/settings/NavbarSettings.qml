@@ -89,6 +89,7 @@ Item {
                             property bool reparent: false
                             property var position
                             Text {
+                                anchors.centerIn: parent
                                 text: "clock"
                             }
                         }
@@ -106,7 +107,6 @@ Item {
                                 model: Hyprland.workspaces
                                 delegate: Rectangle {
                                     required property var modelData
-                                    visible: modelData.id !== 0 && modelData.focused && modelData.active
                                     width: parent.height
                                     height: parent.height
                                     color: "red"

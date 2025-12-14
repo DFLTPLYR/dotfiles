@@ -46,7 +46,6 @@ ColumnLayout {
                 subject: child
             });
             child.parent = dragWrapper;
-            child.visible = false;
             child.x = 0;
             child.y = 0;
             // Track
@@ -127,7 +126,7 @@ ColumnLayout {
         }
     }
 
-    function updateCollisionVisual(dragItem) {
+    function updateCollisionVisual(dragItem, reset = false) {
         let requiredCount = dragItem.parent.subject.cellSize;
         let overlaps = [];
         let highlightColor;
@@ -139,6 +138,8 @@ ColumnLayout {
                 cell.border.color = "green";
             }
         }
+        if (reset)
+            return;
 
         for (let i = 0; i < cellRepeater.count; i++) {
             let cell = cellRepeater.itemAt(i);
@@ -179,6 +180,7 @@ ColumnLayout {
                 overlaps.push([Math.floor(i / gridCellsContainer.columns), i % gridCellsContainer.columns]);
             }
         }
+
         return overlaps;
     }
 
@@ -237,9 +239,13 @@ ColumnLayout {
             Drag.hotSpot.y: parent.height / 4
 
             onXChanged: {
+                if (!mouseArea.drag.active)
+                    return;
                 root.updateCollisionVisual(tile);
             }
             onYChanged: {
+                if (!mouseArea.drag.active)
+                    return;
                 root.updateCollisionVisual(tile);
             }
 
@@ -275,12 +281,12 @@ ColumnLayout {
             onReleased: {
                 // Get overlaps
                 let overlaps = root.updateCollision(tile);
+
                 if (overlaps.length < dragger.subject.cellSize) {
                     dragger.parent = layoutItemContainer;
                     dragger.width = Config.navbar.side ? 50 : 50 * dragger.subject.cellSize;
                     dragger.height = Config.navbar.side ? 50 * dragger.subject.cellSize : 50;
                     root.draggableChanged(dragger, null);
-                    dragger.subject.visible = false;
                     dragger.subject.reparent = false;
                     return;
                 }
@@ -291,7 +297,6 @@ ColumnLayout {
                     dragger.height = 50 * dragger.row;
                     dragger.parent = layoutItemContainer;
                     root.draggableChanged(dragger, null);
-                    dragger.subject.visible = false;
                     dragger.subject.reparent = false;
                     return;
                 }
@@ -326,7 +331,6 @@ ColumnLayout {
                 dragger.width = colspan * cellWidth;
                 dragger.height = rowspan * cellHeight;
                 dragger.subject.reparent = true;
-                dragger.subject.visible = true;
                 dragger.subject.x = 0;
                 dragger.subject.y = 0;
                 root.draggableChanged(dragger, positions);
