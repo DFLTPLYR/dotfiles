@@ -6,13 +6,14 @@ import Quickshell
 import Quickshell.Hyprland
 
 import qs.components
-
+import qs.utils
 import qs.config
 
 Item {
     id: root
 
     ScrollView {
+        id: container
         width: parent.width
         height: parent.height
         anchors.left: parent.left
@@ -55,10 +56,13 @@ Item {
 
                 GridManager {
                     id: gridManager
-
+                    property var screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+                    property int screenWidth: screen ? screen.width : 0
+                    property int screenHeight: screen ? screen.height : 0
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-
+                    preferredHeight: Config.navbar.side ? root.height : Config.navbar.height
+                    preferredWidth: Config.navbar.side ? Config.navbar.width : root.width
                     cellColumns: Config.navbar.side ? 1 : Config.navbar.cell
                     cellRows: Config.navbar.side ? Config.navbar.cell : 1
 
@@ -73,8 +77,8 @@ Item {
                     Component {
                         id: testRect
                         Item {
-                            width: reparent ? parent.width : 0
-                            height: reparent ? parent.height : 0
+                            width: parent ? parent.width : 0
+                            height: parent ? parent.height : 0
                             property int cellSize: 1
                             property bool reparent: false
                             property var position
@@ -84,8 +88,8 @@ Item {
                     Component {
                         id: clock
                         Item {
-                            width: reparent ? parent.width : 50
-                            height: reparent ? parent.height : 50
+                            width: parent ? parent.width : 0
+                            height: parent ? parent.height : 0
                             property int row: 2
                             property int column: 2
                             property bool reparent: false
@@ -372,6 +376,8 @@ Item {
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                preferredWidth: root.width
+                preferredHeight: root.height * 0.5
                 Layout.preferredHeight: 400
 
                 cellColumns: columnCountBox.value

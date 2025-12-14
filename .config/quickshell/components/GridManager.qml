@@ -8,6 +8,8 @@ import qs.config
 
 ColumnLayout {
     id: root
+    property int preferredHeight: 400
+    property int preferredWidth: 400
     property int cellColumns: 1
     property int cellRows: 1
     signal draggableChanged(var item, var positions)
@@ -68,8 +70,8 @@ ColumnLayout {
     // Grid preview
     Item {
         id: gridComponentContainer
-        Layout.fillWidth: true
-        Layout.preferredHeight: 50
+        Layout.preferredWidth: root.preferredWidth
+        Layout.preferredHeight: root.preferredHeight
 
         Rectangle {
             id: overlay
