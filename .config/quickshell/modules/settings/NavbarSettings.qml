@@ -79,7 +79,10 @@ Item {
                         Item {
                             width: parent ? parent.width : 0
                             height: parent ? parent.height : 0
-                            property int cellSize: 1
+                            property int row: 2
+                            property int column: 2
+                            property int columnSpan: 2
+                            property int rowSpan: 2
                             property bool reparent: false
                             property var position
                         }
@@ -108,8 +111,10 @@ Item {
                         Row {
                             width: reparent ? parent.width : 50
                             height: reparent ? parent.height : 50
-                            property int row: 1
-                            property int column: 1
+                            property int row: 2
+                            property int column: 2
+                            property int columnSpan: 2
+                            property int rowSpan: 2
                             property bool reparent: false
                             property var position
                             Repeater {
@@ -159,7 +164,6 @@ Item {
                     }
                 }
             }
-
             // workspace style settings
             RowLayout {
                 Layout.fillWidth: true
@@ -385,7 +389,6 @@ Item {
                 cellColumns: columnCountBox.value
                 cellRows: rowCountBox.value
 
-                z: 5
                 onDraggableChanged: (item, positions) => {
                     for (let key in item.positions) {
                         console.log(" ", key, ":", item.positions[key]);
