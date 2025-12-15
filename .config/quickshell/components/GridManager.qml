@@ -42,7 +42,9 @@ ColumnLayout {
             // Skip if already wrapped
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
+            child.reparent = true;
             const multiplier = Config.navbar.side ? child.row : child.column;
+
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
                 width: Config.navbar.side ? 50 : 50 * multiplier,
                 height: Config.navbar.side ? 50 * multiplier : 50,
@@ -96,6 +98,7 @@ ColumnLayout {
                     }
                 }
                 delegate: Rectangle {
+                    property bool hasItem: false
                     width: parent.width / parent.columns
                     height: parent.height / parent.rows
                     color: "transparent"
@@ -130,12 +133,14 @@ ColumnLayout {
 
         let overlaps = [];
         let highlightColor;
+        let borderColor;
 
         for (let i = 0; i < cellRepeater.count; i++) {
             let cell = cellRepeater.itemAt(i);
-            if (cell) {
+            if (cell && !cell.hasItem) {
                 cell.color = "transparent";
                 cell.border.color = "green";
+                cell.opacity = 1;
             }
         }
         if (reset)
@@ -156,13 +161,15 @@ ColumnLayout {
 
         if (overlaps.length < requiredCount) {
             highlightColor = Scripts.setOpacity("red", 0.2);
+            borderColor = "red";
         } else {
             highlightColor = Scripts.setOpacity(Color.accent, 0.5);
+            borderColor = Color.accent;
         }
 
         for (let cell of overlaps) {
             cell.color = highlightColor;
-            cell.border.color = highlightColor;
+            cell.border.color = borderColor;
         }
     }
 
@@ -178,10 +185,25 @@ ColumnLayout {
 
             if (Scripts.intersects(a, b)) {
                 overlaps.push([Math.floor(i / gridCellsContainer.columns), i % gridCellsContainer.columns]);
+                cell.opacity = 0;
+                cell.hasItem = true;
             }
         }
 
         return overlaps;
+    }
+
+    function clearOccupiedCells(positions) {
+        if (!positions)
+            return;
+        for (let r = positions.row; r < positions.row + positions.rowspan; r++) {
+            for (let c = positions.col; c < positions.col + positions.colspan; c++) {
+                let idx = r * gridCellsContainer.columns + c;
+                let cell = cellRepeater.itemAt(idx);
+                if (cell)
+                    cell.hasItem = false;
+            }
+        }
     }
 
     // Draggable component
@@ -200,8 +222,9 @@ ColumnLayout {
             for (let i = 0; i < children.length; i++) {
                 if (children[i].hasOwnProperty("reparent")) {
                     const child = children[i];
-                    if (child.reparent)
+                    if (child.reparent) {
                         children[i].parent = tile;
+                    }
                 }
             }
         }
@@ -234,6 +257,51 @@ ColumnLayout {
             color: "transparent"
             border.width: 1
             border.color: Color.foreground
+
+            // onChildrenChanged: {
+            //     const child = children[0];
+            //     if (child.column && child.row) {
+            //         dragger.col = child.column;
+            //         dragger.row = child.row;
+            //         if (child.columnSpan && child.rowSpan) {
+            //             const overlaps = root.updateCollision(dragger);
+            //             // Compute bounding cells
+            //             let rows = overlaps.map(c => c[0]);
+            //             let cols = overlaps.map(c => c[1]);
+            //             let row = Math.min(...rows);
+            //             let lastRow = Math.max(...rows);
+            //             let rowspan = lastRow - row + 1;
+            //             let col = Math.min(...cols);
+            //             let lastCol = Math.max(...cols);
+            //             let colspan = lastCol - col + 1;
+            //
+            //             positions = {
+            //                 row: row,
+            //                 col: col,
+            //                 rowspan: rowspan,
+            //                 colspan: colspan
+            //             };
+            //
+            //             dragger.parent = overlay;
+            //
+            //             // Cell sizes
+            //             let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
+            //             let cellHeight = gridCellsContainer.height / gridCellsContainer.rows;
+            //             // Snap to grid
+            //             dragger.x = col * cellWidth;
+            //             dragger.y = row * cellHeight;
+            //
+            //             dragger.row = rowspan;
+            //             dragger.col = colspan;
+            //             dragger.width = colspan * cellWidth;
+            //             dragger.height = rowspan * cellHeight;
+            //             dragger.subject.reparent = true;
+            //             dragger.subject.x = 0;
+            //             dragger.subject.y = 0;
+            //             root.draggableChanged(dragger, positions);
+            //         }
+            //     }
+            // }
 
             Behavior on border.color {
                 ColorAnimation {
@@ -289,12 +357,14 @@ ColumnLayout {
 
             drag.onActiveChanged: {
                 if (dragger.parent === overlay && drag.active) {
-                    width = width * 0.9;
-                    height = height * 0.9;
+                    parent.width = width * 0.9;
+                    parent.height = height * 0.9;
+                    root.clearOccupiedCells(dragger.positions);
+
                     return;
                 } else if (drag.active) {
-                    width = width * 0.9;
-                    height = height * 0.9;
+                    parent.width = width * 0.9;
+                    parent.height = height * 0.9;
                     return;
                 }
             }
@@ -346,6 +416,7 @@ ColumnLayout {
                 // Snap to grid
                 dragger.x = col * cellWidth;
                 dragger.y = row * cellHeight;
+
                 dragger.row = rowspan;
                 dragger.col = colspan;
                 dragger.width = colspan * cellWidth;
