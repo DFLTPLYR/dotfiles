@@ -69,9 +69,9 @@ Item {
                     z: 5
 
                     onDraggableChanged: (item, positions) => {
-                        for (let key in item.positions) {
-                            console.log(" ", key, ":", item.positions[key]);
-                        }
+                    // for (let key in item.positions) {
+                    //     console.log(" ", key, ":", item.positions[key]);
+                    // }
                     }
 
                     Component {
@@ -92,6 +92,8 @@ Item {
                             height: parent ? parent.height : 0
                             property int row: 2
                             property int column: 2
+                            property int columnSpan: 2
+                            property int rowSpan: 2
                             property bool reparent: false
                             property var position
                             Text {
