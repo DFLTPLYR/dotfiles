@@ -289,12 +289,12 @@ ColumnLayout {
 
             drag.onActiveChanged: {
                 if (dragger.parent === overlay && drag.active) {
-                    parent.width = width * 0.9;
-                    parent.height = height * 0.9;
+                    width = width * 0.9;
+                    height = height * 0.9;
                     return;
                 } else if (drag.active) {
-                    parent.width = width * 0.9;
-                    parent.height = height * 0.9;
+                    width = width * 0.9;
+                    height = height * 0.9;
                     return;
                 }
             }
@@ -307,7 +307,6 @@ ColumnLayout {
                     dragger.parent = layoutItemContainer;
                     dragger.width = Config.navbar.side ? 50 : 50 * requiredMultiplier;
                     dragger.height = Config.navbar.side ? 50 * requiredMultiplier : 50;
-                    root.draggableChanged(dragger, null);
                     dragger.subject.reparent = false;
                     return;
                 }
