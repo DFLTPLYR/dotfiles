@@ -162,6 +162,7 @@ ColumnLayout {
         if (overlaps.length < requiredCount) {
             highlightColor = Scripts.setOpacity("red", 0.2);
             borderColor = "red";
+            console.log("Not enough space");
         } else {
             highlightColor = Scripts.setOpacity(Color.accent, 0.5);
             borderColor = Color.accent;
@@ -175,6 +176,7 @@ ColumnLayout {
 
     function updateCollision(dragItem) {
         let overlaps = [];
+        let overlappedCells = [];
         for (let i = 0; i < cellRepeater.count; i++) {
             let cell = cellRepeater.itemAt(i);
             if (!cell)
@@ -185,6 +187,12 @@ ColumnLayout {
 
             if (Scripts.intersects(a, b)) {
                 overlaps.push([Math.floor(i / gridCellsContainer.columns), i % gridCellsContainer.columns]);
+                overlappedCells.push(cell);
+            }
+        }
+        for (let cell of overlappedCells) {
+            const requiredCount = Config.navbar.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
+            if (requiredCount <= overlappedCells.length) {
                 cell.opacity = 0;
                 cell.hasItem = true;
             }
@@ -378,6 +386,7 @@ ColumnLayout {
                     dragger.width = Config.navbar.side ? 50 : 50 * requiredMultiplier;
                     dragger.height = Config.navbar.side ? 50 * requiredMultiplier : 50;
                     dragger.subject.reparent = false;
+                    root.updateCollisionVisual(tile, true);
                     return;
                 }
                 if (overlaps.length === 0) {
