@@ -134,9 +134,12 @@ Scope {
                     currentIndex: tabContainer.selectedIndex
                     Item {
                         id: homeTab
-                        Rectangle {
-                            anchors.fill: parent
-                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        GeneralSettings {
+                            id: generalSettingsConfig
+                            anchors {
+                                fill: parent
+                                margins: 5
+                            }
                         }
                     }
                     Item {

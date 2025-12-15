@@ -162,7 +162,6 @@ ColumnLayout {
         if (overlaps.length < requiredCount) {
             highlightColor = Scripts.setOpacity("red", 0.2);
             borderColor = "red";
-            console.log("Not enough space");
         } else {
             highlightColor = Scripts.setOpacity(Color.accent, 0.5);
             borderColor = Color.accent;
@@ -177,6 +176,7 @@ ColumnLayout {
     function updateCollision(dragItem) {
         let overlaps = [];
         let overlappedCells = [];
+
         for (let i = 0; i < cellRepeater.count; i++) {
             let cell = cellRepeater.itemAt(i);
             if (!cell)
@@ -190,6 +190,7 @@ ColumnLayout {
                 overlappedCells.push(cell);
             }
         }
+
         for (let cell of overlappedCells) {
             const requiredCount = Config.navbar.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
             if (requiredCount <= overlappedCells.length) {
@@ -265,51 +266,6 @@ ColumnLayout {
             color: "transparent"
             border.width: 1
             border.color: Color.foreground
-
-            // onChildrenChanged: {
-            //     const child = children[0];
-            //     if (child.column && child.row) {
-            //         dragger.col = child.column;
-            //         dragger.row = child.row;
-            //         if (child.columnSpan && child.rowSpan) {
-            //             const overlaps = root.updateCollision(dragger);
-            //             // Compute bounding cells
-            //             let rows = overlaps.map(c => c[0]);
-            //             let cols = overlaps.map(c => c[1]);
-            //             let row = Math.min(...rows);
-            //             let lastRow = Math.max(...rows);
-            //             let rowspan = lastRow - row + 1;
-            //             let col = Math.min(...cols);
-            //             let lastCol = Math.max(...cols);
-            //             let colspan = lastCol - col + 1;
-            //
-            //             positions = {
-            //                 row: row,
-            //                 col: col,
-            //                 rowspan: rowspan,
-            //                 colspan: colspan
-            //             };
-            //
-            //             dragger.parent = overlay;
-            //
-            //             // Cell sizes
-            //             let cellWidth = gridCellsContainer.width / gridCellsContainer.columns;
-            //             let cellHeight = gridCellsContainer.height / gridCellsContainer.rows;
-            //             // Snap to grid
-            //             dragger.x = col * cellWidth;
-            //             dragger.y = row * cellHeight;
-            //
-            //             dragger.row = rowspan;
-            //             dragger.col = colspan;
-            //             dragger.width = colspan * cellWidth;
-            //             dragger.height = rowspan * cellHeight;
-            //             dragger.subject.reparent = true;
-            //             dragger.subject.x = 0;
-            //             dragger.subject.y = 0;
-            //             root.draggableChanged(dragger, positions);
-            //         }
-            //     }
-            // }
 
             Behavior on border.color {
                 ColorAnimation {
