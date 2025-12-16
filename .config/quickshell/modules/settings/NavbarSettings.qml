@@ -84,12 +84,17 @@ Item {
                         const items = previewGrid.previewItems.slice();
 
                         const index = items.findIndex(i => i.name === name);
-                        if (index !== -1) {
+                        if (index !== -1 && positions === null) {
                             items.splice(index, 1);
                         } else {
                             items.push({
                                 name,
-                                positions
+                                positions: {
+                                    row: positions.row,
+                                    column: positions.col,
+                                    rowSpan: positions.rowspan,
+                                    columnSpan: positions.colspan
+                                }
                             });
                         }
 
@@ -201,8 +206,29 @@ Item {
                     anchors.fill: parent
                     columns: Config.navbar.side ? 1 : Config.navbar.cell
                     rows: Config.navbar.side ? Config.navbar.cell : 1
-                    onPreviewItemsChanged: {
-                        console.log(previewItems);
+                    rowSpacing: 0
+                    columnSpacing: 0
+
+                    Repeater {
+                        model: ScriptModel {
+                            values: {
+                                const items = previewGrid.previewItems;
+                                return items;
+                            }
+                        }
+                        delegate: Rectangle {
+                            required property var modelData
+                            Component.onCompleted: {
+                                const positions = modelData.positions;
+                                Layout.fillWidth = true;
+                                Layout.fillHeight = true;
+                                Layout.row = positions.row;
+                                Layout.column = positions.column;
+                                Layout.rowSpan = positions.rowSpan;
+                                Layout.columnSpan = positions.columnSpan;
+                                color = Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5);
+                            }
+                        }
                     }
                 }
             }
