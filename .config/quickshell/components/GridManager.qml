@@ -343,6 +343,7 @@ ColumnLayout {
                     dragger.height = Config.navbar.side ? 50 * requiredMultiplier : 50;
                     dragger.subject.reparent = false;
                     root.updateCollisionVisual(tile, true);
+                    root.draggableChanged(dragger, null);
                     return;
                 }
                 if (overlaps.length === 0) {
