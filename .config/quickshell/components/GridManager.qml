@@ -185,7 +185,7 @@ ColumnLayout {
             let a = Scripts.rectBounds(dragItem);
             let b = Scripts.rectBounds(cell);
 
-            if (Scripts.intersects(a, b)) {
+            if (Scripts.intersects(a, b) && !cell.hasItem) {
                 overlaps.push([Math.floor(i / gridCellsContainer.columns), i % gridCellsContainer.columns]);
                 overlappedCells.push(cell);
             }
