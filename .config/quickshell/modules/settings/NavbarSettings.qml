@@ -23,7 +23,12 @@ Item {
 
         ColumnLayout {
             width: parent.width
-
+            Behavior on height {
+                NumberAnimation {
+                    easing.type: Easing.InOutQuad
+                    duration: 250
+                }
+            }
             Text {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
@@ -38,19 +43,25 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                Column {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Label {
-                        text: "Cell count"
-                    }
-                    SpinBox {
-                        id: cellCount
-                        from: 2
-                        value: Config.navbar.cell
-                        onValueChanged: {
-                            Config.navbar.cell = value;
+                Flow {
+                    Column {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Label {
+                            text: "Cell count"
                         }
+                        SpinBox {
+                            id: cellCount
+                            from: 2
+                            value: Config.navbar.cell
+                            onValueChanged: {
+                                Config.navbar.cell = value;
+                            }
+                        }
+                    }
+                    Switch {
+                        id: showPreviewButton
+                        text: qsTr("Show Preview")
                     }
                 }
 
@@ -69,9 +80,20 @@ Item {
                     z: 5
 
                     onDraggableChanged: (item, positions) => {
-                    // for (let key in item.positions) {
-                    //     console.log(" ", key, ":", item.positions[key]);
-                    // }
+                        const name = item.subject.name;
+                        const items = previewGrid.previewItems.slice();
+
+                        const index = items.findIndex(i => i.name === name);
+                        if (index !== -1) {
+                            items.splice(index, 1);
+                        } else {
+                            items.push({
+                                name,
+                                positions
+                            });
+                        }
+
+                        previewGrid.previewItems = items;
                     }
 
                     Component {
@@ -85,6 +107,7 @@ Item {
                             property int rowSpan: 2
                             property bool reparent: false
                             property var position
+                            property string name: "testRect"
                         }
                     }
 
@@ -99,6 +122,7 @@ Item {
                             property int rowSpan: 2
                             property bool reparent: false
                             property var position
+                            property string name: "clock"
                             Text {
                                 anchors.centerIn: parent
                                 text: "clock"
@@ -117,6 +141,7 @@ Item {
                             property int rowSpan: 2
                             property bool reparent: false
                             property var position
+                            property string name: "workspace"
                             Repeater {
                                 model: Hyprland.workspaces
                                 delegate: Rectangle {
@@ -164,6 +189,24 @@ Item {
                     }
                 }
             }
+
+            Rectangle {
+                visible: showPreviewButton.checked
+                Layout.preferredHeight: Config.navbar.side ? root.height : Config.navbar.height
+                Layout.preferredWidth: Config.navbar.side ? Config.navbar.width : root.width
+                color: Scripts.setOpacity(Color.background, 0.5)
+                GridLayout {
+                    id: previewGrid
+                    property var previewItems: []
+                    anchors.fill: parent
+                    columns: Config.navbar.side ? 1 : Config.navbar.cell
+                    rows: Config.navbar.side ? Config.navbar.cell : 1
+                    onPreviewItemsChanged: {
+                        console.log(previewItems);
+                    }
+                }
+            }
+
             // workspace style settings
             RowLayout {
                 Layout.fillWidth: true
