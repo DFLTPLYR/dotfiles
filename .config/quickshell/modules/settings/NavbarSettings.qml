@@ -84,8 +84,21 @@ Item {
                         const items = previewGrid.previewItems.slice();
 
                         const index = items.findIndex(i => i.name === name);
-                        if (index !== -1 && positions === null) {
-                            items.splice(index, 1);
+
+                        if (index !== -1) {
+                            if (positions === null) {
+                                items.splice(index, 1);
+                            } else {
+                                items[index] = {
+                                    name,
+                                    positions: {
+                                        row: positions.row,
+                                        column: positions.col,
+                                        rowSpan: positions.rowspan,
+                                        columnSpan: positions.colspan
+                                    }
+                                };
+                            }
                         } else {
                             items.push({
                                 name,
