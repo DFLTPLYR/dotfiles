@@ -100,6 +100,8 @@ Item {
                                 };
                             }
                         } else {
+                            if (positions === null)
+                                return;
                             items.push({
                                 name,
                                 positions: {
@@ -231,15 +233,19 @@ Item {
                         }
                         delegate: Rectangle {
                             required property var modelData
-                            Component.onCompleted: {
-                                const positions = modelData.positions;
-                                Layout.fillWidth = true;
-                                Layout.fillHeight = true;
-                                Layout.row = positions.row;
-                                Layout.column = positions.column;
-                                Layout.rowSpan = positions.rowSpan;
-                                Layout.columnSpan = positions.columnSpan;
-                                color = Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5);
+                            Layout.fillWidth: false
+                            Layout.fillHeight: false
+                            Layout.row: modelData.positions.row
+                            Layout.column: modelData.positions.column
+                            Layout.rowSpan: modelData.positions.rowSpan
+                            Layout.columnSpan: modelData.positions.columnSpan
+                            Layout.minimumWidth: previewGrid.width / previewGrid.columns * modelData.positions.columnSpan
+                            Layout.minimumHeight: previewGrid.height / previewGrid.rows * modelData.positions.rowSpan
+
+                            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                            Text {
+                                text: "colSpan: " + modelData.positions.columnSpan + ", rowSpan: " + modelData.positions.rowSpan
+                                anchors.centerIn: parent
                             }
                         }
                     }
