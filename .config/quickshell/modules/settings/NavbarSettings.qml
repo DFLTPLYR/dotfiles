@@ -233,15 +233,15 @@ Item {
                         }
                         delegate: Rectangle {
                             required property var modelData
-                            Layout.fillWidth: false
-                            Layout.fillHeight: false
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
                             Layout.row: modelData.positions.row
                             Layout.column: modelData.positions.column
                             Layout.rowSpan: modelData.positions.rowSpan
                             Layout.columnSpan: modelData.positions.columnSpan
                             Layout.minimumWidth: previewGrid.width / previewGrid.columns * modelData.positions.columnSpan
                             Layout.minimumHeight: previewGrid.height / previewGrid.rows * modelData.positions.rowSpan
-
+                            Layout.alignment: Qt.AlignBaseline
                             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
                             Text {
                                 text: "colSpan: " + modelData.positions.columnSpan + ", rowSpan: " + modelData.positions.rowSpan
