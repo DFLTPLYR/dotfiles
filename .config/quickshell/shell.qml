@@ -25,10 +25,12 @@ import qs.modules.settings
 import qs.modules.volume
 import qs.modules.wallpaper
 import qs.modules.webserver
+import qs.modules.widgets
 
 ShellRoot {
     id: root
 
+    Widgets {}
     // NavBar
     LazyLoader {
         active: Config.loaded
