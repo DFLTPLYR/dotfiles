@@ -139,6 +139,7 @@ Variants {
                 id: workspacesModule
                 WorkSpaces {}
             }
+
             Component {
                 id: powerButtonModule
                 PowerButton {}
