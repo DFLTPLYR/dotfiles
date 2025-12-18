@@ -53,8 +53,8 @@ ShellRoot {
     // Sidebar {}
 
     // App menu
-
     AppMenu {}
+
     // Notification Overlay
 
     NotificationOsd {}

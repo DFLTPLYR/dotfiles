@@ -1,5 +1,3 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 
@@ -106,7 +104,6 @@ Scope {
     }
 
     Component.onCompleted: {
-        // start the script as detach oncompleted
         Quickshell.execDetached({
             command: ["zsh", "-c", "~/.config/quickshell/modules/screenrecorder/StartReplay.zsh"]
         });
