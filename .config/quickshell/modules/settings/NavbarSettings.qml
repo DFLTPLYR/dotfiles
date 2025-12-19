@@ -153,22 +153,21 @@ Item {
                                     pixelSize: Math.min(20, Math.min(parent.width, parent.height))
                                 }
                             }
-                            Column {
+
+                            Text {
+                                visible: Config.navbar.side
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                text: Qt.formatDateTime(TimeService.clock.date, "hh mm AP")
+                                color: Color.color2
                                 width: parent.width
                                 height: parent.height
-                                Text {
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    text: Qt.formatDateTime(TimeService.clock.date, "HH mm AP")
-                                    color: Color.color2
-                                    width: parent.width
-                                    font {
-                                        pixelSize: Math.max(10, Math.min(parent.width, parent.height) * 0.5)
-                                    }
-                                    style: Text.Outline
-                                    styleColor: Color.color15
-                                    wrapMode: Text.WordWrap
+                                font {
+                                    pixelSize: Math.max(10, Math.min(parent.width, parent.height) * 0.5)
                                 }
+                                style: Text.Outline
+                                styleColor: Color.color15
+                                wrapMode: Text.WordWrap
                             }
                         }
                     }
