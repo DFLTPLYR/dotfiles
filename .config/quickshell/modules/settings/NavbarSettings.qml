@@ -8,6 +8,7 @@ import Quickshell.Hyprland
 import qs.components
 import qs.utils
 import qs.config
+import qs.services
 
 Item {
     id: root
@@ -144,8 +145,30 @@ Item {
                             property var position
                             property string name: "clock"
                             Text {
+                                visible: !Config.navbar.side
                                 anchors.centerIn: parent
-                                text: "clock"
+                                text: Qt.formatDateTime(TimeService.clock.date, "hh:mm AP")
+                                color: Color.color14
+                                font {
+                                    pixelSize: Math.min(20, Math.min(parent.width, parent.height))
+                                }
+                            }
+                            Column {
+                                width: parent.width
+                                height: parent.height
+                                Text {
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    text: Qt.formatDateTime(TimeService.clock.date, "HH mm AP")
+                                    color: Color.color2
+                                    width: parent.width
+                                    font {
+                                        pixelSize: Math.max(10, Math.min(parent.width, parent.height) * 0.5)
+                                    }
+                                    style: Text.Outline
+                                    styleColor: Color.color15
+                                    wrapMode: Text.WordWrap
+                                }
                             }
                         }
                     }
@@ -166,8 +189,8 @@ Item {
                                 model: Hyprland.workspaces
                                 delegate: Rectangle {
                                     required property var modelData
-                                    width: parent.height
-                                    height: parent.height
+                                    width: Config.navbar.side ? parent.width : parent.height
+                                    height: Config.navbar.side ? parent.width : parent.height
                                     visible: modelData.focused
                                     color: "red"
                                     border.color: "black"
