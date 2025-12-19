@@ -30,7 +30,6 @@ import qs.modules.widgets
 ShellRoot {
     id: root
 
-    Widgets {}
     // NavBar
     LazyLoader {
         active: Config.loaded
