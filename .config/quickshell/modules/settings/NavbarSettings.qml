@@ -238,7 +238,7 @@ Item {
                 Layout.preferredHeight: Config.navbar.side ? root.height : Config.navbar.height
                 Layout.preferredWidth: Config.navbar.side ? Config.navbar.width : root.width
                 color: Scripts.setOpacity(Color.background, 0.5)
-                
+
                 GridLayout {
                     id: previewGrid
                     property var previewItems: []
