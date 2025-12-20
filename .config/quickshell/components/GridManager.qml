@@ -239,6 +239,15 @@ ColumnLayout {
         }
 
         Connections {
+            target: Config.navbar
+            function onSideChanged() {
+                const multiplier = Config.navbar.side ? subject.row : subject.column;
+                dragger.width = Config.navbar.side ? 50 : 50 * multiplier;
+                dragger.height = Config.navbar.side ? 50 * multiplier : 50;
+            }
+        }
+
+        Connections {
             target: gridCellsContainer
             function onColumnsChanged() {
                 if (dragger.parent === overlay) {
