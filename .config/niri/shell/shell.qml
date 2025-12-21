@@ -1,20 +1,14 @@
 import QtQuick
 import Quickshell
+import qs.modules.navbar
 
 ShellRoot {
-    Variants {
-        variants: Quickshell.screens
-        PanelWindow {
-            property var modelData
-            screen: modelData
-            anchors {
-                left: true
-                bottom: true
-                right: true
-            }
-            Component.onCompleted: {
-                console.log("Navbar on screen:", screen.name);
-            }
-        }
+    id: root
+    LazyLoader {
+        active: true
+        component: Bar {}
+    }
+    LazyLoader {
+        active: false
     }
 }
