@@ -1,9 +1,21 @@
+workspace "main" {
+  open-on-output "DP-1"
+}
+
+workspace "side" {
+  open-on-output "DP-2"
+  }
+
+
 output "DP-1" {
     mode "1920x1080@165"
     scale 1
     transform "normal"
-
     position x=840 y=840
+    variable-refresh-rate on-demand=true
+    hot-corners {
+      off
+    }
 }
 
 output "DP-2" {
@@ -11,5 +23,13 @@ output "DP-2" {
     scale 1
     transform "270"
     position x=1920 y=0
+    variable-refresh-rate on-demand=true
+    layout {
+      default-column-width { proportion 1.0; }
+      always-center-single-column
+    }
+    hot-corners {
+      off
+    }
 }
 
