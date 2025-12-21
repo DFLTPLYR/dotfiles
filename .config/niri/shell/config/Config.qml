@@ -10,7 +10,7 @@ Singleton {
     property bool sessionMenuOpen: false
     property alias loaded: fileView.loaded
     property alias navbar: adapter.navbar
-
+    property alias wallpaper: adapter.wallpaper
     FileView {
         id: fileView
         path: Qt.resolvedUrl("./config.json")
@@ -31,6 +31,7 @@ Singleton {
         JsonAdapter {
             id: adapter
             property NavbarConfig navbar: NavbarConfig {}
+            property var wallpaper: []
         }
     }
 

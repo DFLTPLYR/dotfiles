@@ -2,6 +2,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
+import qs.config
+
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
@@ -27,6 +29,20 @@ Variants {
         }
 
         Component.onCompleted: {
+            var exists = false;
+            for (var i = 0; i < Config.wallpaper.length; i++) {
+                if (Config.wallpaper[i].monitor === modelData.name) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                Config.wallpaper.push({
+                    monitor: modelData.name,
+                    path: null
+                });
+            }
+
             if (this.WlrLayershell) {
                 this.exclusionMode = ExclusionMode.Ignore;
                 this.WlrLayershell.layer = WlrLayer.Background;

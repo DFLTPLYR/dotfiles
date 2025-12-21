@@ -3,6 +3,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Mod+B hotkey-overlay-title="Open Browser"  { spawn "zen-browser"; }
     Mod+A hotkey-overlay-title="Open a App Menu: Rofi" { spawn-sh "rofi -show drun || pkill rofi"; }
     Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn "nemo"; }
     Mod+Delete hotkey-overlay-title="Process kill Quickshell"  {spawn-sh "pkill -x qs"; }
@@ -208,6 +209,9 @@ binds {
     // Ctrl+Alt+Delete { quit; }
 
     // Mod+Shift+P { power-off-monitors; }
+    
+    F11 { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    F12 { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
