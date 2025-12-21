@@ -9,12 +9,16 @@ import qs.config
 Singleton {
     property bool sessionMenuOpen: false
     property alias loaded: fileView.loaded
+    property alias navbar: adapter.navbar
 
     FileView {
         id: fileView
         path: Qt.resolvedUrl("./config.json")
         watchChanges: true
         preload: true
+        onLoaded: {
+            console.log("Config loaded");
+        }
         onFileChanged: {
             reload();
         }
@@ -23,6 +27,10 @@ Singleton {
                 fileView.setText("{}");
                 fileView.writeAdapter();
             }
+        }
+        JsonAdapter {
+            id: adapter
+            property NavbarConfig navbar: NavbarConfig {}
         }
     }
 
