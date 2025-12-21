@@ -5,7 +5,8 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+A hotkey-overlay-title="Open a App Menu: Rofi" { spawn-sh "rofi -show drun || pkill rofi"; }
     Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn "nemo"; }
-    
+    Mod+Delete hotkey-overlay-title="Process kill Quickshell"  {spawn-sh "pkill -x qs"; }
+
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
