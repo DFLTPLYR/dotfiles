@@ -20,7 +20,6 @@ layout {
     default-column-width { proportion 0.5; }
     
     focus-ring {
-
         width 2
 
         // Colors can be set in a variety of ways:
