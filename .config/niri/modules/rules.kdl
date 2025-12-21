@@ -1,9 +1,3 @@
-cursor {
-  xcursor-theme "breeze_cursors"
-  xcursor-size 48
-    hide-when-typing
-    hide-after-inactive-ms 1000
-}
 
 /-window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
