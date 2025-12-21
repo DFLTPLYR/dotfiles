@@ -28,4 +28,17 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
 
+// #############################
+// ### ENVIRONMENT VARIABLES ###
+// #############################
+environment {
 
+  // Cursor settings
+  HYPRCURSOR_THEME "Bibata-Modern-Ice"
+
+  XCURSOR_THEME "Bibata-Modern-Ice"
+  XDG_CURRENT_DESKTOP "Niri"
+
+
+  QT_QPA_PLATFORMTHEME "qt6ct"
+}
