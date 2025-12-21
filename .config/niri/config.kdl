@@ -1,0 +1,7 @@
+include "./modules/init.kdl"
+include "./modules/inputs.kdl"
+include "./modules/keybinds.kdl"
+include "./modules/layouts.kdl"
+include "./modules/monitors.kdl"
+include "./modules/rules.kdl"
+
