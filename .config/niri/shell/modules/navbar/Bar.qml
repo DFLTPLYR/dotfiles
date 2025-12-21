@@ -1,24 +1,32 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
+
+import qs.config
 import qs.components
 
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
+        id: root
         required property ShellScreen modelData
+        readonly property bool isPortrait: screen.height > screen.width
         screen: modelData
+
         anchors {
             top: true
             left: true
             right: true
         }
+        implicitWidth: containerRect.width
+        implicitHeight: containerRect.height
         color: "transparent"
-        implicitHeight: 50
 
         // parent
         StyledRect {
-            width: parent.width
-            height: parent.height
+            id: containerRect
+            width: Config.navbar.side ? Config.navbar.width : screen.width
+            height: Config.navbar.side ? screen.height : Config.navbar.height
             fill: true
             color: Qt.rgba(0, 0, 0, 0.5)
             Text {
@@ -29,6 +37,13 @@ Variants {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                 }
+            }
+        }
+
+        Component.onCompleted: {
+            if (this.WlrLayershell != null) {
+                this.WlrLayershell.layer = WlrLayer.Top;
+                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.None;
             }
         }
     }
