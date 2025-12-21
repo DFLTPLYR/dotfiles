@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Wayland
 
 import qs.config
+import Qt.labs.folderlistmodel
 
 Variants {
     model: Quickshell.screens
@@ -24,7 +25,7 @@ Variants {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            clip: true
+            clip: true // change the source be handled by the Config.wallpaper.find(m.name === screen.name)?.path
             source: root.isPortrait ? "file:///home/dfltplyr/Pictures/wallpaper/portrait/purple-girl.jpg" : "file:///home/dfltplyr/Pictures/wallpaper/landscape/1920x1080.jpg"
         }
 
@@ -42,7 +43,6 @@ Variants {
                     path: null
                 });
             }
-
             if (this.WlrLayershell) {
                 this.exclusionMode = ExclusionMode.Ignore;
                 this.WlrLayershell.layer = WlrLayer.Background;

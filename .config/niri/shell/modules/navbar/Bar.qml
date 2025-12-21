@@ -13,6 +13,11 @@ Variants {
         readonly property bool isPortrait: screen.height > screen.width
         screen: modelData
 
+        SystemClock {
+            id: clock
+            precision: SystemClock.Seconds
+        }
+
         anchors {
             top: true
             left: true
@@ -30,8 +35,8 @@ Variants {
             fill: true
             color: Qt.rgba(0, 0, 0, 0.5)
             Text {
-                id: test
-                text: "time"
+                font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
+                text: Qt.formatDateTime(clock.date, "hh:mm AP")
                 color: "white"
                 anchors {
                     verticalCenter: parent.verticalCenter

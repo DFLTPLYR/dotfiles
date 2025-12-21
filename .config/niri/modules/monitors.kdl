@@ -1,12 +1,3 @@
-workspace "main" {
-  open-on-output "DP-1"
-}
-
-workspace "side" {
-  open-on-output "DP-2"
-  }
-
-
 output "DP-1" {
     mode "1920x1080@165"
     scale 1
