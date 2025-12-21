@@ -1,8 +1,10 @@
 # Todo
 
 Wallpaper Config
+
 - [ ] Create a script to change wallpapers automatically
-- [ ] Create a per screen wallapaper config
+- [x] Create a per screen wallapaper config
 - [ ] dynamically porportional scaling based on screen resolution
+- [ ] file explorer integration
 
 Dynamic Styling system

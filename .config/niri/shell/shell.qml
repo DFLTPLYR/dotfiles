@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 // imports
 import qs.modules.navbar
@@ -20,6 +21,10 @@ ShellRoot {
         component: WallOverlay {}
     }
 
+    LazyLoader {
+        active: true
+        component: WallpaperPicker {}
+    }
     // App Launcher
     LazyLoader {
         active: false
