@@ -7,6 +7,17 @@ output "DP-1" {
     hot-corners {
       off
     }
+
+  layout {
+      preset-column-widths {
+          proportion 0.25
+          proportion 0.5
+          proportion 0.75
+          proportion 1.0
+      }
+
+      default-column-width { proportion 0.5; }
+  }
 }
 
 output "DP-2" {
@@ -15,12 +26,20 @@ output "DP-2" {
     transform "270"
     position x=1920 y=0
     variable-refresh-rate on-demand=true
-    layout {
-      default-column-width { proportion 1.0; }
-      always-center-single-column
-    }
+
     hot-corners {
       off
+    }
+
+    layout {
+      preset-column-widths {
+          proportion 0.25
+          proportion 0.5
+          proportion 0.75
+          proportion 1.0
+      }
+      default-column-width { proportion 1.0; }
+      always-center-single-column
     }
 }
 
