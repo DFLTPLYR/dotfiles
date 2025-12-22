@@ -13,8 +13,6 @@ Singleton {
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
 
-    readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
-
     property list<Workspace> workspaces: []
     property Workspace focusedWorkspace: null
     property list<Window> windows: []
@@ -48,6 +46,8 @@ Singleton {
 
     // Credits to this Chad
     // https://github.com/tpaau/dots/blob/main/private_dot_config/quickshell/services/niri/Niri.qml
+    readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
+
     Socket {
         path: root.niriSocket
         connected: true
