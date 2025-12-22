@@ -108,7 +108,6 @@ binds {
     Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
     Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
 
-
     // change focus workspace directly
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
@@ -216,3 +215,29 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 }
+recent-windows {
+  on
+  debounce-ms 750
+
+  open-delay-ms 150
+
+  highlight {
+      active-color "#999999ff"
+      urgent-color "#ff9999ff"
+      padding 30
+      corner-radius 0
+  }
+
+  previews {
+      max-height 480
+      max-scale 0.5
+  }
+
+  binds {
+      Mod+Tab         { next-window; }
+      Mod+Shift+Tab   { previous-window; }
+      Mod+grave       { next-window     filter="app-id"; }
+      Mod+Shift+grave { previous-window filter="app-id"; }
+  }
+}
+
