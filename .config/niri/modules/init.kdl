@@ -1,27 +1,25 @@
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
-// spawn-at-startup "waybar"
 hotkey-overlay {
     skip-at-startup
     hide-not-bound
 }
 
 prefer-no-csd
-
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
 
 // #############################
 // ### ENVIRONMENT VARIABLES ###
 // #############################
+
+// set environment variables
 environment {
   XDG_CURRENT_DESKTOP "Niri"
-  QT_QPA_PLATFORMTHEME "qt5ct"
-  QT_QPA_PLATFORMTHEME "qt6ct"
+  XDG_SESSION_TYPE "wayland"
+  QT_QPA_PLATFORMTHEME "wayland"
   ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
+// cursor theme and size
 cursor {
   xcursor-theme "Bibata-Modern-Ice"
   xcursor-size 24
@@ -29,4 +27,5 @@ cursor {
   hide-after-inactive-ms 1000
 }
 
+// start up qs
 spawn-sh-at-startup "qs -p ~/dotfiles/.config/niri/shell"
