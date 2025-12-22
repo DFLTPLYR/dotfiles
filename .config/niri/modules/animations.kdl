@@ -1,9 +1,5 @@
-// Animation settings.
-// The wiki explains how to configure individual animations:
-// https://yalter.github.io/niri/Configuration:-Animations
 animations {
-    // off
-
+    on
     slowdown 1.0
      
     workspace-switch {
