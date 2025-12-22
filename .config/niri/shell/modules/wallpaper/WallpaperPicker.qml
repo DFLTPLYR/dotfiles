@@ -2,8 +2,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-Scope {
-    IpcHandler {
-        target: "wallpaper"
+Variants {
+    model: Quickshell.screens
+    delegate: PanelWindow {
+        id: root
+        required property ShellScreen modelData
+        screen: modelData
+        visible: false
     }
 }

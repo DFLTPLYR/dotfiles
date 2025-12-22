@@ -19,6 +19,8 @@ Singleton {
     property Window focusedWindow: null
     property bool overviewOpened: false
 
+    property bool openWallpaperPicker: false
+
     FileView {
         id: fileView
         path: Qt.resolvedUrl("./config.json")
@@ -47,14 +49,13 @@ Singleton {
     // Credits to this Chad
     // https://github.com/tpaau/dots/blob/main/private_dot_config/quickshell/services/niri/Niri.qml
     readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
-
     Component {
-        id: window
+        id: windowComponent
         Window {}
     }
 
     Component {
-        id: workspace
+        id: workspaceComponent
         Workspace {}
     }
 
@@ -71,7 +72,9 @@ Singleton {
 
                 const EventType = {
                     WorkspacesChanged: "WorkspacesChanged",
+                    WindowOpenedOrChanged: "WindowOpenedOrChanged",
                     WindowsChanged: "WindowsChanged",
+                    WindowClosed: "WindowClosed",
                     KeyboardLayoutsChanged: "KeyboardLayoutsChanged",
                     OverviewOpenedOrClosed: "OverviewOpenedOrClosed",
                     WorkspaceActivated: "WorkspaceActivated",
@@ -83,7 +86,7 @@ Singleton {
                 case EventType.WorkspacesChanged:
                     let workspaces = [];
                     for (const workspace of event.WorkspacesChanged.workspaces) {
-                        const ws = workspace.createObject(null, {
+                        const ws = workspaceComponent.createObject(null, {
                             workspaceId: workspace.id,
                             idx: workspace.idx,
                             name: workspace.name,
@@ -93,6 +96,7 @@ Singleton {
                             isFocused: workspace.is_focused,
                             activeWindowID: workspace.active_window_id ? workspace.active_window_id : -1
                         });
+
                         if (ws.isFocused) {
                             root.focusedWorkspace = ws;
                         }
@@ -103,10 +107,54 @@ Singleton {
                         }
                         workspaces.push(ws);
                     }
-                    workspaces = workspaces.sort((a, b) => a.idx - b.idx);
-                    root.workspaces = workspaces;
-                    break;
+                    root.workspaces = workspaces.sort((a, b) => a.idx - b.idx);
+                    return root.workspaces = workspaces;
                 case EventType.WindowsChanged:
+                    for (let workspace of root.workspaces) {
+                        workspace.windows = [];
+                    }
+                    const eventWindows = event.WindowsChanged.windows;
+                    let windows = [];
+                    for (const win of eventWindows) {
+                        const winObj = windowComponent.createObject(null, {
+                            windowId: win.id,
+                            title: win.title,
+                            appId: win.app_id,
+                            pid: win.pid,
+                            workspaceId: win.workspace_id ?? -1,
+                            isFocused: win.is_focused,
+                            isFloating: win.is_floating,
+                            isUrgent: win.is_urgent
+                        });
+                        if (winObj.isFocused) {
+                            root.focusedWindow = winObj;
+                        }
+                        windows.push(winObj);
+                        for (let workspace of root.workspaces) {
+                            if (workspace.workspaceId === winObj.workspaceId && winObj.workspaceId !== -1) {
+                                workspace.windows.push(winObj);
+                                break;
+                            }
+                        }
+                    }
+                    return root.windows = windows;
+                case EventType.WindowClosed:
+                    const id = event.WindowClosed.id;
+                    for (const win of root.windows) {
+                        if (win.windowId === id) {
+                            root.windows.splice(root.windows.indexOf(win), 1);
+                            break;
+                        }
+                    }
+                    for (const ws of root.workspaces) {
+                        for (const win of ws.windows) {
+                            if (win === null)
+                                return;
+                            if (win.windowId === id) {
+                                ws.windows.splice(ws.windows.indexOf(win), 1);
+                            }
+                        }
+                    }
                     break;
                 case EventType.KeyboardLayoutsChanged:
                     break;
@@ -117,10 +165,50 @@ Singleton {
                     break;
                 case EventType.WindowFocusChanged:
                     break;
+                case EventType.WindowOpenedOrChanged:
+                    const win = event.WindowOpenedOrChanged.window;
+                    const winObj = windowComponent.createObject(null, {
+                        windowId: win.id,
+                        title: win.title,
+                        appId: win.app_id,
+                        pid: win.pid,
+                        workspaceId: win.workspace_id ?? -1,
+                        isFocused: win.is_focused,
+                        isFloating: win.is_floating,
+                        isUrgent: win.is_urgent
+                    });
+                    for (let window of root.windows) {
+                        if (window.id === winObj) {
+                            window = winObj;
+                        }
+                    }
+                    root.windows.push(winObj);
+                    root.windows.push(winObj);
+                    for (let ws of root.workspaces) {
+                        if (ws.workspaceId === winObj.workspaceId) {
+                            for (let win of ws.windows) {
+                                if (win === null)
+                                    return;
+                                if (win.windowId === winObj.windowId) {
+                                    win = winObj;
+                                    return;
+                                }
+                            }
+                            ws.windows.push(winObj);
+                            return;
+                        }
+                    }
                 default:
                     break;
                 }
             }
+        }
+    }
+
+    IpcHandler {
+        target: "root"
+        function toggleWallpaperPicker() {
+            root.openWallpaperPicker = !root.openWallpaperPicker;
         }
     }
 }
