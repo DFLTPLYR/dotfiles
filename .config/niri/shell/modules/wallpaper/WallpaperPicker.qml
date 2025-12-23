@@ -1,6 +1,7 @@
 import QtQuick
 
 import Quickshell
+import Quickshell.Wayland
 import Quickshell.Io
 
 import qs.config
@@ -18,13 +19,6 @@ Scope {
             id: sidebarRoot
             implicitWidth: 0
             color: isVisible ? Qt.rgba(0, 0, 0, 0.5) : "transparent"
-
-            Behavior on color {
-                ColorAnimation {
-                    duration: 200
-                    easing.type: Easing.InOutQuad
-                }
-            }
 
             anchors {
                 top: true
