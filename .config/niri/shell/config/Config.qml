@@ -59,6 +59,7 @@ Singleton {
         id: workspaceComponent
         Workspace {}
     }
+
     function requestFocusedMonitor() {
         niriSocket.write('"FocusedOutput"\n');
     }
@@ -69,8 +70,9 @@ Singleton {
         connected: true
         parser: SplitParser {
             onRead: line => {
-                const event = JSON.parse(line);
-                console.log("Niri Response:", JSON.stringify(event));
+              const event = JSON.parse(line);
+              const focusedMonitor = event.Ok.FocusedOutput
+                console.log( JSON.stringify(focusedMonitor));
             }
         }
     }
@@ -179,7 +181,8 @@ Singleton {
                     break;
                 case EventType.WorkspaceActivated:
                     break;
-                case EventType.WindowFocusChanged:
+                    case EventType.WindowFocusChanged:
+                    root.requestFocusedMonitor();
                     break;
                 case EventType.WindowOpenedOrChanged:
                     const win = event.WindowOpenedOrChanged.window;
@@ -214,7 +217,7 @@ Singleton {
                             return;
                         }
                     }
-                default:
+                    default:
                     break;
                 }
             }
