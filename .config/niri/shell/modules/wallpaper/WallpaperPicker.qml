@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
@@ -17,8 +18,18 @@ Scope {
         active: root.isVisible
         component: PanelWrapper {
             id: sidebarRoot
-            implicitWidth: 0
-            color: isVisible ? Qt.rgba(0, 0, 0, 0.5) : "transparent"
+            readonly property bool isPortrait: screen.height >= screen.width
+            color: "transparent"
+
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.rgba(0, 0, 0, 0.5)
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 200
+                    }
+                }
+            }
 
             anchors {
                 top: true
@@ -27,17 +38,50 @@ Scope {
                 left: true
             }
 
-            // Contents
-            StyledRect {
-                width: 500 * sidebarRoot.animProgress
-                height: 500 * sidebarRoot.animProgress
-                fill: true
-                x: Math.round(screen.width / 2 - width / 2)
-                y: Math.round(screen.height / 2 - height / 2)
-                color: Qt.rgba(0, 0, 0, 0.5)
-                borderWidth: 2
-                borderColor: "green"
+            Item {
+                anchors.centerIn: parent
+                width: sidebarRoot.isPortrait ? parent.width / 1.2 : parent.width / 1.5
+                height: parent.height * 0.5
+                RowLayout {
+                    id: layout
+                    anchors.fill: parent
+                    spacing: 6
+                    opacity: 1 * sidebarRoot.animProgress
+
+                    Rectangle {
+                        color: 'teal'
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: parent.width / 3
+                        Layout.fillHeight: true
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: parent.width + 'x' + parent.height
+                        }
+                    }
+
+                    Rectangle {
+                        color: 'plum'
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: parent.width + 'x' + parent.height
+                        }
+                    }
+                }
             }
+
+            // Contents
+            // StyledRect {
+            //     width: 500 * sidebarRoot.animProgress
+            //     height: 500 * sidebarRoot.animProgress
+            //     fill: true
+            //     x: Math.round(screen.width / 2 - width / 2)
+            //     y: Math.round(screen.height / 2 - height / 2)
+            //     color: Qt.rgba(0, 0, 0, 0.5)
+            // }
 
             Connections {
                 target: root
