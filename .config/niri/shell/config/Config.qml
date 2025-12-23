@@ -49,6 +49,7 @@ Singleton {
     // Credits to this Chad
     // https://github.com/tpaau/dots/blob/main/private_dot_config/quickshell/services/niri/Niri.qml
     readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
+
     Component {
         id: windowComponent
         Window {}
@@ -57,6 +58,21 @@ Singleton {
     Component {
         id: workspaceComponent
         Workspace {}
+    }
+    function requestFocusedMonitor() {
+        niriSocket.write('"FocusedOutput"\n');
+    }
+
+    Socket {
+        id: niriSocket
+        path: root.niriSocket
+        connected: true
+        parser: SplitParser {
+            onRead: line => {
+                const event = JSON.parse(line);
+                console.log("Niri Response:", JSON.stringify(event));
+            }
+        }
     }
 
     Socket {
