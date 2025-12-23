@@ -11,7 +11,7 @@ binds {
     Mod+A hotkey-overlay-title="Open a App Menu: Rofi" { spawn-sh "rofi -show drun || pkill rofi"; }
     Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn "nemo"; }
     Mod+Delete hotkey-overlay-title="Process kill Quickshell"  {spawn-sh "pkill -x qs"; }
-
+    Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "qs -c ~/dotfiles/.config/niri/shell ipc call root toggleWallpaperPicker";}
 
     // move focus between windows in the current column.
     Mod+Left  { focus-column-left; }
@@ -151,7 +151,7 @@ binds {
     // Expel the bottom window from the focused column to the right.
     Mod+Period { expel-window-from-column; }
 
-    Mod+R { switch-preset-column-width; }
+    Mod+C { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
     // Mod+R { switch-preset-column-width-back; }
     Mod+Shift+R { switch-preset-window-height; }
@@ -169,9 +169,9 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
     
-    Mod+C { center-column; }
-
-    Mod+Ctrl+C { center-visible-columns; }
+    // Mod+C { center-column; }
+    //
+    // Mod+Ctrl+C { center-visible-columns; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,

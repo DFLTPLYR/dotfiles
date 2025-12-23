@@ -16,6 +16,7 @@ Singleton {
     property list<Workspace> workspaces: []
     property Workspace focusedWorkspace: null
     property list<Window> windows: []
+    property var focusedMonitor: null
     property Window focusedWindow: null
     property bool overviewOpened: false
 
@@ -68,11 +69,31 @@ Singleton {
         id: niriSocket
         path: root.niriSocket
         connected: true
+        onConnectionStateChanged: {
+            write('"FocusedOutput"\n');
+        }
         parser: SplitParser {
             onRead: line => {
-              const event = JSON.parse(line);
-              const focusedMonitor = event.Ok.FocusedOutput
-                console.log( JSON.stringify(focusedMonitor));
+                const response = JSON.parse(line);
+                const status = Object.keys(response)[0];
+
+                if (status === "Err")
+                    return;
+
+                const key = Object.keys(response.Ok)[0];
+
+                const EventType = {
+                    FocusedOutput: "FocusedOutput"
+                };
+
+                switch (key) {
+                case EventType.FocusedOutput:
+                    const focusedMonitor = response.Ok.FocusedOutput;
+                    root.focusedMonitor = focusedMonitor;
+                    break;
+                default:
+                    break;
+                }
             }
         }
     }
@@ -151,7 +172,6 @@ Singleton {
                         for (let workspace of root.workspaces) {
                             if (workspace.workspaceId === winObj.workspaceId && winObj.workspaceId !== -1) {
                                 workspace.windows.push(winObj);
-                                break;
                             }
                         }
                     }
@@ -181,7 +201,7 @@ Singleton {
                     break;
                 case EventType.WorkspaceActivated:
                     break;
-                    case EventType.WindowFocusChanged:
+                case EventType.WindowFocusChanged:
                     root.requestFocusedMonitor();
                     break;
                 case EventType.WindowOpenedOrChanged:
@@ -217,7 +237,8 @@ Singleton {
                             return;
                         }
                     }
-                    default:
+                    break;
+                default:
                     break;
                 }
             }
