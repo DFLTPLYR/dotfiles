@@ -4,6 +4,7 @@ import Quickshell.Io
 
 // imports
 import qs.modules.navbar
+import qs.modules.notification
 import qs.modules.wallpaper
 
 ShellRoot {
@@ -26,6 +27,10 @@ ShellRoot {
         component: WallpaperPicker {}
     }
 
+    LazyLoader {
+        active: true
+        component: VolumeOsd {}
+    }
     // App Launcher
     LazyLoader {
         active: false
