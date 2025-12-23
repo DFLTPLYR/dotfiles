@@ -25,6 +25,7 @@ ShellRoot {
         active: true
         component: WallpaperPicker {}
     }
+
     // App Launcher
     LazyLoader {
         active: false
