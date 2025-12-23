@@ -22,15 +22,18 @@ ShellRoot {
         component: WallOverlay {}
     }
 
+    // Wallpaper Picker
     LazyLoader {
         active: true
         component: WallpaperPicker {}
     }
 
+    // Volume OSD
     LazyLoader {
         active: true
         component: VolumeOsd {}
     }
+
     // App Launcher
     LazyLoader {
         active: false

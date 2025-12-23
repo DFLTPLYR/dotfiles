@@ -21,6 +21,7 @@ Singleton {
     property bool overviewOpened: false
 
     property bool openWallpaperPicker: false
+    property bool openAppLauncher: false
 
     FileView {
         id: fileView
@@ -249,6 +250,10 @@ Singleton {
         target: "root"
         function toggleWallpaperPicker() {
             root.openWallpaperPicker = !root.openWallpaperPicker;
+        }
+
+        function toggleAppLauncher() {
+            root.openAppLauncher = !root.openAppLauncher;
         }
     }
 }
