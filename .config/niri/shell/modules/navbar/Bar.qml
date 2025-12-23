@@ -1,4 +1,6 @@
 import QtQuick
+import QtQuick.Controls
+
 import Quickshell
 import Quickshell.Wayland
 
@@ -23,6 +25,7 @@ Variants {
             left: true
             right: true
         }
+
         implicitWidth: containerRect.width
         implicitHeight: containerRect.height
         color: "transparent"
@@ -41,6 +44,13 @@ Variants {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
+                }
+            }
+            Button {
+                width: parent.height * 0.8
+                height: parent.height * 0.8
+                onClicked: {
+                    Config.requestFocusedMonitor();
                 }
             }
         }
