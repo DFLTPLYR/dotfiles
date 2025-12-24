@@ -7,7 +7,7 @@ import Quickshell.Io
 import qs.config
 
 Singleton {
-    id: root
+    id: config
     property bool sessionMenuOpen: false
     property alias loaded: fileView.loaded
     property alias navbar: adapter.navbar
@@ -69,7 +69,7 @@ Singleton {
 
     Socket {
         id: niriSocket
-        path: root.niriSocket
+        path: config.niriSocket
         connected: true
         onConnectionStateChanged: {
             write('"FocusedOutput"\n');
@@ -91,7 +91,7 @@ Singleton {
                 switch (key) {
                 case EventType.FocusedOutput:
                     const focusedMonitor = response.Ok.FocusedOutput;
-                    root.focusedMonitor = focusedMonitor;
+                    config.focusedMonitor = focusedMonitor;
                     break;
                 default:
                     break;
@@ -101,7 +101,7 @@ Singleton {
     }
 
     Socket {
-        path: root.niriSocket
+        path: config.niriSocket
         connected: true
         onConnectedChanged: {
             write('"EventStream"\n');
@@ -139,19 +139,19 @@ Singleton {
                         });
 
                         if (ws.isFocused) {
-                            root.focusedWorkspace = ws;
+                            config.focusedWorkspace = ws;
                         }
-                        for (const win of root.windows) {
+                        for (const win of config.windows) {
                             if (win.workspaceId === ws.workspaceId) {
                                 ws.windows.push(win);
                             }
                         }
                         workspaces.push(ws);
                     }
-                    root.workspaces = workspaces.sort((a, b) => a.idx - b.idx);
-                    return root.workspaces = workspaces;
+                    config.workspaces = workspaces.sort((a, b) => a.idx - b.idx);
+                    return config.workspaces = workspaces;
                 case EventType.WindowsChanged:
-                    for (let workspace of root.workspaces) {
+                    for (let workspace of config.workspaces) {
                         workspace.windows = [];
                     }
                     const eventWindows = event.WindowsChanged.windows;
@@ -168,25 +168,25 @@ Singleton {
                             isUrgent: win.is_urgent
                         });
                         if (winObj.isFocused) {
-                            root.focusedWindow = winObj;
+                            config.focusedWindow = winObj;
                         }
                         windows.push(winObj);
-                        for (let workspace of root.workspaces) {
+                        for (let workspace of config.workspaces) {
                             if (workspace.workspaceId === winObj.workspaceId && winObj.workspaceId !== -1) {
                                 workspace.windows.push(winObj);
                             }
                         }
                     }
-                    return root.windows = windows;
+                    return config.windows = windows;
                 case EventType.WindowClosed:
                     const id = event.WindowClosed.id;
-                    for (const win of root.windows) {
+                    for (const win of config.windows) {
                         if (win.windowId === id) {
-                            root.windows.splice(root.windows.indexOf(win), 1);
+                            config.windows.splice(config.windows.indexOf(win), 1);
                             break;
                         }
                     }
-                    for (const ws of root.workspaces) {
+                    for (const ws of config.workspaces) {
                         for (const win of ws.windows) {
                             if (win === null)
                                 return;
@@ -199,12 +199,12 @@ Singleton {
                 case EventType.KeyboardLayoutsChanged:
                     break;
                 case EventType.OverviewOpenedOrClosed:
-                    root.overviewOpened = event.OverviewOpenedOrClosed.is_open;
+                    config.overviewOpened = event.OverviewOpenedOrClosed.is_open;
                     break;
                 case EventType.WorkspaceActivated:
                     break;
                 case EventType.WindowFocusChanged:
-                    root.requestFocusedMonitor();
+                    config.requestFocusedMonitor();
                     break;
                 case EventType.WindowOpenedOrChanged:
                     const win = event.WindowOpenedOrChanged.window;
@@ -218,14 +218,14 @@ Singleton {
                         isFloating: win.is_floating,
                         isUrgent: win.is_urgent
                     });
-                    for (let window of root.windows) {
+                    for (let window of config.windows) {
                         if (window.id === winObj) {
                             window = winObj;
                         }
                     }
-                    root.windows.push(winObj);
-                    root.windows.push(winObj);
-                    for (let ws of root.workspaces) {
+                    config.windows.push(winObj);
+                    config.windows.push(winObj);
+                    for (let ws of config.workspaces) {
                         if (ws.workspaceId === winObj.workspaceId) {
                             for (let win of ws.windows) {
                                 if (win === null)
@@ -248,17 +248,17 @@ Singleton {
     }
 
     IpcHandler {
-        target: "root"
+        target: "config"
         function toggleWallpaperPicker() {
-            root.openWallpaperPicker = !root.openWallpaperPicker;
+            config.openWallpaperPicker = !config.openWallpaperPicker;
         }
 
         function toggleAppLauncher() {
-            root.openAppLauncher = !root.openAppLauncher;
+            config.openAppLauncher = !config.openAppLauncher;
         }
 
         function toggleSessionMenu() {
-            root.sessionMenuOpen = !root.sessionMenuOpen;
+            config.sessionMenuOpen = !config.sessionMenuOpen;
         }
     }
 }

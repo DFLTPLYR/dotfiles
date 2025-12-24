@@ -40,8 +40,9 @@ Scope {
 
             Item {
                 anchors.centerIn: parent
-                width: sidebarRoot.isPortrait ? parent.width / 1.2 : parent.width / 1.5
-                height: parent.height * 0.5
+                width: sidebarRoot.isPortrait ? (parent.width / 1.2) * sidebarRoot.animProgress : (parent.width / 1.5) * sidebarRoot.animProgress
+                height: (parent.height * 0.5) * sidebarRoot.animProgress
+
                 RowLayout {
                     id: layout
                     anchors.fill: parent
