@@ -149,7 +149,7 @@ Singleton {
                         workspaces.push(ws);
                     }
                     config.workspaces = workspaces.sort((a, b) => a.idx - b.idx);
-                    return config.workspaces = workspaces;
+                    break;
                 case EventType.WindowsChanged:
                     for (let workspace of config.workspaces) {
                         workspace.windows = [];
@@ -170,7 +170,7 @@ Singleton {
                         if (winObj.isFocused) {
                             config.focusedWindow = winObj;
                         }
-                        windows.push(winObj);
+                        // windows.push(winObj);
                         for (let workspace of config.workspaces) {
                             if (workspace.workspaceId === winObj.workspaceId && winObj.workspaceId !== -1) {
                                 workspace.windows.push(winObj);
@@ -186,15 +186,15 @@ Singleton {
                             break;
                         }
                     }
-                    for (const ws of config.workspaces) {
-                        for (const win of ws.windows) {
-                            if (win === null)
-                                return;
-                            if (win.windowId === id) {
-                                ws.windows.splice(ws.windows.indexOf(win), 1);
-                            }
-                        }
-                    }
+                    // for (const ws of config.workspaces) {
+                    //     for (const win of ws.windows) {
+                    //         if (win === null)
+                    //             return;
+                    //         if (win.windowId === id) {
+                    //             ws.windows.splice(ws.windows.indexOf(win), 1);
+                    //         }
+                    //     }
+                    // }
                     break;
                 case EventType.KeyboardLayoutsChanged:
                     break;

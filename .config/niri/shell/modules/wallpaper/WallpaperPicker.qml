@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt.labs.folderlistmodel
 
 import Quickshell
 import Quickshell.Wayland
@@ -50,25 +51,57 @@ Scope {
                     opacity: 1 * sidebarRoot.animProgress
 
                     Rectangle {
-                        color: 'teal'
+                        color: Qt.rgba(0, 0, 0, 0.5)
                         Layout.fillWidth: true
                         Layout.maximumWidth: parent.width / 3
                         Layout.fillHeight: true
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: parent.width + 'x' + parent.height
-                        }
+                        clip: true
                     }
 
                     Rectangle {
-                        color: 'plum'
+                        color: Qt.rgba(0, 0, 0, 0.5)
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        clip: true
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: parent.width + 'x' + parent.height
+                        ListView {
+                            anchors.fill: parent
+                            spacing: 10
+
+                            FolderListModel {
+                                id: folderModel
+                                folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
+                                nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp"]
+                            }
+
+                            model: folderModel
+                            delegate: Item {
+                                required property var modelData
+
+                                width: parent.width
+                                height: 40
+                                visible: folderModel.isFolder(modelData.index)
+
+                                Text {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: modelData.fileName
+                                    color: "white"
+                                    font.pixelSize: 16
+                                    elide: Text.ElideRight
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: {
+                                        if (folderModel.isFolder(modelData.index)) {
+                                            folderModel.folder = modelData.filePath;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
