@@ -23,10 +23,10 @@ ShellRoot {
     }
 
     // Wallpaper Picker
-    LazyLoader {
-        active: true
-        component: WallpaperPicker {}
-    }
+    // LazyLoader {
+    //     active: true
+    //     component: WallpaperPicker {}
+    // }
 
     // Volume OSD
     LazyLoader {

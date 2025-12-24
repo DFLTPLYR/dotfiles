@@ -37,6 +37,7 @@ Variants {
             height: Config.navbar.side ? screen.height : Config.navbar.height
             fill: true
             color: Qt.rgba(0, 0, 0, 0.5)
+
             Text {
                 font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
                 text: Qt.formatDateTime(clock.date, "hh:mm AP")
@@ -46,6 +47,7 @@ Variants {
                     horizontalCenter: parent.horizontalCenter
                 }
             }
+
             Button {
                 width: parent.height * 0.8
                 height: parent.height * 0.8
