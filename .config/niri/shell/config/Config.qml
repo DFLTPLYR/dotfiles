@@ -22,6 +22,7 @@ Singleton {
 
     property bool openWallpaperPicker: false
     property bool openAppLauncher: false
+    property bool openSessionMenu: false
 
     FileView {
         id: fileView
@@ -254,6 +255,10 @@ Singleton {
 
         function toggleAppLauncher() {
             root.openAppLauncher = !root.openAppLauncher;
+        }
+
+        function toggleSessionMenu() {
+            root.sessionMenuOpen = !root.sessionMenuOpen;
         }
     }
 }
