@@ -3,12 +3,19 @@ import Quickshell
 import Quickshell.Io
 
 // imports
+import qs.config
 import qs.modules.navbar
-import qs.modules.notification
 import qs.modules.wallpaper
+import qs.modules.sessionmenu
+import qs.modules.notification
 
 ShellRoot {
     id: root
+
+    // App Launcher
+    LazyLoader {
+        active: false
+    }
 
     // Navbar
     LazyLoader {
@@ -23,10 +30,10 @@ ShellRoot {
     }
 
     // Wallpaper Picker
-    // LazyLoader {
-    //     active: true
-    //     component: WallpaperPicker {}
-    // }
+    LazyLoader {
+        active: true
+        component: WallpaperPicker {}
+    }
 
     // Volume OSD
     LazyLoader {
@@ -34,8 +41,9 @@ ShellRoot {
         component: VolumeOsd {}
     }
 
-    // App Launcher
+    //Session Menu Overlay
     LazyLoader {
-        active: false
+        active: Config.openSessionMenu
+        component: SessionOverlay {}
     }
 }

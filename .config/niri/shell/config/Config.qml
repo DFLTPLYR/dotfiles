@@ -8,7 +8,6 @@ import qs.config
 
 Singleton {
     id: config
-    property bool sessionMenuOpen: false
     property alias loaded: fileView.loaded
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
