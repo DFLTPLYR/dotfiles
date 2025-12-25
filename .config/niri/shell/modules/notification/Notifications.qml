@@ -7,21 +7,29 @@ import qs.config
 import qs.components
 
 Scope {
+    id: root
+    property ListModel notificationListModel: ListModel {}
+
     PanelWindow {
         screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor?.name) ?? null
         property bool isPortrait: screen.height > screen.width
-        implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 4)
+        implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 5)
         color: "transparent"
 
         mask: Region {
             item: listview.contentItem
         }
 
+        anchors {
+            top: true
+            right: true
+            bottom: true
+        }
+
         ListView {
             id: listview
 
-            model: NotificationServer.list
-
+            model: root.notificationListModel
             width: parent.width
             height: parent.height
 
@@ -31,8 +39,17 @@ Scope {
             rightMargin: 20
 
             delegate: StyledRect {
+                required property var modelData
+                color: Qt.rgba(0, 0, 0, 0.8)
                 width: parent.width
-                height: 50
+                height: 60
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        NotificationServer.timeoutNotification(modelData.notificationId);
+                    }
+                }
             }
 
             add: Transition {
@@ -67,7 +84,6 @@ Scope {
                 onRunningChanged: {
                     if (!running && removeTransition.targetItem) {
                         let notificationId = removeTransition.targetItem.notificationId;
-                        console.log(notificationId);
                         NotificationServer.discardNotification(notificationId);
                     }
                 }
@@ -79,23 +95,34 @@ Scope {
                     duration: 250
                 }
             }
-
-            Connections {
-                target: NotificationServer
-                function onTimeout(id) {
-                    console.log("Timeout notification:", id);
-                    NotificationServer.discardNotification(id);
-                }
-                function onDiscardAll() {
-                    NotificationServer.discardAllNotifications();
-                }
-            }
         }
 
-        anchors {
-            top: true
-            right: true
-            bottom: true
+        Connections {
+            target: NotificationServer
+            function onNotify(notif) {
+                root.notificationListModel.append({
+                    notificationId: notif.notificationId,
+                    actions: notif.actions,
+                    appIcon: notif.appIcon,
+                    appName: notif.appName,
+                    body: notif.body,
+                    image: notif.image,
+                    summary: notif.summary,
+                    time: notif.time,
+                    urgency: notif.urgency
+                });
+            }
+            function onTimeout(id) {
+                for (var i = 0; i < root.notificationListModel.count; ++i) {
+                    if (root.notificationListModel.get(i).notificationId === id) {
+                        root.notificationListModel.remove(i);
+                        break;
+                    }
+                }
+            }
+            function onDiscardAll() {
+                root.notificationListModel.clear();
+            }
         }
 
         Component.onCompleted: {
