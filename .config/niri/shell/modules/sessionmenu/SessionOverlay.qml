@@ -35,6 +35,16 @@ Variants {
                 }
             }
         }
+
+        StyledRect {
+            width: parent.width * 0.5
+            height: parent.height * 0.5
+            x: parent.width * 0.25
+            y: parent.height * 0.25
+            color: Qt.rgba(0, 0, 0, 0.9)
+            borderRadius: 10
+        }
+
         Component.onCompleted: {
             if (this.WlrLayershell) {
                 this.exclusionMode = ExclusionMode.Ignore;

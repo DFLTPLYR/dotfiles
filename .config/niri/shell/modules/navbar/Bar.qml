@@ -36,7 +36,6 @@ Variants {
             id: containerRect
             width: Config.navbar.side ? Config.navbar.width : screen.width
             height: Config.navbar.side ? screen.height : Config.navbar.height
-            fill: true
             color: Qt.rgba(0, 0, 0, 0.5)
 
             Text {

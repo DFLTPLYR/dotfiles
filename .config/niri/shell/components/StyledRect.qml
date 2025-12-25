@@ -5,11 +5,11 @@ Item {
     // reparent
     default property alias content: contentItem.data
 
+    property int borderRadius: 0
     property int borderWidth: 0
     property color borderColor: "transparent"
 
     // rectangle properties
-    property bool fill: false
     property alias color: contentItem.color
     property alias leftMargin: contentItem.anchors.leftMargin
     property alias rightMargin: contentItem.anchors.rightMargin
@@ -23,10 +23,14 @@ Item {
         contentItem.border.color = root.borderColor;
     }
 
+    onBorderRadiusChanged: {
+        contentItem.radius = root.borderRadius;
+    }
+
     Rectangle {
         id: contentItem
         anchors {
-            fill: root.fill ? parent : undefined
+            fill: parent
         }
 
         Behavior on color {
