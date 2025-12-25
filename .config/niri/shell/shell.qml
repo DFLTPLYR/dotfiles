@@ -25,7 +25,7 @@ ShellRoot {
 
     // Notifications
     LazyLoader {
-        active: false
+        active: true
         component: Notifications {}
     }
 
