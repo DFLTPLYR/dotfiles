@@ -28,6 +28,7 @@ Variants {
 
         implicitWidth: containerRect.width
         implicitHeight: containerRect.height
+
         color: "transparent"
 
         // parent
@@ -52,7 +53,7 @@ Variants {
                 width: parent.height * 0.8
                 height: parent.height * 0.8
                 onClicked: {
-                    Config.requestFocusedMonitor();
+                    Config.openSessionMenu = !Config.openSessionMenu;
                 }
             }
         }
