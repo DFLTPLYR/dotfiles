@@ -23,6 +23,12 @@ ShellRoot {
         component: Bar {}
     }
 
+    // Notifications
+    LazyLoader {
+        active: true
+        component: Notifications {}
+    }
+
     // Background Wallpaper
     LazyLoader {
         active: true

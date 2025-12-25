@@ -72,12 +72,10 @@ Singleton {
     property list<Notif> list: []
     property var popupList: list.filter(notif => notif.popup)
     property var latestTimeForApp: ({})
-
     Component {
         id: notifComponent
         Notif {}
     }
-
     Component {
         id: notifTimerComponent
         NotifTimer {}
@@ -252,9 +250,6 @@ Singleton {
 
     Component.onCompleted: {
         refresh();
-        // Quickshell.execDetached({
-        //     command: ["sh", "-c", 'pgrep -x screen-time > /dev/null || exec -a screen-time sh -c "while true; do sleep 20m; notify-send \\"20 minutes are up\\"; done"']
-        // });
     }
 
     FileView {
