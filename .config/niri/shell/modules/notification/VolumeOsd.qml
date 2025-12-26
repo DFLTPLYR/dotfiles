@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -124,6 +126,12 @@ Scope {
                                 height: parent.height
                                 radius: 5
                                 color: Qt.rgba(1, 1, 1, 0.8)
+                                Behavior on width {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.OutCubic
+                                    }
+                                }
                             }
                         }
 
@@ -131,11 +139,17 @@ Scope {
                             width: volumeSlider.handleSize * 1.25
                             height: volumeSlider.handleSize * 1.25
                             radius: volumeSlider.handleSize
-                            color: Qt.rgba(1, 1, 1, 0.8)
+                            color: Qt.rgba(1, 1, 1, 1)
                             border.color: Qt.rgba(1, 1, 1, 0.5)
 
                             y: (volumeSlider.height - height) / 2
                             x: volumeSlider.visualPosition * (volumeSlider.width - width)
+                            Behavior on x {
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.OutCubic
+                                }
+                            }
                         }
                     }
                 }
