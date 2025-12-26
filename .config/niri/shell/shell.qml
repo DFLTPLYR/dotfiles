@@ -32,7 +32,7 @@ ShellRoot {
     // Background Wallpaper
     LazyLoader {
         active: true
-        component: WallOverlay {}
+        component: WallpaperOverlay {}
     }
 
     // Wallpaper Picker
