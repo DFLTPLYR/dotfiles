@@ -50,38 +50,39 @@ Scope {
                     spacing: 6
                     opacity: 1 * sidebarRoot.animProgress
 
-                    Rectangle {
-                        color: Qt.rgba(0, 0, 0, 0.5)
-                        Layout.fillWidth: true
-                        Layout.maximumWidth: parent.width / 3
-                        Layout.fillHeight: true
-
-                        clip: true
+                    FolderListModel {
+                        id: dirModel
+                        folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
+                        showFiles: false
+                        showDirs: true
                     }
 
-                    Rectangle {
+                    FolderListModel {
+                        id: folderModel
+                        folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
+                        nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp"]
+                        showFiles: true
+                        showDirs: true
+                    }
+
+                    StyledRect {
                         color: Qt.rgba(0, 0, 0, 0.5)
                         Layout.fillWidth: true
+                        Layout.maximumWidth: parent.width / 10
                         Layout.fillHeight: true
+
                         clip: true
 
-                        ListView {
+                        GridView {
                             anchors.fill: parent
-                            spacing: 10
 
-                            FolderListModel {
-                                id: folderModel
-                                folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
-                                nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp"]
-                            }
+                            model: dirModel
 
-                            model: folderModel
                             delegate: Item {
                                 required property var modelData
 
-                                width: parent.width
+                                implicitWidth: parent.width
                                 height: 40
-                                visible: folderModel.isFolder(modelData.index)
 
                                 Text {
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -96,26 +97,45 @@ Scope {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     onClicked: {
-                                        if (folderModel.isFolder(modelData.index)) {
-                                            folderModel.folder = modelData.filePath;
+                                        if (dirModel.isFolder(modelData.index)) {
+                                            folderModel.folder = Qt.resolvedUrl(modelData.filePath);
                                         }
                                     }
                                 }
                             }
                         }
                     }
+
+                    Rectangle {
+                        color: Qt.rgba(0, 0, 0, 0.5)
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+
+                        GridView {
+                            id: fileGrid
+                            anchors.fill: parent
+                            property var cellSize: parent.width / 5
+                            model: folderModel
+                            cellWidth: cellSize
+                            cellHeight: cellSize
+
+                            delegate: Rectangle {
+                                required property var modelData
+                                width: fileGrid.cellSize
+                                height: width
+                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.3)
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "folder"
+                                    visible: folderModel.isFolder(modelData.index)
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
-            // Contents
-            // StyledRect {
-            //     width: 500 * sidebarRoot.animProgress
-            //     height: 500 * sidebarRoot.animProgress
-            //     fill: true
-            //     x: Math.round(screen.width / 2 - width / 2)
-            //     y: Math.round(screen.height / 2 - height / 2)
-            //     color: Qt.rgba(0, 0, 0, 0.5)
-            // }
 
             Connections {
                 target: root
