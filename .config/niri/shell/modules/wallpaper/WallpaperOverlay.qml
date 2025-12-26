@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
@@ -25,8 +26,10 @@ Variants {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            clip: true // change the source be handled by the Config.wallpaper.find(m.name === screen.name)?.path
-            source: root.isPortrait ? "file:///home/dfltplyr/Pictures/wallpaper/portrait/purple-girl.jpg" : "file:///home/dfltplyr/Pictures/wallpaper/landscape/1920x1080.jpg"
+            clip: true
+            source: {
+                return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(m => m.monitor === screen.name)?.path);
+            }
         }
 
         Component.onCompleted: {

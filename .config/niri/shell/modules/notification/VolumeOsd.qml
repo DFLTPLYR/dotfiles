@@ -126,6 +126,7 @@ Scope {
                                 height: parent.height
                                 radius: 5
                                 color: Qt.rgba(1, 1, 1, 0.8)
+
                                 Behavior on width {
                                     NumberAnimation {
                                         duration: 300
