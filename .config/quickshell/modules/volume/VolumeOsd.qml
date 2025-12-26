@@ -73,6 +73,16 @@ Scope {
                 implicitWidth: isPortrait ? parent.width * 0.3 : parent.width / 6
                 implicitHeight: 40
 
+                NumberAnimation on opacity {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+
+                NumberAnimation on y {
+                    duration: 300
+                    easing.type: Easing.OutCubic
+                }
+
                 StyledRect {
                     childContainerHeight: parent.height
 
