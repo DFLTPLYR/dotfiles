@@ -12,7 +12,7 @@ binds {
     Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn "nemo"; }
     Mod+Delete hotkey-overlay-title="Process kill Quickshell"  {spawn-sh "pkill -x qs"; }
     Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "qs -c ~/dotfiles/.config/niri/shell ipc call config toggleWallpaperPicker";}
-
+    Mod+Shift+G hotkey-overlay-title="Game mode" { spawn-sh "~/dotfiles/.config/niri/scripts/gamemode.sh"; }
     // move focus between windows in the current column.
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
