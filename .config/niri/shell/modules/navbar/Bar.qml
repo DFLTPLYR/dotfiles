@@ -49,16 +49,22 @@ Variants {
             }
 
             Button {
-                width: parent.height * 0.8
-                height: parent.height * 0.8
+                width: parent.height
+                height: parent.height
+                text: "\u23FB"
                 onClicked: {
-                    Config.openSessionMenu = !Config.openSessionMenu;
+                    Quickshell.execDetached({
+                        command: ["sh", "-c", "shutdown now"]
+                    });
+
+                    // Config.openSessionMenu = !Config.openSessionMenu;
                 }
             }
         }
 
         PopupWindow {
             visible: false
+            color: "transparent"
             implicitWidth: {
                 let percent = 0.5;
                 if (root.isPortrait) {
