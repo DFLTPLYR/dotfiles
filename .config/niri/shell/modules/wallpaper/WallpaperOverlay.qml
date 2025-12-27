@@ -28,7 +28,11 @@ Variants {
             fillMode: Image.PreserveAspectCrop
             clip: true
             source: {
-                return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(m => m.monitor === screen.name)?.path);
+                if (Config.wallpaper.find(m => m.monitor === screen.name)?.path === null) {
+                    return null;
+                } else {
+                    return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(m => m.monitor === screen.name)?.path);
+                }
             }
         }
 

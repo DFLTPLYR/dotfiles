@@ -124,7 +124,7 @@ Singleton {
 
                 switch (key) {
                 case EventType.WorkspacesChanged:
-                    let workspaces = [];
+                    let temp = [];
                     for (const workspace of event.WorkspacesChanged.workspaces) {
                         const ws = workspaceComponent.createObject(null, {
                             workspaceId: workspace.id,
@@ -145,10 +145,10 @@ Singleton {
                                 ws.windows.push(win);
                             }
                         }
-                        workspaces.push(ws);
+                        config.workspaces.push(ws);
                     }
-                    config.workspaces = workspaces.sort((a, b) => a.idx - b.idx);
-                    break;
+                    config.workspaces = temp.sort((a, b) => a.idx - b.idx);
+                    return;
                 case EventType.WindowsChanged:
                     for (let workspace of config.workspaces) {
                         workspace.windows = [];
@@ -185,15 +185,13 @@ Singleton {
                             break;
                         }
                     }
-                    // for (const ws of config.workspaces) {
-                    //     for (const win of ws.windows) {
-                    //         if (win === null)
-                    //             return;
-                    //         if (win.windowId === id) {
-                    //             ws.windows.splice(ws.windows.indexOf(win), 1);
-                    //         }
-                    //     }
-                    // }
+                    for (const ws of config.workspaces) {
+                        for (const win of ws.windows) {
+                            if (win.windowId === id) {
+                                ws.windows.splice(ws.windows.indexOf(win), 1);
+                            }
+                        }
+                    }
                     break;
                 case EventType.KeyboardLayoutsChanged:
                     break;
@@ -223,7 +221,6 @@ Singleton {
                         }
                     }
                     config.windows.push(winObj);
-                    config.windows.push(winObj);
                     for (let ws of config.workspaces) {
                         if (ws.workspaceId === winObj.workspaceId) {
                             for (let win of ws.windows) {
@@ -235,10 +232,9 @@ Singleton {
                                 }
                             }
                             ws.windows.push(winObj);
-                            return;
                         }
                     }
-                    break;
+                    return;
                 default:
                     break;
                 }
