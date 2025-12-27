@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# got the idead from theblackdon
+# got the idea from theblackdon
 state_file="${XDG_RUNTIME_DIR:-/tmp}/niri-gaming-mode-state"
 
 normal_x=1920

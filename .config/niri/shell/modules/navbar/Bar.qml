@@ -59,7 +59,7 @@ Variants {
 
         PopupWindow {
             visible: false
-            width: {
+            implicitWidth: {
                 let percent = 0.5;
                 if (root.isPortrait) {
                     return Math.max(screen.width * percent, screen.width * 0.5);
@@ -67,7 +67,7 @@ Variants {
                     return Math.max(screen.width * percent, screen.width * 0.5);
                 }
             }
-            height: screen.height * 0.1
+            implicitHeight: screen.height * 0.1
             anchor {
                 window: root
 
