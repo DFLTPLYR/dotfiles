@@ -57,6 +57,27 @@ Variants {
             }
         }
 
+        PopupWindow {
+            visible: false
+            width: {
+                let percent = 0.5;
+                if (root.isPortrait) {
+                    return Math.max(screen.width * percent, screen.width * 0.5);
+                } else {
+                    return Math.max(screen.width * percent, screen.width * 0.5);
+                }
+            }
+            height: screen.height * 0.1
+            anchor {
+                window: root
+
+                rect {
+                    x: Config.navbar.side ? Config.navbar.width : screen.width / 2 - width / 2
+                    y: Config.navbar.side ? screen.height / 2 - height / 2 : Config.navbar.height
+                }
+            }
+        }
+
         Component.onCompleted: {
             if (this.WlrLayershell != null) {
                 this.WlrLayershell.layer = WlrLayer.Top;
