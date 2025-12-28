@@ -162,32 +162,3 @@ Scope {
         }
     }
 }
-
-// import qs.config
-//
-// Variants {
-//     model: Quickshell.screens
-//     delegate: PanelWindow {
-//         id: root
-//         required property ShellScreen modelData
-//         screen: modelData
-//         visible: Config.openWallpaperPicker && Config.focusedMonitor.name === screen.name
-//
-//         color: Qt.rgba(0.1, 0.1, 0.1, 0.5)
-//
-//         anchors {
-//             top: true
-//             bottom: true
-//             right: true
-//             left: true
-//         }
-//
-//         Component.onCompleted: {
-//             if (this.WlrLayershell) {
-//                 this.WlrLayershell.layer = WlrLayer.Overlay;
-//                 this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
-//                 this.exclusionMode = ExclusionMode.Ignore;
-//             }
-//         }
-//     }
-// }
