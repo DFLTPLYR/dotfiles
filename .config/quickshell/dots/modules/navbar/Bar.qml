@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
 
 import Quickshell
@@ -38,27 +39,45 @@ Variants {
             height: Config.navbar.side ? screen.height : Config.navbar.height
             color: Qt.rgba(0, 0, 0, 0.5)
 
-            Text {
-                font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-                text: Qt.formatDateTime(clock.date, "hh:mm AP")
-                color: "white"
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
-                }
-            }
+            anchors.fill: parent
+            RowLayout {
+                anchors.fill: parent
 
-            StyledIconButton {
-                height: parent.height
-                width: height
-                iconRounding: height
-                iconMargin: 10
-                iconSource: Quickshell.iconPath(Quickshell.shellDir + "/assets/powerbtn.svg", true)
-                onClicked: {
-                    // Quickshell.execDetached({
-                    //     command: ["sh", "-c", "shutdown now"]
-                    // });
-                    Config.openSessionMenu = !Config.openSessionMenu;
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    StyledIconButton {
+                        height: parent.height
+                        width: height
+                        iconRounding: height
+                        iconMargin: 10
+                        iconSource: Quickshell.iconPath(Quickshell.shellDir + "/assets/powerbtn.svg", true)
+                        onClicked: {
+                            // Quickshell.execDetached({
+                            // command: ["sh", "-c", "shutdown now"]
+                            // });
+                            Config.openSessionMenu = !Config.openSessionMenu;
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Text {
+                        font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
+                        text: Qt.formatDateTime(clock.date, "hh:mm AP")
+                        color: "white"
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
             }
         }
