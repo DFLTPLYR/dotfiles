@@ -48,16 +48,15 @@ Variants {
                 }
             }
 
-            Button {
-                width: parent.height
+            StyledIconButton {
                 height: parent.height
-                text: "\u23FB"
+                width: height
+                iconSource: Quickshell.iconPath(Quickshell.shellDir + "/assets/powerbtn.svg", true)
                 onClicked: {
-                    Quickshell.execDetached({
-                        command: ["sh", "-c", "shutdown now"]
-                    });
-
-                    // Config.openSessionMenu = !Config.openSessionMenu;
+                    // Quickshell.execDetached({
+                    //     command: ["sh", "-c", "shutdown now"]
+                    // });
+                    Config.openSessionMenu = !Config.openSessionMenu;
                 }
             }
         }

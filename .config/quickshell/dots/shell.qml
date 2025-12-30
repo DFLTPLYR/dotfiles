@@ -18,32 +18,17 @@ ShellRoot {
     }
 
     // Navbar
-    LazyLoader {
-        active: true
-        component: Bar {}
-    }
+    Bar {}
 
     // Notifications
-    LazyLoader {
-        active: true
-        component: Notifications {}
-    }
+    Notifications {}
 
     // Wallpaper Picker
-    LazyLoader {
-        active: true
-        component: WallpaperPicker {}
-    }
+    WallpaperPicker {}
 
     // Volume OSD
-    LazyLoader {
-        active: true
-        component: VolumeOsd {}
-    }
+    VolumeOsd {}
 
     //Session Menu Overlay
-    LazyLoader {
-        active: Config.openSessionMenu
-        component: SessionOverlay {}
-    }
+    SessionOverlay {}
 }

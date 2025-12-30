@@ -6,50 +6,53 @@ import Quickshell.Wayland
 import qs.config
 import qs.components
 
-Variants {
-    model: Quickshell.screens
-    delegate: PanelWindow {
-        required property ShellScreen modelData
-        screen: modelData
+LazyLoader {
+    active: Config.openSessionMenu
+    component: Variants {
+        model: Quickshell.screens
+        delegate: PanelWindow {
+            required property ShellScreen modelData
+            screen: modelData
 
-        color: Qt.rgba(0, 0, 0, 0.5)
+            color: Qt.rgba(0, 0, 0, 0.5)
 
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-            }
-        }
-
-        anchors {
-            top: true
-            bottom: true
-            right: true
-            left: true
-        }
-
-        contentItem {
-            focus: true
-            Keys.onPressed: event => {
-                if (event.key == Qt.Key_Escape) {
-                    Config.openSessionMenu = false;
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
                 }
             }
-        }
 
-        StyledRect {
-            width: parent.width * 0.5
-            height: parent.height * 0.5
-            x: parent.width * 0.25
-            y: parent.height * 0.25
-            color: Qt.rgba(0, 0, 0, 0.9)
-            borderRadius: 10
-        }
+            anchors {
+                top: true
+                bottom: true
+                right: true
+                left: true
+            }
 
-        Component.onCompleted: {
-            if (this.WlrLayershell) {
-                this.exclusionMode = ExclusionMode.Ignore;
-                this.WlrLayershell.layer = WlrLayer.Top;
-                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+            contentItem {
+                focus: true
+                Keys.onPressed: event => {
+                    if (event.key == Qt.Key_Escape) {
+                        Config.openSessionMenu = false;
+                    }
+                }
+            }
+
+            StyledRect {
+                width: parent.width * 0.5
+                height: parent.height * 0.5
+                x: parent.width * 0.25
+                y: parent.height * 0.25
+                color: Qt.rgba(0, 0, 0, 0.9)
+                borderRadius: 10
+            }
+
+            Component.onCompleted: {
+                if (this.WlrLayershell) {
+                    this.exclusionMode = ExclusionMode.Ignore;
+                    this.WlrLayershell.layer = WlrLayer.Top;
+                    this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                }
             }
         }
     }
