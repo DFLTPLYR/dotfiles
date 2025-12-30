@@ -5,9 +5,8 @@ Button {
     id: root
     property alias iconSource: iconImage.source
     property alias iconRounding: background.radius
+    property int iconMargin: 0
     property alias backgroundColor: background.color
-    property double size: 1
-
     hoverEnabled: true
 
     background: Rectangle {
@@ -24,6 +23,9 @@ Button {
     contentItem: Image {
         id: iconImage
         fillMode: Image.PreserveAspectFit
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: root.iconMargin
+        }
     }
 }
