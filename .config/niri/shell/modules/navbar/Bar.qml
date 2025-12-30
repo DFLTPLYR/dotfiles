@@ -73,14 +73,19 @@ Variants {
                     return Math.max(screen.width * percent, screen.width * 0.5);
                 }
             }
-            implicitHeight: screen.height * 0.1
+            implicitHeight: screen.height * 0.3
             anchor {
                 window: root
-
                 rect {
                     x: Config.navbar.side ? Config.navbar.width : screen.width / 2 - width / 2
                     y: Config.navbar.side ? screen.height / 2 - height / 2 : Config.navbar.height
                 }
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "green"
+                opacity: 1
             }
         }
 
