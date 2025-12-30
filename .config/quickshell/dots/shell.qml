@@ -31,7 +31,7 @@ ShellRoot {
 
     // Wallpaper Picker
     LazyLoader {
-        active: false
+        active: true
         component: WallpaperPicker {}
     }
 
