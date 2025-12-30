@@ -22,6 +22,7 @@ Singleton {
     property bool openWallpaperPicker: false
     property bool openAppLauncher: false
     property bool openSessionMenu: false
+    property bool openExtendedBar: false
 
     FileView {
         id: fileView
@@ -254,6 +255,10 @@ Singleton {
 
         function toggleSessionMenu() {
             config.sessionMenuOpen = !config.sessionMenuOpen;
+        }
+
+        function toggleExtendedBar() {
+            config.openExtendedBar = !config.openExtendedBar;
         }
     }
 }

@@ -28,3 +28,4 @@ cursor {
 
 // start up qs
 spawn-sh-at-startup "qs -p ~/dotfiles/.config/niri/shell"
+spawn-sh-at-startup "swww-daemon"

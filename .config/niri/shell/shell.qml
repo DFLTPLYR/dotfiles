@@ -29,12 +29,6 @@ ShellRoot {
         component: Notifications {}
     }
 
-    // Background Wallpaper
-    LazyLoader {
-        active: true
-        component: WallpaperOverlay {}
-    }
-
     // Wallpaper Picker
     LazyLoader {
         active: false
