@@ -22,9 +22,10 @@ Variants {
         }
 
         anchors {
-            top: true
-            left: true
-            right: true
+            left: ["left", "top", "bottom"].includes(Config.navbar.position)
+            right: ["right", "top", "bottom"].includes(Config.navbar.position)
+            top: ["right", "top", "left"].includes(Config.navbar.position)
+            bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
         }
 
         implicitWidth: containerRect.width
