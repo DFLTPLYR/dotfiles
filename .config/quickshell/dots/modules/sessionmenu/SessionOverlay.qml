@@ -14,7 +14,7 @@ LazyLoader {
             required property ShellScreen modelData
             screen: modelData
 
-            color: Qt.rgba(0, 0, 0, 0.5)
+            color: "transparent"
 
             Behavior on color {
                 ColorAnimation {
@@ -38,13 +38,35 @@ LazyLoader {
                 }
             }
 
-            StyledRect {
-                width: parent.width * 0.5
-                height: parent.height * 0.5
-                x: parent.width * 0.25
-                y: parent.height * 0.25
-                color: Qt.rgba(0, 0, 0, 0.9)
-                borderRadius: 10
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.rgba(0, 0, 0, 0.5)
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Config.openSessionMenu = false
+                    hoverEnabled: true
+                    onHoverEnabledChanged: {
+                        parent.focus = hoverEnabled;
+                    }
+                }
+
+                StyledRect {
+                    width: parent.width * 0.5
+                    height: parent.height * 0.5
+                    x: parent.width * 0.25
+                    y: parent.height * 0.25
+                    color: Qt.rgba(0, 0, 0, 0.9)
+                    borderRadius: 10
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onHoverEnabledChanged: {
+                            parent.focus = hoverEnabled;
+                        }
+                    }
+                }
             }
 
             Component.onCompleted: {

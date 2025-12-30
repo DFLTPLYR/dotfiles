@@ -51,6 +51,8 @@ Variants {
             StyledIconButton {
                 height: parent.height
                 width: height
+                iconRounding: height
+                iconMargin: 10
                 iconSource: Quickshell.iconPath(Quickshell.shellDir + "/assets/powerbtn.svg", true)
                 onClicked: {
                     // Quickshell.execDetached({
