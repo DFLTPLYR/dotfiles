@@ -13,9 +13,6 @@ ShellRoot {
     id: root
 
     // App Launcher
-    LazyLoader {
-        active: false
-    }
 
     // Navbar
     Bar {}
