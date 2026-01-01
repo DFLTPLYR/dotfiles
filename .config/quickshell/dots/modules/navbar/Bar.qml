@@ -61,7 +61,7 @@ Variants {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            text: "\uF000"
+                            text: "power-off"
                         }
                         onAction: {
                             Config.openSessionMenu = !Config.openSessionMenu;
@@ -86,19 +86,6 @@ Variants {
                 Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Text {
-                        font.family: Config.iconFont.family
-                        font.weight: Config.iconFont.weight
-                        font.styleName: Config.iconFont.styleName
-                        font.pixelSize: parent.height
-
-                        color: "white"
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
-                        }
-                        text: "\uF001"
-                    }
                 }
             }
         }
