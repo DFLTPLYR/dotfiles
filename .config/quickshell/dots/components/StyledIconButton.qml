@@ -1,31 +1,26 @@
 import QtQuick
 import QtQuick.Controls
 
-Button {
+Rectangle {
     id: root
-    property alias iconSource: iconImage.source
-    property alias iconRounding: background.radius
-    property int iconMargin: 0
-    property alias backgroundColor: background.color
-    hoverEnabled: true
+    signal action
+    property color unHoveredColor: "transparent"
+    property color hoveredColor: Qt.rgba(1, 1, 1, 0.2)
+    property int duration: 200
+    color: menuBtnArea.containsMouse ? hoveredColor : unHoveredColor
 
-    background: Rectangle {
-        id: background
-        color: root.hovered ? Qt.rgba(255, 255, 255, 0.1) : "transparent"
-        radius: 8
-        anchors.fill: iconImage
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-            }
+    Behavior on color {
+        ColorAnimation {
+            duration: duration
         }
     }
-    contentItem: Image {
-        id: iconImage
-        fillMode: Image.PreserveAspectFit
-        anchors {
-            fill: parent
-            margins: root.iconMargin
+
+    MouseArea {
+        id: menuBtnArea
+        anchors.fill: parent
+        hoverEnabled: true
+        onClicked: {
+            root.action();
         }
     }
 }
