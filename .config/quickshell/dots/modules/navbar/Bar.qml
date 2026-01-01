@@ -47,15 +47,10 @@ Variants {
                 Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Rectangle {
+
+                    StyledIconButton {
+                        width: parent.height
                         height: parent.height
-                        width: height
-                        color: menuBtnArea.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : "transparent"
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 200
-                            }
-                        }
                         Text {
                             font.family: Config.iconFont.family
                             font.weight: Config.iconFont.weight
@@ -68,30 +63,10 @@ Variants {
                             }
                             text: "\uF000"
                         }
-
-                        MouseArea {
-                            id: menuBtnArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: {
-                                Config.openSessionMenu = !Config.openSessionMenu;
-                            }
+                        onAction: {
+                            Config.openSessionMenu = !Config.openSessionMenu;
                         }
                     }
-
-                    // StyledIconButton {
-                    //     height: parent.height
-                    //     width: height
-                    //     iconRounding: height
-                    //     iconMargin: 10
-                    //     iconSource: Quickshell.iconPath(Quickshell.shellDir + "/assets/powerbtn.svg", true)
-                    //     onClicked: {
-                    //         // Quickshell.execDetached({
-                    //         // command: ["sh", "-c", "shutdown now"]
-                    //         // });
-                    //         Config.openSessionMenu = !Config.openSessionMenu;
-                    //     }
-                    // }
                 }
 
                 Item {
