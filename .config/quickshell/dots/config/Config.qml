@@ -28,14 +28,6 @@ Singleton {
     FontLoader {
         id: customIconFont
         source: Qt.resolvedUrl("./customFont.otf")
-        onStatusChanged: {
-            if (status === FontLoader.Ready) {
-                console.log("Custom icon font loaded successfully.", name);
-                console.log("Font family:", font.family);
-                console.log("Font weight:", font.weight);
-                console.log("Font style name:", font.styleName);
-            }
-        }
     }
 
     FileView {
