@@ -23,6 +23,7 @@ Singleton {
     property bool openAppLauncher: false
     property bool openSessionMenu: false
     property bool openExtendedBar: false
+
     property alias iconFont: customIconFont.font
 
     FontLoader {
