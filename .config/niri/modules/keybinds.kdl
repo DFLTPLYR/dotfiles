@@ -14,7 +14,7 @@ binds {
     Mod+Shift+G hotkey-overlay-title="Game mode" { spawn-sh "~/dotfiles/.config/niri/scripts/gamemode.sh"; }
 
     // Quickshell IPC commands
-    Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "qs -c ~/dotfiles/.config/niri/shell ipc call config toggleWallpaperPicker";}
+    Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "pcli launch wallpaper-picker";}
     Mod+Shift+E hotkey-overlay-title="Extended Bar" { spawn-sh "pcli launch extended-bar";}
 
     // move focus between windows in the current column.
