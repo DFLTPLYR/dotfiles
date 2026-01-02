@@ -93,9 +93,49 @@ Variants {
             }
         }
 
+        Connections {
+            target: Config
+            function onOpenExtendedBarChanged() {
+                popupWindow.shouldBeVisible = Config.openExtendedBar;
+            }
+        }
+
         PopupWindow {
-            visible: false
+            id: popupWindow
+
+            // Internal properties
+            property bool shouldBeVisible: false
+            property bool internalVisible: false
+            property real animProgress: 0.0
+
+            // Manual animator
+            NumberAnimation on animProgress {
+                id: anim
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+
+            onShouldBeVisibleChanged: {
+                const target = shouldBeVisible ? 1.0 : 0.0;
+
+                if (anim.to !== target || !anim.running) {
+                    anim.to = target;
+                    anim.restart();
+                }
+            }
+
+            onAnimProgressChanged: {
+                if (animProgress > 0 && !internalVisible) {
+                    internalVisible = true;
+                } else if (!shouldBeVisible && animProgress === 0.00) {
+                    internalVisible = false;
+                    Config.openExtendedBar = false;
+                }
+            }
+
+            visible: internalVisible
             color: "transparent"
+
             implicitWidth: {
                 let percent = 0.5;
                 if (root.isPortrait) {
@@ -105,6 +145,7 @@ Variants {
                 }
             }
             implicitHeight: screen.height * 0.3
+
             anchor {
                 window: root
                 rect {
@@ -115,8 +156,15 @@ Variants {
 
             Rectangle {
                 anchors.fill: parent
-                color: "green"
+                color: parent.visible ? "green" : Qt.rgba(0, 0, 0, 0.5)
                 opacity: 1
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
         }
 
