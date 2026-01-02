@@ -41,32 +41,14 @@ Variants {
             color: Qt.rgba(0, 0, 0, 0.5)
 
             anchors.fill: parent
-            RowLayout {
+            GridLayout {
                 anchors.fill: parent
+                columns: 3
+                rows: 1
 
                 Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-
-                    StyledIconButton {
-                        width: parent.height
-                        height: parent.height
-                        Text {
-                            font.family: Config.iconFont.family
-                            font.weight: Config.iconFont.weight
-                            font.styleName: Config.iconFont.styleName
-                            font.pixelSize: parent.height
-
-                            color: "white"
-                            anchors {
-                                verticalCenter: parent.verticalCenter
-                            }
-                            text: "power-off"
-                        }
-                        onAction: {
-                            Config.openSessionMenu = !Config.openSessionMenu;
-                        }
-                    }
                 }
 
                 Item {
@@ -86,6 +68,27 @@ Variants {
                 Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    StyledIconButton {
+                        width: parent.height
+                        height: parent.height
+
+                        Text {
+                            font.family: Config.iconFont.family
+                            font.weight: Config.iconFont.weight
+                            font.styleName: Config.iconFont.styleName
+                            font.pixelSize: parent.height
+
+                            color: "white"
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: "power-off"
+                        }
+
+                        onAction: {
+                            Config.openSessionMenu = !Config.openSessionMenu;
+                        }
+                    }
                 }
             }
         }
