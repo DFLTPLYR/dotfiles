@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
@@ -38,6 +39,45 @@ LazyLoader {
                 }
             }
 
+            default property list<ProcessButton> buttons: [
+                ProcessButton {
+                    command: "systemctl suspend"
+                    keybind: Qt.Key_U
+                    text: "Suspend"
+                    icon: FontIcon {
+                        anchors.centerIn: parent
+                        text: "door-open"
+                    }
+                },
+                ProcessButton {
+                    command: "systemctl hibernate"
+                    keybind: Qt.Key_H
+                    text: "Hibernate"
+                    icon: FontIcon {
+                        anchors.centerIn: parent
+                        text: "ghost"
+                    }
+                },
+                ProcessButton {
+                    command: "systemctl poweroff"
+                    keybind: Qt.Key_K
+                    text: "Shutdown"
+                    icon: FontIcon {
+                        anchors.centerIn: parent
+                        text: "power-off"
+                    }
+                },
+                ProcessButton {
+                    command: "systemctl reboot"
+                    keybind: Qt.Key_R
+                    text: "Reboot"
+                    icon: FontIcon {
+                        anchors.centerIn: parent
+                        text: "\uf2f1"
+                    }
+                }
+            ]
+
             Rectangle {
                 anchors.fill: parent
                 color: Qt.rgba(0, 0, 0, 0.5)
@@ -59,11 +99,26 @@ LazyLoader {
                     color: Qt.rgba(0, 0, 0, 0.9)
                     borderRadius: 10
 
-                    MouseArea {
+                    GridLayout {
                         anchors.fill: parent
-                        hoverEnabled: true
-                        onHoverEnabledChanged: {
-                            parent.focus = hoverEnabled;
+                        columns: 2
+                        columnSpacing: 0
+                        rowSpacing: 0
+
+                        Repeater {
+                            id: buttonRepeater
+                            model: buttons
+                            delegate: Rectangle {
+                                required property ProcessButton modelData
+
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.6)
+                                FontIcon {
+                                    anchors.centerIn: parent
+                                    text: modelData.icon.text
+                                }
+                            }
                         }
                     }
                 }
