@@ -93,109 +93,43 @@ Variants {
             }
         }
 
+        LazyLoader {
+            id: extendedBarLoader
+            property bool shouldBeVisible: false
+            component: PopupWrapper {
+                anchor.window: root
+                shouldBeVisible: extendedBarLoader.shouldBeVisible
+
+                implicitWidth: 500
+                implicitHeight: 500
+                color: "white"
+                onHide: {
+                    extendedBarLoader.shouldBeVisible = false;
+                }
+            }
+        }
+
         Connections {
             target: Config
             function onOpenExtendedBarChanged() {
-                if (screen.name === Config.focusedMonitor.name) {
-                    popupWindow.shouldBeVisible = Config.openExtendedBar;
+                if (screen.name === Config.focusedMonitor.name || extendedBarLoader.active) {
+                    extendedBarLoader.active = Config.openExtendedBar;
+                    extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
                 }
             }
         }
 
-        PopupWindow {
-            id: popupWindow
-
-            // Internal properties
-            property bool shouldBeVisible: false
-            property bool internalVisible: false
-            property bool isTransitioning: false
-            property real animProgress: 0.0
-
-            // Manual animator
-            NumberAnimation on animProgress {
-                id: anim
-                duration: 300
-                easing.type: Easing.InOutQuad
-            }
-
-            onShouldBeVisibleChanged: {
-                const target = shouldBeVisible ? 1.0 : 0.0;
-
-                if (anim.to !== target || !anim.running) {
-                    anim.to = target;
-
-                    anim.restart();
-                }
-            }
-
-            onAnimProgressChanged: {
-                if (animProgress > 0 && !internalVisible) {
-                    internalVisible = true;
-                } else if (!shouldBeVisible && animProgress === 0.00) {
-                    internalVisible = false;
-                    if (!isTransitioning)
-                        Config.openExtendedBar = false;
-                }
-            }
-
-            visible: internalVisible
-            color: "transparent"
-
-            implicitWidth: contentRect.width
-            implicitHeight: contentRect.height
-
-            anchor {
-                window: root
-                rect {
-                    x: Config.navbar.side ? Config.navbar.width : screen.width / 2 - width / 2
-                    y: Config.navbar.side ? screen.height / 2 - height / 2 : Config.navbar.height
-                }
-            }
-
-            Rectangle {
-                id: contentRect
-                height: Math.max(1, 500 * popupWindow.animProgress)
-                width: 300
-                color: parent.visible ? "green" : Qt.rgba(0, 0, 0, 0.5)
-                opacity: 1
-                y: (-100 * popupWindow.animProgress) - 100
-
-                Behavior on y {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-                Behavior on height {
-                    NumberAnimation {
-                        duration: 200
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
-
-            Connections {
-                target: Config
-                function onFocusedMonitorChanged() {
-                    if (!Config.openExtendedBar)
-                        return;
-                    if (popupWindow.shouldBeVisible) {
-                        popupWindow.shouldBeVisible = false;
-                        popupWindow.isTransitioning = true;
-                    } else if (screen.name === Config.focusedMonitor.name) {
-                        popupWindow.shouldBeVisible = true;
-                        popupWindow.isTransitioning = false;
-                    }
+        Connections {
+            target: Config
+            function onFocusedMonitorChanged() {
+                if (screen.name === Config.focusedMonitor.name || Config.openExtendedBar) {
+                    extendedBarLoader.active = Config.openExtendedBar;
+                    extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
+                } else {
+                    extendedBarLoader.shouldBeVisible = false;
                 }
             }
         }
-
         Component.onCompleted: {
             if (this.WlrLayershell != null) {
                 this.WlrLayershell.layer = WlrLayer.Top;
