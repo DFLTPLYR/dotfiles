@@ -104,23 +104,35 @@ Variants {
                         x: parentWindow.width / 2 - width / 2
                         y: parentWindow.height
                     }
-                }
-
-                implicitWidth: 500
-                implicitHeight: Math.max(1, 400 * animProgress)
-
-                Behavior on height {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
+                    margins {
+                        top: 0
+                        bottom: 0
+                        right: 0
+                        left: 0
                     }
                 }
-
-                color: containerRect.color
+                implicitWidth: container.width
+                implicitHeight: container.height
+                color: "transparent"
 
                 onHide: {
                     extendedBarLoader.shouldBeVisible = false;
                     extendedBarLoader.active = false;
+                }
+
+                Rectangle {
+                    id: container
+                    color: containerRect.color
+                    implicitWidth: 500
+                    implicitHeight: Math.max(1, 400 * animProgress)
+                    bottomLeftRadius: 50
+                    bottomRightRadius: 50
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
             }
         }
