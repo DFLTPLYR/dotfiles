@@ -96,7 +96,9 @@ Variants {
         Connections {
             target: Config
             function onOpenExtendedBarChanged() {
-                popupWindow.shouldBeVisible = Config.openExtendedBar;
+                if (screen.name === Config.focusedMonitor.name) {
+                    popupWindow.shouldBeVisible = Config.openExtendedBar;
+                }
             }
         }
 
@@ -106,6 +108,7 @@ Variants {
             // Internal properties
             property bool shouldBeVisible: false
             property bool internalVisible: false
+            property bool isTransitioning: false
             property real animProgress: 0.0
 
             // Manual animator
@@ -120,6 +123,7 @@ Variants {
 
                 if (anim.to !== target || !anim.running) {
                     anim.to = target;
+
                     anim.restart();
                 }
             }
@@ -129,22 +133,16 @@ Variants {
                     internalVisible = true;
                 } else if (!shouldBeVisible && animProgress === 0.00) {
                     internalVisible = false;
-                    Config.openExtendedBar = false;
+                    if (!isTransitioning)
+                        Config.openExtendedBar = false;
                 }
             }
 
             visible: internalVisible
             color: "transparent"
 
-            implicitWidth: {
-                let percent = 0.5;
-                if (root.isPortrait) {
-                    return Math.max(screen.width * percent, screen.width * 0.5);
-                } else {
-                    return Math.max(screen.width * percent, screen.width * 0.5);
-                }
-            }
-            implicitHeight: screen.height * 0.3
+            implicitWidth: contentRect.width
+            implicitHeight: contentRect.height
 
             anchor {
                 window: root
@@ -155,14 +153,44 @@ Variants {
             }
 
             Rectangle {
-                anchors.fill: parent
+                id: contentRect
+                height: Math.max(1, 500 * popupWindow.animProgress)
+                width: 300
                 color: parent.visible ? "green" : Qt.rgba(0, 0, 0, 0.5)
                 opacity: 1
+                y: (-100 * popupWindow.animProgress) - 100
 
-                Behavior on color {
-                    ColorAnimation {
+                Behavior on y {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on height {
+                    NumberAnimation {
                         duration: 200
                         easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+
+            Connections {
+                target: Config
+                function onFocusedMonitorChanged() {
+                    if (!Config.openExtendedBar)
+                        return;
+                    if (popupWindow.shouldBeVisible) {
+                        popupWindow.shouldBeVisible = false;
+                        popupWindow.isTransitioning = true;
+                    } else if (screen.name === Config.focusedMonitor.name) {
+                        popupWindow.shouldBeVisible = true;
+                        popupWindow.isTransitioning = false;
                     }
                 }
             }
