@@ -8,11 +8,7 @@ PopupWindow {
     property bool shouldBeVisible: false
     property bool isPortrait: screen.height > screen.width
     property real animProgress: 0.0
-    implicitWidth: 500
-    implicitHeight: 500
-    color: "white"
     signal hide
-    visible: false
 
     // Manual animator
     NumberAnimation on animProgress {

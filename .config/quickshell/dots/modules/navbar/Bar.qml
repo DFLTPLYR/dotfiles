@@ -97,13 +97,27 @@ Variants {
             id: extendedBarLoader
             property bool shouldBeVisible: false
             component: PopupWrapper {
-                anchor.window: root
                 shouldBeVisible: extendedBarLoader.shouldBeVisible
+                anchor {
+                    item: containerRect
+                    rect {
+                        x: parentWindow.width / 2 - width / 2
+                        y: parentWindow.height
+                    }
+                }
 
                 implicitWidth: 500
-                implicitHeight: 500
+                implicitHeight: Math.max(1, 400 * animProgress)
 
-                color: "white"
+                Behavior on height {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                color: containerRect.color
+
                 onHide: {
                     extendedBarLoader.shouldBeVisible = false;
                     extendedBarLoader.active = false;
