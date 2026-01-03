@@ -102,6 +102,7 @@ Variants {
 
                 implicitWidth: 500
                 implicitHeight: 500
+
                 color: "white"
                 onHide: {
                     extendedBarLoader.shouldBeVisible = false;
@@ -112,24 +113,13 @@ Variants {
         Connections {
             target: Config
             function onOpenExtendedBarChanged() {
-                if (screen.name === Config.focusedMonitor.name || extendedBarLoader.active) {
+                if (screen.name === Config.focusedMonitor.name) {
                     extendedBarLoader.active = Config.openExtendedBar;
                     extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
                 }
             }
         }
 
-        Connections {
-            target: Config
-            function onFocusedMonitorChanged() {
-                if (screen.name === Config.focusedMonitor.name || Config.openExtendedBar) {
-                    extendedBarLoader.active = Config.openExtendedBar;
-                    extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
-                } else {
-                    extendedBarLoader.shouldBeVisible = false;
-                }
-            }
-        }
         Component.onCompleted: {
             if (this.WlrLayershell != null) {
                 this.WlrLayershell.layer = WlrLayer.Top;
