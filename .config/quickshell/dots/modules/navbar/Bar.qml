@@ -106,6 +106,7 @@ Variants {
                 color: "white"
                 onHide: {
                     extendedBarLoader.shouldBeVisible = false;
+                    extendedBarLoader.active = false;
                 }
             }
         }
@@ -114,8 +115,12 @@ Variants {
             target: Config
             function onOpenExtendedBarChanged() {
                 if (screen.name === Config.focusedMonitor.name) {
-                    extendedBarLoader.active = Config.openExtendedBar;
+                    extendedBarLoader.active = true;
                     extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
+                } else {
+                    if (extendedBarLoader.active) {
+                        extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
+                    }
                 }
             }
         }
