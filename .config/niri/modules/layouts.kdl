@@ -1,9 +1,10 @@
 layout {
     gaps 16
     center-focused-column "never"
+    background-color "transparent"
 
     focus-ring {
-        on
+        off
         width 2
         // active-color "#7fc8ff"
         // inactive-color "#505050"
@@ -12,13 +13,10 @@ layout {
     }
 
     border {
-       on 
-        width 4
-        active-color "#ffc87f"
-        inactive-color "#505050"
-        urgent-color "#9b0000"
-        active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
-        inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+      on 
+      width 2
+      active-gradient from="#ffbb66" to="#ffc880" angle=45 relative-to="workspace-view"
+      inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     shadow {
@@ -34,6 +32,12 @@ layout {
         // right 64
         // top 64
         // bottom 64
+    }
+}
+
+overview {
+    workspace-shadow {
+        off
     }
 }
 
