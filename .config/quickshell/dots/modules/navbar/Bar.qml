@@ -100,6 +100,7 @@ Variants {
             property bool shouldBeVisible: false
             component: PopupWrapper {
                 shouldBeVisible: extendedBarLoader.shouldBeVisible
+
                 anchor {
                     item: containerRect
                     rect {
@@ -113,8 +114,9 @@ Variants {
                         left: 0
                     }
                 }
-                implicitWidth: container.width
-                implicitHeight: container.height
+
+                implicitWidth: 500
+                implicitHeight: 500
                 color: "transparent"
 
                 onHide: {
@@ -125,8 +127,8 @@ Variants {
                 Rectangle {
                     id: container
                     color: containerRect.color
-                    implicitWidth: 500
-                    implicitHeight: Math.max(1, 400 * animProgress)
+                    implicitWidth: parent.width
+                    implicitHeight: Math.max(1, parent.width * animProgress)
                     bottomLeftRadius: 50
                     bottomRightRadius: 50
                     Behavior on height {
