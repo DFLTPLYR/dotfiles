@@ -8,6 +8,7 @@ import qs.modules.navbar
 import qs.modules.wallpaper
 import qs.modules.sessionmenu
 import qs.modules.notification
+import qs.modules.settings
 
 ShellRoot {
     id: root
@@ -28,4 +29,5 @@ ShellRoot {
 
     //Session Menu Overlay
     SessionOverlay {}
+    SettingPanel {}
 }
