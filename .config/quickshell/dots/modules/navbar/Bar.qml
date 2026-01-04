@@ -69,9 +69,10 @@ Variants {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     StyledIconButton {
-                        width: parent.height
-                        height: parent.height
-
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.height / 1.5
+                        height: parent.height / 1.5
+                        radius: width / 2
                         Text {
                             font.family: Config.iconFont.family
                             font.weight: Config.iconFont.weight
@@ -81,6 +82,7 @@ Variants {
                             color: "white"
                             anchors {
                                 verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
                             }
                             text: "power-off"
                         }

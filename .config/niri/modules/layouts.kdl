@@ -3,15 +3,16 @@ layout {
     center-focused-column "never"
 
     focus-ring {
+        on
         width 2
-        active-color "#7fc8ff"
-        inactive-color "#505050"
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+        // active-color "#7fc8ff"
+        // inactive-color "#505050"
+        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45 relative-to="workspace-view"
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     border {
-        off
+       on 
         width 4
         active-color "#ffc87f"
         inactive-color "#505050"
@@ -21,7 +22,7 @@ layout {
     }
 
     shadow {
-        on
+        off
         softness 30
         spread 5
         offset x=0 y=50
