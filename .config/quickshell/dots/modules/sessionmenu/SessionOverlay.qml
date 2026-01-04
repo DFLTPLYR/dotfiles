@@ -121,6 +121,7 @@ LazyLoader {
                                     anchors.centerIn: parent
                                     text: modelData.icon.text
                                     color: ma.containsMouse ? "gray" : "white"
+
                                     Behavior on color {
                                         ColorAnimation {
                                             duration: 200
