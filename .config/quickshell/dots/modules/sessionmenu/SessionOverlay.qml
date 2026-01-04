@@ -96,15 +96,16 @@ LazyLoader {
                     height: parent.height * 0.5
                     x: parent.width * 0.25
                     y: parent.height * 0.25
-                    color: Qt.rgba(0, 0, 0, 0.9)
-                    borderRadius: 10
-
+                    color: Qt.rgba(0, 0, 0, 0.5)
+                    borderRadius: 100
+                    clip: false
+                    borderWidth: 2
+                    borderColor: "white"
                     GridLayout {
                         anchors.fill: parent
                         columns: 2
                         columnSpacing: 0
                         rowSpacing: 0
-
                         Repeater {
                             id: buttonRepeater
                             model: buttons
@@ -113,10 +114,28 @@ LazyLoader {
 
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.6)
+                                color: "transparent"
+
                                 FontIcon {
+                                    id: icon
                                     anchors.centerIn: parent
                                     text: modelData.icon.text
+                                    color: ma.containsMouse ? "gray" : "white"
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 200
+                                            easing.type: Easing.InOutQuad
+                                        }
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: ma
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: {
+                                        modelData.exec();
+                                    }
                                 }
                             }
                         }
