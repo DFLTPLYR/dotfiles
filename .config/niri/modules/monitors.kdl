@@ -1,12 +1,13 @@
 output "DP-1" {
-    mode "1920x1080@165"
-    scale 1
-    transform "normal"
-    position x=840 y=840
-    variable-refresh-rate on-demand=true
-    hot-corners {
-      off
-    }
+  mode "1920x1080@165"
+  scale 1
+  transform "normal"
+  position x=840 y=840
+  variable-refresh-rate on-demand=true
+  
+  hot-corners {
+    off
+  }
 
   layout {
       preset-column-widths {
@@ -52,7 +53,5 @@ output "DP-2" {
       default-column-width { proportion 1.0; }
       always-center-single-column
     }
-
-
 }
 
