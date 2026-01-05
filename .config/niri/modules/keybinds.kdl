@@ -15,7 +15,8 @@ binds {
 
     // Quickshell IPC commands
     Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "pcli launch wallpaper-picker";}
-    Mod+Shift+E hotkey-overlay-title="Extended Bar" { spawn-sh "pcli launch extended-bar";}
+    Mod+Shift+E hotkey-overlay-title="Open Extended Bar" { spawn-sh "pcli launch extended-bar";}
+    Mod+Shift+A hotkey-overlay-title="Open App Launcher" { spawn-sh "pcli launch app-launcher";}
 
     // move focus between windows in the current column.
     Mod+Left  { focus-column-left; }
@@ -173,10 +174,6 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
     
-    // Mod+C { center-column; }
-    //
-    // Mod+Ctrl+C { center-visible-columns; }
-
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
@@ -219,6 +216,7 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 }
+
 recent-windows {
   on
   debounce-ms 750
