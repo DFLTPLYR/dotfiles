@@ -12,7 +12,7 @@ Scope {
         property bool shouldBeVisible: false
         component: PanelWrapper {
             id: screenPanel
-            color: Qt.rgba(0, 0, 0, 0.5)
+            color: "transparent"
             shouldBeVisible: appMenuLoader.shouldBeVisible
 
             anchors {
@@ -20,6 +20,18 @@ Scope {
                 right: true
                 top: true
                 bottom: true
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.rgba(0, 0, 0, 0.5)
+                opacity: screenPanel.animProgress
+                Behavior on height {
+                    NumberAnimation {
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
 
             Component.onCompleted: {
@@ -34,8 +46,12 @@ Scope {
     Connections {
         target: Config
         function onOpenAppLauncherChanged() {
-            appMenuLoader.active = !appMenuLoader.active;
-            appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
+            if (!appMenuLoader.active) {
+                appMenuLoader.active = true;
+                appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
+            } else {
+                appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
+            }
         }
     }
 }
