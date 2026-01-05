@@ -28,8 +28,8 @@ Variants {
             bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
         }
 
-        width: Config.navbar.side ? Config.navbar.width : screen.width
-        height: Config.navbar.side ? screen.height : Config.navbar.height
+        implicitWidth: Config.navbar.side ? Config.navbar.width : screen.width
+        implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
 
         color: "transparent"
 
