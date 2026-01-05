@@ -42,7 +42,7 @@ Scope {
             delegate: StyledRect {
                 required property var modelData
                 color: Qt.rgba(0, 0, 0, 0.8)
-                width: parent.width
+                width: parent ? parent.width : 0
                 height: 60
 
                 RowLayout {
