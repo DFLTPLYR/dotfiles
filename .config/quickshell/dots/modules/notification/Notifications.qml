@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
@@ -43,6 +44,50 @@ Scope {
                 color: Qt.rgba(0, 0, 0, 0.8)
                 width: parent.width
                 height: 60
+
+                RowLayout {
+                    anchors.fill: parent
+
+                    // icon
+                    Rectangle {
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: height
+                        color: "transparent"
+                        clip: true
+                        Image {
+                            id: notificationIcon
+                            anchors.fill: parent
+                            visible: modelData.appIcon !== ""
+                            fillMode: Image.PreserveAspectCrop
+                            source: Qt.resolvedUrl(modelData.appIcon)
+                        }
+                    }
+                    // content
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        spacing: 2
+                        Text {
+                            text: modelData.appName
+                            font.bold: true
+                            font.pointSize: 12
+                            color: "white"
+                            elide: Text.ElideRight
+                        }
+                        Text {
+                            text: modelData.summary
+                            font.pointSize: 10
+                            color: "white"
+                            elide: Text.ElideRight
+                        }
+                        Text {
+                            text: modelData.body
+                            font.pointSize: 9
+                            color: "lightgray"
+                            elide: Text.ElideRight
+                        }
+                    }
+                }
 
                 MouseArea {
                     anchors.fill: parent
