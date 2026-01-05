@@ -28,19 +28,28 @@ Variants {
             bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
         }
 
-        implicitWidth: containerRect.width
-        implicitHeight: containerRect.height
+        width: Config.navbar.side ? Config.navbar.width : screen.width
+        height: Config.navbar.side ? screen.height : Config.navbar.height
 
         color: "transparent"
 
         // parent
         StyledRect {
             id: containerRect
-            width: Config.navbar.side ? Config.navbar.width : screen.width
-            height: Config.navbar.side ? screen.height : Config.navbar.height
             color: Qt.rgba(0, 0, 0, 0.5)
-
             anchors.fill: parent
+            Behavior on height {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on width {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
             GridLayout {
                 anchors.fill: parent
                 columns: 3
