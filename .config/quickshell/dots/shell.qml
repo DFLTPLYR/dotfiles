@@ -4,6 +4,7 @@ import Quickshell.Io
 
 // imports
 import qs.config
+import qs.modules.app
 import qs.modules.navbar
 import qs.modules.wallpaper
 import qs.modules.sessionmenu
@@ -14,6 +15,7 @@ ShellRoot {
     id: root
 
     // App Launcher
+    AppMenu {}
 
     // Navbar
     Bar {}
