@@ -24,7 +24,10 @@ Variants {
         }
 
         Image {
-            anchors.fill: parent
+            height: parent.height
+            width: parent.width
+            sourceSize.width: screen.width
+            sourceSize.height: screen.height
             fillMode: Image.PreserveAspectCrop
             source: {
                 const filePath = Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
