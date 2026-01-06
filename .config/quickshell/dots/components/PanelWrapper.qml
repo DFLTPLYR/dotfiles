@@ -42,7 +42,6 @@ PanelWindow {
             internalVisible = true;
         } else if (!shouldBeVisible && animProgress === 0.00) {
             internalVisible = false;
-            root.isVisible = false;
         }
     }
 
