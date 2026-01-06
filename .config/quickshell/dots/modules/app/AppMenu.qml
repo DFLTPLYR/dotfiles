@@ -22,14 +22,24 @@ Scope {
                 bottom: true
             }
 
-            Rectangle {
-                anchors.fill: parent
-                color: Qt.rgba(0, 0, 0, 0.5)
-                opacity: screenPanel.animProgress
-                Behavior on height {
-                    NumberAnimation {
-                        duration: 250
-                        easing.type: Easing.InOutQuad
+            PopupWindow {
+                anchor.window: screenPanel
+                anchor.rect.x: parentWindow.width / 2 - width / 2
+                anchor.rect.y: parentWindow.screen.height / 2 - height / 2
+                implicitWidth: parentWindow.screen.width * 0.5
+                implicitHeight: parentWindow.screen.height * 0.6
+                color: "transparent"
+                visible: screenPanel.internalVisible
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: Qt.rgba(0, 0, 0, 0.5)
+                    opacity: screenPanel.animProgress
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: 250
+                            easing.type: Easing.InOutQuad
+                        }
                     }
                 }
             }
@@ -50,6 +60,8 @@ Scope {
                 appMenuLoader.active = true;
                 appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
             } else {
+                if (!Config.openAppLauncher)
+                    return;
                 appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
             }
         }
