@@ -11,6 +11,7 @@ Singleton {
     property alias loaded: fileView.loaded
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
+    property alias extendedBar: adapter.extendedBar
 
     property list<Workspace> workspaces: []
     property Workspace focusedWorkspace: null
@@ -49,6 +50,7 @@ Singleton {
         JsonAdapter {
             id: adapter
             property NavbarConfig navbar: NavbarConfig {}
+            property ExtendedBarConfig extendedBar: ExtendedBarConfig {}
             property var wallpaper: []
         }
     }
