@@ -26,7 +26,13 @@ Variants {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path)
+            source: {
+                const filePath = Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
+                if (filePath === undefined) {
+                    return "";
+                }
+                return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path);
+            }
         }
     }
 }
