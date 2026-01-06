@@ -16,6 +16,6 @@ window-rule {
 }
 
 layer-rule {
-  match namespace="swww-daemon"
+  match namespace="Background"
   place-within-backdrop true
 }
