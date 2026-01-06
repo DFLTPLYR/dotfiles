@@ -1,12 +1,13 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         required property ShellScreen modelData
         screen: modelData
-
+        color: "transparent"
         anchors {
             top: true
             bottom: true
@@ -14,12 +15,11 @@ Variants {
             left: true
         }
 
-        contentItem {
-            focus: true
-            Keys.onPressed: event => {
-                if (event.key == Qt.Key_Escape) {
-                    Config.sessionMenuOpen = false;
-                }
+        Component.onCompleted: {
+            if (this.WlrLayershell) {
+                this.exclusionMode = ExclusionMode.Ignore;
+                this.WlrLayershell.layer = WlrLayer.Background;
+                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.None;
             }
         }
     }

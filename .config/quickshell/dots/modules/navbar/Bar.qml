@@ -38,6 +38,7 @@ Variants {
             id: containerRect
             color: Qt.rgba(0, 0, 0, 0.5)
             anchors.fill: parent
+
             Behavior on height {
                 NumberAnimation {
                     duration: 300
@@ -50,6 +51,7 @@ Variants {
                     easing.type: Easing.InOutQuad
                 }
             }
+
             GridLayout {
                 anchors.fill: parent
                 columns: 3

@@ -32,4 +32,5 @@ ShellRoot {
     //Session Menu Overlay
     SessionOverlay {}
     SettingPanel {}
+    WallpaperBackground {}
 }

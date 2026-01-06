@@ -28,5 +28,5 @@ cursor {
 
 // start up qs
 spawn-sh-at-startup "qs -c dots"
-spawn-sh-at-startup "swww-daemon"
-spawn-sh-at-startup "mpdris2-rs"
+spawn-sh-at-startup "mpdris2-rs -n"
+spawn-sh-at-startup "wl-paste --watch cliphist store"
