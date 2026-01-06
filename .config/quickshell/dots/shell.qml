@@ -3,13 +3,12 @@ import Quickshell
 import Quickshell.Io
 
 // imports
-import qs.config
 import qs.modules.app
 import qs.modules.navbar
-import qs.modules.wallpaper
-import qs.modules.sessionmenu
 import qs.modules.notification
+import qs.modules.sessionmenu
 import qs.modules.settings
+import qs.modules.wallpaper
 
 ShellRoot {
     id: root
@@ -23,14 +22,18 @@ ShellRoot {
     // Notifications
     Notifications {}
 
+    // WallpaperBackground
+    WallpaperBackground {}
+
     // Wallpaper Picker
     WallpaperPicker {}
 
     // Volume OSD
     VolumeOsd {}
 
+    // Settings Panel
+    SettingPanel {}
+
     //Session Menu Overlay
     SessionOverlay {}
-    SettingPanel {}
-    WallpaperBackground {}
 }

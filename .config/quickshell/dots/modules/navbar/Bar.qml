@@ -140,9 +140,17 @@ Variants {
                     color: containerRect.color
                     implicitWidth: parent.width
                     implicitHeight: Math.max(1, parent.width * animProgress)
+                    y: height * animProgress - (implicitHeight)
+
                     bottomLeftRadius: 50
                     bottomRightRadius: 50
                     Behavior on height {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                    Behavior on y {
                         NumberAnimation {
                             duration: 300
                             easing.type: Easing.InOutQuad

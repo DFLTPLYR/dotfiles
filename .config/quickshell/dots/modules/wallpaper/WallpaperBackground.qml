@@ -15,6 +15,7 @@ Variants {
         WlrLayershell.layer: WlrLayer.Background
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         WlrLayershell.namespace: "Background"
+
         anchors {
             top: true
             bottom: true
