@@ -1,6 +1,8 @@
 pragma Singleton
 
 import QtQuick
+import QtCore
+
 import Quickshell
 import Quickshell.Io
 
@@ -12,6 +14,7 @@ Singleton {
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
     property alias extendedBar: adapter.extendedBar
+    property alias wallpaperDirs: adapter.wallpaperDirs
 
     property list<Workspace> workspaces: []
     property Workspace focusedWorkspace: null
@@ -54,8 +57,8 @@ Singleton {
             property var wallpaper: []
             property list<var> wallpaperDirs: [
                 {
-                    name: "Add New Directory",
-                    path: null,
+                    name: "Default Pictures",
+                    path: StandardPaths.writableLocation(StandardPaths.PicturesLocation),
                     removable: false
                 }
             ]

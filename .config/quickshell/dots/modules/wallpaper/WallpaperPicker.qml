@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import QtCore
 
 import Qt.labs.folderlistmodel
 
@@ -49,24 +50,10 @@ Scope {
                     anchors.fill: parent
                     spacing: 6
                     opacity: 1 * sidebarRoot.animProgress
-                    FileDialog {
-                        id: fileDialog
-                        currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
-                        onAccepted: image.source = selectedFile
-                    }
-                    FolderListModel {
-                        id: dirModel
-                        folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
-                        showFiles: false
-                        showDirs: true
-                    }
 
                     FolderListModel {
                         id: folderModel
-                        folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
-                        nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp"]
-                        showFiles: true
-                        showDirs: true
+                        nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
                     }
 
                     StyledRect {
@@ -74,41 +61,57 @@ Scope {
                         Layout.fillWidth: true
                         Layout.maximumWidth: parent.width / 10
                         Layout.fillHeight: true
-
                         clip: true
 
                         GridView {
                             anchors.fill: parent
-                            model: [
-                                {
-                                    name: "add Buttom",
-                                    type: "action",
-                                    path: null
+                            model: ScriptModel {
+                                values: {
+                                    return Config.wallpaperDirs;
                                 }
-                            ]
-
-                            delegate: Item {
+                            }
+                            delegate: Rectangle {
                                 required property var modelData
-
                                 implicitWidth: parent ? parent.width : 0
-                                height: 40
+                                height: 50
+                                color: ma.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : Qt.rgba(0, 0, 0, 0.2)
+
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 200
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
 
                                 Text {
+                                    id: label
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: modelData.name
                                     color: "white"
-                                    font.pixelSize: 16
+                                    width: parent.width
                                     elide: Text.ElideRight
+                                    wrapMode: Text.Wrap
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    clip: true
                                 }
 
                                 MouseArea {
+                                    id: ma
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    onClicked: {
-                                        // if (dirModel.isFolder(modelData.index)) {
-                                        //     folderModel.folder = Qt.resolvedUrl(modelData.filePath);
-                                        // }
+                                    acceptedButtons: Qt.AllButtons
+                                    onClicked: mouse => {
+                                        if (mouse.button === Qt.LeftButton) {
+                                            folderModel.folder = "file://" + modelData.path;
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            if (modelData.removable) {
+                                                var index = Config.wallpaperDirs.findIndex(d => d.path === modelData.path);
+                                                if (index !== -1)
+                                                    Config.wallpaperDirs.splice(index, 1);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -124,21 +127,44 @@ Scope {
                         GridView {
                             id: fileGrid
                             anchors.fill: parent
-                            property var cellSize: parent.width / 5
+                            property var cellSize: parent.width / 4
                             model: folderModel
                             cellWidth: cellSize
                             cellHeight: cellSize
 
                             delegate: Rectangle {
                                 required property var modelData
+                                readonly property bool isFolder: folderModel.isFolder(modelData.index)
                                 width: fileGrid.cellSize
                                 height: width
-                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.3)
+                                color: isFolder ? Qt.rgba(Math.random(), Math.random(), Math.random(), 0.3) : "transparent"
 
                                 Text {
+                                    visible: isFolder
                                     anchors.centerIn: parent
-                                    text: "folder"
-                                    visible: folderModel.isFolder(modelData.index)
+                                    text: modelData.fileName
+                                }
+
+                                Image {
+                                    anchors.fill: parent
+                                    visible: !isFolder
+                                    source: modelData.filePath
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: mouse => {
+                                        if (isFolder) {
+                                            if (Config.wallpaperDirs.find(m => m.path === modelData.filePath))
+                                                return;
+                                            Config.wallpaperDirs.push({
+                                                name: modelData.fileName,
+                                                path: modelData.filePath,
+                                                removable: true
+                                            });
+                                            folderModel.folder = "file://" + modelData.path;
+                                        }
+                                    }
                                 }
                             }
                         }
