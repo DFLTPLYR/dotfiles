@@ -127,29 +127,32 @@ Scope {
                         GridView {
                             id: fileGrid
                             anchors.fill: parent
-                            property var cellSize: parent.width / 4
+                            property var cellSize: parent.width / 8
                             model: folderModel
                             cellWidth: cellSize
                             cellHeight: cellSize
 
-                            delegate: Rectangle {
+                            delegate: Item {
+                                id: delegateRect
                                 required property var modelData
                                 readonly property bool isFolder: folderModel.isFolder(modelData.index)
                                 width: fileGrid.cellSize
                                 height: width
-                                color: isFolder ? Qt.rgba(Math.random(), Math.random(), Math.random(), 0.3) : "transparent"
 
                                 Text {
-                                    visible: isFolder
+                                    visible: delegateRect.isFolder
                                     anchors.centerIn: parent
                                     text: modelData.fileName
+                                    color: "white"
                                 }
 
                                 Image {
+                                    id: imagePreview
                                     anchors.fill: parent
-                                    visible: !isFolder
-                                    source: modelData.filePath
+                                    visible: !delegateRect.isFolder
+                                    source: !delegateRect.isFolder ? modelData.filePath : ""
                                     cache: true
+                                    fillMode: Image.PreserveAspectCrop
                                     asynchronous: true
                                     smooth: true
                                 }
@@ -165,7 +168,9 @@ Scope {
                                                 path: modelData.filePath,
                                                 removable: true
                                             });
-                                            folderModel.folder = "file://" + modelData.path;
+                                            Qt.callLater(() => {
+                                                folderModel.folder = "file://" + modelData.filePath;
+                                            });
                                         }
                                     }
                                 }
