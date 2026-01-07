@@ -37,5 +37,17 @@ Variants {
                 return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path);
             }
         }
+
+        Rectangle {
+            visible: !Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)
+            height: parent.height
+            width: parent.width
+            color: Qt.rgba(0, 0, 0, 0.5)
+            Text {
+                anchors.centerIn: parent
+                font.pixelSize: Math.min(screen.width, screen.height) / 20
+                text: "No wallpaper set for " + screen.name
+            }
+        }
     }
 }
