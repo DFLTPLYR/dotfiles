@@ -16,8 +16,7 @@ PanelWindow {
     property real animProgress: 0.0
 
     // Signals for custom behavior
-    signal hidden(string drawerKey)
-    signal visibilityChanged(bool value, string monitorName)
+    signal hidden
 
     visible: internalVisible
     focusable: internalVisible
@@ -42,6 +41,7 @@ PanelWindow {
             internalVisible = true;
         } else if (!shouldBeVisible && animProgress === 0.00) {
             internalVisible = false;
+            hidden();
         }
     }
 

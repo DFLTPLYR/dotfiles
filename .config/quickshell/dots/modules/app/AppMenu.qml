@@ -44,6 +44,10 @@ Scope {
                 }
             }
 
+            onHidden: {
+                appMenuLoader.active = false;
+            }
+
             Component.onCompleted: {
                 if (this.WlrLayershell) {
                     this.WlrLayershell.layer = WlrLayer.Overlay;
@@ -60,8 +64,6 @@ Scope {
                 appMenuLoader.active = true;
                 appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
             } else {
-                if (!Config.openAppLauncher)
-                    return;
                 appMenuLoader.shouldBeVisible = !appMenuLoader.shouldBeVisible;
             }
         }
