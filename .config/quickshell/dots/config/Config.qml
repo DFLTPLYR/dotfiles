@@ -73,10 +73,6 @@ Singleton {
         Workspace {}
     }
 
-    function requestFocusedMonitor() {
-        niriSocket.write('"FocusedOutput"\n');
-    }
-
     Socket {
         id: niriSocket
         path: config.niriSocket
@@ -212,7 +208,7 @@ Singleton {
                 case EventType.WorkspaceActivated:
                     break;
                 case EventType.WindowFocusChanged:
-                    config.requestFocusedMonitor();
+                    niriSocket.write('"FocusedOutput"\n');
                     break;
                 case EventType.WindowOpenedOrChanged:
                     const win = event.WindowOpenedOrChanged.window;
