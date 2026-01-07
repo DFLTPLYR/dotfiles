@@ -19,6 +19,7 @@ Item {
     onBorderWidthChanged: {
         contentItem.border.width = root.borderWidth;
     }
+
     onBorderColorChanged: {
         contentItem.border.color = root.borderColor;
     }
