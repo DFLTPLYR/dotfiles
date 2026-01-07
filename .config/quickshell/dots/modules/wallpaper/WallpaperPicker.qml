@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
+
 import Qt.labs.folderlistmodel
 
 import Quickshell
@@ -11,16 +13,14 @@ import qs.components
 
 Scope {
     id: root
-    property bool isVisible: false
-    signal toggle
 
     LazyLoader {
         id: panelLoader
-        active: root.isVisible
+        property bool shouldBeVisible: false
         component: PanelWrapper {
             id: sidebarRoot
-            readonly property bool isPortrait: screen.height >= screen.width
             color: "transparent"
+            shouldBeVisible: panelLoader.shouldBeVisible
 
             Rectangle {
                 anchors.fill: parent
@@ -49,7 +49,11 @@ Scope {
                     anchors.fill: parent
                     spacing: 6
                     opacity: 1 * sidebarRoot.animProgress
-
+                    FileDialog {
+                        id: fileDialog
+                        currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                        onAccepted: image.source = selectedFile
+                    }
                     FolderListModel {
                         id: dirModel
                         folder: Qt.resolvedUrl(`${Quickshell.env("HOME") + "/Pictures"}`)
@@ -75,19 +79,24 @@ Scope {
 
                         GridView {
                             anchors.fill: parent
-
-                            model: dirModel
+                            model: [
+                                {
+                                    name: "add Buttom",
+                                    type: "action",
+                                    path: null
+                                }
+                            ]
 
                             delegate: Item {
                                 required property var modelData
 
-                                implicitWidth: parent.width
+                                implicitWidth: parent ? parent.width : 0
                                 height: 40
 
                                 Text {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
-                                    text: modelData.fileName
+                                    text: modelData.name
                                     color: "white"
                                     font.pixelSize: 16
                                     elide: Text.ElideRight
@@ -97,9 +106,9 @@ Scope {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     onClicked: {
-                                        if (dirModel.isFolder(modelData.index)) {
-                                            folderModel.folder = Qt.resolvedUrl(modelData.filePath);
-                                        }
+                                        // if (dirModel.isFolder(modelData.index)) {
+                                        //     folderModel.folder = Qt.resolvedUrl(modelData.filePath);
+                                        // }
                                     }
                                 }
                             }
@@ -137,12 +146,10 @@ Scope {
                 }
             }
 
-            Connections {
-                target: root
-                function onToggle() {
-                    sidebarRoot.shouldBeVisible = !sidebarRoot.shouldBeVisible;
-                }
+            onHidden: {
+                panelLoader.active = false;
             }
+
             // set up
             Component.onCompleted: {
                 if (this.WlrLayershell) {
@@ -157,8 +164,12 @@ Scope {
     Connections {
         target: Config
         function onOpenWallpaperPickerChanged() {
-            root.isVisible = true;
-            root.toggle();
+            if (!panelLoader.active) {
+                panelLoader.active = true;
+                panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
+            } else {
+                panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
+            }
         }
     }
 }

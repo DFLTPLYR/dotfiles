@@ -52,6 +52,13 @@ Singleton {
             property NavbarConfig navbar: NavbarConfig {}
             property ExtendedBarConfig extendedBar: ExtendedBarConfig {}
             property var wallpaper: []
+            property list<var> wallpaperDirs: [
+                {
+                    name: "Add New Directory",
+                    path: null,
+                    removable: false
+                }
+            ]
         }
     }
 
