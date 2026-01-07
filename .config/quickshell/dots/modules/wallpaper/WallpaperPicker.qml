@@ -149,6 +149,9 @@ Scope {
                                     anchors.fill: parent
                                     visible: !isFolder
                                     source: modelData.filePath
+                                    cache: true
+                                    asynchronous: true
+                                    smooth: true
                                 }
 
                                 MouseArea {
