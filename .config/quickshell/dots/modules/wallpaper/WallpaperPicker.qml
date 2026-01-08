@@ -123,39 +123,18 @@ Scope {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-                        Flickable {
-                            id: flickable
-                            anchors.fill: parent
-                            contentWidth: width
-                            contentHeight: flexLayout.height
-                            clip: true
-                            ScrollBar.vertical: ScrollBar {
-                                width: 20
-                                policy: ScrollBar.AlwaysOn
-                            }
 
-                            FlexboxLayout {
-                                id: flexLayout
-                                wrap: FlexboxLayout.Wrap
-                                width: flickable.width
-                                implicitHeight: 10
-                                direction: FlexboxLayout.Row
-                                justifyContent: FlexboxLayout.JustifyStart
-                                Repeater {
-                                    id: contentRepeater
-                                    model: folderModel
-                                    delegate: Loader {
-                                        active: true
-                                        sourceComponent: folderModel.isFolder(model.index) ? folderDescriptionComponent : imagePreviewComponent
-                                        onLoaded: {
-                                            if (item) {
-                                                item.model = model;
-                                                if (folderModel.isFolder(model.index)) {
-                                                    item.text = model.fileName ? model.fileName : "";
-                                                }
-                                            }
-                                        }
-                                    }
+                        GridView {
+                            anchors.fill: parent
+                            model: folderModel
+                            delegate: Loader {
+                                id: compLoader
+                                Component.onCompleted: {
+                                    const isFolder = folderModel.isFolder(index);
+                                    sourceComponent = isFolder ? folderDescriptionComponent : imagePreviewComponent;
+                                }
+                                onLoaded: {
+                                    item.model = model;
                                 }
                             }
                         }
@@ -201,6 +180,7 @@ Scope {
             }
         }
     }
+
     Component {
         id: folderDescriptionComponent
         Rectangle {
