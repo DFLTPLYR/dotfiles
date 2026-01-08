@@ -12,6 +12,7 @@ Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: root
+        WlrLayershell.namespace: "navbar"
         required property ShellScreen modelData
         readonly property bool isPortrait: screen.height > screen.width
         screen: modelData
