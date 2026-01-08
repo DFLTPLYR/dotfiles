@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 import QtCore
@@ -50,11 +51,6 @@ Scope {
                     anchors.fill: parent
                     spacing: 6
                     opacity: 1 * sidebarRoot.animProgress
-
-                    FolderListModel {
-                        id: folderModel
-                        nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
-                    }
 
                     StyledRect {
                         color: Qt.rgba(0, 0, 0, 0.5)
@@ -127,50 +123,37 @@ Scope {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-
-                        GridView {
-                            id: fileGrid
+                        Flickable {
+                            id: flickable
                             anchors.fill: parent
-                            property var cellSize: parent.width / 10
-                            model: folderModel
-                            cellWidth: cellSize
-                            cellHeight: cellSize
+                            contentWidth: width
+                            contentHeight: flexLayout.height
+                            clip: true
+                            ScrollBar.vertical: ScrollBar {
+                                width: 20
+                                policy: ScrollBar.AlwaysOn
+                            }
 
-                            delegate: Item {
-                                id: delegateRect
-                                required property var modelData
-                                readonly property bool isFolder: folderModel.isFolder(modelData.index)
-                                width: fileGrid.cellSize
-                                height: width
-
-                                FolderDescription {
-                                    visible: (isFolder && modelData.fileName != undefined)
-                                    text: (isFolder && modelData.fileName) ? modelData.fileName : ""
-                                }
-
-                                ImagePreview {
-                                    width: parent.width
-                                    height: parent.height
-                                    // width: implicitWidth * 0.5
-                                    // height: implicitHeight * 0.5
-                                    visible: (!isFolder && modelData.filePath != undefined)
-                                    source: (!isFolder && modelData.filePath) ? modelData.filePath : ""
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: mouse => {
-                                        if (isFolder) {
-                                            if (Config.wallpaperDirs.find(m => m.path === modelData.filePath))
-                                                return;
-                                            Config.wallpaperDirs.push({
-                                                name: modelData.fileName,
-                                                path: modelData.filePath,
-                                                removable: true
-                                            });
-                                            Qt.callLater(() => {
-                                                folderModel.folder = "file://" + modelData.filePath;
-                                            });
+                            FlexboxLayout {
+                                id: flexLayout
+                                wrap: FlexboxLayout.Wrap
+                                width: flickable.width
+                                implicitHeight: 10
+                                direction: FlexboxLayout.Row
+                                justifyContent: FlexboxLayout.JustifyStart
+                                Repeater {
+                                    id: contentRepeater
+                                    model: folderModel
+                                    delegate: Loader {
+                                        active: true
+                                        sourceComponent: folderModel.isFolder(model.index) ? folderDescriptionComponent : imagePreviewComponent
+                                        onLoaded: {
+                                            if (item) {
+                                                item.model = model;
+                                                if (folderModel.isFolder(model.index)) {
+                                                    item.text = model.fileName ? model.fileName : "";
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -195,27 +178,71 @@ Scope {
         }
     }
 
-    component ImagePreview: Image {
-        id: imagePreview
-        cache: true
-        fillMode: Image.PreserveAspectCrop
-        asynchronous: true
-        smooth: true
-
-        Text {
-            visible: imagePreview.status === Image.Loading
-            anchors.centerIn: parent
-            text: "Loading..."
-            color: "white"
+    Component {
+        id: imagePreviewComponent
+        Item {
+            id: imageFrame
+            property var model
+            width: 150
+            height: 150
+            Image {
+                id: imagePreview
+                source: (model && model.filePath) ? model.filePath : ""
+                anchors.fill: parent
+                cache: true
+                asynchronous: true
+                smooth: true
+                Text {
+                    visible: imagePreview.status === Image.Loading
+                    anchors.centerIn: parent
+                    text: "Loading..."
+                    color: "white"
+                }
+            }
+        }
+    }
+    Component {
+        id: folderDescriptionComponent
+        Rectangle {
+            property var model
+            property alias text: label.text
+            color: Qt.rgba(0, 0, 0, 0.5)
+            width: 150
+            height: 50
+            Text {
+                id: label
+                anchors.centerIn: parent
+                text: ""
+                color: "white"
+                elide: Text.ElideRight
+                wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width - 4
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: mouse => {
+                    if (Config.wallpaperDirs.find(m => m.path === model.filePath))
+                        return;
+                    Config.wallpaperDirs.push({
+                        name: model.fileName,
+                        path: model.filePath,
+                        removable: true
+                    });
+                    Qt.callLater(() => {
+                        folderModel.folder = "file://" + model.filePath;
+                    });
+                }
+            }
         }
     }
 
-    component FolderDescription: Text {
-        anchors.centerIn: parent
-        text: "📁"
-        color: "white"
+    FolderListModel {
+        id: folderModel
+        folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+        nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
     }
-
     Connections {
         target: Config
         function onOpenWallpaperPickerChanged() {
