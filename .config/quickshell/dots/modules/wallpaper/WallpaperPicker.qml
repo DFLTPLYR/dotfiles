@@ -144,10 +144,12 @@ Scope {
                                 height: width
 
                                 FolderDescription {
+                                    visible: (isFolder && modelData.fileName != undefined)
                                     text: (isFolder && modelData.fileName) ? modelData.fileName : ""
                                 }
 
                                 ImagePreview {
+                                    visible: (!isFolder && modelData.filePath != undefined)
                                     source: (!isFolder && modelData.filePath) ? modelData.filePath : ""
                                 }
 
@@ -196,6 +198,13 @@ Scope {
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         smooth: true
+
+        Text {
+            visible: imagePreview.status === Image.Loading
+            anchors.centerIn: parent
+            text: "Loading..."
+            color: "white"
+        }
     }
 
     component FolderDescription: Text {
