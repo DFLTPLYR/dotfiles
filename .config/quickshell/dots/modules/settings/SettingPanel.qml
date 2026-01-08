@@ -9,7 +9,7 @@ import qs.config
 Scope {
     Connections {
         target: Config
-        function onOpenWallpaperPickerChanged() {
+        function onOpenSettingsPanelChanged() {
             settingsLoader.active = !settingsLoader.active;
         }
     }
@@ -30,14 +30,14 @@ Scope {
 
                 Item {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 40
+                    Layout.preferredWidth: parent.width / 10
 
                     ListView {
                         anchors.fill: parent
                         spacing: 1
-                        model: ["wallpaper", "themes", "extensions", "about"]
-                        delegate: Rectangle {
-                            width: parent.width
+                        model: ["general", "navbar", "wallpaper", "extended-navbar"]
+                        delegate: Item {
+                            width: parent ? parent.width : null
                             height: 40
                         }
                     }

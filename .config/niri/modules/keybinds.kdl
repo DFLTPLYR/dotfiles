@@ -17,6 +17,7 @@ binds {
     Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "pcli launch wallpaper-picker";}
     Mod+Shift+E hotkey-overlay-title="Open Extended Bar" { spawn-sh "pcli launch extended-bar";}
     Mod+Shift+A hotkey-overlay-title="Open App Launcher" { spawn-sh "pcli launch app-launcher";}
+    Mod+S hotkey-overlay-title="Open Shell Settings" { spawn-sh "pcli launch shell-settings";}
 
     // move focus between windows in the current column.
     Mod+Left  { focus-column-left; }

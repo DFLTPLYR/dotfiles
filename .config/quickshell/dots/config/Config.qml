@@ -11,7 +11,6 @@ import qs.config
 
 Singleton {
     id: config
-    property alias loaded: fileView.loaded
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
     property alias extendedBar: adapter.extendedBar
@@ -268,6 +267,10 @@ Singleton {
 
         function toggleExtendedBar() {
             config.openExtendedBar = !config.openExtendedBar;
+        }
+
+        function toggleSettingsPanel() {
+            config.openSettingsPanel = !config.openSettingsPanel;
         }
     }
 }
