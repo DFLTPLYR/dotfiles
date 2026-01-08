@@ -12,6 +12,7 @@ Scope {
     property ListModel notificationListModel: ListModel {}
 
     PanelWindow {
+        WlrLayershell.namespace: "notifications"
         screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor?.name) ?? null
         property bool isPortrait: screen.height > screen.width
         implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 5)

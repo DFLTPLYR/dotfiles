@@ -64,7 +64,11 @@ Scope {
                         clip: true
 
                         GridView {
-                            anchors.fill: parent
+                            id: gridDirList
+                            height: parent.height
+                            width: parent.width
+                            readonly property int itemHeight: 50
+                            cellHeight: itemHeight
                             model: ScriptModel {
                                 values: {
                                     return Config.wallpaperDirs;
@@ -73,7 +77,7 @@ Scope {
                             delegate: Rectangle {
                                 required property var modelData
                                 implicitWidth: parent ? parent.width : 0
-                                height: 50
+                                height: gridDirList.itemHeight
                                 color: ma.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : Qt.rgba(0, 0, 0, 0.2)
 
                                 Behavior on color {
@@ -139,22 +143,12 @@ Scope {
                                 width: fileGrid.cellSize
                                 height: width
 
-                                Text {
-                                    visible: delegateRect.isFolder
-                                    anchors.centerIn: parent
-                                    text: modelData.fileName
-                                    color: "white"
+                                FolderDescription {
+                                    text: (isFolder && modelData.fileName) ? modelData.fileName : ""
                                 }
 
-                                Image {
-                                    id: imagePreview
-                                    anchors.fill: parent
-                                    visible: !delegateRect.isFolder
-                                    source: !delegateRect.isFolder ? modelData.filePath : ""
-                                    cache: true
-                                    fillMode: Image.PreserveAspectCrop
-                                    asynchronous: true
-                                    smooth: true
+                                ImagePreview {
+                                    source: (!isFolder && modelData.filePath) ? modelData.filePath : ""
                                 }
 
                                 MouseArea {
@@ -193,6 +187,21 @@ Scope {
                 }
             }
         }
+    }
+
+    component ImagePreview: Image {
+        id: imagePreview
+        anchors.fill: parent
+        cache: true
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        smooth: true
+    }
+
+    component FolderDescription: Text {
+        anchors.centerIn: parent
+        text: "📁"
+        color: "white"
     }
 
     Connections {
