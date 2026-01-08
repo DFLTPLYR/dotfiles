@@ -118,24 +118,23 @@ Scope {
                         }
                     }
 
-                    Rectangle {
-                        color: Qt.rgba(0, 0, 0, 0.5)
+                    GridView {
+                        id: contentGrid
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        clip: true
-
-                        GridView {
-                            anchors.fill: parent
-                            model: folderModel
-                            delegate: Loader {
-                                id: compLoader
-                                Component.onCompleted: {
-                                    const isFolder = folderModel.isFolder(index);
-                                    sourceComponent = isFolder ? folderDescriptionComponent : imagePreviewComponent;
-                                }
-                                onLoaded: {
-                                    item.model = model;
-                                }
+                        model: folderModel
+                        cellHeight: 80
+                        cellWidth: 150
+                        delegate: Loader {
+                            id: compLoader
+                            width: contentGrid.cellWidth
+                            height: contentGrid.cellHeight
+                            Component.onCompleted: {
+                                const isFolder = folderModel.isFolder(index);
+                                sourceComponent = isFolder ? folderDescriptionComponent : imagePreviewComponent;
+                            }
+                            onLoaded: {
+                                item.model = model;
                             }
                         }
                     }
@@ -162,12 +161,10 @@ Scope {
         Item {
             id: imageFrame
             property var model
-            width: 150
-            height: 150
             Image {
                 id: imagePreview
-                source: (model && model.filePath) ? model.filePath : ""
                 anchors.fill: parent
+                source: (model && model.filePath) ? model.filePath : ""
                 cache: true
                 asynchronous: true
                 smooth: true
@@ -186,8 +183,6 @@ Scope {
         Rectangle {
             property var model
             color: Qt.rgba(0, 0, 0, 0.5)
-            width: 150
-            height: 50
             Text {
                 id: label
                 anchors.centerIn: parent
@@ -222,15 +217,16 @@ Scope {
         folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
         nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
     }
-    Connections {
-        target: Config
-        function onOpenWallpaperPickerChanged() {
-            if (!panelLoader.active) {
-                panelLoader.active = true;
-                panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
-            } else {
-                panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
-            }
-        }
-    }
+
+    // Connections {
+    //     target: Config
+    //     function onOpenWallpaperPickerChanged() {
+    //         if (!panelLoader.active) {
+    //             panelLoader.active = true;
+    //             panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
+    //         } else {
+    //             panelLoader.shouldBeVisible = !panelLoader.shouldBeVisible;
+    //         }
+    //     }
+    // }
 }
