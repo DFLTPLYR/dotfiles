@@ -1,4 +1,5 @@
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtCore
@@ -14,7 +15,6 @@ Singleton {
     property alias navbar: adapter.navbar
     property alias wallpaper: adapter.wallpaper
     property alias extendedBar: adapter.extendedBar
-    property alias wallpaperDirs: adapter.wallpaperDirs
 
     property list<Workspace> workspaces: []
     property Workspace focusedWorkspace: null
@@ -54,14 +54,7 @@ Singleton {
             id: adapter
             property NavbarConfig navbar: NavbarConfig {}
             property ExtendedBarConfig extendedBar: ExtendedBarConfig {}
-            property var wallpaper: []
-            property list<var> wallpaperDirs: [
-                {
-                    name: "Default Pictures",
-                    path: StandardPaths.writableLocation(StandardPaths.PicturesLocation),
-                    removable: false
-                }
-            ]
+            property WallpaperConfig wallpaper: WallpaperConfig {}
         }
     }
 
