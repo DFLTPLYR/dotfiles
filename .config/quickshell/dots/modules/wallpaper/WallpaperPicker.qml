@@ -185,14 +185,13 @@ Scope {
         id: folderDescriptionComponent
         Rectangle {
             property var model
-            property alias text: label.text
             color: Qt.rgba(0, 0, 0, 0.5)
             width: 150
             height: 50
             Text {
                 id: label
                 anchors.centerIn: parent
-                text: ""
+                text: model && model.fileName ? model.fileName : "Unknown"
                 color: "white"
                 elide: Text.ElideRight
                 wrapMode: Text.Wrap
