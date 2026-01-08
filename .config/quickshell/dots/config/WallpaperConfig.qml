@@ -3,7 +3,7 @@ import QtQuick
 import QtCore
 
 JsonObject {
-    property var wallpapers: []
+    property list<var> wallpapers: []
     property list<var> directory: [
         {
             name: "Default Pictures",
