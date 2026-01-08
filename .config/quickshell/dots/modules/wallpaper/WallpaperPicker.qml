@@ -131,7 +131,7 @@ Scope {
                         GridView {
                             id: fileGrid
                             anchors.fill: parent
-                            property var cellSize: parent.width / 8
+                            property var cellSize: parent.width / 10
                             model: folderModel
                             cellWidth: cellSize
                             cellHeight: cellSize
@@ -149,6 +149,10 @@ Scope {
                                 }
 
                                 ImagePreview {
+                                    width: parent.width
+                                    height: parent.height
+                                    // width: implicitWidth * 0.5
+                                    // height: implicitHeight * 0.5
                                     visible: (!isFolder && modelData.filePath != undefined)
                                     source: (!isFolder && modelData.filePath) ? modelData.filePath : ""
                                 }
@@ -193,7 +197,6 @@ Scope {
 
     component ImagePreview: Image {
         id: imagePreview
-        anchors.fill: parent
         cache: true
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
