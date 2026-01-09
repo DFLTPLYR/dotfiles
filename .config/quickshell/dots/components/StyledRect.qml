@@ -37,7 +37,7 @@ Item {
         Behavior on color {
             ColorAnimation {
                 duration: 250
-                easing: Easing.InOutQuad
+                easing.type: Easing.InOutQuad
             }
         }
     }

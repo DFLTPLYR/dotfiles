@@ -111,16 +111,24 @@ Scope {
                         PageHeader {
                             title: "General"
                         }
+                        PageFooter {}
                     }
                     PageWrapper {
                         PageHeader {
                             title: "Navbar"
                         }
+                        // property string position: "top" // top, bottom, left, right
+                        // property bool side: position === "left" || position === "right"
+                        // property PopupProps popup: PopupProps {}
+                        // property int width: 50
+                        // property int height: 50
+                        PageFooter {}
                     }
                     PageWrapper {
                         PageHeader {
                             title: "Wallpaper"
                         }
+                        PageFooter {}
                     }
                 }
             }
@@ -135,11 +143,6 @@ Scope {
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                color: "red"
-            }
         }
     }
 
@@ -151,6 +154,59 @@ Scope {
             id: titleText
             anchors.centerIn: parent
             color: "white"
+        }
+    }
+
+    component PageFooter: Item {
+        property alias footerLayout: footerLayout.data
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        RowLayout {
+            id: footerLayout
+            width: parent.width
+
+            Text {
+                Layout.fillWidth: true
+                text: "Save Settings"
+                color: "white"
+            }
+
+            Row {
+                spacing: 10
+                Button {
+                    id: cancelButton
+                    text: "Cancel"
+                    width: 80
+
+                    background: StyledRect {
+                        borderRadius: 2
+                        anchors.fill: parent
+                        color: cancelButton.hovered ? "#BDBDBD" : "#757575"
+                    }
+
+                    onClicked: {
+                        Config.openSettingsPanel = false;
+                    }
+                }
+                Button {
+                    id: saveButton
+                    text: "Save"
+                    width: 80
+
+                    background: StyledRect {
+                        borderRadius: 2
+                        anchors.fill: parent
+                        color: saveButton.hovered ? "#4CAF50" : "#388E3C"
+                    }
+
+                    onClicked: {
+                        Config.saveSettings();
+                        Qt.callLater(() => {
+                            Config.openSettingsPanel = false;
+                        });
+                    }
+                }
+            }
         }
     }
 }
