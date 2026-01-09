@@ -5,6 +5,7 @@ import QtQuick.Controls
 import Quickshell
 
 import qs.config
+import qs.components
 
 Scope {
     Connections {
@@ -12,6 +13,19 @@ Scope {
         function onOpenSettingsPanelChanged() {
             settingsLoader.active = !settingsLoader.active;
         }
+    }
+
+    function getIcon(name) {
+      switch (name) {
+        case "general":
+          return "gear-icon";
+        case "navbar":
+          return "navbar-top";
+        case "wallpaper":
+          return "hexagon-image";
+        default:
+          return "?";
+      }
     }
 
     LazyLoader {
@@ -22,7 +36,7 @@ Scope {
             readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.6, screen.height * 0.4) : Qt.size(screen.width * 0.4, screen.height * 0.6)
             minimumSize: panelSize
             maximumSize: panelSize
-            color: Qt.rgba(0, 0, 0, 0.6)
+            color: Qt.rgba(0, 0, 0, 0.8)
 
             GridLayout {
                 columns: 2
@@ -30,15 +44,38 @@ Scope {
 
                 Item {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: parent.width / 10
+                    Layout.preferredWidth: 40
 
                     ListView {
                         anchors.fill: parent
                         spacing: 1
-                        model: ["general", "navbar", "wallpaper", "extended-navbar"]
+                        model: ["general", "navbar", "wallpaper"]
                         delegate: Item {
-                            width: parent ? parent.width : null
+                            width: 40
                             height: 40
+                            Rectangle {
+                                anchors.fill: parent
+                                color: ma.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : "transparent"
+
+                                FontIcon {
+                                    anchors.centerIn: parent
+                                    text:  getIcon(modelData)
+                                    font.pixelSize: parent.height
+                                    color: "white"
+                                }
+
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: 200
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
+                            }
+                            MouseArea {
+                                id: ma
+                                hoverEnabled: true
+                                anchors.fill: parent
+                            }
                         }
                     }
                 }
