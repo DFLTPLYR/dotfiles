@@ -124,7 +124,46 @@ Scope {
                             }
                         }
 
+                        ColumnLayout {
+                            Layout.fillWidth: true
+
+                            // Button
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 400
+
+                                Button {
+                                    anchors.fill: parent
+                                    anchors.centerIn: parent
+                                    text: "changePanel"
+                                    background: Item {}
+                                    onClicked: {
+                                        console.log("clicked");
+                                    }
+                                }
+
+                                BorderImage {
+                                    visible: Config.general.panelPresetIndex >= 0
+                                    anchors.fill: parent
+                                    horizontalTileMode: BorderImage.Stretch
+                                    verticalTileMode: BorderImage.Stretch
+                                }
+
+                                Rectangle {
+                                    visible: Config.general.panelPresetIndex <= 0
+                                    anchors.fill: parent
+                                    color: Qt.rgba(0, 0, 0, 0.5)
+                                }
+                            }
+                            Switch {
+                                text: qsTr("Show PresetGrid")
+                                onClicked: presetGrid.visible = !presetGrid.visible
+                            }
+                        }
+
                         GridLayout {
+                            id: presetGrid
+                            visible: false
                             Layout.fillWidth: true
                             Layout.preferredHeight: 200
                             columns: 3
@@ -144,10 +183,6 @@ Scope {
                                     }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Label {
-                                        text: "top"
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                    }
                                     SpinBox {
                                         from: 0
                                         onValueChanged: {
@@ -156,10 +191,12 @@ Scope {
                                     }
                                 }
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
@@ -171,10 +208,7 @@ Scope {
                                     }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Label {
-                                        text: "left"
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                    }
+
                                     SpinBox {
                                         from: 0
                                         onValueChanged: {
@@ -184,12 +218,14 @@ Scope {
                                 }
                             }
 
-                            Item {
+                            Rectangle {
+                                color: "transparent"
+                                border.color: "gray"
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Button {
                                     id: testAcceptButton
-                                    text: "Test"
+                                    text: "change panel"
                                     anchors {
                                         horizontalCenter: parent.horizontalCenter
                                         verticalCenter: parent.verticalCenter
@@ -217,6 +253,7 @@ Scope {
                                     }
                                 }
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
@@ -228,10 +265,6 @@ Scope {
 
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Label {
-                                        text: "right"
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                    }
                                     SpinBox {
                                         from: 0
                                         onValueChanged: {
@@ -245,6 +278,7 @@ Scope {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
@@ -256,10 +290,6 @@ Scope {
                                     }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Label {
-                                        text: "bottom"
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                    }
                                     SpinBox {
                                         from: 0
                                         onValueChanged: {
@@ -268,9 +298,42 @@ Scope {
                                     }
                                 }
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+
+                                Column {
+                                    Rectangle {
+                                        width: 150
+                                        height: 20
+                                        color: Qt.rgba(1, 1, 1, 0.1)
+                                        clip: true
+                                        TextInput {
+                                            id: inputField
+                                            anchors.fill: parent
+                                            color: "white"
+                                            font.pixelSize: parent.height
+                                        }
+                                    }
+                                    Button {
+                                        text: "save"
+                                        enabled: inputField.text.length > 0
+                                        onClicked: {
+                                            const preset = {};
+                                            preset.name = inputField.text;
+                                            preset.border = {
+                                                left: acceptButtonBg.border.left,
+                                                top: acceptButtonBg.border.top,
+                                                right: acceptButtonBg.border.right,
+                                                bottom: acceptButtonBg.border.bottom
+                                            };
+                                            preset.source = acceptButtonBg.source;
+                                            Config.general.presets.push(preset);
+                                            Config.saveSettings();
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -353,6 +416,21 @@ Scope {
                     id: saveButton
                     text: "Save"
                     width: 80
+                    height: 50
+
+                    background: StyledRect {
+                        usePanel: true
+                        panelSource: Qt.resolvedUrl("file:///home/dfltplyr/Downloads/kenney_fantasy-ui-borders/PNG/Default/Border/panel-border-003.png")
+                    }
+
+                    onClicked: {
+                        Config.saveSettings();
+                    }
+                }
+
+                Button {
+                    text: "Save and Exit"
+                    width: 150
                     height: 50
 
                     background: StyledRect {

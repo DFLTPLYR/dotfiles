@@ -1,6 +1,8 @@
 import Quickshell.Io
 
 JsonObject {
-    property list<var> buttonPresets: []
-    property list<var> panelPresets: []
+    property list<var> presets: []
+    property int panelPresetIndex: -1
+    property int buttonPresetIndex: -1
+    property int altButtonPresetIndex: -1
 }
