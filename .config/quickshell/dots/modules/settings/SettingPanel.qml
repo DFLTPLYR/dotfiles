@@ -173,21 +173,22 @@ Scope {
 
             Row {
                 spacing: 10
+
                 Button {
                     id: cancelButton
                     text: "Cancel"
                     width: 80
 
                     background: StyledRect {
-                        borderRadius: 2
-                        anchors.fill: parent
-                        color: cancelButton.hovered ? "#BDBDBD" : "#757575"
+                        usePanel: true
+                        panelSource: Qt.resolvedUrl("panel-border-000.png")
                     }
 
                     onClicked: {
                         Config.openSettingsPanel = false;
                     }
                 }
+
                 Button {
                     id: saveButton
                     text: "Save"

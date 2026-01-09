@@ -3,6 +3,8 @@ import QtQuick
 Item {
     id: root
     // reparent
+    property bool usePanel: false
+    property alias panelSource: panelItem.source
     default property alias content: contentItem.data
 
     property int borderRadius: 0
@@ -30,6 +32,7 @@ Item {
 
     Rectangle {
         id: contentItem
+        visible: !root.usePanel
         anchors {
             fill: parent
         }
@@ -40,5 +43,20 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
+    }
+
+    BorderImage {
+        id: panelItem
+        anchors {
+            fill: parent
+        }
+        border {
+            left: 10
+            top: 10
+            right: 10
+            bottom: 10
+        }
+        horizontalTileMode: BorderImage.Stretch
+        verticalTileMode: BorderImage.Stretch
     }
 }
