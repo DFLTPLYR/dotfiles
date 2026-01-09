@@ -16,22 +16,24 @@ Scope {
     }
 
     function getIcon(name) {
-      switch (name) {
+        switch (name) {
         case "general":
-          return "gear-icon";
+            return "gear-icon";
         case "navbar":
-          return "navbar-top";
+            return `navbar-${Config.navbar.position}`;
         case "wallpaper":
-          return "hexagon-image";
+            return "hexagon-image";
         default:
-          return "?";
-      }
+            return "?";
+        }
     }
 
     LazyLoader {
         id: settingsLoader
         component: FloatingWindow {
+            id: root
             title: "SettingsPanel"
+            property int page: 0
             readonly property bool isPortrait: screen.height > screen.width
             readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.6, screen.height * 0.4) : Qt.size(screen.width * 0.4, screen.height * 0.6)
             minimumSize: panelSize
@@ -56,67 +58,99 @@ Scope {
                             Rectangle {
                                 anchors.fill: parent
                                 color: ma.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : "transparent"
+                                radius: ma.containsMouse ? 8 : 0
 
                                 FontIcon {
                                     anchors.centerIn: parent
-                                    text:  getIcon(modelData)
+                                    text: getIcon(modelData)
                                     font.pixelSize: parent.height
-                                    color: "white"
+                                    color: ma.containsMouse || root.page === index ? "white" : Qt.rgba(1, 1, 1, 0.6)
+
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 350
+                                            easing.type: Easing.InOutQuad
+                                        }
+                                    }
+                                }
+
+                                Behavior on radius {
+                                    NumberAnimation {
+                                        duration: 350
+                                        easing.type: Easing.InOutQuad
+                                    }
                                 }
 
                                 Behavior on color {
                                     ColorAnimation {
-                                        duration: 200
+                                        duration: 350
                                         easing.type: Easing.InOutQuad
                                     }
                                 }
                             }
+
                             MouseArea {
                                 id: ma
                                 hoverEnabled: true
                                 anchors.fill: parent
+                                onClicked: {
+                                    page = index;
+                                }
                             }
                         }
                     }
                 }
-
-                Item {
+                StackLayout {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 600
+                    currentIndex: root.page
+                    Layout.rightMargin: 10
 
-                    ScrollView {
-                        width: parent.width
-                        height: parent.height
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        contentWidth: width
-                        clip: true
-
-                        ColumnLayout {
-                            width: parent.width
-
-                            // Controls
-                            Item {
-                                id: controls
-
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: controlFlow.implicitHeight
-                                Text {
-                                    text: "General Settings"
-                                    color: "white"
-                                }
-
-                                Flow {
-                                    id: controlFlow
-                                    anchors.fill: parent
-                                    spacing: 20
-                                    width: parent.width
-                                }
-                            }
+                    PageWrapper {
+                        PageHeader {
+                            title: "General"
+                        }
+                    }
+                    PageWrapper {
+                        PageHeader {
+                            title: "Navbar"
+                        }
+                    }
+                    PageWrapper {
+                        PageHeader {
+                            title: "Wallpaper"
                         }
                     }
                 }
             }
+        }
+    }
+    component PageWrapper: ScrollView {
+        default property alias contentLayout: contentLayout.data
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        contentWidth: width
+        clip: true
+        ColumnLayout {
+            id: contentLayout
+            anchors.fill: parent
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                color: "red"
+            }
+        }
+    }
+
+    component PageHeader: Item {
+        property alias title: titleText.text
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            id: titleText
+            anchors.centerIn: parent
+            color: "white"
         }
     }
 }
