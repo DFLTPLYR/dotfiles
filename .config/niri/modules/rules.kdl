@@ -15,6 +15,27 @@ window-rule {
 }
 
 window-rule {
+    match app-id="steam" title="Steam"
+    open-on-output "DP-2"
+}
+
+window-rule {
+    match app-id="discord"
+    open-on-output "DP-2"
+}
+
+window-rule {
+    match app-id="scrin.io"
+    open-on-output "DP-2"
+}
+
+window-rule {
+    match app-id="org.telegram.desktop" title="Telegram"
+    open-on-output "DP-2"
+}
+
+
+window-rule {
   match title="btop"
   open-on-output "DP-2"
   min-height 530
