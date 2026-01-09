@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-
+import QtQuick.Dialogs
+import QtCore
 import Quickshell
 
 import qs.config
@@ -111,17 +112,175 @@ Scope {
                         PageHeader {
                             title: "General"
                         }
+
+                        FileDialog {
+                            id: testDialog
+                            property Item targetItem
+                            currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                            onAccepted: {
+                                if (targetItem) {
+                                    targetItem.source = selectedFile;
+                                }
+                            }
+                        }
+
+                        GridLayout {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 200
+                            columns: 3
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Column {
+                                    anchors {
+                                        bottom: parent.bottom
+                                        horizontalCenter: parent.horizontalCenter
+                                    }
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Label {
+                                        text: "top"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    SpinBox {
+                                        from: 0
+                                        onValueChanged: {
+                                            acceptButtonBg.border.top = value;
+                                        }
+                                    }
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                Column {
+                                    anchors {
+                                        right: parent.right
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Label {
+                                        text: "left"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    SpinBox {
+                                        from: 0
+                                        onValueChanged: {
+                                            acceptButtonBg.border.left = value;
+                                        }
+                                    }
+                                }
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Button {
+                                    id: testAcceptButton
+                                    text: "Test"
+                                    anchors {
+                                        horizontalCenter: parent.horizontalCenter
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    width: 150
+                                    height: 50
+                                    background: BorderImage {
+                                        id: acceptButtonBg
+                                        anchors {
+                                            fill: parent
+                                            margins: 1
+                                        }
+                                        border {
+                                            left: 1
+                                            top: 1
+                                            right: 1
+                                            bottom: 1
+                                        }
+                                        horizontalTileMode: BorderImage.Stretch
+                                        verticalTileMode: BorderImage.Stretch
+                                    }
+                                    onClicked: {
+                                        testDialog.targetItem = acceptButtonBg;
+                                        testDialog.open();
+                                    }
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Column {
+                                    anchors {
+                                        left: parent.left
+                                        verticalCenter: parent.verticalCenter
+                                    }
+
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Label {
+                                        text: "right"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    SpinBox {
+                                        from: 0
+                                        onValueChanged: {
+                                            acceptButtonBg.border.right = value;
+                                        }
+                                    }
+                                }
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                                Column {
+                                    anchors {
+                                        top: parent.top
+                                        horizontalCenter: parent.horizontalCenter
+                                    }
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Label {
+                                        text: "bottom"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    SpinBox {
+                                        from: 0
+                                        onValueChanged: {
+                                            acceptButtonBg.border.bottom = value;
+                                        }
+                                    }
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
+                        }
+
                         PageFooter {}
                     }
                     PageWrapper {
                         PageHeader {
                             title: "Navbar"
                         }
-                        // property string position: "top" // top, bottom, left, right
-                        // property bool side: position === "left" || position === "right"
-                        // property PopupProps popup: PopupProps {}
-                        // property int width: 50
-                        // property int height: 50
+
                         PageFooter {}
                     }
                     PageWrapper {
@@ -178,10 +337,11 @@ Scope {
                     id: cancelButton
                     text: "Cancel"
                     width: 80
+                    height: 50
 
                     background: StyledRect {
                         usePanel: true
-                        panelSource: Qt.resolvedUrl("panel-border-000.png")
+                        panelSource: Qt.resolvedUrl("file:///home/dfltplyr/Downloads/kenney_fantasy-ui-borders/PNG/Default/Border/panel-border-003.png")
                     }
 
                     onClicked: {
@@ -193,11 +353,11 @@ Scope {
                     id: saveButton
                     text: "Save"
                     width: 80
+                    height: 50
 
                     background: StyledRect {
-                        borderRadius: 2
-                        anchors.fill: parent
-                        color: saveButton.hovered ? "#4CAF50" : "#388E3C"
+                        usePanel: true
+                        panelSource: Qt.resolvedUrl("file:///home/dfltplyr/Downloads/kenney_fantasy-ui-borders/PNG/Default/Border/panel-border-003.png")
                     }
 
                     onClicked: {
