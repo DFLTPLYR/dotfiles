@@ -45,6 +45,7 @@ Scope {
                 columns: 2
                 anchors.fill: parent
 
+                // sidebar
                 Item {
                     Layout.fillHeight: true
                     Layout.preferredWidth: 40
@@ -101,6 +102,8 @@ Scope {
                         }
                     }
                 }
+
+                // content
                 StackLayout {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -120,6 +123,7 @@ Scope {
                             onAccepted: {
                                 if (targetItem) {
                                     targetItem.source = selectedFile;
+                                    testPanel.source = selectedFile;
                                 }
                             }
                         }
@@ -127,36 +131,45 @@ Scope {
                         ColumnLayout {
                             Layout.fillWidth: true
 
-                            // Button
-                            Item {
+                            Column {
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: 400
 
-                                Button {
-                                    anchors.fill: parent
-                                    anchors.centerIn: parent
-                                    text: "changePanel"
-                                    background: Item {}
-                                    onClicked: {
-                                        console.log("clicked");
-                                    }
+                                Label {
+                                    text: qsTr("Panel:")
                                 }
 
                                 BorderImage {
-                                    visible: Config.general.panelPresetIndex >= 0
-                                    anchors.fill: parent
-                                    horizontalTileMode: BorderImage.Stretch
-                                    verticalTileMode: BorderImage.Stretch
-                                }
+                                    id: testPanel
+                                    width: parent.width
+                                    height: 500
 
-                                Rectangle {
-                                    visible: Config.general.panelPresetIndex <= 0
-                                    anchors.fill: parent
-                                    color: Qt.rgba(0, 0, 0, 0.5)
+                                    Rectangle {
+                                        anchors {
+                                            fill: parent
+                                            leftMargin: testPanel.border.left
+                                            rightMargin: testPanel.border.right
+                                            bottomMargin: testPanel.border.bottom
+                                            topMargin: testPanel.border.top
+                                        }
+                                        color: Qt.rgba(1, 1, 1, 0.1)
+                                    }
+                                }
+                            }
+
+                            Column {
+                                Layout.fillWidth: true
+
+                                Label {
+                                    text: qsTr("Buttons:")
+                                }
+                                Button {
+                                    width: 150
+                                    height: 50
+                                    text: "Basic Button"
                                 }
                             }
                             Switch {
-                                text: qsTr("Show PresetGrid")
+                                text: qsTr("Show Preset Creator Grid")
                                 onClicked: presetGrid.visible = !presetGrid.visible
                             }
                         }
@@ -187,6 +200,7 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.top = value;
+                                            testPanel.border.top = value;
                                         }
                                     }
                                 }
@@ -213,6 +227,7 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.left = value;
+                                            testPanel.border.left = value;
                                         }
                                     }
                                 }
@@ -269,6 +284,7 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.right = value;
+                                            testPanel.border.right = value;
                                         }
                                     }
                                 }
@@ -294,6 +310,7 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.bottom = value;
+                                            testPanel.border.bottom = value;
                                         }
                                     }
                                 }
