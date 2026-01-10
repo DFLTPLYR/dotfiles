@@ -8,6 +8,7 @@ Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         required property ShellScreen modelData
+        readonly property string filePath: Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path || ""
         screen: modelData
         color: "transparent"
 
@@ -30,16 +31,15 @@ Variants {
             sourceSize.height: screen.height
             fillMode: Image.PreserveAspectCrop
             source: {
-                const filePath = Config.wallpaper.wallpapers.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
                 if (filePath === undefined) {
                     return "";
                 }
-                return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path);
+                return Qt.resolvedUrl(filePath);
             }
         }
 
         Rectangle {
-            visible: !Config.wallpaper.wallpapers.find(wallpaperItem => wallpaperItem.monitor === screen.name)
+            visible: !filePath
             height: parent.height
             width: parent.width
             color: Qt.rgba(0, 0, 0, 0.5)
