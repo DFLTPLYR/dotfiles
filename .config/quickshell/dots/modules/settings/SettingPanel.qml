@@ -107,9 +107,8 @@ Scope {
                 StackLayout {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 600
                     currentIndex: root.page
-                    Layout.rightMargin: 10
+                    Layout.rightMargin: 20
 
                     PageWrapper {
                         PageHeader {
@@ -141,7 +140,7 @@ Scope {
                                 BorderImage {
                                     id: testPanel
                                     width: parent.width
-                                    height: 500
+                                    height: 300
 
                                     Rectangle {
                                         anchors {
@@ -315,6 +314,10 @@ Scope {
                                     }
                                 }
                             }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
 
                             Item {
                                 Layout.fillWidth: true
@@ -400,6 +403,7 @@ Scope {
         property alias footerLayout: footerLayout.data
         Layout.fillWidth: true
         Layout.preferredHeight: 40
+        Layout.bottomMargin: 40
         RowLayout {
             id: footerLayout
             width: parent.width
