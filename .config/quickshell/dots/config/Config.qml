@@ -12,7 +12,6 @@ import qs.config
 Singleton {
     id: config
     property alias navbar: adapter.navbar
-    property alias wallpaper: adapter.wallpaper
     property alias extendedBar: adapter.extendedBar
     property alias general: adapter.general
 
@@ -54,7 +53,6 @@ Singleton {
             id: adapter
             property NavbarConfig navbar: NavbarConfig {}
             property ExtendedBarConfig extendedBar: ExtendedBarConfig {}
-            property WallpaperConfig wallpaper: WallpaperConfig {}
             property GeneralConfig general: GeneralConfig {}
         }
     }
