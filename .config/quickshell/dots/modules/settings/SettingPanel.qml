@@ -36,8 +36,9 @@ Scope {
             id: root
             title: "SettingsPanel"
             property int page: 0
+            property ShellScreen selectedScreen: Quickshell.screens[0]
             readonly property bool isPortrait: screen.height > screen.width
-            readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.6, screen.height * 0.4) : Qt.size(screen.width * 0.4, screen.height * 0.6)
+            readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
             minimumSize: panelSize
             maximumSize: panelSize
             color: Qt.rgba(0, 0, 0, 0.8)
@@ -133,51 +134,56 @@ Scope {
                             Label {
                                 text: qsTr("Panels:")
                             }
-
-                            RowLayout {
+                            Item {
                                 Layout.fillWidth: true
-                                Repeater {
-                                    model: Quickshell.screens
-                                    delegate: Rectangle {
-                                        required property ShellScreen modelData
-                                        readonly property string filePath: Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name)?.path || ""
-                                        color: "transparent"
-                                        border.color: "white"
-                                        Layout.preferredHeight: modelData.height / 6
-                                        Layout.preferredWidth: modelData.width / 6
+                                Layout.preferredHeight: monitorRow.height
+                                RowLayout {
+                                    id: monitorRow
+                                    anchors.centerIn: parent
+                                    Repeater {
+                                        model: Quickshell.screens
+                                        delegate: Rectangle {
+                                            required property ShellScreen modelData
+                                            readonly property string filePath: Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name)?.path || ""
+                                            color: "transparent"
+                                            border.color: selectedScreen.name === modelData.name ? "green" : "gray"
+                                            Layout.preferredHeight: modelData.height / 6
+                                            Layout.preferredWidth: modelData.width / 6
 
-                                        Text {
-                                            anchors {
-                                                verticalCenter: parent.verticalCenter
-                                                horizontalCenter: parent.horizontalCenter
-                                            }
-                                            text: modelData.name
-                                            color: "white"
-                                        }
-                                        Image {
-                                            id: monitorBg
-                                            anchors.fill: parent
-                                            fillMode: Image.PreserveAspectCrop
-                                            source: filePath
-                                            onSourceChanged: {
-                                                const replace = Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name);
-                                                if (replace) {
-                                                    replace.path = source;
-                                                    return;
+                                            Text {
+                                                anchors {
+                                                    verticalCenter: parent.verticalCenter
+                                                    horizontalCenter: parent.horizontalCenter
                                                 }
-                                                Config.general.wallpapers.push({
-                                                    monitor: modelData.name,
-                                                    path: source
-                                                });
+                                                text: modelData.name
+                                                color: "white"
                                             }
-                                        }
-                                        MouseArea {
-                                            id: monitorArea
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            onClicked: {
-                                                fileDialog.targetItem = monitorBg;
-                                                fileDialog.open();
+                                            Image {
+                                                id: monitorBg
+                                                anchors.fill: parent
+                                                anchors.margins: 1
+                                                fillMode: Image.PreserveAspectCrop
+                                                source: filePath
+                                                onSourceChanged: {
+                                                    const replace = Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name);
+                                                    if (replace) {
+                                                        replace.path = source;
+                                                        return;
+                                                    }
+                                                    Config.general.wallpapers.push({
+                                                        monitor: modelData.name,
+                                                        path: source
+                                                    });
+                                                }
+                                            }
+                                            MouseArea {
+                                                id: monitorArea
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                onClicked: {
+                                                    fileDialog.targetItem = monitorBg;
+                                                    fileDialog.open();
+                                                }
                                             }
                                         }
                                     }
@@ -398,6 +404,7 @@ Scope {
 
                         PageFooter {}
                     }
+
                     PageWrapper {
                         PageHeader {
                             title: "Navbar"
@@ -436,6 +443,11 @@ Scope {
             anchors.centerIn: parent
             color: "white"
         }
+    }
+
+    component Spacer: Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 2
     }
 
     component PageFooter: Item {
