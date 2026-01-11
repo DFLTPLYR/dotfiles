@@ -175,20 +175,33 @@ Scope {
                                                         duration: 200
                                                         easing.type: Easing.InOutQuad
                                                     }
-                                                  }
+                                                }
 
                                                 fillMode: Image.PreserveAspectCrop
                                                 source: filePath
                                                 onSourceChanged: {
-                                                    const replace = Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name);
-                                                    if (replace) {
-                                                        replace.path = source;
-                                                        return;
+                                                    let monitor = Config.general.wallpapers.find(w => w.monitor === modelData.name);
+
+                                                    if (monitor) {
+                                                        monitor.path = source;
+                                                        monitor.isGif = source.toString().toLowerCase().endsWith(".gif");
+                                                    } else {
+                                                        Config.general.wallpapers.push({
+                                                            monitor: modelData.name,
+                                                            path: source,
+                                                            isGif: source.toString().toLowerCase().endsWith(".gif")
+                                                        });
                                                     }
-                                                    Config.general.wallpapers.push({
-                                                        monitor: modelData.name,
-                                                        path: source
-                                                    });
+                                                    let wallpaperIndex = Config.general.recentWallpapers.findIndex(w => String(w.path).trim().toLowerCase() === String(source).trim().toLowerCase() && w.monitor === modelData.name);
+                                                    if (wallpaperIndex !== -1) {
+                                                        Config.general.recentWallpapers[wallpaperIndex].timestamp = Date.now();
+                                                    } else {
+                                                        Config.general.recentWallpapers.push({
+                                                            monitor: modelData.name,
+                                                            timestamp: Date.now(),
+                                                            path: source
+                                                        });
+                                                    }
                                                 }
                                             }
                                             MouseArea {
@@ -196,20 +209,55 @@ Scope {
                                                 anchors.fill: parent
                                                 hoverEnabled: true
                                                 onClicked: {
-                                                  selectedScreen = modelData;
-                                                  fileDialog.targetItem = monitorBg;
+                                                    selectedScreen = modelData;
+                                                    fileDialog.targetItem = monitorBg;
                                                 }
-                                              }
-                                                                                      }
+                                            }
+                                        }
                                     }
                                 }
                             }
 
                             StyledButton {
-                              text: "Change Wallpaper" + selectedScreen.name
-                              onClicked: {
-                                  fileDialog.open();
-                              }
+                                text: "Change Wallpaper" + selectedScreen.name
+                                onClicked: {
+                                    fileDialog.open();
+                                }
+                            }
+
+                            ListView {
+                                id: recentWallpapersList
+                                readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
+                                orientation: ListView.Horizontal
+                                layoutDirection: Qt.LeftToRight
+                                Layout.fillWidth: true
+                                Layout.minimumHeight: isPortrait ? 150 : 100
+                                model: Config.general.recentWallpapers.filter(item => item.monitor === selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
+                                delegate: Item {
+                                    width: recentWallpapersList.isPortrait ? 80 : 150
+                                    height: recentWallpapersList.isPortrait ? 150 : 80
+                                    Image {
+                                        anchors.fill: parent
+                                        fillMode: Image.PreserveAspectCrop
+                                        source: modelData.path
+                                    }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        acceptedButtons: Qt.AllButtons
+                                        onClicked: mouse => {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                // set the wallpaper
+                                                // selectedScreen = Quickshell.screens.find(screen => screen.name === modelData.monitor);
+                                            } else if (mouse.button === Qt.RightButton) {
+                                                const index = Config.general.recentWallpapers.findIndex(wallpaperItem => wallpaperItem.monitor === modelData.monitor && wallpaperItem.path === modelData.path);
+                                                if (index !== -1) {
+                                                    Config.general.recentWallpapers.splice(index, 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             // Switch {
