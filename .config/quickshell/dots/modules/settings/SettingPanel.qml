@@ -140,7 +140,7 @@ Scope {
                                     model: Quickshell.screens
                                     delegate: Rectangle {
                                         required property ShellScreen modelData
-
+                                        readonly property string filePath: Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name)?.path || ""
                                         color: "transparent"
                                         border.color: "white"
                                         Layout.preferredHeight: modelData.height / 6
@@ -158,6 +158,7 @@ Scope {
                                             id: monitorBg
                                             anchors.fill: parent
                                             fillMode: Image.PreserveAspectCrop
+                                            source: filePath
                                             onSourceChanged: {
                                                 const replace = Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === modelData.name);
                                                 if (replace) {
