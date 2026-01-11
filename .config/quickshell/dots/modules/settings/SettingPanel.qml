@@ -150,6 +150,13 @@ Scope {
                                             Layout.preferredHeight: modelData.height / 6
                                             Layout.preferredWidth: modelData.width / 6
 
+                                            Behavior on border.color {
+                                                ColorAnimation {
+                                                    duration: 200
+                                                    easing.type: Easing.InOutQuad
+                                                }
+                                            }
+
                                             Text {
                                                 anchors {
                                                     verticalCenter: parent.verticalCenter
@@ -161,7 +168,15 @@ Scope {
                                             Image {
                                                 id: monitorBg
                                                 anchors.fill: parent
-                                                anchors.margins: 1
+                                                anchors.margins: selectedScreen.name === modelData.name ? 2 : 1
+
+                                                Behavior on anchors.margins {
+                                                    NumberAnimation {
+                                                        duration: 200
+                                                        easing.type: Easing.InOutQuad
+                                                    }
+                                                  }
+
                                                 fillMode: Image.PreserveAspectCrop
                                                 source: filePath
                                                 onSourceChanged: {
@@ -181,41 +196,26 @@ Scope {
                                                 anchors.fill: parent
                                                 hoverEnabled: true
                                                 onClicked: {
-                                                    fileDialog.targetItem = monitorBg;
-                                                    fileDialog.open();
+                                                  selectedScreen = modelData;
+                                                  fileDialog.targetItem = monitorBg;
                                                 }
-                                            }
-                                        }
+                                              }
+                                                                                      }
                                     }
                                 }
                             }
 
-                            // reuse later for preset for panel with BorderImage
-                            // Column {
-                            //     Layout.fillWidth: true
-                            //
-                            //     BorderImage {
-                            //         id: testPanel
-                            //         width: parent.width
-                            //         height: 300
-                            //
-                            //         Rectangle {
-                            //             anchors {
-                            //                 fill: parent
-                            //                 leftMargin: testPanel.border.left
-                            //                 rightMargin: testPanel.border.right
-                            //                 bottomMargin: testPanel.border.bottom
-                            //                 topMargin: testPanel.border.top
-                            //             }
-                            //             color: Qt.rgba(1, 1, 1, 0.1)
-                            //         }
-                            //     }
-                            // }
-
-                            Switch {
-                                text: qsTr("Show Preset Creator Grid")
-                                onClicked: presetGrid.visible = !presetGrid.visible
+                            StyledButton {
+                              text: "Change Wallpaper" + selectedScreen.name
+                              onClicked: {
+                                  fileDialog.open();
+                              }
                             }
+
+                            // Switch {
+                            //     text: qsTr("Show Preset Creator Grid")
+                            //     onClicked: presetGrid.visible = !presetGrid.visible
+                            // }
                         }
 
                         GridLayout {
