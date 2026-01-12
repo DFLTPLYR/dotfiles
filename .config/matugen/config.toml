@@ -1,0 +1,4 @@
+[config]
+[templates.niri]
+input_path = "templates/niri-layouts.kdl"
+output_path = "~/.config/niri/modules/test.kdl"
