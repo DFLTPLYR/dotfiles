@@ -55,7 +55,7 @@ Scope {
                     ListView {
                         anchors.fill: parent
                         spacing: 1
-                        model: ["general", "navbar"]
+                        model: ["general", "navbar", "wallpaper"]
                         delegate: Item {
                             width: 40
                             height: 40
@@ -228,20 +228,39 @@ Scope {
                             ListView {
                                 id: recentWallpapersList
                                 readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: recentWallpapersList.isPortrait ? 220 : 100
                                 orientation: ListView.Horizontal
                                 layoutDirection: Qt.LeftToRight
-                                Layout.fillWidth: true
-                                Layout.minimumHeight: isPortrait ? 150 : 100
+                                spacing: 5
                                 model: Config.general.recentWallpapers.filter(item => item.monitor === selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
-                                delegate: Item {
-                                    width: recentWallpapersList.isPortrait ? 80 : 150
-                                    height: recentWallpapersList.isPortrait ? 150 : 80
+                                delegate: Rectangle {
+
+                                    color: "transparent"
+                                    border.width: recentWallMa.containsMouse ? 2 : 1
+                                    border.color: recentWallMa.containsMouse ? "green" : "white"
+
+                                    width: recentWallpapersList.isPortrait ? 100 : 220
+                                    height: recentWallpapersList.isPortrait ? 220 : 100
+
                                     Image {
-                                        anchors.fill: parent
+                                        anchors {
+                                            fill: parent
+                                            margins: 2
+                                        }
                                         fillMode: Image.PreserveAspectCrop
                                         source: modelData.path
                                     }
+
+                                    Behavior on border.color {
+                                        ColorAnimation {
+                                            duration: 350
+                                            easing.type: Easing.InOutQuad
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: recentWallMa
                                         anchors.fill: parent
                                         hoverEnabled: true
                                         acceptedButtons: Qt.AllButtons
@@ -460,18 +479,14 @@ Scope {
 
                         PageFooter {}
                     }
-                    PageWrapper {
-                        PageHeader {
-                            title: "Wallpaper"
-                        }
-                        PageFooter {}
-                    }
                 }
             }
         }
     }
+
     component PageWrapper: ScrollView {
         default property alias contentLayout: contentLayout.data
+
         Layout.fillHeight: true
         Layout.fillWidth: true
         contentWidth: width
@@ -503,6 +518,7 @@ Scope {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Layout.bottomMargin: 40
+
         RowLayout {
             id: footerLayout
             width: parent.width

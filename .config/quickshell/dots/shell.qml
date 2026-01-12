@@ -25,9 +25,6 @@ ShellRoot {
     // WallpaperBackground
     WallpaperBackground {}
 
-    // Wallpaper Picker
-    WallpaperPicker {}
-
     // Volume OSD
     VolumeOsd {}
 
