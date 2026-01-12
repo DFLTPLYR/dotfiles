@@ -3,10 +3,10 @@
 Wallpaper Configuration
 
 - [x] Create a per screen wallpaper configuration
-- [ ] Create a GUI for wallpaper selection
-- [ ] Create a script to change wallpapers automatically
-- [ ] dynamically proportional scaling based on screen resolution
-- [ ] file explorer integration
+- [x] Create a GUI for wallpaper selection
+- [x] Create a script to change wallpapers automatically
+- [x] dynamically proportional scaling based on screen resolution
+- [x] file explorer integration
 
 Dynamic Styling system
 
