@@ -309,15 +309,50 @@ Scope {
                         }
                         Spacer {}
 
-                        PageFooter {}
+                        PageFooter {
+                            onSave: {
+                                Config.saveSettings();
+                            }
+                            onSaveAndExit: {
+                                Config.general.previewWallpaper = [];
+                                Config.saveSettings();
+                                Qt.callLater(() => {
+                                    Config.openSettingsPanel = false;
+                                });
+                            }
+                            onExit: {
+                                Config.general.previewWallpaper = [];
+                                Qt.callLater(() => {
+                                    Config.openSettingsPanel = false;
+                                });
+                            }
+                        }
                     }
 
                     PageWrapper {
                         PageHeader {
                             title: "Navbar"
                         }
+                        Spacer {}
 
-                        PageFooter {}
+                        PageFooter {
+                            onSave: {
+                                Config.saveSettings();
+                            }
+                            onSaveAndExit: {
+                                Config.general.previewWallpaper = [];
+                                Config.saveSettings();
+                                Qt.callLater(() => {
+                                    Config.openSettingsPanel = false;
+                                });
+                            }
+                            onExit: {
+                                Config.general.previewWallpaper = [];
+                                Qt.callLater(() => {
+                                    Config.openSettingsPanel = false;
+                                });
+                            }
+                        }
                     }
 
                     PageWrapper {
@@ -404,8 +439,6 @@ Scope {
                                                             path: source,
                                                             isGif: source.toString().toLowerCase().endsWith(".gif")
                                                         });
-
-                                                        console.log(Config.general.previewWallpaper);
                                                     }
                                                     let wallpaperIndex = Config.general.recentWallpapers.findIndex(w => String(w.path).trim().toLowerCase() === String(source).trim().toLowerCase() && w.monitor === modelData.name);
                                                     if (wallpaperIndex !== -1) {
@@ -490,7 +523,6 @@ Scope {
                                                         path: modelData.path,
                                                         isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
                                                     };
-                                                    console.log(selectedScreen.name, monitor);
                                                     Config.general.previewWallpaper.push(monitor);
                                                 }
                                             } else if (mouse.button === Qt.RightButton) {
@@ -506,10 +538,10 @@ Scope {
                         }
 
                         Spacer {}
+
                         PageFooter {
                             onSave: {
-                                console.log(Object.keys(Config.general.previewWallpaper));
-                                // Config.saveSettings();
+                                Config.saveSettings();
                             }
                             onSaveAndExit: {
                                 Config.general.previewWallpaper = [];
@@ -520,8 +552,9 @@ Scope {
                             }
                             onExit: {
                                 Config.general.previewWallpaper = [];
-
-                                Config.openSettingsPanel = false;
+                                Qt.callLater(() => {
+                                    Config.openSettingsPanel = false;
+                                });
                             }
                         }
                     }
