@@ -25,6 +25,7 @@ Variants {
         }
 
         Image {
+            id: main
             height: parent.height
             width: parent.width
             sourceSize.width: screen.width

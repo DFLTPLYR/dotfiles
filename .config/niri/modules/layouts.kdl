@@ -1,8 +1,10 @@
 layout {
     gaps 16
-    center-focused-column "never"
-    background-color "transparent"
 
+    center-focused-column "always"
+    always-center-single-column
+
+    background-color "transparent"
     focus-ring {
         off
         width 2
