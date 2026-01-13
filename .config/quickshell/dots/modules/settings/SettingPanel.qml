@@ -36,7 +36,7 @@ Scope {
             id: root
             title: "SettingsPanel"
             property int page: 0
-            property ShellScreen selectedScreen: Quickshell.screens[0]
+            property ShellScreen selectedScreen: Quickshell.screens.find(w => w.name === Config.focusedMonitor.name)
             readonly property bool isPortrait: screen.height > screen.width
             readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
             minimumSize: panelSize
@@ -266,8 +266,17 @@ Scope {
                                         acceptedButtons: Qt.AllButtons
                                         onClicked: mouse => {
                                             if (mouse.button === Qt.LeftButton) {
-                                                // set the wallpaper
-                                                // selectedScreen = Quickshell.screens.find(screen => screen.name === modelData.monitor);
+                                                const targetMonitor = Config.general.wallpapers.findIndex(w => w.monitor === selectedScreen.name);
+                                                if (targetMonitor != -1) {
+                                                    Config.general.wallpapers[targetMonitor].path = modelData.path;
+                                                } else {
+                                                    const monitor = {
+                                                        monitor: selectedScreen.name,
+                                                        path: modelData.path,
+                                                        isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
+                                                    };
+                                                    Config.general.wallpapers.push(monitor);
+                                                }
                                             } else if (mouse.button === Qt.RightButton) {
                                                 const index = Config.general.recentWallpapers.findIndex(wallpaperItem => wallpaperItem.monitor === modelData.monitor && wallpaperItem.path === modelData.path);
                                                 if (index !== -1) {
