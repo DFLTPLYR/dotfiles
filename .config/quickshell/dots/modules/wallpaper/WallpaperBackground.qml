@@ -42,10 +42,8 @@ Variants {
 
         Image {
             id: temp
-            height: parent.height
-            width: parent.width
-            sourceSize.width: screen.width
-            sourceSize.height: screen.height
+            width: screen.width
+            height: screen.height
             fillMode: Image.PreserveAspectCrop
             source: {
                 if (tempPath === undefined) {
@@ -61,8 +59,8 @@ Variants {
             PropertyAnimation {
                 id: fadeIn
                 target: temp
-                duration: 1000
-                property: "opacity"
+                duration: 300
+                properties: "opacity, scale"
                 from: 0
                 to: 1
             }
