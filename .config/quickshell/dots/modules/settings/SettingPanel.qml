@@ -413,6 +413,7 @@ Scope {
                                                 text: modelData.name
                                                 color: "white"
                                             }
+
                                             Image {
                                                 id: monitorBg
                                                 anchors.fill: parent
@@ -429,8 +430,9 @@ Scope {
                                                 source: imagePath
                                                 onSourceChanged: {
                                                     let monitor = Config.general.previewWallpaper.find(w => w?.monitor === modelData.name);
-
-                                                    if (monitor) {
+                                                    if (monitor === undefined) {
+                                                        return;
+                                                    } else if (monitor) {
                                                         monitor.path = source;
                                                         monitor.isGif = source.toString().toLowerCase().endsWith(".gif");
                                                     } else {
@@ -440,6 +442,7 @@ Scope {
                                                             isGif: source.toString().toLowerCase().endsWith(".gif")
                                                         });
                                                     }
+
                                                     let wallpaperIndex = Config.general.recentWallpapers.findIndex(w => String(w.path).trim().toLowerCase() === String(source).trim().toLowerCase() && w.monitor === modelData.name);
                                                     if (wallpaperIndex !== -1) {
                                                         Config.general.recentWallpapers[wallpaperIndex].timestamp = Date.now();
