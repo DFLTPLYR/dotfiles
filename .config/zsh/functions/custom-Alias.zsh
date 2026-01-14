@@ -8,7 +8,7 @@ alias job="chafa --scale max \
       --fg-only \
       --dither=none \
       /home/dfltplyr/Pictures/meme/j*b.png"
-alias c='clear'
+alias c='clear && fastfetch'
 alias fastfetch='fastfetch --logo-type kitty'
 alias ..='cd ..'
 alias ...='cd ../..'

@@ -46,6 +46,12 @@ window-rule {
   max-height 530
 }
 
+window-rule {
+  match title="hytale" app-id="HytaleClient"
+  open-on-output "DP-1"
+  open-maximized true
+}
+
 layer-rule {
   match namespace="Background"
   place-within-backdrop true
