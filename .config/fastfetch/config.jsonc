@@ -19,31 +19,31 @@
     },
     {
       "type": "chassis",
-      "key": "{#separator}│  󰇺 Chassis",
+      "key": "{#separator}│  󰇺 Chassis ",
       "format": "{1} {2} {3}",
     },
     {
       "type": "display",
-      "key": "{#separator}│  󰍹 Display",
+      "key": "{#separator}│  󰍹 Display ",
       "format": "{1}x{2} @ {3}Hz [{7}]",
       "keyColor": "green",
     },
     {
       "type": "cpu",
       "format": "{1} @ {7}",
-      "key": "{#separator}│   CPU",
+      "key": "{#separator}│   CPU ",
       "keyColor": "blue",
     },
     {
       "type": "gpu",
       "format": "{1} {2}",
-      "key": "{#separator}│  󰊴 GPU",
+      "key": "{#separator}│  󰊴 GPU ",
       "keyColor": "blue",
     },
     {
       "type": "gpu",
       "format": "{3}",
-      "key": "{#separator}│   GPU Driver",
+      "key": "{#separator}│   GPU Driver ",
       "keyColor": "magenta",
     },
     {
@@ -65,30 +65,30 @@
     },
     {
       "type": "os",
-      "key": "{#separator}│  󰣇 OS",
+      "key": "{#separator}│  󰣇 OS ",
       "format": "{2}",
       "keyColor": "red",
     },
     {
       "type": "kernel",
-      "key": "{#separator}│   Kernel",
+      "key": "{#separator}│   Kernel ",
       "format": "{2}",
       "keyColor": "red",
     },
     {
       "type": "wm",
-      "key": "{#separator}│  󱗃 WM",
+      "key": "{#separator}│  󱗃 WM ",
       "format": "{2}",
       "keyColor": "yellow",
     },
     {
       "type": "packages",
-      "key": "{#separator}│  󰏗 Packages",
+      "key": "{#separator}│  󰏗 Packages ",
       "keyColor": "green",
     },
     {
       "type": "terminal",
-      "key": "{#separator}│   Terminal",
+      "key": "{#separator}│   Terminal ",
       "keyColor": "yellow",
     },
     {

@@ -120,15 +120,17 @@ Scope {
                             title: "General"
                         }
                         Spacer {}
+
                         Switch {
                             text: qsTr("Show Preset Creator Grid")
                             onClicked: presetGrid.visible = !presetGrid.visible
                         }
+
                         GridLayout {
                             id: presetGrid
                             visible: false
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 200
+                            Layout.preferredHeight: 600
                             columns: 3
 
                             Item {
@@ -150,7 +152,6 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.top = value;
-                                            testPanel.border.top = value;
                                         }
                                     }
                                 }
@@ -177,7 +178,6 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.left = value;
-                                            testPanel.border.left = value;
                                         }
                                     }
                                 }
@@ -185,7 +185,6 @@ Scope {
 
                             Rectangle {
                                 color: "transparent"
-                                border.color: "gray"
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 Button {
@@ -195,8 +194,7 @@ Scope {
                                         horizontalCenter: parent.horizontalCenter
                                         verticalCenter: parent.verticalCenter
                                     }
-                                    width: 150
-                                    height: 50
+                                    anchors.fill: parent
                                     background: BorderImage {
                                         id: acceptButtonBg
                                         anchors {
@@ -234,7 +232,6 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.right = value;
-                                            testPanel.border.right = value;
                                         }
                                     }
                                 }
@@ -260,7 +257,6 @@ Scope {
                                         from: 0
                                         onValueChanged: {
                                             acceptButtonBg.border.bottom = value;
-                                            testPanel.border.bottom = value;
                                         }
                                     }
                                 }
@@ -307,6 +303,7 @@ Scope {
                                 }
                             }
                         }
+
                         Spacer {}
 
                         PageFooter {
