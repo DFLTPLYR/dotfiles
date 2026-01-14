@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: "/home/dfltplyr/.config/rmpc/theme/medium",
+    theme: "~/.config/rmpc/theme/default",
     cache_dir: None,
     on_resize: ["resize-player.zsh"],
     on_song_change: ["~/.config/rmpc/scripts/onsongchange.sh"],

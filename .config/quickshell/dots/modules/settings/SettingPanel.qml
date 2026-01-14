@@ -136,6 +136,45 @@ Scope {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+                                Column {
+                                    spacing: 10
+                                    anchors {
+                                        horizontalCenter: parent.horizontalCenter
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    Label {
+                                        text: "Preset Name:"
+                                    }
+                                    Rectangle {
+                                        width: 150
+                                        height: 20
+                                        color: Qt.rgba(1, 1, 1, 0.1)
+                                        clip: true
+                                        TextInput {
+                                            id: inputField
+                                            anchors.fill: parent
+                                            color: "white"
+                                            font.pixelSize: parent.height
+                                        }
+                                    }
+                                    Button {
+                                        text: "save"
+                                        enabled: inputField.text.length > 0
+                                        onClicked: {
+                                            const preset = {};
+                                            preset.name = inputField.text;
+                                            preset.border = {
+                                                left: acceptButtonBg.border.left,
+                                                top: acceptButtonBg.border.top,
+                                                right: acceptButtonBg.border.right,
+                                                bottom: acceptButtonBg.border.bottom
+                                            };
+                                            preset.source = acceptButtonBg.source;
+                                            Config.general.presets.push(preset);
+                                            Config.saveSettings();
+                                        }
+                                    }
+                                }
                             }
 
                             Item {
@@ -261,6 +300,7 @@ Scope {
                                     }
                                 }
                             }
+
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
@@ -269,38 +309,6 @@ Scope {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-
-                                Column {
-                                    Rectangle {
-                                        width: 150
-                                        height: 20
-                                        color: Qt.rgba(1, 1, 1, 0.1)
-                                        clip: true
-                                        TextInput {
-                                            id: inputField
-                                            anchors.fill: parent
-                                            color: "white"
-                                            font.pixelSize: parent.height
-                                        }
-                                    }
-                                    Button {
-                                        text: "save"
-                                        enabled: inputField.text.length > 0
-                                        onClicked: {
-                                            const preset = {};
-                                            preset.name = inputField.text;
-                                            preset.border = {
-                                                left: acceptButtonBg.border.left,
-                                                top: acceptButtonBg.border.top,
-                                                right: acceptButtonBg.border.right,
-                                                bottom: acceptButtonBg.border.bottom
-                                            };
-                                            preset.source = acceptButtonBg.source;
-                                            Config.general.presets.push(preset);
-                                            Config.saveSettings();
-                                        }
-                                    }
-                                }
                             }
                         }
 
