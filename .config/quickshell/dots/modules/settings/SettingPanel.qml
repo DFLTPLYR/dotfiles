@@ -382,6 +382,7 @@ Scope {
 
                             Label {
                                 text: qsTr("Panels:")
+                                font.pixelSize: 32
                             }
                             Item {
                                 Layout.fillWidth: true
@@ -483,6 +484,7 @@ Scope {
 
                             ListView {
                                 id: recentWallpapersList
+                                readonly property string currentWallpaper: Config.general.wallpapers.find(wallpaper => wallpaper?.monitor === selectedScreen.name)?.path
                                 readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: recentWallpapersList.isPortrait ? 220 : 100
@@ -494,8 +496,7 @@ Scope {
 
                                     color: "transparent"
                                     border.width: recentWallMa.containsMouse ? 2 : 1
-                                    border.color: recentWallMa.containsMouse ? "green" : "white"
-
+                                    border.color: recentWallpapersList.currentWallpaper === modelData.path ? "orange" : recentWallMa.containsMouse ? "green" : "white"
                                     width: recentWallpapersList.isPortrait ? 100 : 220
                                     height: recentWallpapersList.isPortrait ? 220 : 100
 
@@ -540,6 +541,42 @@ Scope {
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        }
+
+                        Spacer {}
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Generate Color:")
+                                font.pixelSize: 32
+                            }
+                            ListView {
+                                id: schemeList
+                                property int selectedScheme: 0
+                                readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
+                                orientation: ListView.Horizontal
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 400
+                                model: schemes
+                                delegate: RadioDelegate {
+                                    text: modelData
+                                    background: Rectangle {
+                                        anchors.fill: parent
+                                        color: schemeList.selectedScheme === model.index ? "green" : "transparent"
+                                        Behavior on color {
+                                            ColorAnimation {
+                                                duration: 300
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                    }
+                                    indicator: Item {}
+                                    onCheckedChanged: {
+                                        schemeList.selectedScheme = model.index;
                                     }
                                 }
                             }
