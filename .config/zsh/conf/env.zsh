@@ -36,7 +36,6 @@ PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 # Custom additions
 DOCKER_HOST="unix:///run/user/1000/podman/podman.sock"
 COMPOSER_BIN="$XDG_CONFIG_HOME/composer/vendor/bin"
-DOTFILES_SCRIPTS="$HOME/dotfiles/Scripts"
 CARGO_BIN="$HOME/.cargo/bin"
 EDITOR="nvim"
 VISUAL="nvim"

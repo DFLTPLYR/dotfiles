@@ -15,11 +15,7 @@ function _load_compinit() {
     setopt EXTENDED_GLOB
 
     # Fastest - use glob qualifiers on directory pattern
-    if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+${HYDE_ZSH_COMPINIT_CHECK:-1}) ]]; then
-        compinit
-    else
-        compinit -C
-    fi
+    compinit -C
 
     _comp_options+=(globdots) # tab complete hidden files
 }
