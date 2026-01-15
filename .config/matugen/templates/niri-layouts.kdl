@@ -6,11 +6,15 @@ layout {
     focus-ring {
         off
         width 2
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+        active-gradient from="#80c8ff" to="#c7ff7f" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     border {
       on 
-      width 2
+      width 4
       active-gradient from="{{colors.on_primary.default.hex}}" to="{{colors.primary.default.hex}}" angle=45 relative-to="workspace-view"
       inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
