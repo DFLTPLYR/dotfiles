@@ -85,6 +85,7 @@
       "type": "packages",
       "key": "{#separator}│  󰏗 Packages ",
       "keyColor": "green",
+      "format": "{all}"
     },
     {
       "type": "terminal",
