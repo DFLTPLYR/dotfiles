@@ -1,23 +1,21 @@
 layout {
     gaps 16
-
-    center-focused-column "always"
-    always-center-single-column
-
+    center-focused-column "never"
     background-color "transparent"
+
     focus-ring {
         off
         width 2
-        // active-color "#7fc8ff"
-        // inactive-color "#505050"
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45 relative-to="workspace-view"
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+        active-gradient from="#80c8ff" to="#c7ff7f" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     border {
       on 
-      width 2
-      active-gradient from="#ffbb66" to="#ffc880" angle=45 relative-to="workspace-view"
+      width 4
+      active-gradient from="#003355" to="#a3caf6" angle=45 relative-to="workspace-view"
       inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
@@ -42,4 +40,5 @@ overview {
         off
     }
 }
+
 
