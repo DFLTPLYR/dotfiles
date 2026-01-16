@@ -371,8 +371,18 @@ Scope {
                             property Item targetItem
                             currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                             onAccepted: {
-                                if (targetItem) {
-                                    targetItem.source = selectedFile;
+                                if (selectedScreen) {
+                                    const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
+                                    if (targetMonitor != -1) {
+                                        Config.general.previewWallpaper[targetMonitor].path = selectedFile.path;
+                                    } else {
+                                        const monitor = {
+                                            monitor: selectedScreen.name,
+                                            path: selectedFile,
+                                            isGif: selectedFile.toString().toLowerCase().endsWith(".gif")
+                                        };
+                                        Config.general.previewWallpaper.push(monitor);
+                                    }
                                 }
                             }
                         }
@@ -387,6 +397,7 @@ Scope {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: monitorRow.height
+
                                 RowLayout {
                                     id: monitorRow
                                     anchors.centerIn: parent
@@ -401,8 +412,8 @@ Scope {
                                             color: "transparent"
                                             border.color: selectedScreen.name === modelData.name ? Colors.color.inverse_primary : Colors.color.primary
 
-                                            Layout.preferredHeight: modelData.height / 6
-                                            Layout.preferredWidth: modelData.width / 6
+                                            Layout.preferredHeight: modelData.height / 4
+                                            Layout.preferredWidth: modelData.width / 4
 
                                             Behavior on border.color {
                                                 ColorAnimation {
@@ -469,7 +480,6 @@ Scope {
                                                 hoverEnabled: true
                                                 onClicked: {
                                                     selectedScreen = modelData;
-                                                    fileDialog.targetItem = monitorBg;
                                                 }
                                             }
                                         }
@@ -488,8 +498,10 @@ Scope {
                                 id: recentWallpapersList
                                 readonly property string currentWallpaper: Config.general.wallpapers.find(wallpaper => wallpaper?.monitor === selectedScreen.name)?.path
                                 readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
+                                readonly property int itemHeight: selectedScreen.height / 4
+                                readonly property int itemWidth: selectedScreen.width / 4
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: recentWallpapersList.isPortrait ? 220 : 100
+                                Layout.preferredHeight: itemHeight
                                 orientation: ListView.Horizontal
                                 layoutDirection: Qt.LeftToRight
                                 spacing: 5
@@ -499,8 +511,8 @@ Scope {
                                     color: "transparent"
                                     border.width: recentWallMa.containsMouse ? 2 : 1
                                     border.color: recentWallpapersList.currentWallpaper === modelData.path ? Colors.color.tertiary : recentWallMa.containsMouse ? Colors.color.inverse_primary : Colors.color.primary
-                                    width: recentWallpapersList.isPortrait ? 100 : 220
-                                    height: recentWallpapersList.isPortrait ? 220 : 100
+                                    height: recentWallpapersList.itemHeight
+                                    width: recentWallpapersList.itemWidth
 
                                     Image {
                                         anchors {
@@ -564,10 +576,13 @@ Scope {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 400
                                 model: schemes
+                                spacing: 5
                                 delegate: Rectangle {
                                     width: 200
                                     height: 40
+                                    radius: width / 2
                                     color: schemeList.selectedScheme === model.index ? Colors.color.primary : Colors.color.background
+
                                     Behavior on color {
                                         ColorAnimation {
                                             duration: 300
@@ -597,10 +612,30 @@ Scope {
 
                         PageFooter {
                             onSave: {
+                                if (Config.general.previewWallpaper && Config.general.previewWallpaper.length > 0) {
+                                    Config.general.previewWallpaper.forEach(preview => {
+                                        const found = Config.general.wallpapers.find(item => item.monitor === preview.monitor);
+
+                                        if (found) {
+                                            found.path = preview.path;
+                                        }
+                                    });
+                                }
+                                Config.general.previewWallpaper = [];
                                 Config.saveSettings();
                             }
                             onSaveAndExit: {
+                                if (Config.general.previewWallpaper && Config.general.previewWallpaper.length > 0) {
+                                    Config.general.previewWallpaper.forEach(preview => {
+                                        const found = Config.general.wallpapers.find(item => item.monitor === preview.monitor);
+
+                                        if (found) {
+                                            found.path = preview.path;
+                                        }
+                                    });
+                                }
                                 Config.general.previewWallpaper = [];
+
                                 Config.saveSettings();
                                 Qt.callLater(() => {
                                     Config.openSettingsPanel = false;
@@ -639,7 +674,7 @@ Scope {
         Text {
             id: titleText
             anchors.centerIn: parent
-            color: "white"
+            color: Colors.color.primary
         }
     }
 
@@ -666,7 +701,7 @@ Scope {
             Text {
                 Layout.fillWidth: true
                 text: "Save Settings"
-                color: "white"
+                color: Colors.color.secondary
             }
 
             Row {
@@ -681,7 +716,6 @@ Scope {
 
                     onClicked: {
                         footer.exit();
-                        // Config.openSettingsPanel = false;
                     }
                 }
 
@@ -693,7 +727,6 @@ Scope {
 
                     onClicked: {
                         footer.save();
-                        // Config.saveSettings();
                     }
                 }
 
@@ -703,11 +736,6 @@ Scope {
                     rightPadding: 10
                     onClicked: {
                         footer.saveAndExit();
-
-                        // Config.saveSettings();
-                        // Qt.callLater(() => {
-                        //     Config.openSettingsPanel = false;
-                        // });
                     }
                 }
             }

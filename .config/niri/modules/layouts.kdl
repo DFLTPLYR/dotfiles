@@ -16,7 +16,7 @@ layout {
     border {
       on 
       width 4
-      active-gradient from="#003355" to="#a3caf6" angle=45 relative-to="workspace-view"
+      active-gradient from="#630c14" to="#ffb3b0" angle=45 relative-to="workspace-view"
       inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
