@@ -1,4 +1,9 @@
 [config]
+
+[templates.dots]
+input_path = "templates/colors.json.template"
+output_path = "~/.config/quickshell/dots/config/colors.json"
+
 [templates.niri]
 input_path = "templates/niri-layouts.kdl"
 output_path = "~/.config/niri/modules/layouts.kdl"
