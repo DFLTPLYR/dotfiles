@@ -399,7 +399,7 @@ Scope {
                                             readonly property string imagePath: tempPath || filePath
 
                                             color: "transparent"
-                                            border.color: selectedScreen.name === modelData.name ? "green" : "gray"
+                                            border.color: selectedScreen.name === modelData.name ? Colors.color.inverse_primary : Colors.color.primary
 
                                             Layout.preferredHeight: modelData.height / 6
                                             Layout.preferredWidth: modelData.width / 6
@@ -417,7 +417,8 @@ Scope {
                                                     horizontalCenter: parent.horizontalCenter
                                                 }
                                                 text: modelData.name
-                                                color: "white"
+                                                color: Colors.color.on_surface
+                                                z: 10
                                             }
 
                                             Image {
@@ -461,6 +462,7 @@ Scope {
                                                     }
                                                 }
                                             }
+
                                             MouseArea {
                                                 id: monitorArea
                                                 anchors.fill: parent
@@ -496,7 +498,7 @@ Scope {
 
                                     color: "transparent"
                                     border.width: recentWallMa.containsMouse ? 2 : 1
-                                    border.color: recentWallpapersList.currentWallpaper === modelData.path ? "orange" : recentWallMa.containsMouse ? "green" : "white"
+                                    border.color: recentWallpapersList.currentWallpaper === modelData.path ? Colors.color.tertiary : recentWallMa.containsMouse ? Colors.color.inverse_primary : Colors.color.primary
                                     width: recentWallpapersList.isPortrait ? 100 : 220
                                     height: recentWallpapersList.isPortrait ? 220 : 100
 
@@ -562,21 +564,30 @@ Scope {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 400
                                 model: schemes
-                                delegate: RadioDelegate {
-                                    text: modelData
-                                    background: Rectangle {
-                                        anchors.fill: parent
-                                        color: schemeList.selectedScheme === model.index ? "green" : "transparent"
-                                        Behavior on color {
-                                            ColorAnimation {
-                                                duration: 300
-                                                easing.type: Easing.InOutQuad
-                                            }
+                                delegate: Rectangle {
+                                    width: 200
+                                    height: 40
+                                    color: schemeList.selectedScheme === model.index ? Colors.color.primary : Colors.color.background
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 300
+                                            easing.type: Easing.InOutQuad
                                         }
                                     }
-                                    indicator: Item {}
-                                    onCheckedChanged: {
-                                        schemeList.selectedScheme = model.index;
+                                    Text {
+                                        text: modelData
+                                        anchors {
+                                            centerIn: parent
+                                        }
+                                        color: schemeList.selectedScheme === model.index ? Colors.color.on_primary : Colors.color.on_background
+                                    }
+
+                                    MouseArea {
+                                        id: schemeItemMouseArea
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            schemeList.selectedScheme = model.index;
+                                        }
                                     }
                                 }
                             }
