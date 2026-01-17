@@ -114,8 +114,8 @@ Scope {
                     currentIndex: root.page
                     Layout.rightMargin: 20
 
+                    // General
                     PageWrapper {
-
                         PageHeader {
                             title: "General"
                         }
@@ -333,7 +333,7 @@ Scope {
                             }
                         }
                     }
-
+                    // Navbar
                     PageWrapper {
                         PageHeader {
                             title: "Navbar"
@@ -359,7 +359,7 @@ Scope {
                             }
                         }
                     }
-
+                    // Wallpaper
                     PageWrapper {
                         PageHeader {
                             title: "Wallpaper"
@@ -568,13 +568,14 @@ Scope {
                                 text: qsTr("Generate Color:")
                                 font.pixelSize: 32
                             }
+
                             ListView {
                                 id: schemeList
                                 property int selectedScheme: 0
                                 readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
                                 orientation: ListView.Horizontal
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: 400
+                                Layout.preferredHeight: 40
                                 model: schemes
                                 spacing: 5
                                 delegate: Rectangle {
@@ -604,6 +605,41 @@ Scope {
                                             schemeList.selectedScheme = model.index;
                                         }
                                     }
+                                }
+                            }
+
+                            Label {
+                                text: qsTr("Generated Color:")
+                                font.pixelSize: 32
+                            }
+                            GridView {
+                                id: colorGrid
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: contentHeight
+                                cellHeight: width / 15
+                                cellWidth: width / 15
+                                model: Colors.colors
+                                delegate: Rectangle {
+                                    width: colorGrid.cellWidth
+                                    height: colorGrid.cellHeight
+                                    color: Colors.color[modelData]
+                                }
+                            }
+                            Label {
+                                text: qsTr("Generated Palette:")
+                                font.pixelSize: 32
+                            }
+                            GridView {
+                                id: paletteGrid
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: contentHeight
+                                cellHeight: width / 18
+                                cellWidth: width / 18
+                                model: Colors.palettes
+                                delegate: Rectangle {
+                                    width: paletteGrid.cellWidth
+                                    height: paletteGrid.cellHeight
+                                    color: Colors.palette[modelData]
                                 }
                             }
                         }
