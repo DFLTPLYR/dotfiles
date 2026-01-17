@@ -621,7 +621,7 @@ Scope {
                             Process {
                                 id: cmdGenerateColor
                                 running: false
-                                command: ["pcli", "generate-palette", ...Config.general.wallpapers.map(item => item.path)]
+                                command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...Config.general.wallpapers.map(item => item.path)]
                                 stdout: StdioCollector {
                                     onStreamFinished: console.log(`line read: ${this.text}`)
                                 }
