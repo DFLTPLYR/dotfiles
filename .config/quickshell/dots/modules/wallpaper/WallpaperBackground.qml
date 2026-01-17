@@ -60,7 +60,7 @@ Variants {
                 id: fadeIn
                 target: temp
                 duration: 300
-                properties: "opacity,"
+                properties: "opacity"
                 from: 0
                 to: 1
             }
