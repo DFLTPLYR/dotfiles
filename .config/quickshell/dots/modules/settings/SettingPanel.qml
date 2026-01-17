@@ -5,6 +5,7 @@ import QtQuick.Dialogs
 import QtCore
 
 import Quickshell
+import Quickshell.Io
 
 import qs.config
 import qs.components
@@ -61,6 +62,7 @@ Scope {
                         delegate: Item {
                             width: 40
                             height: 40
+
                             Rectangle {
                                 anchors.fill: parent
                                 color: ma.containsMouse ? Qt.rgba(1, 1, 1, 0.2) : "transparent"
@@ -608,6 +610,23 @@ Scope {
                                 }
                             }
 
+                            Button {
+                                text: "Generate Colors"
+                                enabled: !cmdGenerateColor.running
+                                onClicked: {
+                                    cmdGenerateColor.running = true;
+                                }
+                            }
+
+                            Process {
+                                id: cmdGenerateColor
+                                running: false
+                                command: ["pcli", "generate-palette", ...Config.general.wallpapers.map(item => item.path)]
+                                stdout: StdioCollector {
+                                    onStreamFinished: console.log(`line read: ${this.text}`)
+                                }
+                            }
+
                             Label {
                                 text: qsTr("Generated Color:")
                                 font.pixelSize: 32
@@ -655,6 +674,7 @@ Scope {
                                     }
                                 }
                             }
+
                             Label {
                                 text: qsTr("Generated Palette:")
                                 font.pixelSize: 32
