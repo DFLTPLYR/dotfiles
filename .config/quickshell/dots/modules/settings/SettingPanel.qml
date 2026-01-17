@@ -612,8 +612,15 @@ Scope {
                                 text: qsTr("Generated Color:")
                                 font.pixelSize: 32
                             }
+
+                            Switch {
+                                text: qsTr("Show Color names")
+                                onClicked: colorGrid.showName = !colorGrid.showName
+                            }
+
                             GridView {
                                 id: colorGrid
+                                property bool showName: false
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: contentHeight
                                 cellHeight: width / 15
@@ -623,14 +630,43 @@ Scope {
                                     width: colorGrid.cellWidth
                                     height: colorGrid.cellHeight
                                     color: Colors.color[modelData]
+                                    Text {
+                                        opacity: colorGrid.showName ? 1 : 0
+                                        Behavior on opacity {
+                                            NumberAnimation {
+                                                duration: 300
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                        anchors {
+                                            fill: parent
+                                            centerIn: parent
+                                            horizontalCenter: parent.horizontalCenter
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        font.pixelSize: Math.min(parent.width, parent.height) / 5
+                                        wrapMode: Text.WrapAnywhere
+                                        text: modelData
+                                        color: {
+                                            let bg = Colors.color[modelData];
+                                            let brightness = bg.r * 0.299 + bg.g * 0.587 + bg.b * 0.114;
+                                            return brightness > 0.5 ? "black" : "white";
+                                        }
+                                    }
                                 }
                             }
                             Label {
                                 text: qsTr("Generated Palette:")
                                 font.pixelSize: 32
                             }
+                            Switch {
+                                text: qsTr("Show Palette names")
+                                onClicked: paletteGrid.showName = !paletteGrid.showName
+                            }
+
                             GridView {
                                 id: paletteGrid
+                                property bool showName: false
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: contentHeight
                                 cellHeight: width / 18
@@ -640,6 +676,29 @@ Scope {
                                     width: paletteGrid.cellWidth
                                     height: paletteGrid.cellHeight
                                     color: Colors.palette[modelData]
+                                    Text {
+                                        opacity: paletteGrid.showName ? 1 : 0
+                                        Behavior on opacity {
+                                            NumberAnimation {
+                                                duration: 300
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                        anchors {
+                                            fill: parent
+                                            centerIn: parent
+                                            horizontalCenter: parent.horizontalCenter
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        font.pixelSize: Math.min(parent.width, parent.height) / 5
+                                        wrapMode: Text.WrapAnywhere
+                                        text: modelData
+                                        color: {
+                                            let bg = Colors.palette[modelData];
+                                            let brightness = bg.r * 0.299 + bg.g * 0.587 + bg.b * 0.114;
+                                            return brightness > 0.5 ? "black" : "white";
+                                        }
+                                    }
                                 }
                             }
                         }
