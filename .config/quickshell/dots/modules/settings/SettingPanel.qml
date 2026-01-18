@@ -490,7 +490,7 @@ Scope {
                             }
 
                             StyledButton {
-                                text: "Change Wallpaper" + selectedScreen.name
+                                text: "Change Wallpaper " + selectedScreen.name
                                 onClicked: {
                                     fileDialog.open();
                                 }
@@ -566,6 +566,7 @@ Scope {
 
                         ColumnLayout {
                             Layout.fillWidth: true
+
                             Label {
                                 text: qsTr("Generate Color:")
                                 font.pixelSize: 32
@@ -610,9 +611,10 @@ Scope {
                                 }
                             }
 
-                            Button {
+                            StyledButton {
                                 text: "Generate Colors"
                                 enabled: !cmdGenerateColor.running
+                                colorBackground: cmdGenerateColor.running ? Colors.palette.primary60 : Colors.palette.primary10
                                 onClicked: {
                                     cmdGenerateColor.running = true;
                                 }
@@ -622,9 +624,6 @@ Scope {
                                 id: cmdGenerateColor
                                 running: false
                                 command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...Config.general.wallpapers.map(item => item.path)]
-                                stdout: StdioCollector {
-                                    onStreamFinished: console.log(`line read: ${this.text}`)
-                                }
                             }
 
                             Label {
@@ -822,33 +821,25 @@ Scope {
             Row {
                 spacing: 10
 
-                Button {
-                    id: cancelButton
+                StyledButton {
                     text: "Cancel"
-
-                    leftPadding: 10
-                    rightPadding: 10
 
                     onClicked: {
                         footer.exit();
                     }
                 }
 
-                Button {
-                    id: saveButton
+                StyledButton {
                     text: "Save"
-                    leftPadding: 10
-                    rightPadding: 10
 
                     onClicked: {
                         footer.save();
                     }
                 }
 
-                Button {
+                StyledButton {
                     text: "Save and Exit"
-                    leftPadding: 10
-                    rightPadding: 10
+
                     onClicked: {
                         footer.saveAndExit();
                     }
