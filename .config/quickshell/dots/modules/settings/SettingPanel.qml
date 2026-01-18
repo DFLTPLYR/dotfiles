@@ -114,7 +114,7 @@ Scope {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     currentIndex: root.page
-                    Layout.rightMargin: 20
+                    Layout.rightMargin: 0
 
                     // General
                     PageWrapper {
@@ -770,14 +770,17 @@ Scope {
 
     component PageWrapper: ScrollView {
         default property alias contentLayout: contentLayout.data
-
         Layout.fillHeight: true
         Layout.fillWidth: true
         contentWidth: width
         clip: true
+
         ColumnLayout {
             id: contentLayout
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                rightMargin: 8
+            }
         }
     }
 
@@ -795,6 +798,7 @@ Scope {
     component Spacer: Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 2
+        color: Colors.palette.secondary60
     }
 
     component PageFooter: Item {
