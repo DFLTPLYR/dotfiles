@@ -1,8 +1,31 @@
 import QtQuick
 import QtQuick.Controls
 
+import qs.config
+
 Button {
     id: root
+    property color textColor: Colors.palette.neutral100
+    property color colorBackground: Colors.palette.primary60
     leftPadding: 10
     rightPadding: 10
+    background: Rectangle {
+        id: background
+        anchors.fill: parent
+        radius: height / 2
+        color: root.colorBackground
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
+    palette.buttonText: root.textColor
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onPressed: mouse => mouse.accepted = false
+        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.WaitCursor
+    }
 }

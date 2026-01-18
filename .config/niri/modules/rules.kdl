@@ -47,7 +47,7 @@ window-rule {
 }
 
 window-rule {
-  match title="hytale" app-id="HytaleClient"
+  match title="Hytale" app-id="HytaleClient"
   open-on-output "DP-1"
   open-maximized true
 }
