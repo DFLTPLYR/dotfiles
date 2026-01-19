@@ -98,20 +98,6 @@ PageWrapper {
                             fillMode: Image.PreserveAspectCrop
                             source: imagePath
                             onSourceChanged: {
-                                let monitor = Config.general.previewWallpaper.find(w => w?.monitor === modelData.name);
-                                if (monitor === undefined) {
-                                    return;
-                                } else if (monitor) {
-                                    monitor.path = source;
-                                    monitor.isGif = source.toString().toLowerCase().endsWith(".gif");
-                                } else {
-                                    Config.general.previewWallpaper.push({
-                                        monitor: modelData.name,
-                                        path: source,
-                                        isGif: source.toString().toLowerCase().endsWith(".gif")
-                                    });
-                                }
-
                                 let wallpaperIndex = Config.general.recentWallpapers.findIndex(w => String(w.path).trim().toLowerCase() === String(source).trim().toLowerCase() && w.monitor === modelData.name);
                                 if (wallpaperIndex !== -1) {
                                     Config.general.recentWallpapers[wallpaperIndex].timestamp = Date.now();
@@ -158,7 +144,8 @@ PageWrapper {
             spacing: 5
             model: Config.general.recentWallpapers.filter(item => item.monitor === selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
             delegate: Rectangle {
-
+                id: recItem
+                property bool isSetCurrent: recentWallpapersList.currentWallpaper === modelData.path
                 color: "transparent"
                 border.width: recentWallMa.containsMouse ? 2 : 1
                 border.color: recentWallpapersList.currentWallpaper === modelData.path ? Colors.color.tertiary : recentWallMa.containsMouse ? Colors.color.inverse_primary : Colors.color.primary
@@ -181,31 +168,99 @@ PageWrapper {
                     }
                 }
 
+                Row {
+                    z: 100000
+                    anchors {
+                        bottom: parent.bottom
+                        right: parent.right
+                        margins: 5
+                    }
+                    spacing: 5
+
+                    Rectangle {
+                        width: 40
+                        height: 40
+                        radius: height / 2
+                        color: Colors.color.background
+
+                        Text {
+                            font.family: Config.iconFont.family
+                            font.weight: Config.iconFont.weight
+                            font.styleName: Config.iconFont.styleName
+                            font.pixelSize: Math.min(parent.height, parent.width) / 2
+                            color: !recItem.isSetCurrent ? Colors.color.primary : Colors.color.tertiary
+
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                            }
+                            text: "eye"
+                        }
+
+                        MouseArea {
+                            enabled: !recItem.isSetCurrent
+                            anchors.fill: parent
+                            onClicked: {
+                                const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
+                                if (targetMonitor != -1) {
+                                    Config.general.previewWallpaper[targetMonitor].path = modelData.path;
+                                } else {
+                                    const monitor = {
+                                        monitor: selectedScreen.name,
+                                        path: modelData.path,
+                                        isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
+                                    };
+                                    Config.general.previewWallpaper.push(monitor);
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        width: 40
+                        height: 40
+                        radius: height / 2
+                        color: Colors.color.background
+
+                        Text {
+                            font.family: Config.iconFont.family
+                            font.weight: Config.iconFont.weight
+                            font.styleName: Config.iconFont.styleName
+                            font.pixelSize: Math.min(parent.height, parent.width) / 2
+                            color: !recItem.isSetCurrent ? Colors.color.primary : Colors.color.tertiary
+
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                            }
+                            text: "circle-check"
+                        }
+
+                        MouseArea {
+                            enabled: !recItem.isSetCurrent
+                            anchors.fill: parent
+                            onClicked: {
+                                const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === selectedScreen.name);
+                                if (targetMonitor != -1) {
+                                    Config.general.wallpapers[targetMonitor].path = modelData.path;
+                                } else {
+                                    const monitor = {
+                                        monitor: selectedScreen.name,
+                                        path: modelData.path,
+                                        isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
+                                    };
+                                    Config.general.wallpapers.push(monitor);
+                                }
+                                Config.general.previewWallpaper = [];
+                                Config.saveSettings();
+                            }
+                        }
+                    }
+                }
                 MouseArea {
                     id: recentWallMa
                     anchors.fill: parent
                     hoverEnabled: true
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: mouse => {
-                        if (mouse.button === Qt.LeftButton) {
-                            const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
-                            if (targetMonitor != -1) {
-                                Config.general.previewWallpaper[targetMonitor].path = modelData.path;
-                            } else {
-                                const monitor = {
-                                    monitor: selectedScreen.name,
-                                    path: modelData.path,
-                                    isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
-                                };
-                                Config.general.previewWallpaper.push(monitor);
-                            }
-                        } else if (mouse.button === Qt.RightButton) {
-                            const index = Config.general.recentWallpapers.findIndex(wallpaperItem => wallpaperItem.monitor === modelData.monitor && wallpaperItem.path === modelData.path);
-                            if (index !== -1) {
-                                Config.general.recentWallpapers.splice(index, 1);
-                            }
-                        }
-                    }
                 }
             }
         }
