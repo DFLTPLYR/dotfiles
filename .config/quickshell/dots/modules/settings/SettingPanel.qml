@@ -6,6 +6,7 @@ import QtCore
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 
 import qs.config
 import qs.components
@@ -15,6 +16,46 @@ Scope {
         target: Config
         function onOpenSettingsPanelChanged() {
             settingsLoader.active = !settingsLoader.active;
+        // if (!settingsContainer.active) {
+        //     settingsContainer.active = true;
+        //     settingsContainer.shouldBeVisible = !settingsContainer.shouldBeVisible;
+        // } else {
+        //     settingsContainer.shouldBeVisible = !settingsContainer.shouldBeVisible;
+        // }
+        }
+    }
+
+    LazyLoader {
+        id: settingsContainer
+        property bool shouldBeVisible: false
+        component: PanelWrapper {
+            id: settingsRoot
+            readonly property bool isPortrait: screen.height > screen.width
+            readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
+            shouldBeVisible: settingsContainer.shouldBeVisible
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+            exclusionMode: ExclusionMode.Ignore
+
+            anchors {
+                left: true
+                right: true
+                top: true
+                bottom: true
+            }
+
+            Rectangle {
+                width: 400
+                height: 400
+                color: Qt.rgba(0, 0, 0, 0.5)
+                opacity: settingsRoot.animProgress
+                x: screen.width / 2 - width / 2
+                y: screen.height / 2 - height / 2
+            }
+
+            onHidden: {
+                settingsContainer.active = false;
+            }
         }
     }
 
@@ -116,225 +157,6 @@ Scope {
                     currentIndex: root.page
                     Layout.rightMargin: 0
 
-                    // General
-                    PageWrapper {
-                        PageHeader {
-                            title: "General"
-                        }
-                        Spacer {}
-
-                        Switch {
-                            text: qsTr("Show Preset Creator Grid")
-                            onClicked: presetGrid.visible = !presetGrid.visible
-                        }
-
-                        GridLayout {
-                            id: presetGrid
-                            visible: false
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 600
-                            columns: 3
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Column {
-                                    spacing: 10
-                                    anchors {
-                                        horizontalCenter: parent.horizontalCenter
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    Label {
-                                        text: "Preset Name:"
-                                    }
-                                    Rectangle {
-                                        width: 150
-                                        height: 20
-                                        color: Qt.rgba(1, 1, 1, 0.1)
-                                        clip: true
-                                        TextInput {
-                                            id: inputField
-                                            anchors.fill: parent
-                                            color: "white"
-                                            font.pixelSize: parent.height
-                                        }
-                                    }
-                                    Button {
-                                        text: "save"
-                                        enabled: inputField.text.length > 0
-                                        onClicked: {
-                                            const preset = {};
-                                            preset.name = inputField.text;
-                                            preset.border = {
-                                                left: acceptButtonBg.border.left,
-                                                top: acceptButtonBg.border.top,
-                                                right: acceptButtonBg.border.right,
-                                                bottom: acceptButtonBg.border.bottom
-                                            };
-                                            preset.source = acceptButtonBg.source;
-                                            Config.general.presets.push(preset);
-                                            Config.saveSettings();
-                                        }
-                                    }
-                                }
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Column {
-                                    anchors {
-                                        bottom: parent.bottom
-                                        horizontalCenter: parent.horizontalCenter
-                                    }
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    SpinBox {
-                                        from: 0
-                                        onValueChanged: {
-                                            acceptButtonBg.border.top = value;
-                                        }
-                                    }
-                                }
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-
-                                Column {
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-
-                                    SpinBox {
-                                        from: 0
-                                        onValueChanged: {
-                                            acceptButtonBg.border.left = value;
-                                        }
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                color: "transparent"
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Button {
-                                    id: testAcceptButton
-                                    text: "change panel"
-                                    anchors {
-                                        horizontalCenter: parent.horizontalCenter
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    anchors.fill: parent
-                                    background: BorderImage {
-                                        id: acceptButtonBg
-                                        anchors {
-                                            fill: parent
-                                            margins: 1
-                                        }
-                                        border {
-                                            left: 1
-                                            top: 1
-                                            right: 1
-                                            bottom: 1
-                                        }
-                                        horizontalTileMode: BorderImage.Stretch
-                                        verticalTileMode: BorderImage.Stretch
-                                    }
-                                    onClicked: {
-                                        fileDialog.targetItem = acceptButtonBg;
-                                        fileDialog.open();
-                                    }
-                                }
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Column {
-                                    anchors {
-                                        left: parent.left
-                                        verticalCenter: parent.verticalCenter
-                                    }
-
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    SpinBox {
-                                        from: 0
-                                        onValueChanged: {
-                                            acceptButtonBg.border.right = value;
-                                        }
-                                    }
-                                }
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                                Column {
-                                    anchors {
-                                        top: parent.top
-                                        horizontalCenter: parent.horizontalCenter
-                                    }
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    SpinBox {
-                                        from: 0
-                                        onValueChanged: {
-                                            acceptButtonBg.border.bottom = value;
-                                        }
-                                    }
-                                }
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                            }
-
-                            Item {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                            }
-                        }
-
-                        Spacer {}
-
-                        PageFooter {
-                            onSave: {
-                                Config.saveSettings();
-                            }
-                            onSaveAndExit: {
-                                Config.general.previewWallpaper = [];
-                                Config.saveSettings();
-                                Qt.callLater(() => {
-                                    Config.openSettingsPanel = false;
-                                });
-                            }
-                            onExit: {
-                                Config.general.previewWallpaper = [];
-                                Qt.callLater(() => {
-                                    Config.openSettingsPanel = false;
-                                });
-                            }
-                        }
-                    }
                     // Navbar
                     PageWrapper {
                         PageHeader {
@@ -762,91 +584,6 @@ Scope {
                                 });
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    component PageWrapper: ScrollView {
-        default property alias contentLayout: contentLayout.data
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        contentWidth: width
-        clip: true
-
-        ColumnLayout {
-            id: contentLayout
-            anchors {
-                fill: parent
-                rightMargin: 8
-            }
-        }
-    }
-
-    component PageHeader: Item {
-        property alias title: titleText.text
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Text {
-            id: titleText
-            anchors.centerIn: parent
-            color: Colors.color.primary
-        }
-    }
-
-    component Spacer: Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 2
-        color: Colors.palette.secondary60
-    }
-
-    component PageFooter: Item {
-        id: footer
-        signal save
-        signal saveAndExit
-        signal exit
-
-        property alias footerLayout: footerLayout.data
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Layout.bottomMargin: 40
-
-        RowLayout {
-            id: footerLayout
-            width: parent.width
-
-            Text {
-                Layout.fillWidth: true
-                text: "Save Settings"
-                color: Colors.color.secondary
-                font.pixelSize: 24
-            }
-
-            Row {
-                spacing: 10
-
-                StyledButton {
-                    text: "Cancel"
-
-                    onClicked: {
-                        footer.exit();
-                    }
-                }
-
-                StyledButton {
-                    text: "Save"
-
-                    onClicked: {
-                        footer.save();
-                    }
-                }
-
-                StyledButton {
-                    text: "Save and Exit"
-
-                    onClicked: {
-                        footer.saveAndExit();
                     }
                 }
             }
