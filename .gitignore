@@ -1,0 +1,5 @@
+# Local Netlify folder
+.netlify
+
+# Generated colors file
+.config/niri/modules/colors.kdl
