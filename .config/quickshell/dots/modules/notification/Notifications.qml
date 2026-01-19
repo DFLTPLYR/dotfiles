@@ -58,9 +58,9 @@ Scope {
                         Image {
                             id: notificationIcon
                             anchors.fill: parent
-                            visible: modelData.appIcon !== ""
+                            visible: modelData.appIcon || modelData.image
                             fillMode: Image.PreserveAspectCrop
-                            source: Qt.resolvedUrl(modelData.appIcon)
+                            source: Qt.resolvedUrl(modelData.image || modelData.appIcon)
                         }
                     }
                     // content
