@@ -5,5 +5,23 @@ input_path = "templates/colors.json.template"
 output_path = "~/.config/quickshell/dots/config/colors.json"
 
 [templates.niri]
-input_path = "templates/niri-layouts.kdl"
-output_path = "~/.config/niri/modules/layouts.kdl"
+input_path = "templates/niri-colors.kdl"
+output_path = "~/.config/niri/modules/colors.kdl"
+post_hook = 'niri msg action load-config-file'
+
+[templates.qt5ct]
+input_path = "templates/qtct.conf"
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = "templates/qtct.conf"
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.gtk3]
+input_path = "templates/gtk-colors.css"
+output_path = '~/.config/gtk-3.0/colors.css'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
+
+[templates.gtk4]
+input_path = "templates/gtk-colors.css"
+output_path = '~/.config/gtk-4.0/colors.css'
