@@ -820,6 +820,7 @@ Scope {
                 Layout.fillWidth: true
                 text: "Save Settings"
                 color: Colors.color.secondary
+                font.pixelSize: 24
             }
 
             Row {
