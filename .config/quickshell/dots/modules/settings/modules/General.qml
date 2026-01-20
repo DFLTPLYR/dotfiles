@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
+import QtCore
 
 import qs.config
 import qs.components
@@ -15,6 +17,15 @@ PageWrapper {
     StyledSwitch {
         label: qsTr("Show Preset Creator Grid")
         onClicked: presetGrid.visible = !presetGrid.visible
+    }
+
+    FileDialog {
+        id: fileDialog
+        property Item targetItem
+        currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+        onAccepted: {
+            targetItem.source = selectedFile;
+        }
     }
 
     GridLayout {
