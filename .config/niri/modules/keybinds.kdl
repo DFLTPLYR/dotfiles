@@ -9,7 +9,7 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+B hotkey-overlay-title="Open Browser"  { spawn "zen-browser"; }
     Mod+A hotkey-overlay-title="Open a App Menu: Rofi" { spawn-sh "rofi -show drun || pkill rofi"; }
-    Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn "nemo"; }
+    Mod+E hotkey-overlay-title="Open a File Manager: Yazi" { spawn-sh "kitty yazi"; }
     Mod+Delete hotkey-overlay-title="Process kill Quickshell"  {spawn-sh "pkill -x qs"; }
     Mod+Shift+G hotkey-overlay-title="Game mode" { spawn-sh "~/dotfiles/.config/niri/scripts/gamemode.sh"; }
 
