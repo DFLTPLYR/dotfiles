@@ -12,8 +12,8 @@ PageWrapper {
     }
     Spacer {}
 
-    Switch {
-        text: qsTr("Show Preset Creator Grid")
+    StyledSwitch {
+        label: qsTr("Show Preset Creator Grid")
         onClicked: presetGrid.visible = !presetGrid.visible
     }
 
@@ -33,8 +33,10 @@ PageWrapper {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
                 }
-                Label {
+                Text {
                     text: "Preset Name:"
+                    color: Colors.color.secondary
+                    font.pixelSize: 12
                 }
                 Rectangle {
                     width: 150
@@ -78,7 +80,7 @@ PageWrapper {
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                SpinBox {
+                StyledSpinBox {
                     from: 0
                     onValueChanged: {
                         acceptButtonBg.border.top = value;
@@ -104,7 +106,7 @@ PageWrapper {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                SpinBox {
+                StyledSpinBox {
                     from: 0
                     onValueChanged: {
                         acceptButtonBg.border.left = value;
@@ -158,7 +160,7 @@ PageWrapper {
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                SpinBox {
+                StyledSpinBox {
                     from: 0
                     onValueChanged: {
                         acceptButtonBg.border.right = value;
@@ -183,7 +185,7 @@ PageWrapper {
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                SpinBox {
+                StyledSpinBox {
                     from: 0
                     onValueChanged: {
                         acceptButtonBg.border.bottom = value;

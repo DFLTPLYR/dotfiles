@@ -271,8 +271,10 @@ PageWrapper {
     ColumnLayout {
         Layout.fillWidth: true
 
-        Label {
+        Text {
+            Layout.fillWidth: true
             text: qsTr("Generate Color:")
+            color: Colors.color.secondary
             font.pixelSize: 32
         }
 
@@ -330,13 +332,15 @@ PageWrapper {
             command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...Config.general.wallpapers.map(item => item.path)]
         }
 
-        Label {
+        Text {
+            Layout.fillWidth: true
             text: qsTr("Generated Color:")
+            color: Colors.color.secondary
             font.pixelSize: 32
         }
 
-        Switch {
-            text: qsTr("Show Color names")
+        StyledSwitch {
+            label: checked ? "Hide Color names" : "Show Color names"
             onClicked: colorGrid.showName = !colorGrid.showName
         }
 
@@ -381,9 +385,11 @@ PageWrapper {
         Label {
             text: qsTr("Generated Palette:")
             font.pixelSize: 32
+            color: Colors.color.secondary
         }
-        Switch {
-            text: qsTr("Show Palette names")
+
+        StyledSwitch {
+            label: "Show Palette names"
             onClicked: paletteGrid.showName = !paletteGrid.showName
         }
 
