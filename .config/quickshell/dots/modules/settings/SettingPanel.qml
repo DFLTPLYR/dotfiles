@@ -32,7 +32,6 @@ Scope {
             maximumSize: panelSize
 
             color: Qt.rgba(0, 0, 0, 0.8)
-
             GridLayout {
                 columns: 2
                 anchors.fill: parent
@@ -110,48 +109,6 @@ Scope {
                     // Wallpaper
                     Wallpaper {}
                 }
-            }
-        }
-    }
-
-    LazyLoader {
-        id: settingsContainer
-        property bool shouldBeVisible: false
-        component: PanelWrapper {
-            id: settingsRoot
-            property ShellScreen selectedScreen: Quickshell.screens.find(w => w.name === Config.focusedMonitor.name)
-            readonly property bool isPortrait: screen.height > screen.width
-            readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
-
-            mask: Region {
-                item: container
-            }
-
-            shouldBeVisible: settingsContainer.shouldBeVisible
-
-            WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            exclusionMode: ExclusionMode.Ignore
-
-            anchors {
-                left: true
-                right: true
-                top: true
-                bottom: true
-            }
-
-            StyledRect {
-                id: container
-                width: settingsRoot.panelSize.width
-                height: settingsRoot.panelSize.height
-                color: Scripts.setOpacity(Colors.color.background, 0.8)
-                opacity: settingsRoot.animProgress
-                x: screen.width / 2 - width / 2
-                y: screen.height / 2 - height / 2
-            }
-
-            onHidden: {
-                settingsContainer.active = false;
             }
         }
     }
