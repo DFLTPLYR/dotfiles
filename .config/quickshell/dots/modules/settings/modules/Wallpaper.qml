@@ -98,9 +98,17 @@ PageWrapper {
                         onClicked: {
                             wallpaper.updateLocation();
                             if (wallpaper.coordinates) {
+                                let preset = [];
                                 wallpaper.coordinates.forEach(item => {
+                                    preset.push(item);
                                     console.log(JSON.stringify(item));
                                 });
+                                const path = {
+                                    x: customWallpaperImage.x,
+                                    y: customWallpaperImage.y,
+                                    width: customWallpaperImage.width,
+                                    height: customWallpaperImage.height
+                                };
                             }
                         }
                     }
@@ -168,18 +176,19 @@ PageWrapper {
                                 return;
 
                             const relativeX = customWallpaperImage.x - x;
-    const relativeY = customWallpaperImage.y - y;
-    const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
-    if (target !== -1) {
-        wallpaper.coordinates[target].x = relativeX;
-        wallpaper.coordinates[target].y = relativeY;
-    } else {
-        wallpaper.coordinates.push({
-            name: modelData.name,
-            x: relativeX,
-            y: relativeY
-        });
-    }                        }
+                            const relativeY = customWallpaperImage.y - y;
+                            const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
+                            if (target !== -1) {
+                                wallpaper.coordinates[target].x = relativeX;
+                                wallpaper.coordinates[target].y = relativeY;
+                            } else {
+                                wallpaper.coordinates.push({
+                                    name: modelData.name,
+                                    x: relativeX,
+                                    y: relativeY
+                                });
+                            }
+                        }
 
                         Connections {
                             target: wallpaper
@@ -197,8 +206,8 @@ PageWrapper {
                 Image {
                     id: customWallpaperImage
                     z: 1
+                    visible: source
                     fillMode: Image.PreserveAspectFit
-
                     width: sourceSize.width / 4
                     height: sourceSize.height / 4
                     Drag.active: wallpaperDragArea.drag.active
