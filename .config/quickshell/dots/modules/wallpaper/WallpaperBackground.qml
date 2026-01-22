@@ -40,14 +40,20 @@ Variants {
             }
         }
 
-        //Working :D * 4 so the sizing is the same for x and y
         Image {
             id: testMage
-            visible: false
             fillMode: Image.PreserveAspectFit
             width: sourceSize.width
             height: sourceSize.height
-            source: "file:///home/dfltplyr/Pictures/wallpaper/landscape/windows-98-vaporwave.png"
+            source: Config.general.customWallpaper?.[0]?.path?.path ? Qt.resolvedUrl(Config.general.customWallpaper?.[0]?.path?.path) : ""
+            x: {
+                var found = Config.general.customWallpaper?.[0]?.monitors?.find(s => s && s.name === screen.name);
+                return found?.x * 4;
+            }
+            y: {
+                var found = Config.general.customWallpaper?.[0]?.monitors?.find(s => s && s.name === screen.name);
+                return found?.y * 4;
+            }
         }
 
         Image {
