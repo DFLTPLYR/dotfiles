@@ -30,6 +30,7 @@ PageWrapper {
     PageHeader {
         title: "Wallpaper"
     }
+
     Spacer {}
 
     FileDialog {
@@ -63,8 +64,9 @@ PageWrapper {
             font.pixelSize: 32
             color: Colors.color.on_surface
         }
-        StyledButton {
-            text: "Custom Wallpaper"
+
+        StyledSwitch {
+            label: "Custom Wallpaper"
             onClicked: {
                 wallpaper.customWallpaper = !wallpaper.customWallpaper;
             }
@@ -78,7 +80,7 @@ PageWrapper {
             property double zoom: 1.0
             clip: true
 
-            Row {
+            Column {
                 z: 2
                 anchors.top: parent.top
                 anchors.right: parent.right
@@ -98,17 +100,24 @@ PageWrapper {
                         onClicked: {
                             wallpaper.updateLocation();
                             if (wallpaper.coordinates) {
-                                let preset = [];
+                                let monitors = [];
                                 wallpaper.coordinates.forEach(item => {
-                                    preset.push(item);
+                                    monitors.push(item);
                                     console.log(JSON.stringify(item));
                                 });
                                 const path = {
                                     x: customWallpaperImage.x,
                                     y: customWallpaperImage.y,
                                     width: customWallpaperImage.width,
-                                    height: customWallpaperImage.height
+                                    height: customWallpaperImage.height,
+                                    path: customWallpaperImage.source
                                 };
+                                let preset = {
+                                    path,
+                                    monitors
+                                };
+                                Config.general.customWallpaper[0] = preset;
+                                Config.saveSettings();
                             }
                         }
                     }
@@ -146,7 +155,6 @@ PageWrapper {
                         anchors.fill: parent
                         onClicked: {
                             panelContent.zoom = panelContent.zoom + 0.1;
-                            console.log(panelContent.zoom);
                         }
                     }
                 }
@@ -155,12 +163,11 @@ PageWrapper {
             Item {
                 width: parent.width
                 height: parent.height
-
+                scale: panelContent.zoom
                 Repeater {
                     model: Quickshell.screens
                     delegate: Rectangle {
                         z: 2
-                        scale: panelContent.zoom
                         required property ShellScreen modelData
                         width: modelData.width / 4
                         height: modelData.height / 4
@@ -185,7 +192,9 @@ PageWrapper {
                                 wallpaper.coordinates.push({
                                     name: modelData.name,
                                     x: relativeX,
-                                    y: relativeY
+                                    y: relativeY,
+                                    previewX: x,
+                                    previewY: y
                                 });
                             }
                         }
@@ -350,7 +359,7 @@ PageWrapper {
 
                 Row {
                     z: 1
-                    visible: !recItem.isSetCurrent
+                    visible: !recItem.isSetCurrent || wallpaper.customWallpaper
                     anchors {
                         bottom: parent.bottom
                         right: parent.right
@@ -379,7 +388,6 @@ PageWrapper {
                         }
 
                         MouseArea {
-                            enabled: !recItem.isSetCurrent
                             anchors.fill: parent
                             onClicked: {
                                 if (wallpaper.customWallpaper) {
@@ -421,7 +429,6 @@ PageWrapper {
                         }
 
                         MouseArea {
-                            enabled: !recItem.isSetCurrent
                             anchors.fill: parent
                             onClicked: {
                                 if (wallpaper.customWallpaper) {
