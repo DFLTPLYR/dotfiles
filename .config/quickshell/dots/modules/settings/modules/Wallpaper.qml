@@ -7,10 +7,26 @@ import QtCore
 import Quickshell
 import Quickshell.Io
 
+import qs.utils
 import qs.config
 import qs.components
 
 PageWrapper {
+    id: wallpaper
+    property bool customWallpaper: false
+    property list<var> coordinates: []
+    signal updateLocation
+    function getIntersection(rect, image) {
+        var x = Math.max(rect.x, image.x);
+        var y = Math.max(rect.y, image.y);
+        var right = Math.min(rect.x + rect.width, image.x + image.width);
+        var bottom = Math.min(rect.y + rect.height, image.y + image.height);
+        if (right < x || bottom < y) {
+            return Qt.rect(0, 0, 0, 0);
+        }
+        return Qt.rect(x, y, right - x, bottom - y);
+    }
+
     PageHeader {
         title: "Wallpaper"
     }
@@ -21,7 +37,7 @@ PageWrapper {
         property Item targetItem
         currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
         onAccepted: {
-            if (selectedScreen) {
+            if (selectedScreen && !wallpaper.customWallpaper) {
                 const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
                 if (targetMonitor != -1) {
                     Config.general.previewWallpaper[targetMonitor].path = selectedFile.path;
@@ -33,6 +49,8 @@ PageWrapper {
                     };
                     Config.general.previewWallpaper.push(monitor);
                 }
+            } else {
+                customWallpaperImage.source = selectedFile;
             }
         }
     }
@@ -45,7 +63,165 @@ PageWrapper {
             font.pixelSize: 32
             color: Colors.color.on_surface
         }
+        StyledButton {
+            text: "Custom Wallpaper"
+            onClicked: {
+                wallpaper.customWallpaper = !wallpaper.customWallpaper;
+            }
+        }
+
         Item {
+            id: panelContent
+            visible: wallpaper.customWallpaper
+            Layout.fillWidth: true
+            Layout.preferredHeight: screen.height / 2
+            property double zoom: 1.0
+            clip: true
+
+            Row {
+                z: 2
+                anchors.top: parent.top
+                anchors.right: parent.right
+
+                Rectangle {
+                    FontIcon {
+                        anchors.centerIn: parent
+                        text: "check"
+                        font.pixelSize: parent.width / 2
+                        color: Colors.color.secondary
+                    }
+                    width: 40
+                    height: 40
+                    color: Scripts.setOpacity(Colors.color.background, 0.5)
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            wallpaper.updateLocation();
+                            if (wallpaper.coordinates) {
+                                wallpaper.coordinates.forEach(item => {
+                                    console.log(JSON.stringify(item));
+                                });
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    FontIcon {
+                        anchors.centerIn: parent
+                        text: "circle-minus"
+                        font.pixelSize: parent.width / 2
+                        color: Colors.color.secondary
+                    }
+                    width: 40
+                    height: 40
+                    color: Scripts.setOpacity(Colors.color.background, 0.5)
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            panelContent.zoom = panelContent.zoom - 0.1;
+                        }
+                    }
+                }
+
+                Rectangle {
+                    FontIcon {
+                        anchors.centerIn: parent
+                        text: "circle-plus"
+                        font.pixelSize: parent.width / 2
+                        color: Colors.color.secondary
+                    }
+                    width: 40
+                    height: 40
+                    color: Scripts.setOpacity(Colors.color.background, 0.5)
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            panelContent.zoom = panelContent.zoom + 0.1;
+                            console.log(panelContent.zoom);
+                        }
+                    }
+                }
+            }
+
+            Item {
+                width: parent.width
+                height: parent.height
+
+                Repeater {
+                    model: Quickshell.screens
+                    delegate: Rectangle {
+                        z: 2
+                        scale: panelContent.zoom
+                        required property ShellScreen modelData
+                        width: modelData.width / 4
+                        height: modelData.height / 4
+                        color: Scripts.setOpacity(Colors.color.background, 0.5)
+                        border.color: Colors.color.secondary
+                        border.width: 1 * panelContent.zoom
+                        Drag.active: screenDragArea.drag.active
+                        Drag.hotSpot.x: 10
+                        Drag.hotSpot.y: 10
+
+                        function updateWallpaper() {
+                            if (customWallpaperImage.source === "")
+                                return;
+
+                            let intersection = getIntersection(Qt.rect(x, y, width, height), Qt.rect(customWallpaperImage.x, customWallpaperImage.y, customWallpaperImage.width, customWallpaperImage.height));
+                            const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
+
+                            if (target !== -1) {
+                                wallpaper.coordinates[target].x = intersection.x;
+                                wallpaper.coordinates[target].y = intersection.y;
+                                wallpaper.coordinates[target].width = intersection.width;
+                                wallpaper.coordinates[target].height = intersection.height;
+                            } else {
+                                wallpaper.coordinates.push({
+                                    name: modelData.name,
+                                    x: intersection.x,
+                                    y: intersection.y,
+                                    width: intersection.width,
+                                    height: intersection.height
+                                });
+                            }
+                        }
+
+                        Connections {
+                            target: wallpaper
+                            function onUpdateLocation() {
+                                updateWallpaper();
+                            }
+                        }
+                        MouseArea {
+                            id: screenDragArea
+                            anchors.fill: parent
+                            drag.target: parent
+                        }
+                    }
+                }
+                Image {
+                    id: customWallpaperImage
+                    z: 1
+                    fillMode: Image.PreserveAspectFit
+
+                    width: sourceSize.width / 4
+                    height: sourceSize.height / 4
+                    Drag.active: wallpaperDragArea.drag.active
+                    Drag.hotSpot.x: 10
+                    Drag.hotSpot.y: 10
+
+                    MouseArea {
+                        id: wallpaperDragArea
+                        anchors.fill: parent
+
+                        drag.target: parent
+                    }
+                }
+            }
+        }
+
+        Item {
+            visible: !wallpaper.customWallpaper
             Layout.fillWidth: true
             Layout.preferredHeight: monitorRow.height
 
@@ -169,7 +345,8 @@ PageWrapper {
                 }
 
                 Row {
-                    z: 100000
+                    z: 1
+                    visible: !recItem.isSetCurrent
                     anchors {
                         bottom: parent.bottom
                         right: parent.right
@@ -201,6 +378,9 @@ PageWrapper {
                             enabled: !recItem.isSetCurrent
                             anchors.fill: parent
                             onClicked: {
+                                if (wallpaper.customWallpaper) {
+                                    return customWallpaperImage.source = modelData.path;
+                                }
                                 const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
                                 if (targetMonitor != -1) {
                                     Config.general.previewWallpaper[targetMonitor].path = modelData.path;
@@ -240,6 +420,9 @@ PageWrapper {
                             enabled: !recItem.isSetCurrent
                             anchors.fill: parent
                             onClicked: {
+                                if (wallpaper.customWallpaper) {
+                                    return customWallpaperImage.source = modelData.path;
+                                }
                                 const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === selectedScreen.name);
                                 if (targetMonitor != -1) {
                                     Config.general.wallpapers[targetMonitor].path = modelData.path;
