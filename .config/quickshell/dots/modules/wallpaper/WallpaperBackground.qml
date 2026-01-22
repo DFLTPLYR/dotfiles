@@ -40,15 +40,13 @@ Variants {
             }
         }
 
-        //Working :D
+        //Working :D * 4 so the sizing is the same for x and y
         Image {
             id: testMage
             visible: false
             fillMode: Image.PreserveAspectFit
             width: sourceSize.width
             height: sourceSize.height
-            x: -423.42578125
-            y: -218.53125
             source: "file:///home/dfltplyr/Pictures/wallpaper/landscape/windows-98-vaporwave.png"
         }
 
