@@ -167,24 +167,19 @@ PageWrapper {
                             if (customWallpaperImage.source === "")
                                 return;
 
-                            let intersection = getIntersection(Qt.rect(x, y, width, height), Qt.rect(customWallpaperImage.x, customWallpaperImage.y, customWallpaperImage.width, customWallpaperImage.height));
-                            const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
-
-                            if (target !== -1) {
-                                wallpaper.coordinates[target].x = intersection.x;
-                                wallpaper.coordinates[target].y = intersection.y;
-                                wallpaper.coordinates[target].width = intersection.width;
-                                wallpaper.coordinates[target].height = intersection.height;
-                            } else {
-                                wallpaper.coordinates.push({
-                                    name: modelData.name,
-                                    x: intersection.x,
-                                    y: intersection.y,
-                                    width: intersection.width,
-                                    height: intersection.height
-                                });
-                            }
-                        }
+                            const relativeX = customWallpaperImage.x - x;
+    const relativeY = customWallpaperImage.y - y;
+    const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
+    if (target !== -1) {
+        wallpaper.coordinates[target].x = relativeX;
+        wallpaper.coordinates[target].y = relativeY;
+    } else {
+        wallpaper.coordinates.push({
+            name: modelData.name,
+            x: relativeX,
+            y: relativeY
+        });
+    }                        }
 
                         Connections {
                             target: wallpaper
