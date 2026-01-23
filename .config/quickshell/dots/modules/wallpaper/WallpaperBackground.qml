@@ -2,6 +2,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
+import QtQml.Models
+
 import qs.config
 
 Variants {
@@ -24,6 +26,21 @@ Variants {
             right: true
             left: true
         }
+        Repeater {
+            model: Config.general.customWallpaper
+            delegate: Image {
+                required property var modelData
+                readonly property var coords: modelData.monitors.find(s => s && s.name === screen.name)
+                readonly property var imageData: modelData.path
+                fillMode: Image.PreserveAspectFit
+                width: imageData.width
+                height: imageData.height
+                source: imageData.path
+                parent: childHandler
+                x: coords.x
+                y: coords.y
+            }
+        }
 
         Image {
             id: main
@@ -40,20 +57,9 @@ Variants {
             }
         }
 
-        Image {
-            id: testMage
-            fillMode: Image.PreserveAspectFit
-            width: sourceSize.width
-            height: sourceSize.height
-            source: Config.general.customWallpaper?.[0]?.path?.path ? Qt.resolvedUrl(Config.general.customWallpaper?.[0]?.path?.path) : ""
-            x: {
-                var found = Config.general.customWallpaper?.[0]?.monitors?.find(s => s && s.name === screen.name);
-                return found?.x * 4;
-            }
-            y: {
-                var found = Config.general.customWallpaper?.[0]?.monitors?.find(s => s && s.name === screen.name);
-                return found?.y * 4;
-            }
+        Item {
+            id: childHandler
+            anchors.fill: parent
         }
 
         Image {

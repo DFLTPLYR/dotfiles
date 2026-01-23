@@ -72,13 +72,15 @@ PageWrapper {
             }
         }
 
-        Item {
+        Rectangle {
             id: panelContent
             visible: wallpaper.customWallpaper
             Layout.fillWidth: true
             Layout.preferredHeight: screen.height / 2
             property double zoom: 1.0
             clip: true
+            color: "transparent"
+            border.color: Colors.color.secondary
 
             Column {
                 z: 2
@@ -95,6 +97,8 @@ PageWrapper {
                     width: 40
                     height: 40
                     color: Scripts.setOpacity(Colors.color.background, 0.5)
+                    border.color: Colors.color.secondary
+
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
@@ -103,14 +107,15 @@ PageWrapper {
                                 let monitors = [];
                                 wallpaper.coordinates.forEach(item => {
                                     monitors.push(item);
-                                    console.log(JSON.stringify(item));
                                 });
                                 const path = {
-                                    x: customWallpaperImage.x,
-                                    y: customWallpaperImage.y,
-                                    width: customWallpaperImage.width,
-                                    height: customWallpaperImage.height,
-                                    path: customWallpaperImage.source
+                                    x: customWallpaperImage.x * 4,
+                                    y: customWallpaperImage.y * 4,
+                                    width: customWallpaperImage.width * 4,
+                                    height: customWallpaperImage.height * 4,
+                                    path: customWallpaperImage.source,
+                                    previewX: customWallpaper.x,
+                                    previewY: customWallpaper.y
                                 };
                                 let preset = {
                                     path,
@@ -191,8 +196,8 @@ PageWrapper {
                             } else {
                                 wallpaper.coordinates.push({
                                     name: modelData.name,
-                                    x: relativeX,
-                                    y: relativeY,
+                                    x: relativeX * 4,
+                                    y: relativeY * 4,
                                     previewX: x,
                                     previewY: y
                                 });
