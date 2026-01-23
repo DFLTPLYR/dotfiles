@@ -13,20 +13,10 @@ import qs.components
 
 PageWrapper {
     id: wallpaper
-    property bool customWallpaper: false
+    property list<string> wallpaperPathList: []
     property list<var> coordinates: []
     signal updateLocation
-    function getIntersection(rect, image) {
-        var x = Math.max(rect.x, image.x);
-        var y = Math.max(rect.y, image.y);
-        var right = Math.min(rect.x + rect.width, image.x + image.width);
-        var bottom = Math.min(rect.y + rect.height, image.y + image.height);
-        if (right < x || bottom < y) {
-            return Qt.rect(0, 0, 0, 0);
-        }
-        return Qt.rect(x, y, right - x, bottom - y);
-    }
-
+    signal saveCustomWallpaper
     PageHeader {
         title: "Wallpaper"
     }
@@ -38,7 +28,7 @@ PageWrapper {
         property Item targetItem
         currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
         onAccepted: {
-            if (selectedScreen && !wallpaper.customWallpaper) {
+            if (selectedScreen && !Config.general.useCustomWallpaper) {
                 const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
                 if (targetMonitor != -1) {
                     Config.general.previewWallpaper[targetMonitor].path = selectedFile.path;
@@ -51,6 +41,7 @@ PageWrapper {
                     Config.general.previewWallpaper.push(monitor);
                 }
             } else {
+                wallpaper.wallpaperPathList.push(selectedFile);
                 customWallpaperImage.source = selectedFile;
             }
         }
@@ -58,7 +49,6 @@ PageWrapper {
 
     ColumnLayout {
         Layout.fillWidth: true
-
         Label {
             text: qsTr("Panels:")
             font.pixelSize: 32
@@ -68,16 +58,16 @@ PageWrapper {
         StyledSwitch {
             label: "Custom Wallpaper"
             onClicked: {
-                wallpaper.customWallpaper = !wallpaper.customWallpaper;
+                Config.general.useCustomWallpaper = !Config.general.useCustomWallpaper;
             }
         }
 
         Rectangle {
             id: panelContent
-            visible: wallpaper.customWallpaper
+            property double zoom: 1.0
+            visible: Config.general.useCustomWallpaper
             Layout.fillWidth: true
             Layout.preferredHeight: screen.height / 2
-            property double zoom: 1.0
             clip: true
             color: "transparent"
             border.color: Colors.color.secondary
@@ -108,22 +98,28 @@ PageWrapper {
                                 wallpaper.coordinates.forEach(item => {
                                     monitors.push(item);
                                 });
-                                const path = {
-                                    x: customWallpaperImage.x * 4,
-                                    y: customWallpaperImage.y * 4,
-                                    width: customWallpaperImage.width * 4,
-                                    height: customWallpaperImage.height * 4,
-                                    path: customWallpaperImage.source,
-                                    previewX: customWallpaper.x,
-                                    previewY: customWallpaper.y
-                                };
-                                let preset = {
-                                    path,
-                                    monitors
-                                };
-                                Config.general.customWallpaper[0] = preset;
                                 Config.saveSettings();
                             }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    FontIcon {
+                        anchors.centerIn: parent
+                        text: "circle-plus"
+                        font.pixelSize: parent.width / 2
+                        color: Colors.color.secondary
+                    }
+                    width: 40
+                    height: 40
+                    color: Scripts.setOpacity(Colors.color.background, 0.5)
+                    border.color: Colors.color.secondary
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            wallpaper.saveCustomWallpaper();
                         }
                     }
                 }
@@ -165,13 +161,65 @@ PageWrapper {
                 }
             }
 
+            Rectangle {
+                id: offScreenCapture
+                width: parent.width
+                height: parent.height
+                color: "transparent"
+                z: -1
+
+                Repeater {
+                    model: wallpaper.coordinates
+                    delegate: Rectangle {
+                        id: ghostPreview
+                        required property var modelData
+                        width: modelData.width
+                        height: modelData.height
+                        x: modelData.previewX
+                        y: modelData.previewY
+                        clip: true
+
+                        Instantiator {
+                            model: modelData.images
+                            delegate: Image {
+                                id: tempImage
+                                parent: ghostPreview
+                                required property var modelData
+                                source: modelData.path
+                                fillMode: Image.PreserveAspectFit
+                                width: sourceSize.width / 4
+                                height: sourceSize.height / 4
+                                x: modelData.x - ghostPreview.x
+                                y: modelData.y - ghostPreview.y
+                            }
+                        }
+
+                        Connections {
+                            target: wallpaper
+                            function onSaveCustomWallpaper() {
+                                setWallpaper();
+                            }
+                        }
+
+                        function setWallpaper() {
+                            ghostPreview.grabToImage(function (result) {
+                                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`);
+                                Config.reload();
+                            }, Qt.rect(0, 0, width * 4, height * 4));
+                        }
+                    }
+                }
+            }
             Item {
+                id: imagePreviewContainer
                 width: parent.width
                 height: parent.height
                 scale: panelContent.zoom
+
                 Repeater {
                     model: Quickshell.screens
                     delegate: Rectangle {
+                        id: screenPreview
                         z: 2
                         required property ShellScreen modelData
                         width: modelData.width / 4
@@ -184,22 +232,34 @@ PageWrapper {
                         Drag.hotSpot.y: 10
 
                         function updateWallpaper() {
-                            if (customWallpaperImage.source === "")
+                            let wallpapers = previewImageInstantiator.imagecomps;
+                            if (wallpapers.lenght > 0)
                                 return;
+                            let images = [];
+                            for (let i in wallpapers) {
+                                let wallpaper = wallpapers[i];
+                                const relativeX = wallpaper.x;
+                                const relativeY = wallpaper.y;
 
-                            const relativeX = customWallpaperImage.x - x;
-                            const relativeY = customWallpaperImage.y - y;
+                                images.push({
+                                    path: wallpaper.source,
+                                    x: relativeX,
+                                    y: relativeY
+                                });
+                            }
                             const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
                             if (target !== -1) {
-                                wallpaper.coordinates[target].x = relativeX;
-                                wallpaper.coordinates[target].y = relativeY;
+                                wallpaper.coordinates[target].y = y;
+                                wallpaper.coordinates[target].x = x;
+                                wallpaper.coordinates[target].images = images;
                             } else {
                                 wallpaper.coordinates.push({
                                     name: modelData.name,
-                                    x: relativeX * 4,
-                                    y: relativeY * 4,
+                                    width,
+                                    height,
                                     previewX: x,
-                                    previewY: y
+                                    previewY: y,
+                                    images: images
                                 });
                             }
                         }
@@ -217,10 +277,41 @@ PageWrapper {
                         }
                     }
                 }
+
+                Instantiator {
+                    id: previewImageInstantiator
+                    property list<Item> imagecomps: []
+                    model: ScriptModel {
+                        values: {
+                            return wallpaper.wallpaperPathList;
+                        }
+                    }
+                    delegate: Image {
+                        parent: imagePreviewContainer
+                        fillMode: Image.PreserveAspectFit
+                        width: sourceSize.width / 4
+                        height: sourceSize.height / 4
+                        source: modelData
+                        Drag.active: imageMa.drag.active
+                        Drag.hotSpot.x: 10
+                        Drag.hotSpot.y: 10
+
+                        MouseArea {
+                            id: imageMa
+                            anchors.fill: parent
+                            drag.target: parent
+                        }
+                    }
+                    onObjectAdded: (idx, item) => {
+                        imagecomps.push(item);
+                    }
+                }
                 Image {
                     id: customWallpaperImage
                     z: 1
-                    visible: source
+                    parent: imagePreviewContainer
+                    visible: false
+                    // visible: source
                     fillMode: Image.PreserveAspectFit
                     width: sourceSize.width / 4
                     height: sourceSize.height / 4
@@ -238,8 +329,9 @@ PageWrapper {
             }
         }
 
+        // per monitor
         Item {
-            visible: !wallpaper.customWallpaper
+            visible: !Config.general.useCustomWallpaper
             Layout.fillWidth: true
             Layout.preferredHeight: monitorRow.height
 
@@ -364,7 +456,7 @@ PageWrapper {
 
                 Row {
                     z: 1
-                    visible: !recItem.isSetCurrent || wallpaper.customWallpaper
+                    visible: !recItem.isSetCurrent || Config.general.useCustomWallpaper
                     anchors {
                         bottom: parent.bottom
                         right: parent.right
@@ -395,7 +487,8 @@ PageWrapper {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                if (wallpaper.customWallpaper) {
+                                if (Config.general.useCustomWallpaper) {
+                                    wallpaper.wallpaperPathList.push(modelData.path);
                                     return customWallpaperImage.source = modelData.path;
                                 }
                                 const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
@@ -436,7 +529,8 @@ PageWrapper {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                if (wallpaper.customWallpaper) {
+                                if (Config.general.useCustomWallpaper) {
+                                    wallpaper.wallpaperPathList.push(modelData.path);
                                     return customWallpaperImage.source = modelData.path;
                                 }
                                 const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === selectedScreen.name);

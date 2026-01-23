@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import QtQuick.Dialogs
+import QtCore
 
 import QtQml.Models
 
@@ -26,21 +28,6 @@ Variants {
             right: true
             left: true
         }
-        Repeater {
-            model: Config.general.customWallpaper
-            delegate: Image {
-                required property var modelData
-                readonly property var coords: modelData.monitors.find(s => s && s.name === screen.name)
-                readonly property var imageData: modelData.path
-                fillMode: Image.PreserveAspectFit
-                width: imageData.width
-                height: imageData.height
-                source: imageData.path
-                parent: childHandler
-                x: coords.x
-                y: coords.y
-            }
-        }
 
         Image {
             id: main
@@ -60,6 +47,25 @@ Variants {
         Item {
             id: childHandler
             anchors.fill: parent
+            visible: Config.general.useCustomWallpaper
+            Image {
+                id: customImage
+                fillMode: Image.PreserveAspectFit
+                height: sourceSize.height
+                width: sourceSize.width
+                source: `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`
+            }
+            Connections {
+                target: Config
+                function onReload() {
+                    customImage.source = "";
+                    customImage.visible = false;
+                    Qt.callLater(() => {
+                        customImage.visible = true;
+                        customImage.source = `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`;
+                    }, 500);
+                }
+            }
         }
 
         Image {

@@ -11,6 +11,7 @@ import qs.config
 
 Singleton {
     id: config
+    signal reload
     property alias navbar: adapter.navbar
     property alias extendedBar: adapter.extendedBar
     property alias general: adapter.general
