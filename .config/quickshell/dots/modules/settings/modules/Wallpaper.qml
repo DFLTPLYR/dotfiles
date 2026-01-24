@@ -73,89 +73,96 @@ PageWrapper {
 
             Column {
                 z: 2
-                anchors.top: parent.top
-                anchors.right: parent.right
+                anchors {
+                    margins: 10
+                    top: parent.top
+                    right: parent.right
+                }
 
-                Rectangle {
+                StyledButton {
+                    width: 40
+                    height: 40
+                    hoverEnabled: true
+                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    borderWidth: 1
+                    borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
+
                     FontIcon {
                         anchors.centerIn: parent
                         text: "check"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
-                    width: 40
-                    height: 40
-                    color: Scripts.setOpacity(Colors.color.background, 0.5)
-                    border.color: Colors.color.secondary
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            wallpaper.updateLocation();
-                            if (wallpaper.coordinates) {
-                                let monitors = [];
-                                wallpaper.coordinates.forEach(item => {
-                                    monitors.push(item);
-                                });
-                                Config.saveSettings();
-                            }
+                    onClicked: {
+                        wallpaper.updateLocation();
+                        if (wallpaper.coordinates) {
+                            let monitors = [];
+                            wallpaper.coordinates.forEach(item => {
+                                monitors.push(item);
+                            });
+                            Config.saveSettings();
                         }
                     }
                 }
 
-                Rectangle {
+                StyledButton {
+                    width: 40
+                    height: 40
+                    hoverEnabled: true
+                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+
+                    borderWidth: 1
+                    borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
+
                     FontIcon {
                         anchors.centerIn: parent
                         text: "image-square-check"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
-                    width: 40
-                    height: 40
-                    color: Scripts.setOpacity(Colors.color.background, 0.5)
-                    border.color: Colors.color.secondary
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            wallpaper.saveCustomWallpaper();
-                        }
+                    onClicked: {
+                        wallpaper.saveCustomWallpaper();
                     }
                 }
 
-                Rectangle {
+                StyledButton {
+                    width: 40
+                    height: 40
+                    hoverEnabled: true
+                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    borderWidth: 1
+                    borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
+
                     FontIcon {
                         anchors.centerIn: parent
                         text: "circle-minus"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
-                    width: 40
-                    height: 40
-                    color: Scripts.setOpacity(Colors.color.background, 0.5)
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            wallpaper.zoom = Math.min(10, wallpaper.zoom + 1);
-                        }
+
+                    onClicked: {
+                        wallpaper.zoom = Math.min(10, wallpaper.zoom + 1);
                     }
                 }
 
-                Rectangle {
+                StyledButton {
+                    width: 40
+                    height: 40
+                    hoverEnabled: true
+                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    borderWidth: 1
+                    borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
                     FontIcon {
                         anchors.centerIn: parent
                         text: "circle-plus"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
-                    width: 40
-                    height: 40
-                    color: Scripts.setOpacity(Colors.color.background, 0.5)
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            wallpaper.zoom = Math.max(1, wallpaper.zoom - 1);
-                        }
+
+                    onClicked: {
+                        wallpaper.zoom = Math.max(1, wallpaper.zoom - 1);
                     }
                 }
             }
