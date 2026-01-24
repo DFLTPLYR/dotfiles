@@ -186,8 +186,8 @@ PageWrapper {
                                 required property var modelData
                                 source: modelData.path
                                 fillMode: Image.PreserveAspectFit
-                                width: sourceSize.width / 4
-                                height: sourceSize.height / 4
+                                width: modelData.width
+                                height: modelData.height
                                 x: modelData.x - ghostPreview.x
                                 y: modelData.y - ghostPreview.y
                             }
@@ -255,7 +255,9 @@ PageWrapper {
                                 const relativeY = wallpaper.y;
 
                                 images.push({
-                                    path: wallpaper.source,
+                                    path: wallpaper.modelData,
+                                    width: wallpaper.image.width,
+                                    height: wallpaper.image.height,
                                     x: relativeX,
                                     y: relativeY
                                 });
@@ -300,21 +302,114 @@ PageWrapper {
                             return wallpaper.wallpaperPathList;
                         }
                     }
-                    delegate: Image {
+                    delegate: Item {
+                        id: container
                         parent: imagePreviewContainer
-                        fillMode: Image.PreserveAspectFit
-                        width: sourceSize.width / 4
-                        height: sourceSize.height / 4
-                        source: modelData
-                        Drag.active: imageMa.drag.active
-                        Drag.hotSpot.x: 10
-                        Drag.hotSpot.y: 10
-                        MouseArea {
-                            id: imageMa
-                            anchors.fill: parent
-                            drag.target: parent
+                        required property var modelData
+                        property Item image: draggableImage
+
+                        Image {
+                            id: draggableImage
+                            fillMode: Image.PreserveAspectFit
+                            width: sourceSize.width / 4
+                            height: sourceSize.height / 4
+                            source: modelData
+                            Drag.active: imageMa.drag.active
+                            Drag.hotSpot.x: 10
+                            Drag.hotSpot.y: 10
+                            MouseArea {
+                                id: imageMa
+                                anchors.fill: parent
+                                drag.target: parent
+                            }
+                        }
+
+                        Repeater {
+                            model: [
+                                {
+                                    anchors: ["left", "top"]
+                                },
+                                {
+                                    anchors: ["right", "top"]
+                                },
+                                {
+                                    anchors: ["left", "bottom"]
+                                },
+                                {
+                                    anchors: ["right", "bottom"]
+                                },
+                            ]
+                            delegate: Rectangle {
+                                id: cornerHandle
+                                z: 10
+                                height: 10
+                                width: height
+                                radius: height / 2
+                                color: "green"
+
+                                anchors {
+                                    horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
+                                    verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
+                                }
+
+                                MouseArea {
+                                    id: cornerPoint
+                                    anchors.fill: parent
+                                    drag.target: parent
+
+                                    onPositionChanged: mouse => {
+                                        if (drag.active) {
+                                            var anchors = modelData.anchors;
+
+                                            if (anchors.includes("right")) {
+                                                draggableImage.width = Math.max(50, parent.x - draggableImage.x);
+                                            }
+                                            if (anchors.includes("left")) {
+                                                var newWidth = draggableImage.width + (draggableImage.x - parent.x);
+                                                draggableImage.x = parent.x;
+                                                draggableImage.width = Math.max(50, newWidth);
+                                            }
+                                            if (anchors.includes("bottom")) {
+                                                draggableImage.height = Math.max(50, parent.y - draggableImage.y);
+                                            }
+                                            if (anchors.includes("top")) {
+                                                var newHeight = draggableImage.height + (draggableImage.y - parent.y);
+                                                draggableImage.y = parent.y;
+                                                draggableImage.height = Math.max(50, newHeight);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                states: State {
+                                    when: cornerPoint.drag.active
+                                    AnchorChanges {
+                                        target: cornerHandle
+                                        anchors {
+                                            horizontalCenter: undefined
+                                            verticalCenter: undefined
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+
+                    // delegate: Image {
+                    //     parent: imagePreviewContainer
+                    //     fillMode: Image.PreserveAspectFit
+                    //     width: sourceSize.width / 4
+                    //     height: sourceSize.height / 4
+                    //     source: modelData
+                    //     Drag.active: imageMa.drag.active
+                    //     Drag.hotSpot.x: 10
+                    //     Drag.hotSpot.y: 10
+                    //     MouseArea {
+                    //         id: imageMa
+                    //         anchors.fill: parent
+                    //         drag.target: parent
+                    //     }
+                    // }
                     onObjectAdded: (idx, item) => {
                         imagecomps.push(item);
                     }
