@@ -197,15 +197,27 @@ PageWrapper {
                         Connections {
                             target: wallpaper
                             function onSaveCustomWallpaper() {
-                                setWallpaper();
+                                ghostPreview.grabToImage(function (result) {
+                                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`);
+                                }, Qt.rect(0, 0, width * 4, height * 4));
+                                ghostPreview.setWallpaper();
                             }
                         }
 
                         function setWallpaper() {
-                            ghostPreview.grabToImage(function (result) {
-                                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`);
-                                Config.reload();
-                            }, Qt.rect(0, 0, width * 4, height * 4));
+                            const image = {
+                                path: `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`,
+                                monitor: modelData.name
+                            };
+                            const target = Config.general.customWallpaper.findIndex(i => i && i.monitor === modelData.name);
+
+                            if (target != -1) {
+                                Config.general.customWallpaper[target].path = image.path;
+                            } else {
+                                Config.general.customWallpaper.push(image);
+                            }
+                            Config.reload();
+                            Config.saveSettings();
                         }
                     }
                 }
@@ -622,7 +634,7 @@ PageWrapper {
         Process {
             id: cmdGenerateColor
             running: false
-            command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...Config.general.wallpapers.map(item => item.path)]
+            command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...(Config.general.useCustomWallpaper ? Config.general.customWallpaper.map(item => item.path) : Config.general.wallpapers.map(item => item.path))]
         }
 
         Text {
