@@ -15,6 +15,7 @@ PageWrapper {
     id: wallpaper
     property list<string> wallpaperPathList: []
     property list<var> coordinates: []
+    property int zoom: 4
     signal updateLocation
     signal saveCustomWallpaper
     PageHeader {
@@ -63,7 +64,6 @@ PageWrapper {
         // panel
         Rectangle {
             id: panelContent
-            property double zoom: 1.0
             visible: Config.general.useCustomWallpaper
             Layout.fillWidth: true
             Layout.preferredHeight: screen.height / 2
@@ -106,7 +106,7 @@ PageWrapper {
                 Rectangle {
                     FontIcon {
                         anchors.centerIn: parent
-                        text: "circle-plus"
+                        text: "image-square-check"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
@@ -136,7 +136,7 @@ PageWrapper {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            panelContent.zoom = panelContent.zoom - 0.1;
+                            wallpaper.zoom = Math.min(10, wallpaper.zoom + 1);
                         }
                     }
                 }
@@ -154,7 +154,7 @@ PageWrapper {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            panelContent.zoom = panelContent.zoom + 0.1;
+                            wallpaper.zoom = Math.max(1, wallpaper.zoom - 1);
                         }
                     }
                 }
@@ -198,8 +198,8 @@ PageWrapper {
                             function onSaveCustomWallpaper() {
                                 ghostPreview.grabToImage(function (result) {
                                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`);
-                                }, Qt.rect(0, 0, width * 4, height * 4));
-                                ghostPreview.setWallpaper();
+                                    ghostPreview.setWallpaper();
+                                }, Qt.rect(0, 0, width * wallpaper.zoom, height * wallpaper.zoom));
                             }
                         }
 
@@ -215,8 +215,10 @@ PageWrapper {
                             } else {
                                 Config.general.customWallpaper.push(image);
                             }
-                            Config.reload();
-                            Config.saveSettings();
+                            Qt.callLater(() => {
+                                Config.reload();
+                                Config.saveSettings();
+                            });
                         }
                     }
                 }
@@ -227,7 +229,6 @@ PageWrapper {
                 id: imagePreviewContainer
                 width: parent.width
                 height: parent.height
-                scale: panelContent.zoom
 
                 Repeater {
                     model: Quickshell.screens
@@ -235,11 +236,11 @@ PageWrapper {
                         id: screenPreview
                         z: 2
                         required property ShellScreen modelData
-                        width: modelData.width / 4
-                        height: modelData.height / 4
+                        width: modelData.width / wallpaper.zoom
+                        height: modelData.height / wallpaper.zoom
                         color: Scripts.setOpacity(Colors.color.background, 0.5)
                         border.color: Colors.color.secondary
-                        border.width: 1 * panelContent.zoom
+                        border.width: 1
                         Drag.active: screenDragArea.drag.active
                         Drag.hotSpot.x: 10
                         Drag.hotSpot.y: 10
@@ -251,8 +252,8 @@ PageWrapper {
                             let images = [];
                             for (let i in wallpapers) {
                                 let wallpaper = wallpapers[i];
-                                const relativeX = wallpaper.x;
-                                const relativeY = wallpaper.y;
+                                const relativeX = wallpaper.image.x;
+                                const relativeY = wallpaper.image.y;
 
                                 images.push({
                                     path: wallpaper.modelData,
@@ -311,8 +312,8 @@ PageWrapper {
 
                         Image {
                             id: draggableImage
-                            width: sourceSize.width / 4
-                            height: sourceSize.height / 4
+                            width: sourceSize.width / wallpaper.zoom
+                            height: sourceSize.height / wallpaper.zoom
                             source: modelData
                             Drag.active: imageMa.drag.active
                             Drag.hotSpot.x: 10
@@ -395,21 +396,6 @@ PageWrapper {
                         }
                     }
 
-                    // delegate: Image {
-                    //     parent: imagePreviewContainer
-                    //     fillMode: Image.PreserveAspectFit
-                    //     width: sourceSize.width / 4
-                    //     height: sourceSize.height / 4
-                    //     source: modelData
-                    //     Drag.active: imageMa.drag.active
-                    //     Drag.hotSpot.x: 10
-                    //     Drag.hotSpot.y: 10
-                    //     MouseArea {
-                    //         id: imageMa
-                    //         anchors.fill: parent
-                    //         drag.target: parent
-                    //     }
-                    // }
                     onObjectAdded: (idx, item) => {
                         imagecomps.push(item);
                     }
