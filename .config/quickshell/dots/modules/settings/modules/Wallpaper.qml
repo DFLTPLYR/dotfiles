@@ -302,15 +302,15 @@ PageWrapper {
                             return wallpaper.wallpaperPathList;
                         }
                     }
-                    delegate: Item {
+                    delegate: Rectangle {
                         id: container
                         parent: imagePreviewContainer
+
                         required property var modelData
                         property Item image: draggableImage
 
                         Image {
                             id: draggableImage
-                            fillMode: Image.PreserveAspectFit
                             width: sourceSize.width / 4
                             height: sourceSize.height / 4
                             source: modelData
