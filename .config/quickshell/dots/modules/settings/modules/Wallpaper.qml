@@ -42,7 +42,6 @@ PageWrapper {
                 }
             } else {
                 wallpaper.wallpaperPathList.push(selectedFile);
-                customWallpaperImage.source = selectedFile;
             }
         }
     }
@@ -61,7 +60,7 @@ PageWrapper {
                 Config.general.useCustomWallpaper = !Config.general.useCustomWallpaper;
             }
         }
-
+        // panel
         Rectangle {
             id: panelContent
             property double zoom: 1.0
@@ -222,6 +221,8 @@ PageWrapper {
                     }
                 }
             }
+
+            // Draggable Area
             Item {
                 id: imagePreviewContainer
                 width: parent.width
@@ -282,6 +283,7 @@ PageWrapper {
                                 updateWallpaper();
                             }
                         }
+
                         MouseArea {
                             id: screenDragArea
                             anchors.fill: parent
@@ -307,7 +309,6 @@ PageWrapper {
                         Drag.active: imageMa.drag.active
                         Drag.hotSpot.x: 10
                         Drag.hotSpot.y: 10
-
                         MouseArea {
                             id: imageMa
                             anchors.fill: parent
@@ -316,26 +317,6 @@ PageWrapper {
                     }
                     onObjectAdded: (idx, item) => {
                         imagecomps.push(item);
-                    }
-                }
-                Image {
-                    id: customWallpaperImage
-                    z: 1
-                    parent: imagePreviewContainer
-                    visible: false
-                    // visible: source
-                    fillMode: Image.PreserveAspectFit
-                    width: sourceSize.width / 4
-                    height: sourceSize.height / 4
-                    Drag.active: wallpaperDragArea.drag.active
-                    Drag.hotSpot.x: 10
-                    Drag.hotSpot.y: 10
-
-                    MouseArea {
-                        id: wallpaperDragArea
-                        anchors.fill: parent
-
-                        drag.target: parent
                     }
                 }
             }
@@ -501,7 +482,7 @@ PageWrapper {
                             onClicked: {
                                 if (Config.general.useCustomWallpaper) {
                                     wallpaper.wallpaperPathList.push(modelData.path);
-                                    return customWallpaperImage.source = modelData.path;
+                                    return;
                                 }
                                 const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
                                 if (targetMonitor != -1) {
@@ -543,7 +524,7 @@ PageWrapper {
                             onClicked: {
                                 if (Config.general.useCustomWallpaper) {
                                     wallpaper.wallpaperPathList.push(modelData.path);
-                                    return customWallpaperImage.source = modelData.path;
+                                    return;
                                 }
                                 const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === selectedScreen.name);
                                 if (targetMonitor != -1) {
