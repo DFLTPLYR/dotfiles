@@ -7,6 +7,9 @@ Button {
     id: root
     property color textColor: Colors.palette.neutral100
     property color colorBackground: Colors.palette.primary60
+
+    property int borderWidth: 1
+    property color borderColor: "transparent"
     leftPadding: 10
     rightPadding: 10
     background: Rectangle {
@@ -14,8 +17,16 @@ Button {
         anchors.fill: parent
         radius: height / 2
         color: root.colorBackground
+        border.width: root.borderWidth
+        border.color: root.borderColor
         Behavior on color {
             ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on border.width {
+            NumberAnimation {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
