@@ -241,9 +241,10 @@ PageWrapper {
                     model: Quickshell.screens
                     delegate: Rectangle {
                         id: screenPreview
-                        z: 2
                         required property ShellScreen modelData
                         property bool lock: false
+                        property bool hoveredState: screenDragArea.containsMouse || screenLockPosition.hovered
+                        z: 2
                         width: modelData.width / wallpaper.zoom
                         height: modelData.height / wallpaper.zoom
                         color: Scripts.setOpacity(Colors.color.background, 0.5)
@@ -255,7 +256,13 @@ PageWrapper {
 
                         Row {
                             z: 2
-                            opacity: 1
+                            opacity: screenPreview.hoveredState ? 1 : 0
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
 
                             anchors {
                                 verticalCenter: parent.verticalCenter
@@ -263,11 +270,13 @@ PageWrapper {
                             }
 
                             StyledButton {
+                                id: screenLockPosition
                                 width: 40
                                 height: 40
                                 colorBackground: Scripts.setOpacity(Colors.color.background, 0.9)
                                 borderWidth: 1
                                 borderColor: Scripts.setOpacity(Colors.color.secondary, 0.9)
+
                                 FontIcon {
                                     anchors.centerIn: parent
                                     text: screenPreview.lock ? "lock" : "lock-slash"
@@ -349,6 +358,7 @@ PageWrapper {
 
                         Image {
                             id: draggableImage
+                            property bool lock
                             width: sourceSize.width / wallpaper.zoom
                             height: sourceSize.height / wallpaper.zoom
                             source: modelData
@@ -359,6 +369,34 @@ PageWrapper {
                                 id: imageMa
                                 anchors.fill: parent
                                 drag.target: parent
+                                hoverEnabled: true
+                                enabled: !draggableImage.lock
+                            }
+                            Row {
+                                z: 2
+                                opacity: 1
+
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+
+                                StyledButton {
+                                    width: 40
+                                    height: 40
+                                    colorBackground: Scripts.setOpacity(Colors.color.background, 0.9)
+                                    borderWidth: 1
+                                    borderColor: Scripts.setOpacity(Colors.color.secondary, 0.9)
+                                    FontIcon {
+                                        anchors.centerIn: parent
+                                        text: draggableImage.lock ? "lock" : "lock-slash"
+                                        font.pixelSize: parent.width / 2
+                                        color: Colors.color.secondary
+                                    }
+                                    onClicked: {
+                                        draggableImage.lock = !draggableImage.lock;
+                                    }
+                                }
                             }
                         }
 
@@ -384,7 +422,14 @@ PageWrapper {
                                 width: height
                                 radius: height / 2
                                 color: "green"
-
+                                visible: !draggableImage.lock
+                                opacity: imageMa.hovered ? 1 : 0
+                                Behavior on opacity {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
                                 anchors {
                                     horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
                                     verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
@@ -394,7 +439,6 @@ PageWrapper {
                                     id: cornerPoint
                                     anchors.fill: parent
                                     drag.target: parent
-
                                     onPositionChanged: mouse => {
                                         if (drag.active) {
                                             var anchors = modelData.anchors;
