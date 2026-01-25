@@ -243,14 +243,50 @@ PageWrapper {
                         id: screenPreview
                         z: 2
                         required property ShellScreen modelData
+                        property bool lock: false
                         width: modelData.width / wallpaper.zoom
                         height: modelData.height / wallpaper.zoom
                         color: Scripts.setOpacity(Colors.color.background, 0.5)
                         border.color: Colors.color.secondary
                         border.width: 1
-                        Drag.active: screenDragArea.drag.active
+                        Drag.active: !screenPreview.lock ? screenDragArea.drag.active : false
                         Drag.hotSpot.x: 10
                         Drag.hotSpot.y: 10
+
+                        Row {
+                            z: 2
+                            opacity: 1
+
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                            }
+
+                            StyledButton {
+                                width: 40
+                                height: 40
+                                colorBackground: Scripts.setOpacity(Colors.color.background, 0.9)
+                                borderWidth: 1
+                                borderColor: Scripts.setOpacity(Colors.color.secondary, 0.9)
+                                FontIcon {
+                                    anchors.centerIn: parent
+                                    text: screenPreview.lock ? "lock" : "lock-slash"
+                                    font.pixelSize: parent.width / 2
+                                    color: Colors.color.secondary
+                                }
+                                onClicked: {
+                                    screenPreview.lock = !screenPreview.lock;
+                                }
+                            }
+                        }
+
+                        MouseArea {
+                            id: screenDragArea
+                            enabled: !screenPreview.lock
+                            hoverEnabled: true
+                            anchors.fill: parent
+                            drag.target: !screenPreview.lock ? parent : undefined
+                        }
 
                         function updateWallpaper() {
                             let wallpapers = previewImageInstantiator.imagecomps;
@@ -292,12 +328,6 @@ PageWrapper {
                             function onUpdateLocation() {
                                 updateWallpaper();
                             }
-                        }
-
-                        MouseArea {
-                            id: screenDragArea
-                            anchors.fill: parent
-                            drag.target: parent
                         }
                     }
                 }
