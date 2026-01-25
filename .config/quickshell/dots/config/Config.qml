@@ -16,9 +16,9 @@ Singleton {
     property alias extendedBar: adapter.extendedBar
     property alias general: adapter.general
 
-    property list<Workspace> workspaces: []
+    property var workspaces: []
+    property var windows: []
     property Workspace focusedWorkspace: null
-    property list<Window> windows: []
     property var focusedMonitor: null
     property Window focusedWindow: null
     property bool overviewOpened: false
@@ -179,7 +179,6 @@ Singleton {
                         if (winObj.isFocused) {
                             config.focusedWindow = winObj;
                         }
-                        // windows.push(winObj);
                         for (let workspace of config.workspaces) {
                             if (workspace.workspaceId === winObj.workspaceId && winObj.workspaceId !== -1) {
                                 workspace.windows.push(winObj);
@@ -215,22 +214,28 @@ Singleton {
                     break;
                 case EventType.WindowOpenedOrChanged:
                     const win = event.WindowOpenedOrChanged.window;
-                    const winObj = windowComponent.createObject(null, {
-                        windowId: win.id,
-                        title: win.title,
-                        appId: win.app_id,
-                        pid: win.pid,
-                        workspaceId: win.workspace_id ?? -1,
-                        isFocused: win.is_focused,
-                        isFloating: win.is_floating,
-                        isUrgent: win.is_urgent
-                    });
-                    for (let window of config.windows) {
-                        if (window.id === winObj) {
-                            window = winObj;
-                        }
+                    let existingWindow = config.windows.find(w => w.windowId === win.id);
+                    if (existingWindow) {
+                        existingWindow.title = win.title;
+                        existingWindow.appId = win.app_id;
+                        existingWindow.pid = win.pid;
+                        existingWindow.workspaceId = win.workspace_id ?? -1;
+                        existingWindow.isFocused = win.is_focused;
+                        existingWindow.isFloating = win.is_floating;
+                        existingWindow.isUrgent = win.is_urgent;
+                    } else {
+                        const winObj = windowComponent.createObject(null, {
+                            windowId: win.id,
+                            title: win.title,
+                            appId: win.app_id,
+                            pid: win.pid,
+                            workspaceId: win.workspace_id ?? -1,
+                            isFocused: win.is_focused,
+                            isFloating: win.is_floating,
+                            isUrgent: win.is_urgent
+                        });
+                        config.windows.push(winObj);
                     }
-                    config.windows.push(winObj);
                     for (let ws of config.workspaces) {
                         if (ws.workspaceId === winObj.workspaceId) {
                             for (let win of ws.windows) {
