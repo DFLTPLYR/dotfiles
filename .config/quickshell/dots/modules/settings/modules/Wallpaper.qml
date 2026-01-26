@@ -44,6 +44,11 @@ PageWrapper {
             } else {
                 wallpaper.wallpaperPathList.push(selectedFile);
             }
+            Config.general.recentWallpapers.push({
+                monitor: selectedScreen.name,
+                timestamp: Date.now(),
+                path: selectedFile
+            });
         }
     }
 
@@ -176,6 +181,7 @@ PageWrapper {
 
                 Repeater {
                     model: wallpaper.coordinates
+
                     delegate: Rectangle {
                         id: ghostPreview
                         required property var modelData
@@ -183,7 +189,7 @@ PageWrapper {
                         height: modelData.height
                         x: modelData.previewX
                         y: modelData.previewY
-                        clip: true
+                        clip: false
 
                         Instantiator {
                             model: modelData.images
@@ -192,7 +198,6 @@ PageWrapper {
                                 parent: ghostPreview
                                 required property var modelData
                                 source: modelData.path
-                                fillMode: Image.PreserveAspectFit
                                 width: modelData.width
                                 height: modelData.height
                                 x: modelData.x - ghostPreview.x
@@ -317,8 +322,8 @@ PageWrapper {
                             }
                             const target = wallpaper.coordinates.findIndex(w => w && w.monitor === modelData.name);
                             if (target !== -1) {
-                                wallpaper.coordinates[target].y = y;
-                                wallpaper.coordinates[target].x = x;
+                                wallpaper.coordinates[target].previewY = screenPreview.y;
+                                wallpaper.coordinates[target].previewX = screenPreview.x;
                                 wallpaper.coordinates[target].images = images;
                             } else {
                                 wallpaper.coordinates.push({
@@ -335,7 +340,7 @@ PageWrapper {
                         Connections {
                             target: wallpaper
                             function onUpdateLocation() {
-                                updateWallpaper();
+                                screenPreview.updateWallpaper();
                             }
                         }
                     }
@@ -365,6 +370,7 @@ PageWrapper {
                             Drag.active: imageMa.drag.active
                             Drag.hotSpot.x: 10
                             Drag.hotSpot.y: 10
+
                             MouseArea {
                                 id: imageMa
                                 anchors.fill: parent
@@ -372,6 +378,7 @@ PageWrapper {
                                 hoverEnabled: true
                                 enabled: !draggableImage.lock
                             }
+
                             Row {
                                 z: 2
                                 opacity: 1
@@ -422,14 +429,15 @@ PageWrapper {
                                 width: height
                                 radius: height / 2
                                 color: "green"
-                                visible: !draggableImage.lock
-                                opacity: imageMa.hovered ? 1 : 0
+                                opacity: !draggableImage.lock ? 1 : 0
+
                                 Behavior on opacity {
                                     NumberAnimation {
                                         duration: 300
                                         easing.type: Easing.InOutQuad
                                     }
                                 }
+
                                 anchors {
                                     horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
                                     verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
@@ -439,6 +447,7 @@ PageWrapper {
                                     id: cornerPoint
                                     anchors.fill: parent
                                     drag.target: parent
+                                    enabled: !draggableImage.lock
                                     onPositionChanged: mouse => {
                                         if (drag.active) {
                                             var anchors = modelData.anchors;
@@ -479,6 +488,9 @@ PageWrapper {
 
                     onObjectAdded: (idx, item) => {
                         imagecomps.push(item);
+                    }
+                    onObjectRemoved: (idx, item) => {
+                        imagecomps.splice(idx, 1);
                     }
                 }
             }
