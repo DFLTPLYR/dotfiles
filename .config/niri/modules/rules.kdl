@@ -51,7 +51,3 @@ window-rule {
   open-maximized true
 }
 
-layer-rule {
-  match namespace="Background"
-  place-within-backdrop true
-}
