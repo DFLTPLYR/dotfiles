@@ -180,7 +180,14 @@ PageWrapper {
                 z: -1
 
                 Repeater {
+                    id: ghostPreviewRepeater
                     model: wallpaper.coordinates
+
+                    function reset() {
+                        const tempModel = model;
+                        model = undefined;
+                        model = tempModel;
+                    }
 
                     delegate: Rectangle {
                         id: ghostPreview
@@ -189,7 +196,7 @@ PageWrapper {
                         height: modelData.height
                         x: modelData.previewX
                         y: modelData.previewY
-                        clip: false
+                        clip: true
 
                         Instantiator {
                             model: modelData.images
@@ -788,7 +795,6 @@ PageWrapper {
 
         Process {
             id: cmdGenerateColor
-            running: false
             command: ["pcli", "generate-palette", "--type", schemeList.schemes[schemeList.selectedScheme], ...(Config.general.useCustomWallpaper ? Config.general.customWallpaper.map(item => item.path) : Config.general.wallpapers.map(item => item.path))]
         }
 
