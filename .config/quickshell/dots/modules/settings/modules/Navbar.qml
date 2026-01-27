@@ -133,30 +133,34 @@ PageWrapper {
     GridLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: root.navbarHeight * 0.5
+        Layout.preferredHeight: root.navbarHeight * 0.6
         columns: Config.navbar.side ? 2 : 1
 
         // preview Panel
         Rectangle {
             Layout.fillWidth: Config.navbar.side ? false : true
             Layout.fillHeight: !Config.navbar.side ? false : true
-            Layout.preferredHeight: Config.navbar.height
-            Layout.preferredWidth: Config.navbar.width
-            color: "transparent"
+            Layout.preferredHeight: Config.navbar.height * 1.2
+            Layout.preferredWidth: Config.navbar.width * 1.2
+            color: Colors.color.on_primary
             border.color: Colors.color.primary
             Rectangle {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                 }
-                width: Config.navbar.side ? parent.width : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
-                height: Config.navbar.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : parent.height
+                width: Config.navbar.side ? Config.navbar.width : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
+                height: Config.navbar.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Config.navbar.height
                 color: Scripts.setOpacity(Colors.color.background, 0.9)
             }
         }
+
+        // Options/Settings panel
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            color: "transparent"
+            border.color: Colors.color.primary
         }
     }
 
