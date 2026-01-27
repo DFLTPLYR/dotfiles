@@ -88,7 +88,7 @@ PageWrapper {
                     width: 40
                     height: 40
                     hoverEnabled: true
-                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    bgColor: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
                     borderWidth: 1
                     borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
 
@@ -115,7 +115,7 @@ PageWrapper {
                     width: 40
                     height: 40
                     hoverEnabled: true
-                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    bgColor: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
 
                     borderWidth: 1
                     borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
@@ -136,7 +136,7 @@ PageWrapper {
                     width: 40
                     height: 40
                     hoverEnabled: true
-                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    bgColor: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
                     borderWidth: 1
                     borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
 
@@ -156,7 +156,7 @@ PageWrapper {
                     width: 40
                     height: 40
                     hoverEnabled: true
-                    colorBackground: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
+                    bgColor: hovered ? Scripts.setOpacity(Colors.color.background, 0.9) : Scripts.setOpacity(Colors.color.background, 0.2)
                     borderWidth: 1
                     borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
                     FontIcon {
@@ -285,7 +285,7 @@ PageWrapper {
                                 id: screenLockPosition
                                 width: 40
                                 height: 40
-                                colorBackground: Scripts.setOpacity(Colors.color.background, 0.9)
+                                bgColor: Scripts.setOpacity(Colors.color.background, 0.9)
                                 borderWidth: 1
                                 borderColor: Scripts.setOpacity(Colors.color.secondary, 0.9)
 
@@ -398,7 +398,7 @@ PageWrapper {
                                 StyledButton {
                                     width: 40
                                     height: 40
-                                    colorBackground: Scripts.setOpacity(Colors.color.background, 0.9)
+                                    bgColor: Scripts.setOpacity(Colors.color.background, 0.9)
                                     borderWidth: 1
                                     borderColor: Scripts.setOpacity(Colors.color.secondary, 0.9)
                                     FontIcon {
@@ -787,7 +787,7 @@ PageWrapper {
         StyledButton {
             text: "Generate Colors"
             enabled: !cmdGenerateColor.running
-            colorBackground: cmdGenerateColor.running ? Colors.palette.primary60 : Colors.palette.primary10
+            bgColor: cmdGenerateColor.running ? Colors.palette.primary60 : Colors.palette.primary10
             onClicked: {
                 cmdGenerateColor.running = true;
             }
