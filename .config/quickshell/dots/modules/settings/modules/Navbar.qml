@@ -138,6 +138,7 @@ PageWrapper {
 
         // preview Panel
         Rectangle {
+            id: previewPanelContainer
             Layout.fillWidth: Config.navbar.side ? false : true
             Layout.fillHeight: !Config.navbar.side ? false : true
             Layout.preferredHeight: Config.navbar.height * 1.2
@@ -163,31 +164,6 @@ PageWrapper {
             border.color: Colors.color.primary
         }
     }
-
-    // Landscape
-    // Rectangle {
-    //     Layout.fillWidth: true
-    //     Layout.preferredHeight: 100
-    //     color: Colors.color.on_surface
-    //
-    //     // Navbar Preview
-    //     Rectangle {
-    //         anchors {
-    //             verticalCenter: parent.verticalCenter
-    //             horizontalCenter: parent.horizontalCenter
-    //         }
-    //         width: root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
-    //         height: Config.navbar.height
-    //         color: Scripts.setOpacity(Colors.color.background, 0.9)
-    //         Repeater {
-    //           id: areaRepeater
-    //           model: root.areas
-    //           delegate: RowLayout {
-    //
-    //           }
-    //         }
-    //     }
-    // }
 
     Row {
         Label {
@@ -217,13 +193,6 @@ PageWrapper {
                 };
                 root.areas = [container, ...root.areas];
             }
-            // Qt::AlignLeft
-            // Qt::AlignHCenter
-            // Qt::AlignRight
-            // Qt::AlignTop
-            // Qt::AlignVCenter
-            // Qt::AlignBottom
-            // Qt::AlignBaseline
         }
     }
 
