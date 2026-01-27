@@ -138,7 +138,6 @@ PageWrapper {
 
         // preview Panel
         Rectangle {
-            id: previewPanelContainer
             Layout.fillWidth: Config.navbar.side ? false : true
             Layout.fillHeight: !Config.navbar.side ? false : true
             Layout.preferredHeight: Config.navbar.height * 1.2
@@ -146,6 +145,7 @@ PageWrapper {
             color: Colors.color.on_primary
             border.color: Colors.color.primary
             Rectangle {
+                id: previewPanelContainer
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -153,6 +153,21 @@ PageWrapper {
                 width: Config.navbar.side ? Config.navbar.width : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
                 height: Config.navbar.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Config.navbar.height
                 color: Scripts.setOpacity(Colors.color.background, 0.9)
+
+                GridLayout {
+                    anchors.fill: parent
+                    columns: Config.navbar.side ? 1 : root.areas.length
+                    rows: Config.navbar.side ? root.areas.length : 1
+                    Repeater {
+                        id: slotRepeater
+                        model: root.areas
+                        delegate: Rectangle {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.alignment: modelData.direction
+                        }
+                    }
+                }
             }
         }
 
@@ -162,36 +177,35 @@ PageWrapper {
             Layout.fillHeight: true
             color: "transparent"
             border.color: Colors.color.primary
-        }
-    }
-
-    Row {
-        Label {
-            text: qsTr("Areas:")
-            font.pixelSize: 32
-            color: Colors.color.on_surface
-        }
-        StyledButton {
-            anchors {
-                verticalCenter: parent.verticalCenter
-            }
-            height: parent.height * 0.8
-            width: height
-            FontIcon {
-                text: "plus"
-                font.pixelSize: parent.height * 0.8
-                color: Colors.color.secondary
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
+            Row {
+                Label {
+                    text: qsTr("Areas:")
+                    font.pixelSize: 32
+                    color: Colors.color.on_surface
                 }
-            }
-            onClicked: {
-                const container = {
-                    name: "",
-                    direction: Qt.AlignVCenter | Qt.AlignRight
-                };
-                root.areas = [container, ...root.areas];
+                StyledButton {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    height: parent.height * 0.8
+                    width: height
+                    FontIcon {
+                        text: "plus"
+                        font.pixelSize: parent.height * 0.8
+                        color: Colors.color.secondary
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                        }
+                    }
+                    onClicked: {
+                        const container = {
+                            name: "",
+                            direction: Qt.AlignVCenter | Qt.AlignRight
+                        };
+                        root.areas = [container, ...root.areas];
+                    }
+                }
             }
         }
     }
