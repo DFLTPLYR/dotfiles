@@ -31,7 +31,7 @@ Scope {
             minimumSize: panelSize
             maximumSize: panelSize
 
-            color: Qt.rgba(0, 0, 0, 0.8)
+            color: Colors.color.background
             GridLayout {
                 columns: 2
                 anchors.fill: parent
