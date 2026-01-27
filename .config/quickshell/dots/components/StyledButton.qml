@@ -6,7 +6,7 @@ import qs.config
 Button {
     id: root
     property color textColor: Colors.palette.neutral100
-    property color colorBackground: Colors.palette.primary60
+    property color bgColor: Colors.palette.primary60
 
     property int borderWidth: 1
     property color borderColor: "transparent"
@@ -17,7 +17,7 @@ Button {
         id: background
         anchors.fill: parent
         radius: root.borderRadius
-        color: root.colorBackground
+        color: root.bgColor
         border.width: root.borderWidth
         border.color: root.borderColor
 
