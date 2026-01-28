@@ -173,19 +173,8 @@ PageWrapper {
                         model: ScriptModel {
                             values: root.areas
                         }
-                        delegate: Rectangle {
+                        delegate: StyledSlot {
                             required property var modelData
-
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.alignment: modelData.direction
-
-                            objectName: modelData.name
-                            color: testingasdf.containsDrag ? "green" : "yellow"
-                            DropArea {
-                                id: testingasdf
-                                anchors.fill: parent
-                            }
                         }
                     }
                 }
@@ -214,7 +203,7 @@ PageWrapper {
                 currentIndex: bar.currentIndex
 
                 Item {
-                    id: homeTab
+                    id: areasTab
                     Row {
                         id: areaLabel
 
@@ -308,46 +297,52 @@ PageWrapper {
                     id: widgetTab
 
                     Label {
-                        text: qsTr("Areas:")
+                        text: qsTr("Widgets:")
                         font.pixelSize: 32
                         color: Colors.color.on_surface
                     }
-                    Item {
-                        id: testDragItem
-                        property bool isSlotted: false
-                        height: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
-                        width: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
+                    FlexboxLayout {
+                        width: parent.width
+                        height: parent.height
+                        Item {
+                            width: 64
+                            height: 64
+                            MouseArea {
+                                id: mouseArea
+                                property bool isSlotted: false
+                                width: isSlotted ? parent.width : 32
+                                height: isSlotted ? parent.height : 32
 
-                        MouseArea {
-                            id: testDrag
-                            onReleased: {
-                                console.log(testDragItem.Drag.target);
-                            }
-                            anchors.fill: parent
-                            drag.target: testDragItem
-                        }
-                        states: [
-                            State {
-                                when: testDrag.drag.active
-                                AnchorChanges {
-                                    target: testDragItem
-                                    anchors {
-                                        verticalCenter: undefined
-                                        horizontalCenter: undefined
-                                    }
-                                }
-                            },
-                            State {
-                                when: !testDrag.drag.active
-                                AnchorChanges {
-                                    target: testDragItem
+                                drag.target: tile
+
+                                onReleased: parent = tile.Drag.target !== null ? tile.Drag.target : root
+
+                                Rectangle {
+                                    id: tile
+                                    width: mouseArea.width
+                                    height: mouseArea.height
+                                    Drag.hotSpot.x: width / 2
+                                    Drag.hotSpot.y: height / 2
                                     anchors {
                                         verticalCenter: parent.verticalCenter
                                         horizontalCenter: parent.horizontalCenter
                                     }
+
+                                    Drag.active: mouseArea.drag.active
+
+                                    states: State {
+                                        when: mouseArea.drag.active
+                                        AnchorChanges {
+                                            target: tile
+                                            anchors {
+                                                verticalCenter: undefined
+                                                horizontalCenter: undefined
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                        ]
+                        }
                     }
                 }
             }

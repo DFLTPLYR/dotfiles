@@ -21,11 +21,13 @@ Item {
             }
         }
     }
-
-    Item {
+    DropArea {
+        anchors.fill: parent
+    }
+    Rectangle {
         id: childHandler
         anchors.fill: parent
-        visible: false
+        visible: true
     }
 
     component RowSlot: RowLayout {
@@ -40,6 +42,8 @@ Item {
             onChildrenChanged: {
                 for (let c = 0; c < childrenHolder.children.length; c++) {
                     const child = childrenHolder.children[c];
+                    if (!child.hasOwnProperty("isSlotted"))
+                        return;
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
@@ -51,6 +55,8 @@ Item {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
+                if (!child.hasOwnProperty("isSlotted"))
+                    return;
                 child.isSlotted = false;
                 child.parent = childHandler;
             }
@@ -69,6 +75,9 @@ Item {
             onChildrenChanged: {
                 for (let c = 0; c < childrenHolder.children.length; c++) {
                     const child = childrenHolder.children[c];
+                    if (!child.hasOwnProperty("isSlotted"))
+                        return;
+
                     child.implicitWidth = childrenHolder.width;
                     child.y = 0;
                     child.x = 0;
@@ -80,6 +89,9 @@ Item {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
+                if (!child.hasOwnProperty("isSlotted"))
+                    return;
+
                 child.isSlotted = false;
                 child.parent = childHandler;
             }
@@ -108,11 +120,15 @@ Item {
             const copy = childHandler.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
+                if (!child.hasOwnProperty("isSlotted"))
+                    return;
                 child.parent = item.children[0];
             }
             const copyparent = slotRoot.children.slice();
             for (let i = 0; i < copyparent.length; i++) {
                 const child = copyparent[i];
+                if (!child.hasOwnProperty("isSlotted"))
+                    return;
                 if (child.hasOwnProperty("module") && item) {
                     child.parent = slotLayoutLoader.item.children[0];
                 }
