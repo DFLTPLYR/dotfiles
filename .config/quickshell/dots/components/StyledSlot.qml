@@ -3,15 +3,11 @@ import QtQuick.Layouts
 import Quickshell
 import qs.config
 
-Rectangle {
+Item {
     id: slotRoot
     Layout.fillWidth: true
     Layout.fillHeight: true
-    DropArea {
-        id: dragArea
-        z: 1000
-        anchors.fill: parent
-    }
+
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
     property bool debug: false
@@ -44,8 +40,6 @@ Rectangle {
             onChildrenChanged: {
                 for (let c = 0; c < childrenHolder.children.length; c++) {
                     const child = childrenHolder.children[c];
-                    if (!child.hasOwnProperty("isSlotted"))
-                        return;
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
@@ -53,14 +47,10 @@ Rectangle {
                 }
             }
         }
-
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
-                if (!child.hasOwnProperty("isSlotted"))
-                    return;
-
                 child.isSlotted = false;
                 child.parent = childHandler;
             }
@@ -79,9 +69,6 @@ Rectangle {
             onChildrenChanged: {
                 for (let c = 0; c < childrenHolder.children.length; c++) {
                     const child = childrenHolder.children[c];
-                    if (!child.hasOwnProperty("isSlotted"))
-                        return;
-
                     child.implicitWidth = childrenHolder.width;
                     child.y = 0;
                     child.x = 0;
@@ -89,7 +76,6 @@ Rectangle {
                 }
             }
         }
-
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {

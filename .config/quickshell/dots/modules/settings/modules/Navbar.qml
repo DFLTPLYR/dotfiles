@@ -106,23 +106,29 @@ PageWrapper {
                 id: orientationBtn
                 required property string modelData
                 readonly property bool isSelected: Config.navbar.position === modelData
-                enabled: !isSelected
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
-                bgColor: isSelected ? Colors.color.primary : Colors.color.secondary
 
                 height: parent.height * 0.8
                 width: height
+                enabled: !isSelected
+
+                bgColor: isSelected ? Colors.color.primary : Colors.color.secondary
+
                 FontIcon {
                     text: `bar-${modelData}`
                     color: isSelected ? Colors.color.on_primary : Colors.color.on_secondary
+
                     font.pixelSize: parent.height * 0.8
+
                     anchors {
                         verticalCenter: parent.verticalCenter
                         horizontalCenter: parent.horizontalCenter
                     }
                 }
+
                 onClicked: {
                     Config.navbar.position = modelData;
                 }
@@ -148,6 +154,7 @@ PageWrapper {
 
             Rectangle {
                 id: previewPanelContainer
+                visible: true
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -163,176 +170,186 @@ PageWrapper {
 
                     Repeater {
                         id: slotRepeater
-                        model: root.areas
+                        model: ScriptModel {
+                            values: root.areas
+                        }
                         delegate: Rectangle {
                             required property var modelData
 
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            objectName: modelData.name
                             Layout.alignment: modelData.direction
-                            color: dragArea.containsDrag ? "white" : modelData.color
+
+                            objectName: modelData.name
+                            color: testingasdf.containsDrag ? "green" : "yellow"
                             DropArea {
-                                id: dragArea
+                                id: testingasdf
                                 anchors.fill: parent
                             }
                         }
                     }
                 }
-            }
-        }
-
-        TabBar {
-            id: bar
-            Layout.fillWidth: true
-            TabButton {
-                text: qsTr("Areas")
-            }
-            TabButton {
-                text: qsTr("Widgets")
             }
         }
 
         // Options/Settings panel
-        StackLayout {
-            Layout.fillWidth: true
+        ColumnLayout {
             Layout.fillHeight: true
-            currentIndex: bar.currentIndex
+            Layout.fillWidth: true
 
-            Item {
-                id: homeTab
-                Row {
-                    id: areaLabel
-                    Label {
-                        text: qsTr("Areas:")
-                        font.pixelSize: 32
-                        color: Colors.color.on_surface
-                    }
-                    StyledButton {
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                        }
-                        height: parent.height * 0.8
-                        width: height
-                        FontIcon {
-                            text: "plus"
-                            font.pixelSize: parent.height * 0.8
-                            color: Colors.color.secondary
-                            anchors {
-                                verticalCenter: parent.verticalCenter
-                                horizontalCenter: parent.horizontalCenter
-                            }
-                        }
-                        onClicked: {
-                            const container = {
-                                idx: root.areas.length,
-                                name: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                                direction: Qt.AlignVCenter | Qt.AlignRight,
-                                color: Colors.color.tertiary
-                            };
-                            root.areas = [...root.areas, container];
-                        }
-                    }
+            TabBar {
+                id: bar
+                Layout.fillWidth: true
+                TabButton {
+                    text: qsTr("Areas")
                 }
-
-                FlexboxLayout {
-                    height: contentHeight
-                    width: parent.width
-                    anchors.top: areaLabel.bottom
-                    gap: 2
-                    direction: FlexboxLayout.Column
-
-                    Repeater {
-                        model: root.areas
-                        delegate: Item {
-                            required property var modelData
-                            property Item orig: slotRepeater.itemAt(modelData.idx)
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 80
-                            RowLayout {
-                                anchors.fill: parent
-                                Rectangle {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    color: modelData.color
-                                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            const testArray = [Qt.AlignLeft, Qt.AlignHCenter, Qt.AlignRight, Qt.AlignTop, Qt.AlignVCenter, Qt.AlignBottom];
-                                            if (orig === null)
-                                                orig = slotRepeater.itemAt(modelData.idx);
-                                            const randomAlignment = testArray[Math.floor(Math.random() * testArray.length)];
-                                            parent.Layout.alignment = randomAlignment;
-                                        }
-                                    }
-                                }
-
-                                Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    StyledButton {
-                                        width: 40
-                                        height: 40
-                                    }
-                                }
-                            }
-                        }
-                    }
+                TabButton {
+                    text: qsTr("Widgets")
                 }
             }
 
-            Item {
-                id: widgetTab
-                Label {
-                    text: qsTr("Areas:")
-                    font.pixelSize: 32
-                    color: Colors.color.on_surface
-                }
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: bar.currentIndex
 
-                Rectangle {
-                    id: test
-                    width: 20
-                    height: 20
-                    color: "red"
+                Item {
+                    id: homeTab
+                    Row {
+                        id: areaLabel
 
-                    Drag.active: testDrag.drag.active
-
-                    MouseArea {
-                        id: testDrag
-                        onReleased: {
-                            const target = test.Drag.target;
-                            test.parent = target !== null ? target.parent : widgetTab;
+                        Label {
+                            text: qsTr("Areas:")
+                            font.pixelSize: 32
+                            color: Colors.color.on_surface
                         }
-                        anchors.fill: parent
-                        drag.target: parent
-                    }
-                    states: [
-                        State {
-                            when: testDrag.drag.active
-                            AnchorChanges {
-                                target: test
-                                anchors {
-                                    verticalCenter: undefined
-                                    horizontalCenter: undefined
-                                }
+
+                        StyledButton {
+                            anchors {
+                                verticalCenter: parent.verticalCenter
                             }
-                        },
-                        State {
-                            when: !testDrag.drag.active
-                            AnchorChanges {
-                                target: test
+                            height: parent.height * 0.8
+                            width: height
+
+                            FontIcon {
+                                text: "plus"
+                                color: Colors.color.secondary
+                                font.pixelSize: parent.height * 0.8
+
                                 anchors {
                                     verticalCenter: parent.verticalCenter
                                     horizontalCenter: parent.horizontalCenter
                                 }
                             }
+                            onClicked: {
+                                const container = {
+                                    idx: root.areas.length,
+                                    name: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                                    direction: Qt.AlignVCenter | Qt.AlignRight,
+                                    color: Colors.color.tertiary
+                                };
+                                root.areas = [...root.areas, container];
+                            }
                         }
-                    ]
+                    }
+
+                    FlexboxLayout {
+                        height: contentHeight
+                        width: parent.width
+                        anchors.top: areaLabel.bottom
+                        gap: 2
+                        direction: FlexboxLayout.Column
+
+                        Repeater {
+                            model: root.areas
+                            delegate: Item {
+                                required property var modelData
+                                property Item orig: slotRepeater.itemAt(modelData.idx)
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 80
+
+                                RowLayout {
+                                    anchors.fill: parent
+
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        color: modelData.color
+                                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                const testArray = [Qt.AlignLeft, Qt.AlignHCenter, Qt.AlignRight, Qt.AlignTop, Qt.AlignVCenter, Qt.AlignBottom];
+                                                if (orig === null)
+                                                    orig = slotRepeater.itemAt(modelData.idx);
+                                                const randomAlignment = testArray[Math.floor(Math.random() * testArray.length)];
+                                                parent.Layout.alignment = randomAlignment;
+                                            }
+                                        }
+                                    }
+
+                                    Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+
+                                        StyledButton {
+                                            width: 40
+                                            height: 40
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            Item {
-                id: activityTab
+
+                Item {
+                    id: widgetTab
+
+                    Label {
+                        text: qsTr("Areas:")
+                        font.pixelSize: 32
+                        color: Colors.color.on_surface
+                    }
+                    Item {
+                        id: testDragItem
+                        property bool isSlotted: false
+                        height: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
+                        width: (Config.navbar.side && root.isSlotted) ? (parent ? parent.width : 0) : (parent ? parent.height : 0)
+
+                        MouseArea {
+                            id: testDrag
+                            onReleased: {
+                                console.log(testDragItem.Drag.target);
+                            }
+                            anchors.fill: parent
+                            drag.target: testDragItem
+                        }
+                        states: [
+                            State {
+                                when: testDrag.drag.active
+                                AnchorChanges {
+                                    target: testDragItem
+                                    anchors {
+                                        verticalCenter: undefined
+                                        horizontalCenter: undefined
+                                    }
+                                }
+                            },
+                            State {
+                                when: !testDrag.drag.active
+                                AnchorChanges {
+                                    target: testDragItem
+                                    anchors {
+                                        verticalCenter: parent.verticalCenter
+                                        horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
             }
         }
     }
