@@ -33,7 +33,13 @@ Variants {
         implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
 
         color: "transparent"
-
+        Behavior on anchors {
+            AnchorAnimation {
+                targets: root
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
         // parent
         StyledRect {
             id: containerRect
