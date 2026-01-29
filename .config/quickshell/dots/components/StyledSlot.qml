@@ -5,29 +5,23 @@ import qs.config
 
 Item {
     id: slotRoot
-    Layout.fillWidth: true
-    Layout.fillHeight: true
 
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
     property bool debug: false
 
-    onChildrenChanged: {
-        const copy = children.slice();
-        for (let i = 0; i < copy.length; i++) {
-            const child = copy[i];
-            if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
-                child.parent = slotLayoutLoader.item.children[0];
-            }
-        }
-    }
     DropArea {
-        anchors.fill: parent
-    }
-    Rectangle {
         id: childHandler
         anchors.fill: parent
-        visible: true
+        onChildrenChanged: {
+            const copy = children.slice();
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
+                    child.parent = slotLayoutLoader.item.children[0];
+                }
+            }
+        }
     }
 
     component RowSlot: RowLayout {
@@ -37,7 +31,9 @@ Item {
         Row {
             id: childrenHolder
             Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.alignment: rootRowSlot.alignment
+
             spacing: 4
             onChildrenChanged: {
                 for (let c = 0; c < childrenHolder.children.length; c++) {
@@ -114,8 +110,9 @@ Item {
 
     Loader {
         id: slotLayoutLoader
-        anchors.fill: parent
         sourceComponent: Config.navbar.side ? colSlot : rowSlot
+        anchors.fill: parent
+
         onLoaded: {
             const copy = childHandler.children.slice();
             for (let i = 0; i < copy.length; i++) {
