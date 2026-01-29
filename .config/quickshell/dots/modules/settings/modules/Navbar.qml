@@ -303,75 +303,14 @@ PageWrapper {
                         font.pixelSize: 32
                         color: Colors.color.on_surface
                     }
+
                     FlexboxLayout {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-
-                        Item {
-                            width: 64
-                            height: 64
-                            DropArea {
-                                anchors.fill: parent
-                            }
-                            MouseArea {
-                                id: mouseArea
-
-                                property Item origParent
-                                property bool isSlotted: false
-                                width: isSlotted ? parent.width : 32
-                                height: isSlotted ? parent.height : 32
-                                drag.target: tile
-
-                                onReleased: parent = tile.Drag.target !== null ? tile.Drag.target : origParent
-
-                                Rectangle {
-                                    id: tile
-                                    width: mouseArea.width
-                                    height: mouseArea.height
-                                    Drag.hotSpot.x: width / 2
-                                    Drag.hotSpot.y: height / 2
-
-                                    anchors {
-                                        verticalCenter: parent.verticalCenter
-                                        horizontalCenter: parent.horizontalCenter
-                                    }
-
-                                    Drag.active: mouseArea.drag.active
-
-                                    states: State {
-                                        when: mouseArea.drag.active
-                                        AnchorChanges {
-                                            target: tile
-                                            anchors {
-                                                verticalCenter: undefined
-                                                horizontalCenter: undefined
-                                            }
-                                        }
-                                    }
-                                }
-                                Component.onCompleted: {
-                                    origParent = parent;
-                                }
-                            }
-                        }
+                        WidgetWrapper {}
                     }
                 }
             }
-        }
-    }
-
-    GridView {
-        id: colorGrid
-        visible: false
-        Layout.fillWidth: true
-        Layout.preferredHeight: contentHeight
-        cellHeight: width / 15
-        cellWidth: width / 15
-        model: Colors.colors
-        delegate: Rectangle {
-            width: colorGrid.cellWidth
-            height: colorGrid.cellHeight
-            color: Colors.color[modelData]
         }
     }
 
