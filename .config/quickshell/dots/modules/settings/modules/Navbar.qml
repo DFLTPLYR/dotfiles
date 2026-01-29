@@ -307,7 +307,21 @@ PageWrapper {
                     FlexboxLayout {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        WidgetWrapper {}
+                        SystemClock {
+                            id: clock
+                            precision: SystemClock.Seconds
+                        }
+                        WidgetWrapper {
+                            Text {
+
+                                text: Qt.formatDateTime(clock.date, "hh:mm AP")
+                                color: "white"
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -51,7 +51,6 @@ Rectangle {
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
-                    child.isSlotted = true;
                 }
             }
         }
@@ -61,7 +60,6 @@ Rectangle {
                 const child = copy[i];
                 if (!child.hasOwnProperty("isSlotted"))
                     return;
-                child.isSlotted = false;
                 child.parent = childHandler;
             }
         }
@@ -85,7 +83,6 @@ Rectangle {
                     child.implicitWidth = childrenHolder.width;
                     child.y = 0;
                     child.x = 0;
-                    child.isSlotted = true;
                 }
             }
         }
@@ -96,7 +93,6 @@ Rectangle {
                 if (!child.hasOwnProperty("isSlotted"))
                     return;
 
-                child.isSlotted = false;
                 child.parent = childHandler;
             }
         }
@@ -120,24 +116,5 @@ Rectangle {
         id: slotLayoutLoader
         sourceComponent: Config.navbar.side ? colSlot : rowSlot
         anchors.fill: parent
-
-        onLoaded: {
-            const copy = childHandler.children.slice();
-            for (let i = 0; i < copy.length; i++) {
-                const child = copy[i];
-                if (!child.hasOwnProperty("isSlotted"))
-                    return;
-                child.parent = item.children[0];
-            }
-            const copyparent = slotRoot.children.slice();
-            for (let i = 0; i < copyparent.length; i++) {
-                const child = copyparent[i];
-                if (!child.hasOwnProperty("isSlotted"))
-                    return;
-                if (child.hasOwnProperty("module") && item) {
-                    child.parent = slotLayoutLoader.item.children[0];
-                }
-            }
-        }
     }
 }
