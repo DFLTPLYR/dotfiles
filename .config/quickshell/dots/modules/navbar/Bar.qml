@@ -91,6 +91,7 @@ Variants {
                         width: parent.height / 1.5
                         height: parent.height / 1.5
                         radius: width / 2
+
                         Text {
                             font.family: Config.iconFont.family
                             font.weight: Config.iconFont.weight
