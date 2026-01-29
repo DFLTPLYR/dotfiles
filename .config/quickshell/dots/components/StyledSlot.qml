@@ -3,12 +3,20 @@ import QtQuick.Layouts
 import Quickshell
 import qs.config
 
-Item {
+Rectangle {
     id: slotRoot
+    color: "transparent"
+    border.color: childHandler.containsDrag ? Colors.color.primary : "transparent"
+
+    Behavior on border.color {
+        ColorAnimation {
+            duration: 100
+            easing.type: Easing.InOutQuad
+        }
+    }
 
     default property alias content: childHandler.data
     property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
-    property bool debug: false
 
     DropArea {
         id: childHandler
