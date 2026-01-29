@@ -174,6 +174,8 @@ PageWrapper {
                             values: root.areas
                         }
                         delegate: StyledSlot {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
                             required property var modelData
                         }
                     }
@@ -293,7 +295,7 @@ PageWrapper {
                     }
                 }
 
-                Item {
+                ColumnLayout {
                     id: widgetTab
 
                     Label {
@@ -302,20 +304,25 @@ PageWrapper {
                         color: Colors.color.on_surface
                     }
                     FlexboxLayout {
-                        width: parent.width
-                        height: parent.height
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
                         Item {
                             width: 64
                             height: 64
+                            DropArea {
+                                anchors.fill: parent
+                            }
                             MouseArea {
                                 id: mouseArea
+
+                                property Item origParent
                                 property bool isSlotted: false
                                 width: isSlotted ? parent.width : 32
                                 height: isSlotted ? parent.height : 32
-
                                 drag.target: tile
 
-                                onReleased: parent = tile.Drag.target !== null ? tile.Drag.target : root
+                                onReleased: parent = tile.Drag.target !== null ? tile.Drag.target : origParent
 
                                 Rectangle {
                                     id: tile
@@ -323,6 +330,7 @@ PageWrapper {
                                     height: mouseArea.height
                                     Drag.hotSpot.x: width / 2
                                     Drag.hotSpot.y: height / 2
+
                                     anchors {
                                         verticalCenter: parent.verticalCenter
                                         horizontalCenter: parent.horizontalCenter
@@ -340,6 +348,9 @@ PageWrapper {
                                             }
                                         }
                                     }
+                                }
+                                Component.onCompleted: {
+                                    origParent = parent;
                                 }
                             }
                         }
