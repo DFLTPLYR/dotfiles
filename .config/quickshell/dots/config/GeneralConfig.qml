@@ -7,4 +7,6 @@ JsonObject {
     property list<var> recentWallpapers: []
     property bool useCustomWallpaper: false
     property list<var> customWallpaper: []
+    property list<var> monitorPosition: []
+    property int zoom: 1
 }

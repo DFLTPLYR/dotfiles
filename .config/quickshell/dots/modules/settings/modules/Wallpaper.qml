@@ -15,7 +15,6 @@ PageWrapper {
     id: wallpaper
     property list<string> wallpaperPathList: []
     property list<var> coordinates: []
-    property int zoom: 4
     signal updateLocation
     signal saveCustomWallpaper
     PageHeader {
@@ -148,7 +147,8 @@ PageWrapper {
                     }
 
                     onClicked: {
-                        wallpaper.zoom = Math.min(10, wallpaper.zoom + 1);
+                        Config.general.zoom = Math.min(10, Config.general.zoom + 1);
+                        Config.saveSettings();
                     }
                 }
 
@@ -167,7 +167,8 @@ PageWrapper {
                     }
 
                     onClicked: {
-                        wallpaper.zoom = Math.max(1, wallpaper.zoom - 1);
+                        Config.general.zoom = Math.max(1, Config.general.zoom - 1);
+                        Config.saveSettings();
                     }
                 }
             }
@@ -207,6 +208,9 @@ PageWrapper {
                                 source: modelData.path
                                 width: modelData.width
                                 height: modelData.height
+                                smooth: true
+                                mipmap: true
+                                antialiasing: true
                                 x: modelData.x - ghostPreview.x
                                 y: modelData.y - ghostPreview.y
                             }
@@ -218,7 +222,7 @@ PageWrapper {
                                 ghostPreview.grabToImage(function (result) {
                                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${modelData.name}.jpg`);
                                     ghostPreview.setWallpaper();
-                                }, Qt.rect(0, 0, width * wallpaper.zoom, height * wallpaper.zoom));
+                                }, Qt.size(width * Config.general.zoom, height * Config.general.zoom));
                             }
                         }
 
@@ -254,11 +258,12 @@ PageWrapper {
                     delegate: Rectangle {
                         id: screenPreview
                         required property ShellScreen modelData
+                        readonly property var monitorData: Config.general.monitorPosition.find(s => s.name === modelData.name)
                         property bool lock: false
                         property bool hoveredState: screenDragArea.containsMouse || screenLockPosition.hovered
                         z: 2
-                        width: modelData.width / wallpaper.zoom
-                        height: modelData.height / wallpaper.zoom
+                        width: modelData.width / Config.general.zoom
+                        height: modelData.height / Config.general.zoom
                         color: Scripts.setOpacity(Colors.color.background, 0.5)
                         border.color: Colors.color.secondary
                         border.width: 1
@@ -297,6 +302,21 @@ PageWrapper {
                                 }
                                 onClicked: {
                                     screenPreview.lock = !screenPreview.lock;
+                                    const index = Config.general.monitorPosition.findIndex(s => s.name === modelData.name);
+                                    const monitor = {
+                                        name: modelData.name,
+                                        x: screenPreview.x,
+                                        y: screenPreview.y
+                                    };
+                                    if (index === -1) {
+                                        Config.general.monitorPosition.push(monitor);
+                                    } else {
+                                        const target = Config.general.monitorPosition[index];
+                                        target.x = screenPreview.x;
+                                        target.y = screenPreview.y;
+                                    }
+
+                                    Config.saveSettings();
                                 }
                             }
                         }
@@ -350,6 +370,10 @@ PageWrapper {
                                 screenPreview.updateWallpaper();
                             }
                         }
+                        Component.onCompleted: {
+                            x = monitorData ? monitorData.x : 0;
+                            y = monitorData ? monitorData.y : 0;
+                        }
                     }
                 }
 
@@ -371,8 +395,8 @@ PageWrapper {
                         Image {
                             id: draggableImage
                             property bool lock
-                            width: sourceSize.width / wallpaper.zoom
-                            height: sourceSize.height / wallpaper.zoom
+                            width: sourceSize.width / Config.general.zoom
+                            height: sourceSize.height / Config.general.zoom
                             source: modelData
                             Drag.active: imageMa.drag.active
                             Drag.hotSpot.x: 10
