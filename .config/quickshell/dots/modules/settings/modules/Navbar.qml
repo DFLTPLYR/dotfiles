@@ -188,6 +188,7 @@ PageWrapper {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
+            // tabs
             TabBar {
                 id: bar
                 Layout.fillWidth: true
@@ -199,6 +200,7 @@ PageWrapper {
                 }
             }
 
+            // contents
             StackLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -248,8 +250,8 @@ PageWrapper {
                         height: contentHeight
                         width: parent.width
                         anchors.top: areaLabel.bottom
-                        gap: 2
                         direction: FlexboxLayout.Column
+                        gap: 2
 
                         Repeater {
                             model: root.areas
@@ -266,16 +268,11 @@ PageWrapper {
                                         Layout.fillWidth: true
                                         Layout.fillHeight: true
                                         color: modelData.color
-                                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: {
-                                                const testArray = [Qt.AlignLeft, Qt.AlignHCenter, Qt.AlignRight, Qt.AlignTop, Qt.AlignVCenter, Qt.AlignBottom];
-                                                if (orig === null)
-                                                    orig = slotRepeater.itemAt(modelData.idx);
-                                                const randomAlignment = testArray[Math.floor(Math.random() * testArray.length)];
-                                                parent.Layout.alignment = randomAlignment;
+                                                orig.position = "right";
                                             }
                                         }
                                     }
@@ -320,6 +317,12 @@ PageWrapper {
                                     verticalCenter: parent.verticalCenter
                                     horizontalCenter: parent.horizontalCenter
                                 }
+                            }
+                        }
+
+                        WidgetWrapper {
+                            Rectangle {
+                                anchors.fill: parent
                             }
                         }
                     }
