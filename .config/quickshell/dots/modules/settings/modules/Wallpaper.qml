@@ -617,8 +617,16 @@ PageWrapper {
                         fill: parent
                         margins: 2
                     }
+                    asynchronous: true
                     fillMode: Image.PreserveAspectCrop
-                    source: modelData.path
+                    source: Qt.resolvedUrl(modelData.path)
+                    onStatusChanged: {
+                        if (status === Image.Error) {
+                            const pathToRemove = modelData.path;
+                            Config.general.recentWallpapers = Config.general.recentWallpapers.filter(item => item.path !== pathToRemove);
+                            Config.saveSettings();
+                        }
+                    }
                 }
 
                 Behavior on border.color {

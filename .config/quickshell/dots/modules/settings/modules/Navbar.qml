@@ -11,7 +11,6 @@ import qs.components
 PageWrapper {
     id: root
     property ShellScreen selectedScreen: null
-    property var areas: []
     property int navbarWidth
     property int navbarHeight
 
@@ -165,13 +164,13 @@ PageWrapper {
 
                 GridLayout {
                     anchors.fill: parent
-                    columns: Config.navbar.side ? 1 : root.areas.length
-                    rows: Config.navbar.side ? root.areas.length : 1
+                    columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
+                    rows: Config.navbar.side ? Config.navbar.layouts.length : 1
 
                     Repeater {
                         id: slotRepeater
                         model: ScriptModel {
-                            values: root.areas
+                            values: Config.navbar.layouts
                         }
                         delegate: StyledSlot {
                             Layout.fillWidth: true
@@ -193,7 +192,7 @@ PageWrapper {
                 id: bar
                 Layout.fillWidth: true
                 TabButton {
-                    text: qsTr("Areas")
+                    text: qsTr("Slots")
                 }
                 TabButton {
                     text: qsTr("Widgets")
@@ -207,12 +206,12 @@ PageWrapper {
                 currentIndex: bar.currentIndex
 
                 Item {
-                    id: areasTab
+                    id: slotsTab
                     Row {
-                        id: areaLabel
+                        id: slotLabel
 
                         Label {
-                            text: qsTr("Areas:")
+                            text: qsTr("Slots:")
                             font.pixelSize: 32
                             color: Colors.color.on_surface
                         }
@@ -236,12 +235,12 @@ PageWrapper {
                             }
                             onClicked: {
                                 const container = {
-                                    idx: root.areas.length,
+                                    idx: Config.navbar.layouts.length,
                                     name: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
                                     direction: Qt.AlignVCenter | Qt.AlignRight,
                                     color: Colors.color.tertiary
                                 };
-                                root.areas = [...root.areas, container];
+                                Config.navbar.layouts = [...Config.navbar.layouts, container];
                             }
                         }
                     }
@@ -249,12 +248,12 @@ PageWrapper {
                     FlexboxLayout {
                         height: contentHeight
                         width: parent.width
-                        anchors.top: areaLabel.bottom
+                        anchors.top: slotLabel.bottom
                         direction: FlexboxLayout.Column
                         gap: 2
 
                         Repeater {
-                            model: root.areas
+                            model: Config.navbar.layouts
                             delegate: Item {
                                 required property var modelData
                                 property Item orig: slotRepeater.itemAt(modelData.idx)
