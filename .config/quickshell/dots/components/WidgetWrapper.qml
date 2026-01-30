@@ -36,9 +36,27 @@ Rectangle {
             }
             return sum;
         }
-
-        width: isSlotted ? contentWidth : parent.width
-        height: parent.height
+        property real contentHeight: {
+            let sum = 0;
+            for (let i = 0; i < widgetHandler.children.length; i++) {
+                sum += widgetHandler.children[i].height;
+            }
+            return sum;
+        }
+        width: {
+            if (Config.navbar.side) {
+                return parent.width;
+            } else {
+                return isSlotted ? contentWidth : parent.width;
+            }
+        }
+        height: {
+            if (Config.navbar.side) {
+                return isSlotted ? contentHeight : parent.height;
+            } else {
+                return parent.height;
+            }
+        }
         drag.target: tile
 
         onReleased: {
@@ -46,6 +64,8 @@ Rectangle {
         }
 
         onParentChanged: {
+            if (!parent)
+                return;
             if (parent.objectName === "handler") {
                 return isSlotted = false;
             }
