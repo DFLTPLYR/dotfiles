@@ -304,10 +304,12 @@ PageWrapper {
                     FlexboxLayout {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+
                         SystemClock {
                             id: clock
                             precision: SystemClock.Seconds
                         }
+
                         WidgetWrapper {
                             Text {
 
@@ -322,7 +324,8 @@ PageWrapper {
 
                         WidgetWrapper {
                             Rectangle {
-                                anchors.fill: parent
+                                width: Config.navbar.side ? parent.width : 40
+                                height: Config.navbar.side ? 50 : parent.height
                             }
                         }
                     }

@@ -6,4 +6,6 @@ JsonObject {
     property PopupProps popup: PopupProps {}
     property int width: 50
     property int height: 50
+    property list<var> layouts: []
+    property list<var> widgets: []
 }
