@@ -4,8 +4,10 @@ import QtQuick
 import qs.config
 
 Rectangle {
+    id: root
     objectName: "handler"
     color: "transparent"
+    property string icon: "plus"
     property bool freeSlot: children.length >= 2
     default property alias content: widgetHandler.data
     width: 64
@@ -78,7 +80,7 @@ Rectangle {
             height: ma.height
             FontIcon {
                 visible: !ma.isSlotted
-                text: "plus"
+                text: root.icon
                 color: Colors.color.secondary
                 font.pixelSize: parent.height * 0.8
 
