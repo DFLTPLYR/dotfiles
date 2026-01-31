@@ -91,14 +91,15 @@ Rectangle {
             Layout.fillWidth: true
             Layout.alignment: {
                 switch (slotRoot.position) {
-                case "top" || "left":
+                case "left":
                     return Qt.AlignTop;
-                case "bottom" || "right":
+                case "right":
                     return Qt.AlignBottom;
                 case "center":
                     return Qt.AlignCenter;
                 default:
-                    return Qt.AlignTop;
+                    console.log(slotRoot.position);
+                    return;
                 }
             }
             spacing: 4
