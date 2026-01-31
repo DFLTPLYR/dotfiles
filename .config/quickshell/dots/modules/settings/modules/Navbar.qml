@@ -249,43 +249,35 @@ PageWrapper {
                         height: contentHeight
                         width: parent.width
                         anchors.top: slotLabel.bottom
-                        direction: FlexboxLayout.Column
                         gap: 2
-
+                        wrap: FlexboxLayout.Wrap
                         Repeater {
                             model: Config.navbar.layouts
                             delegate: Item {
                                 required property var modelData
                                 property Item orig: slotRepeater.itemAt(modelData.idx)
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: 80
+                                Layout.preferredWidth: parent.width / 3
+                                Layout.preferredHeight: Config.navbar.height
 
                                 RowLayout {
                                     anchors.fill: parent
 
                                     Rectangle {
-                                        Layout.fillWidth: true
                                         Layout.fillHeight: true
+                                        Layout.fillWidth: true
                                         color: modelData.color
 
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: {
-                                                orig.position = "right";
+                                                if (orig) {
+                                                    orig.position = "right";
+                                                }
                                             }
                                         }
                                     }
-
-                                    Item {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-
-                                        StyledButton {
-                                            width: 40
-                                            height: 40
-                                        }
-                                    }
                                 }
+                                Component.onCompleted: orig = slotRepeater.itemAt(modelData.idx)
                             }
                         }
                     }
@@ -319,9 +311,8 @@ PageWrapper {
                                     horizontalCenter: parent.horizontalCenter
                                 }
                                 wrapMode: Text.Wrap
-                                width: Math.min(parent.width, font.pixelSize * 6)
                                 horizontalAlignment: Text.AlignHCenter
-                                font.pixelSize: Math.max(2, Math.min(parent.width, parent.height)) / 2
+                                font.pixelSize: Math.max(2, parent.height) / 2
                             }
                         }
 

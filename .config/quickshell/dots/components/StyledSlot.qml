@@ -24,7 +24,7 @@ Rectangle {
         objectName: "handler"
         onChildrenChanged: {
             Qt.callLater(() => {
-                const copy = childHandler.children.slice();
+                const copy = childHandler.children ? childHandler.children.slice() : [];
                 for (let i = 0; i < copy.length; i++) {
                     const child = copy[i];
                     if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
@@ -138,7 +138,7 @@ Rectangle {
         sourceComponent: Config.navbar.side ? colSlot : rowSlot
         anchors.fill: parent
         onLoaded: {
-            const copy = childHandler.children.slice();
+            const copy = childHandler.children ? childHandler.children.slice() : [];
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
                 if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {

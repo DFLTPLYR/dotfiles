@@ -76,8 +76,8 @@ Rectangle {
 
         Item {
             id: tile
-            width: ma.width
-            height: ma.height
+            width: parent.width
+            height: parent.height
             FontIcon {
                 visible: !ma.isSlotted
                 text: root.icon
