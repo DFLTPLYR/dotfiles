@@ -253,31 +253,79 @@ PageWrapper {
                         wrap: FlexboxLayout.Wrap
                         Repeater {
                             model: Config.navbar.layouts
-                            delegate: Item {
+                            delegate: Rectangle {
                                 required property var modelData
                                 property Item orig: slotRepeater.itemAt(modelData.idx)
-                                Layout.preferredWidth: parent.width / 3
+                                Layout.preferredWidth: parent.width
                                 Layout.preferredHeight: Config.navbar.height
+                                color: "transparent"
+                                border.color: Colors.color.primary
 
+                                HoverHandler {
+                                    id: mouse
+                                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                                    cursorShape: Qt.PointingHandCursor
+                                    onHoveredChanged: {
+                                        if (orig === null) {
+                                            orig = slotRepeater.itemAt(modelData.idx);
+                                        }
+                                        orig.border.color = !hovered ? "transparent" : "green";
+                                    }
+                                }
                                 RowLayout {
                                     anchors.fill: parent
 
                                     Rectangle {
                                         Layout.fillHeight: true
-                                        Layout.fillWidth: true
-                                        color: modelData.color
+                                        Layout.preferredWidth: height
+                                        radius: height / 2
+                                        color: "green"
 
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: {
-                                                if (orig) {
-                                                    orig.position = "right";
+                                                if (orig === null) {
+                                                    orig = slotRepeater.itemAt(modelData.idx);
                                                 }
+                                                orig.position = "left";
+                                            }
+                                        }
+                                    }
+                                    Rectangle {
+                                        Layout.fillHeight: true
+                                        Layout.preferredWidth: height
+                                        Layout.alignment: Qt.AlignCenter
+                                        radius: height / 2
+                                        color: "green"
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                if (orig === null) {
+                                                    orig = slotRepeater.itemAt(modelData.idx);
+                                                }
+                                                orig.position = "center";
+                                            }
+                                        }
+                                    }
+                                    Rectangle {
+                                        Layout.fillHeight: true
+                                        Layout.preferredWidth: height
+                                        Layout.alignment: Qt.AlignRight
+                                        radius: height / 2
+                                        color: "green"
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                if (orig === null) {
+                                                    orig = slotRepeater.itemAt(modelData.idx);
+                                                }
+                                                orig.position = "right";
                                             }
                                         }
                                     }
                                 }
-                                Component.onCompleted: orig = slotRepeater.itemAt(modelData.idx)
                             }
                         }
                     }
