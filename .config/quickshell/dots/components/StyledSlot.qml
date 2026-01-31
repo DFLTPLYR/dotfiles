@@ -6,11 +6,10 @@ import qs.config
 Rectangle {
     id: slotRoot
     color: "transparent"
-    border.color: childHandler.containsDrag ? Colors.color.primary : "transparent"
 
     Behavior on border.color {
         ColorAnimation {
-            duration: 100
+            duration: 200
             easing.type: Easing.InOutQuad
         }
     }
@@ -22,6 +21,9 @@ Rectangle {
         id: childHandler
         anchors.fill: parent
         objectName: "handler"
+        onContainsDragChanged: {
+            slotRoot.border.color = containsDrag ? Colors.color.primary : "transparent";
+        }
         onChildrenChanged: {
             Qt.callLater(() => {
                 const copy = childHandler.children ? childHandler.children.slice() : [];
@@ -47,6 +49,8 @@ Rectangle {
                     return Qt.AlignLeft;
                 case "right" || "bottom":
                     return Qt.AlignRight;
+                case "center":
+                    return Qt.AlignCenter;
                 default:
                     break;
                 }
@@ -91,6 +95,8 @@ Rectangle {
                     return Qt.AlignTop;
                 case "bottom" || "right":
                     return Qt.AlignBottom;
+                case "center":
+                    return Qt.AlignCenter;
                 default:
                     return Qt.AlignTop;
                 }
