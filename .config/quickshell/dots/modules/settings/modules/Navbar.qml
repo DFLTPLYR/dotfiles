@@ -39,6 +39,7 @@ PageWrapper {
                     horizontalCenter: parent.horizontalCenter
                 }
                 FontIcon {
+                    Layout.alignment: Qt.AlignCenter
                     text: "monitor"
                     font.pixelSize: parent.height / 2
                     color: Colors.color.secondary
@@ -74,6 +75,7 @@ PageWrapper {
                         horizontalCenter: parent.horizontalCenter
                     }
                     FontIcon {
+                        Layout.alignment: Qt.AlignCenter
                         text: "monitor"
                         font.pixelSize: parent.height / 2
                         color: Colors.color.secondary
@@ -103,12 +105,11 @@ PageWrapper {
             RowLayout {
                 anchors {
                     fill: parent
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
                 }
 
                 Text {
                     text: "Save"
+                    Layout.alignment: Qt.AlignCenter
                     font.pixelSize: parent.height / 2
                     color: Colors.color.secondary
                 }
@@ -298,7 +299,7 @@ PageWrapper {
                                         if (orig === null) {
                                             orig = slotRepeater.itemAt(modelData.idx);
                                         }
-                                        orig.border.color = !hovered ? "transparent" : "green";
+                                        orig.border.color = !hovered ? "transparent" : Colors.color.tertiary;
                                     }
                                 }
 
