@@ -1,12 +1,19 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
+
 import qs.config
+import qs.utils
 
 Rectangle {
     id: slotRoot
     color: "transparent"
 
+    Behavior on color {
+        ColorAnimation {
+            duration: 200
+            easing.type: Easing.InOutQuad
+        }
+    }
     Behavior on border.color {
         ColorAnimation {
             duration: 200
