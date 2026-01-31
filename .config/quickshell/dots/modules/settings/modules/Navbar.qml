@@ -272,17 +272,37 @@ PageWrapper {
                                         orig.border.color = !hovered ? "transparent" : "green";
                                     }
                                 }
+
                                 RowLayout {
                                     anchors.fill: parent
 
                                     Rectangle {
                                         Layout.fillHeight: true
                                         Layout.preferredWidth: height
+                                        Layout.alignment: Qt.AlignLeft
                                         radius: height / 2
-                                        color: "green"
+                                        color: {
+                                            orig ? orig.position === "center" ? "green" : "transparent" : "transparent";
+                                        }
 
+                                        Behavior on color {
+                                            NumberAnimation {
+                                                duration: 300
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
+                                        Behavior on border.color {
+                                            NumberAnimation {
+                                                duration: 300
+                                                easing.type: Easing.InOutQuad
+                                            }
+                                        }
                                         MouseArea {
                                             anchors.fill: parent
+                                            hoverEnabled: true
+                                            onContainsMouseChanged: {
+                                                parent.border.color = containsMouse ? Colors.color.primary : "transparent";
+                                            }
                                             onClicked: {
                                                 if (orig === null) {
                                                     orig = slotRepeater.itemAt(modelData.idx);
@@ -296,7 +316,9 @@ PageWrapper {
                                         Layout.preferredWidth: height
                                         Layout.alignment: Qt.AlignCenter
                                         radius: height / 2
-                                        color: "green"
+                                        color: {
+                                            orig ? orig.position === "center" ? "green" : "transparent" : "transparent";
+                                        }
 
                                         MouseArea {
                                             anchors.fill: parent
@@ -313,7 +335,9 @@ PageWrapper {
                                         Layout.preferredWidth: height
                                         Layout.alignment: Qt.AlignRight
                                         radius: height / 2
-                                        color: "green"
+                                        color: {
+                                            orig ? orig.position === "right" ? "green" : "transparent" : "transparent";
+                                        }
 
                                         MouseArea {
                                             anchors.fill: parent
@@ -359,8 +383,9 @@ PageWrapper {
                                     horizontalCenter: parent.horizontalCenter
                                 }
                                 wrapMode: Text.Wrap
+                                width: Math.min(parent.width, font.pixelSize * 6)
                                 horizontalAlignment: Text.AlignHCenter
-                                font.pixelSize: Math.max(2, parent.height) / 2
+                                font.pixelSize: Math.max(2, Math.min(parent.width, parent.height)) / 2
                             }
                         }
 
