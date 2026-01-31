@@ -90,6 +90,34 @@ PageWrapper {
                 }
             }
         }
+        StyledButton {
+            Layout.preferredWidth: 120
+            Layout.preferredHeight: 40
+            hoverEnabled: true
+            bgColor: root.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
+
+            borderRadius: 0
+            borderWidth: 1
+            borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
+
+            RowLayout {
+                anchors {
+                    fill: parent
+                    verticalCenter: parent.verticalCenter
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Text {
+                    text: "Save"
+                    font.pixelSize: parent.height / 2
+                    color: Colors.color.secondary
+                }
+            }
+
+            onClicked: {
+                Config.saveSettings();
+            }
+        }
     }
 
     Row {
@@ -176,6 +204,7 @@ PageWrapper {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             required property var modelData
+                            position: modelData.direction
                         }
                     }
                 }
@@ -237,7 +266,7 @@ PageWrapper {
                                 const container = {
                                     idx: Config.navbar.layouts.length,
                                     name: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                                    direction: Qt.AlignVCenter | Qt.AlignRight,
+                                    direction: "left",
                                     color: Colors.color.tertiary
                                 };
                                 Config.navbar.layouts = [...Config.navbar.layouts, container];
@@ -275,78 +304,39 @@ PageWrapper {
 
                                 RowLayout {
                                     anchors.fill: parent
+                                    opacity: mouse.hovered ? 1 : 0
+                                    Behavior on opacity {
+                                        NumberAnimation {
+                                            duration: 200
+                                            easing.type: Easing.InOutQuad
+                                        }
+                                    }
 
-                                    Rectangle {
-                                        Layout.fillHeight: true
-                                        Layout.preferredWidth: height
+                                    AlignmentButton {
                                         Layout.alignment: Qt.AlignLeft
-                                        radius: height / 2
                                         color: {
-                                            orig ? orig.position === "center" ? "green" : "transparent" : "transparent";
+                                            orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
                                         }
-
-                                        Behavior on color {
-                                            NumberAnimation {
-                                                duration: 300
-                                                easing.type: Easing.InOutQuad
-                                            }
-                                        }
-                                        Behavior on border.color {
-                                            NumberAnimation {
-                                                duration: 300
-                                                easing.type: Easing.InOutQuad
-                                            }
-                                        }
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            onContainsMouseChanged: {
-                                                parent.border.color = containsMouse ? Colors.color.primary : "transparent";
-                                            }
-                                            onClicked: {
-                                                if (orig === null) {
-                                                    orig = slotRepeater.itemAt(modelData.idx);
-                                                }
-                                                orig.position = "left";
-                                            }
+                                        onAlignmentChanged: {
+                                            orig.direction = "left";
                                         }
                                     }
-                                    Rectangle {
-                                        Layout.fillHeight: true
-                                        Layout.preferredWidth: height
+                                    AlignmentButton {
                                         Layout.alignment: Qt.AlignCenter
-                                        radius: height / 2
                                         color: {
-                                            orig ? orig.position === "center" ? "green" : "transparent" : "transparent";
+                                            orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
                                         }
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                if (orig === null) {
-                                                    orig = slotRepeater.itemAt(modelData.idx);
-                                                }
-                                                orig.position = "center";
-                                            }
+                                        onAlignmentChanged: {
+                                            orig.position = "center";
                                         }
                                     }
-                                    Rectangle {
-                                        Layout.fillHeight: true
-                                        Layout.preferredWidth: height
+                                    AlignmentButton {
                                         Layout.alignment: Qt.AlignRight
-                                        radius: height / 2
                                         color: {
-                                            orig ? orig.position === "right" ? "green" : "transparent" : "transparent";
+                                            orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
                                         }
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                if (orig === null) {
-                                                    orig = slotRepeater.itemAt(modelData.idx);
-                                                }
-                                                orig.position = "right";
-                                            }
+                                        onAlignmentChanged: {
+                                            orig.position = "right";
                                         }
                                     }
                                 }
@@ -397,6 +387,38 @@ PageWrapper {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component AlignmentButton: Rectangle {
+        signal alignmentChanged
+        Layout.fillHeight: true
+        Layout.preferredWidth: height
+        radius: height / 2
+
+        border.color: ma.containsMouse ? Colors.color.primary : "transparent"
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        MouseArea {
+            id: ma
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: {
+                if (orig === null) {
+                    orig = slotRepeater.itemAt(modelData.idx);
+                }
+                alignmentChanged();
             }
         }
     }

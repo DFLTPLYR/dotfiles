@@ -16,7 +16,12 @@ Rectangle {
 
     default property alias content: childHandler.data
     property string position: "left"
-
+    onPositionChanged: {
+        const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+        if (position === target.direction)
+            return;
+        target.direction = position;
+    }
     DropArea {
         id: childHandler
         anchors.fill: parent

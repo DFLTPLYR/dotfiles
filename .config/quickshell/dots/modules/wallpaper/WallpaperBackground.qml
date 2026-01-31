@@ -35,6 +35,9 @@ Variants {
             width: parent.width
             sourceSize.width: screen.width
             sourceSize.height: screen.height
+            smooth: true
+            mipmap: true
+            antialiasing: true
             fillMode: Image.PreserveAspectCrop
             source: {
                 if (filePath === undefined) {
@@ -44,27 +47,27 @@ Variants {
             }
         }
 
-        Item {
-            id: childHandler
-            anchors.fill: parent
+        Image {
+            id: customImage
+            fillMode: Image.PreserveAspectFit
             visible: Config.general.useCustomWallpaper
-            Image {
-                id: customImage
-                fillMode: Image.PreserveAspectFit
-                height: sourceSize.height
-                width: sourceSize.width
-                source: `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`
-            }
-            Connections {
-                target: Config
-                function onReload() {
-                    customImage.source = "";
-                    customImage.visible = false;
-                    Qt.callLater(() => {
-                        customImage.visible = true;
-                        customImage.source = `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`;
-                    }, 500);
-                }
+            height: sourceSize.height
+            width: sourceSize.width
+            smooth: true
+            mipmap: true
+            antialiasing: true
+            source: `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`
+        }
+
+        Connections {
+            target: Config
+            function onReload() {
+                customImage.source = "";
+                customImage.visible = false;
+                Qt.callLater(() => {
+                    customImage.visible = true;
+                    customImage.source = `${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.name}.jpg`;
+                }, 500);
             }
         }
 
