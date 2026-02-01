@@ -7,7 +7,6 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
-
     Behavior on color {
         ColorAnimation {
             duration: 200
@@ -23,12 +22,19 @@ Rectangle {
 
     default property alias content: childHandler.data
     property string position: "left"
-    onPositionChanged: {
-        const target = Config.navbar.layouts.find(s => s.name === modelData.name);
-        if (position === target.direction)
-            return;
-        target.direction = position;
+
+    onChildrenChanged: {
+        Qt.callLater(() => {
+            const copy = children ? children.slice() : [];
+            for (let i = 0; i < copy.length; i++) {
+                const child = copy[i];
+                if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
+                    child.parent = slotLayoutLoader.item.children[0];
+                }
+            }
+        });
     }
+
     DropArea {
         id: childHandler
         anchors.fill: parent
@@ -38,7 +44,7 @@ Rectangle {
         }
         onChildrenChanged: {
             Qt.callLater(() => {
-                const copy = childHandler.children ? childHandler.children.slice() : [];
+                const copy = children ? childHandler.children.slice() : [];
                 for (let i = 0; i < copy.length; i++) {
                     const child = copy[i];
                     if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
@@ -52,8 +58,10 @@ Rectangle {
     component RowSlot: RowLayout {
         id: rootRowSlot
         default property alias content: childrenHolder.children
+
         Row {
             id: childrenHolder
+            objectName: modelData.name
             Layout.fillHeight: true
             Layout.alignment: {
                 switch (slotRoot.position) {
@@ -80,6 +88,7 @@ Rectangle {
                 }
             }
         }
+
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {
@@ -98,8 +107,10 @@ Rectangle {
     component ColSlot: ColumnLayout {
         id: rootColSlot
         default property alias content: childrenHolder.children
+
         Column {
             id: childrenHolder
+            objectName: modelData.name
             Layout.fillWidth: true
             Layout.alignment: {
                 switch (slotRoot.position) {
@@ -110,7 +121,6 @@ Rectangle {
                 case "center":
                     return Qt.AlignCenter;
                 default:
-                    console.log(slotRoot.position);
                     return;
                 }
             }
@@ -127,6 +137,7 @@ Rectangle {
                 }
             }
         }
+
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
             for (let i = 0; i < copy.length; i++) {

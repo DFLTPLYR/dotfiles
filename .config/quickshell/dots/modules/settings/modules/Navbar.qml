@@ -13,11 +13,28 @@ PageWrapper {
     property ShellScreen selectedScreen: null
     property int navbarWidth
     property int navbarHeight
+    property var tempLayoutChanges: []
+    property list<var> reslot: []
 
     PageHeader {
         title: "Navbar"
     }
     Spacer {}
+
+    onReslotChanged: {
+        for (let i = 0; i < slotRepeater.count; i++) {
+            const slot = slotRepeater.objectAt(i);
+            const slotName = slot.modelData.name;
+
+            const matchingItems = root.reslot.filter(r => r.name === slotName);
+            for (let j = 0; j < matchingItems.length; j++) {
+                const item = matchingItems[j].item;
+                if (item) {
+                    item.parent = slot;
+                }
+            }
+        }
+    }
 
     RowLayout {
         id: screenSelector
@@ -28,7 +45,6 @@ PageWrapper {
             hoverEnabled: true
             bgColor: root.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
 
-            borderRadius: 0
             borderWidth: 1
             borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
 
@@ -64,7 +80,6 @@ PageWrapper {
                 hoverEnabled: true
                 bgColor: root.selectedScreen === modelData ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.background, 1)
 
-                borderRadius: 0
                 borderWidth: 1
                 borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
 
@@ -92,13 +107,13 @@ PageWrapper {
                 }
             }
         }
+
         StyledButton {
             Layout.preferredWidth: 120
             Layout.preferredHeight: 40
             hoverEnabled: true
             bgColor: root.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
 
-            borderRadius: 0
             borderWidth: 1
             borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
 
@@ -192,16 +207,16 @@ PageWrapper {
                 color: Scripts.setOpacity(Colors.color.background, 0.9)
 
                 GridLayout {
+                    id: slotGrid
                     anchors.fill: parent
                     columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
                     rows: Config.navbar.side ? Config.navbar.layouts.length : 1
 
-                    Repeater {
+                    Instantiator {
                         id: slotRepeater
-                        model: ScriptModel {
-                            values: Config.navbar.layouts
-                        }
+                        model: Config.navbar.layouts
                         delegate: StyledSlot {
+                            parent: slotGrid
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             required property var modelData
@@ -237,6 +252,7 @@ PageWrapper {
 
                 Item {
                     id: slotsTab
+
                     Row {
                         id: slotLabel
 
@@ -281,11 +297,14 @@ PageWrapper {
                         anchors.top: slotLabel.bottom
                         gap: 2
                         wrap: FlexboxLayout.Wrap
+
                         Repeater {
-                            model: Config.navbar.layouts
+                            model: ScriptModel {
+                                values: Config.navbar.layouts
+                            }
                             delegate: Rectangle {
                                 required property var modelData
-                                property Item orig: slotRepeater.itemAt(modelData.idx)
+                                property Item orig: slotRepeater.objectAt(modelData.idx)
                                 Layout.preferredWidth: parent.width
                                 Layout.preferredHeight: Config.navbar.height
                                 color: "transparent"
@@ -297,7 +316,7 @@ PageWrapper {
                                     cursorShape: Qt.PointingHandCursor
                                     onHoveredChanged: {
                                         if (orig === null) {
-                                            orig = slotRepeater.itemAt(modelData.idx);
+                                            orig = slotRepeater.objectAt(modelData.idx);
                                         }
                                         orig.border.color = !hovered ? "transparent" : Colors.color.tertiary;
                                     }
@@ -306,6 +325,7 @@ PageWrapper {
                                 RowLayout {
                                     anchors.fill: parent
                                     opacity: mouse.hovered ? 1 : 0
+
                                     Behavior on opacity {
                                         NumberAnimation {
                                             duration: 200
@@ -319,7 +339,9 @@ PageWrapper {
                                             orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            orig.direction = "left";
+                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            target.direction = "left";
+                                            orig.position = "left";
                                         }
                                     }
                                     AlignmentButton {
@@ -328,7 +350,8 @@ PageWrapper {
                                             orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            orig.position = "center";
+                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            target.direction = "center";
                                         }
                                     }
                                     AlignmentButton {
@@ -337,7 +360,12 @@ PageWrapper {
                                             orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            orig.position = "right";
+                                            const newLayouts = [...Config.navbar.layouts];
+                                            const index = newLayouts.findIndex(s => s.name === modelData.name);
+                                            if (index !== -1) {
+                                                newLayouts[index].direction = "right";
+                                                Config.navbar.layouts = newLayouts;
+                                            }
                                         }
                                     }
                                 }
@@ -382,8 +410,14 @@ PageWrapper {
 
                         WidgetWrapper {
                             Rectangle {
-                                width: Config.navbar.side ? parent.width : 40
-                                height: Config.navbar.side ? 50 : parent.height
+                                width: Config.navbar.side && parent ? parent.width : 40
+                                height: Config.navbar.side && parent ? 50 : parent.height
+                            }
+                            onReparent: (name, item) => {
+                                root.reslot.push({
+                                    name: name,
+                                    item: item
+                                });
                             }
                         }
                     }
