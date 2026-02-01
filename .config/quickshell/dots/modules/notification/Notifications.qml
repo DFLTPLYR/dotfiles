@@ -176,7 +176,7 @@ Scope {
         Component.onCompleted: {
             if (this.WlrLayershell) {
                 this.exclusionMode = ExclusionMode.Normal;
-                this.WlrLayershell.layer = WlrLayer.Top;
+                this.WlrLayershell.layer = WlrLayer.Overlay;
                 this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.None;
             }
         }

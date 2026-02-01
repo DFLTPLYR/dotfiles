@@ -8,8 +8,12 @@ Rectangle {
     objectName: "handler"
     color: "transparent"
     property string icon: "plus"
+    property string parentName: ""
     property bool freeSlot: children.length >= 2
     default property alias content: widgetHandler.data
+
+    signal reparent(string name, Item item)
+
     width: 64
     height: 64
     border.color: freeSlot ? Colors.color.primary : Colors.color.tertiary
@@ -45,14 +49,20 @@ Rectangle {
             }
             return sum;
         }
+
         width: {
+            if (!parent)
+                return 0;
             if (Config.navbar.side) {
                 return parent.width;
             } else {
                 return isSlotted ? contentWidth : parent.width;
             }
         }
+
         height: {
+            if (!parent)
+                return 0;
             if (Config.navbar.side) {
                 return isSlotted ? contentHeight : parent.height;
             } else {
@@ -66,11 +76,12 @@ Rectangle {
         }
 
         onParentChanged: {
-            if (!parent)
-                return;
+            if (!parent && isSlotted)
+                return reparent(parentName, ma);
             if (parent.objectName === "handler") {
                 return isSlotted = false;
             }
+            parentName = parent.objectName;
             return isSlotted = true;
         }
 

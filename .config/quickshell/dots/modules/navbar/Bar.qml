@@ -40,10 +40,9 @@ Variants {
                 easing.type: Easing.InOutQuad
             }
         }
-        // parent
         StyledRect {
             id: containerRect
-            color: Qt.rgba(0, 0, 0, 0.5)
+            color: Config.navbar.background
             anchors.fill: parent
 
             Behavior on height {
@@ -58,61 +57,81 @@ Variants {
                     easing.type: Easing.InOutQuad
                 }
             }
-
             GridLayout {
                 anchors.fill: parent
-                columns: 3
-                rows: 1
-
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Text {
-                        font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-                        text: Qt.formatDateTime(clock.date, "hh:mm AP")
-                        color: "white"
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
-                        }
+                columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
+                rows: Config.navbar.side ? Config.navbar.layouts.length : 1
+                Repeater {
+                    id: slotRepeater
+                    model: ScriptModel {
+                        values: Config.navbar.layouts
                     }
-                }
-
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    StyledIconButton {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.height / 1.5
-                        height: parent.height / 1.5
-                        radius: width / 2
-
-                        Text {
-                            font.family: Config.iconFont.family
-                            font.weight: Config.iconFont.weight
-                            font.styleName: Config.iconFont.styleName
-                            font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-
-                            color: "white"
-                            anchors {
-                                verticalCenter: parent.verticalCenter
-                                horizontalCenter: parent.horizontalCenter
-                            }
-                            text: "power-off"
-                        }
-
-                        onAction: {
-                            Config.openSessionMenu = !Config.openSessionMenu;
-                        }
+                    delegate: StyledSlot {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        required property var modelData
+                        position: modelData.direction
                     }
                 }
             }
         }
+        // parent
+        // StyledRect {
+        //
+        //     GridLayout {
+        //         anchors.fill: parent
+        //         columns: 3
+        //         rows: 1
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //         }
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //             Text {
+        //                 font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
+        //                 text: Qt.formatDateTime(clock.date, "hh:mm AP")
+        //                 color: "white"
+        //                 anchors {
+        //                     verticalCenter: parent.verticalCenter
+        //                     horizontalCenter: parent.horizontalCenter
+        //                 }
+        //             }
+        //         }
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //             StyledIconButton {
+        //                 anchors.verticalCenter: parent.verticalCenter
+        //                 width: parent.height / 1.5
+        //                 height: parent.height / 1.5
+        //                 radius: width / 2
+        //
+        //                 Text {
+        //                     font.family: Config.iconFont.family
+        //                     font.weight: Config.iconFont.weight
+        //                     font.styleName: Config.iconFont.styleName
+        //                     font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
+        //
+        //                     color: "white"
+        //                     anchors {
+        //                         verticalCenter: parent.verticalCenter
+        //                         horizontalCenter: parent.horizontalCenter
+        //                     }
+        //                     text: "power-off"
+        //                 }
+        //
+        //                 onAction: {
+        //                     Config.openSessionMenu = !Config.openSessionMenu;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         LazyLoader {
             id: extendedBarLoader
