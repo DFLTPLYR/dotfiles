@@ -216,21 +216,19 @@ PageWrapper {
                         id: slotRepeater
                         model: Config.navbar.layouts
                         delegate: StyledSlot {
+                            id: slot
                             parent: slotGrid
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             required property var modelData
                             position: modelData.direction
+
                             Component.onCompleted: {
-                                for (let i = 0; i < slotRepeater.count; i++) {
-                                    const slot = slotRepeater.objectAt(i);
-                                    const slotName = slot.modelData.name;
-                                    const matchingItems = root.reslot.filter(r => r.name === slotName);
-                                    for (let j = 0; j < matchingItems.length; j++) {
-                                        const item = matchingItems[j].item;
-                                        if (item) {
-                                            item.parent = slot;
-                                        }
+                                const matchingItems = root.reslot.filter(r => r.name === modelData.name);
+                                for (let j = 0; j < matchingItems.length; j++) {
+                                    const item = matchingItems[j].item;
+                                    if (item) {
+                                        item.parent = slot;
                                     }
                                 }
                             }
