@@ -7,6 +7,7 @@ import Quickshell
 import qs.utils
 import qs.config
 import qs.components
+import qs.widgets
 
 PageWrapper {
     id: root
@@ -387,24 +388,15 @@ PageWrapper {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
 
-                        SystemClock {
-                            id: clock
-                            precision: SystemClock.Seconds
-                        }
-
                         WidgetWrapper {
                             icon: "clock-nine"
-                            Text {
-                                text: Qt.formatDateTime(clock.date, "hh:mm AP")
-                                color: Colors.color.primary
-                                anchors {
-                                    verticalCenter: parent.verticalCenter
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                wrapMode: Text.Wrap
-                                width: Math.min(parent.width, font.pixelSize * 6)
-                                horizontalAlignment: Text.AlignHCenter
-                                font.pixelSize: Math.max(2, Math.min(parent.width, parent.height)) / 2
+                            widgetName: "clock"
+                            Clock {}
+                            onReparent: (name, item) => {
+                                root.reslot.push({
+                                    name: name,
+                                    item: item
+                                });
                             }
                         }
 
