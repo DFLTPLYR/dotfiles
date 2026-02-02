@@ -59,11 +59,11 @@ Scope {
                                 sourceSize.height: screen.height
                                 fillMode: Image.PreserveAspectCrop
                                 source: {
-                                    const filePath = Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
+                                    const filePath = Config.general.useCustomWallpaper ? Config.general.customWallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path : Config.general.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
                                     if (filePath === undefined) {
                                         return "";
                                     }
-                                    return Qt.resolvedUrl(Quickshell.env("HOME") + Config.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path);
+                                    return Qt.resolvedUrl(filePath);
                                 }
                             }
                         }

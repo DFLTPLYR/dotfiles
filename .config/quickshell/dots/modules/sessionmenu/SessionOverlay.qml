@@ -7,27 +7,20 @@ import Quickshell.Wayland
 import qs.config
 import qs.components
 
-LazyLoader {
-    active: Config.openSessionMenu
-    component: Variants {
-        model: Quickshell.screens
-        delegate: PanelWindow {
-            required property ShellScreen modelData
-            screen: modelData
-
+Scope {
+    LazyLoader {
+        id: sessionMenuLoader
+        property bool shouldBeVisible: false
+        component: PanelWrapper {
+            id: screenPanel
             color: "transparent"
-
-            Behavior on color {
-                ColorAnimation {
-                    duration: 200
-                }
-            }
+            shouldBeVisible: sessionMenuLoader.shouldBeVisible
 
             anchors {
+                left: true
+                right: true
                 top: true
                 bottom: true
-                right: true
-                left: true
             }
 
             contentItem {
@@ -78,29 +71,28 @@ LazyLoader {
                 }
             ]
 
-            Rectangle {
-                anchors.fill: parent
-                color: Qt.rgba(0, 0, 0, 0.5)
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: Config.openSessionMenu = false
-                    hoverEnabled: true
-                    onHoverEnabledChanged: {
-                        parent.focus = hoverEnabled;
-                    }
-                }
+            PopupWindow {
+                anchor.window: screenPanel
+                anchor.rect.x: parentWindow.width / 2 - width / 2
+                anchor.rect.y: (parentWindow.screen.height / 2 - height / 2)
+                implicitWidth: screenPanel.isPortrait ? parentWindow.screen.width * 0.8 : parentWindow.screen.width * 0.5
+                implicitHeight: parentWindow.screen.height * 0.6
+                color: "transparent"
+                visible: screenPanel.internalVisible
 
                 StyledRect {
-                    width: parent.width * 0.5
-                    height: parent.height * 0.5
-                    x: parent.width * 0.25
-                    y: parent.height * 0.25
-                    color: Qt.rgba(0, 0, 0, 0.5)
-                    borderRadius: 100
-                    clip: false
-                    borderWidth: 2
-                    borderColor: "white"
+                    anchors.fill: parent
+                    opacity: screenPanel.animProgress
+                    color: Colors.color.background
+                    borderColor: Colors.color.secondary
+                    borderRadius: 50
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: 250
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+
                     GridLayout {
                         anchors.fill: parent
                         columns: 2
@@ -144,12 +136,27 @@ LazyLoader {
                 }
             }
 
+            onHidden: {
+                sessionMenuLoader.active = false;
+            }
+
             Component.onCompleted: {
                 if (this.WlrLayershell) {
-                    this.exclusionMode = ExclusionMode.Ignore;
-                    this.WlrLayershell.layer = WlrLayer.Top;
+                    this.WlrLayershell.layer = WlrLayer.Overlay;
                     this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
+                    this.exclusionMode = ExclusionMode.Ignore;
                 }
+            }
+        }
+    }
+    Connections {
+        target: Config
+        function onOpenSessionMenuChanged() {
+            if (!sessionMenuLoader.active) {
+                sessionMenuLoader.active = true;
+                sessionMenuLoader.shouldBeVisible = !sessionMenuLoader.shouldBeVisible;
+            } else {
+                sessionMenuLoader.shouldBeVisible = !sessionMenuLoader.shouldBeVisible;
             }
         }
     }
