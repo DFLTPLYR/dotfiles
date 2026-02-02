@@ -7,8 +7,8 @@ Rectangle {
     id: root
     objectName: "handler"
     color: "transparent"
+    property string widgetName
     property string icon: "plus"
-    property string parentName: ""
     property bool freeSlot: children.length >= 2
     default property alias content: widgetHandler.data
 
@@ -35,6 +35,20 @@ Rectangle {
         id: ma
         property Item origParent
         property bool isSlotted: false
+        property string parentName: ""
+
+        onParentNameChanged: {
+            const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
+            if (parentTarget === -1) {
+                Config.navbar.widgets.push({
+                    name: root.widgetName,
+                    layout: parentName
+                });
+            } else {
+                Config.navbar.widgets[parentTarget].layout = parentName;
+            }
+        }
+
         property real contentWidth: {
             let sum = 0;
             for (let i = 0; i < widgetHandler.children.length; i++) {
@@ -42,6 +56,7 @@ Rectangle {
             }
             return sum;
         }
+
         property real contentHeight: {
             let sum = 0;
             for (let i = 0; i < widgetHandler.children.length; i++) {
@@ -69,6 +84,7 @@ Rectangle {
                 return parent.height;
             }
         }
+
         drag.target: tile
 
         onReleased: {

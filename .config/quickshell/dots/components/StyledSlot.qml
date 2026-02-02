@@ -7,6 +7,7 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
+
     Behavior on color {
         ColorAnimation {
             duration: 200
@@ -39,9 +40,11 @@ Rectangle {
         id: childHandler
         anchors.fill: parent
         objectName: "handler"
+
         onContainsDragChanged: {
             slotRoot.border.color = containsDrag ? Colors.color.primary : "transparent";
         }
+
         onChildrenChanged: {
             Qt.callLater(() => {
                 const copy = children ? childHandler.children.slice() : [];
