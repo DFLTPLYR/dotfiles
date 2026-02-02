@@ -26,7 +26,6 @@ PageWrapper {
         for (let i = 0; i < slotRepeater.count; i++) {
             const slot = slotRepeater.objectAt(i);
             const slotName = slot.modelData.name;
-
             const matchingItems = root.reslot.filter(r => r.name === slotName);
             for (let j = 0; j < matchingItems.length; j++) {
                 const item = matchingItems[j].item;
@@ -222,6 +221,19 @@ PageWrapper {
                             Layout.fillHeight: true
                             required property var modelData
                             position: modelData.direction
+                            Component.onCompleted: {
+                                for (let i = 0; i < slotRepeater.count; i++) {
+                                    const slot = slotRepeater.objectAt(i);
+                                    const slotName = slot.modelData.name;
+                                    const matchingItems = root.reslot.filter(r => r.name === slotName);
+                                    for (let j = 0; j < matchingItems.length; j++) {
+                                        const item = matchingItems[j].item;
+                                        if (item) {
+                                            item.parent = slot;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -342,7 +354,6 @@ PageWrapper {
                                         onAlignmentChanged: {
                                             const target = Config.navbar.layouts.find(s => s.name === modelData.name);
                                             target.direction = "left";
-                                            orig.position = "left";
                                         }
                                     }
                                     AlignmentButton {
@@ -361,12 +372,8 @@ PageWrapper {
                                             orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            const newLayouts = [...Config.navbar.layouts];
-                                            const index = newLayouts.findIndex(s => s.name === modelData.name);
-                                            if (index !== -1) {
-                                                newLayouts[index].direction = "right";
-                                                Config.navbar.layouts = newLayouts;
-                                            }
+                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            target.direction = "right";
                                         }
                                     }
                                 }
@@ -393,10 +400,15 @@ PageWrapper {
                             widgetName: "clock"
                             Clock {}
                             onReparent: (name, item) => {
-                                root.reslot.push({
-                                    name: name,
-                                    item: item
-                                });
+                                const target = root.reslot.findIndex(s => s.name === name);
+                                if (target === -1) {
+                                    root.reslot.push({
+                                        name: name,
+                                        item: item
+                                    });
+                                } else {
+                                    target.name = name;
+                                }
                             }
                         }
 
@@ -406,10 +418,15 @@ PageWrapper {
                                 height: Config.navbar.side && parent ? 50 : parent.height
                             }
                             onReparent: (name, item) => {
-                                root.reslot.push({
-                                    name: name,
-                                    item: item
-                                });
+                                const target = root.reslot.findIndex(s => s.name === name);
+                                if (target === -1) {
+                                    root.reslot.push({
+                                        name: name,
+                                        item: item
+                                    });
+                                } else {
+                                    target.name = name;
+                                }
                             }
                         }
                     }
