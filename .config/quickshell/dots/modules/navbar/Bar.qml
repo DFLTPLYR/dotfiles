@@ -7,11 +7,13 @@ import Quickshell.Wayland
 
 import qs.config
 import qs.components
+import qs.widgets
 
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: root
+
         WlrLayershell.namespace: "navbar"
         required property ShellScreen modelData
         readonly property bool isPortrait: screen.height > screen.width
@@ -33,105 +35,119 @@ Variants {
         implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
 
         color: "transparent"
+
         Behavior on anchors {
             AnchorAnimation {
                 targets: root
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-          }
+        }
 
-        // StyledRect {
-        //     Behavior on height {
-        //         NumberAnimation {
-        //             duration: 300
-        //             easing.type: Easing.InOutQuad
-        //         }
-        //     }
-        //     Behavior on width {
-        //         NumberAnimation {
-        //             duration: 300
-        //             easing.type: Easing.InOutQuad
-        //         }
-        //     }
-        //     GridLayout {
-        //         anchors.fill: parent
-        //         columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
-        //         rows: Config.navbar.side ? Config.navbar.layouts.length : 1
-        //         Repeater {
-        //             id: slotRepeater
-        //             model: ScriptModel {
-        //                 values: Config.navbar.layouts
-        //             }
-        //             delegate: StyledSlot {
-        //                 Layout.fillWidth: true
-        //                 Layout.fillHeight: true
-        //                 required property var modelData
-        //                 position: modelData.direction
-        //             }
-        //         }
-        //     }
-        // }
-        
         StyledRect {
             id: containerRect
-            color: Config.navbar.background
+            color: "transparent"
             anchors.fill: parent
 
+            Behavior on height {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on width {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
             GridLayout {
+                id: slotGrid
                 anchors.fill: parent
-                columns: 3
-                rows: 1
+                columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
+                rows: Config.navbar.side ? Config.navbar.layouts.length : 1
 
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                }
-
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Text {
-                        font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-                        text: Qt.formatDateTime(clock.date, "hh:mm AP")
-                        color: "white"
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
+                Repeater {
+                    id: slotRepeater
+                    model: Config.navbar.layouts
+                    delegate: StyledSlot {
+                        id: slot
+                        required property var modelData
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        position: modelData.direction
+                        Item {
+                            property bool isSlotted: false
+                            width: height
+                            height: parent.height
+                            Clock {}
                         }
-                    }
-                }
+                        StyledIconButton {
+                            property bool isSlotted: false
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.height / 1.5
+                            height: parent.height / 1.5
+                            radius: width / 2
 
-                Item {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    StyledIconButton {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.height / 1.5
-                        height: parent.height / 1.5
-                        radius: width / 2
+                            Text {
+                                font.family: Config.iconFont.family
+                                font.weight: Config.iconFont.weight
+                                font.styleName: Config.iconFont.styleName
+                                font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
 
-                        Text {
-                            font.family: Config.iconFont.family
-                            font.weight: Config.iconFont.weight
-                            font.styleName: Config.iconFont.styleName
-                            font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-
-                            color: "white"
-                            anchors {
-                                verticalCenter: parent.verticalCenter
-                                horizontalCenter: parent.horizontalCenter
+                                color: "white"
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                                text: "power-off"
                             }
-                            text: "power-off"
-                        }
 
-                        onAction: {
-                            Config.openSessionMenu = !Config.openSessionMenu;
+                            onAction: {
+                                Config.openSessionMenu = !Config.openSessionMenu;
+                            }
                         }
                     }
                 }
             }
         }
+
+        // StyledRect {
+        //     id: containerRect
+        //     color: Config.navbar.background
+        //     anchors.fill: parent
+        //
+        //     GridLayout {
+        //         anchors.fill: parent
+        //         columns: 3
+        //         rows: 1
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //         }
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //             Text {
+        //                 font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
+        //                 text: Qt.formatDateTime(clock.date, "hh:mm AP")
+        //                 color: "white"
+        //                 anchors {
+        //                     verticalCenter: parent.verticalCenter
+        //                     horizontalCenter: parent.horizontalCenter
+        //                 }
+        //             }
+        //         }
+        //
+        //         Item {
+        //             Layout.fillHeight: true
+        //             Layout.fillWidth: true
+        //             Layout.alignment: Qt.AlignRight
+        //         }
+        //     }
+        // }
 
         LazyLoader {
             id: extendedBarLoader
