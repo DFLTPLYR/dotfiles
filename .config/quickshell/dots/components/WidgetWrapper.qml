@@ -144,6 +144,7 @@ Rectangle {
                 }
             }
         }
+
         Component.onCompleted: {
             origParent = parent;
         }
