@@ -186,25 +186,22 @@ PageWrapper {
         columns: Config.navbar.side ? 2 : 1
 
         // preview Panel
-        Rectangle {
+        Item {
             Layout.fillWidth: Config.navbar.side ? false : true
             Layout.fillHeight: !Config.navbar.side ? false : true
             Layout.preferredHeight: Config.navbar.height
             Layout.preferredWidth: Config.navbar.width
 
-            color: Colors.color.on_primary
-            border.color: Colors.color.primary
-
-            Rectangle {
+            Item {
                 id: previewPanelContainer
-                visible: true
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                 }
+
                 width: Config.navbar.side ? Config.navbar.width / 2 : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
                 height: Config.navbar.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Config.navbar.height / 2
-                color: Scripts.setOpacity(Colors.color.background, 0.9)
 
                 GridLayout {
                     id: slotGrid
@@ -217,10 +214,12 @@ PageWrapper {
                         model: Config.navbar.layouts
                         delegate: StyledSlot {
                             id: slot
+                            required property var modelData
                             parent: slotGrid
+
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            required property var modelData
+
                             position: modelData.direction
 
                             Component.onCompleted: {
@@ -396,7 +395,24 @@ PageWrapper {
                         WidgetWrapper {
                             icon: "clock-nine"
                             widgetName: "clock"
-                            Clock {}
+ 
+                            Text {
+                                SystemClock {
+                                    id: clock
+                                    precision: SystemClock.Seconds
+                                }
+
+                                text: Qt.formatDateTime(clock.date, "hh:mm AP")
+                                color: Colors.color.primary
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                                wrapMode: Text.Wrap
+                                width: Math.min(parent.width, font.pixelSize * 6)
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
                             onReparent: (name, item) => {
                                 const target = root.reslot.findIndex(s => s.name === name);
                                 if (target === -1) {

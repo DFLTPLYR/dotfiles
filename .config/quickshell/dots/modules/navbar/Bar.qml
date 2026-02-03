@@ -55,12 +55,14 @@ Variants {
                     easing.type: Easing.InOutQuad
                 }
             }
+
             Behavior on width {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
             }
+
             GridLayout {
                 id: slotGrid
                 anchors.fill: parent

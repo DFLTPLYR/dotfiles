@@ -13,6 +13,12 @@ Scope {
         property bool shouldBeVisible: false
         component: PanelWrapper {
             id: screenPanel
+
+            exclusionMode: ExclusionMode.Ignore
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+            WlrLayershell.namespace: "AppMenu"
+
             color: "transparent"
             shouldBeVisible: appMenuLoader.shouldBeVisible
 
@@ -79,14 +85,6 @@ Scope {
 
             onHidden: {
                 appMenuLoader.active = false;
-            }
-
-            Component.onCompleted: {
-                if (this.WlrLayershell) {
-                    this.WlrLayershell.layer = WlrLayer.Overlay;
-                    this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive;
-                    this.exclusionMode = ExclusionMode.Ignore;
-                }
             }
         }
     }
