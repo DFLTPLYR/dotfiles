@@ -69,27 +69,75 @@ Variants {
                 columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
                 rows: Config.navbar.side ? Config.navbar.layouts.length : 1
 
+                Instantiator {
+                    model: Config.navbar.widgets
+
+                    delegate: Rectangle {
+                        required property var modelData
+                        property bool isSlotted: false
+                        height: parent ? parent.height : 0
+                        width: parent ? height : 0
+                        onParentChanged: {
+                            if (isSlotted && parent === null) {
+                                parent = widgetHolder;
+                            }
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        for (let i = 0; i < slotRepeater.count; i++) {
+                            const slot = slotRepeater.itemAt(i);
+                            if (slot && slot.modelData.name === obj.modelData.layout) {
+                                obj.parent = slot;
+                                obj.isSlotted = true;
+
+                                if (slot.children.length > 0) {
+                                    slot.children[0].destroy();
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                Item {
+                    id: widgetHolder
+                    visible: false
+                    onChildrenChanged: {
+                        const slotMap = Array.from({
+                            length: slotRepeater.count
+                        }, (_, i) => slotRepeater.itemAt(i)).filter(slot => slot && slot.modelData).reduce((map, slot) => (map[slot.modelData.name] = slot, map), {});
+                        children.forEach(child => {
+                            const slot = slotMap[child.modelData.layout];
+                            if (slot)
+                                child.parent = slot;
+                        });
+                    }
+                }
+
                 Repeater {
                     id: slotRepeater
-                    model: Config.navbar.layouts
+                    model: ScriptModel {
+                        values: Config.navbar.layouts
+                    }
                     delegate: StyledSlot {
                         id: slot
                         required property var modelData
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         position: modelData.direction
+
                         Item {
                             property bool isSlotted: false
-                            width: height
-                            height: parent.height
+                            width: parent ? height : 0
+                            height: parent ? parent.height : 0
                             Clock {}
                         }
                         StyledIconButton {
                             property bool isSlotted: false
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: parent.height / 1.5
-                            height: parent.height / 1.5
-                            radius: width / 2
+                            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+                            width: parent ? parent.height / 1.5 : 0
+                            height: parent ? parent.height / 1.5 : 0
+                            radius: parent ? width / 2 : 0
 
                             Text {
                                 font.family: Config.iconFont.family
