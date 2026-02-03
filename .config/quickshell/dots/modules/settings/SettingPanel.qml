@@ -32,6 +32,7 @@ Scope {
             maximumSize: panelSize
 
             color: Colors.color.background
+
             GridLayout {
                 columns: 2
                 anchors.fill: parent
@@ -44,7 +45,7 @@ Scope {
                     ListView {
                         anchors.fill: parent
                         spacing: 1
-                        model: ["general", "navbar", "wallpaper"]
+                        model: ["general", "navbar", "wallpaper",]
                         delegate: Item {
                             width: 40
                             height: 40
