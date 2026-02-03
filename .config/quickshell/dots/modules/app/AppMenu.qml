@@ -59,7 +59,7 @@ Scope {
                                 sourceSize.height: screen.height
                                 fillMode: Image.PreserveAspectCrop
                                 source: {
-                                    const filePath = Config.general.useCustomWallpaper ? Config.general.customWallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path : Config.general.wallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
+                                    const filePath = Config.general.useCustomWallpaper ? Config.general.customWallpaper.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path : Config.general.wallpapers.find(wallpaperItem => wallpaperItem.monitor === screen.name)?.path;
                                     if (filePath === undefined) {
                                         return "";
                                     }

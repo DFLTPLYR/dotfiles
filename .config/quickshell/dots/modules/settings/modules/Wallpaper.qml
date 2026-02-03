@@ -585,12 +585,6 @@ PageWrapper {
                                 let wallpaperIndex = Config.general.recentWallpapers.findIndex(w => String(w.path).trim().toLowerCase() === String(source).trim().toLowerCase() && w.monitor === modelData.name);
                                 if (wallpaperIndex !== -1) {
                                     Config.general.recentWallpapers[wallpaperIndex].timestamp = Date.now();
-                                } else {
-                                    Config.general.recentWallpapers.push({
-                                        monitor: modelData.name,
-                                        timestamp: Date.now(),
-                                        path: source
-                                    });
                                 }
                             }
                         }
