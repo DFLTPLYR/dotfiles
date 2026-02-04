@@ -7,7 +7,8 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
-
+    signal slotDestroyed(var widgets)
+    property list<Item> widgets: []
     Behavior on color {
         ColorAnimation {
             duration: 200
@@ -29,7 +30,7 @@ Rectangle {
             const copy = children ? children.slice() : [];
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
-                if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
+                if (slotLayoutLoader && slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
                     child.parent = slotLayoutLoader.item.children[0];
                 }
             }
@@ -94,16 +95,17 @@ Rectangle {
 
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
+            slotRoot.widgets = [];
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
                 if (!child.hasOwnProperty("isSlotted"))
                     return;
-
                 const savedWidth = child.width;
                 const savedHeight = child.height;
-
+                slotRoot.widgets.push(child);
                 child.parent = childHandler;
             }
+            slotRoot.slotDestroyed(slotRoot.widgets);
         }
     }
 
@@ -143,17 +145,22 @@ Rectangle {
 
         Component.onDestruction: {
             const copy = childrenHolder.children.slice();
+            slotRoot.widgets = [];
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
                 if (!child.hasOwnProperty("isSlotted"))
                     return;
-
                 const savedWidth = child.width;
                 const savedHeight = child.height;
-
+                slotRoot.widgets.push(child);
                 child.parent = childHandler;
             }
+            slotRoot.slotDestroyed(slotRoot.widgets);
         }
+    }
+
+    Component.onDestruction: {
+        slotRoot.slotDestroyed(slotRoot.widgets);
     }
 
     Component {

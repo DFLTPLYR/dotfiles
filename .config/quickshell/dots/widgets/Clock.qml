@@ -3,24 +3,25 @@ import QtQuick
 import Quickshell
 import qs.config
 
-Wrapper {
-    Item {
-        id: widgetHandler
-        anchors.fill: parent
-        Text {
-            SystemClock {
-                id: clock
-                precision: SystemClock.Seconds
-            }
+Item {
+    property string handler
+    property bool isSlotted: false
+    width: parent ? height : 0
+    height: parent ? parent.height : 0
 
-            text: Qt.formatDateTime(clock.date, "hh:mm AP")
-            color: Colors.color.primary
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
-            wrapMode: Text.Wrap
-            horizontalAlignment: Text.AlignHCenter
+    Text {
+        SystemClock {
+            id: clock
+            precision: SystemClock.Seconds
         }
+
+        text: Qt.formatDateTime(clock.date, "hh:mm AP")
+        color: Colors.color.primary
+        anchors {
+            verticalCenter: parent.verticalCenter
+            horizontalCenter: parent.horizontalCenter
+        }
+        wrapMode: Text.Wrap
+        horizontalAlignment: Text.AlignHCenter
     }
 }
