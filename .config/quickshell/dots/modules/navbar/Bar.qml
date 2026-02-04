@@ -163,9 +163,15 @@ Variants {
                         left: 0
                     }
                 }
+                implicitWidth: {
+                    const percentage = (screen.width * Config.navbar.popup.width) / 100;
+                    return percentage;
+                }
 
-                implicitWidth: 500
-                implicitHeight: 500
+                implicitHeight: {
+                    const percentage = (screen.height * Config.navbar.popup.height) / 100;
+                    return percentage;
+                }
                 color: "transparent"
 
                 onHide: {
@@ -178,7 +184,7 @@ Variants {
                     color: containerRect.color
                     border.color: Colors.color.secondary
                     implicitWidth: parent.width
-                    implicitHeight: Math.max(1, parent.width * animProgress)
+                    implicitHeight: Math.max(1, parent.height * animProgress)
                     y: height * animProgress - (implicitHeight)
 
                     bottomLeftRadius: 50
