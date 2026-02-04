@@ -394,7 +394,7 @@ PageWrapper {
 
                         WidgetWrapper {
                             icon: "clock-nine"
-                            widgetName: "clock"
+                            widgetName: "Clock"
 
                             Text {
                                 SystemClock {
@@ -427,9 +427,37 @@ PageWrapper {
                         }
 
                         WidgetWrapper {
-                            Rectangle {
-                                width: Config.navbar.side && parent ? parent.width : 40
-                                height: Config.navbar.side && parent ? 50 : parent.height
+                            widgetName: "PowerButton"
+
+                            StyledIconButton {
+                                property string handler
+                                property bool isSlotted: false
+                                enabled: false
+                                anchors {
+                                    verticalCenter: parent ? parent.verticalCenter : undefined
+                                }
+
+                                width: parent ? parent.height / 1.5 : 0
+                                height: parent ? parent.height / 1.5 : 0
+                                radius: parent ? width / 2 : 0
+
+                                Text {
+                                    font.family: Config.iconFont.family
+                                    font.weight: Config.iconFont.weight
+                                    font.styleName: Config.iconFont.styleName
+                                    font.pixelSize: Math.min(parent.height, parent.width) / 2
+
+                                    color: "white"
+                                    anchors {
+                                        verticalCenter: parent.verticalCenter
+                                        horizontalCenter: parent.horizontalCenter
+                                    }
+                                    text: "power-off"
+                                }
+
+                                onAction: {
+                                    Config.openSessionMenu = !Config.openSessionMenu;
+                                }
                             }
                             onReparent: (name, item) => {
                                 const target = root.reslot.findIndex(s => s.name === name);
