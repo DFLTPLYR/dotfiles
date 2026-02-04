@@ -8,21 +8,20 @@ import Quickshell.Wayland
 import qs.config
 import qs.components
 import qs.widgets
+import qs.utils
 
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: root
 
-        WlrLayershell.namespace: "navbar"
         required property ShellScreen modelData
         readonly property bool isPortrait: screen.height > screen.width
         screen: modelData
 
-        SystemClock {
-            id: clock
-            precision: SystemClock.Seconds
-        }
+        WlrLayershell.namespace: "navbar"
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
         anchors {
             left: ["left", "top", "bottom"].includes(Config.navbar.position)
@@ -70,31 +69,45 @@ Variants {
                 rows: Config.navbar.side ? Config.navbar.layouts.length : 1
 
                 Instantiator {
-                    model: Config.navbar.widgets
-
-                    delegate: Rectangle {
+                    id: slotRepeater
+                    model: Config.navbar.layouts
+                    delegate: StyledSlot {
+                        id: slot
                         required property var modelData
-                        property bool isSlotted: false
-                        height: parent ? parent.height : 0
-                        width: parent ? height : 0
-                        onParentChanged: {
-                            if (isSlotted && parent === null) {
-                                parent = widgetHolder;
-                            }
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        parent: slotGrid
+                        position: modelData.direction
+
+                        onSlotDestroyed: function (widgets) {
+                            widgetHolder.returnChildrenToHolder(widgets, modelData.name);
+                        }
+
+                        Component.onCompleted: {
+                            Qt.callLater(() => {
+                                widgetHolder.reparent();
+                            });
                         }
                     }
-                    onObjectAdded: (idx, obj) => {
-                        for (let i = 0; i < slotRepeater.count; i++) {
-                            const slot = slotRepeater.itemAt(i);
-                            if (slot && slot.modelData.name === obj.modelData.layout) {
-                                obj.parent = slot;
-                                obj.isSlotted = true;
+                }
 
-                                if (slot.children.length > 0) {
-                                    slot.children[0].destroy();
-                                }
-
-                                break;
+                Instantiator {
+                    model: Config.navbar.widgets
+                    delegate: LazyLoader {
+                        required property var modelData
+                        active: true
+                        source: {
+                            if (modelData.name !== "") {
+                                return Quickshell.shellPath(`widgets/${modelData.name}.qml`);
+                            } else {
+                                return "";
+                            }
+                        }
+                        onLoadingChanged: {
+                            if (!loading && item) {
+                                item.handler = modelData.layout;
+                                item.parent = widgetHolder;
+                                widgetHolder.reparent();
                             }
                         }
                     }
@@ -102,102 +115,34 @@ Variants {
                 Item {
                     id: widgetHolder
                     visible: false
-                    onChildrenChanged: {
+
+                    function returnChildrenToHolder(widgets, slotName) {
+                        for (let i = 0; i < widgets.length; i++) {
+                            let child = widgets[i];
+                            if (child.handler === slotName) {
+                                child.isSlotted = false;
+                                child.parent = this;
+                            }
+                        }
+                    }
+
+                    function reparent() {
                         const slotMap = Array.from({
                             length: slotRepeater.count
-                        }, (_, i) => slotRepeater.itemAt(i)).filter(slot => slot && slot.modelData).reduce((map, slot) => (map[slot.modelData.name] = slot, map), {});
+                        }, (_, i) => slotRepeater.objectAt(i)).filter(slot => slot && slot.modelData).reduce((map, slot) => {
+                            map[slot.modelData.name] = slot;
+                            return map;
+                        }, {});
                         children.forEach(child => {
-                            const slot = slotMap[child.modelData.layout];
-                            if (slot)
+                            const slot = slotMap[child.handler];
+                            if (slot) {
                                 child.parent = slot;
+                            }
                         });
-                    }
-                }
-
-                Repeater {
-                    id: slotRepeater
-                    model: ScriptModel {
-                        values: Config.navbar.layouts
-                    }
-                    delegate: StyledSlot {
-                        id: slot
-                        required property var modelData
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        position: modelData.direction
-
-                        Item {
-                            property bool isSlotted: false
-                            width: parent ? height : 0
-                            height: parent ? parent.height : 0
-                            Clock {}
-                        }
-                        StyledIconButton {
-                            property bool isSlotted: false
-                            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-                            width: parent ? parent.height / 1.5 : 0
-                            height: parent ? parent.height / 1.5 : 0
-                            radius: parent ? width / 2 : 0
-
-                            Text {
-                                font.family: Config.iconFont.family
-                                font.weight: Config.iconFont.weight
-                                font.styleName: Config.iconFont.styleName
-                                font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-
-                                color: "white"
-                                anchors {
-                                    verticalCenter: parent.verticalCenter
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: "power-off"
-                            }
-
-                            onAction: {
-                                Config.openSessionMenu = !Config.openSessionMenu;
-                            }
-                        }
                     }
                 }
             }
         }
-
-        // StyledRect {
-        //     id: containerRect
-        //     color: Config.navbar.background
-        //     anchors.fill: parent
-        //
-        //     GridLayout {
-        //         anchors.fill: parent
-        //         columns: 3
-        //         rows: 1
-        //
-        //         Item {
-        //             Layout.fillHeight: true
-        //             Layout.fillWidth: true
-        //         }
-        //
-        //         Item {
-        //             Layout.fillHeight: true
-        //             Layout.fillWidth: true
-        //             Text {
-        //                 font.pixelSize: Math.min(containerRect.height, containerRect.width) / 2
-        //                 text: Qt.formatDateTime(clock.date, "hh:mm AP")
-        //                 color: "white"
-        //                 anchors {
-        //                     verticalCenter: parent.verticalCenter
-        //                     horizontalCenter: parent.horizontalCenter
-        //                 }
-        //             }
-        //         }
-        //
-        //         Item {
-        //             Layout.fillHeight: true
-        //             Layout.fillWidth: true
-        //             Layout.alignment: Qt.AlignRight
-        //         }
-        //     }
-        // }
 
         LazyLoader {
             id: extendedBarLoader
@@ -231,22 +176,51 @@ Variants {
                 Rectangle {
                     id: container
                     color: containerRect.color
+                    border.color: Colors.color.secondary
                     implicitWidth: parent.width
                     implicitHeight: Math.max(1, parent.width * animProgress)
                     y: height * animProgress - (implicitHeight)
 
                     bottomLeftRadius: 50
                     bottomRightRadius: 50
+
                     Behavior on height {
                         NumberAnimation {
                             duration: 300
                             easing.type: Easing.InOutQuad
                         }
                     }
+
                     Behavior on y {
                         NumberAnimation {
                             duration: 300
                             easing.type: Easing.InOutQuad
+                        }
+                    }
+
+                    TabBar {
+                        id: bar
+                        width: parent.width
+
+                        Repeater {
+                            model: ["Media", "Hardware", "Weather"]
+                            delegate: CustomTabButton {
+                                label: modelData
+                            }
+                        }
+                    }
+
+                    StackLayout {
+                        width: parent.width
+                        currentIndex: bar.currentIndex
+                        Item {
+                            id: mediaTab
+                        }
+                        Item {
+                            id: hardwareTab
+                        }
+                        Item {
+                            id: weatherTab
                         }
                     }
                 }
@@ -266,11 +240,36 @@ Variants {
                 }
             }
         }
+    }
 
-        Component.onCompleted: {
-            if (this.WlrLayershell != null) {
-                this.WlrLayershell.layer = WlrLayer.Top;
-                this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.None;
+    component CustomTabButton: TabButton {
+        property string label: " "
+        text: " "
+        indicator: Text {
+            text: parent.label
+            color: parent.checked ? Colors.color.on_primary : parent.background.border.color
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+        background: Rectangle {
+            color: parent.checked ? Scripts.setOpacity(Colors.color.primary, 0.4) : "transparent"
+            border.color: parent.checked ? Colors.color.primary : Colors.color.secondary
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
     }

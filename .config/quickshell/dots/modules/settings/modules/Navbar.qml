@@ -395,7 +395,7 @@ PageWrapper {
                         WidgetWrapper {
                             icon: "clock-nine"
                             widgetName: "clock"
- 
+
                             Text {
                                 SystemClock {
                                     id: clock

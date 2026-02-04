@@ -7,7 +7,7 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property string path: Quickshell.env("XDG_RUNTIME_DIR") + "/pdaemon.sock"
+    property string path: `${Quickshell.env("XDG_RUNTIME_DIR")}/pdaemon.sock`
 
     property string location: ""
     property string condition: ""
@@ -23,7 +23,7 @@ Singleton {
     property double pressureIn: 0
     property string sunrise: ""
     property string sunset: ""
-    property string forecastText: ""
+    property list<var> forecast: []
 
     property bool ready: false
     property string lastError: ""
@@ -63,7 +63,7 @@ Singleton {
             root.pressureIn = data.pressure_in || 0;
             root.sunrise = data.sunrise || "";
             root.sunset = data.sunset || "";
-            root.forecastText = data.forecast_text || "";
+            root.forecast = data.forecast.forecastday || "";
             root.ready = true;
         } catch (e) {
             console.log("Failed to parse line:", e);

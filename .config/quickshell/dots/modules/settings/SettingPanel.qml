@@ -45,7 +45,7 @@ Scope {
                     ListView {
                         anchors.fill: parent
                         spacing: 1
-                        model: ["general", "navbar", "wallpaper",]
+                        model: ["general", "navbar", "wallpaper"]
                         delegate: Item {
                             width: 40
                             height: 40
