@@ -6,6 +6,9 @@ import qs.components
 StyledIconButton {
     property string handler
     property bool isSlotted: false
+    property bool enableActions: true
+
+    enabled: enableActions
 
     anchors {
         verticalCenter: parent ? parent.verticalCenter : undefined
@@ -30,6 +33,7 @@ StyledIconButton {
     }
 
     onAction: {
-        Config.openSessionMenu = !Config.openSessionMenu;
+        if (enableActions)
+            Config.openSessionMenu = !Config.openSessionMenu;
     }
 }

@@ -66,7 +66,6 @@ Singleton {
             root.forecast = data.forecast.forecastday || "";
             root.ready = true;
         } catch (e) {
-            console.log("Failed to parse line:", e);
             root.lastError = e.toString();
         }
     }

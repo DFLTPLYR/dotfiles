@@ -112,6 +112,7 @@ Variants {
                         }
                     }
                 }
+
                 Item {
                     id: widgetHolder
                     visible: false

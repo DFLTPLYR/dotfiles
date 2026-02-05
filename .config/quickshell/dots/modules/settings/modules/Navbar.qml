@@ -222,18 +222,41 @@ PageWrapper {
 
                             position: modelData.direction
 
-                            Component.onCompleted: {
-                                const matchingItems = root.reslot.filter(r => r.name === modelData.name);
-                                for (let j = 0; j < matchingItems.length; j++) {
-                                    const item = matchingItems[j].item;
-                                    if (item) {
-                                        item.parent = slot;
-                                    }
-                                }
+                            onSlotDestroyed: function (widgets) {
+                                widgetHolder.returnChildrenToHolder(widgets, modelData.name);
                             }
                         }
                     }
                 }
+            }
+        }
+
+        Item {
+            id: widgetHolder
+            visible: false
+            function returnChildrenToHolder(widgets, slotName) {
+                for (let i = 0; i < widgets.length; i++) {
+                    let child = widgets[i];
+                    if (child.handler === slotName) {
+                        child.isSlotted = false;
+                        child.parent = this;
+                    }
+                }
+            }
+
+            function reparent() {
+                const slotMap = Array.from({
+                    length: slotRepeater.count
+                }, (_, i) => slotRepeater.objectAt(i)).filter(slot => slot && slot.modelData).reduce((map, slot) => {
+                    map[slot.modelData.name] = slot;
+                    return map;
+                }, {});
+                children.forEach(child => {
+                    const slot = slotMap[child.handler];
+                    if (slot) {
+                        child.parent = slot;
+                    }
+                });
             }
         }
 
@@ -389,85 +412,24 @@ PageWrapper {
                     }
 
                     FlexboxLayout {
+                        id: wrapperLayout
                         Layout.fillHeight: true
                         Layout.fillWidth: true
 
-                        WidgetWrapper {
-                            icon: "clock-nine"
-                            widgetName: "Clock"
-
-                            Text {
-                                SystemClock {
-                                    id: clock
-                                    precision: SystemClock.Seconds
+                        Instantiator {
+                            model: Config.navbar.widgets
+                            delegate: LazyLoader {
+                                required property var modelData
+                                active: true
+                                component: WidgetWrapper {
+                                    parent: wrapperLayout
+                                    icon: modelData.icon
+                                    widgetName: modelData.name
+                                    contentHeight: modelData.height
+                                    contentWidth: modelData.width
                                 }
-
-                                text: Qt.formatDateTime(clock.date, "hh:mm AP")
-                                color: Colors.color.primary
-                                anchors {
-                                    verticalCenter: parent.verticalCenter
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                wrapMode: Text.Wrap
-                                width: Math.min(parent.width, font.pixelSize * 6)
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            onReparent: (name, item) => {
-                                const target = root.reslot.findIndex(s => s.name === name);
-                                if (target === -1) {
-                                    root.reslot.push({
-                                        name: name,
-                                        item: item
-                                    });
-                                } else {
-                                    target.name = name;
-                                }
-                            }
-                        }
-
-                        WidgetWrapper {
-                            widgetName: "PowerButton"
-
-                            StyledIconButton {
-                                property string handler
-                                property bool isSlotted: false
-                                enabled: false
-                                anchors {
-                                    verticalCenter: parent ? parent.verticalCenter : undefined
-                                }
-
-                                width: parent ? parent.height / 1.5 : 0
-                                height: parent ? parent.height / 1.5 : 0
-                                radius: parent ? width / 2 : 0
-
-                                Text {
-                                    font.family: Config.iconFont.family
-                                    font.weight: Config.iconFont.weight
-                                    font.styleName: Config.iconFont.styleName
-                                    font.pixelSize: Math.min(parent.height, parent.width) / 2
-
-                                    color: "white"
-                                    anchors {
-                                        verticalCenter: parent.verticalCenter
-                                        horizontalCenter: parent.horizontalCenter
-                                    }
-                                    text: "power-off"
-                                }
-
-                                onAction: {
-                                    Config.openSessionMenu = !Config.openSessionMenu;
-                                }
-                            }
-                            onReparent: (name, item) => {
-                                const target = root.reslot.findIndex(s => s.name === name);
-                                if (target === -1) {
-                                    root.reslot.push({
-                                        name: name,
-                                        item: item
-                                    });
-                                } else {
-                                    target.name = name;
+                                onLoadingChanged: {
+                                    if (!loading) {}
                                 }
                             }
                         }
