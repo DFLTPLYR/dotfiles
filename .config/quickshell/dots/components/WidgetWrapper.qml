@@ -44,6 +44,8 @@ Rectangle {
         property string parentName: ""
 
         onParentNameChanged: {
+            if (parentName === "")
+                return;
             const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
             if (parentTarget === -1) {
                 Config.navbar.widgets.push({
