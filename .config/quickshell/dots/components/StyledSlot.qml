@@ -48,7 +48,7 @@ Rectangle {
 
         onChildrenChanged: {
             Qt.callLater(() => {
-                const copy = children ? childHandler.children.slice() : [];
+                const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
                 for (let i = 0; i < copy.length; i++) {
                     const child = copy[i];
                     if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {

@@ -8,7 +8,6 @@ Item {
     property bool isSlotted: false
     width: parent ? height : 0
     height: parent ? parent.height : 0
-
     Text {
         SystemClock {
             id: clock

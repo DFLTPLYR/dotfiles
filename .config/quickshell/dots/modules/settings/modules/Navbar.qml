@@ -225,6 +225,9 @@ PageWrapper {
                             onSlotDestroyed: function (widgets) {
                                 widgetHolder.returnChildrenToHolder(widgets, modelData.name);
                             }
+                            Component.onCompleted: {
+                                widgetHolder.reparent();
+                            }
                         }
                     }
                 }
@@ -237,13 +240,11 @@ PageWrapper {
             function returnChildrenToHolder(widgets, slotName) {
                 for (let i = 0; i < widgets.length; i++) {
                     let child = widgets[i];
-                    if (child.handler === slotName) {
-                        child.isSlotted = false;
+                    if (child.parentName === slotName) {
                         child.parent = this;
                     }
                 }
             }
-
             function reparent() {
                 const slotMap = Array.from({
                     length: slotRepeater.count
@@ -252,7 +253,8 @@ PageWrapper {
                     return map;
                 }, {});
                 children.forEach(child => {
-                    const slot = slotMap[child.handler];
+                    const slot = slotMap[child.parentName];
+                    console.log(slot);
                     if (slot) {
                         child.parent = slot;
                     }
@@ -427,9 +429,19 @@ PageWrapper {
                                     widgetName: modelData.name
                                     contentHeight: modelData.height
                                     contentWidth: modelData.width
-                                }
-                                onLoadingChanged: {
-                                    if (!loading) {}
+
+                                    onReparent: (name, item) => {
+                                        const slotMap = Array.from({
+                                            length: slotRepeater.count
+                                        }, (_, i) => slotRepeater.objectAt(i)).filter(slot => slot && slot.modelData).reduce((map, slot) => {
+                                            map[slot.modelData.name] = slot;
+                                            return map;
+                                        }, {});
+                                        const slot = slotMap[name];
+                                        if (slot && name !== "") {
+                                            item.parent = slot;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -476,14 +488,11 @@ PageWrapper {
             Config.saveSettings();
         }
         onSaveAndExit: {
-            Config.general.previewWallpaper = [];
-            Config.saveSettings();
             Qt.callLater(() => {
                 Config.openSettingsPanel = false;
             });
         }
         onExit: {
-            Config.general.previewWallpaper = [];
             Qt.callLater(() => {
                 Config.openSettingsPanel = false;
             });

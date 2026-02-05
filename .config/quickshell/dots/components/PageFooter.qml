@@ -40,6 +40,8 @@ Item {
                 text: "Save"
 
                 onClicked: {
+                    Config.general.previewWallpaper = [];
+                    Config.saveSettings();
                     footer.save();
                 }
             }
@@ -48,6 +50,8 @@ Item {
                 text: "Save and Exit"
 
                 onClicked: {
+                    Config.general.previewWallpaper = [];
+                    Config.saveSettings();
                     footer.saveAndExit();
                 }
             }

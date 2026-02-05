@@ -103,8 +103,13 @@ Variants {
                                 return "";
                             }
                         }
+
                         onLoadingChanged: {
                             if (!loading && item) {
+                                if (!modelData.layout) {
+                                    const target = Config.navbar.widgets.filter(s => s.name === modelData.name)[0];
+                                    console.log(JSON.stringify(target, null, 2));
+                                }
                                 item.handler = modelData.layout;
                                 item.parent = widgetHolder;
                                 widgetHolder.reparent();

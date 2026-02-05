@@ -84,10 +84,10 @@ Rectangle {
         onParentChanged: {
             if (!parent && isSlotted)
                 return reparent(parentName, ma);
-            if (parent.objectName === "handler") {
+            if (parent && parent.objectName === "handler")
                 return isSlotted = false;
-            }
-            parentName = parent.objectName;
+            if (parent)
+                parentName = parent.objectName;
             return isSlotted = true;
         }
 
@@ -116,6 +116,8 @@ Rectangle {
 
                         if (parentTarget !== -1) {
                             const layout = Config.navbar.widgets[parentTarget].layout;
+                            item.handler = layout;
+                            ma.isSlotted = true;
                             return reparent(layout, ma);
                         }
                     }
