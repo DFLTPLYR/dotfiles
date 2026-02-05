@@ -1,6 +1,9 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+
+import Quickshell
+
 import qs.config
 
 Rectangle {
@@ -10,12 +13,15 @@ Rectangle {
     property string widgetName
     property string icon: "plus"
     property bool freeSlot: children.length >= 2
-    default property alias content: widgetHandler.data
+
+    property real contentWidth
+    property real contentHeight
 
     signal reparent(string name, Item item)
 
-    width: 64
-    height: 64
+    width: contentWidth
+    height: contentHeight
+
     border.color: freeSlot ? Colors.color.primary : Colors.color.tertiary
 
     Behavior on border.color {
@@ -47,22 +53,6 @@ Rectangle {
             } else {
                 Config.navbar.widgets[parentTarget].layout = parentName;
             }
-        }
-
-        property real contentWidth: {
-            let sum = 0;
-            for (let i = 0; i < widgetHandler.children.length; i++) {
-                sum += widgetHandler.children[i].width;
-            }
-            return sum;
-        }
-
-        property real contentHeight: {
-            let sum = 0;
-            for (let i = 0; i < widgetHandler.children.length; i++) {
-                sum += widgetHandler.children[i].height;
-            }
-            return sum;
         }
 
         width: {
@@ -105,22 +95,31 @@ Rectangle {
             id: tile
             width: parent.width
             height: parent.height
-            FontIcon {
-                visible: !ma.isSlotted
-                text: root.icon
-                color: Colors.color.secondary
-                font.pixelSize: parent.height * 0.8
 
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
+            LazyLoader {
+                active: true
+                source: {
+                    if (modelData.name !== "") {
+                        return Quickshell.shellPath(`widgets/${root.widgetName}.qml`);
+                    } else {
+                        return "";
+                    }
                 }
-            }
+                onLoadingChanged: {
+                    if (!loading && item) {
+                        item.parent = tile;
+                        if (item.hasOwnProperty("enableActions")) {
+                            item.enableActions = false;
+                        }
+                        item.isSlotted = true;
+                        const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
 
-            Item {
-                id: widgetHandler
-                visible: ma.isSlotted
-                anchors.fill: parent
+                        if (parentTarget !== -1) {
+                            const layout = Config.navbar.widgets[parentTarget].layout;
+                            return reparent(layout, ma);
+                        }
+                    }
+                }
             }
 
             Drag.hotSpot.x: width / 2

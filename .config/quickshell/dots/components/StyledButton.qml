@@ -11,6 +11,7 @@ Button {
     property int borderWidth: 1
     property color borderColor: "transparent"
     property int borderRadius: height / 2
+
     leftPadding: 10
     rightPadding: 10
     background: Rectangle {
@@ -43,9 +44,11 @@ Button {
         }
     }
     palette.buttonText: root.textColor
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        enabled: parent.enabled
         onPressed: mouse => mouse.accepted = false
         cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.WaitCursor
     }
