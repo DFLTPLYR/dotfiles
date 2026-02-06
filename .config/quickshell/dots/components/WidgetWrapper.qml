@@ -91,6 +91,7 @@ Rectangle {
                     } else {
                         Config.navbar.widgets[parentTarget].layout = parentName;
                     }
+                    return isSlotted = false;
                 } else {
                     parent = dropArea;
                     parentName = dropArea.parent.objectName;
@@ -102,23 +103,21 @@ Rectangle {
                     } else {
                         Config.navbar.widgets[parentTarget].layout = parentName;
                     }
+                    return isSlotted = true;
                 }
-            }
-        }
-
-        onParentChanged: {
-            if (!parent && isSlotted)
-                return reparent(parentName, ma);
-
-            if (parent && parent.objectName === "handler") {
+            } else {
+                parent = origParent;
                 parentName = "";
+                if (parentTarget === -1) {
+                    Config.navbar.widgets.push({
+                        name: root.widgetName,
+                        layout: parentName
+                    });
+                } else {
+                    Config.navbar.widgets[parentTarget].layout = parentName;
+                }
                 return isSlotted = false;
             }
-
-            if (parent) {
-                parentName = parent.objectName;
-            }
-            return isSlotted = true;
         }
 
         Item {
@@ -149,7 +148,8 @@ Rectangle {
                         if (parentTarget !== -1) {
                             const layout = Config.navbar.widgets[parentTarget].layout;
                             item.handler = layout;
-                            ma.isSlotted = true;
+                            if (layout !== "")
+                                ma.isSlotted = true;
                             return reparent(layout, ma);
                         }
                     }
