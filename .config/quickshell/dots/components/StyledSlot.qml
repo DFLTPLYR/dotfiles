@@ -7,8 +7,10 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
+
     signal slotDestroyed(var widgets)
     property list<Item> widgets: []
+
     Behavior on color {
         ColorAnimation {
             duration: 200

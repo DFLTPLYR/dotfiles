@@ -10,6 +10,7 @@ Rectangle {
     id: root
     objectName: "handler"
     color: "transparent"
+
     property string widgetName
     property string icon: "plus"
     property bool freeSlot: children.length >= 2
@@ -43,17 +44,13 @@ Rectangle {
         property bool isSlotted: false
         property string parentName: ""
 
-        onParentNameChanged: {
-            if (parentName === "")
-                return;
-            const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
-            if (parentTarget === -1) {
-                Config.navbar.widgets.push({
-                    name: root.widgetName,
-                    layout: parentName
-                });
-            } else {
-                Config.navbar.widgets[parentTarget].layout = parentName;
+        FontIcon {
+            visible: !ma.isSlotted
+            text: root.icon
+            color: Colors.color.primary
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
             }
         }
 
@@ -80,25 +77,58 @@ Rectangle {
         drag.target: tile
 
         onReleased: {
-            parent = tile.Drag.target !== null ? tile.Drag.target : origParent;
+            const dropArea = tile.Drag.target;
+            const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
+            if (dropArea) {
+                if (dropArea.parent.objectName === "handler") {
+                    parent = origParent;
+                    parentName = "";
+                    if (parentTarget === -1) {
+                        Config.navbar.widgets.push({
+                            name: root.widgetName,
+                            layout: parentName
+                        });
+                    } else {
+                        Config.navbar.widgets[parentTarget].layout = parentName;
+                    }
+                } else {
+                    parent = dropArea;
+                    parentName = dropArea.parent.objectName;
+                    if (parentTarget === -1) {
+                        Config.navbar.widgets.push({
+                            name: root.widgetName,
+                            layout: parentName
+                        });
+                    } else {
+                        Config.navbar.widgets[parentTarget].layout = parentName;
+                    }
+                }
+            }
         }
 
         onParentChanged: {
             if (!parent && isSlotted)
                 return reparent(parentName, ma);
-            if (parent && parent.objectName === "handler")
+
+            if (parent && parent.objectName === "handler") {
+                parentName = "";
                 return isSlotted = false;
-            if (parent)
+            }
+
+            if (parent) {
                 parentName = parent.objectName;
+            }
             return isSlotted = true;
         }
 
         Item {
             id: tile
+            visible: ma.isSlotted || ma.drag.active
             width: parent.width
             height: parent.height
 
             LazyLoader {
+                id: loader
                 active: true
                 source: {
                     if (modelData.name !== "") {
