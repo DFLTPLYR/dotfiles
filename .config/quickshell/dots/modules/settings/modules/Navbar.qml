@@ -221,10 +221,12 @@ PageWrapper {
                             Layout.fillHeight: true
 
                             position: modelData.direction
+                            objectName: modelData.name
 
                             onSlotDestroyed: function (widgets) {
                                 widgetHolder.returnChildrenToHolder(widgets, modelData.name);
                             }
+
                             Component.onCompleted: {
                                 widgetHolder.reparent();
                             }
