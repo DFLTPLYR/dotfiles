@@ -228,7 +228,7 @@ PageWrapper {
                             }
 
                             Component.onCompleted: {
-                                widgetHolder.reparent();
+                                Qt.callLater(() => widgetHolder.reparent());
                             }
                         }
                     }
@@ -239,14 +239,16 @@ PageWrapper {
         Item {
             id: widgetHolder
             visible: false
+
             function returnChildrenToHolder(widgets, slotName) {
                 for (let i = 0; i < widgets.length; i++) {
                     let child = widgets[i];
-                    if (child.parentName === slotName) {
+                    if (child.handler === slotName) {
                         child.parent = this;
                     }
                 }
             }
+
             function reparent() {
                 const slotMap = Array.from({
                     length: slotRepeater.count
@@ -256,7 +258,6 @@ PageWrapper {
                 }, {});
                 children.forEach(child => {
                     const slot = slotMap[child.parentName];
-                    console.log(slot);
                     if (slot) {
                         child.parent = slot;
                     }
