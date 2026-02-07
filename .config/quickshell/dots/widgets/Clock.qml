@@ -6,8 +6,24 @@ import qs.config
 Item {
     property string handler
     property bool isSlotted: false
-    width: parent ? height : 0
-    height: parent ? parent.height : 0
+
+    property real widgetWidth
+    property real widgetHeight
+
+    width: {
+        if (widgetWidth !== 0 && !Config.navbar.side) {
+            return widgetWidth;
+        }
+        return parent ? parent.width : 0;
+    }
+
+    height: {
+        if (widgetHeight !== 0 && Config.navbar.side) {
+            return widgetHeight;
+        }
+        return parent ? parent.height : 0;
+    }
+
     Text {
         SystemClock {
             id: clock

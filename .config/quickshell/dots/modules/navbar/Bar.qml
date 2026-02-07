@@ -96,6 +96,7 @@ Variants {
                     delegate: LazyLoader {
                         required property var modelData
                         active: true
+
                         source: {
                             if (modelData.name !== "") {
                                 return Quickshell.shellPath(`widgets/${modelData.name}.qml`);
@@ -109,6 +110,10 @@ Variants {
                                 const layoutValue = modelData.layout.valueOf();
                                 item.handler = layoutValue;
                                 item.parent = widgetHolder;
+                                if (modelData.name === "Clock") {
+                                    item.widgetWidth = modelData.width;
+                                }
+                                item.height = modelData.height;
                                 widgetHolder.reparent();
                             }
                         }
@@ -118,8 +123,12 @@ Variants {
                 Item {
                     id: widgetHolder
                     visible: false
-
+                    onChildrenChanged: {
+                        reparent();
+                    }
                     function returnChildrenToHolder(widgets, slotName) {
+                        console.log(widgets);
+
                         for (let i = 0; i < widgets.length; i++) {
                             let child = widgets[i];
                             if (child.handler === slotName) {

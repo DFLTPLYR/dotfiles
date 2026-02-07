@@ -15,13 +15,13 @@ Rectangle {
     property string icon: "plus"
     property bool freeSlot: children.length >= 2
 
-    property real contentWidth
-    property real contentHeight
+    property alias contentWidth: ma.contentWidth
+    property alias contentHeight: ma.contentHeight
 
     signal reparent(string name, Item item)
 
-    width: contentWidth
-    height: contentHeight
+    width: 64
+    height: 64
 
     border.color: freeSlot ? Colors.color.primary : Colors.color.tertiary
 
@@ -43,6 +43,9 @@ Rectangle {
         property Item origParent
         property bool isSlotted: false
         property string parentName: ""
+
+        property real contentWidth
+        property real contentHeight
 
         FontIcon {
             visible: !ma.isSlotted
@@ -120,11 +123,19 @@ Rectangle {
             }
         }
 
-        Item {
+        onParentChanged: {
+            if (parent === null)
+                reparent(parentName, ma);
+        }
+
+        Rectangle {
             id: tile
+            clip: true
             visible: ma.isSlotted || ma.drag.active
-            width: parent.width
-            height: parent.height
+            color: "transparent"
+            border.color: "white"
+            implicitWidth: parent.width
+            implicitHeight: parent.height
 
             LazyLoader {
                 id: loader
@@ -148,6 +159,7 @@ Rectangle {
                         if (parentTarget !== -1) {
                             const layout = Config.navbar.widgets[parentTarget].layout;
                             item.handler = layout;
+                            ma.parentName = layout;
                             if (layout !== "")
                                 ma.isSlotted = true;
                             return reparent(layout, ma);
