@@ -37,6 +37,7 @@ Item {
             horizontalCenter: parent.horizontalCenter
         }
         wrapMode: Text.Wrap
+        width: parent.width
         horizontalAlignment: Text.AlignHCenter
     }
 }

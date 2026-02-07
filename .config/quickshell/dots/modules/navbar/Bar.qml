@@ -110,9 +110,8 @@ Variants {
                                 const layoutValue = modelData.layout.valueOf();
                                 item.handler = layoutValue;
                                 item.parent = widgetHolder;
-                                if (modelData.name === "Clock") {
-                                    item.widgetWidth = modelData.width;
-                                }
+                                item.widgetWidth = modelData.width;
+                                item.widgetHeight = modelData.height;
                                 item.height = modelData.height;
                                 widgetHolder.reparent();
                             }
@@ -124,11 +123,11 @@ Variants {
                     id: widgetHolder
                     visible: false
                     onChildrenChanged: {
-                        reparent();
+                        if (children.length > 0) {
+                            reparent();
+                        }
                     }
                     function returnChildrenToHolder(widgets, slotName) {
-                        console.log(widgets);
-
                         for (let i = 0; i < widgets.length; i++) {
                             let child = widgets[i];
                             if (child.handler === slotName) {
