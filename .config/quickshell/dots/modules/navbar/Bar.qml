@@ -24,14 +24,14 @@ Variants {
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
         anchors {
-            left: ["left", "top", "bottom"].includes(Config.navbar.position)
-            right: ["right", "top", "bottom"].includes(Config.navbar.position)
-            top: ["right", "top", "left"].includes(Config.navbar.position)
-            bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
+            left: ["left", "top", "bottom"].includes(Navbar.config.position)
+            right: ["right", "top", "bottom"].includes(Navbar.config.position)
+            top: ["right", "top", "left"].includes(Navbar.config.position)
+            bottom: ["right", "bottom", "left"].includes(Navbar.config.position)
         }
 
-        implicitWidth: Config.navbar.side ? Config.navbar.width : screen.width
-        implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
+        implicitWidth: Navbar.config.side ? Navbar.config.width : screen.width
+        implicitHeight: Navbar.config.side ? screen.height : Navbar.config.height
 
         color: "transparent"
 
@@ -65,12 +65,12 @@ Variants {
             GridLayout {
                 id: slotGrid
                 anchors.fill: parent
-                columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
-                rows: Config.navbar.side ? Config.navbar.layouts.length : 1
+                columns: Navbar.config.side ? 1 : Navbar.config.layouts.length
+                rows: Navbar.config.side ? Navbar.config.layouts.length : 1
 
                 Instantiator {
                     id: slotRepeater
-                    model: Config.navbar.layouts
+                    model: Navbar.config.layouts
                     delegate: StyledSlot {
                         id: slot
                         required property var modelData
@@ -92,7 +92,7 @@ Variants {
                 }
 
                 Instantiator {
-                    model: Config.navbar.widgets
+                    model: Navbar.config.widgets
                     delegate: LazyLoader {
                         required property var modelData
                         active: true
@@ -175,12 +175,12 @@ Variants {
                     }
                 }
                 implicitWidth: {
-                    const percentage = (screen.width * Config.navbar.popup.width) / 100;
+                    const percentage = (screen.width * Navbar.config.popup.width) / 100;
                     return percentage;
                 }
 
                 implicitHeight: {
-                    const percentage = (screen.height * Config.navbar.popup.height) / 100;
+                    const percentage = (screen.height * Navbar.config.popup.height) / 100;
                     return percentage;
                 }
                 color: "transparent"
@@ -218,7 +218,6 @@ Variants {
                     TabBar {
                         id: bar
                         width: parent.width
-
                         Repeater {
                             model: ["Media", "Hardware", "Weather"]
                             delegate: CustomTabButton {
