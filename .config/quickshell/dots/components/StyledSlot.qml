@@ -7,7 +7,7 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
-
+    border.color: childHandler.containsDrag ? Colors.color.primary : "transparent"
     signal slotDestroyed(var widgets)
     property list<Item> widgets: []
 
@@ -43,21 +43,20 @@ Rectangle {
         id: childHandler
         anchors.fill: parent
         objectName: "handler"
-
+        property bool hasFocus: false
         onContainsDragChanged: {
-            slotRoot.border.color = containsDrag ? Colors.color.primary : "transparent";
+            hasFocus = containsDrag;
         }
-
         onChildrenChanged: {
             Qt.callLater(() => {
-                const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
-                for (let i = 0; i < copy.length; i++) {
-                    const child = copy[i];
-                    if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
-                        child.parent = slotLayoutLoader.item.children[0];
-                    }
-                }
-            });
+                             const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
+                             for (let i = 0; i < copy.length; i++) {
+                                 const child = copy[i];
+                                 if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
+                                     child.parent = slotLayoutLoader.item.children[0];
+                                 }
+                             }
+                         });
         }
     }
 
@@ -177,7 +176,7 @@ Rectangle {
 
     Loader {
         id: slotLayoutLoader
-        sourceComponent: Config.navbar.side ? colSlot : rowSlot
+        sourceComponent: Navbar.config.side ? colSlot : rowSlot
         anchors.fill: parent
         onLoaded: {
             const copy = childHandler.children ? childHandler.children.slice() : [];

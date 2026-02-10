@@ -8,7 +8,7 @@ import qs.config
 
 Rectangle {
     id: root
-    objectName: "handler"
+    objectName: "WidgetWrapper"
     color: "transparent"
 
     property string widgetName
@@ -35,7 +35,7 @@ Rectangle {
     DropArea {
         id: dragHandler
         anchors.fill: parent
-        objectName: "handler"
+        objectName: "WidgetWrapper"
     }
 
     MouseArea {
@@ -60,7 +60,7 @@ Rectangle {
         width: {
             if (!parent)
                 return 0;
-            if (Config.navbar.side) {
+            if (Navbar.config.side) {
                 return parent.width;
             } else {
                 return isSlotted ? contentWidth : parent.width;
@@ -70,7 +70,7 @@ Rectangle {
         height: {
             if (!parent)
                 return 0;
-            if (Config.navbar.side) {
+            if (Navbar.config.side) {
                 return isSlotted ? contentHeight : parent.height;
             } else {
                 return parent.height;
@@ -81,30 +81,31 @@ Rectangle {
 
         onReleased: {
             const dropArea = tile.Drag.target;
-            const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
+            const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
             if (dropArea) {
-                if (dropArea.parent.objectName === "handler") {
+                dropArea.hasFocus = false;
+                if (dropArea.parent.objectName === "WidgetWrapper") {
                     parent = origParent;
                     parentName = "";
                     if (parentTarget === -1) {
-                        Config.navbar.widgets.push({
+                        Navbar.config.widgets.push({
                             name: root.widgetName,
                             layout: parentName
                         });
                     } else {
-                        Config.navbar.widgets[parentTarget].layout = parentName;
+                        Navbar.config.widgets[parentTarget].layout = parentName;
                     }
                     return isSlotted = false;
                 } else {
                     parent = dropArea;
                     parentName = dropArea.parent.objectName;
                     if (parentTarget === -1) {
-                        Config.navbar.widgets.push({
+                        Navbar.config.widgets.push({
                             name: root.widgetName,
                             layout: parentName
                         });
                     } else {
-                        Config.navbar.widgets[parentTarget].layout = parentName;
+                        Navbar.config.widgets[parentTarget].layout = parentName;
                     }
                     return isSlotted = true;
                 }
@@ -112,12 +113,12 @@ Rectangle {
                 parent = origParent;
                 parentName = "";
                 if (parentTarget === -1) {
-                    Config.navbar.widgets.push({
+                    Navbar.config.widgets.push({
                         name: root.widgetName,
                         layout: parentName
                     });
                 } else {
-                    Config.navbar.widgets[parentTarget].layout = parentName;
+                    Navbar.config.widgets[parentTarget].layout = parentName;
                 }
                 return isSlotted = false;
             }
@@ -154,10 +155,10 @@ Rectangle {
                             item.enableActions = false;
                         }
                         item.isSlotted = true;
-                        const parentTarget = Config.navbar.widgets.findIndex(s => s.name === root.widgetName);
+                        const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
 
                         if (parentTarget !== -1) {
-                            const layout = Config.navbar.widgets[parentTarget].layout;
+                            const layout = Navbar.config.widgets[parentTarget].layout;
                             item.handler = layout;
                             ma.parentName = layout;
                             if (layout !== "")

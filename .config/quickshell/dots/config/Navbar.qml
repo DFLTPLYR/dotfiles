@@ -36,4 +36,8 @@ Singleton {
             property ExtendedBarConfig extendedbar: ExtendedBarConfig {}
         }
     }
+
+    function saveSettings() {
+        fileView.writeAdapter();
+    }
 }

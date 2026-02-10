@@ -488,7 +488,7 @@ PageWrapper {
 
     PageFooter {
         onSave: {
-            Config.saveSettings();
+            Navbar.saveSettings();
         }
         onSaveAndExit: {
             Qt.callLater(() => {
