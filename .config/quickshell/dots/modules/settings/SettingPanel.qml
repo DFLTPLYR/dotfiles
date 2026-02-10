@@ -119,7 +119,7 @@ Scope {
         case "general":
             return "gear";
         case "navbar":
-            return `bar-${Config.navbar.position}`;
+            return `bar-${Navbar.config.position}`;
         case "wallpaper":
             return "hexagon-image";
         default:

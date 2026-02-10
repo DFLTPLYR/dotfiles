@@ -148,7 +148,7 @@ PageWrapper {
             delegate: StyledButton {
                 id: orientationBtn
                 required property string modelData
-                readonly property bool isSelected: Config.navbar.position === modelData
+                readonly property bool isSelected: Navbar.config.position === modelData
 
                 anchors {
                     verticalCenter: parent.verticalCenter
@@ -173,7 +173,7 @@ PageWrapper {
                 }
 
                 onClicked: {
-                    Config.navbar.position = modelData;
+                    Navbar.config.position = modelData;
                 }
             }
         }
@@ -183,14 +183,14 @@ PageWrapper {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredHeight: root.navbarHeight * 0.6
-        columns: Config.navbar.side ? 2 : 1
+        columns: Navbar.config.side ? 2 : 1
 
         // preview Panel
         Item {
-            Layout.fillWidth: Config.navbar.side ? false : true
-            Layout.fillHeight: !Config.navbar.side ? false : true
-            Layout.preferredHeight: Config.navbar.height
-            Layout.preferredWidth: Config.navbar.width
+            Layout.fillWidth: Navbar.config.side ? false : true
+            Layout.fillHeight: !Navbar.config.side ? false : true
+            Layout.preferredHeight: Navbar.config.height
+            Layout.preferredWidth: Navbar.config.width
 
             Item {
                 id: previewPanelContainer
@@ -200,18 +200,18 @@ PageWrapper {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                width: Config.navbar.side ? Config.navbar.width / 2 : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
-                height: Config.navbar.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Config.navbar.height / 2
+                width: Navbar.config.side ? Navbar.config.width / 2 : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
+                height: Navbar.config.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Navbar.config.height / 2
 
                 GridLayout {
                     id: slotGrid
                     anchors.fill: parent
-                    columns: Config.navbar.side ? 1 : Config.navbar.layouts.length
-                    rows: Config.navbar.side ? Config.navbar.layouts.length : 1
+                    columns: Navbar.config.side ? 1 : Navbar.config.layouts.length
+                    rows: Navbar.config.side ? Navbar.config.layouts.length : 1
 
                     Instantiator {
                         id: slotRepeater
-                        model: Config.navbar.layouts
+                        model: Navbar.config.layouts
                         delegate: StyledSlot {
                             id: slot
                             required property var modelData
@@ -319,12 +319,12 @@ PageWrapper {
                             }
                             onClicked: {
                                 const container = {
-                                    idx: Config.navbar.layouts.length,
+                                    idx: Navbar.config.layouts.length,
                                     name: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
                                     direction: "left",
                                     color: Colors.color.tertiary
                                 };
-                                Config.navbar.layouts = [...Config.navbar.layouts, container];
+                                Navbar.config.layouts = [...Navbar.config.layouts, container];
                             }
                         }
                     }
@@ -338,13 +338,13 @@ PageWrapper {
 
                         Repeater {
                             model: ScriptModel {
-                                values: Config.navbar.layouts
+                                values: Navbar.config.layouts
                             }
                             delegate: Rectangle {
                                 required property var modelData
                                 property Item orig: slotRepeater.objectAt(modelData.idx)
                                 Layout.preferredWidth: parent.width
-                                Layout.preferredHeight: Config.navbar.height
+                                Layout.preferredHeight: Navbar.config.height
                                 color: "transparent"
                                 border.color: Colors.color.primary
 
@@ -377,7 +377,7 @@ PageWrapper {
                                             orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "left";
                                         }
                                     }
@@ -387,7 +387,7 @@ PageWrapper {
                                             orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "center";
                                         }
                                     }
@@ -397,7 +397,7 @@ PageWrapper {
                                             orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
                                         }
                                         onAlignmentChanged: {
-                                            const target = Config.navbar.layouts.find(s => s.name === modelData.name);
+                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "right";
                                         }
                                     }
@@ -422,7 +422,7 @@ PageWrapper {
                         Layout.fillWidth: true
 
                         Instantiator {
-                            model: Config.navbar.widgets
+                            model: Navbar.config.widgets
                             delegate: LazyLoader {
                                 required property var modelData
                                 active: true
