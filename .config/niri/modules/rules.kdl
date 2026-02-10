@@ -51,3 +51,10 @@ window-rule {
   open-maximized true
 }
 
+window-rule {
+  match title="Deadlock"
+  open-on-output "DP-1"
+  open-maximized true
+  min-height 1080
+  max-width 1920
+}
