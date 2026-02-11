@@ -38,22 +38,22 @@ PopupWindow {
 
         rect {
             x: {
-                if (Config.navbar.position === "right") {
+                if (Navbar.config.position === "right") {
                     return -parentWindow.width + parentWindow.width;
-                } else if (Config.navbar.position === "left") {
+                } else if (Navbar.config.position === "left") {
                     return parentWindow.width;
                 } else {
-                    return Math.round((parentWindow.width - width) * (Config.navbar.popup.x / 100));
+                    return Math.round((parentWindow.width - width) * (Navbar.config.popup.x / 100));
                 }
             }
 
             y: {
-                if (Config.navbar.position === "top") {
+                if (Navbar.config.position === "top") {
                     return parentWindow.height;
-                } else if (Config.navbar.position === "bottom") {
+                } else if (Navbar.config.position === "bottom") {
                     return -parentWindow.height + parentWindow.height;
                 } else {
-                    return Math.round((parentWindow.height - height) * Config.navbar.popup.y / 100);
+                    return Math.round((parentWindow.height - height) * Navbar.config.popup.y / 100);
                 }
             }
         }
@@ -79,13 +79,13 @@ PopupWindow {
         id: extendedBarContainer
 
         width: {
-            let percent = Math.max(10, Math.min(Config.navbar.popup.width, 100)) / 100;
+            let percent = Math.max(10, Math.min(Navbar.config.popup.width, 100)) / 100;
             let baseWidth = isPortrait ? parentWindow.screen.width * percent * 1.5 : parentWindow.screen.width * percent;
             return Math.min(Math.floor(baseWidth), parentWindow.screen.width);
         }
 
         height: {
-            let percent = Math.max(10, Math.min(Config.navbar.popup.height, 100)) / 100;
+            let percent = Math.max(10, Math.min(Navbar.config.popup.height, 100)) / 100;
             if (isPortrait) {
                 return Math.floor(parentWindow.screen.height * percent / 2);
             } else {
@@ -94,9 +94,9 @@ PopupWindow {
         }
 
         y: {
-            if (Config.navbar.position === "top") {
+            if (Navbar.config.position === "top") {
                 return -parentWindow.screen.height + animProgress * parentWindow.screen.height;
-            } else if (Config.navbar.position === "bottom") {
+            } else if (Navbar.config.position === "bottom") {
                 return +parentWindow.screen.height + animProgress * -parentWindow.screen.height;
             } else {
                 return 0;
@@ -104,9 +104,9 @@ PopupWindow {
         }
 
         x: {
-            if (Config.navbar.position === "left") {
+            if (Navbar.config.position === "left") {
                 return -parentWindow.screen.width + animProgress * parentWindow.screen.width;
-            } else if (Config.navbar.position === "right") {
+            } else if (Navbar.config.position === "right") {
                 return +parentWindow.screen.width + animProgress * -parentWindow.screen.width;
             } else {
                 return 0;

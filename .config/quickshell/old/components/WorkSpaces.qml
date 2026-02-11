@@ -8,8 +8,8 @@ import qs.utils
 Item {
     id: root
     property bool isSlotted: false
-    width: (Config.navbar.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
-    height: (Config.navbar.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
+    width: (Navbar.config.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
+    height: (Navbar.config.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
 
     function kanjiNumber(n) {
         const kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
@@ -25,7 +25,7 @@ Item {
         id: loader
         height: parent.height
         width: parent.width
-        sourceComponent: Config.navbar.side ? portrait : landscape
+        sourceComponent: Navbar.config.side ? portrait : landscape
     }
 
     Component {
@@ -44,7 +44,7 @@ Item {
                     Rectangle {
                         id: monitorIndicator
                         anchors.centerIn: parent
-                        height: Config.navbar.height * 0.6
+                        height: Navbar.config.height * 0.6
                         width: height
                         color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
 
@@ -61,7 +61,7 @@ Item {
                                 if (modelData.id <= 0) {
                                     return "S";
                                 }
-                                switch (Config.navbar.extended.style) {
+                                switch (Navbar.config.extended.style) {
                                 case "kanji":
                                     return root.kanjiNumber(modelData.id - 1);
                                 case "roman":
@@ -113,7 +113,7 @@ Item {
                     Rectangle {
                         id: monitorIndicator
                         anchors.centerIn: parent
-                        height: Config.navbar.width * 0.6
+                        height: Navbar.config.width * 0.6
                         width: height
                         color: mouseArea.containsMouse ? Scripts.setOpacity(Color.color14, 0.4) : (modelData.active && modelData.focused) ? Color.color2 : "transparent"
 
@@ -131,7 +131,7 @@ Item {
                                     console.log("Using bullet for workspace 0");
                                     return "•";
                                 }
-                                switch (Config.navbar.extended.style) {
+                                switch (Navbar.config.extended.style) {
                                 case "kanji":
                                     return root.kanjiNumber(modelData.id - 1);
                                 case "roman":

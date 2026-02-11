@@ -24,7 +24,7 @@ Item {
     }
 
     width: {
-        if (Config.navbar.side) {
+        if (Navbar.config.side) {
             return parent.width;
         } else {
             return isSlotted ? contentWidth : parent.width;
@@ -32,7 +32,7 @@ Item {
     }
 
     height: {
-        if (Config.navbar.side) {
+        if (Navbar.config.side) {
             return isSlotted ? contentHeight : parent.height;
         } else {
             return parent.height;

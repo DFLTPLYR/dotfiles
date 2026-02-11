@@ -13,7 +13,7 @@ Rectangle {
         anchors.fill: parent
     }
     default property alias content: childHandler.data
-    property int alignment: Config.navbar.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
+    property int alignment: Navbar.config.side ? Qt.AlignTop | Qt.AlignHCenter : Qt.AlignLeft | Qt.AlignHCenter
     property bool debug: false
 
     onChildrenChanged: {
@@ -117,7 +117,7 @@ Rectangle {
     Loader {
         id: slotLayoutLoader
         anchors.fill: parent
-        sourceComponent: Config.navbar.side ? colSlot : rowSlot
+        sourceComponent: Navbar.config.side ? colSlot : rowSlot
         onLoaded: {
             const copy = childHandler.children.slice();
             for (let i = 0; i < copy.length; i++) {

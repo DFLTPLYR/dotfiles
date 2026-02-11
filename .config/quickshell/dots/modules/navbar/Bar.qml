@@ -92,7 +92,15 @@ Variants {
                 }
 
                 Instantiator {
-                    model: Navbar.config.widgets
+                    model: ScriptModel {
+                        values: {
+                            const widgets = Navbar.config.widgets.filter(w => {
+                                const layout = Navbar.config.layouts.find(s => s.name === w.layout);
+                                return w.layout !== "" && layout !== undefined;
+                            });
+                            return widgets;
+                        }
+                    }
                     delegate: LazyLoader {
                         required property var modelData
                         active: true

@@ -54,9 +54,9 @@ Item {
                         SpinBox {
                             id: cellCount
                             from: 2
-                            value: Config.navbar.cell
+                            value: Navbar.config.cell
                             onValueChanged: {
-                                Config.navbar.cell = value;
+                                Navbar.config.cell = value;
                             }
                         }
                     }
@@ -73,10 +73,10 @@ Item {
                     property int screenHeight: screen ? screen.height : 0
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    preferredHeight: Config.navbar.side ? root.height : Config.navbar.height
-                    preferredWidth: Config.navbar.side ? Config.navbar.width : root.width
-                    cellColumns: Config.navbar.side ? 1 : Config.navbar.cell
-                    cellRows: Config.navbar.side ? Config.navbar.cell : 1
+                    preferredHeight: Navbar.config.side ? root.height : Navbar.config.height
+                    preferredWidth: Navbar.config.side ? Navbar.config.width : root.width
+                    cellColumns: Navbar.config.side ? 1 : Navbar.config.cell
+                    cellRows: Navbar.config.side ? Navbar.config.cell : 1
 
                     visible: !showPreviewButton.checked
                     z: 5
@@ -146,7 +146,7 @@ Item {
                             property var position
                             property string name: "clock"
                             Text {
-                                visible: !Config.navbar.side
+                                visible: !Navbar.config.side
                                 anchors.centerIn: parent
                                 text: Qt.formatDateTime(TimeService.clock.date, "hh:mm AP")
                                 color: Color.color14
@@ -156,7 +156,7 @@ Item {
                             }
 
                             Text {
-                                visible: Config.navbar.side
+                                visible: Navbar.config.side
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 text: Qt.formatDateTime(TimeService.clock.date, "hh mm AP")
@@ -189,8 +189,8 @@ Item {
                                 model: Hyprland.workspaces
                                 delegate: Rectangle {
                                     required property var modelData
-                                    width: Config.navbar.side ? parent.width : parent.height
-                                    height: Config.navbar.side ? parent.width : parent.height
+                                    width: Navbar.config.side ? parent.width : parent.height
+                                    height: Navbar.config.side ? parent.width : parent.height
                                     visible: modelData.focused
                                     color: "red"
                                     border.color: "black"
@@ -205,7 +205,7 @@ Item {
                     }
 
                     Variants {
-                        model: Config.navbar.modules
+                        model: Navbar.config.modules
                         delegate: LazyLoader {
                             id: loader
                             property var modelData
@@ -235,16 +235,16 @@ Item {
 
             Rectangle {
                 visible: showPreviewButton.checked
-                Layout.preferredHeight: Config.navbar.side ? root.height : Config.navbar.height
-                Layout.preferredWidth: Config.navbar.side ? Config.navbar.width : root.width
+                Layout.preferredHeight: Navbar.config.side ? root.height : Navbar.config.height
+                Layout.preferredWidth: Navbar.config.side ? Navbar.config.width : root.width
                 color: Scripts.setOpacity(Color.background, 0.5)
 
                 GridLayout {
                     id: previewGrid
                     property var previewItems: []
                     anchors.fill: parent
-                    columns: Config.navbar.side ? 1 : Config.navbar.cell
-                    rows: Config.navbar.side ? Config.navbar.cell : 1
+                    columns: Navbar.config.side ? 1 : Navbar.config.cell
+                    rows: Navbar.config.side ? Navbar.config.cell : 1
                     rowSpacing: 0
                     columnSpacing: 0
 
@@ -280,14 +280,14 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 Repeater {
-                    model: Config.navbar.extended.styles
+                    model: Navbar.config.extended.styles
                     delegate: RadioButton {
                         required property var modelData
-                        checked: Config.navbar.extended.style === modelData
+                        checked: Navbar.config.extended.style === modelData
                         text: modelData
                         onCheckedChanged: {
                             if (checked) {
-                                Config.navbar.extended.style = modelData;
+                                Navbar.config.extended.style = modelData;
                             }
                         }
                     }
@@ -298,42 +298,42 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 RadioButton {
-                    checked: Config.navbar.position === "top"
+                    checked: Navbar.config.position === "top"
                     text: qsTr("Top")
                     onCheckedChanged: {
                         if (checked) {
-                            Config.navbar.position = "top";
-                            Config.navbar.side = false;
+                            Navbar.config.position = "top";
+                            Navbar.config.side = false;
                         }
                     }
                 }
                 RadioButton {
-                    checked: Config.navbar.position === "bottom"
+                    checked: Navbar.config.position === "bottom"
                     text: qsTr("Bottom")
                     onCheckedChanged: {
                         if (checked) {
-                            Config.navbar.position = "bottom";
-                            Config.navbar.side = false;
+                            Navbar.config.position = "bottom";
+                            Navbar.config.side = false;
                         }
                     }
                 }
                 RadioButton {
-                    checked: Config.navbar.position === "right"
+                    checked: Navbar.config.position === "right"
                     text: qsTr("Right")
                     onCheckedChanged: {
                         if (checked) {
-                            Config.navbar.position = "right";
-                            Config.navbar.side = true;
+                            Navbar.config.position = "right";
+                            Navbar.config.side = true;
                         }
                     }
                 }
                 RadioButton {
-                    checked: Config.navbar.position === "left"
+                    checked: Navbar.config.position === "left"
                     text: qsTr("Left")
                     onCheckedChanged: {
                         if (checked) {
-                            Config.navbar.position = "left";
-                            Config.navbar.side = true;
+                            Navbar.config.position = "left";
+                            Navbar.config.side = true;
                         }
                     }
                 }
@@ -348,32 +348,32 @@ Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Label {
-                        visible: !Config.navbar.side
+                        visible: !Navbar.config.side
                         text: "Height"
                     }
                     Slider {
-                        visible: !Config.navbar.side
+                        visible: !Navbar.config.side
                         Layout.fillWidth: true
                         from: 40
-                        value: Config.navbar.height
+                        value: Navbar.config.height
                         to: 100
                         onValueChanged: {
-                            Config.navbar.height = value;
+                            Navbar.config.height = value;
                         }
                     }
                     Label {
-                        visible: Config.navbar.side
+                        visible: Navbar.config.side
                         text: "Width"
                     }
                     Slider {
 
-                        visible: Config.navbar.side
+                        visible: Navbar.config.side
                         Layout.fillWidth: true
                         from: 40
-                        value: Config.navbar.width
+                        value: Navbar.config.width
                         to: 100
                         onValueChanged: {
-                            Config.navbar.width = value;
+                            Navbar.config.width = value;
                         }
                     }
                 }
@@ -386,7 +386,7 @@ Item {
 
             // Axis position extendedbar settings
             RowLayout {
-                visible: Config.navbar.position === "top" || Config.navbar.position === "bottom"
+                visible: Navbar.config.position === "top" || Navbar.config.position === "bottom"
                 Layout.fillWidth: true
                 Label {
                     text: "Popup X Position"
@@ -395,15 +395,15 @@ Item {
                     Layout.fillWidth: true
                     from: 0
                     to: 99
-                    value: Config.navbar.popup.x
+                    value: Navbar.config.popup.x
                     onValueChanged: {
-                        Config.navbar.popup.x = value;
+                        Navbar.config.popup.x = value;
                     }
                 }
             }
 
             RowLayout {
-                visible: Config.navbar.position === "left" || Config.navbar.position === "right"
+                visible: Navbar.config.position === "left" || Navbar.config.position === "right"
                 Layout.fillWidth: true
                 Label {
                     text: "Popup Y Position"
@@ -412,9 +412,9 @@ Item {
                     Layout.fillWidth: true
                     from: 0
                     to: 100
-                    value: Config.navbar.popup.y
+                    value: Navbar.config.popup.y
                     onValueChanged: {
-                        Config.navbar.popup.y = value;
+                        Navbar.config.popup.y = value;
                     }
                 }
             }
@@ -430,10 +430,10 @@ Item {
                     Slider {
                         Layout.fillWidth: true
                         from: 10
-                        value: Config.navbar.popup.height
+                        value: Navbar.config.popup.height
                         to: 100
                         onValueChanged: {
-                            Config.navbar.popup.height = value;
+                            Navbar.config.popup.height = value;
                         }
                     }
                 }
@@ -446,10 +446,10 @@ Item {
                     Slider {
                         Layout.fillWidth: true
                         from: 10
-                        value: Config.navbar.popup.width
+                        value: Navbar.config.popup.width
                         to: 100
                         onValueChanged: {
-                            Config.navbar.popup.width = value;
+                            Navbar.config.popup.width = value;
                         }
                     }
                 }
@@ -466,9 +466,9 @@ Item {
                         id: columnCountBox
                         from: 2
                         to: 10
-                        value: Config.navbar.extended.columns
+                        value: Navbar.config.extended.columns
                         onValueChanged: {
-                            Config.navbar.extended.columns = value;
+                            Navbar.config.extended.columns = value;
                         }
                     }
                 }
@@ -481,9 +481,9 @@ Item {
                         id: rowCountBox
                         from: 2
                         to: 10
-                        value: Config.navbar.extended.rows
+                        value: Navbar.config.extended.rows
                         onValueChanged: {
-                            Config.navbar.extended.rows = value;
+                            Navbar.config.extended.rows = value;
                         }
                     }
                 }

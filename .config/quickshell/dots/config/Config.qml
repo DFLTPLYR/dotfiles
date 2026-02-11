@@ -12,8 +12,6 @@ import qs.config
 Singleton {
     id: config
     signal reload
-    property alias navbar: adapter.navbar
-    property alias extendedBar: adapter.extendedBar
     property alias general: adapter.general
 
     property var workspaces: []
@@ -52,8 +50,6 @@ Singleton {
         }
         JsonAdapter {
             id: adapter
-            property NavbarConfig navbar: NavbarConfig {}
-            property ExtendedBarConfig extendedBar: ExtendedBarConfig {}
             property GeneralConfig general: GeneralConfig {}
         }
     }

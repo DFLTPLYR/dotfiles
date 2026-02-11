@@ -9,14 +9,14 @@ import qs.services
 Item {
     id: root
     property bool isSlotted: false
-    width: (Config.navbar.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
-    height: (Config.navbar.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
+    width: (Navbar.config.side && root.isSlotted && loader) ? (parent ? parent.width : 0) : loader.implicitWidth
+    height: (Navbar.config.side && root.isSlotted && loader) ? loader.implicitHeight : (parent ? parent.height : 0)
 
     Loader {
         id: loader
         width: parent.width
         height: parent.height
-        sourceComponent: Config.navbar.side ? portrait : landscape
+        sourceComponent: Navbar.config.side ? portrait : landscape
     }
 
     Component {

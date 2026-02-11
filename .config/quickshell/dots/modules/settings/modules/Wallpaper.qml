@@ -611,6 +611,7 @@ PageWrapper {
 
         ListView {
             id: recentWallpapersList
+            visible: model.lenght > 0
             readonly property string currentWallpaper: Config.general.wallpapers.find(wallpaper => wallpaper?.monitor === selectedScreen.name)?.path
             readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
             readonly property int itemHeight: selectedScreen.height / 4

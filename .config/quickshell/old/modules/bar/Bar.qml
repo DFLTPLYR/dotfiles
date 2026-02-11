@@ -31,40 +31,40 @@ Variants {
         screen: modelData
         color: "transparent"
 
-        implicitHeight: Config.navbar.side ? screen.height : Config.navbar.height
-        implicitWidth: Config.navbar.side ? Config.navbar.width : screen.width
+        implicitHeight: Navbar.config.side ? screen.height : Navbar.config.height
+        implicitWidth: Navbar.config.side ? Navbar.config.width : screen.width
 
         anchors {
-            left: ["left", "top", "bottom"].includes(Config.navbar.position)
-            right: ["right", "top", "bottom"].includes(Config.navbar.position)
-            top: ["right", "top", "left"].includes(Config.navbar.position)
-            bottom: ["right", "bottom", "left"].includes(Config.navbar.position)
+            left: ["left", "top", "bottom"].includes(Navbar.config.position)
+            right: ["right", "top", "bottom"].includes(Navbar.config.position)
+            top: ["right", "top", "left"].includes(Navbar.config.position)
+            bottom: ["right", "bottom", "left"].includes(Navbar.config.position)
         }
 
         Item {
             id: barComponent
 
-            width: Config.navbar.side ? Config.navbar.width : parent.width
-            height: Config.navbar.side ? parent.height : Config.navbar.height
+            width: Navbar.config.side ? Navbar.config.width : parent.width
+            height: Navbar.config.side ? parent.height : Navbar.config.height
 
             StyledRect {
                 id: layoutSlotContainer
                 childContainerHeight: parent.height
 
                 anchors {
-                    top: Config.navbar.main.anchors.top ? parent.top : undefined
-                    left: Config.navbar.main.anchors.left ? parent.left : undefined
-                    bottom: Config.navbar.main.anchors.bottom ? parent.bottom : undefined
-                    right: Config.navbar.main.anchors.right ? parent.right : undefined
-                    topMargin: Config.navbar.main.margins.top
-                    leftMargin: Config.navbar.main.margins.left
-                    rightMargin: Config.navbar.main.margins.right
-                    bottomMargin: Config.navbar.main.margins.bottom
+                    top: Navbar.config.main.anchors.top ? parent.top : undefined
+                    left: Navbar.config.main.anchors.left ? parent.left : undefined
+                    bottom: Navbar.config.main.anchors.bottom ? parent.bottom : undefined
+                    right: Navbar.config.main.anchors.right ? parent.right : undefined
+                    topMargin: Navbar.config.main.margins.top
+                    leftMargin: Navbar.config.main.margins.left
+                    rightMargin: Navbar.config.main.margins.right
+                    bottomMargin: Navbar.config.main.margins.bottom
                 }
 
                 StyledLayout {
                     id: layoutContainer
-                    isPortrait: Config.navbar.side
+                    isPortrait: Navbar.config.side
 
                     anchors {
                         fill: parent
@@ -74,7 +74,7 @@ Variants {
 
                     StyledSlot {
                         id: left
-                        alignment: Config.navbar.side ? Qt.AlignTop : Qt.AlignLeft
+                        alignment: Navbar.config.side ? Qt.AlignTop : Qt.AlignLeft
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
@@ -88,7 +88,7 @@ Variants {
 
                     StyledSlot {
                         id: right
-                        alignment: Config.navbar.side ? Qt.AlignBottom : Qt.AlignRight
+                        alignment: Navbar.config.side ? Qt.AlignBottom : Qt.AlignRight
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                     }
@@ -96,7 +96,7 @@ Variants {
             }
 
             Variants {
-                model: Config.navbar.module
+                model: Navbar.config.module
                 delegate: LazyLoader {
                     id: loader
                     property var modelData
