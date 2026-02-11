@@ -43,11 +43,11 @@ ColumnLayout {
             if (wrappedChildren.indexOf(child) !== -1)
                 return;
             child.reparent = true;
-            const multiplier = Config.navbar.side ? child.row : child.column;
+            const multiplier = Navbar.config.side ? child.row : child.column;
 
             let dragWrapper = draggableWrapperComponent.createObject(layoutItemContainer, {
-                width: Config.navbar.side ? 50 : 50 * multiplier,
-                height: Config.navbar.side ? 50 * multiplier : 50,
+                width: Navbar.config.side ? 50 : 50 * multiplier,
+                height: Navbar.config.side ? 50 * multiplier : 50,
                 subject: child
             });
 
@@ -129,7 +129,7 @@ ColumnLayout {
     }
 
     function updateCollisionVisual(dragItem, reset = false) {
-        const requiredCount = Config.navbar.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
+        const requiredCount = Navbar.config.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
 
         let overlaps = [];
         let highlightColor;
@@ -192,7 +192,7 @@ ColumnLayout {
         }
 
         for (let cell of overlappedCells) {
-            const requiredCount = Config.navbar.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
+            const requiredCount = Navbar.config.side ? dragItem.parent.subject.row : dragItem.parent.subject.column;
             if (requiredCount <= overlappedCells.length) {
                 cell.opacity = 0;
                 cell.hasItem = true;
@@ -239,11 +239,11 @@ ColumnLayout {
         }
 
         Connections {
-            target: Config.navbar
+            target: Navbar.config
             function onSideChanged() {
-                const multiplier = Config.navbar.side ? subject.row : subject.column;
-                dragger.width = Config.navbar.side ? 50 : 50 * multiplier;
-                dragger.height = Config.navbar.side ? 50 * multiplier : 50;
+                const multiplier = Navbar.config.side ? subject.row : subject.column;
+                dragger.width = Navbar.config.side ? 50 : 50 * multiplier;
+                dragger.height = Navbar.config.side ? 50 * multiplier : 50;
             }
         }
 
@@ -345,11 +345,11 @@ ColumnLayout {
             onReleased: {
                 // Get overlaps
                 let overlaps = root.updateCollision(tile);
-                const requiredMultiplier = Config.navbar.side ? dragger.subject.row : dragger.subject.column;
+                const requiredMultiplier = Navbar.config.side ? dragger.subject.row : dragger.subject.column;
                 if (overlaps.length < requiredMultiplier) {
                     dragger.parent = layoutItemContainer;
-                    dragger.width = Config.navbar.side ? 50 : 50 * requiredMultiplier;
-                    dragger.height = Config.navbar.side ? 50 * requiredMultiplier : 50;
+                    dragger.width = Navbar.config.side ? 50 : 50 * requiredMultiplier;
+                    dragger.height = Navbar.config.side ? 50 * requiredMultiplier : 50;
                     dragger.subject.reparent = false;
                     root.updateCollisionVisual(tile, true);
                     root.draggableChanged(dragger, null);

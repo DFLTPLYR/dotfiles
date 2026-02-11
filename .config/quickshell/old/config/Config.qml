@@ -27,7 +27,7 @@ Singleton {
         }
         JsonAdapter {
             id: adapter
-            property NavbarConfig navbarConfig: NavbarConfig {}
+            property NavbarNavbar.configConfig: NavbarConfig {}
         }
     }
 

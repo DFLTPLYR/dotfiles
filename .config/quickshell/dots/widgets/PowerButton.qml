@@ -18,14 +18,14 @@ StyledIconButton {
     property real widgetHeight
 
     width: {
-        if (widgetWidth !== 0 && !Config.navbar.side) {
+        if (widgetWidth !== 0 && !Navbar.config.side) {
             return widgetWidth;
         }
         return parent ? parent.width : 0;
     }
 
     height: {
-        if (widgetHeight !== 0 && Config.navbar.side) {
+        if (widgetHeight !== 0 && Navbar.config.side) {
             return widgetHeight;
         }
         return parent ? parent.height : 0;

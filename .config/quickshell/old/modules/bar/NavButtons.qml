@@ -111,6 +111,6 @@ Item {
     Loader {
         id: layoutLoader
         height: parent.height
-        sourceComponent: Config.navbar.side ? portraitLayout : landscapeLayout
+        sourceComponent: Navbar.config.side ? portraitLayout : landscapeLayout
     }
 }
