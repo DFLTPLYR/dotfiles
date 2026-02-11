@@ -131,7 +131,7 @@ PageWrapper {
             }
 
             onClicked: {
-                Config.saveSettings();
+                Navbar.saveSettings();
             }
         }
     }

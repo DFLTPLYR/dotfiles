@@ -82,8 +82,8 @@ Rectangle {
         onReleased: {
             const dropArea = tile.Drag.target;
             const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
+            tile.Drag.drop();
             if (dropArea) {
-                dropArea.hasFocus = false;
                 if (dropArea.parent.objectName === "WidgetWrapper") {
                     parent = origParent;
                     parentName = "";
@@ -135,6 +135,7 @@ Rectangle {
             visible: ma.isSlotted || ma.drag.active
             color: "transparent"
             border.color: "white"
+
             implicitWidth: parent.width
             implicitHeight: parent.height
 
