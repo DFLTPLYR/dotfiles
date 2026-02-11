@@ -7,7 +7,7 @@ import qs.utils
 Rectangle {
     id: slotRoot
     color: "transparent"
-    border.color: childHandler.containsDrag ? Colors.color.primary : "transparent"
+    border.color: "transparent"
     signal slotDestroyed(var widgets)
     property list<Item> widgets: []
 
@@ -43,25 +43,26 @@ Rectangle {
         id: childHandler
         anchors.fill: parent
         objectName: "handler"
-        property bool hasFocus: false
+        z: 1000
         onContainsDragChanged: {
-            hasFocus = containsDrag;
+            slotRoot.border.color = containsDrag ? Colors.color.primary : "transparent";
         }
         onChildrenChanged: {
             Qt.callLater(() => {
-                             const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
-                             for (let i = 0; i < copy.length; i++) {
-                                 const child = copy[i];
-                                 if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
-                                     child.parent = slotLayoutLoader.item.children[0];
-                                 }
-                             }
-                         });
+                const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
+                for (let i = 0; i < copy.length; i++) {
+                    const child = copy[i];
+                    if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
+                        child.parent = slotLayoutLoader.item.children[0];
+                    }
+                }
+            });
         }
     }
 
     component RowSlot: RowLayout {
         id: rootRowSlot
+        z: -10
         default property alias content: childrenHolder.children
 
         Row {
@@ -114,6 +115,7 @@ Rectangle {
         id: rootColSlot
         default property alias content: childrenHolder.children
 
+        z: -10
         Column {
             id: childrenHolder
             objectName: modelData.name
