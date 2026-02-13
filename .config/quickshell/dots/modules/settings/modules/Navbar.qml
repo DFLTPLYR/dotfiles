@@ -422,7 +422,9 @@ PageWrapper {
                         Layout.fillWidth: true
 
                         Instantiator {
-                            model: Navbar.config.widgets
+                            model: ScriptModel {
+                                values: Navbar.config.widgets
+                            }
                             delegate: LazyLoader {
                                 required property var modelData
                                 active: true
