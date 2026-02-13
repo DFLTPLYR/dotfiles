@@ -130,11 +130,7 @@ Variants {
                 Item {
                     id: widgetHolder
                     visible: false
-                    onChildrenChanged: {
-                        if (children.length > 0) {
-                            reparent();
-                        }
-                    }
+
                     function returnChildrenToHolder(widgets, slotName) {
                         for (let i = 0; i < widgets.length; i++) {
                             let child = widgets[i];

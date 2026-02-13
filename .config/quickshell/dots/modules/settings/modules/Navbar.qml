@@ -376,6 +376,7 @@ PageWrapper {
                                         color: {
                                             orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
                                         }
+                                        position: "left"
                                         onAlignmentChanged: {
                                             const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "left";
@@ -386,6 +387,7 @@ PageWrapper {
                                         color: {
                                             orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
                                         }
+                                        position: "center"
                                         onAlignmentChanged: {
                                             const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "center";
@@ -396,6 +398,7 @@ PageWrapper {
                                         color: {
                                             orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
                                         }
+                                        position: "right"
                                         onAlignmentChanged: {
                                             const target = Navbar.config.layouts.find(s => s.name === modelData.name);
                                             target.direction = "right";
@@ -423,13 +426,7 @@ PageWrapper {
 
                         Instantiator {
                             model: ScriptModel {
-                                values: {
-                                    const widgets = Navbar.config.widgets.filter(w => {
-                                        const layout = Navbar.config.layouts.find(s => s.name === w.layout);
-                                        return w.layout !== "" && layout !== undefined;
-                                    });
-                                    return widgets.sort((a, b) => a.position - b.position);
-                                }
+                                values: Navbar.config.widgets.slice().sort((a, b) => a.position - b.position)
                             }
                             delegate: LazyLoader {
                                 required property var modelData
@@ -464,6 +461,7 @@ PageWrapper {
 
     component AlignmentButton: Rectangle {
         signal alignmentChanged
+        property string position
         Layout.fillHeight: true
         Layout.preferredWidth: height
         radius: height / 2
@@ -481,6 +479,12 @@ PageWrapper {
                 easing.type: Easing.InOutQuad
             }
         }
+        Text {
+            text: position
+            anchors.centerIn: parent
+            color: Colors.color.primary
+        }
+
         MouseArea {
             id: ma
             anchors.fill: parent

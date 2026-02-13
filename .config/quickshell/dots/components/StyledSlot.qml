@@ -43,7 +43,6 @@ Rectangle {
         id: childHandler
         anchors.fill: parent
         objectName: "handler"
-        z: 1000
         onContainsDragChanged: {
             slotRoot.border.color = containsDrag ? Colors.color.primary : "transparent";
         }
@@ -62,7 +61,6 @@ Rectangle {
 
     component RowSlot: RowLayout {
         id: rootRowSlot
-        z: -10
         default property alias content: childrenHolder.children
 
         Row {
@@ -117,8 +115,6 @@ Rectangle {
     component ColSlot: ColumnLayout {
         id: rootColSlot
         default property alias content: childrenHolder.children
-
-        z: -10
         Column {
             id: childrenHolder
             objectName: modelData.name

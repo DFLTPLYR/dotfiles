@@ -84,7 +84,6 @@ Rectangle {
             const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
             tile.Drag.drop();
             const isWidgetWrapper = dropArea && dropArea.parent.objectName === "WidgetWrapper";
-
             parent = isWidgetWrapper || !dropArea ? origParent : dropArea;
             parentName = isWidgetWrapper || !dropArea ? "" : dropArea.parent.objectName;
             isSlotted = !(isWidgetWrapper || !dropArea);
@@ -130,7 +129,7 @@ Rectangle {
                         if (item.hasOwnProperty("enableActions")) {
                             item.enableActions = false;
                         }
-                        item.isSlotted = true;
+
                         const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
 
                         if (parentTarget !== -1) {
