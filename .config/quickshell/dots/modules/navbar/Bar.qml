@@ -98,7 +98,7 @@ Variants {
                                 const layout = Navbar.config.layouts.find(s => s.name === w.layout);
                                 return w.layout !== "" && layout !== undefined;
                             });
-                            return widgets;
+                            return widgets.sort((a, b) => a.position - b.position);
                         }
                     }
                     delegate: LazyLoader {
