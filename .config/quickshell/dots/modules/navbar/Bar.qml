@@ -182,6 +182,7 @@ Variants {
                         left: 0
                     }
                 }
+
                 implicitWidth: {
                     const percentage = (screen.width * Navbar.config.popup.width) / 100;
                     return percentage;

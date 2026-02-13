@@ -84,14 +84,12 @@ Rectangle {
 
             spacing: 4
             onChildrenChanged: {
-                for (let c = 0; c < childrenHolder.children.length; c++) {
-                    const child = childrenHolder.children[c];
-                    if (!child.hasOwnProperty("isSlotted"))
-                        return;
+                const widgets = childrenHolder.children.filter(c => c.isSlotted !== undefined);
+                widgets.forEach((child, index) => {
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
-                }
+                });
             }
         }
 

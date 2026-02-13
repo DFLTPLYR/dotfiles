@@ -83,44 +83,19 @@ Rectangle {
             const dropArea = tile.Drag.target;
             const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
             tile.Drag.drop();
-            if (dropArea) {
-                if (dropArea.parent.objectName === "WidgetWrapper") {
-                    parent = origParent;
-                    parentName = "";
-                    if (parentTarget === -1) {
-                        Navbar.config.widgets.push({
-                            name: root.widgetName,
-                            layout: parentName
-                        });
-                    } else {
-                        Navbar.config.widgets[parentTarget].layout = parentName;
-                    }
-                    return isSlotted = false;
-                } else {
-                    parent = dropArea;
-                    parentName = dropArea.parent.objectName;
-                    if (parentTarget === -1) {
-                        Navbar.config.widgets.push({
-                            name: root.widgetName,
-                            layout: parentName
-                        });
-                    } else {
-                        Navbar.config.widgets[parentTarget].layout = parentName;
-                    }
-                    return isSlotted = true;
-                }
+            const isWidgetWrapper = dropArea && dropArea.parent.objectName === "WidgetWrapper";
+
+            parent = isWidgetWrapper || !dropArea ? origParent : dropArea;
+            parentName = isWidgetWrapper || !dropArea ? "" : dropArea.parent.objectName;
+            isSlotted = !(isWidgetWrapper || !dropArea);
+            if (parentTarget === -1) {
+                Navbar.config.widgets.push({
+                    name: root.widgetName,
+                    layout: parentName,
+                    position: 0
+                });
             } else {
-                parent = origParent;
-                parentName = "";
-                if (parentTarget === -1) {
-                    Navbar.config.widgets.push({
-                        name: root.widgetName,
-                        layout: parentName
-                    });
-                } else {
-                    Navbar.config.widgets[parentTarget].layout = parentName;
-                }
-                return isSlotted = false;
+                Navbar.config.widgets[parentTarget].layout = parentName;
             }
         }
 

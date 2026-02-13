@@ -98,7 +98,7 @@ Variants {
         }
 
         Rectangle {
-            visible: !filePath && !tempPath
+            visible: !filePath && !tempPath && !Config.general.useCustomWallpaper
             height: parent.height
             width: parent.width
             color: Qt.rgba(0, 0, 0, 0.5)
