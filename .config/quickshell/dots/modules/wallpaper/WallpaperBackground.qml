@@ -1,10 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
-import QtQuick.Dialogs
 import QtCore
-
-import QtQml.Models
 
 import qs.config
 

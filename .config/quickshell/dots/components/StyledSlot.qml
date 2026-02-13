@@ -89,6 +89,11 @@ Rectangle {
                     child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
+                    const widgetList = Navbar.config.widgets.filter(s => s.layout === modelData.name);
+                    const currentChildren = children.filter(s => s.isSlotted);
+                    const config = Navbar.config.widgets.find(w => w.name === child.origParent?.widgetName);
+                    if (config && widgetList.length === currentChildren.length)
+                        config.position = index;
                 });
             }
         }
@@ -132,15 +137,17 @@ Rectangle {
             }
             spacing: 4
             onChildrenChanged: {
-                for (let c = 0; c < childrenHolder.children.length; c++) {
-                    const child = childrenHolder.children[c];
-                    if (!child.hasOwnProperty("isSlotted"))
-                        return;
-
-                    child.implicitWidth = childrenHolder.width;
+                const widgets = childrenHolder.children.filter(c => c.isSlotted !== undefined);
+                widgets.forEach((child, index) => {
+                    child.implicitHeight = childrenHolder.height;
                     child.y = 0;
                     child.x = 0;
-                }
+                    const widgetList = Navbar.config.widgets.filter(s => s.layout === modelData.name);
+                    const currentChildren = children.filter(s => s.isSlotted);
+                    const config = Navbar.config.widgets.find(w => w.name === child.origParent?.widgetName);
+                    if (config && widgetList.length === currentChildren.length)
+                        config.position = index;
+                });
             }
         }
 
