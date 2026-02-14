@@ -31,7 +31,7 @@ Singleton {
 
     FontLoader {
         id: customIconFont
-        source: Qt.resolvedUrl("./customFont.otf")
+        source: Qt.resolvedUrl("./CustomFont.otf")
     }
 
     FileView {
