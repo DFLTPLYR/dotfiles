@@ -207,14 +207,14 @@ Variants {
                     bottomRightRadius: 50
 
                     Behavior on height {
-                        NumberAnimation {
+                        SmoothedAnimation {
                             duration: 300
                             easing.type: Easing.InOutQuad
                         }
                     }
 
                     Behavior on y {
-                        NumberAnimation {
+                        SmoothedAnimation {
                             duration: 300
                             easing.type: Easing.InOutQuad
                         }
