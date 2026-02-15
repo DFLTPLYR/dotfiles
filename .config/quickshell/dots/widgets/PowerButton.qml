@@ -28,7 +28,8 @@ Wrapper {
             font.styleName: Config.iconFont.styleName
             font.pixelSize: Math.min(parent.height, parent.width) / 2
 
-            color: "white"
+            color: Colors.color.primary
+
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
