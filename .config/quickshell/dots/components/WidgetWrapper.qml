@@ -118,7 +118,7 @@ Rectangle {
                 active: true
                 source: {
                     if (modelData.name !== "") {
-                        return Quickshell.shellPath(`widgets/${root.widgetName}.qml`);
+                        return Quickshell.shellPath(`widgets/${root.widgetName}`);
                     } else {
                         return "";
                     }

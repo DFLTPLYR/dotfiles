@@ -5,7 +5,7 @@ import qs.config
 
 Wrapper {
     Text {
-        text: Hardware.cpuUsagePercent
+        text: `${Hardware.cpuUsagePercent.toFixed(2)} %`
         color: Colors.color.primary
         anchors {
             verticalCenter: parent.verticalCenter

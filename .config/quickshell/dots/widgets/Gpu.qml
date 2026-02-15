@@ -5,7 +5,7 @@ import qs.config
 
 Wrapper {
     Text {
-        text: Hardware.gpuUsagePercent
+        text: `${Hardware.gpuUsagePercent} %`
         color: Colors.color.primary
         anchors {
             verticalCenter: parent.verticalCenter
