@@ -48,7 +48,7 @@ Singleton {
             for (let i = 0; i < count; i++) {
                 const fileName = get(i, "fileName");
                 if (fileName !== "Wrapper.qml") {
-                    const widgetName = fileName.replace('.qml', '');
+                    const widgetName = fileName;
                     const exists = navbar.config.widgets?.find(s => s.name === widgetName);
                     if (!exists) {
                         config.widgets.push({

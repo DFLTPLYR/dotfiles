@@ -66,8 +66,8 @@ Singleton {
 
     Socket {
         id: socket
-        connected: true
         path: root.path
+        connected: true
         onConnectedChanged: {
             write('hardware\n');
         }
