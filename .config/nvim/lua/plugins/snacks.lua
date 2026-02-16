@@ -1,6 +1,8 @@
 return {
   "folke/snacks.nvim",
   opts = {
+    scroll = { enabled = false },
+    dashboard = { enabled = false },
     animate = { enabled = false },
     notifier = { enabled = true },
     styles = {
