@@ -30,15 +30,6 @@ local function set_hl_mutliple(groups, value)
 	end
 end
 
--- Make selected text stand out more
-vim.api.nvim_set_hl(0, "Visual", {
-	bg = "#ff479a",
-	fg = "#000000", -- normal text contrast
-})
--- After the base16-colorscheme setup
-vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
-
 -- Make "string" text contrast better
 set_hl_mutliple({ "String", "TSString" }, {
 	fg = "#ff7657",
