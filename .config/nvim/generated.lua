@@ -81,23 +81,225 @@ set_transparent_bg({
 	"lualine",
 })
 
--- Bufferline (tab) colors
-set_hl_mutliple({
-	"BufferLineFill",
-	"BufferLineBackground",
-	"BufferLineBufferVisible",
-	"BufferLineSeparator",
-}, {
-	bg = "NONE",
-	fg = "NONE",
+-- Bufferline (tab) colors - dynamically configure bufferline with matugen colors
+local function set_bufferline_highlights()
+	local ok, bufferline = pcall(require, "bufferline")
+	if ok then
+		bufferline.setup({
+			highlights = {
+				fill = { bg = "NONE", fg = "NONE" },
+				background = { bg = "NONE", fg = "NONE" },
+				buffer_visible = { bg = "NONE", fg = "NONE" },
+				separator = { bg = "NONE", fg = "NONE" },
+				buffer_selected = {
+					bg = "#1e0f14",
+					fg = "#f9dbe2",
+					bold = true,
+				},
+			},
+		})
+	end
+end
+
+-- Run after plugins load and on ColorScheme changes
+vim.defer_fn(set_bufferline_highlights, 100)
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = set_bufferline_highlights,
 })
 
-set_hl_mutliple({
-	"BufferLineBufferSelected",
-}, {
-	bg = "#1e0f14",
-	fg = "#f9dbe2",
-	bold = true,
+-- Snacks.nvim highlights - dynamically configure with matugen colors
+local function set_snacks_highlights()
+	set_hl_mutliple({
+		"SnacksPicker",
+		"SnacksPickerList",
+		"SnacksPickerPreview",
+		"SnacksPickerInput",
+		"SnacksPickerBox",
+	}, {
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerBorder",
+		"SnacksPickerInputBorder",
+		"SnacksPickerPreviewBorder",
+		"SnacksPickerListBorder",
+		"SnacksPickerBoxBorder",
+	}, {
+		fg = "#a98891",
+		bg = "NONE",
+	})
+
+	-- Input window highlights (for explorer search)
+	set_hl_mutliple({
+		"SnacksInputNormal",
+		"SnacksInput",
+	}, {
+		bg = "NONE",
+		fg = "#f9dbe2",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputBorder",
+		"SnacksPickerInputBorder",
+	}, {
+		fg = "#a98891",
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputTitle",
+		"SnacksPickerInputTitle",
+	}, {
+		fg = "#ffb0ca",
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputIcon",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	-- Search-related highlights
+	set_hl_mutliple({
+		"SnacksPickerInputSearch",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	-- Additional picker UI elements
+	set_hl_mutliple({
+		"SnacksPickerTotals",
+		"SnacksPickerSpinner",
+	}, {
+		fg = "#a98891",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerLabel",
+		"SnacksPickerSpecial",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerSelected",
+	}, {
+		fg = "#ffb0ca",
+		bold = true,
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerPrompt",
+		"SnacksPickerMatch",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerDir",
+	}, {
+		fg = "#e2bdc7",
+	})
+
+	set_hl_mutliple({
+		"SnacksIndent",
+		"SnacksIndentBlank",
+	}, {
+		fg = "#5a3f48",
+	})
+
+	set_hl_mutliple({
+		"SnacksIndentScope",
+		"SnacksIndentChunk",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierInfo",
+		"SnacksNotifierTitleInfo",
+		"SnacksNotifierIconInfo",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierWarn",
+		"SnacksNotifierTitleWarn",
+		"SnacksNotifierIconWarn",
+	}, {
+		fg = "#ffb4a3",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierError",
+		"SnacksNotifierTitleError",
+		"SnacksNotifierIconError",
+	}, {
+		fg = "#ffb4ab",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierDebug",
+		"SnacksNotifierTitleDebug",
+		"SnacksNotifierIconDebug",
+	}, {
+		fg = "#a98891",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierTrace",
+		"SnacksNotifierTitleTrace",
+		"SnacksNotifierIconTrace",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierHistory",
+		"SnacksNotifierHistoryTitle",
+		"SnacksNotifierHistoryDateTime",
+		"SnacksNotifierHistoryType",
+	}, {
+		fg = "#e2bdc7",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardHeader",
+		"SnacksDashboardFooter",
+	}, {
+		fg = "#ffb0ca",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardDesc",
+		"SnacksDashboardIcon",
+	}, {
+		fg = "#e2bdc7",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardKey",
+		"SnacksDashboardSpecial",
+	}, {
+		fg = "#ffb4a3",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardDir",
+	}, {
+		fg = "#a98891",
+	})
+end
+
+-- Run immediately and on ColorScheme changes
+set_snacks_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = set_snacks_highlights,
 })
 
 -- Define custom lualine theme using matugen colors

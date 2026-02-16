@@ -56,11 +56,15 @@ return {
       {
         "akinsho/bufferline.nvim",
         optional = true,
-        opts = function(_, opts)
-          if (vim.g.colors_name or ""):find("catppuccin") then
-            opts.highlights = require("catppuccin.special.bufferline").get_theme()
-          end
-        end,
+        opts = {
+          highlights = {
+            fill = { bg = "NONE", fg = "NONE" },
+            background = { bg = "NONE", fg = "NONE" },
+            buffer_visible = { bg = "NONE", fg = "NONE" },
+            separator = { bg = "NONE", fg = "NONE" },
+            buffer_selected = { bg = "#1e0f14", fg = "#f9dbe2", bold = true },
+          },
+        },
       },
     },
   },

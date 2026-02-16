@@ -81,23 +81,225 @@ set_transparent_bg({
 	"lualine",
 })
 
--- Bufferline (tab) colors
-set_hl_mutliple({
-	"BufferLineFill",
-	"BufferLineBackground",
-	"BufferLineBufferVisible",
-	"BufferLineSeparator",
-}, {
-	bg = "NONE",
-	fg = "NONE",
+-- Bufferline (tab) colors - dynamically configure bufferline with matugen colors
+local function set_bufferline_highlights()
+	local ok, bufferline = pcall(require, "bufferline")
+	if ok then
+		bufferline.setup({
+			highlights = {
+				fill = { bg = "NONE", fg = "NONE" },
+				background = { bg = "NONE", fg = "NONE" },
+				buffer_visible = { bg = "NONE", fg = "NONE" },
+				separator = { bg = "NONE", fg = "NONE" },
+				buffer_selected = {
+					bg = "{{colors.background.default.hex}}",
+					fg = "{{colors.on_surface.default.hex}}",
+					bold = true,
+				},
+			},
+		})
+	end
+end
+
+-- Run after plugins load and on ColorScheme changes
+vim.defer_fn(set_bufferline_highlights, 100)
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = set_bufferline_highlights,
 })
 
-set_hl_mutliple({
-	"BufferLineBufferSelected",
-}, {
-	bg = "{{colors.background.default.hex}}",
-	fg = "{{colors.on_surface.default.hex}}",
-	bold = true,
+-- Snacks.nvim highlights - dynamically configure with matugen colors
+local function set_snacks_highlights()
+	set_hl_mutliple({
+		"SnacksPicker",
+		"SnacksPickerList",
+		"SnacksPickerPreview",
+		"SnacksPickerInput",
+		"SnacksPickerBox",
+	}, {
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerBorder",
+		"SnacksPickerInputBorder",
+		"SnacksPickerPreviewBorder",
+		"SnacksPickerListBorder",
+		"SnacksPickerBoxBorder",
+	}, {
+		fg = "{{colors.outline.default.hex}}",
+		bg = "NONE",
+	})
+
+	-- Input window highlights (for explorer search)
+	set_hl_mutliple({
+		"SnacksInputNormal",
+		"SnacksInput",
+	}, {
+		bg = "NONE",
+		fg = "{{colors.on_surface.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputBorder",
+		"SnacksPickerInputBorder",
+	}, {
+		fg = "{{colors.outline.default.hex}}",
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputTitle",
+		"SnacksPickerInputTitle",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+		bg = "NONE",
+	})
+
+	set_hl_mutliple({
+		"SnacksInputIcon",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	-- Search-related highlights
+	set_hl_mutliple({
+		"SnacksPickerInputSearch",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	-- Additional picker UI elements
+	set_hl_mutliple({
+		"SnacksPickerTotals",
+		"SnacksPickerSpinner",
+	}, {
+		fg = "{{colors.outline.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerLabel",
+		"SnacksPickerSpecial",
+	}, {
+		fg = "{{colors.secondary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerSelected",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+		bold = true,
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerPrompt",
+		"SnacksPickerMatch",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksPickerDir",
+	}, {
+		fg = "{{colors.on_surface_variant.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksIndent",
+		"SnacksIndentBlank",
+	}, {
+		fg = "{{colors.outline_variant.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksIndentScope",
+		"SnacksIndentChunk",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierInfo",
+		"SnacksNotifierTitleInfo",
+		"SnacksNotifierIconInfo",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierWarn",
+		"SnacksNotifierTitleWarn",
+		"SnacksNotifierIconWarn",
+	}, {
+		fg = "{{colors.tertiary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierError",
+		"SnacksNotifierTitleError",
+		"SnacksNotifierIconError",
+	}, {
+		fg = "{{colors.error.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierDebug",
+		"SnacksNotifierTitleDebug",
+		"SnacksNotifierIconDebug",
+	}, {
+		fg = "{{colors.outline.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierTrace",
+		"SnacksNotifierTitleTrace",
+		"SnacksNotifierIconTrace",
+	}, {
+		fg = "{{colors.secondary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksNotifierHistory",
+		"SnacksNotifierHistoryTitle",
+		"SnacksNotifierHistoryDateTime",
+		"SnacksNotifierHistoryType",
+	}, {
+		fg = "{{colors.on_surface_variant.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardHeader",
+		"SnacksDashboardFooter",
+	}, {
+		fg = "{{colors.primary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardDesc",
+		"SnacksDashboardIcon",
+	}, {
+		fg = "{{colors.on_surface_variant.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardKey",
+		"SnacksDashboardSpecial",
+	}, {
+		fg = "{{colors.tertiary.default.hex}}",
+	})
+
+	set_hl_mutliple({
+		"SnacksDashboardDir",
+	}, {
+		fg = "{{colors.outline.default.hex}}",
+	})
+end
+
+-- Run immediately and on ColorScheme changes
+set_snacks_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = set_snacks_highlights,
 })
 
 -- Define custom lualine theme using matugen colors
