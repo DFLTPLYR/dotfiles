@@ -69,6 +69,7 @@ local function set_transparent_bg(groups)
 		vim.api.nvim_set_hl(0, group, { bg = "NONE" })
 	end
 end
+
 set_transparent_bg({
 	"Normal",
 	"NormalNC",
@@ -77,4 +78,84 @@ set_transparent_bg({
 	"EndOfBuffer",
 	"StatusLine",
 	"StatusLineNC",
+	"lualine",
+})
+
+-- Bufferline (tab) colors
+set_hl_mutliple({
+	"BufferLineFill",
+	"BufferLineBackground",
+	"BufferLineBufferVisible",
+	"BufferLineSeparator",
+}, {
+	bg = "NONE",
+	fg = "NONE",
+})
+
+set_hl_mutliple({
+	"BufferLineBufferSelected",
+}, {
+	bg = "{{colors.background.default.hex}}",
+	fg = "{{colors.on_surface.default.hex}}",
+	bold = true,
+})
+
+-- Define custom lualine theme using matugen colors
+local lualine_theme = {
+	normal = {
+		a = {
+			bg = "{{colors.primary_container.default.hex}}",
+			fg = "{{colors.on_primary_container.default.hex}}",
+			gui = "bold",
+		},
+		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.on_surface.default.hex}}" },
+	},
+	insert = {
+		a = {
+			bg = "{{colors.secondary_container.default.hex}}",
+			fg = "{{colors.on_secondary_container.default.hex}}",
+			gui = "bold",
+		},
+		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.on_surface.default.hex}}" },
+	},
+	visual = {
+		a = {
+			bg = "{{colors.tertiary_container.default.hex}}",
+			fg = "{{colors.on_tertiary_container.default.hex}}",
+			gui = "bold",
+		},
+		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.on_surface.default.hex}}" },
+	},
+	replace = {
+		a = {
+			bg = "{{colors.error_container.default.hex}}",
+			fg = "{{colors.on_error_container.default.hex}}",
+			gui = "bold",
+		},
+		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.on_surface.default.hex}}" },
+	},
+	command = {
+		a = {
+			bg = "{{colors.surface_variant.default.hex}}",
+			fg = "{{colors.on_surface_variant.default.hex}}",
+			gui = "bold",
+		},
+		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.on_surface.default.hex}}" },
+	},
+	inactive = {
+		a = { bg = "{{colors.surface_container_low.default.hex}}", fg = "{{colors.outline.default.hex}}", gui = "bold" },
+		b = { bg = "{{colors.surface_container_low.default.hex}}", fg = "{{colors.outline.default.hex}}" },
+		c = { bg = "NONE", fg = "{{colors.outline.default.hex}}" },
+	},
+}
+-- Apply the theme to lualine
+require("lualine").setup({
+	options = {
+		theme = lualine_theme,
+	},
 })
