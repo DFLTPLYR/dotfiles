@@ -30,3 +30,8 @@ output_path = '~/.config/gtk-4.0/colors.css'
 input_path = 'templates/kitty-colors.conf'
 output_path = '~/.config/kitty/themes/Matugen.conf'
 post_hook = "kitty +kitten themes --reload-in=all Matugen"
+
+[templates.neovim]
+input_path = 'templates/nvim-colors.lua'
+output_path = '~/.config/nvim/generated.lua'
+post_hook = 'pkill -SIGUSR1 nvim'
