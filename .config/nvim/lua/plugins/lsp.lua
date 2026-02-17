@@ -54,5 +54,4 @@ return {
       })
     end,
   },
-  require("lspconfig").qmlls.setup({}),
 }

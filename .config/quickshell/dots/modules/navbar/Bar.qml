@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -7,7 +8,6 @@ import Quickshell.Wayland
 
 import qs.config
 import qs.components
-import qs.widgets
 import qs.utils
 
 Variants {
@@ -134,7 +134,7 @@ Variants {
                     function returnChildrenToHolder(widgets, slotName) {
                         for (let i = 0; i < widgets.length; i++) {
                             let child = widgets[i];
-                            if (child.handler === slotName) {
+                            if (child.handler && child.handler === slotName) {
                                 child.isSlotted = false;
                                 child.parent = this;
                             }
