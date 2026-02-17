@@ -119,6 +119,7 @@ Variants {
                                 item.handler = layoutValue;
                                 item.parent = widgetHolder;
                                 item.widgetWidth = modelData.width;
+                                item.position = modelData.position;
                                 item.widgetHeight = modelData.height;
                                 item.height = modelData.height;
                                 widgetHolder.reparent();

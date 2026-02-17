@@ -11,10 +11,10 @@ Rectangle {
     objectName: "WidgetWrapper"
     color: "transparent"
 
+    property int position
     property string widgetName
     property string icon: "plus"
     property bool freeSlot: children.length >= 2
-
     property alias contentWidth: ma.contentWidth
     property alias contentHeight: ma.contentHeight
 

@@ -7,9 +7,8 @@ Wrapper {
     Row {
         anchors.centerIn: parent
         spacing: 8
-
         FontIcon {
-            text: "gaming-pad-alt"
+            text: "circuit"
             color: Colors.color.primary
             font.pixelSize: parent.height
         }
