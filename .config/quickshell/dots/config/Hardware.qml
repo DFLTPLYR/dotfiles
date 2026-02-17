@@ -76,9 +76,6 @@ Singleton {
                 root._handleLine(line);
             }
         }
-        onError: err => {
-            root.lastError = err;
-        }
     }
 
     function _handleLine(line) {

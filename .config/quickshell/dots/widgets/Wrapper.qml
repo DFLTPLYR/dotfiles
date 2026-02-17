@@ -7,7 +7,7 @@ Item {
     property string handler
     property bool isSlotted: false
     property bool enableActions: true
-
+    property int position
     property real widgetWidth
     property real widgetHeight
 

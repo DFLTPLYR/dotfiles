@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.config
-import qs.utils
 
 Rectangle {
     id: slotRoot
@@ -48,13 +47,26 @@ Rectangle {
         }
         onChildrenChanged: {
             Qt.callLater(() => {
-                const copy = (childHandler && childHandler.children) ? childHandler.children.slice() : [];
-                for (let i = 0; i < copy.length; i++) {
-                    const child = copy[i];
-                    if (slotLayoutLoader.item && child.hasOwnProperty("isSlotted")) {
-                        child.parent = slotLayoutLoader.item.children[0];
+                if (!childHandler?.children)
+                    return;
+
+                const copy = Array.from(childHandler.children);
+                const slotted = copy.filter(c => c?.hasOwnProperty("isSlotted")).sort((a, b) => (a?.origParent?.position ?? 0) - (b?.origParent?.position ?? 0));
+
+                const container = slotLayoutLoader?.item?.children?.[0];
+                if (!container)
+                    return;
+
+                // Insert at beginning in reverse order to maintain sort
+                slotted.slice().reverse().forEach(child => {
+                    if (child.parent !== container) {
+                        child.parent = container;
+                    } else {
+                        // Already in container - need to reorder
+                        container.children.splice(container.children.indexOf(child), 1);
+                        container.children.unshift(child);
                     }
-                }
+                });
             });
         }
     }
@@ -96,19 +108,7 @@ Rectangle {
             }
         }
 
-        Component.onDestruction: {
-            const copy = childrenHolder.children.slice();
-            slotRoot.widgets = [];
-            for (let i = 0; i < copy.length; i++) {
-                const child = copy[i];
-                if (!child.hasOwnProperty("isSlotted"))
-                    return;
-                const savedWidth = child.width;
-                const savedHeight = child.height;
-                slotRoot.widgets.push(child);
-                child.parent = childHandler;
-            }
-        }
+        Component.onDestruction: slotRoot._reparentChildren()
     }
 
     component ColSlot: ColumnLayout {
@@ -146,8 +146,15 @@ Rectangle {
             }
         }
 
-        Component.onDestruction: {
-            const copy = childrenHolder.children.slice();
+        Component.onDestruction: slotRoot._reparentChildren()
+    }
+
+    Component.onDestruction: _onDestruction()
+
+    function _reparentChildren() {
+        const target = slotLayoutLoader.item;
+        if (target) {
+            const copy = target.children[0].children.slice();
             slotRoot.widgets = [];
             for (let i = 0; i < copy.length; i++) {
                 const child = copy[i];
@@ -161,7 +168,8 @@ Rectangle {
         }
     }
 
-    Component.onDestruction: {
+    function _onDestruction() {
+        _reparentChildren();
         slotRoot.slotDestroyed(slotRoot.widgets);
     }
 
