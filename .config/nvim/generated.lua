@@ -84,7 +84,7 @@ local function set_bufferline_highlights()
 				separator = { bg = "NONE", fg = "NONE" },
 				buffer_selected = {
 					bg = "#1e0f14",
-					fg = "#f9dbe2",
+					fg = "#ffb4a3",
 					bold = true,
 				},
 			},

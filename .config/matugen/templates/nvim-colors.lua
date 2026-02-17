@@ -84,7 +84,7 @@ local function set_bufferline_highlights()
 				separator = { bg = "NONE", fg = "NONE" },
 				buffer_selected = {
 					bg = "{{colors.background.default.hex}}",
-					fg = "{{colors.on_surface.default.hex}}",
+					fg = "{{colors.tertiary.default.hex}}",
 					bold = true,
 				},
 			},
