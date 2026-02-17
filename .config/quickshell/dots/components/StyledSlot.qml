@@ -108,7 +108,6 @@ Rectangle {
                 slotRoot.widgets.push(child);
                 child.parent = childHandler;
             }
-            slotRoot.slotDestroyed(slotRoot.widgets);
         }
     }
 
@@ -159,7 +158,6 @@ Rectangle {
                 slotRoot.widgets.push(child);
                 child.parent = childHandler;
             }
-            slotRoot.slotDestroyed(slotRoot.widgets);
         }
     }
 

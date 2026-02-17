@@ -65,6 +65,7 @@ PageWrapper {
                 Config.general.useCustomWallpaper = !Config.general.useCustomWallpaper;
             }
         }
+
         // panel
         Rectangle {
             id: panelContent
@@ -259,7 +260,7 @@ PageWrapper {
                         id: screenPreview
                         required property ShellScreen modelData
                         readonly property var monitorData: Config.general.monitorPosition.find(s => s.name === modelData.name)
-                        property bool lock: false
+                        property bool lock: true
                         property bool hoveredState: screenDragArea.containsMouse || screenLockPosition.hovered
                         z: 2
                         width: modelData.width / Config.general.zoom
@@ -300,6 +301,7 @@ PageWrapper {
                                     font.pixelSize: parent.width / 2
                                     color: Colors.color.secondary
                                 }
+
                                 onClicked: {
                                     screenPreview.lock = !screenPreview.lock;
                                     const index = Config.general.monitorPosition.findIndex(s => s.name === modelData.name);
@@ -323,7 +325,6 @@ PageWrapper {
 
                         MouseArea {
                             id: screenDragArea
-                            enabled: !screenPreview.lock
                             hoverEnabled: true
                             anchors.fill: parent
                             drag.target: !screenPreview.lock ? parent : undefined
