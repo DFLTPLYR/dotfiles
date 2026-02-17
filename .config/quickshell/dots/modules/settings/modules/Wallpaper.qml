@@ -17,6 +17,7 @@ PageWrapper {
     property list<var> coordinates: []
     signal updateLocation
     signal saveCustomWallpaper
+
     PageHeader {
         title: "Wallpaper"
     }
@@ -28,13 +29,13 @@ PageWrapper {
         property Item targetItem
         currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
         onAccepted: {
-            if (selectedScreen && !Config.general.useCustomWallpaper) {
-                const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
+            if (root.selectedScreen && !Config.general.useCustomWallpaper) {
+                const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === root.selectedScreen.name);
                 if (targetMonitor != -1) {
                     Config.general.previewWallpaper[targetMonitor].path = selectedFile.path;
                 } else {
                     const monitor = {
-                        monitor: selectedScreen.name,
+                        monitor: root.selectedScreen.name,
                         path: selectedFile,
                         isGif: selectedFile.toString().toLowerCase().endsWith(".gif")
                     };
@@ -44,7 +45,7 @@ PageWrapper {
                 wallpaper.wallpaperPathList.push(selectedFile);
             }
             Config.general.recentWallpapers.push({
-                monitor: selectedScreen.name,
+                monitor: root.selectedScreen.name,
                 timestamp: Date.now(),
                 path: selectedFile
             });
@@ -242,6 +243,7 @@ PageWrapper {
                             Qt.callLater(() => {
                                 Config.reload();
                                 Config.saveSettings();
+                                cmdGenerateColor.running = true;
                             });
                         }
                     }
@@ -546,7 +548,7 @@ PageWrapper {
                         readonly property string imagePath: tempPath || filePath
 
                         color: "transparent"
-                        border.color: selectedScreen.name === modelData.name ? Colors.color.inverse_primary : Colors.color.primary
+                        border.color: root.selectedScreen.name === modelData.name ? Colors.color.inverse_primary : Colors.color.primary
 
                         Layout.preferredHeight: modelData.height / 4
                         Layout.preferredWidth: modelData.width / 4
@@ -571,7 +573,7 @@ PageWrapper {
                         Image {
                             id: monitorBg
                             anchors.fill: parent
-                            anchors.margins: selectedScreen.name === modelData.name ? 2 : 1
+                            anchors.margins: root.selectedScreen.name === modelData.name ? 2 : 1
 
                             Behavior on anchors.margins {
                                 NumberAnimation {
@@ -595,7 +597,7 @@ PageWrapper {
                             anchors.fill: parent
                             hoverEnabled: true
                             onClicked: {
-                                selectedScreen = modelData;
+                                root.selectedScreen = modelData;
                             }
                         }
                     }
@@ -604,7 +606,7 @@ PageWrapper {
         }
 
         StyledButton {
-            text: "Change Wallpaper " + selectedScreen.name
+            text: "Change Wallpaper " + root.selectedScreen.name
             onClicked: {
                 fileDialog.open();
             }
@@ -613,16 +615,16 @@ PageWrapper {
         ListView {
             id: recentWallpapersList
             visible: model.length > 0
-            readonly property string currentWallpaper: Config.general.wallpapers.find(wallpaper => wallpaper?.monitor === selectedScreen.name)?.path || ""
-            readonly property bool isPortrait: selectedScreen.height > selectedScreen.width
-            readonly property int itemHeight: selectedScreen.height / 4
-            readonly property int itemWidth: selectedScreen.width / 4
+            readonly property string currentWallpaper: Config.general.wallpapers.find(wallpaper => wallpaper?.monitor === root.selectedScreen.name)?.path || ""
+            readonly property bool isPortrait: root.selectedScreen.height > selectedScreen.width
+            readonly property int itemHeight: root.selectedScreen.height / 4
+            readonly property int itemWidth: root.selectedScreen.width / 4
             Layout.fillWidth: true
             Layout.preferredHeight: itemHeight
             orientation: ListView.Horizontal
             layoutDirection: Qt.LeftToRight
             spacing: 5
-            model: Config.general.recentWallpapers.filter(item => item.monitor === selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
+            model: Config.general.recentWallpapers.filter(item => item.monitor === root.selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
             delegate: Rectangle {
                 id: recItem
                 property bool isSetCurrent: recentWallpapersList.currentWallpaper === modelData.path
@@ -693,12 +695,12 @@ PageWrapper {
                                     wallpaper.wallpaperPathList.push(modelData.path);
                                     return;
                                 }
-                                const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === selectedScreen.name);
+                                const targetMonitor = Config.general.previewWallpaper.findIndex(w => w && w.monitor === root.selectedScreen.name);
                                 if (targetMonitor != -1) {
                                     Config.general.previewWallpaper[targetMonitor].path = modelData.path;
                                 } else {
                                     const monitor = {
-                                        monitor: selectedScreen.name,
+                                        monitor: root.selectedScreen.name,
                                         path: modelData.path,
                                         isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
                                     };
@@ -735,12 +737,12 @@ PageWrapper {
                                     wallpaper.wallpaperPathList.push(modelData.path);
                                     return;
                                 }
-                                const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === selectedScreen.name);
+                                const targetMonitor = Config.general.wallpapers.findIndex(w => w && w.monitor === root.selectedScreen.name);
                                 if (targetMonitor != -1) {
                                     Config.general.wallpapers[targetMonitor].path = modelData.path;
                                 } else {
                                     const monitor = {
-                                        monitor: selectedScreen.name,
+                                        monitor: root.selectedScreen.name,
                                         path: modelData.path,
                                         isGif: modelData.path.toString().toLowerCase().endsWith(".gif")
                                     };

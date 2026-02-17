@@ -12,12 +12,12 @@ require("base16-colorscheme").setup({
 
 	base08 = "#ff9f8a",
 	base09 = "#ffb4a3",
-	base0A = "#ffb0ca",
-	base0B = "#ffb0ca",
+	base0A = "#ffb0c9",
+	base0B = "#ffb0c9",
 	base0C = "#ff562e",
-	base0D = "#ff479a",
-	base0E = "#8a184f",
-	base0F = "#ff7da8",
+	base0D = "#ff4799",
+	base0E = "#8a184e",
+	base0F = "#ff7da6",
 })
 
 -- We first theme base16, but we also need to fix some other colors that don't
@@ -48,11 +48,11 @@ set_hl_mutliple({ "TSMethod", "Method" }, {
 })
 
 set_hl_mutliple({ "TSFunction", "Function" }, {
-	fg = "#ffb0ca",
+	fg = "#ffb0c9",
 })
 
 set_hl_mutliple({ "Keyword", "TSKeyword", "TSKeywordFunction", "TSRepeat" }, {
-	fg = "#b90067",
+	fg = "#b90066",
 })
 
 local function set_transparent_bg(groups)
@@ -143,21 +143,21 @@ local function set_snacks_highlights()
 		"SnacksInputTitle",
 		"SnacksPickerInputTitle",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 		bg = "NONE",
 	})
 
 	set_hl_mutliple({
 		"SnacksInputIcon",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	-- Search-related highlights
 	set_hl_mutliple({
 		"SnacksPickerInputSearch",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	-- Additional picker UI elements
@@ -172,13 +172,13 @@ local function set_snacks_highlights()
 		"SnacksPickerLabel",
 		"SnacksPickerSpecial",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
 		"SnacksPickerSelected",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 		bold = true,
 	})
 
@@ -186,7 +186,7 @@ local function set_snacks_highlights()
 		"SnacksPickerPrompt",
 		"SnacksPickerMatch",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
@@ -206,7 +206,7 @@ local function set_snacks_highlights()
 		"SnacksIndentScope",
 		"SnacksIndentChunk",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
@@ -214,7 +214,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleInfo",
 		"SnacksNotifierIconInfo",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
@@ -246,7 +246,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleTrace",
 		"SnacksNotifierIconTrace",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
@@ -262,7 +262,7 @@ local function set_snacks_highlights()
 		"SnacksDashboardHeader",
 		"SnacksDashboardFooter",
 	}, {
-		fg = "#ffb0ca",
+		fg = "#ffb0c9",
 	})
 
 	set_hl_mutliple({
@@ -297,7 +297,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 local lualine_theme = {
 	normal = {
 		a = {
-			bg = "#ff479a",
+			bg = "#ff4799",
 			fg = "#000000",
 			gui = "bold",
 		},
@@ -306,7 +306,7 @@ local lualine_theme = {
 	},
 	insert = {
 		a = {
-			bg = "#8a184f",
+			bg = "#8a184e",
 			fg = "#ffdbe4",
 			gui = "bold",
 		},
