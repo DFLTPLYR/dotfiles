@@ -96,7 +96,7 @@ Singleton {
                 switch (key) {
                 case EventType.FocusedOutput:
                     const focusedMonitor = response.Ok.FocusedOutput;
-                    config.focusedMonitor = focusedMonitor;
+                    config.focusedMonitor = focusedMonitor.name;
                     break;
                 default:
                     break;

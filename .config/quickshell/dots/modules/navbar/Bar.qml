@@ -227,6 +227,7 @@ Variants {
                         Repeater {
                             model: ["Media", "Hardware", "Weather"]
                             delegate: CustomTabButton {
+                                required property string modelData
                                 label: modelData
                             }
                         }

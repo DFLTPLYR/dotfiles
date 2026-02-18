@@ -20,8 +20,9 @@ Scope {
         component: FloatingWindow {
             id: root
             title: "SettingsPanel"
+            screen: selectedScreen
             property int page: 0
-            property ShellScreen selectedScreen: Quickshell.screens.find(w => w.name === Config.focusedMonitor.name)
+            property ShellScreen selectedScreen: Quickshell.screens.find(w => w.name === Config.focusedMonitor)
             readonly property bool isPortrait: screen.height > screen.width
             readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
 
