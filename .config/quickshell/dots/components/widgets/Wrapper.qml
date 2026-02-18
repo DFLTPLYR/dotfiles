@@ -9,7 +9,7 @@ Item {
     property int position
     property real widgetWidth
     property real widgetHeight
-
+    clip: true
     width: {
         if (widgetWidth !== 0 && !Navbar.config.side) {
             return widgetWidth;

@@ -2,7 +2,6 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtCore
 import Qt.labs.folderlistmodel
 
 import Quickshell
@@ -49,9 +48,9 @@ Singleton {
                 const fileName = get(i, "fileName");
                 if (fileName !== "Wrapper.qml") {
                     const widgetName = fileName;
-                    const exists = navbar.config.widgets?.find(s => s.name === widgetName);
+                    const exists = navbar.config.widgets.find(s => s.name === widgetName);
                     if (!exists) {
-                        config.widgets.push({
+                        navbar.config.widgets.push({
                             name: fileName,
                             width: 50,
                             height: 50,
@@ -60,7 +59,7 @@ Singleton {
                             layout: "",
                             position: 0
                         });
-                        saveSettings();
+                        navbar.saveSettings();
                     }
                 }
             }
