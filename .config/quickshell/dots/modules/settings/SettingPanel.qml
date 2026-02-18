@@ -5,7 +5,7 @@ import Quickshell
 
 import qs.config
 import qs.components
-import qs.modules.settings.modules
+import qs.modules.settings.pages
 
 Scope {
     Connections {

@@ -107,7 +107,7 @@ Variants {
 
                         source: {
                             if (modelData.name !== "") {
-                                return Quickshell.shellPath(`widgets/${modelData.name}`);
+                                return Quickshell.shellPath(`components/widgets/${modelData.name}`);
                             } else {
                                 return "";
                             }
