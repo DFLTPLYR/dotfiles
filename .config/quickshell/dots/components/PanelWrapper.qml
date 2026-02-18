@@ -4,7 +4,7 @@ import Quickshell.Hyprland
 import qs.config
 
 PanelWindow {
-    screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor?.name) ?? null
+    screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor)
 
     color: 'transparent'
 

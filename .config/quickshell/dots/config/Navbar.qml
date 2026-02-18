@@ -40,7 +40,7 @@ Singleton {
 
     FolderListModel {
         id: folderModel
-        folder: Qt.resolvedUrl("../widgets")
+        folder: Qt.resolvedUrl("../components/widgets")
         nameFilters: ["*.qml"]
         showDirs: false
 
