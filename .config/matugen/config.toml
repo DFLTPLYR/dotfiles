@@ -18,7 +18,7 @@ input_path = "templates/qtct.conf"
 output_path = '~/.config/qt6ct/colors/matugen.conf'
 
 [templates.gtk3]
-input_path = "templates/gtk-colors.css"
+input_path = "templates/gtk3-colors.css"
 output_path = '~/.config/gtk-3.0/colors.css'
 post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
 

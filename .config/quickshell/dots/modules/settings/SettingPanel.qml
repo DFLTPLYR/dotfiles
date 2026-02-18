@@ -1,11 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import Quickshell
-import Quickshell.Wayland
 
-import qs.utils
 import qs.config
 import qs.components
 import qs.modules.settings.modules

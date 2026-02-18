@@ -11,7 +11,7 @@ Wrapper {
         FontIcon {
             text: "gaming-pad-alt"
             color: Colors.color.primary
-            font.pixelSize: parent.height
+            font.pixelSize: Math.min(parent.height, parent.width)
         }
         Text {
             text: `${Hardware.gpuUsagePercent} %`
