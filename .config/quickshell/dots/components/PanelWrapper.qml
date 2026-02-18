@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
+
 import qs.config
 
 PanelWindow {
