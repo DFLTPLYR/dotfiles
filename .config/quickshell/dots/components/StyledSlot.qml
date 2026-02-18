@@ -57,12 +57,10 @@ Rectangle {
                 if (!container)
                     return;
 
-                // Insert at beginning in reverse order to maintain sort
                 slotted.slice().reverse().forEach(child => {
                     if (child.parent !== container) {
                         child.parent = container;
                     } else {
-                        // Already in container - need to reorder
                         container.children.splice(container.children.indexOf(child), 1);
                         container.children.unshift(child);
                     }

@@ -10,7 +10,7 @@ Wrapper {
         FontIcon {
             text: "circuit"
             color: Colors.color.primary
-            font.pixelSize: parent.height
+            font.pixelSize: Math.min(parent.height, parent.width)
         }
         Text {
             text: `${Hardware.memoryUsagePercent.toFixed(2)} %`
