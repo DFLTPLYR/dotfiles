@@ -118,7 +118,7 @@ Rectangle {
                 active: true
                 source: {
                     if (modelData.name !== "") {
-                        return Quickshell.shellPath(`widgets/${root.widgetName}`);
+                        return Quickshell.shellPath(`components/widgets/${root.widgetName}`);
                     } else {
                         return "";
                     }
