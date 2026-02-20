@@ -35,6 +35,7 @@ Item {
 
     BorderImage {
         id: panelItem
+        visible: root.usePanel
         anchors {
             fill: parent
         }
