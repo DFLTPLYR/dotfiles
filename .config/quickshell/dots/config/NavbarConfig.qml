@@ -10,4 +10,5 @@ JsonObject {
     property bool side: position === "left" || position === "right"
     property color background: Colors.color.background
     property PopupProps popup: PopupProps {}
+    property Style style: Style {}
 }
