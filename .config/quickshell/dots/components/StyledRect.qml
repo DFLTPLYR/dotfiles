@@ -7,9 +7,9 @@ Item {
     property alias panelSource: panelItem.source
     default property alias content: contentItem.data
 
-    property int borderRadius: 0
-    property int borderWidth: 0
-    property color borderColor: "transparent"
+    property alias borderRadius: contentItem.radius
+    property alias borderWidth: contentItem.border.width
+    property alias borderColor: contentItem.border.color
 
     // rectangle properties
     property alias color: contentItem.color
@@ -18,25 +18,13 @@ Item {
     property alias topMargin: contentItem.anchors.topMargin
     property alias bottomMargin: contentItem.anchors.bottomMargin
 
-    onBorderWidthChanged: {
-        contentItem.border.width = root.borderWidth;
-    }
-
-    onBorderColorChanged: {
-        contentItem.border.color = root.borderColor;
-    }
-
-    onBorderRadiusChanged: {
-        contentItem.radius = root.borderRadius;
-    }
-
     Rectangle {
         id: contentItem
         visible: !root.usePanel
         anchors {
             fill: parent
         }
-
+        border.color: "transparent"
         Behavior on color {
             ColorAnimation {
                 duration: 250
