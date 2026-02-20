@@ -6,7 +6,7 @@ Item {
     property bool isPortrait: false
     property real spacing: layoutLoader.item ? layoutLoader.item.spacing : 0
     default property alias content: contentHolder.children
-
+    clip: true
     QtObject {
         id: contentHolder
         property list<Item> children
