@@ -8,6 +8,7 @@ Wrapper {
     property string icon: "power-off"
     property int widgetHeight: 50
     property int widgetWidth: 50
+
     StyledIconButton {
         enabled: wrapper.enableActions !== undefined ? wrapper.enableActions : false
 
