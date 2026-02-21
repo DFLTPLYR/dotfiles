@@ -48,6 +48,10 @@ Singleton {
                 const fileName = get(i, "fileName");
                 if (fileName !== "Wrapper.qml") {
                     const widgetName = fileName;
+                    const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
+                    propertyCheckerComponent.createObject(navbar, {
+                        path: target
+                    });
                     const exists = navbar.config.widgets.find(s => s.name === widgetName);
                     if (!exists) {
                         navbar.config.widgets.push({
@@ -62,6 +66,33 @@ Singleton {
                         navbar.saveSettings();
                     }
                 }
+            }
+        }
+    }
+
+    Component {
+        id: propertyCheckerComponent
+        FileView {
+            function getProperties(content) {
+                var properties = [];
+                var regex = /property\s+(var|string|int|real|bool|color|url|list|component)\s+(\w+)(?:\s*:\s*(.+?))?$/gm;
+                var match;
+                while ((match = regex.exec(content)) !== null) {
+                    properties.push({
+                        type: match[1],
+                        name: match[2],
+                        default: match[3] || null
+                    });
+                }
+                return properties;
+            }
+            onPathChanged: {
+                this.reload();
+            }
+            onLoaded: {
+                var props = getProperties(text());
+                // later do a write here stop obsessing with DEADLOCK and LOCKIN TWINN
+                this.destroy();
             }
         }
     }
