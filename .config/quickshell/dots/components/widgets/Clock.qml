@@ -4,7 +4,9 @@ import Quickshell
 import qs.config
 
 Wrapper {
-    property bool hasItOwns: false
+    property string icon: "clock-nine"
+    property int widgetHeight: 100
+    property int widgetWidth: 100
     Text {
         SystemClock {
             id: clock
