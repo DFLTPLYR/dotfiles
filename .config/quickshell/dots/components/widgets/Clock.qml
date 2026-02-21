@@ -4,6 +4,7 @@ import Quickshell
 import qs.config
 
 Wrapper {
+    property bool hasItOwns: false
     Text {
         SystemClock {
             id: clock
