@@ -55,15 +55,6 @@ Singleton {
                             path: target,
                             widget: widgetName
                         });
-                        // navbar.config.widgets.push({
-                        //     name: fileName,
-                        //     width: 50,
-                        //     height: 50,
-                        //
-                        //     icon: "clock-nine",
-                        //     layout: "",
-                        //     position: 0
-                        // });
                     }
                 }
             }

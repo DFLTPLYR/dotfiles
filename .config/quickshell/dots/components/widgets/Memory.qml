@@ -1,18 +1,28 @@
 import QtQuick
 
 import qs.config
+import qs.components
 
 Wrapper {
+    id: wrap
     property string icon: "device-ram-memory"
-    property int widgetHeight: 100
-    property int widgetWidth: 100
+    property int widgetHeight: 200
+    property int widgetWidth: 200
     Row {
         anchors.centerIn: parent
         spacing: 8
 
+        FontIcon {
+            text: "device-ram-memory"
+            color: Colors.color.primary
+            font.pixelSize: Math.min(parent.height, parent.width)
+        }
+
         Text {
             text: `${formatBytes(Hardware.memory.used)} / ${formatBytes(Hardware.memory.total)}`
             color: Colors.color.primary
+
+            font.pixelSize: Math.min(wrap.width, wrap.height) / 4
             function formatBytes(bytes) {
                 if (bytes === 0)
                     return "0 B";

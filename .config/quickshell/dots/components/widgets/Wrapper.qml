@@ -23,8 +23,8 @@ Item {
             fill: parent
             topMargin: 10
             bottomMargin: 10
-            leftMargin: 0
-            rightMargin: 0
+            leftMargin: 10
+            rightMargin: 10
         }
     }
 
