@@ -64,7 +64,6 @@ Singleton {
                         //     layout: "",
                         //     position: 0
                         // });
-                        // navbar.saveSettings();
                     }
                 }
             }
@@ -91,7 +90,6 @@ Singleton {
                     }
                     properties[match[2]] = value;
                 }
-                navbar.config.widgets.push(properties);
                 return properties;
             }
             onPathChanged: {
@@ -99,6 +97,8 @@ Singleton {
             }
             onLoaded: {
                 var props = getProperties(text());
+                navbar.config.widgets.push(props);
+                navbar.saveSettings();
                 // later do a write here stop obsessing with DEADLOCK and LOCKIN TWINN
                 this.destroy();
             }
