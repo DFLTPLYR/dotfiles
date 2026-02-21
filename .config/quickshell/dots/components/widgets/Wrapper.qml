@@ -9,8 +9,8 @@ Item {
     property bool isSlotted: false
     property bool enableActions: true
     property int position
-    property real widgetWidth
-    property real widgetHeight
+    property real wrapWidth
+    property real wrapHeight
 
     Rectangle {
         id: handler
@@ -29,15 +29,15 @@ Item {
     }
 
     width: {
-        if (widgetWidth !== 0 && !Navbar.config.side) {
-            return widgetWidth;
+        if (wrapWidth !== 0 && !Navbar.config.side) {
+            return wrapWidth;
         }
         return parent ? parent.width : 0;
     }
 
     height: {
-        if (widgetHeight !== 0 && Navbar.config.side) {
-            return widgetHeight;
+        if (wrapHeight !== 0 && Navbar.config.side) {
+            return wrapHeight;
         }
         return parent ? parent.height : 0;
     }

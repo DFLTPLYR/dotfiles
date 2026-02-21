@@ -3,6 +3,9 @@ import QtQuick
 import qs.config
 
 Wrapper {
+    property string icon: "device-ram-memory"
+    property int widgetHeight: 100
+    property int widgetWidth: 100
     Row {
         anchors.centerIn: parent
         spacing: 8

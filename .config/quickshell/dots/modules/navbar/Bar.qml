@@ -118,9 +118,9 @@ Variants {
                                 const layoutValue = modelData.layout.valueOf();
                                 item.handler = layoutValue;
                                 item.parent = widgetHolder;
-                                item.widgetWidth = modelData.width;
+                                item.wrapWidth = modelData.widgetWidth;
+                                item.wrapHeight = modelData.widgetHeight;
                                 item.position = modelData.position;
-                                item.widgetHeight = modelData.height;
                                 widgetHolder.reparent();
                             }
                         }

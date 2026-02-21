@@ -435,8 +435,8 @@ PageWrapper {
                                     parent: wrapperLayout
                                     icon: modelData.icon
                                     widgetName: modelData.name
-                                    contentHeight: modelData.height / 2
-                                    contentWidth: modelData.width / 2
+                                    contentHeight: modelData.widgetHeight / 2
+                                    contentWidth: modelData.widgetWidth / 2
                                     position: modelData.position
                                     onReparent: (name, item) => {
                                         const slotMap = Array.from({
