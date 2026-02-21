@@ -100,7 +100,7 @@ Rectangle {
 
         onParentChanged: {
             if (parent === null)
-                reparent(parentName, ma);
+                root.reparent(parentName, ma);
         }
 
         Rectangle {
@@ -138,7 +138,7 @@ Rectangle {
                             ma.parentName = layout;
                             if (layout !== "")
                                 ma.isSlotted = true;
-                            return reparent(layout, ma);
+                            return root.reparent(layout, ma);
                         }
                     }
                 }
