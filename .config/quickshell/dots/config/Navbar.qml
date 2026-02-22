@@ -95,7 +95,14 @@ Singleton {
                         break;
                     default:
                         value = value.replace(/^["']|["']$/g, '');
-                        properties[match[2]] = value;
+
+                        if (match[2].includes("widgetWidth")) {
+                            properties.width = value;
+                        } else if (match[2].includes("widgetHeight")) {
+                            properties.height = value;
+                        } else {
+                            properties[match[2]] = value;
+                        }
                     }
                 }
                 return properties;
@@ -106,7 +113,7 @@ Singleton {
             onLoaded: {
                 var props = getProperties(text());
                 navbar.config.widgets.push(props);
-                navbar.saveSettings();
+                // navbar.saveSettings();
                 // later do a write here stop obsessing with DEADLOCK and LOCKIN TWINN
                 this.destroy();
             }

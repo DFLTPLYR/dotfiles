@@ -118,8 +118,8 @@ Variants {
                                 const layoutValue = modelData.layout.valueOf();
                                 item.handler = layoutValue;
                                 item.parent = widgetHolder;
-                                item.wrapWidth = modelData.widgetWidth;
-                                item.wrapHeight = modelData.widgetHeight;
+                                item.wrapWidth = modelData.width;
+                                item.wrapHeight = modelData.height;
                                 item.position = modelData.position;
                                 if (modelData.padding) {
                                     const padding = spacing.createObject(null, {
