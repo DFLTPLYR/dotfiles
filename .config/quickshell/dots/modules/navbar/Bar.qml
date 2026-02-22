@@ -121,6 +121,15 @@ Variants {
                                 item.wrapWidth = modelData.widgetWidth;
                                 item.wrapHeight = modelData.widgetHeight;
                                 item.position = modelData.position;
+                                if (modelData.padding) {
+                                    const padding = spacing.createObject(null, {
+                                        left: modelData.padding.left,
+                                        right: modelData.padding.right,
+                                        bottom: modelData.padding.bottom,
+                                        top: modelData.padding.top
+                                    });
+                                    item.padding = padding;
+                                }
                                 widgetHolder.reparent();
                             }
                         }
@@ -157,6 +166,11 @@ Variants {
                     }
                 }
             }
+        }
+
+        Component {
+            id: spacing
+            Spacing {}
         }
 
         LazyLoader {

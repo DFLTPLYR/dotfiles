@@ -6,35 +6,38 @@ import qs.config
 Item {
     id: wrap
 
+    //for child being passed cuz shieeeee
     default property alias content: handler.data
 
+    // generics for handling reparent
     property string handler
     property bool isSlotted: false
     property bool enableActions: true
     property int position
+
+    // size
     property real wrapWidth
     property real wrapHeight
 
-    // padding
-    property int leftPadding: 10
-    property int rightPadding: 10
-    property int topPadding: 10
-    property int bottomPadding: 10
+    // margin
+    property Spacing margin: Spacing {}
+    property int rouding: 0
 
     Rectangle {
         id: handler
         color: Scripts.setOpacity(Colors.color.on_primary, 0.8)
         border.color: Colors.color.primary
-        radius: width / 2
+        radius: wrap.rouding
         clip: true
 
         anchors {
             fill: parent
+
             // padding
-            bottomMargin: Navbar.config.side ? 0 : wrap.bottomPadding
-            topMargin: Navbar.config.side ? 0 : wrap.topPadding
-            leftMargin: Navbar.config.side ? wrap.leftPadding : 0
-            rightMargin: Navbar.config.side ? wrap.rightPadding : 0
+            bottomMargin: wrap.margin.bottom
+            topMargin: wrap.margin.top
+            leftMargin: wrap.margin.bottom
+            rightMargin: wrap.margin.top
         }
     }
 

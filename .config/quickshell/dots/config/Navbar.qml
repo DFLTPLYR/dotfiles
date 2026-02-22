@@ -70,7 +70,15 @@ Singleton {
                     name: widget,
                     enableActions: true,
                     layout: "",
-                    position: null
+                    position: null,
+                    margin: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                    },
+                    width: 0,
+                    height: 0
                 };
                 var regex = /property\s+(\w+)\s+(\w+)(?:\s*:\s*(.+?))?$/gm;
                 var match;

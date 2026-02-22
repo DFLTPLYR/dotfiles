@@ -130,6 +130,15 @@ Rectangle {
                             item.enableActions = false;
                         }
 
+                        if (modelData.padding) {
+                            const padding = spacing.createObject(null, {
+                                left: modelData.padding.left,
+                                right: modelData.padding.right,
+                                bottom: modelData.padding.bottom,
+                                top: modelData.padding.top
+                            });
+                            item.padding = padding;
+                        }
                         const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
 
                         if (parentTarget !== -1) {
@@ -169,5 +178,9 @@ Rectangle {
         Component.onCompleted: {
             origParent = parent;
         }
+    }
+    Component {
+        id: spacing
+        Spacing {}
     }
 }
