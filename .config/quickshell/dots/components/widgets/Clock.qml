@@ -7,6 +7,7 @@ Wrapper {
     property string icon: "clock-nine"
     property int widgetHeight: 100
     property int widgetWidth: 100
+    property Spacing padding: Spacing {}
     Text {
         SystemClock {
             id: clock

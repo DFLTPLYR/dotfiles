@@ -7,6 +7,7 @@ Wrapper {
     property string icon: "gaming-pad-alt"
     property int widgetHeight: 100
     property int widgetWidth: 100
+    property Spacing padding: Spacing {}
     Row {
         anchors.centerIn: parent
         spacing: 8

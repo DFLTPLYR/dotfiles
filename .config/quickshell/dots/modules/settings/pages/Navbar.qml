@@ -437,7 +437,7 @@ PageWrapper {
                                     widgetName: modelData.name
                                     contentHeight: modelData.widgetHeight / 2
                                     contentWidth: modelData.widgetWidth / 2
-                                    position: modelData.position
+                                    position: modelData.position || 0
                                     onReparent: (name, item) => {
                                         const slotMap = Array.from({
                                             length: slotRepeater.count
