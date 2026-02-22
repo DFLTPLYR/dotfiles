@@ -72,14 +72,23 @@ Singleton {
                     layout: "",
                     position: null
                 };
-                var regex = /property\s+(var|string|int|real|bool|color|url|list|component)\s+(\w+)(?:\s*:\s*(.+?))?$/gm;
+                var regex = /property\s+(\w+)\s+(\w+)(?:\s*:\s*(.+?))?$/gm;
                 var match;
                 while ((match = regex.exec(content)) !== null) {
                     var value = match[3];
-                    if (value) {
+                    switch (match[1]) {
+                    case "Spacing":
+                        properties[match[2]] = {
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0
+                        };
+                        break;
+                    default:
                         value = value.replace(/^["']|["']$/g, '');
+                        properties[match[2]] = value;
                     }
-                    properties[match[2]] = value;
                 }
                 return properties;
             }

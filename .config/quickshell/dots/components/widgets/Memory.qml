@@ -13,6 +13,7 @@ Wrapper {
     property int rightPadding: 10
     property int topPadding: 10
     property int bottomPadding: 10
+    property Spacing padding: Spacing {}
 
     function formatBytes(bytes, point = 2) {
         if (bytes === 0)
@@ -34,13 +35,14 @@ Wrapper {
             topMargin: Navbar.config.side ? wrap.topPadding : 0
             bottomMargin: Navbar.config.side ? wrap.bottomPadding : 0
         }
-
+        // icon
         FontIcon {
             text: "device-ram-memory"
             color: Colors.color.primary
             font.pixelSize: Math.min(parent.height, parent.width)
         }
 
+        // Portrait
         Text {
             visible: !Navbar.config.side
             text: `${wrap.formatBytes(Hardware.memory.used)} / ${wrap.formatBytes(Hardware.memory.total)}`
@@ -50,6 +52,7 @@ Wrapper {
             wrapMode: Text.Wrap
         }
 
+        // Column
         Text {
             visible: Navbar.config.side
             Layout.fillWidth: true
@@ -58,6 +61,7 @@ Wrapper {
             font.pixelSize: Math.min(wrap.width, wrap.height) / 4
             text: `${wrap.formatBytes(Hardware.memory.used, 0)} `
         }
+
         Rectangle {
             visible: Navbar.config.side
             color: Colors.color.tertiary
