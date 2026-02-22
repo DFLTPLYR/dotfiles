@@ -4,13 +4,22 @@ import qs.utils
 import qs.config
 
 Item {
+    id: wrap
+
     default property alias content: handler.data
+
     property string handler
     property bool isSlotted: false
     property bool enableActions: true
     property int position
     property real wrapWidth
     property real wrapHeight
+
+    // padding
+    property int leftPadding: 10
+    property int rightPadding: 10
+    property int topPadding: 10
+    property int bottomPadding: 10
 
     Rectangle {
         id: handler
@@ -21,10 +30,11 @@ Item {
 
         anchors {
             fill: parent
-            topMargin: 10
-            bottomMargin: 10
-            leftMargin: 10
-            rightMargin: 10
+            // padding
+            bottomMargin: Navbar.config.side ? 0 : wrap.bottomPadding
+            topMargin: Navbar.config.side ? 0 : wrap.topPadding
+            leftMargin: Navbar.config.side ? wrap.leftPadding : 0
+            rightMargin: Navbar.config.side ? wrap.rightPadding : 0
         }
     }
 
