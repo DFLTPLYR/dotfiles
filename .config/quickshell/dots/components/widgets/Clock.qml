@@ -4,20 +4,25 @@ import Quickshell
 import qs.config
 
 Wrapper {
-    id: clock
     property string icon: "clock-nine"
     property int widgetHeight: 100
     property int widgetWidth: 100
 
+    margin {
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+    }
+
     Text {
         SystemClock {
-            id: sysClock
+            id: clock
             precision: SystemClock.Seconds
         }
 
-        text: Qt.formatDateTime(sysClock.date, "hh:mm AP")
+        text: Qt.formatDateTime(clock.date, "hh:mm AP")
         color: Colors.color.primary
-        font.pixelSize: Math.min(clock.contentWidth, clock.contentHeight) * 0.4
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
