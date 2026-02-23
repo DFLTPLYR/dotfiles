@@ -29,7 +29,7 @@ PageWrapper {
     }
 
     // margins, padding and rounding
-    ColumnLayout {
+    RowLayout {
         Layout.fillWidth: true
         Layout.minimumHeight: 20
         spacing: 4
@@ -48,9 +48,10 @@ PageWrapper {
                 onValueChanged: {
                     Config.general.appearance.margin = value;
                 }
-                Component.onCompleted: from = Config.general.appearance.margin
+                Component.onCompleted: value = Config.general.appearance.margin
             }
         }
+
         Row {
             Layout.fillWidth: true
             Text {
@@ -65,9 +66,10 @@ PageWrapper {
                 onValueChanged: {
                     Config.general.appearance.padding = value;
                 }
-                Component.onCompleted: from = Config.general.appearance.padding
+                Component.onCompleted: value = Config.general.appearance.padding
             }
         }
+
         Row {
             Layout.fillWidth: true
             Text {
@@ -79,10 +81,12 @@ PageWrapper {
                 }
             }
             StyledSpinBox {
+                from: 0
+                to: 50
+                value: Config.general.appearance.rounding
                 onValueChanged: {
                     Config.general.appearance.rounding = value;
                 }
-                Component.onCompleted: from = Config.general.appearance.rounding
             }
         }
     }
