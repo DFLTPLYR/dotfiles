@@ -28,6 +28,66 @@ PageWrapper {
         }
     }
 
+    // margins, padding and rounding
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.minimumHeight: 20
+        spacing: 4
+
+        Row {
+            Layout.fillWidth: true
+            Text {
+                color: Colors.color.primary
+                text: "Margin: "
+                width: 100
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
+            }
+            StyledSpinBox {
+                onValueChanged: {
+                    Config.general.appearance.margin = value;
+                }
+                Component.onCompleted: from = Config.general.appearance.margin
+            }
+        }
+        Row {
+            Layout.fillWidth: true
+            Text {
+                color: Colors.color.primary
+                text: "Padding: "
+                width: 100
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
+            }
+            StyledSpinBox {
+                onValueChanged: {
+                    Config.general.appearance.padding = value;
+                }
+                Component.onCompleted: from = Config.general.appearance.padding
+            }
+        }
+        Row {
+            Layout.fillWidth: true
+            Text {
+                color: Colors.color.primary
+                text: "Rounding: "
+                width: 100
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
+            }
+            StyledSpinBox {
+                onValueChanged: {
+                    Config.general.appearance.rounding = value;
+                }
+                Component.onCompleted: from = Config.general.appearance.rounding
+            }
+        }
+    }
+
+    // preset creator
     GridLayout {
         id: presetGrid
         visible: false
@@ -89,8 +149,7 @@ PageWrapper {
                     bottom: parent.bottom
                     horizontalCenter: parent.horizontalCenter
                 }
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+
                 StyledSpinBox {
                     from: 0
                     onValueChanged: {
@@ -114,8 +173,6 @@ PageWrapper {
                     right: parent.right
                     verticalCenter: parent.verticalCenter
                 }
-                Layout.fillWidth: true
-                Layout.fillHeight: true
 
                 StyledSpinBox {
                     from: 0
@@ -169,8 +226,6 @@ PageWrapper {
                     verticalCenter: parent.verticalCenter
                 }
 
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 StyledSpinBox {
                     from: 0
                     onValueChanged: {
@@ -194,8 +249,7 @@ PageWrapper {
                     top: parent.top
                     horizontalCenter: parent.horizontalCenter
                 }
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+
                 StyledSpinBox {
                     from: 0
                     onValueChanged: {

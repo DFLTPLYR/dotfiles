@@ -9,13 +9,6 @@ Wrapper {
     property int widgetHeight: 50
     property int widgetWidth: 50
 
-    margin {
-        top: 0
-        bottom: 0
-        left: 0
-        right: 0
-    }
-
     StyledIconButton {
         enabled: wrapper.enableActions !== undefined ? wrapper.enableActions : false
 

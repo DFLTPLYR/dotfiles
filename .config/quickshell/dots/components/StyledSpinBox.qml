@@ -52,12 +52,15 @@ SpinBox {
             }
         }
     }
+
     down.indicator: Rectangle {
         id: rightIndicator
         height: parent.height
+
         anchors {
             right: parent.right
         }
+
         implicitWidth: height
         color: root.down.pressed ? Colors.color.primary : Colors.color.secondary
 

@@ -34,26 +34,27 @@ Item {
         id: background
         color: Scripts.setOpacity(Colors.color.on_primary, 0.8)
         border.color: Colors.color.primary
-        radius: wrap.rouding
+        radius: wrap.rouding + Config.general.appearance.rounding
         clip: true
 
         anchors {
             fill: parent
-            topMargin: wrap.margin.top
-            bottomMargin: wrap.margin.bottom
-            leftMargin: wrap.margin.left
-            rightMargin: wrap.margin.right
+            topMargin: wrap.margin.top + Config.general.appearance.margin
+            bottomMargin: wrap.margin.bottom + Config.general.appearance.margin
+            leftMargin: wrap.margin.left + Config.general.appearance.margin
+            rightMargin: wrap.margin.right + Config.general.appearance.margin
         }
 
         // content area with padding applied
         Item {
             id: contentItem
+            clip: true
             anchors {
                 fill: parent
-                leftMargin: wrap.padding.left
-                rightMargin: wrap.padding.right
-                topMargin: wrap.padding.top
-                bottomMargin: wrap.padding.bottom
+                leftMargin: wrap.padding.left + Config.general.appearance.padding
+                rightMargin: wrap.padding.right + Config.general.appearance.padding
+                topMargin: wrap.padding.top + Config.general.appearance.padding
+                bottomMargin: wrap.padding.bottom + Config.general.appearance.padding
             }
         }
     }
