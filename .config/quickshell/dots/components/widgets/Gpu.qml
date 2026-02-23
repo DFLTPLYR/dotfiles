@@ -10,13 +10,6 @@ Wrapper {
     property int widgetHeight: 100
     property int widgetWidth: 100
 
-    margin {
-        top: 0
-        bottom: 0
-        left: 0
-        right: 0
-    }
-
     GridLayout {
         anchors.fill: parent
         columns: Navbar.config.side ? 1 : 2
