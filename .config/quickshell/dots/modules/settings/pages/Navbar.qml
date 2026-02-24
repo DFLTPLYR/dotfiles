@@ -14,27 +14,11 @@ PageWrapper {
     property ShellScreen selectedScreen: null
     property int navbarWidth
     property int navbarHeight
-    property var tempLayoutChanges: []
-    property list<var> reslot: []
 
     PageHeader {
         title: "Navbar"
     }
     Spacer {}
-
-    onReslotChanged: {
-        for (let i = 0; i < slotRepeater.count; i++) {
-            const slot = slotRepeater.objectAt(i);
-            const slotName = slot.modelData.name;
-            const matchingItems = root.reslot.filter(r => r.name === slotName);
-            for (let j = 0; j < matchingItems.length; j++) {
-                const item = matchingItems[j].item;
-                if (item) {
-                    item.parent = slot;
-                }
-            }
-        }
-    }
 
     RowLayout {
         id: screenSelector
@@ -423,7 +407,7 @@ PageWrapper {
                         id: wrapperLayout
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-
+                        gap: 5
                         Instantiator {
                             model: ScriptModel {
                                 values: Navbar.config.widgets.slice().sort((a, b) => a.position - b.position)

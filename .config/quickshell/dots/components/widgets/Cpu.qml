@@ -25,7 +25,7 @@ Wrapper {
         FontIcon {
             text: "circuit"
             color: Colors.color.primary
-            font.pixelSize: Navbar.config.side ? Math.min(cpu.contentWidth, cpu.contentHeight / 2) * 0.6 : Math.min(cpu.contentWidth / 2, cpu.contentHeight) * 0.6
+            font.pixelSize: Math.min(parent.width, parent.height)
         }
 
         Text {
