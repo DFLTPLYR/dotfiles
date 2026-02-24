@@ -621,7 +621,7 @@ PageWrapper {
             readonly property int itemWidth: root.selectedScreen.width / 4
             Layout.fillWidth: true
             Layout.preferredHeight: itemHeight
-            orientation: ListView.Horizontal
+            orientation: recentWallpapersList.isPortrait ? ListView.Vertical : ListView.Horizontal
             layoutDirection: Qt.LeftToRight
             spacing: 5
             model: Config.general.recentWallpapers.filter(item => item.monitor === root.selectedScreen.name).sort((a, b) => b.timestamp - a.timestamp)
@@ -779,7 +779,8 @@ PageWrapper {
             id: schemeList
             property int selectedScheme: 0
             readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
-            orientation: ListView.Horizontal
+            readonly property bool isPortrait: root.selectedScreen.height > root.selectedScreen.width
+            orientation: isPortrait ? ListView.Vertical : ListView.Horizontal
             Layout.fillWidth: true
             Layout.preferredHeight: 40
             model: schemes
