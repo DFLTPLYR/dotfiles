@@ -274,6 +274,14 @@ PageWrapper {
         }
     }
 
+    ListView {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 20
+        delegate: Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+    }
     Spacer {}
 
     PageFooter {

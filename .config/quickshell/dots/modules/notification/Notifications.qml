@@ -13,7 +13,7 @@ Scope {
 
     PanelWindow {
         WlrLayershell.namespace: "notifications"
-        screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor?.name) ?? null
+        screen: Quickshell.screens.find(s => s.name === Config.focusedMonitor) || null
         property bool isPortrait: screen.height > screen.width
         implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 5)
         color: "transparent"

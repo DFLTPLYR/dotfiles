@@ -24,7 +24,6 @@ Wrapper {
         Text {
             text: `${Hardware.gpuUsagePercent} %`
             color: Colors.color.primary
-            font.pixelSize: Navbar.config.side ? Math.min(gpu.contentWidth, gpu.contentHeight / 2) * 0.4 : Math.min(gpu.contentWidth / 2, gpu.contentHeight) * 0.4
         }
     }
 }
