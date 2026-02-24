@@ -121,6 +121,7 @@ Variants {
                                 item.wrapWidth = modelData.width;
                                 item.wrapHeight = modelData.height;
                                 item.position = modelData.position;
+
                                 if (modelData.padding) {
                                     const padding = spacing.createObject(null, {
                                         left: modelData.padding.left,
@@ -129,6 +130,16 @@ Variants {
                                         top: modelData.padding.top
                                     });
                                     item.padding = padding;
+                                }
+
+                                if (modelData.margin) {
+                                    const margin = spacing.createObject(null, {
+                                        left: modelData.margin.left,
+                                        right: modelData.margin.right,
+                                        bottom: modelData.margin.bottom,
+                                        top: modelData.margin.top
+                                    });
+                                    item.margin = margin;
                                 }
                                 widgetHolder.reparent();
                             }

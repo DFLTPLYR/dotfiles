@@ -27,7 +27,7 @@ Wrapper {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
         }
-        wrapMode: Text.Wrap
+        wrapMode: Navbar.config.side ? Text.Wrap : Text.NoWrap
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
     }

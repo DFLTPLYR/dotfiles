@@ -108,7 +108,14 @@ Rectangle {
             clip: true
             visible: ma.isSlotted || ma.drag.active
             color: "transparent"
-            border.color: "white"
+            border.color: "transparent"
+
+            Behavior on border.color {
+                ColorAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             implicitWidth: parent.width
             implicitHeight: parent.height
@@ -139,6 +146,16 @@ Rectangle {
                             });
                             item.padding = padding;
                         }
+                        if (modelData.margin) {
+                            const margin = spacing.createObject(null, {
+                                left: modelData.margin.left,
+                                right: modelData.margin.right,
+                                bottom: modelData.margin.bottom,
+                                top: modelData.margin.top
+                            });
+                            item.margin = margin;
+                        }
+
                         const parentTarget = Navbar.config.widgets.findIndex(s => s.name === root.widgetName);
 
                         if (parentTarget !== -1) {
@@ -179,6 +196,7 @@ Rectangle {
             origParent = parent;
         }
     }
+
     Component {
         id: spacing
         Spacing {}

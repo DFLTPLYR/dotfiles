@@ -7,6 +7,7 @@ Item {
     id: wrap
 
     default property alias content: contentItem.data
+    property alias background: background
 
     // generics for handling reparent
     property string handler

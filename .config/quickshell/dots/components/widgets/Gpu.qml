@@ -18,7 +18,7 @@ Wrapper {
         FontIcon {
             text: "gaming-pad-alt"
             color: Colors.color.primary
-            font.pixelSize: Navbar.config.side ? Math.min(gpu.contentWidth, gpu.contentHeight / 2) * 0.6 : Math.min(gpu.contentWidth / 2, gpu.contentHeight) * 0.6
+            font.pixelSize: Math.min(parent.width, parent.height)
         }
 
         Text {
