@@ -1,6 +1,7 @@
 import QtQuick
 
 import qs.config
+import qs.utils
 
 Wrapper {
     id: wrapper
@@ -8,10 +9,18 @@ Wrapper {
     property int widgetHeight: 50
     property int widgetWidth: 50
     MouseArea {
+        id: ma
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
             Config.openSessionMenu = !Config.openSessionMenu;
+        }
+        onHoveredChanged: {
+            if (containsMouse) {
+                background.color = Colors.color.secondary;
+            } else {
+                background.color = Scripts.setOpacity(Colors.color.on_primary, 0.8);
+            }
         }
     }
     Text {
@@ -20,7 +29,14 @@ Wrapper {
         font.styleName: Config.iconFont.styleName
         font.pixelSize: Math.min(parent.height, parent.width)
 
-        color: Colors.color.primary
+        color: ma.containsMouse ? Colors.color.on_secondary : Colors.color.primary
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         anchors {
             verticalCenter: parent.verticalCenter

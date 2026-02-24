@@ -38,6 +38,13 @@ Item {
         radius: wrap.rouding + Config.general.appearance.rounding
         clip: true
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         anchors {
             fill: parent
             topMargin: wrap.margin.top + Config.general.appearance.margin
