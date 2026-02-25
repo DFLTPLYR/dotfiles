@@ -39,7 +39,7 @@ Wrapper {
             Layout.preferredWidth: height
             text: "circuit"
             color: Colors.color.primary
-            font.pixelSize: Math.min(width, height)
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight)
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -47,10 +47,15 @@ Wrapper {
 
         // Landscape
         Text {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             visible: !Navbar.config.side
             text: `${mem.formatBytes(Hardware.memory.used)} / ${mem.formatBytes(Hardware.memory.total)}`
             color: Colors.color.primary
-            wrapMode: Text.Wrap
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight)
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         // Portrait

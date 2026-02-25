@@ -297,7 +297,7 @@ PageWrapper {
                             onValueChanged: {
                                 Navbar.config.height = value;
                             }
-                            Component.onCompleted: value = Navbar.config.height
+                            value: Navbar.config.height
                         }
                     }
                     Row {
@@ -315,7 +315,7 @@ PageWrapper {
                             onValueChanged: {
                                 Navbar.config.width = value;
                             }
-                            Component.onCompleted: value = Navbar.config.width
+                            value: Navbar.config.width
                         }
                     }
                 }

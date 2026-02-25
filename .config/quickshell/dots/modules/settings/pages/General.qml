@@ -14,11 +14,6 @@ PageWrapper {
     }
     Spacer {}
 
-    StyledSwitch {
-        label: qsTr("Show Preset Creator Grid")
-        onClicked: presetGrid.visible = !presetGrid.visible
-    }
-
     FileDialog {
         id: fileDialog
         property Item targetItem
@@ -45,10 +40,10 @@ PageWrapper {
                 }
             }
             StyledSpinBox {
+                value: Config.general.appearance.margin
                 onValueChanged: {
                     Config.general.appearance.margin = value;
                 }
-                Component.onCompleted: value = Config.general.appearance.margin
             }
         }
 
@@ -63,10 +58,10 @@ PageWrapper {
                 }
             }
             StyledSpinBox {
+                value: Config.general.appearance.padding
                 onValueChanged: {
                     Config.general.appearance.padding = value;
                 }
-                Component.onCompleted: value = Config.general.appearance.padding
             }
         }
 
@@ -81,14 +76,19 @@ PageWrapper {
                 }
             }
             StyledSpinBox {
-                from: 0
-                to: 50
                 value: Config.general.appearance.rounding
                 onValueChanged: {
                     Config.general.appearance.rounding = value;
                 }
             }
         }
+    }
+
+    Spacer {}
+
+    StyledSwitch {
+        label: qsTr("Show Preset Creator Grid")
+        onClicked: presetGrid.visible = !presetGrid.visible
     }
 
     // preset creator

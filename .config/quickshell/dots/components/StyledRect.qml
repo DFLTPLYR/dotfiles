@@ -1,10 +1,12 @@
 import QtQuick
+import qs.config
 
 Item {
     id: root
     // reparent
     property bool usePanel: false
     property alias panelSource: panelItem.source
+    property Spacing border: Spacing {}
     default property alias content: contentItem.data
 
     property alias borderRadius: contentItem.radius
@@ -40,10 +42,10 @@ Item {
             fill: parent
         }
         border {
-            left: 10
-            top: 10
-            right: 10
-            bottom: 10
+            left: root.border.left
+            top: root.border.top
+            right: root.border.right
+            bottom: root.border.bottom
         }
         horizontalTileMode: BorderImage.Stretch
         verticalTileMode: BorderImage.Stretch
