@@ -13,7 +13,7 @@ Singleton {
     id: navbar
     property alias config: adapter.navbar
     property alias extended: adapter.extendedbar
-
+    property ShellScreen selectedScreen: null
     property bool extendedOpen: false
 
     FileView {

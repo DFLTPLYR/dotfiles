@@ -35,9 +35,14 @@ Wrapper {
         }
 
         FontIcon {
-            text: "device-ram-memory"
+            Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
+            Layout.preferredWidth: height
+            text: "circuit"
             color: Colors.color.primary
-            font.pixelSize: Math.min(parent.width, parent.height)
+            font.pixelSize: Math.min(width, height)
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         // Landscape
@@ -53,8 +58,10 @@ Wrapper {
             visible: Navbar.config.side
             Layout.fillWidth: true
             wrapMode: Text.Wrap
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             color: Colors.color.primary
-            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight / 2) * 0.3
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight)
             text: `${mem.formatBytes(Hardware.memory.used, 0)} `
         }
 
@@ -62,8 +69,10 @@ Wrapper {
             visible: Navbar.config.side
             Layout.fillWidth: true
             wrapMode: Text.Wrap
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             color: Colors.color.primary
-            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight / 2) * 0.3
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight / 2) / 4
             text: `${mem.formatBytes(Hardware.memory.total, 0)}`
         }
     }

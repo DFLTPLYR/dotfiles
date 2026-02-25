@@ -23,14 +23,25 @@ Wrapper {
         anchors.fill: parent
 
         FontIcon {
+            Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
+            Layout.preferredWidth: height
             text: "circuit"
             color: Colors.color.primary
-            font.pixelSize: Math.min(parent.width, parent.height)
+            font.pixelSize: Math.min(width, height)
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         Text {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             text: `${Hardware.cpuUsagePercent.toFixed(2)} %`
             color: Colors.color.primary
+            fontSizeMode: Text.Fit
+            font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight)
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }

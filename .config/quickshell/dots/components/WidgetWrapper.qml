@@ -91,7 +91,8 @@ Rectangle {
                 Navbar.config.widgets.push({
                     name: root.widgetName,
                     layout: parentName,
-                    position: 0
+                    position: 0,
+                    screen: Navbar.selectedScreen
                 });
             } else {
                 Navbar.config.widgets[parentTarget].layout = parentName;
