@@ -26,7 +26,7 @@ Wrapper {
             precision: SystemClock.Seconds
         }
         Text {
-            text: Qt.formatDateTime(clock.date, Navbar.config.side ? "HH : MM AP" : "hh:mm AP")
+            text: Qt.formatDateTime(clock.date, Navbar.config.side ? "HH \nMM\nAP" : "hh:mm AP")
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
