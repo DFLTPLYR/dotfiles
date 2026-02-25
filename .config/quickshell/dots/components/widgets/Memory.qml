@@ -66,7 +66,7 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: Colors.color.primary
-            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight)
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight) / 2
             text: `${mem.formatBytes(Hardware.memory.used, 0)} `
         }
 
@@ -77,7 +77,7 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: Colors.color.primary
-            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight / 2) / 4
+            font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight) / 2
             text: `${mem.formatBytes(Hardware.memory.total, 0)}`
         }
     }

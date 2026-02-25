@@ -34,12 +34,13 @@ Wrapper {
         }
 
         Text {
-            text: `${Hardware.cpuUsagePercent.toFixed(3)} %`
+            text: `${Hardware.cpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
             fontSizeMode: Text.Fit
-            font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight)
+            wrapMode: Text.Wrap
+            font.pixelSize: Navbar.config.side ? Math.min(cpu.contentWidth, cpu.contentHeight) / 2 : Math.min(cpu.contentWidth, cpu.contentHeight)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
