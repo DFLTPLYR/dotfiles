@@ -11,13 +11,13 @@ import qs.components.widgets
 
 PageWrapper {
     id: root
-    property ShellScreen selectedScreen: null
     property int navbarWidth
     property int navbarHeight
 
     PageHeader {
         title: "Navbar"
     }
+
     Spacer {}
 
     RowLayout {
@@ -27,7 +27,7 @@ PageWrapper {
             Layout.preferredWidth: 120
             Layout.preferredHeight: 40
             hoverEnabled: true
-            bgColor: root.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
+            bgColor: Navbar.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
 
             borderWidth: 1
             borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
@@ -52,7 +52,7 @@ PageWrapper {
             }
 
             onClicked: {
-                root.selectedScreen = null;
+                Navbar.selectedScreen = null;
             }
         }
 
@@ -62,7 +62,7 @@ PageWrapper {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 40
                 hoverEnabled: true
-                bgColor: root.selectedScreen === modelData ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.background, 1)
+                bgColor: Navbar.selectedScreen === modelData ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.background, 1)
 
                 borderWidth: 1
                 borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
@@ -87,7 +87,7 @@ PageWrapper {
                 }
 
                 onClicked: {
-                    root.selectedScreen = modelData;
+                    Navbar.selectedScreen = modelData;
                 }
             }
         }
@@ -96,7 +96,7 @@ PageWrapper {
             Layout.preferredWidth: 120
             Layout.preferredHeight: 40
             hoverEnabled: true
-            bgColor: root.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
+            bgColor: Navbar.selectedScreen === null ? Scripts.setOpacity(Colors.color.primary, 0.6) : hovered ? Scripts.setOpacity(Colors.color.primary, 1) : Scripts.setOpacity(Colors.color.background, 1)
 
             borderWidth: 1
             borderColor: hovered ? Scripts.setOpacity(Colors.color.secondary, 0.9) : Scripts.setOpacity(Colors.color.primary, 1)
@@ -184,8 +184,8 @@ PageWrapper {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                width: Navbar.config.side ? Navbar.config.width / 2 : root.selectedScreen === null ? root.navbarWidth / 2 : root.selectedScreen.width / 2
-                height: Navbar.config.side ? root.selectedScreen === null ? root.navbarHeight / 2 : root.selectedScreen.height / 2 : Navbar.config.height / 2
+                width: Navbar.config.side ? Navbar.config.width / 2 : Navbar.selectedScreen === null ? root.navbarWidth / 2 : Navbar.selectedScreen.width / 2
+                height: Navbar.config.side ? Navbar.selectedScreen === null ? root.navbarHeight / 2 : Navbar.selectedScreen.height / 2 : Navbar.config.height / 2
 
                 GridLayout {
                     id: slotGrid
@@ -259,6 +259,9 @@ PageWrapper {
                 id: bar
                 Layout.fillWidth: true
                 TabButton {
+                    text: qsTr("General")
+                }
+                TabButton {
                     text: qsTr("Slots")
                 }
                 TabButton {
@@ -271,6 +274,51 @@ PageWrapper {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: bar.currentIndex
+
+                ColumnLayout {
+
+                    Label {
+                        text: qsTr("General:")
+                        font.pixelSize: 32
+                        color: Colors.color.on_surface
+                    }
+                    Row {
+                        visible: !Navbar.config.side
+                        Layout.fillWidth: true
+                        Text {
+                            color: Colors.color.primary
+                            text: "Height: "
+                            width: 100
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                        }
+                        StyledSpinBox {
+                            onValueChanged: {
+                                Navbar.config.height = value;
+                            }
+                            Component.onCompleted: value = Navbar.config.height
+                        }
+                    }
+                    Row {
+                        visible: Navbar.config.side
+                        Layout.fillWidth: true
+                        Text {
+                            color: Colors.color.primary
+                            text: "Width: "
+                            width: 100
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                        }
+                        StyledSpinBox {
+                            onValueChanged: {
+                                Navbar.config.width = value;
+                            }
+                            Component.onCompleted: value = Navbar.config.width
+                        }
+                    }
+                }
 
                 Item {
                     id: slotsTab
