@@ -32,9 +32,67 @@ Singleton {
         }
         JsonAdapter {
             id: adapter
-            property NavbarConfig navbar: NavbarConfig {}
-            property ExtendedBarConfig extendedbar: ExtendedBarConfig {}
+            property Navbar navbar: Navbar {}
+            property ExtendedBar extendedbar: ExtendedBar {}
         }
+    }
+
+    component Navbar: JsonObject {
+        property int width: 50
+        property int height: 50
+        property string position: "top" // top, bottom, left, right
+        property bool side: position === "left" || position === "right"
+        property list<var> layouts: []
+        property list<var> widgets: []
+        property color background: Colors.color.background
+        property PopupProps popup: PopupProps {}
+        property Style style: Style {}
+    }
+
+    component PopupProps: JsonObject {
+        property int width: 40
+        property int height: 40
+        property color color: "black"
+        property int x: 50
+        property int y: 0
+    }
+
+    component Style: JsonObject {
+        property bool usePanel: false
+        property string panelSource: ""
+        property int borderWidth: 0
+        property color borderColor: "transparent"
+        property color color: Colors.color.primary
+        property JsonObject margin: JsonObject {
+            property int left: 0
+            property int right: 0
+            property int top: 0
+            property int bottom: 0
+        }
+        property JsonObject rounding: JsonObject {
+            property int left: 0
+            property int right: 0
+            property int top: 0
+            property int bottom: 0
+        }
+    }
+
+    component ExtendedBar: JsonObject {
+        property int width: 500
+        property JsonObject padding: JsonObject {
+            property int left: 0
+            property int right: 0
+            property int top: 0
+            property int bottom: 0
+        }
+        property JsonObject margin: JsonObject {
+            property int left: 0
+            property int right: 0
+            property int top: 0
+            property int bottom: 0
+        }
+        property int height: 500
+        property real axisRatio: 1.0
     }
 
     FolderListModel {

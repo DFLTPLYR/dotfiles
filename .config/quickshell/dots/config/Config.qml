@@ -50,7 +50,23 @@ Singleton {
         }
         JsonAdapter {
             id: adapter
-            property GeneralConfig general: GeneralConfig {}
+            property General general: General {}
+        }
+    }
+
+    component General: JsonObject {
+        property int zoom: 1
+        property bool useCustomWallpaper: false
+        property list<var> presets: []
+        property list<var> wallpapers: []
+        property list<var> previewWallpaper: []
+        property list<var> recentWallpapers: []
+        property list<var> customWallpaper: []
+        property list<var> monitorPosition: []
+        property JsonObject appearance: JsonObject {
+            property int rounding: 0
+            property int margin: 0
+            property int padding: 0
         }
     }
 

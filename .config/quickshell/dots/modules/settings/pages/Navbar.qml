@@ -276,12 +276,13 @@ PageWrapper {
                 currentIndex: bar.currentIndex
 
                 ColumnLayout {
-
+                    id: generalTab
                     Label {
                         text: qsTr("General:")
                         font.pixelSize: 32
                         color: Colors.color.on_surface
                     }
+                    // size
                     Row {
                         visible: !Navbar.config.side
                         Layout.fillWidth: true
@@ -300,6 +301,7 @@ PageWrapper {
                             value: Navbar.config.height
                         }
                     }
+
                     Row {
                         visible: Navbar.config.side
                         Layout.fillWidth: true
@@ -317,6 +319,15 @@ PageWrapper {
                             }
                             value: Navbar.config.width
                         }
+                    }
+
+                    // background
+                    Spacer {}
+
+                    Label {
+                        text: qsTr("General:")
+                        font.pixelSize: 16
+                        color: Colors.color.primary
                     }
                 }
 
