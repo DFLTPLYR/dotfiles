@@ -23,9 +23,9 @@ Wrapper {
         anchors.fill: parent
 
         FontIcon {
+            text: "circuit"
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
-            text: "circuit"
             color: Colors.color.primary
             font.pixelSize: Math.min(width, height)
             fontSizeMode: Text.Fit
@@ -34,9 +34,9 @@ Wrapper {
         }
 
         Text {
+            text: `${Hardware.cpuUsagePercent.toFixed(3)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: `${Hardware.cpuUsagePercent.toFixed(2)} %`
             color: Colors.color.primary
             fontSizeMode: Text.Fit
             font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight)

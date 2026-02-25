@@ -17,13 +17,23 @@ Wrapper {
 
         FontIcon {
             text: "gaming-pad-alt"
+            Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
+            Layout.preferredWidth: height
             color: Colors.color.primary
-            font.pixelSize: Math.min(parent.width, parent.height)
+            font.pixelSize: Math.min(width, height)
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         Text {
             text: `${Hardware.gpuUsagePercent} %`
+            Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
+            Layout.preferredWidth: height
             color: Colors.color.primary
+            font.pixelSize: Math.min(gpu.contentWidth, gpu.contentHeight)
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }

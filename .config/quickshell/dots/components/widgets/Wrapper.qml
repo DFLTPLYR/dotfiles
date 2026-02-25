@@ -54,7 +54,7 @@ Item {
         }
 
         // content area with padding applied
-        Item {
+        BorderImage {
             id: contentItem
             clip: true
             anchors {
