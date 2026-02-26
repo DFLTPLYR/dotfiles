@@ -7,6 +7,7 @@ Item {
     property bool usePanel: false
     property alias panelSource: panelItem.source
     property Spacing border: Spacing {}
+    property Spacing margin: Spacing {}
     default property alias content: contentItem.data
 
     property alias borderRadius: contentItem.radius
@@ -15,17 +16,18 @@ Item {
 
     // rectangle properties
     property alias color: contentItem.color
-    property alias leftMargin: contentItem.anchors.leftMargin
-    property alias rightMargin: contentItem.anchors.rightMargin
-    property alias topMargin: contentItem.anchors.topMargin
-    property alias bottomMargin: contentItem.anchors.bottomMargin
 
     Rectangle {
         id: contentItem
-        visible: !root.usePanel
         anchors {
             fill: parent
+            topMargin: root.margin.top
+            bottomMargin: root.margin.bottom
+            leftMargin: root.margin.left
+            rightMargin: root.margin.right
         }
+
+        color: "transparent"
         border.color: "transparent"
         Behavior on color {
             ColorAnimation {
@@ -41,6 +43,7 @@ Item {
         anchors {
             fill: parent
         }
+        clip: true
         border {
             left: root.border.left
             top: root.border.top
