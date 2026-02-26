@@ -104,15 +104,18 @@ PageWrapper {
             Layout.fillHeight: true
             Column {
                 spacing: 10
+
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
                 }
+
                 Text {
                     text: "Preset Name:"
                     color: Colors.color.secondary
                     font.pixelSize: 12
                 }
+
                 Rectangle {
                     width: 150
                     height: 20
@@ -125,13 +128,14 @@ PageWrapper {
                         font.pixelSize: parent.height
                     }
                 }
+
                 Button {
                     text: "save"
                     enabled: inputField.text.length > 0
                     onClicked: {
                         const preset = {};
                         preset.name = inputField.text;
-                        preset.border = {
+                        preset.padding = {
                             left: acceptButtonBg.border.left,
                             top: acceptButtonBg.border.top,
                             right: acceptButtonBg.border.right,
@@ -274,14 +278,6 @@ PageWrapper {
         }
     }
 
-    ListView {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 20
-        delegate: Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-    }
     Spacer {}
 
     PageFooter {

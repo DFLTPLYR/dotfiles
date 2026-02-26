@@ -8,6 +8,7 @@ Wrapper {
     property string icon: "power-off"
     property int widgetHeight: 50
     property int widgetWidth: 50
+
     MouseArea {
         id: ma
         anchors.fill: parent
@@ -23,6 +24,7 @@ Wrapper {
             }
         }
     }
+
     Text {
         font.family: Config.iconFont.family
         font.weight: Config.iconFont.weight
@@ -42,6 +44,6 @@ Wrapper {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
         }
-        text: "power-off"
+        text: wrapper.icon
     }
 }

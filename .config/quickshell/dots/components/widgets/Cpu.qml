@@ -23,7 +23,7 @@ Wrapper {
         anchors.fill: parent
 
         FontIcon {
-            text: "circuit"
+            text: cpu.icon
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
             color: Colors.color.primary
@@ -40,7 +40,7 @@ Wrapper {
             color: Colors.color.primary
             fontSizeMode: Text.Fit
             wrapMode: Text.Wrap
-            font.pixelSize: Navbar.config.side ? Math.min(cpu.contentWidth, cpu.contentHeight) / 2 : Math.min(cpu.contentWidth, cpu.contentHeight)
+            font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight) / 2
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

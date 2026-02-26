@@ -37,7 +37,7 @@ Wrapper {
         FontIcon {
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
-            text: "circuit"
+            text: mem.icon
             color: Colors.color.primary
             font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight)
             fontSizeMode: Text.Fit
