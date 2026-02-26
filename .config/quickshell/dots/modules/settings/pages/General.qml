@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtCore
 
+import Quickshell
+
 import qs.config
 import qs.components
 
@@ -142,8 +144,13 @@ PageWrapper {
                             bottom: acceptButtonBg.border.bottom
                         };
                         preset.source = acceptButtonBg.source;
-                        Config.general.presets.push(preset);
-                        Config.saveSettings();
+                        const target = Config.general.presets.find(p => p.name === preset.name);
+                        console.log(target);
+
+                        if (!target) {
+                            Config.general.presets.push(preset);
+                            Config.saveSettings();
+                        }
                     }
                 }
             }
@@ -275,6 +282,41 @@ PageWrapper {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
+        }
+    }
+
+    GridLayout {
+        id: presetGridContainer
+        Layout.fillWidth: true
+        Layout.minimumHeight: 1
+        columns: 3
+        Instantiator {
+            id: presetInstantiator
+            model: ScriptModel {
+                values: {
+                    return Config.general.presets;
+                }
+            }
+            delegate: StyledRect {
+                parent: presetGridContainer
+                usePanel: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 200
+                panelSource: modelData.source
+                border {
+                    left: modelData.padding.left
+                    right: modelData.padding.right
+                    top: modelData.padding.top
+                    bottom: modelData.padding.bottom
+                }
+                Column {
+                    Text {
+                        text: modelData.name
+                        color: Colors.color.primary
+                    }
+                   
+                }
+            }
         }
     }
 
