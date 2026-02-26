@@ -19,12 +19,13 @@ Item {
 
     Rectangle {
         id: contentItem
+
         anchors {
             fill: parent
-            topMargin: root.margin.top
-            bottomMargin: root.margin.bottom
-            leftMargin: root.margin.left
-            rightMargin: root.margin.right
+            topMargin: root.usePanel ? Math.round(root.border.top) : root.margin.top
+            bottomMargin: root.usePanel ? Math.round(root.border.bottom) : root.margin.bottom
+            leftMargin: root.usePanel ? Math.round(root.border.left) : root.margin.left
+            rightMargin: root.usePanel ? Math.round(root.border.right) : root.margin.right
         }
 
         color: "transparent"
