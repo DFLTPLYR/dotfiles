@@ -16,7 +16,7 @@ Wrapper {
         rows: Navbar.config.side ? 2 : 1
 
         FontIcon {
-            text: "gaming-pad-alt"
+            text: gpu.icon
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
             color: Colors.color.primary
@@ -31,7 +31,7 @@ Wrapper {
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
             color: Colors.color.primary
-            font.pixelSize: Navbar.config.side ? Math.min(gpu.contentWidth, gpu.contentHeight) / 2 : Math.min(gpu.contentWidth, gpu.contentHeight)
+            font.pixelSize: Math.min(gpu.contentWidth, gpu.contentHeight) / 2
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
