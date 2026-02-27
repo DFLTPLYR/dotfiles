@@ -10,11 +10,11 @@ require("base16-colorscheme").setup({
 	base06 = "#2b3135",
 	base07 = "#343a3e",
 
-	base08 = "#ffae5d",
-	base09 = "#ffbb76",
+	base08 = "#e19eff",
+	base09 = "#e9b7ff",
 	base0A = "#a2cce6",
 	base0B = "#80d3ff",
-	base0C = "#f3992b",
+	base0C = "#d694f6",
 	base0D = "#21baf5",
 	base0E = "#1f4b61",
 	base0F = "#7ab6db",
@@ -32,7 +32,7 @@ end
 
 -- Make "string" text contrast better
 set_hl_mutliple({ "String", "TSString" }, {
-	fg = "#ff952a",
+	fg = "#d26bff",
 })
 
 -- Grey out comments
@@ -44,7 +44,7 @@ set_hl_mutliple({ "TSComment", "Comment" }, {
 -- Color in other highlight groups as you see fit!
 
 set_hl_mutliple({ "TSMethod", "Method" }, {
-	fg = "#ffbb76",
+	fg = "#e9b7ff",
 })
 
 set_hl_mutliple({ "TSFunction", "Function" }, {
@@ -84,7 +84,7 @@ local function set_bufferline_highlights()
 				separator = { bg = "NONE", fg = "NONE" },
 				buffer_selected = {
 					bg = "#0f1418",
-					fg = "#ffbb76",
+					fg = "#e9b7ff",
 					bold = true,
 				},
 			},
@@ -222,7 +222,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleWarn",
 		"SnacksNotifierIconWarn",
 	}, {
-		fg = "#ffbb76",
+		fg = "#e9b7ff",
 	})
 
 	set_hl_mutliple({
@@ -276,7 +276,7 @@ local function set_snacks_highlights()
 		"SnacksDashboardKey",
 		"SnacksDashboardSpecial",
 	}, {
-		fg = "#ffbb76",
+		fg = "#e9b7ff",
 	})
 
 	set_hl_mutliple({
@@ -315,8 +315,8 @@ local lualine_theme = {
 	},
 	visual = {
 		a = {
-			bg = "#f3992b",
-			fg = "#361d00",
+			bg = "#d694f6",
+			fg = "#3c0058",
 			gui = "bold",
 		},
 		b = { bg = "#1b2024", fg = "#dee3e8" },
