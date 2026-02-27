@@ -137,6 +137,7 @@ PageWrapper {
                     onClicked: {
                         const preset = {};
                         preset.name = inputField.text;
+
                         preset.padding = {
                             left: acceptButtonBg.border.left,
                             top: acceptButtonBg.border.top,
@@ -145,9 +146,8 @@ PageWrapper {
                         };
                         preset.source = acceptButtonBg.source;
                         const target = Config.general.presets.find(p => p.name === preset.name);
-                        console.log(target);
 
-                        if (!target) {
+                        if (!target && preset.source) {
                             Config.general.presets.push(preset);
                             Config.saveSettings();
                         }
@@ -289,7 +289,9 @@ PageWrapper {
         id: presetGridContainer
         Layout.fillWidth: true
         Layout.minimumHeight: 1
+
         columns: 3
+
         Instantiator {
             id: presetInstantiator
             model: ScriptModel {
@@ -302,19 +304,27 @@ PageWrapper {
                 usePanel: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: 200
-                panelSource: modelData.source
+                panelSource: modelData ? modelData.source : ""
+
                 border {
-                    left: modelData.padding.left
-                    right: modelData.padding.right
-                    top: modelData.padding.top
-                    bottom: modelData.padding.bottom
+                    left: modelData ? modelData.padding.left : 0
+                    right: modelData ? modelData.padding.right : 0
+                    top: modelData ? modelData.padding.top : 0
+                    bottom: modelData ? modelData.padding.bottom : 0
                 }
+
                 Column {
                     Text {
-                        text: modelData.name
+                        text: modelData ? modelData.name : ""
                         color: Colors.color.primary
                     }
-                   
+                    StyledButton {
+                        text: "remove"
+                        onClicked: {
+                            Config.general.presets.splice(index, 1);
+                            Config.saveSettings();
+                        }
+                    }
                 }
             }
         }
