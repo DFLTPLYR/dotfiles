@@ -1,8 +1,6 @@
 import QtQuick
 import Quickshell
 
-import qs.config
-
 PopupWindow {
     id: root
     property bool shouldBeVisible: false

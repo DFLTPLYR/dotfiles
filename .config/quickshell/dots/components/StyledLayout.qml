@@ -4,44 +4,13 @@ import QtQuick.Layouts
 Item {
     id: styledLayoutRoot
     property bool isPortrait: false
-    property real spacing: layoutLoader.item ? layoutLoader.item.spacing : 0
-    default property alias content: contentHolder.children
-    clip: true
+    property real spacing: layout.spacing
 
-    QtObject {
-        id: contentHolder
-        property list<Item> children
-    }
+    default property alias content: layout.children
 
-    Loader {
-        id: layoutLoader
+    GridLayout {
+        id: layout
         anchors.fill: parent
-        active: true
-        sourceComponent: styledLayoutRoot.isPortrait ? portraitLayout : landscapeLayout
-        onLoaded: styledLayoutRoot.reparentChildren()
-    }
-
-    function reparentChildren() {
-        const layoutItem = layoutLoader.item;
-        if (!layoutItem)
-            return;
-        for (let c of contentHolder.children) {
-            if (c.parent !== layoutItem)
-                c.parent = layoutItem;
-        }
-    }
-
-    Component {
-        id: portraitLayout
-        ColumnLayout {
-            anchors.fill: parent
-        }
-    }
-
-    Component {
-        id: landscapeLayout
-        RowLayout {
-            anchors.fill: parent
-        }
+        flow: styledLayoutRoot.isPortrait ? GridLayout.TopToBottom : GridLayout.LeftToRight
     }
 }
