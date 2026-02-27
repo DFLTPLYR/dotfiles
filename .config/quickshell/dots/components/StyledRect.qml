@@ -1,5 +1,6 @@
 import QtQuick
 import qs.config
+import qs.utils
 
 Item {
     id: root
@@ -53,5 +54,18 @@ Item {
         }
         horizontalTileMode: BorderImage.Stretch
         verticalTileMode: BorderImage.Stretch
+    }
+
+    Rectangle {
+        visible: root.usePanel
+        color: Scripts.setOpacity(Colors.color.background, 1)
+        anchors {
+            fill: panelItem
+            topMargin: root.border.top / 2
+            bottomMargin: root.border.bottom / 2
+            leftMargin: root.border.left / 2
+            rightMargin: root.border.right / 2
+        }
+        z: -1
     }
 }
