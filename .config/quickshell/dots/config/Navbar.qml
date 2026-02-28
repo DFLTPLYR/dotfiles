@@ -40,6 +40,7 @@ Singleton {
     component Navbar: JsonObject {
         property int width: 50
         property int height: 50
+        property int spacing: 0
         property string position: "top" // top, bottom, left, right
         property bool side: position === "left" || position === "right"
         property list<var> layouts: []
