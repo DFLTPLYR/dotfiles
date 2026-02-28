@@ -90,7 +90,7 @@ Rectangle {
                 }
             }
 
-            spacing: 4
+            spacing: Navbar.config.spacing
             onChildrenChanged: {
                 const widgets = childrenHolder.children.filter(c => c.isSlotted !== undefined);
                 widgets.forEach((child, index) => {
@@ -128,7 +128,7 @@ Rectangle {
                     return;
                 }
             }
-            spacing: 4
+            spacing: Navbar.config.spacing
             onChildrenChanged: {
                 const widgets = childrenHolder.children.filter(c => c.isSlotted !== undefined);
                 widgets.forEach((child, index) => {
