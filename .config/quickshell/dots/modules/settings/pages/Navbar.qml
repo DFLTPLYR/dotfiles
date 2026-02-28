@@ -165,16 +165,15 @@ PageWrapper {
 
     GridLayout {
         Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.preferredHeight: root.navbarHeight * 0.6
+        Layout.minimumHeight: Navbar.config.side ? root.navbarHeight * 0.6 : 1
         columns: Navbar.config.side ? 2 : 1
 
         // preview Panel
         Item {
             Layout.fillWidth: Navbar.config.side ? false : true
             Layout.fillHeight: !Navbar.config.side ? false : true
-            Layout.preferredHeight: Navbar.config.height
-            Layout.preferredWidth: Navbar.config.width
+            Layout.minimumHeight: Navbar.config.height
+            Layout.minimumWidth: Navbar.config.width
 
             Item {
                 id: previewPanelContainer
@@ -251,8 +250,8 @@ PageWrapper {
 
         // Options/Settings panel
         ColumnLayout {
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.minimumHeight: 1
 
             // tabs
             TabBar {
@@ -272,7 +271,7 @@ PageWrapper {
             // contents
             StackLayout {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Layout.minimumHeight: 1
                 currentIndex: bar.currentIndex
 
                 ColumnLayout {
@@ -283,12 +282,12 @@ PageWrapper {
                         color: Colors.color.on_surface
                     }
                     // size
+
                     Row {
-                        visible: !Navbar.config.side
                         Layout.fillWidth: true
                         Text {
                             color: Colors.color.primary
-                            text: "Height: "
+                            text: Navbar.config.side ? "Width: " : "Height: "
                             width: 100
                             anchors {
                                 verticalCenter: parent.verticalCenter
@@ -296,18 +295,17 @@ PageWrapper {
                         }
                         StyledSpinBox {
                             onValueChanged: {
-                                Navbar.config.height = value;
+                                Navbar.config.side ? Navbar.config.width : Navbar.config.height = value;
                             }
-                            value: Navbar.config.height
+                            value: Navbar.config.side ? Navbar.config.width : Navbar.config.height
                         }
                     }
 
                     Row {
-                        visible: Navbar.config.side
                         Layout.fillWidth: true
                         Text {
                             color: Colors.color.primary
-                            text: "Width: "
+                            text: "Gaps: "
                             width: 100
                             anchors {
                                 verticalCenter: parent.verticalCenter
@@ -315,28 +313,19 @@ PageWrapper {
                         }
                         StyledSpinBox {
                             onValueChanged: {
-                                Navbar.config.width = value;
+                                Navbar.config.spacing = value;
                             }
-                            value: Navbar.config.width
+                            value: Navbar.config.spacing
                         }
-                    }
-
-                    // background
-                    Spacer {}
-
-                    Label {
-                        text: qsTr("General:")
-                        font.pixelSize: 16
-                        color: Colors.color.primary
                     }
                 }
 
-                Item {
+                ColumnLayout {
                     id: slotsTab
 
                     Row {
                         id: slotLabel
-
+                        Layout.fillWidth: true
                         Label {
                             text: qsTr("Slots:")
                             font.pixelSize: 32
@@ -347,7 +336,8 @@ PageWrapper {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            height: parent.height * 0.8
+
+                            height: 32
                             width: height
 
                             FontIcon {
@@ -372,84 +362,9 @@ PageWrapper {
                         }
                     }
 
-                    FlexboxLayout {
-                        height: contentHeight
-                        width: parent.width
-                        anchors.top: slotLabel.bottom
-                        gap: 2
-                        wrap: FlexboxLayout.Wrap
-
-                        Repeater {
-                            model: ScriptModel {
-                                values: Navbar.config.layouts
-                            }
-                            delegate: Rectangle {
-                                required property var modelData
-                                property Item orig: slotRepeater.objectAt(modelData.idx)
-                                Layout.preferredWidth: parent.width
-                                Layout.preferredHeight: Navbar.config.height
-                                color: "transparent"
-                                border.color: Colors.color.primary
-
-                                HoverHandler {
-                                    id: mouse
-                                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                                    cursorShape: Qt.PointingHandCursor
-                                    onHoveredChanged: {
-                                        if (orig === null) {
-                                            orig = slotRepeater.objectAt(modelData.idx);
-                                        }
-                                        orig.border.color = !hovered ? "transparent" : Colors.color.tertiary;
-                                    }
-                                }
-
-                                RowLayout {
-                                    anchors.fill: parent
-                                    opacity: mouse.hovered ? 1 : 0
-
-                                    Behavior on opacity {
-                                        NumberAnimation {
-                                            duration: 200
-                                            easing.type: Easing.InOutQuad
-                                        }
-                                    }
-
-                                    AlignmentButton {
-                                        Layout.alignment: Qt.AlignLeft
-                                        color: {
-                                            orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
-                                        }
-                                        position: "left"
-                                        onAlignmentChanged: {
-                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
-                                            target.direction = "left";
-                                        }
-                                    }
-                                    AlignmentButton {
-                                        Layout.alignment: Qt.AlignCenter
-                                        color: {
-                                            orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
-                                        }
-                                        position: "center"
-                                        onAlignmentChanged: {
-                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
-                                            target.direction = "center";
-                                        }
-                                    }
-                                    AlignmentButton {
-                                        Layout.alignment: Qt.AlignRight
-                                        color: {
-                                            orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
-                                        }
-                                        position: "right"
-                                        onAlignmentChanged: {
-                                            const target = Navbar.config.layouts.find(s => s.name === modelData.name);
-                                            target.direction = "right";
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    ColumnLayout {
+                        id: layoutContainer
+                        Layout.fillWidth: true
                     }
                 }
 
@@ -554,6 +469,78 @@ PageWrapper {
             Qt.callLater(() => {
                 Config.openSettingsPanel = false;
             });
+        }
+    }
+    Instantiator {
+        model: ScriptModel {
+            values: Navbar.config.layouts
+        }
+        delegate: Rectangle {
+            required property var modelData
+            property Item orig: slotRepeater.objectAt(modelData.idx)
+            Layout.fillWidth: true
+            Layout.preferredHeight: Navbar.config.height
+            parent: layoutContainer
+            color: "transparent"
+            border.color: Colors.color.primary
+
+            HoverHandler {
+                id: mouse
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                cursorShape: Qt.PointingHandCursor
+                onHoveredChanged: {
+                    if (orig === null) {
+                        orig = slotRepeater.objectAt(modelData.idx);
+                    }
+                    orig.border.color = !hovered ? "transparent" : Colors.color.tertiary;
+                }
+            }
+
+            RowLayout {
+                anchors.fill: parent
+                opacity: mouse.hovered ? 1 : 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                AlignmentButton {
+                    Layout.alignment: Qt.AlignLeft
+                    color: {
+                        orig ? orig.position === "left" ? Colors.color.primary : "transparent" : "transparent";
+                    }
+                    position: "left"
+                    onAlignmentChanged: {
+                        const target = Navbar.config.layouts.find(s => s.name === modelData.name);
+                        target.direction = "left";
+                    }
+                }
+                AlignmentButton {
+                    Layout.alignment: Qt.AlignCenter
+                    color: {
+                        orig ? orig.position === "center" ? Colors.color.primary : "transparent" : "transparent";
+                    }
+                    position: "center"
+                    onAlignmentChanged: {
+                        const target = Navbar.config.layouts.find(s => s.name === modelData.name);
+                        target.direction = "center";
+                    }
+                }
+                AlignmentButton {
+                    Layout.alignment: Qt.AlignRight
+                    color: {
+                        orig ? orig.position === "right" ? Colors.color.primary : "transparent" : "transparent";
+                    }
+                    position: "right"
+                    onAlignmentChanged: {
+                        const target = Navbar.config.layouts.find(s => s.name === modelData.name);
+                        target.direction = "right";
+                    }
+                }
+            }
         }
     }
 
