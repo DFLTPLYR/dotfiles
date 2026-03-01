@@ -23,12 +23,12 @@ Item {
 
         anchors {
             fill: parent
-            topMargin: root.usePanel ? Math.round(root.border.top) : root.margin.top
-            bottomMargin: root.usePanel ? Math.round(root.border.bottom) : root.margin.bottom
-            leftMargin: root.usePanel ? Math.round(root.border.left) : root.margin.left
-            rightMargin: root.usePanel ? Math.round(root.border.right) : root.margin.right
+            topMargin: root.usePanel ? Math.round(root.border.top) / 2 : root.margin.top
+            bottomMargin: root.usePanel ? Math.round(root.border.bottom) / 2 : root.margin.bottom
+            leftMargin: root.usePanel ? Math.round(root.border.left) / 2 : root.margin.left
+            rightMargin: root.usePanel ? Math.round(root.border.right) / 2 : root.margin.right
         }
-
+        z: root.usePanel ? -1 : 1
         color: "transparent"
         border.color: "transparent"
         Behavior on color {

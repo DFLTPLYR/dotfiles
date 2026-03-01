@@ -1,14 +1,18 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 import qs.config
 
 Rectangle {
     id: slotRoot
-    color: "transparent"
-    border.color: "transparent"
     signal slotDestroyed(var widgets)
     property list<Item> widgets: []
+    property alias background: backgroundRect
+    property bool hasPanel: false
+
+    color: "transparent"
+    border.color: "transparent"
 
     Behavior on color {
         ColorAnimation {
@@ -89,8 +93,8 @@ Rectangle {
                     break;
                 }
             }
-
             spacing: Navbar.config.spacing
+
             onChildrenChanged: {
                 const widgets = childrenHolder.children.filter(c => c.isSlotted !== undefined);
                 widgets.forEach((child, index) => {
@@ -193,6 +197,29 @@ Rectangle {
                     child.parent = slotLayoutLoader.item.children[0];
                 }
             }
+        }
+    }
+
+    StyledRect {
+        id: backgroundRect
+        usePanel: true
+        width: slotLayoutLoader.item ? slotLayoutLoader.item.children[0].width : 0
+        height: slotLayoutLoader.item ? slotLayoutLoader.item.children[0].height : 0
+        x: slotLayoutLoader.item ? slotLayoutLoader.item.children[0].x : 0
+        y: slotLayoutLoader.item ? slotLayoutLoader.item.children[0].y : 0
+        z: -1
+        color: Colors.color.background
+        border {
+            left: Config.general.presets[0].padding.left
+            right: Config.general.presets[0].padding.right
+            top: Config.general.presets[0].padding.top
+            bottom: Config.general.presets[0].padding.bottom
+        }
+        panelSource: Config.general.presets[0].source
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            colorization: 1.0
+            colorizationColor: Colors.color.primary
         }
     }
 }
