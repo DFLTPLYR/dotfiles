@@ -93,7 +93,8 @@ Singleton {
         path: config.niriSocket
         connected: true
         onConnectionStateChanged: {
-            write('"FocusedOutput"\n');
+            if (connected)
+                write('"FocusedOutput"\n');
         }
         parser: SplitParser {
             onRead: line => {
@@ -124,7 +125,8 @@ Singleton {
         path: config.niriSocket
         connected: true
         onConnectedChanged: {
-            write('"EventStream"\n');
+            if (connected)
+                write('"EventStream"\n');
         }
         parser: SplitParser {
             onRead: line => {
@@ -142,6 +144,7 @@ Singleton {
                     WindowFocusChanged: "WindowFocusChanged",
                     WindowFocusTimestampChanged: "WindowFocusTimestampChanged"
                 };
+
                 switch (key) {
                 case EventType.WorkspacesChanged:
                     let temp = [];
