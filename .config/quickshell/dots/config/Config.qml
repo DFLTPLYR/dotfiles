@@ -108,7 +108,6 @@ Singleton {
                 const EventType = {
                     FocusedOutput: "FocusedOutput"
                 };
-
                 switch (key) {
                 case EventType.FocusedOutput:
                     const focusedMonitor = response.Ok.FocusedOutput;
@@ -143,7 +142,6 @@ Singleton {
                     WindowFocusChanged: "WindowFocusChanged",
                     WindowFocusTimestampChanged: "WindowFocusTimestampChanged"
                 };
-
                 switch (key) {
                 case EventType.WorkspacesChanged:
                     let temp = [];
@@ -220,8 +218,12 @@ Singleton {
                     config.overviewOpened = event.OverviewOpenedOrClosed.is_open;
                     break;
                 case EventType.WorkspaceActivated:
+                    niriSocket.write('"FocusedOutput"\n');
                     break;
                 case EventType.WindowFocusChanged:
+                    niriSocket.write('"FocusedOutput"\n');
+                    break;
+                case EventType.WindowFocusTimestampChanged:
                     niriSocket.write('"FocusedOutput"\n');
                     break;
                 case EventType.WindowOpenedOrChanged:

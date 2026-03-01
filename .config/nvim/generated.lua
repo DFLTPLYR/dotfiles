@@ -3,20 +3,20 @@
 require("base16-colorscheme").setup({
 	base00 = "#200e0c",
 	base01 = "#1a0907",
-	base02 = "#2a1614",
+	base02 = "#2a1714",
 	base03 = "#5e3f3a",
 	base04 = "#e9bcb6",
 	base05 = "#ffdad5",
 	base06 = "#412b28",
-	base07 = "#4b3330",
+	base07 = "#4a3330",
 
-	base08 = "#ffae49",
-	base09 = "#ffb962",
+	base08 = "#ffae45",
+	base09 = "#ffb95e",
 	base0A = "#ffb4a9",
 	base0B = "#ffb4a9",
-	base0C = "#c7821e",
-	base0D = "#ff5545",
-	base0E = "#921410",
+	base0C = "#c6821e",
+	base0D = "#ff5544",
+	base0E = "#8e120d",
 	base0F = "#ff8876",
 })
 
@@ -32,19 +32,19 @@ end
 
 -- Make "string" text contrast better
 set_hl_mutliple({ "String", "TSString" }, {
-	fg = "#ff9716",
+	fg = "#ff9812",
 })
 
 -- Grey out comments
 set_hl_mutliple({ "TSComment", "Comment" }, {
-	fg = "#af8782",
+	fg = "#af8781",
 	italic = true,
 })
 
 -- Color in other highlight groups as you see fit!
 
 set_hl_mutliple({ "TSMethod", "Method" }, {
-	fg = "#ffb962",
+	fg = "#ffb95e",
 })
 
 set_hl_mutliple({ "TSFunction", "Function" }, {
@@ -52,7 +52,7 @@ set_hl_mutliple({ "TSFunction", "Function" }, {
 })
 
 set_hl_mutliple({ "Keyword", "TSKeyword", "TSKeywordFunction", "TSRepeat" }, {
-	fg = "#c0000a",
+	fg = "#c00006",
 })
 
 local function set_transparent_bg(groups)
@@ -84,7 +84,7 @@ local function set_bufferline_highlights()
 				separator = { bg = "NONE", fg = "NONE" },
 				buffer_selected = {
 					bg = "#200e0c",
-					fg = "#ffb962",
+					fg = "#ffb95e",
 					bold = true,
 				},
 			},
@@ -118,7 +118,7 @@ local function set_snacks_highlights()
 		"SnacksPickerListBorder",
 		"SnacksPickerBoxBorder",
 	}, {
-		fg = "#af8782",
+		fg = "#af8781",
 		bg = "NONE",
 	})
 
@@ -135,7 +135,7 @@ local function set_snacks_highlights()
 		"SnacksInputBorder",
 		"SnacksPickerInputBorder",
 	}, {
-		fg = "#af8782",
+		fg = "#af8781",
 		bg = "NONE",
 	})
 
@@ -165,7 +165,7 @@ local function set_snacks_highlights()
 		"SnacksPickerTotals",
 		"SnacksPickerSpinner",
 	}, {
-		fg = "#af8782",
+		fg = "#af8781",
 	})
 
 	set_hl_mutliple({
@@ -222,7 +222,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleWarn",
 		"SnacksNotifierIconWarn",
 	}, {
-		fg = "#ffb962",
+		fg = "#ffb95e",
 	})
 
 	set_hl_mutliple({
@@ -238,7 +238,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleDebug",
 		"SnacksNotifierIconDebug",
 	}, {
-		fg = "#af8782",
+		fg = "#af8781",
 	})
 
 	set_hl_mutliple({
@@ -276,13 +276,13 @@ local function set_snacks_highlights()
 		"SnacksDashboardKey",
 		"SnacksDashboardSpecial",
 	}, {
-		fg = "#ffb962",
+		fg = "#ffb95e",
 	})
 
 	set_hl_mutliple({
 		"SnacksDashboardDir",
 	}, {
-		fg = "#af8782",
+		fg = "#af8781",
 	})
 end
 
@@ -297,7 +297,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 local lualine_theme = {
 	normal = {
 		a = {
-			bg = "#ff5545",
+			bg = "#ff5544",
 			fg = "#000000",
 			gui = "bold",
 		},
@@ -306,8 +306,8 @@ local lualine_theme = {
 	},
 	insert = {
 		a = {
-			bg = "#921410",
-			fg = "#ffdcd7",
+			bg = "#8e120d",
+			fg = "#ffd7d1",
 			gui = "bold",
 		},
 		b = { bg = "#2e1a18", fg = "#ffdad5" },
@@ -315,7 +315,7 @@ local lualine_theme = {
 	},
 	visual = {
 		a = {
-			bg = "#c7821e",
+			bg = "#c6821e",
 			fg = "#000000",
 			gui = "bold",
 		},
@@ -341,9 +341,9 @@ local lualine_theme = {
 		c = { bg = "NONE", fg = "#ffdad5" },
 	},
 	inactive = {
-		a = { bg = "#2a1614", fg = "#af8782", gui = "bold" },
-		b = { bg = "#2a1614", fg = "#af8782" },
-		c = { bg = "NONE", fg = "#af8782" },
+		a = { bg = "#2a1714", fg = "#af8781", gui = "bold" },
+		b = { bg = "#2a1714", fg = "#af8781" },
+		c = { bg = "NONE", fg = "#af8781" },
 	},
 }
 -- Apply the theme to lualine
