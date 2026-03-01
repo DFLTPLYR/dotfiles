@@ -5,7 +5,6 @@ import qs.config
 
 Item {
     id: wrap
-
     default property alias content: contentItem.data
     property alias background: background
 
@@ -33,8 +32,8 @@ Item {
 
     Rectangle {
         id: background
-        color: Scripts.setOpacity(Colors.color.on_primary, 0.8)
-        border.color: Colors.color.primary
+        color: "transparent"
+        // border.color: Colors.color.primary
         radius: wrap.rouding + Config.general.appearance.rounding
         clip: true
 
