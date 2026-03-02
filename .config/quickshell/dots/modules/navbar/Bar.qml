@@ -187,8 +187,10 @@ Variants {
         LazyLoader {
             id: extendedBarLoader
             property bool shouldBeVisible: false
+            property ShellScreen selectedScreen
             component: PopupWrapper {
                 shouldBeVisible: !extendedBarLoader.shouldBeVisible
+
                 anchor {
                     item: containerRect
                     rect {
@@ -204,12 +206,12 @@ Variants {
                 }
 
                 implicitWidth: {
-                    const percentage = (screen.width * Navbar.extended.width) / 100;
+                    const percentage = (extendedBarLoader.selectedScreen.width * Navbar.extended.width) / 100;
                     return percentage;
                 }
 
                 implicitHeight: {
-                    const percentage = (screen.height * Navbar.extended.height) / 100;
+                    const percentage = (extendedBarLoader.selectedScreen.height * Navbar.extended.height) / 100;
                     return percentage;
                 }
 
@@ -278,6 +280,8 @@ Variants {
             target: Config
             function onOpenExtendedBarChanged() {
                 if (screen.name === Config.focusedMonitor) {
+                    const screen = Quickshell.screens.find(s => s.name === Config.focusedMonitor);
+                    extendedBarLoader.selectedScreen = screen;
                     extendedBarLoader.active = true;
                     extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
                 } else {
