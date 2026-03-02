@@ -47,16 +47,6 @@ Rectangle {
         property real contentWidth
         property real contentHeight
 
-        FontIcon {
-            visible: !ma.isSlotted
-            text: root.icon
-            color: Colors.color.primary
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
-        }
-
         width: {
             if (!parent)
                 return 0;
@@ -121,6 +111,27 @@ Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
 
+            Drag.hotSpot.x: width / 2
+            Drag.hotSpot.y: height / 2
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            Drag.active: ma.drag.active
+
+            states: State {
+                when: ma.drag.active
+                AnchorChanges {
+                    target: tile
+                    anchors {
+                        verticalCenter: undefined
+                        horizontalCenter: undefined
+                    }
+                }
+            }
+
             LazyLoader {
                 id: loader
                 active: true
@@ -170,26 +181,15 @@ Rectangle {
                     }
                 }
             }
+        }
 
-            Drag.hotSpot.x: width / 2
-            Drag.hotSpot.y: height / 2
-
+        FontIcon {
+            visible: !ma.isSlotted
+            text: root.icon
+            color: Colors.color.primary
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
-            }
-
-            Drag.active: ma.drag.active
-
-            states: State {
-                when: ma.drag.active
-                AnchorChanges {
-                    target: tile
-                    anchors {
-                        verticalCenter: undefined
-                        horizontalCenter: undefined
-                    }
-                }
             }
         }
 

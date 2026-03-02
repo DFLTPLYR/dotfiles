@@ -30,7 +30,7 @@ Singleton {
                 fileView.writeAdapter();
             }
         }
-        JsonAdapter {
+        adapter: JsonAdapter {
             id: adapter
             property Navbar navbar: Navbar {}
             property ExtendedBar extendedbar: ExtendedBar {}
@@ -41,13 +41,24 @@ Singleton {
         property int width: 50
         property int height: 50
         property int spacing: 0
+        property color background: Colors.color.background
+        property Style style: Style {}
+
         property string position: "top" // top, bottom, left, right
         property bool side: position === "left" || position === "right"
+
         property list<var> layouts: []
         property list<var> widgets: []
-        property color background: Colors.color.background
+
         property PopupProps popup: PopupProps {}
-        property Style style: Style {}
+    }
+
+    component ExtendedBar: JsonObject {
+        property int width: 500
+        property int height: 500
+        property Direction padding: Direction {}
+        property Direction margin: Direction {}
+        property real axisRatio: 1.0
     }
 
     component PopupProps: JsonObject {
@@ -58,42 +69,32 @@ Singleton {
         property int y: 0
     }
 
-    component Style: JsonObject {
-        property bool usePanel: false
-        property string panelSource: ""
-        property int borderWidth: 0
-        property color borderColor: "transparent"
-        property color color: Colors.color.primary
-        property JsonObject margin: JsonObject {
-            property int left: 0
-            property int right: 0
-            property int top: 0
-            property int bottom: 0
-        }
-        property JsonObject rounding: JsonObject {
-            property int left: 0
-            property int right: 0
-            property int top: 0
-            property int bottom: 0
-        }
+    component BorderImage: JsonObject {
+        property bool enable: false
+        property string source: ""
+        property Direction border: Direction {}
     }
 
-    component ExtendedBar: JsonObject {
-        property int width: 500
-        property JsonObject padding: JsonObject {
-            property int left: 0
-            property int right: 0
-            property int top: 0
-            property int bottom: 0
-        }
-        property JsonObject margin: JsonObject {
-            property int left: 0
-            property int right: 0
-            property int top: 0
-            property int bottom: 0
-        }
-        property int height: 500
-        property real axisRatio: 1.0
+    component Border: JsonObject {
+        property int width: 0
+        property color color: "transparent"
+    }
+
+    component Style: JsonObject {
+        property color color: Colors.color.primary
+
+        property BorderImage borderImage: BorderImage {}
+        property Border border: Border {}
+
+        property Direction margin: Direction {}
+        property Direction rounding: Direction {}
+    }
+
+    component Direction: JsonObject {
+        property int left: 0
+        property int right: 0
+        property int top: 0
+        property int bottom: 0
     }
 
     FolderListModel {
