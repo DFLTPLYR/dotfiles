@@ -49,24 +49,14 @@ Singleton {
 
         property list<var> layouts: []
         property list<var> widgets: []
-
-        property PopupProps popup: PopupProps {}
     }
 
     component ExtendedBar: JsonObject {
-        property int width: 500
-        property int height: 500
+        property int width: 40
+        property int height: 40
         property Direction padding: Direction {}
         property Direction margin: Direction {}
         property real axisRatio: 1.0
-    }
-
-    component PopupProps: JsonObject {
-        property int width: 40
-        property int height: 40
-        property color color: "black"
-        property int x: 50
-        property int y: 0
     }
 
     component BorderImage: JsonObject {

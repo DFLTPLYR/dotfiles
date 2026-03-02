@@ -188,8 +188,7 @@ Variants {
             id: extendedBarLoader
             property bool shouldBeVisible: false
             component: PopupWrapper {
-                shouldBeVisible: extendedBarLoader.shouldBeVisible
-
+                shouldBeVisible: !extendedBarLoader.shouldBeVisible
                 anchor {
                     item: containerRect
                     rect {
@@ -205,14 +204,15 @@ Variants {
                 }
 
                 implicitWidth: {
-                    const percentage = (screen.width * Navbar.config.popup.width) / 100;
+                    const percentage = (screen.width * Navbar.extended.width) / 100;
                     return percentage;
                 }
 
                 implicitHeight: {
-                    const percentage = (screen.height * Navbar.config.popup.height) / 100;
+                    const percentage = (screen.height * Navbar.extended.height) / 100;
                     return percentage;
                 }
+
                 color: "transparent"
 
                 onHide: {
@@ -277,7 +277,7 @@ Variants {
         Connections {
             target: Config
             function onOpenExtendedBarChanged() {
-                if (screen.name === Config.focusedMonitor.name) {
+                if (screen.name === Config.focusedMonitor) {
                     extendedBarLoader.active = true;
                     extendedBarLoader.shouldBeVisible = !extendedBarLoader.shouldBeVisible;
                 } else {
