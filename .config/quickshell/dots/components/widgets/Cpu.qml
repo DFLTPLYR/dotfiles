@@ -37,10 +37,10 @@ Wrapper {
             text: `${Hardware.cpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Colors.color.primary
             fontSizeMode: Text.Fit
+            color: Colors.color.primary
             wrapMode: Text.Wrap
-            font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight) / 2
+            font.pixelSize: Math.min(cpu.contentWidth, cpu.contentHeight)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

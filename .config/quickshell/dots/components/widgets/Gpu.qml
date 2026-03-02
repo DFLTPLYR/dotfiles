@@ -31,7 +31,7 @@ Wrapper {
             Layout.preferredHeight: Navbar.config.side ? parent.width : parent.height
             Layout.preferredWidth: height
             color: Colors.color.primary
-            font.pixelSize: Math.min(gpu.contentWidth, gpu.contentHeight) / 2
+            font.pixelSize: Math.min(gpu.contentWidth, gpu.contentHeight)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
