@@ -2,7 +2,6 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtCore
 
 import Quickshell
 import Quickshell.Io
@@ -63,11 +62,20 @@ Singleton {
         property list<var> recentWallpapers: []
         property list<var> customWallpaper: []
         property list<var> monitorPosition: []
-        property JsonObject appearance: JsonObject {
-            property int rounding: 0
-            property int margin: 0
-            property int padding: 0
-        }
+        property Appearance appearance: Appearance {}
+    }
+
+    component Appearance: JsonObject {
+        property int rounding: 0
+        property int margin: 0
+        property int padding: 0
+    }
+
+    component Direction: JsonObject {
+        property int left: 0
+        property int right: 0
+        property int top: 0
+        property int bottom: 0
     }
 
     function saveSettings() {
