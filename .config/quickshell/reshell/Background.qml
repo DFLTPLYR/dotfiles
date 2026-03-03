@@ -18,12 +18,14 @@ Variants {
         implicitWidth: screen.width
 
         exclusionMode: ExclusionMode.Ignore
+
         WlrLayershell.layer: WlrLayer.Background
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
 
-        // Background
+        // Basic Background
         Image {
+            visible: Wallpaper.config.mode === "standard"
             width: panel.screen.width
             height: panel.screen.height
             sourceSize.width: panel.screen.width
