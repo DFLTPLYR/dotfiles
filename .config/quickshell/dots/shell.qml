@@ -32,4 +32,13 @@ ShellRoot {
 
     //Session Menu Overlay
     SessionOverlay {}
+
+    Connections {
+        target: Quickshell
+        function onReloadCompleted() {
+            Quickshell.execDetached({
+                command: ["sh", "-c", "pkill pdaemon || true; pdaemon &"]
+            });
+        }
+    }
 }
