@@ -9,7 +9,7 @@ Singleton {
     id: config
     property bool enableSetting: false
 
-    property alias iconFont: customIconFont.font
+    property alias icon: customIconFont.font
 
     FontLoader {
         id: customIconFont
