@@ -60,18 +60,36 @@ Rectangle {
 
     GridLayout {
         columns: 2
+        rows: 2
 
         anchors {
             fill: parent
             margins: 4
         }
 
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 10
+            Layout.columnSpan: 2
+
+            Text {
+                id: label
+                text: tablist.model[stack.currentIndex].toUpperCase()
+                anchors {
+                    centerIn: parent
+                }
+                color: Colors.color.primary
+            }
+        }
+
         // icon container
         Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 50
+            clip: true
 
             ListView {
+                id: tablist
                 anchors.fill: parent
                 spacing: 1
                 model: ["general", "navbar", "wallpaper"]
