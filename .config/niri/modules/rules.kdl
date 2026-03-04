@@ -18,6 +18,12 @@ window-rule {
 }
 
 window-rule {
+  match title="FilePicker"
+  default-floating-position x=10 y=10
+  open-floating true
+}
+
+window-rule {
     match app-id="steam" title="Steam"
     open-on-output "DP-2"
 }

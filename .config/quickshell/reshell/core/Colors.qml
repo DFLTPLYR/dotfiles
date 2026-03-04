@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "./ntc.js" as NTC
 
 Singleton {
     property alias color: jsonAdapter.color
@@ -21,6 +22,16 @@ Singleton {
             readonly property Color color: Color {}
             readonly property Palette palette: Palette {}
         }
+    }
+
+    function setOpacity(color, alpha) {
+        if (!color)
+            return Qt.rgba(0, 0, 0, alpha || 1);
+
+        if (typeof color === "string")
+            color = Qt.color(color);
+
+        return Qt.rgba(color.r, color.g, color.b, alpha || 1);
     }
 
     component Color: JsonObject {
