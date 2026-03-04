@@ -62,5 +62,12 @@ Button {
                 easing.type: Easing.InOutQuad
             }
         }
+
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 }
