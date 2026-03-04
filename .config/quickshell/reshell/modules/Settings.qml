@@ -72,13 +72,10 @@ Rectangle {
             Layout.preferredHeight: 10
             Layout.columnSpan: 2
 
-            Text {
-                id: label
-                text: tablist.model[stack.currentIndex].toUpperCase()
-                anchors {
-                    centerIn: parent
-                }
-                color: Colors.color.primary
+            PageIndicator {
+                anchors.centerIn: parent
+                count: tablist.model.length
+                currentIndex: stack.currentIndex
             }
         }
 

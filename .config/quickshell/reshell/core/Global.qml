@@ -44,20 +44,20 @@ Singleton {
             property real opacity: 0.5
             property ButtonJson button: ButtonJson {}
             property SpinBoxJson spinbox: SpinBoxJson {}
+            property SwitchJson toggle: SwitchJson {}
+            property PageIndicator pageIndicator: PageIndicator {}
         }
     }
 
     component ButtonJson: JsonObject {
-        property JsonObject hover: JsonObject {
-            property real opacity: 0.5
-            property color color: Colors.setOpacity(Colors.color.primary, 1)
-            property BorderJson border: BorderJson {}
-            property DirectionJson margin: DirectionJson {}
-            property CornerJson rounding: CornerJson {}
+        property JsonObject content: JsonObject {
+            property color down: Colors.setOpacity(Colors.color.primary, 1)
+            property color up: Colors.setOpacity(Colors.color.primary, 1)
         }
-        property JsonObject unhover: JsonObject {
+        property JsonObject background: JsonObject {
+            property color down: Qt.darker(Colors.color.background, 1.2)
+            property color up: Qt.darker(Colors.color.primary, 1)
             property real opacity: 0.5
-            property color color: Colors.setOpacity(Colors.color.primary, 0.7)
             property BorderJson border: BorderJson {}
             property DirectionJson margin: DirectionJson {}
             property CornerJson rounding: CornerJson {}
@@ -83,6 +83,34 @@ Singleton {
             property DirectionJson margin: DirectionJson {}
             property CornerJson rounding: CornerJson {}
         }
+    }
+
+    component SwitchJson: JsonObject {
+        property JsonObject content: JsonObject {
+            property color color: Colors.color.primary
+            property int radius: 13
+        }
+        property JsonObject indicator: JsonObject {
+            property color down: Colors.color.surface_dim
+            property color up: Colors.color.surface_bright
+            property int radius: 13
+            property int width: 48
+            property int height: 26
+            property JsonObject inner: JsonObject {
+                property color down: Colors.color.primary
+                property color up: Colors.color.secondary
+                property int radius: 13
+                property int width: 26
+                property int height: 26
+            }
+        }
+    }
+
+    component PageIndicator: JsonObject {
+        property int width: 8
+        property int height: 8
+        property real radius: 4
+        property color color: Colors.color.primary
     }
 
     IpcHandler {
