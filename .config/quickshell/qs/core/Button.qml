@@ -9,7 +9,7 @@ Rectangle {
 
     signal clicked(var mouse)
 
-    property var currentState: ma.containsMouse ? hover : unhover
+    property var currentState: ma.containsMouse ? Global.general.button.hover : Global.general.button.unhover
 
     color: Colors.setOpacity(Colors.color.background, currentState.opacity)
 
