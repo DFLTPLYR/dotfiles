@@ -1,26 +1,31 @@
 import QtQuick
 import QtQuick.Layouts
-import QtCore
-import QtQuick.Dialogs
 
 import qs.core
 import qs.components
+import qs.modules.pages
 
 Rectangle {
     id: floatingWindow
+    readonly property bool isFocused: screen.name === Compositor.focusedMonitor
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
     width: screen.width / 2
     height: screen.height / 2
 
-    color: Colors.color.background
-    opacity: Global.enableSetting ? 1 : 0
+    color: Colors.setOpacity(Colors.color.background, Global.general.opacity)
+    opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
 
     border {
-        width: 1
-        color: "white"
+        width: Global.general.border.width
+        color: Global.general.border.color
     }
+
+    bottomLeftRadius: Global.general.rounding.bottomLeft
+    bottomRightRadius: Global.general.rounding.bottomRight
+    topLeftRadius: Global.general.rounding.topLeft
+    topRightRadius: Global.general.rounding.topRight
 
     Drag.active: ma.drag.active
 
@@ -40,6 +45,19 @@ Rectangle {
         }
     }
 
+    function getIcon(name) {
+        switch (name) {
+        case "general":
+            return "gear";
+        case "navbar":
+            return `bar-${Navbar.config.position}`;
+        case "wallpaper":
+            return "hexagon-image";
+        default:
+            return "?";
+        }
+    }
+
     GridLayout {
         columns: 2
 
@@ -48,6 +66,7 @@ Rectangle {
             margins: 4
         }
 
+        // icon container
         Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 50
@@ -60,6 +79,7 @@ Rectangle {
                     height: 50
                     width: 50
 
+                    // icons
                     Rectangle {
                         anchors.fill: parent
                         color: itemMa.containsMouse ? Colors.color.background : "transparent"
@@ -104,95 +124,21 @@ Rectangle {
                     }
                 }
             }
-
-            // Rectangle {
-            //     id: floatingWindow2
-            //
-            //     width: 20
-            //     height: 20
-            //     color: Qt.rgba(0, 0, 0, 0.2)
-            //
-            //     border {
-            //         width: 1
-            //         color: "white"
-            //     }
-            //
-            //     states: State {
-            //         when: ma2.drag.active
-            //         ParentChange {
-            //             parent: null
-            //         }
-            //     }
-            //     Drag.active: ma2.drag.active
-            //
-            //     MouseArea {
-            //         id: ma2
-            //         anchors.fill: parent
-            //         drag.target: floatingWindow2
-            //         onReleased: {
-            //             const target = floatingWindow2.Drag.target;
-            //             floatingWindow2.Drag.drop();
-            //             if (target) {
-            //                 console.log("has");
-            //             } else {
-            //                 floatingWindow2.x = floatingWindow.x;
-            //                 floatingWindow2.y = floatingWindow.y;
-            //             }
-            //         }
-            //     }
-            // }
         }
 
         StackLayout {
             id: stack
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Rectangle {
-                color: Colors.color.primary
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-            Rectangle {
-                color: Colors.color.secondary
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: fileDialog.open()
-                }
-                FileDialog {
-                    id: fileDialog
-                    fileMode: FileDialog.OpenFile
-                    currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-                    nameFilters: ["Images (*.png *.jpg *.jpeg *.webp)"]
 
-                    onAccepted: {
-                        Wallpaper.config.source.push({
-                            monitor: screen.name,
-                            timestamp: Date.now(),
-                            path: selectedFile
-                        });
-                        Wallpaper.save();
-                    }
-                }
-            }
-        }
-    }
+            // General
+            GeneralPage {}
 
-    function getIcon(name) {
-        switch (name) {
-        case "general":
-            return "gear";
-        case "navbar":
-            return `bar-${Navbar.config.position}`;
-        case "wallpaper":
-            return "hexagon-image";
-        default:
-            return "?";
+            // Navbar
+            NavbarPage {}
+
+            // Wallpaper
+            WallpaperPage {}
         }
     }
 }

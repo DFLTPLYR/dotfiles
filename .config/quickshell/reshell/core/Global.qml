@@ -10,7 +10,7 @@ import qs.types
 Singleton {
     id: config
     property bool enableSetting: false
-
+    property alias general: adapter
     property alias icon: customIconFont.font
 
     FontLoader {
@@ -23,20 +23,25 @@ Singleton {
         path: Qt.resolvedUrl("./general.json")
         watchChanges: true
         preload: true
+
         onFileChanged: {
             reload();
         }
+
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
                 fileView.setText("{}");
                 fileView.writeAdapter();
             }
         }
+
         adapter: JsonAdapter {
             id: adapter
             property BorderJson border: BorderJson {}
             property DirectionJson margin: DirectionJson {}
-            property DirectionJson rounding: DirectionJson {}
+            property CornerJson rounding: CornerJson {}
+            // set it to 0.0 hehe haha moment
+            property real opacity: 0.5
         }
     }
 
