@@ -42,6 +42,24 @@ Singleton {
             property CornerJson rounding: CornerJson {}
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
+            property ButtonJson button: ButtonJson {}
+        }
+    }
+
+    component ButtonJson: JsonObject {
+        property JsonObject hover: JsonObject {
+            property real opacity: 0.5
+            property color color: Colors.setOpacity(Colors.color.primary, 1)
+            property BorderJson border: BorderJson {}
+            property DirectionJson margin: DirectionJson {}
+            property CornerJson rounding: CornerJson {}
+        }
+        property JsonObject unhover: JsonObject {
+            property real opacity: 0.5
+            property color color: Colors.setOpacity(Colors.color.primary, 0.7)
+            property BorderJson border: BorderJson {}
+            property DirectionJson margin: DirectionJson {}
+            property CornerJson rounding: CornerJson {}
         }
     }
 
