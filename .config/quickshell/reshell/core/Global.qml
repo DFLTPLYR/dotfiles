@@ -35,6 +35,8 @@ Singleton {
             }
         }
 
+        onSaveFailed: error => console.log(error)
+
         adapter: JsonAdapter {
             id: adapter
             property BorderJson border: BorderJson {}
@@ -46,6 +48,7 @@ Singleton {
             property SpinBoxJson spinbox: SpinBoxJson {}
             property SwitchJson toggle: SwitchJson {}
             property PageIndicator pageIndicator: PageIndicator {}
+            property Slider slider: Slider {}
         }
     }
 
@@ -111,6 +114,30 @@ Singleton {
         property int height: 8
         property real radius: 4
         property color color: Colors.color.primary
+    }
+
+    component Slider: JsonObject {
+        property JsonObject background: JsonObject {
+            property color color: Colors.color.background
+            property int height: 2
+            property int width: 200
+            property int radius: 2
+            property BorderJson border: BorderJson {}
+            property JsonObject progress: JsonObject {
+                property int height: 2
+                property int width: 200
+                property int radius: 2
+                property color color: Colors.color.primary
+                property BorderJson border: BorderJson {}
+            }
+        }
+        property JsonObject handle: JsonObject {
+            property int height: 2
+            property int width: 200
+            property int radius: 2
+            property color color: Colors.color.primary
+            property BorderJson border: BorderJson {}
+        }
     }
 
     IpcHandler {

@@ -7,4 +7,5 @@ import qs.core
 ColumnLayout {
     Layout.fillWidth: true
     Layout.fillHeight: true
+    Slider {}
 }
