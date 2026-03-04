@@ -13,6 +13,9 @@ Singleton {
     property alias general: adapter
     property alias icon: customIconFont.font
 
+    // global item
+    property list<var> fileManager: []
+
     FontLoader {
         id: customIconFont
         source: Qt.resolvedUrl("./icon.otf")
