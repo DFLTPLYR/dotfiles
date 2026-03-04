@@ -2,34 +2,65 @@ import QtQuick
 
 import qs.core
 
-Rectangle {
-    id: btn
-    property var state: ma.containsMouse ? Global.general.button.hover : Global.general.button.unhover
-    signal clicked(var mouse)
+import QtQuick.Controls.Basic
 
-    color: btn.state.color
+Button {
+    id: control
+    property var state: control.down ? Global.general.button.hover : Global.general.button.unhover
 
-    border {
-        width: btn.state.border.width
-        color: btn.state.border.color
-    }
+    text: qsTr("Button")
 
-    bottomLeftRadius: btn.state.rounding.bottomLeft
-    bottomRightRadius: btn.state.rounding.bottomRight
-    topLeftRadius: btn.state.rounding.topLeft
-    topRightRadius: btn.state.rounding.topRight
+    contentItem: Text {
+        id: content
+        property var state: Global.general.button.content
 
-    Behavior on color {
-        ColorAnimation {
-            duration: 200
-            easing.type: Easing.InOutQuad
+        text: control.text
+        font: control.font
+
+        color: control.down ? Qt.darker(content.state.down, 1.5) : content.state.up
+
+        opacity: enabled ? 1.0 : 0.3
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        elide: Text.ElideRight
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
         }
     }
 
-    MouseArea {
-        id: ma
-        anchors.fill: parent
-        hoverEnabled: true
-        onClicked: mouse => btn.clicked(mouse)
+    background: Rectangle {
+        id: background
+
+        property var state: Global.general.button.background
+
+        implicitWidth: 100
+        implicitHeight: 40
+
+        opacity: enabled ? 1 : 0.3
+
+        border {
+            width: background.state.border.width
+            color: background.state.border.color
+        }
+
+        color: control.down ? background.state.up : background.state.down
+
+        bottomLeftRadius: background.state.rounding.bottomLeft
+        bottomRightRadius: background.state.rounding.bottomRight
+        topLeftRadius: background.state.rounding.topLeft
+        topRightRadius: background.state.rounding.topRight
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 }

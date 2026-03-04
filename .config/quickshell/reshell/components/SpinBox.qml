@@ -8,7 +8,7 @@ SpinBox {
 
     property var state: Global.general.spinbox
 
-    editable: true
+    editable: false
     wheelEnabled: true
 
     background: Rectangle {
@@ -31,14 +31,16 @@ SpinBox {
         text: value
 
         anchors {
-            right: leftIndicator.right
-            left: rightIndicator.left
+            left: parent.left
+            right: parent.right
+            leftMargin: rightIndicator.width + 4
+            rightMargin: leftIndicator.width + 4
         }
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
 
-        font.pixelSize: Math.min(parent.height, parent.width) / 2
+        font.pixelSize: 16
 
         color: spinbox.state.text
     }
@@ -47,13 +49,15 @@ SpinBox {
         id: leftIndicator
         property var state: spinbox.up.pressed ? Global.general.spinbox.hover : Global.general.spinbox.unhover
 
-        height: parent.height
+        height: parent.height - 4
         width: height
+        y: 2
 
         color: leftIndicator.state.color
 
         anchors {
-            left: parent.right
+            right: parent.right
+            rightMargin: 2
         }
 
         border {
@@ -84,13 +88,15 @@ SpinBox {
         id: rightIndicator
         property var state: spinbox.down.pressed ? Global.general.spinbox.hover : Global.general.spinbox.unhover
 
-        height: parent.height
+        height: parent.height - 4
         width: height
+        y: 2
 
         color: rightIndicator.state.color
 
         anchors {
             left: parent.left
+            leftMargin: 2
         }
 
         border {
