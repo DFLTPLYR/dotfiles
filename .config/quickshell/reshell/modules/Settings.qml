@@ -75,18 +75,6 @@ Rectangle {
             margins: 4
         }
 
-        Item {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 10
-            Layout.columnSpan: 2
-
-            PageIndicator {
-                anchors.centerIn: parent
-                count: tablist.model.length
-                currentIndex: stack.currentIndex
-            }
-        }
-
         // icon container
         Item {
             Layout.fillHeight: true
@@ -160,10 +148,26 @@ Rectangle {
             }
 
             // Navbar
-            NavbarPage {}
+            NavbarPage {
+                settings: floatingWindow.config
+            }
 
             // Wallpaper
-            WallpaperPage {}
+            WallpaperPage {
+                settings: floatingWindow.config
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 10
+            Layout.columnSpan: 2
+
+            PageIndicator {
+                anchors.centerIn: parent
+                count: tablist.model.length
+                currentIndex: stack.currentIndex
+            }
         }
     }
 }

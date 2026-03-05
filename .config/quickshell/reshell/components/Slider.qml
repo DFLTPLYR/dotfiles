@@ -10,6 +10,7 @@ Slider {
     background: Rectangle {
         id: background
         property var state: control.state.background
+
         x: control.leftPadding
         y: control.topPadding + control.availableHeight / 2 - height / 2
 
