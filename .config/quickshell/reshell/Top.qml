@@ -18,16 +18,16 @@ Variants {
         color: "transparent"
 
         anchors {
-            top: Navbar.config.position === "top"
-            bottom: Navbar.config.position === "bottom"
-            left: Navbar.config.position === "left"
-            right: Navbar.config.position === "right"
+            top: fileView.adapter.position === "top"
+            bottom: fileView.adapter.position === "bottom"
+            left: fileView.adapter.position === "left"
+            right: fileView.adapter.position === "right"
         }
 
         implicitHeight: screen.height
         implicitWidth: screen.width
 
-        exclusiveZone: navbar.height
+        exclusiveZone: fileView.adapter.side ? navbar.width : navbar.height
         exclusionMode: ExclusionMode.Normal
 
         WlrLayershell.layer: WlrLayer.Top

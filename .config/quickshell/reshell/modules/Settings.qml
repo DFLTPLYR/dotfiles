@@ -8,6 +8,14 @@ import qs.modules.pages
 Rectangle {
     id: floatingWindow
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
+
+    property var configFile: Global.fileManager.find(function (s) {
+        return s && s.subject === screen.name + "-navbar";
+    })
+    property QtObject config: configFile ? configFile.ref.adapter : null
+
+    property bool side: config ? (config.position === "left" || config.position === "right") : false
+
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
@@ -50,7 +58,7 @@ Rectangle {
         case "general":
             return "gear";
         case "navbar":
-            return `bar-${Navbar.config.position}`;
+            return `bar-${config.position}`;
         case "wallpaper":
             return "hexagon-image";
         default:
@@ -147,7 +155,9 @@ Rectangle {
             Layout.fillWidth: true
 
             // General
-            GeneralPage {}
+            GeneralPage {
+                settings: floatingWindow.config
+            }
 
             // Navbar
             NavbarPage {}
