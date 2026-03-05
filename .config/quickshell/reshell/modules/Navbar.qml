@@ -12,9 +12,62 @@ Item {
 
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
-    width: side ? (config ? config.width : 40) : parent.width
-    height: !side ? (config ? config.height : 40) : parent.height
+    state: config.position
 
+    states: [
+        State {
+            name: "left"
+            PropertyChanges {
+                target: navbar
+                x: 0
+                y: 0
+                width: config ? config.width : 40
+                height: parent.height
+            }
+        },
+        State {
+            name: "right"
+            PropertyChanges {
+                target: navbar
+                x: parent.width - (config ? config.width : 40)
+                y: 0
+                width: config ? config.width : 40
+                height: parent.height
+            }
+        },
+        State {
+            name: "top"
+            PropertyChanges {
+                target: navbar
+                x: 0
+                y: 0
+                width: parent.width
+                height: config ? config.height : 40
+            }
+        },
+        State {
+            name: "bottom"
+            PropertyChanges {
+                target: navbar
+                x: 0
+                y: parent.height - (config ? config.height : 40)
+                width: parent.width
+                height: config ? config.height : 40
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "*"
+            to: "*"
+            NumberAnimation {
+                properties: "x,y,width,height"
+                duration: 300
+                easing.type: Easing.InOutSine
+            }
+        }
+    ]
     Rectangle {
         id: container
         color: config && config.style ? config.style.color : 'transparent'
@@ -40,6 +93,7 @@ Item {
             container.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
         }
     }
+
     MouseArea {
         anchors.fill: parent
         onClicked: {
