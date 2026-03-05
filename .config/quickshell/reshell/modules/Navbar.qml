@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 import qs.core
 
@@ -110,13 +111,64 @@ Item {
             leftMargin: config && config.style && config.style.margin ? config.style.margin.left : 0
             rightMargin: config && config.style && config.style.margin ? config.style.margin.right : 0
         }
+
+        GridLayout {
+            width: parent.width
+            height: parent.height
+            flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
+
+            Slot {
+                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
+            }
+            Slot {
+                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
+            }
+            Slot {
+                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
+            }
+        }
     }
 
-    // Instantiate
-    DropArea {
-        anchors.fill: parent
-        onContainsDragChanged: {
-            container.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
+    component Slot: Rectangle {
+        id: slot
+        property string position: "left"
+        property int spacing: 2
+        default property alias content: innerGrid.data
+        color: "transparent"
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Grid {
+            id: innerGrid
+            width: parent.width
+            height: parent.height
+
+            flow: navbar.side ? Grid.TopToBottom : Grid.LeftToRight
+            rows: navbar.side ? 2 : 1
+
+            columns: navbar.side ? 1 : 2
+            spacing: slot.spacing
+            onChildrenChanged: {
+                for (let i = 0; children.length > i; i++) {
+                    const target = children[i];
+                    slot.bindSize(target);
+                }
+            }
+        }
+        function bindSize(item) {
+            const setHeight = item.setHeight || 100;
+            const setWidth = item.setWidth || 100;
+            item.width = Qt.binding(() => navbar.side ? item.parent.width : setWidth);
+            item.height = Qt.binding(() => navbar.side ? setHeight : item.parent.height);
+        }
+
+        DropArea {
+            readonly property Grid slot: innerGrid
+            anchors.fill: parent
+            onContainsDragChanged: {
+                slot.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
+            }
         }
     }
 
