@@ -52,6 +52,7 @@ Singleton {
             property SwitchJson toggle: SwitchJson {}
             property PageIndicator pageIndicator: PageIndicator {}
             property Slider slider: Slider {}
+            property Label label: Label {}
         }
     }
 
@@ -120,27 +121,44 @@ Singleton {
     }
 
     component Slider: JsonObject {
-        property JsonObject background: JsonObject {
-            property color color: Colors.color.background
-            property int height: 2
-            property int width: 200
-            property int radius: 2
-            property BorderJson border: BorderJson {}
-            property JsonObject progress: JsonObject {
-                property int height: 2
-                property int width: 200
-                property int radius: 2
-                property color color: Colors.color.primary
-                property BorderJson border: BorderJson {}
+        property RectangleJson background: RectangleJson {
+            height: 4
+            width: 200
+            color: Colors.color.background
+            rounding {
+                topLeft: 100
+                topRight: 100
+                bottomLeft: 100
+                bottomRight: 100
+            }
+            property RectangleJson progress: RectangleJson {
+                height: 4
+                width: 26
+                color: Colors.color.primary
+                rounding {
+                    topLeft: 100
+                    topRight: 100
+                    bottomLeft: 100
+                    bottomRight: 100
+                }
             }
         }
-        property JsonObject handle: JsonObject {
-            property int height: 2
-            property int width: 200
-            property int radius: 2
-            property color color: Colors.color.primary
-            property BorderJson border: BorderJson {}
+        property RectangleJson handle: RectangleJson {
+            color: Colors.color.primary
+            height: 26
+            width: 26
+            rounding {
+                topLeft: 13
+                topRight: 13
+                bottomLeft: 13
+                bottomRight: 13
+            }
         }
+    }
+
+    component Label: JsonObject {
+        property color text: Colors.color.primary
+        property RectangleJson background: RectangleJson {}
     }
 
     IpcHandler {

@@ -6,11 +6,36 @@ Item {
     id: navbar
     default property alias content: container.data
     property var configFile: Global.fileManager.find(function (s) {
-        return s && s.subject === screen.name + "-navbar";
+        return s && s.subject === `${screen.name}-navbar`;
     })
     property QtObject config: configFile ? configFile.ref.adapter : null
 
     property bool side: config ? (config.position === "left" || config.position === "right") : false
+
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+    Behavior on y {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+    Behavior on width {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+    Behavior on height {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
 
     state: config.position
 
@@ -68,6 +93,7 @@ Item {
             }
         }
     ]
+
     Rectangle {
         id: container
         color: config && config.style ? config.style.color : 'transparent'
