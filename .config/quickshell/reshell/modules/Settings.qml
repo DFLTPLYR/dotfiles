@@ -35,8 +35,6 @@ Rectangle {
     topLeftRadius: Global.general.rounding.topLeft
     topRightRadius: Global.general.rounding.topRight
 
-    Drag.active: ma.drag.active
-
     Behavior on opacity {
         NumberAnimation {
             duration: 300
@@ -48,9 +46,6 @@ Rectangle {
         id: ma
         anchors.fill: parent
         drag.target: floatingWindow
-        onReleased: {
-            floatingWindow.Drag.drop();
-        }
     }
 
     function getIcon(name) {

@@ -16,9 +16,11 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
+
         Label {
             text: "Anchor Positions"
         }
+
         Repeater {
             id: positions
             model: ["left", "top", "right", "bottom"]
@@ -45,6 +47,53 @@ ColumnLayout {
             }
         }
     }
+
+    Column {
+        id: column
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        function comparePosition(a, b) {
+            return a.position - b.position;
+        }
+        function arrange(array) {
+            return array.sort(comparePosition);
+        }
+
+        Button {
+            text: "shuffle"
+            onClicked: {
+                var array = column.children.filter(function (child) {
+                    return child.hasOwnProperty('position');
+                });
+                for (var a in array) {
+                    array[a].parent = null;
+                }
+                array = column.arrange(array);
+                for (var a in array) {
+                    array[a].parent = column;
+                }
+            }
+        }
+
+        Button {
+            id: button3
+            property int position: 3
+            text: "I am button 3"
+        }
+        Button {
+            id: button2
+            property int position: 2
+            text: "I am button 2 "
+        }
+
+        Button {
+            id: button1
+            property int position: 1
+            text: "I am button 1"
+        }
+    }
     component WidgetWrapper: Rectangle {
         id: origparent
         width: 40
@@ -57,14 +106,15 @@ ColumnLayout {
         }
 
         Rectangle {
-            id: testWidgets
+            id: widget
 
             z: 10
             property int setHeight: 100
             property int setWidth: 100
             property int relativeX: 0
             property int relativeY: 0
-
+            property int position: -1
+            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
             width: parent ? parent.width : 0
             height: parent ? parent.height : 0
 
@@ -74,18 +124,21 @@ ColumnLayout {
                     easing.type: Easing.InOutQuad
                 }
             }
+
             Behavior on y {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
             }
+
             Behavior on width {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
             }
+
             Behavior on height {
                 NumberAnimation {
                     duration: 300
@@ -97,23 +150,24 @@ ColumnLayout {
 
             Drag.hotSpot.x: width * 0.6
             Drag.hotSpot.y: height * 0.6
+            Drag.keys: ["widget", widget.position]
 
             MouseArea {
                 id: ma
                 anchors.fill: parent
-                drag.target: testWidgets
+                drag.target: widget
                 drag.axis: Drag.XAndYAxis
                 onReleased: {
-                    const dropArea = testWidgets.Drag.target;
-                    testWidgets.Drag.drop();
-                    if (dropArea) {
-                        testWidgets.parent = dropArea.slot;
-                    } else {
-                        testWidgets.parent = origparent;
-                        testWidgets.x = 0;
-                        testWidgets.y = 0;
-                        testWidgets.width = origparent.width;
-                        testWidgets.height = origparent.height;
+                    const dropArea = widget.Drag.target;
+                    widget.Drag.drop();
+                    if (!dropArea) {
+                        widget.parent = origparent;
+                        widget.x = 0;
+                        widget.y = 0;
+                        widget.width = origparent.width;
+                        widget.height = origparent.height;
+                        widget.position = -1;
+                        return;
                     }
                 }
             }
