@@ -6,7 +6,7 @@ import qs.core
 Item {
     id: navbar
     default property alias content: container.data
-    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
+    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Behavior on x {

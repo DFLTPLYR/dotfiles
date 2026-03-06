@@ -64,6 +64,12 @@ Variants {
                     height: adapter.height,
                     width: adapter.width,
                     position: adapter.position,
+                    fill: {
+                        enable: adapter.fill.enable,
+                        height: adapter.fill.height,
+                        width: adapter.fill.width,
+                        axis: adapter.fill.axis
+                    },
                     style: {
                         color: adapter.style.color,
                         border: {
@@ -107,6 +113,10 @@ Variants {
                 adapter.height = history.height;
                 adapter.width = history.width;
                 adapter.position = history.position;
+                adapter.fill.enable = history.adapter.fill.enable;
+                adapter.fill.height = history.adapter.fill.height;
+                adapter.fill.width = history.adapter.fill.width;
+                adapter.fill.axis = history.adapter.fill.axis;
                 adapter.style.color = history.style.color;
                 adapter.style.border.width = history.style.border.width;
                 adapter.style.border.color = history.style.border.color;
@@ -125,6 +135,72 @@ Variants {
 
             function save() {
                 fileView.writeAdapter();
+                fileView.snapHistory();
+                reload();
+            }
+
+            function getDiff() {
+                const key = `${screen.name}-navbar`;
+                const entry = Global.fileManager.find(s => s && s.subject === key);
+                const history = entry?.history;
+                if (!history)
+                    return null;
+                const current = {
+                    height: adapter.height,
+                    width: adapter.width,
+                    position: adapter.position,
+                    fill: {
+                        enable: adapter.fill.enable,
+                        height: adapter.fill.height,
+                        width: adapter.fill.width,
+                        axis: adapter.fill.axis
+                    },
+                    style: {
+                        color: adapter.style.color,
+                        border: {
+                            width: adapter.style.border.width,
+                            color: adapter.style.border.color
+                        },
+                        margin: {
+                            top: adapter.style.margin.top,
+                            bottom: adapter.style.margin.bottom,
+                            left: adapter.style.margin.left,
+                            right: adapter.style.margin.right
+                        },
+                        rounding: {
+                            topLeft: adapter.style.rounding.topLeft,
+                            topRight: adapter.style.rounding.topRight,
+                            bottomLeft: adapter.style.rounding.bottomLeft,
+                            bottomRight: adapter.style.rounding.bottomRight
+                        }
+                    },
+                    layouts: adapter.layouts,
+                    widgets: adapter.widgets
+                };
+                const diff = {};
+
+                function compare(prefix, a, b) {
+                    for (const key in a) {
+                        const fullKey = prefix ? `${prefix}.${key}` : key;
+                        if (typeof a[key] === 'object' && a[key] !== null && !Array.isArray(a[key])) {
+                            compare(fullKey, a[key], b[key]);
+                        } else if (Array.isArray(a[key])) {
+                            if (JSON.stringify(a[key]) !== JSON.stringify(b[key])) {
+                                diff[fullKey] = {
+                                    from: b[key],
+                                    to: a[key]
+                                };
+                            }
+                        } else if (a[key] !== b[key]) {
+                            diff[fullKey] = {
+                                from: b[key],
+                                to: a[key]
+                            };
+                        }
+                    }
+                }
+                compare('', current, history);
+                return diff;
             }
 
             onLoaded: snapHistory()

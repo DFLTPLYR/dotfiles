@@ -9,7 +9,7 @@ import qs.core
 ColumnLayout {
     id: navbarpage
 
-    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
+    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Layout.fillWidth: true
@@ -226,6 +226,6 @@ ColumnLayout {
     }
 
     Footer {
-        config: navbarpage.config
+        config: Global.getConfigManager(`${screen.name}-navbar`)
     }
 }

@@ -16,9 +16,9 @@ Singleton {
     // global item
     property list<var> fileManager: []
 
-    function getConfigAdapter(tag) {
+    function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
-        return entry?.ref?.adapter || null;
+        return entry?.ref || null;
     }
 
     FontLoader {
