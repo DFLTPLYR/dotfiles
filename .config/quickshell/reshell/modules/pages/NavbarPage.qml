@@ -8,36 +8,66 @@ import qs.core
 
 ColumnLayout {
     id: navbarpage
-    required property var settings
-    property bool side: settings ? (settings.position === "left" || settings.position === "right") : false
+
+    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
+    property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Layout.fillWidth: true
-    Layout.fillHeight: true
+    Layout.minimumHeight: 1
 
-    RowLayout {
+    // anchor position
+    ColumnLayout {
         Layout.fillWidth: true
 
         Label {
+            font.pixelSize: 32
             text: "Anchor Positions"
         }
 
-        Repeater {
-            id: positions
-            model: ["left", "top", "right", "bottom"]
-            delegate: Button {
-                required property string modelData
-                text: modelData
-                onClicked: {
-                    settings.position = modelData;
+        Row {
+            Repeater {
+                id: positions
+                model: ["left", "top", "right", "bottom"]
+                delegate: Button {
+                    required property string modelData
+                    text: modelData
+                    onClicked: {
+                        config.position = modelData;
+                    }
                 }
             }
         }
     }
 
+    // layout slots
+    ColumnLayout {
+        Layout.fillWidth: true
+        Row {
+            spacing: 8
+            Label {
+                text: "Navbar Slots"
+                font.pixelSize: 32
+            }
+
+            Button {
+                text: "add"
+                width: 60
+                onClicked: {
+                    const layout = {
+                        position: "left",
+                        spacing: 2,
+                        name: Math.random().toString(36).substring(2, 10)
+                    };
+                    config.layouts.push(layout);
+                }
+            }
+        }
+    }
+
+    // widgets
     FlexboxLayout {
         id: widgetContainer
         Layout.fillWidth: true
-        Layout.fillHeight: true
 
         Instantiator {
             model: ["clock", "bar", "other"]
@@ -48,73 +78,33 @@ ColumnLayout {
         }
     }
 
-    Column {
-        id: column
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        function comparePosition(a, b) {
-            return a.position - b.position;
-        }
-        function arrange(array) {
-            return array.sort(comparePosition);
-        }
-
-        Button {
-            text: "shuffle"
-            onClicked: {
-                var array = column.children.filter(function (child) {
-                    return child.hasOwnProperty('position');
-                });
-                for (var a in array) {
-                    array[a].parent = null;
-                }
-                array = column.arrange(array);
-                for (var a in array) {
-                    array[a].parent = column;
-                }
-            }
-        }
-
-        Button {
-            id: button3
-            property int position: 3
-            text: "I am button 3"
-        }
-        Button {
-            id: button2
-            property int position: 2
-            text: "I am button 2 "
-        }
-
-        Button {
-            id: button1
-            property int position: 1
-            text: "I am button 1"
-        }
-    }
     component WidgetWrapper: Rectangle {
         id: origparent
-        width: 40
-        height: 40
-        color: Colors.setOpacity(Colors.color.background, 0.2)
+        width: 80
+        height: 80
+        color: widget.parent === origparent ? Colors.setOpacity(Colors.color.background, 0.2) : Colors.color.background
 
         border {
             width: 1
             color: Colors.color.outline
         }
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         Rectangle {
             id: widget
-
-            z: 10
             property int setHeight: 100
             property int setWidth: 100
             property int relativeX: 0
             property int relativeY: 0
             property int position: -1
+
             color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+
             width: parent ? parent.width : 0
             height: parent ? parent.height : 0
 
@@ -167,10 +157,13 @@ ColumnLayout {
                         widget.width = origparent.width;
                         widget.height = origparent.height;
                         widget.position = -1;
-                        return;
                     }
                 }
             }
         }
+    }
+
+    Footer {
+        config: navbarpage.config
     }
 }
