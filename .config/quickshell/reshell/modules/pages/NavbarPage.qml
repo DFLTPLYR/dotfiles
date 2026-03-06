@@ -37,6 +37,68 @@ ColumnLayout {
                 }
             }
         }
+
+        Toggle {
+            text: "Fill"
+            checked: config.fill.enable
+            onCheckedChanged: config.fill.enable = checked
+        }
+
+        // Fill options
+        Column {
+            spacing: 10
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "width"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.width
+                    onValueChanged: config.fill.width = value
+                }
+            }
+            Row {
+                spacing: 10
+                Label {
+                    text: "height"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.height
+                    onValueChanged: config.fill.height = value
+                }
+            }
+            Row {
+                spacing: 10
+                Label {
+                    text: "axis"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.axis
+                    onValueChanged: config.fill.axis = value
+                }
+            }
+        }
+
+        Row {}
     }
 
     // layout slots
