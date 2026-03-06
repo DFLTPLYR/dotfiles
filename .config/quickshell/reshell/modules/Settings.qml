@@ -9,7 +9,7 @@ Rectangle {
     id: floatingWindow
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
 
-    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
+    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     x: (parent.width - width) / 2

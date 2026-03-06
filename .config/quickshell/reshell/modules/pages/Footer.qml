@@ -15,7 +15,7 @@ RowLayout {
     }
 
     Repeater {
-        model: ["cancel", "save", "save and quit"]
+        model: ["cancel", "save", "test", "save and quit"]
         delegate: Button {
             text: modelData
             onClicked: {
@@ -24,13 +24,18 @@ RowLayout {
                     footer.config.rollbackHistory();
                     break;
                 case "save":
+                    footer.config.save();
                     break;
                 case "save and quit":
-                    // footer.config.save();
+                    footer.config.save();
                     Qt.callLater(() => {
                         Global.enableSetting = false;
                     });
                     break;
+                default:
+                    const diff = footer.config.getDiff();
+                    console.log(JSON.stringify(diff));
+                    return;
                 }
             }
         }
