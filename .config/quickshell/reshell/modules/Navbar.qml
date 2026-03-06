@@ -124,6 +124,7 @@ Item {
                 Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
             }
             Slot {
+                position: "center"
                 Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
             }
         }
@@ -139,28 +140,44 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        Grid {
-            id: innerGrid
-            width: parent.width
-            height: parent.height
+        GridLayout {
+            id: grid
+            anchors.fill: parent
 
-            flow: navbar.side ? Grid.TopToBottom : Grid.LeftToRight
-            rows: navbar.side ? 2 : 1
+            Grid {
+                id: innerGrid
+                flow: navbar.side ? Grid.TopToBottom : Grid.LeftToRight
 
-            columns: navbar.side ? 1 : 2
-            spacing: slot.spacing
-            onChildrenChanged: {
-                for (let i = 0; children.length > i; i++) {
-                    const target = children[i];
-                    slot.bindSize(target);
+                rows: navbar.side ? children.length : 1
+                columns: navbar.side ? 1 : children.length
+
+                Layout.alignment: {
+                    switch (slot.position) {
+                    case "left" || "top":
+                        return Qt.AlignLeft;
+                    case "right" || "bottom":
+                        return Qt.AlignRight;
+                    case "center":
+                        return Qt.AlignCenter;
+                    default:
+                        break;
+                    }
+                }
+                spacing: slot.spacing
+                onChildrenChanged: {
+                    for (let i = 0; children.length > i; i++) {
+                        const target = children[i];
+                        slot.bindSize(target);
+                    }
                 }
             }
         }
+
         function bindSize(item) {
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
-            item.width = Qt.binding(() => navbar.side ? item.parent.width : setWidth);
-            item.height = Qt.binding(() => navbar.side ? setHeight : item.parent.height);
+            item.width = Qt.binding(() => navbar.side ? slot.width : setWidth);
+            item.height = Qt.binding(() => navbar.side ? setHeight : slot.height);
         }
 
         DropArea {
@@ -169,13 +186,6 @@ Item {
             onContainsDragChanged: {
                 slot.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
             }
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            console.log(config ? config.style.color : "no config");
         }
     }
 }
