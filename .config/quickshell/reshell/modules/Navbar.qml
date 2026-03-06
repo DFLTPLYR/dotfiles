@@ -15,18 +15,21 @@ Item {
             easing.type: Easing.InOutQuad
         }
     }
+
     Behavior on y {
         NumberAnimation {
             duration: 300
             easing.type: Easing.InOutQuad
         }
     }
+
     Behavior on width {
         NumberAnimation {
             duration: 300
             easing.type: Easing.InOutQuad
         }
     }
+
     Behavior on height {
         NumberAnimation {
             duration: 300
@@ -42,39 +45,39 @@ Item {
             PropertyChanges {
                 target: navbar
                 x: 0
-                y: 0
-                width: config ? config.width : 40
-                height: parent.height
+                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height
             }
         },
         State {
             name: "right"
             PropertyChanges {
                 target: navbar
-                x: parent.width - (config ? config.width : 40)
-                y: 0
-                width: config ? config.width : 40
-                height: parent.height
+                x: config.fill.enable ? parent.width * (1 - config.fill.width / 100) : parent.width - (config ? config.width : 40)
+                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height
             }
         },
         State {
             name: "top"
             PropertyChanges {
                 target: navbar
-                x: 0
+                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : 0
                 y: 0
-                width: parent.width
-                height: config ? config.height : 40
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
             }
         },
         State {
             name: "bottom"
             PropertyChanges {
                 target: navbar
-                x: 0
-                y: parent.height - (config ? config.height : 40)
-                width: parent.width
-                height: config ? config.height : 40
+                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : 0
+                y: config.fill.enable ? parent.height * (1 - config.fill.height / 100) : parent.height - (config ? config.height : 40)
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
             }
         }
     ]

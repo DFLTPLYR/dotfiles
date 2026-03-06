@@ -143,6 +143,12 @@ Variants {
                 id: adapter
                 property int height: 40
                 property int width: 40
+                property JsonObject fill: JsonObject {
+                    property bool enable: false
+                    property int height: 10
+                    property int width: 100
+                    property int axis: 0
+                }
                 property string position: "top"
                 readonly property bool side: position === "left" || position === "right"
                 property StyleJson style: StyleJson {
