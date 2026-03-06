@@ -7,5 +7,5 @@ JsonObject {
     property BorderJson border: BorderJson {}
 
     property DirectionJson margin: DirectionJson {}
-    property DirectionJson rounding: DirectionJson {}
+    property CornerJson rounding: CornerJson {}
 }

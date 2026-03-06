@@ -16,6 +16,11 @@ Singleton {
     // global item
     property list<var> fileManager: []
 
+    function getConfigAdapter(tag) {
+        const entry = fileManager.find(s => s && s.subject === tag);
+        return entry?.ref?.adapter || null;
+    }
+
     FontLoader {
         id: customIconFont
         source: Qt.resolvedUrl("./icon.otf")

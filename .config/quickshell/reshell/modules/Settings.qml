@@ -9,11 +9,7 @@ Rectangle {
     id: floatingWindow
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
 
-    property var configFile: Global.fileManager.find(function (s) {
-        return s && s.subject === screen.name + "-navbar";
-    })
-    property QtObject config: configFile ? configFile.ref.adapter : null
-
+    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     x: (parent.width - width) / 2
@@ -143,9 +139,7 @@ Rectangle {
             }
 
             // Navbar
-            NavbarPage {
-                settings: floatingWindow.config
-            }
+            NavbarPage {}
 
             // Wallpaper
             WallpaperPage {

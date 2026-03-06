@@ -1,16 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
-
+import Quickshell
 import qs.core
 
 Item {
     id: navbar
     default property alias content: container.data
-    property var configFile: Global.fileManager.find(function (s) {
-        return s && s.subject === `${screen.name}-navbar`;
-    })
-    property QtObject config: configFile ? configFile.ref.adapter : null
-
+    property QtObject config: Global.getConfigAdapter(`${screen.name}-navbar`)
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Behavior on x {
@@ -113,19 +109,25 @@ Item {
         }
 
         GridLayout {
+            id: navbarSlot
             width: parent.width
             height: parent.height
             flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
-            Slot {
-                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
-            }
-            Slot {
-                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
-            }
-            Slot {
-                position: "center"
-                Layout.alignment: navbar.side ? Qt.AlignLeft : Qt.AlignTop | Qt.AlignLeft
+            Instantiator {
+                model: ScriptModel {
+                    values: config.layouts
+                }
+                delegate: Slot {
+                    required property var modelData
+                }
+                onObjectAdded: (idx, obj) => {
+                    const props = obj.modelData;
+                    obj.position = props.position;
+                    obj.objectName = props.name;
+                    obj.spacing = props.spacing;
+                    obj.parent = navbarSlot;
+                }
             }
         }
     }
@@ -153,16 +155,19 @@ Item {
 
                 Layout.alignment: {
                     switch (slot.position) {
-                    case "left" || "top":
-                        return Qt.AlignLeft;
-                    case "right" || "bottom":
-                        return Qt.AlignRight;
+                    case "left":
+                    case "top":
+                        return Qt.AlignLeft | Qt.AlignTop;
+                    case "right":
+                    case "bottom":
+                        return Qt.AlignRight | Qt.AlignBottom;
                     case "center":
                         return Qt.AlignCenter;
                     default:
-                        break;
+                        return Qt.AlignLeft | Qt.AlignTop;
                     }
                 }
+
                 spacing: slot.spacing
                 onChildrenChanged: {
                     for (let i = 0; children.length > i; i++) {
@@ -223,11 +228,61 @@ Item {
             }
         }
 
+        function calculateNewPosition(item, drop, newParent, oldParent, oldPosition) {
+            const dropX = drop.x;
+            const dropY = drop.y;
+            const itemWidth = item.width || 100;
+            const itemHeight = item.height || 100;
+            let newPosition;
+            if (navbar.side) {
+                newPosition = Math.round(dropY / itemHeight);
+            } else {
+                newPosition = Math.round(dropX / itemWidth);
+            }
+            newPosition = Math.max(0, Math.min(newPosition, newParent.children.length - 1));
+            if (oldParent === newParent && oldPosition !== -1) {
+                if (oldPosition < newPosition) {
+                    for (let i = 0; i < newParent.children.length; i++) {
+                        const child = newParent.children[i];
+                        if (child && child.hasOwnProperty('position') && child !== item) {
+                            if (child.position > oldPosition && child.position <= newPosition) {
+                                child.position = child.position - 1;
+                            }
+                        }
+                    }
+                } else if (oldPosition > newPosition) {
+                    for (let i = 0; i < newParent.children.length; i++) {
+                        const child = newParent.children[i];
+                        if (child && child.hasOwnProperty('position') && child !== item) {
+                            if (child.position >= newPosition && child.position < oldPosition) {
+                                child.position = child.position + 1;
+                            }
+                        }
+                    }
+                }
+                item.position = newPosition;
+            } else {
+                if (oldParent === newParent) {
+                    item.parent = null;
+                }
+                for (let i = 0; i < newParent.children.length; i++) {
+                    const child = newParent.children[i];
+                    if (child && child.hasOwnProperty('position') && child.position >= newPosition) {
+                        child.position = child.position + 1;
+                    }
+                }
+                item.parent = newParent;
+                item.position = newPosition;
+                item.opacity = 1;
+            }
+            return newPosition;
+        }
+
         DropArea {
             id: dropArea
             anchors.fill: parent
             onContainsDragChanged: {
-                slot.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
+                slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
             }
             onDropped: drop => {
                 const isWidget = drop.source.Drag.keys[0];
@@ -237,54 +292,7 @@ Item {
                     const oldParent = item.parent;
                     const oldPosition = item.position;
 
-                    const dropX = drop.x;
-                    const dropY = drop.y;
-                    const itemWidth = item.width || 100;
-                    const itemHeight = item.height || 100;
-
-                    let newPosition;
-                    if (navbar.side) {
-                        newPosition = Math.round(dropY / itemHeight);
-                    } else {
-                        newPosition = Math.round(dropX / itemWidth);
-                    }
-
-                    newPosition = Math.max(0, Math.min(newPosition, newParent.children.length - 1));
-
-                    if (oldParent === newParent && oldPosition !== -1) {
-                        if (oldPosition < newPosition) {
-                            for (let i = 0; i < newParent.children.length; i++) {
-                                const child = newParent.children[i];
-                                if (child && child.hasOwnProperty('position') && child !== item) {
-                                    if (child.position > oldPosition && child.position <= newPosition) {
-                                        child.position = child.position - 1;
-                                    }
-                                }
-                            }
-                        } else if (oldPosition > newPosition) {
-                            for (let i = 0; i < newParent.children.length; i++) {
-                                const child = newParent.children[i];
-                                if (child && child.hasOwnProperty('position') && child !== item) {
-                                    if (child.position >= newPosition && child.position < oldPosition) {
-                                        child.position = child.position + 1;
-                                    }
-                                }
-                            }
-                        }
-                        item.position = newPosition;
-                    } else {
-                        if (oldParent === newParent) {
-                            item.parent = null;
-                        }
-                        for (let i = 0; i < newParent.children.length; i++) {
-                            const child = newParent.children[i];
-                            if (child && child.hasOwnProperty('position') && child.position >= newPosition) {
-                                child.position = child.position + 1;
-                            }
-                        }
-                        item.parent = newParent;
-                        item.position = newPosition;
-                    }
+                    slot.calculateNewPosition(item, drop, newParent, oldParent, oldPosition);
 
                     slot.reorderChildren();
                 }
