@@ -170,6 +170,36 @@ Item {
                         slot.bindSize(target);
                     }
                 }
+
+                populate: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
+
+                add: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
+
+                move: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
             }
         }
 
@@ -180,11 +210,84 @@ Item {
             item.height = Qt.binding(() => navbar.side ? setHeight : slot.height);
         }
 
+        // i vibed coded this shit but basically it compares the new position properties from lowest to heigthest then it reparents it
+        function reorderChildren(from, to) {
+            const children = innerGrid.children.filter(c => c && c.hasOwnProperty('position'));
+            children.sort((a, b) => a.position - b.position);
+
+            for (const child of children) {
+                child.parent = null;
+            }
+            for (const child of children) {
+                child.parent = innerGrid;
+            }
+        }
+
         DropArea {
-            readonly property Grid slot: innerGrid
+            id: dropArea
             anchors.fill: parent
             onContainsDragChanged: {
                 slot.border.color = containsDrag ? "red" : Qt.rgba(0, 0, 0, 0.3);
+            }
+            onDropped: drop => {
+                const isWidget = drop.source.Drag.keys[0];
+                if (isWidget) {
+                    const item = drop.source;
+                    const newParent = innerGrid;
+                    const oldParent = item.parent;
+                    const oldPosition = item.position;
+
+                    const dropX = drop.x;
+                    const dropY = drop.y;
+                    const itemWidth = item.width || 100;
+                    const itemHeight = item.height || 100;
+
+                    let newPosition;
+                    if (navbar.side) {
+                        newPosition = Math.round(dropY / itemHeight);
+                    } else {
+                        newPosition = Math.round(dropX / itemWidth);
+                    }
+
+                    newPosition = Math.max(0, Math.min(newPosition, newParent.children.length - 1));
+
+                    if (oldParent === newParent && oldPosition !== -1) {
+                        if (oldPosition < newPosition) {
+                            for (let i = 0; i < newParent.children.length; i++) {
+                                const child = newParent.children[i];
+                                if (child && child.hasOwnProperty('position') && child !== item) {
+                                    if (child.position > oldPosition && child.position <= newPosition) {
+                                        child.position = child.position - 1;
+                                    }
+                                }
+                            }
+                        } else if (oldPosition > newPosition) {
+                            for (let i = 0; i < newParent.children.length; i++) {
+                                const child = newParent.children[i];
+                                if (child && child.hasOwnProperty('position') && child !== item) {
+                                    if (child.position >= newPosition && child.position < oldPosition) {
+                                        child.position = child.position + 1;
+                                    }
+                                }
+                            }
+                        }
+                        item.position = newPosition;
+                    } else {
+                        if (oldParent === newParent) {
+                            item.parent = null;
+                        }
+                        for (let i = 0; i < newParent.children.length; i++) {
+                            const child = newParent.children[i];
+                            if (child && child.hasOwnProperty('position') && child.position >= newPosition) {
+                                child.position = child.position + 1;
+                            }
+                        }
+                        item.parent = newParent;
+                        item.position = newPosition;
+                    }
+
+                    slot.reorderChildren();
+                }
             }
         }
     }
