@@ -15,6 +15,8 @@ Singleton {
     property var focusedWindow: null
     property bool overviewOpened: false
 
+    property bool ready: false
+
     // Credits to this Chad
     // https://github.com/tpaau/dots/blob/main/private_dot_config/quickshell/services/niri/Niri.qml
     readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
@@ -73,6 +75,9 @@ Singleton {
                 case EventType.FocusedOutput:
                     const focusedMonitor = response.Ok.FocusedOutput;
                     config.focusedMonitor = focusedMonitor.name;
+                    if (!config.ready) {
+                        config.ready = true;
+                    }
                     break;
                 default:
                     break;

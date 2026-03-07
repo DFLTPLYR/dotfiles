@@ -9,7 +9,22 @@ Rectangle {
     property int relativeX: 0
     property int relativeY: 0
     property int position: -1
+    property bool active: Global.enableSetting
+    property bool side: false
 
+    Connections {
+        target: Compositor
+        function onReadyChanged() {
+            const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
+            widget.side = config.side;
+
+            config.onSideChanged.connect(() => {
+                widget.side = config.side;
+            });
+        }
+    }
+
+    clip: true
     color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
 
     width: parent ? parent.width : 0
@@ -51,6 +66,7 @@ Rectangle {
 
     MouseArea {
         id: ma
+        visible: widget.active
         anchors.fill: parent
         drag.target: widget
         drag.axis: Drag.XAndYAxis
@@ -67,6 +83,7 @@ Rectangle {
 
                 const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
                 const index = config.widgets.findIndex(s => s.name === widget.objectName);
+
                 if (index !== -1) {
                     config.widgets.splice(index, 1);
                 }
