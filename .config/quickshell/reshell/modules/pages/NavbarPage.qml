@@ -132,9 +132,10 @@ ColumnLayout {
         Layout.fillWidth: true
         Instantiator {
             model: ["Clock.qml", "Test.qml"]
-            delegate: WidgetContainer {}
+            delegate: WidgetContainer {
+                model: modelData
+            }
             onObjectAdded: (idx, obj) => {
-                obj.model = model[idx];
                 obj.parent = widgetContainer;
             }
         }
@@ -146,9 +147,23 @@ ColumnLayout {
         property string model
         property Item widget
 
-        width: navbarpage.side ? 40 : 120
-        height: navbarpage.side ? 120 : 40
+        Layout.preferredWidth: navbarpage.side ? 40 : 120
+        Layout.preferredHeight: navbarpage.side ? 120 : 40
         color: widget && widget.parent === origparent ? Colors.setOpacity(Colors.color.background, 0.2) : Colors.color.background
+
+        Behavior on Layout.preferredWidth {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Behavior on Layout.preferredHeight {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         border {
             width: 1
