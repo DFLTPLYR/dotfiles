@@ -64,6 +64,12 @@ Rectangle {
                 widget.width = origparent.width;
                 widget.height = origparent.height;
                 widget.position = -1;
+
+                const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
+                const index = config.widgets.findIndex(s => s.name === widget.objectName);
+                if (index !== -1) {
+                    config.widgets.splice(index, 1);
+                }
             }
         }
     }
