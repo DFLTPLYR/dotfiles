@@ -53,11 +53,43 @@ Variants {
             id: floatingWindow
         }
 
+        Connections {
+            target: Quickshell
+            function onReloadCompleted() {
+                fileView.reslot();
+            }
+        }
+
         FileView {
             id: fileView
             path: Qt.resolvedUrl(`./core/${screen.name}.json`)
             watchChanges: true
             preload: true
+
+            property list<Item> slots: []
+            property list<Item> widgets: []
+
+            onSlotsChanged: {
+                fileView.reslot();
+            }
+            onWidgetsChanged: {
+                fileView.reslot();
+            }
+
+            function reslot() {
+                const sorted = [...widgets].sort((a, b) => {
+                    const targetA = adapter.widgets.find(s => s.name === a.objectName);
+                    const targetB = adapter.widgets.find(s => s.name === b.objectName);
+                    return (targetA?.position ?? Infinity) - (targetB?.position ?? Infinity);
+                });
+                for (const widget of sorted) {
+                    const target = adapter.widgets.find(s => s.name === widget.objectName);
+                    if (target !== undefined) {
+                        const slot = slots.find(s => s.objectName === target.slot);
+                        widget.parent = slot;
+                    }
+                }
+            }
 
             function snapHistory() {
                 const key = `${screen.name}-navbar`;
@@ -114,10 +146,10 @@ Variants {
                 adapter.height = history.height;
                 adapter.width = history.width;
                 adapter.position = history.position;
-                adapter.fill.enable = history.adapter.fill.enable;
-                adapter.fill.height = history.adapter.fill.height;
-                adapter.fill.width = history.adapter.fill.width;
-                adapter.fill.axis = history.adapter.fill.axis;
+                adapter.fill.enable = history.fill.enable;
+                adapter.fill.height = history.fill.height;
+                adapter.fill.width = history.fill.width;
+                adapter.fill.axis = history.fill.axis;
                 adapter.style.color = history.style.color;
                 adapter.style.border.width = history.style.border.width;
                 adapter.style.border.color = history.style.border.color;
@@ -178,6 +210,7 @@ Variants {
                     layouts: adapter.layouts,
                     widgets: adapter.widgets
                 };
+
                 const diff = {};
 
                 function compare(prefix, a, b) {
@@ -239,6 +272,12 @@ Variants {
                 }
                 property list<var> layouts: []
                 property list<var> widgets: []
+
+                onWidgetsChanged: {
+                    Qt.callLater(() => {
+                        fileView.reslot();
+                    });
+                }
             }
 
             Component.onCompleted: snapHistory()

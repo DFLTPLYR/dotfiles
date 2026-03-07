@@ -1,23 +1,21 @@
 import Quickshell
 
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
 import QtQml.Models
+import QtQuick.Layouts
 
-import qs.components.widgets
-import qs.components
 import qs.core
+import qs.components
+import qs.components.widgets
 
 ColumnLayout {
     id: navbarpage
-
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Layout.fillWidth: true
     Layout.minimumHeight: 1
- 
+
     ColumnLayout {
         Layout.fillWidth: true
 
@@ -133,7 +131,7 @@ ColumnLayout {
         id: widgetContainer
         Layout.fillWidth: true
         Instantiator {
-            model: ["Clock.qml"]
+            model: ["Clock.qml", "Test.qml"]
             delegate: WidgetContainer {}
             onObjectAdded: (idx, obj) => {
                 obj.model = model[idx];
@@ -178,6 +176,11 @@ ColumnLayout {
                     item.origparent = origparent;
                     item.parent = origparent;
                     origparent.widget = item;
+                    const file = Global.getConfigManager(`${screen.name}-navbar`);
+                    const exists = file.widgets.some(w => w.objectName === item.objectName);
+                    if (!exists) {
+                        file.widgets.push(item);
+                    }
                 }
             }
         }

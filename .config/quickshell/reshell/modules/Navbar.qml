@@ -9,20 +9,6 @@ Item {
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
-    Behavior on x {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Behavior on y {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
     Behavior on width {
         NumberAnimation {
             duration: 300
@@ -87,7 +73,12 @@ Item {
             from: "*"
             to: "*"
             NumberAnimation {
-                properties: "x,y,width,height"
+                properties: "width,height"
+                duration: 300
+                easing.type: Easing.InOutSine
+            }
+            NumberAnimation {
+                properties: "x,y"
                 duration: 300
                 easing.type: Easing.InOutSine
             }
@@ -123,24 +114,15 @@ Item {
                 }
                 delegate: Slot {
                     required property var modelData
+                    objectName: modelData.name
+                    position: modelData.position
+                    spacing: modelData.spacing
                 }
                 onObjectAdded: (idx, obj) => {
-                    const props = obj.modelData;
-                    obj.position = props.position;
-                    obj.objectName = props.name;
-                    obj.spacing = props.spacing;
                     obj.parent = navbarSlot;
-                }
-            }
-            Component.onCompleted: {
-                const target = Global.navbar.find(s => s && s.from === screen.name);
-                if (target) {
-                    target.ref = navbarSlot;
-                } else {
-                    Global.navbar.push({
-                        ref: navbarSlot,
-                        from: screen.name
-                    });
+                    const file = Global.getConfigManager(`${screen.name}-navbar`);
+                    file.slots.push(obj);
+                    file.reslot();
                 }
             }
         }
@@ -155,6 +137,15 @@ Item {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+
+        onChildrenChanged: {
+            for (const i in children) {
+                const target = children[i];
+                if (target.objectName) {
+                    target.parent = innerGrid;
+                }
+            }
+        }
 
         GridLayout {
             id: grid
@@ -233,12 +224,23 @@ Item {
         function reorderChildren(from, to) {
             const children = innerGrid.children.filter(c => c && c.hasOwnProperty('position'));
             children.sort((a, b) => a.position - b.position);
-
             for (const child of children) {
                 child.parent = null;
             }
             for (const child of children) {
                 child.parent = innerGrid;
+                const exist = navbar.config.widgets.find(s => s.name === child.objectName);
+                if (!exist) {
+                    const widget = {
+                        name: child.objectName,
+                        slot: slot.objectName,
+                        position: child.position
+                    };
+                    navbar.config.widgets.push(widget);
+                } else {
+                    exist.slot = slot.objectName;
+                    exist.position = child.position;
+                }
             }
         }
 
@@ -305,11 +307,21 @@ Item {
                     const newParent = innerGrid;
                     const oldParent = item.parent;
                     const oldPosition = item.position;
-
                     slot.calculateNewPosition(item, drop, newParent, oldParent, oldPosition);
-
                     slot.reorderChildren();
                 }
+            }
+        }
+
+        Component.onCompleted: {
+            const target = Global.slots.find(s => s && s.name === slot.objectName);
+            if (target) {
+                return target.ref = slot;
+            } else {
+                Global.slots.push({
+                    ref: slot,
+                    name: slot.objectName
+                });
             }
         }
     }
