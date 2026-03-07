@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Qt.labs.folderlistmodel
 
 import qs.core
 import qs.modules
@@ -209,12 +210,14 @@ Variants {
                 reload();
                 snapHistory();
             }
+
             onLoadFailed: error => {
                 if (error === FileViewError.FileNotFound) {
                     fileView.setText("{}");
                     fileView.writeAdapter();
                 }
             }
+
             adapter: JsonAdapter {
                 id: adapter
                 property int height: 40
@@ -237,7 +240,32 @@ Variants {
                 property list<var> layouts: []
                 property list<var> widgets: []
             }
+
             Component.onCompleted: snapHistory()
+        }
+
+        FolderListModel {
+            id: folderModel
+            folder: Qt.resolvedUrl("./components/widgets")
+            nameFilters: ["*.qml"]
+            showDirs: false
+
+            onCountChanged: {
+                for (let i = 0; i < count; i++) {
+                    const fileName = get(i, "fileName");
+                    if (fileName !== "Wrapper.qml") {
+                        const widgetName = fileName;
+                        // const exists = navbar.config.widgets.find(s => s.name === widgetName);
+                        // if (!exists) {
+                        //     const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
+                        //     propertyCheckerComponent.createObject(navbar, {
+                        //         path: target,
+                        //         widget: widgetName
+                        //     });
+                        // }
+                    }
+                }
+            }
         }
     }
 }

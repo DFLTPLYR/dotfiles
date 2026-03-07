@@ -132,6 +132,17 @@ Item {
                     obj.parent = navbarSlot;
                 }
             }
+            Component.onCompleted: {
+                const target = Global.navbar.find(s => s && s.from === screen.name);
+                if (target) {
+                    target.ref = navbarSlot;
+                } else {
+                    Global.navbar.push({
+                        ref: navbarSlot,
+                        from: screen.name
+                    });
+                }
+            }
         }
     }
 

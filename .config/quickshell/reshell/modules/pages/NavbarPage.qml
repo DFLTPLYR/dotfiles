@@ -1,8 +1,11 @@
+import Quickshell
+
 import QtQuick
 import QtQuick.Layouts
-
+import QtQuick.Controls
 import QtQml.Models
 
+import qs.components.widgets
 import qs.components
 import qs.core
 
@@ -14,8 +17,7 @@ ColumnLayout {
 
     Layout.fillWidth: true
     Layout.minimumHeight: 1
-
-    // anchor position
+ 
     ColumnLayout {
         Layout.fillWidth: true
 
@@ -130,26 +132,31 @@ ColumnLayout {
     FlexboxLayout {
         id: widgetContainer
         Layout.fillWidth: true
-
         Instantiator {
-            model: ["clock", "bar", "other"]
-            delegate: WidgetWrapper {}
+            model: ["Clock.qml"]
+            delegate: WidgetContainer {}
             onObjectAdded: (idx, obj) => {
+                obj.model = model[idx];
                 obj.parent = widgetContainer;
             }
         }
     }
 
-    component WidgetWrapper: Rectangle {
+    component WidgetContainer: Rectangle {
         id: origparent
-        width: 80
-        height: 80
-        color: widget.parent === origparent ? Colors.setOpacity(Colors.color.background, 0.2) : Colors.color.background
+
+        property string model
+        property Item widget
+
+        width: navbarpage.side ? 40 : 120
+        height: navbarpage.side ? 120 : 40
+        color: widget && widget.parent === origparent ? Colors.setOpacity(Colors.color.background, 0.2) : Colors.color.background
 
         border {
             width: 1
             color: Colors.color.outline
         }
+
         Behavior on color {
             ColorAnimation {
                 duration: 200
@@ -157,69 +164,20 @@ ColumnLayout {
             }
         }
 
-        Rectangle {
-            id: widget
-            property int setHeight: 100
-            property int setWidth: 100
-            property int relativeX: 0
-            property int relativeY: 0
-            property int position: -1
-
-            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-
-            width: parent ? parent.width : 0
-            height: parent ? parent.height : 0
-
-            Behavior on x {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
+        LazyLoader {
+            active: true
+            source: {
+                if (model !== "") {
+                    return Quickshell.shellPath(`components/widgets/${origparent.model}`);
+                } else {
+                    return "";
                 }
             }
-
-            Behavior on y {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on width {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on height {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Drag.active: ma.drag.active
-
-            Drag.hotSpot.x: width * 0.6
-            Drag.hotSpot.y: height * 0.6
-            Drag.keys: ["widget", widget.position]
-
-            MouseArea {
-                id: ma
-                anchors.fill: parent
-                drag.target: widget
-                drag.axis: Drag.XAndYAxis
-                onReleased: {
-                    const dropArea = widget.Drag.target;
-                    widget.Drag.drop();
-                    if (!dropArea) {
-                        widget.parent = origparent;
-                        widget.x = 0;
-                        widget.y = 0;
-                        widget.width = origparent.width;
-                        widget.height = origparent.height;
-                        widget.position = -1;
-                    }
+            onLoadingChanged: {
+                if (item) {
+                    item.origparent = origparent;
+                    item.parent = origparent;
+                    origparent.widget = item;
                 }
             }
         }

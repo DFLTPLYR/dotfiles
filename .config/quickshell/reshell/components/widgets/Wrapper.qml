@@ -1,0 +1,70 @@
+import QtQuick
+import qs.core
+
+Rectangle {
+    id: widget
+    property Item origparent
+    property int setHeight: 100
+    property int setWidth: 100
+    property int relativeX: 0
+    property int relativeY: 0
+    property int position: -1
+
+    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+
+    width: parent ? parent.width : 0
+    height: parent ? parent.height : 0
+
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on y {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on width {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on height {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Drag.active: ma.drag.active
+
+    Drag.hotSpot.x: width * 0.6
+    Drag.hotSpot.y: height * 0.6
+    Drag.keys: ["widget", widget.position]
+
+    MouseArea {
+        id: ma
+        anchors.fill: parent
+        drag.target: widget
+        drag.axis: Drag.XAndYAxis
+        onReleased: {
+            const dropArea = widget.Drag.target;
+            widget.Drag.drop();
+            if (!dropArea) {
+                widget.parent = origparent;
+                widget.x = 0;
+                widget.y = 0;
+                widget.width = origparent.width;
+                widget.height = origparent.height;
+                widget.position = -1;
+            }
+        }
+    }
+}

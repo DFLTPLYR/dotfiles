@@ -15,6 +15,7 @@ Singleton {
 
     // global item
     property list<var> fileManager: []
+    property list<var> navbar: []
 
     function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
