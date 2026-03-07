@@ -10,12 +10,12 @@ RowLayout {
     Layout.fillWidth: true
 
     Label {
-        text: "testing"
+        text: ""
         Layout.fillWidth: true
     }
 
     Repeater {
-        model: ["cancel", "save", "test", "save and quit"]
+        model: ["cancel", "save", "save and quit"]
         delegate: Button {
             text: modelData
             onClicked: {
@@ -32,10 +32,6 @@ RowLayout {
                         Global.enableSetting = false;
                     });
                     break;
-                default:
-                    const diff = footer.config.getDiff();
-                    console.log(JSON.stringify(diff));
-                    return;
                 }
             }
         }
