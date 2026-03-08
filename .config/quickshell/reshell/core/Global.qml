@@ -13,7 +13,7 @@ Singleton {
     property bool enableSetting: false
     property alias general: adapter
     property alias icon: customIconFont.font
-
+    onEnableSettingChanged: console.log(enableSetting)
     // global item
     property list<var> fileManager: []
     property list<var> slots: []
@@ -316,6 +316,7 @@ Singleton {
         }
 
         function toggleSettingsPanel() {
+            console.log("test");
             config.enableSetting = !config.enableSetting;
         }
     }

@@ -1,8 +1,6 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
-
 import QtQuick
-
 import Quickshell
 import Quickshell.Io
 
@@ -14,13 +12,8 @@ Singleton {
     property var focusedMonitor: null
     property var focusedWindow: null
     property bool overviewOpened: false
-
     property bool ready: false
-
-    // Credits to this Chad
-    // https://github.com/tpaau/dots/blob/main/private_dot_config/quickshell/services/niri/Niri.qml
-    readonly property string niriSocket: Quickshell.env("NIRI_SOCKET")
-
+    readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/pdaemon.sock"
     Component {
         id: windowComponent
         QtObject {
@@ -32,9 +25,9 @@ Singleton {
             required property bool isFocused
             required property bool isFloating
             required property bool isUrgent
+            property string address: ""
         }
     }
-
     Component {
         id: workspaceComponent
         QtObject {
@@ -49,82 +42,45 @@ Singleton {
             property list<Window> windows: []
         }
     }
-
     Socket {
-        id: niriSocket
-        path: config.niriSocket
-        connected: true
-        onConnectionStateChanged: {
-            if (connected)
-                write('"FocusedOutput"\n');
-        }
-        parser: SplitParser {
-            onRead: line => {
-                const response = JSON.parse(line);
-                const status = Object.keys(response)[0];
-
-                if (status === "Err")
-                    return;
-
-                const key = Object.keys(response.Ok)[0];
-
-                const EventType = {
-                    FocusedOutput: "FocusedOutput"
-                };
-                switch (key) {
-                case EventType.FocusedOutput:
-                    const focusedMonitor = response.Ok.FocusedOutput;
-                    config.focusedMonitor = focusedMonitor.name;
-                    if (!config.ready) {
-                        config.ready = true;
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-    }
-
-    Socket {
-        path: config.niriSocket
+        id: compositorSocket
+        path: config.daemonSocket
         connected: true
         onConnectedChanged: {
             if (connected)
-                write('"EventStream"\n');
+                write("compositor\n");
         }
         parser: SplitParser {
             onRead: line => {
                 const event = JSON.parse(line);
                 const key = Object.keys(event)[0];
-
                 const EventType = {
                     WorkspacesChanged: "WorkspacesChanged",
                     WindowOpenedOrChanged: "WindowOpenedOrChanged",
                     WindowsChanged: "WindowsChanged",
                     WindowClosed: "WindowClosed",
-                    KeyboardLayoutsChanged: "KeyboardLayoutsChanged",
-                    OverviewOpenedOrClosed: "OverviewOpenedOrClosed",
-                    WorkspaceActivated: "WorkspaceActivated",
+                    FocusedMonitor: "FocusedMonitor",
                     WindowFocusChanged: "WindowFocusChanged",
-                    WindowFocusTimestampChanged: "WindowFocusTimestampChanged"
+                    Fullscreen: "Fullscreen",
+                    WindowPinned: "WindowPinned",
+                    WindowFloating: "WindowFloating",
+                    MonitorChanged: "MonitorChanged"
                 };
-
                 switch (key) {
                 case EventType.WorkspacesChanged:
                     let temp = [];
-                    for (const workspace of event.WorkspacesChanged.workspaces) {
+                    const wsList = event.WorkspacesChanged.workspaces;
+                    for (const workspace of wsList) {
                         const ws = workspaceComponent.createObject(null, {
                             workspaceId: workspace.id,
                             idx: workspace.idx,
                             name: workspace.name,
-                            output: workspace.output,
-                            isUrgent: workspace.is_urgent,
-                            isActive: workspace.is_active,
-                            isFocused: workspace.is_focused,
-                            activeWindowID: workspace.active_window_id ? workspace.active_window_id : -1
+                            output: workspace.output || "",
+                            isUrgent: workspace.is_urgent || false,
+                            isActive: workspace.is_active || false,
+                            isFocused: workspace.is_focused || false,
+                            activeWindowID: workspace.active_window_id || -1
                         });
-
                         if (ws.isFocused) {
                             config.focusedWorkspace = ws;
                         }
@@ -133,9 +89,12 @@ Singleton {
                                 ws.windows.push(win);
                             }
                         }
-                        config.workspaces.push(ws);
+                        temp.push(ws);
                     }
                     config.workspaces = temp.sort((a, b) => a.idx - b.idx);
+                    if (!config.ready && config.workspaces.length > 0) {
+                        config.ready = true;
+                    }
                     return;
                 case EventType.WindowsChanged:
                     for (let workspace of config.workspaces) {
@@ -152,7 +111,8 @@ Singleton {
                             workspaceId: win.workspace_id ?? -1,
                             isFocused: win.is_focused,
                             isFloating: win.is_floating,
-                            isUrgent: win.is_urgent
+                            isUrgent: win.is_urgent,
+                            address: win.address || ""
                         });
                         if (winObj.isFocused) {
                             config.focusedWindow = winObj;
@@ -162,6 +122,7 @@ Singleton {
                                 workspace.windows.push(winObj);
                             }
                         }
+                        windows.push(winObj);
                     }
                     return config.windows = windows;
                 case EventType.WindowClosed:
@@ -174,64 +135,59 @@ Singleton {
                     }
                     for (const ws of config.workspaces) {
                         for (const win of ws.windows) {
-                            if (win.windowId === id) {
+                            if (win && win.windowId === id) {
                                 ws.windows.splice(ws.windows.indexOf(win), 1);
                             }
                         }
                     }
                     break;
-                case EventType.KeyboardLayoutsChanged:
-                    break;
-                case EventType.OverviewOpenedOrClosed:
-                    config.overviewOpened = event.OverviewOpenedOrClosed.is_open;
-                    break;
-                case EventType.WorkspaceActivated:
-                    niriSocket.write('"FocusedOutput"\n');
+                case EventType.FocusedMonitor:
+                    config.focusedMonitor = event.FocusedMonitor.name;
+                    if (!config.ready) {
+                        config.ready = true;
+                    }
                     break;
                 case EventType.WindowFocusChanged:
-                    niriSocket.write('"FocusedOutput"\n');
-                    break;
-                case EventType.WindowFocusTimestampChanged:
-                    niriSocket.write('"FocusedOutput"\n');
+                    const winChanged = event.WindowFocusChanged.window;
+                    const addr = event.WindowFocusChanged.address;
+                    for (const win of config.windows) {
+                        if (win.address === addr || (winChanged && win.appId === winChanged.class)) {
+                            win.isFocused = true;
+                            config.focusedWindow = win;
+                        } else {
+                            win.isFocused = false;
+                        }
+                    }
                     break;
                 case EventType.WindowOpenedOrChanged:
-                    const win = event.WindowOpenedOrChanged.window;
-                    let existingWindow = config.windows.find(w => w.windowId === win.id);
+                    const winNew = event.WindowOpenedOrChanged.window;
+                    let existingWindow = config.windows.find(w => w.address === winNew.address);
                     if (existingWindow) {
-                        existingWindow.title = win.title;
-                        existingWindow.appId = win.app_id;
-                        existingWindow.pid = win.pid;
-                        existingWindow.workspaceId = win.workspace_id ?? -1;
-                        existingWindow.isFocused = win.is_focused;
-                        existingWindow.isFloating = win.is_floating;
-                        existingWindow.isUrgent = win.is_urgent;
+                        existingWindow.title = winNew.title;
+                        existingWindow.appId = winNew.class;
+                        existingWindow.workspaceId = winNew.workspace || -1;
+                        existingWindow.isFocused = winNew.is_focused;
+                        existingWindow.isFloating = winNew.is_floating;
                     } else {
                         const winObj = windowComponent.createObject(null, {
-                            windowId: win.id,
-                            title: win.title,
-                            appId: win.app_id,
-                            pid: win.pid,
-                            workspaceId: win.workspace_id ?? -1,
-                            isFocused: win.is_focused,
-                            isFloating: win.is_floating,
-                            isUrgent: win.is_urgent
+                            windowId: 0,
+                            title: winNew.title,
+                            appId: winNew.class,
+                            pid: 0,
+                            workspaceId: winNew.workspace || -1,
+                            isFocused: winNew.is_focused,
+                            isFloating: winNew.is_floating,
+                            isUrgent: false,
+                            address: winNew.address
                         });
                         config.windows.push(winObj);
                     }
-                    for (let ws of config.workspaces) {
-                        if (ws.workspaceId === winObj.workspaceId) {
-                            for (let win of ws.windows) {
-                                if (win === null)
-                                    return;
-                                if (win.windowId === winObj.windowId) {
-                                    win = winObj;
-                                    return;
-                                }
-                            }
-                            ws.windows.push(winObj);
-                        }
-                    }
                     return;
+                case EventType.Fullscreen:
+                case EventType.WindowPinned:
+                case EventType.WindowFloating:
+                case EventType.MonitorChanged:
+                    break;
                 default:
                     break;
                 }
