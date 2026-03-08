@@ -129,7 +129,9 @@ ColumnLayout {
     // widgets
     FlexboxLayout {
         id: widgetContainer
+
         Layout.fillWidth: true
+
         Instantiator {
             model: ["Clock.qml", "Test.qml"]
             delegate: WidgetContainer {
