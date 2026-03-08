@@ -133,13 +133,23 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Instantiator {
-            model: ["Clock.qml", "Test.qml"]
+            id: widgetInstantiator
+            active: false
             delegate: WidgetContainer {
-                model: modelData
+                model: `${modelData.objectName}.qml`
             }
             onObjectAdded: (idx, obj) => {
                 obj.parent = widgetContainer;
             }
+        }
+
+        Component.onCompleted: {
+            Global.general.onWidgetsChanged.connect(() => {
+                if (Global.general.widgets.length !== 0) {
+                    widgetInstantiator.model = Global.general.widgets;
+                    widgetInstantiator.active = true;
+                }
+            });
         }
     }
 

@@ -8,9 +8,6 @@ import qs.modules.pages
 Rectangle {
     id: floatingWindow
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
-    onIsFocusedChanged: {
-        console.log(isFocused, Global.enableSetting);
-    }
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
