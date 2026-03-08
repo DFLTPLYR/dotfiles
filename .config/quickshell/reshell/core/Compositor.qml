@@ -9,11 +9,12 @@ Singleton {
     property var workspaces: []
     property var windows: []
     property var focusedWorkspace: null
-    property var focusedMonitor: null
+    property var focusedMonitor: Quickshell.screens[0].name
     property var focusedWindow: null
     property bool overviewOpened: false
     property bool ready: false
     readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/pdaemon.sock"
+
     Component {
         id: windowComponent
         QtObject {
@@ -28,6 +29,7 @@ Singleton {
             property string address: ""
         }
     }
+
     Component {
         id: workspaceComponent
         QtObject {
@@ -42,6 +44,7 @@ Singleton {
             property list<Window> windows: []
         }
     }
+
     Socket {
         id: compositorSocket
         path: config.daemonSocket
@@ -71,6 +74,8 @@ Singleton {
                     let temp = [];
                     const wsList = event.WorkspacesChanged.workspaces;
                     for (const workspace of wsList) {
+                        if (!workspace.idx)
+                            break;
                         const ws = workspaceComponent.createObject(null, {
                             workspaceId: workspace.id,
                             idx: workspace.idx,
@@ -175,8 +180,8 @@ Singleton {
                             appId: winNew.class,
                             pid: 0,
                             workspaceId: winNew.workspace || -1,
-                            isFocused: winNew.is_focused,
-                            isFloating: winNew.is_floating,
+                            isFocused: winNew.is_focused || true,
+                            isFloating: winNew.is_floating || false,
                             isUrgent: false,
                             address: winNew.address
                         });

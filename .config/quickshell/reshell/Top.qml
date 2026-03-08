@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Qt.labs.folderlistmodel
 
 import qs.core
 import qs.modules
@@ -12,6 +13,7 @@ Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: panel
+
         required property ShellScreen modelData
         screen: modelData
 
