@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Qt.labs.folderlistmodel
 
 import qs.types
 
@@ -60,6 +61,90 @@ Singleton {
             property Slider slider: Slider {}
             property Label label: Label {}
             property Range range: Range {}
+
+            property list<var> widgets: []
+        }
+    }
+
+    FolderListModel {
+        id: folderModel
+        folder: Qt.resolvedUrl("../components/widgets")
+        nameFilters: ["*.qml"]
+        showDirs: false
+
+        onCountChanged: {
+            for (let i = 0; i < count; i++) {
+                const fileName = get(i, "fileName");
+                if (fileName !== "Wrapper.qml") {
+                    const widgetName = fileName;
+                    const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
+                    propertyCheckerComponent.createObject(config, {
+                        path: target,
+                        widget: widgetName
+                    });
+                }
+            }
+        }
+    }
+
+    Component {
+        id: propertyCheckerComponent
+        FileView {
+            property string widget: ""
+
+            function getProperties(content) {
+                const regex = /\/\/ properties\n([\s\S]*?)\n\s*\/\/ properties/;
+                const match = returnJsonObject(content.match(regex));
+                return match;
+            }
+
+            function returnJsonObject(match) {
+                if (!match)
+                    return null;
+                const props = {};
+                const lines = match[1].trim().split('\n');
+                for (let line of lines) {
+                    let key, value;
+                    if (line.trim().startsWith('property ')) {
+                        const parts = line.trim().slice(9).split(':');
+                        if (parts.length < 2)
+                            continue;
+                        key = parts[0].trim().split(' ').pop();
+                        value = parts.slice(1).join(':').trim();
+                    } else {
+                        const colonIdx = line.indexOf(':');
+                        if (colonIdx === -1)
+                            continue;
+                        key = line.slice(0, colonIdx).trim();
+                        value = line.slice(colonIdx + 1).trim();
+                    }
+                    if (value === 'true')
+                        value = true;
+                    else if (value === 'false')
+                        value = false;
+                    else if (!isNaN(value) && value !== '')
+                        value = Number(value);
+                    else if (value.startsWith('"') && value.endsWith('"'))
+                        value = value.slice(1, -1);
+                    props[key] = value;
+                }
+                return props;
+            }
+
+            onPathChanged: {
+                this.reload();
+            }
+            onLoaded: {
+                var props = getProperties(text());
+                if (props) {
+                    const exist = fileView.adapter.widgets.find(s => s && s.objectName === props.objectName);
+                    if (!exist) {
+                        fileView.adapter.widgets.push(props);
+                        fileView.writeAdapter();
+                    }
+                }
+                this.destroy();
+            }
         }
     }
 
