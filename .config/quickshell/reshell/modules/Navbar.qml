@@ -214,10 +214,21 @@ Item {
         }
 
         function bindSize(item) {
+            const widget = item.objectName;
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
-            item.width = Qt.binding(() => navbar.side ? slot.width : setWidth);
-            item.height = Qt.binding(() => navbar.side ? setHeight : slot.height);
+            item.width = Qt.binding(() => {
+                if (navbar.config.fill.enable) {
+                    return slot.width;
+                }
+                return navbar.side ? slot.width : setWidth;
+            });
+            item.height = Qt.binding(() => {
+                if (navbar.config.fill.enable) {
+                    return slot.height;
+                }
+                return navbar.side ? setHeight : slot.height;
+            });
         }
 
         // i vibed coded this shit but basically it compares the new position properties from lowest to heigthest then it reparents it

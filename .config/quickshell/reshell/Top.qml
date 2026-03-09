@@ -77,6 +77,54 @@ Variants {
                 fileView.reslot();
             }
 
+            onLoaded: snapHistory()
+
+            onFileChanged: {
+                reload();
+                snapHistory();
+            }
+
+            onLoadFailed: error => {
+                if (error === FileViewError.FileNotFound) {
+                    fileView.setText("{}");
+                    fileView.writeAdapter();
+                }
+            }
+
+            adapter: JsonAdapter {
+                id: adapter
+                property int height: 40
+                property int width: 40
+                property JsonObject fill: JsonObject {
+                    property bool enable: false
+                    property int height: 10
+                    property int width: 100
+                    property int axis: 0
+                }
+                property string position: "top"
+                readonly property bool side: position === "left" || position === "right"
+                property StyleJson style: StyleJson {
+                    color: Colors.color.background
+                    border {
+                        width: 1
+                        color: Colors.color.primary
+                    }
+                }
+                property WallpaperJson wallpaper: WallpaperJson {}
+                property list<var> layouts: []
+                property list<var> widgets: []
+
+                property JsonObject custom: JsonObject {
+                    property list<var> widget: []
+                    property list<var> layout: []
+                }
+                onWidgetsChanged: {
+                    Qt.callLater(() => {
+                        fileView.reslot();
+                    });
+                }
+            }
+
             function reslot() {
                 const sorted = [...widgets].sort((a, b) => {
                     const targetA = adapter.widgets.find(s => s.name === a.objectName);
@@ -123,8 +171,13 @@ Variants {
                             bottomRight: adapter.style.rounding.bottomRight
                         }
                     },
-                    layouts: JSON.parse(JSON.stringify(adapter.layouts)),
-                    widgets: JSON.parse(JSON.stringify(adapter.widgets))
+                    custom: {
+                        widget: parseJson(adapter.custom.widget),
+                        layout: parseJson(adapter.custom.layout)
+                    },
+                    layouts: parseJson(adapter.layouts),
+                    widgets: parseJson(adapter.widgets),
+                    wallpaper: parseJson(adapter.wallpaper)
                 };
                 const existing = Global.fileManager.find(s => s && s.subject === key);
                 if (existing) {
@@ -162,9 +215,16 @@ Variants {
                 adapter.style.rounding.topRight = history.style.rounding.topRight;
                 adapter.style.rounding.bottomLeft = history.style.rounding.bottomLeft;
                 adapter.style.rounding.bottomRight = history.style.rounding.bottomRight;
-                adapter.layouts = JSON.parse(JSON.stringify(history.layouts));
-                adapter.widgets = JSON.parse(JSON.stringify(history.widgets));
+                adapter.custom.widget = parseJson(adapter.custom.widget);
+                adapter.custom.layout = parseJson(adapter.custom.layout);
+                adapter.layouts = parseJson(history.layouts);
+                adapter.widgets = parseJson(history.widgets);
+                adapter.wallpaper = parseJson(history.wallpaper);
                 Quickshell.reload(false);
+            }
+
+            function parseJson(json) {
+                return JSON.parse(JSON.stringify(json));
             }
 
             function save() {
@@ -234,51 +294,10 @@ Variants {
                         }
                     }
                 }
+
                 compare('', current, history);
+
                 return diff;
-            }
-
-            onLoaded: snapHistory()
-
-            onFileChanged: {
-                reload();
-                snapHistory();
-            }
-
-            onLoadFailed: error => {
-                if (error === FileViewError.FileNotFound) {
-                    fileView.setText("{}");
-                    fileView.writeAdapter();
-                }
-            }
-
-            adapter: JsonAdapter {
-                id: adapter
-                property int height: 40
-                property int width: 40
-                property JsonObject fill: JsonObject {
-                    property bool enable: false
-                    property int height: 10
-                    property int width: 100
-                    property int axis: 0
-                }
-                property string position: "top"
-                readonly property bool side: position === "left" || position === "right"
-                property StyleJson style: StyleJson {
-                    color: Colors.color.background
-                    border {
-                        width: 1
-                        color: Colors.color.primary
-                    }
-                }
-                property list<var> layouts: []
-                property list<var> widgets: []
-
-                onWidgetsChanged: {
-                    Qt.callLater(() => {
-                        fileView.reslot();
-                    });
-                }
             }
 
             Component.onCompleted: snapHistory()
