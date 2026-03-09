@@ -143,17 +143,13 @@ Rectangle {
             Layout.fillWidth: true
 
             // General
-            GeneralPage {
-                settings: floatingWindow.config
-            }
+            GeneralPage {}
 
             // Navbar
             NavbarPage {}
 
             // Wallpaper
-            WallpaperPage {
-                settings: floatingWindow.config
-            }
+            WallpaperPage {}
         }
     }
 }

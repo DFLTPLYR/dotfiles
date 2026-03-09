@@ -6,8 +6,8 @@ import Quickshell.Io
 
 Singleton {
     id: config
-    property var workspaces: []
-    property var windows: []
+    property list<QtObject> workspaces: []
+    property list<QtObject> windows: []
     property var focusedWorkspace: null
     property var focusedMonitor: Quickshell.screens[0].name
     property var focusedWindow: null
@@ -41,7 +41,7 @@ Singleton {
             required property bool isActive
             required property bool isFocused
             required property int activeWindowID
-            property list<Window> windows: []
+            property list<QtObject> windows: []
         }
     }
 
@@ -111,7 +111,7 @@ Singleton {
                         const winObj = windowComponent.createObject(null, {
                             windowId: win.id,
                             title: win.title,
-                            appId: win.app_id,
+                            appId: win.app_id || null,
                             pid: win.pid,
                             workspaceId: win.workspace_id ?? -1,
                             isFocused: win.is_focused,
@@ -177,13 +177,13 @@ Singleton {
                         const winObj = windowComponent.createObject(null, {
                             windowId: 0,
                             title: winNew.title,
-                            appId: winNew.class,
+                            appId: winNew.class || 0,
                             pid: 0,
                             workspaceId: winNew.workspace || -1,
                             isFocused: winNew.is_focused || true,
                             isFloating: winNew.is_floating || false,
                             isUrgent: false,
-                            address: winNew.address
+                            address: winNew.address || ""
                         });
                         config.windows.push(winObj);
                     }

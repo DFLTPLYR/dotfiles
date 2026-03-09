@@ -46,6 +46,7 @@ ColumnLayout {
 
         // Fill options
         Column {
+            visible: config.fill.enable
             spacing: 10
 
             Row {
