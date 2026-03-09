@@ -46,6 +46,13 @@ Slider {
             }
         }
 
+        Behavior on width {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
+
         Rectangle {
             id: progress
             property var state: control.state.background.progress
@@ -74,6 +81,13 @@ Slider {
                 ColorAnimation {
                     duration: 200
                     easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on width {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.OutCubic
                 }
             }
         }
@@ -111,6 +125,19 @@ Slider {
             ColorAnimation {
                 duration: 200
                 easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on x {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        Behavior on implicitWidth {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
             }
         }
     }
