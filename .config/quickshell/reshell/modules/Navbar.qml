@@ -229,6 +229,7 @@ Item {
                 }
                 return navbar.side ? setHeight : slot.height;
             });
+            const exist = navbar.config.custom.widget.find(w => w.objectName === widget);
         }
 
         // i vibed coded this shit but basically it compares the new position properties from lowest to heigthest then it reparents it
