@@ -41,6 +41,7 @@ Scope {
             rightMargin: 20
 
             delegate: Notification {}
+
             add: Transition {
                 NumberAnimation {
                     property: "opacity"
