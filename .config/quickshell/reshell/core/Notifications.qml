@@ -37,6 +37,7 @@ Singleton {
         onNotificationChanged: {
             if (notification === null) {
                 root.discardNotification(notificationId);
+                console.log("removed");
             }
         }
     }

@@ -59,16 +59,13 @@ Variants {
                     item: volume
                 },
                 Region {
-                    item: notifications.contentItem
+                    item: notification.contentItem
                 }
             ]
         }
 
         Notifications {
             id: notification
-            width: 400
-            height: panel.height
-            x: (panel.width * 1) - width
         }
 
         // Volume Slider
@@ -109,100 +106,6 @@ Variants {
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
-                }
-            }
-        }
-
-        // Notifications
-        ListView {
-            id: notifications
-            property ListModel list: ListModel {}
-            visible: Compositor.focusedMonitor === screen.name
-            opacity: Compositor.focusedMonitor === screen.name ? 1 : 0
-            model: notifications.list
-            width: 400
-            height: screen.height
-            x: parent.width - width
-            spacing: 2
-            delegate: Rectangle {
-                width: notifications.width
-                height: 50
-                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-            }
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            add: Transition {
-                NumberAnimation {
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: 250
-                }
-                NumberAnimation {
-                    property: "x"
-                    from: 200
-                    to: 0
-                    duration: 250
-                }
-            }
-
-            remove: Transition {
-                id: removeTransition
-                NumberAnimation {
-                    property: "opacity"
-                    from: 1
-                    to: 0
-                    duration: 250
-                }
-                NumberAnimation {
-                    property: "x"
-                    to: 200
-                    duration: 250
-                }
-
-                onRunningChanged: {
-                    if (!running && removeTransition.targetItem) {
-                        let notificationId = removeTransition.targetItem.notificationId;
-                        Notification.discardNotification(notificationId);
-                    }
-                }
-            }
-
-            displaced: Transition {
-                NumberAnimation {
-                    properties: "x,y"
-                    duration: 250
-                }
-            }
-            Connections {
-                target: Notifications
-                function onNotify(notif) {
-                    notifications.list.append({
-                        notificationId: notif.notificationId,
-                        actions: notif.actions,
-                        appIcon: notif.appIcon,
-                        appName: notif.appName,
-                        body: notif.body,
-                        image: notif.image,
-                        summary: notif.summary,
-                        time: notif.time,
-                        urgency: notif.urgency
-                    });
-                }
-                function onTimeout(id) {
-                    for (var i = 0; i < notifications.list.count; ++i) {
-                        if (notifications.list.get(i).notificationId === id) {
-                            notifications.list.remove(i);
-                            break;
-                        }
-                    }
-                }
-                function onDiscardAll() {
-                    notifications.list.clear();
                 }
             }
         }
