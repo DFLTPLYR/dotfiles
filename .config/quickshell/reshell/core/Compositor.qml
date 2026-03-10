@@ -63,11 +63,7 @@ Singleton {
                     WindowsChanged: "WindowsChanged",
                     WindowClosed: "WindowClosed",
                     FocusedMonitor: "FocusedMonitor",
-                    WindowFocusChanged: "WindowFocusChanged",
-                    Fullscreen: "Fullscreen",
-                    WindowPinned: "WindowPinned",
-                    WindowFloating: "WindowFloating",
-                    MonitorChanged: "MonitorChanged"
+                    WindowFocusChanged: "WindowFocusChanged"
                 };
                 switch (key) {
                 case EventType.WorkspacesChanged:
@@ -188,11 +184,6 @@ Singleton {
                         config.windows.push(winObj);
                     }
                     return;
-                case EventType.Fullscreen:
-                case EventType.WindowPinned:
-                case EventType.WindowFloating:
-                case EventType.MonitorChanged:
-                    break;
                 default:
                     break;
                 }
