@@ -14,8 +14,8 @@ Rectangle {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    width: screen.width / 2
-    height: screen.height / 2
+    width: screen.width / 1.5
+    height: screen.height / 1.5
 
     color: Colors.setOpacity(Colors.color.background, Global.general.opacity)
     opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
