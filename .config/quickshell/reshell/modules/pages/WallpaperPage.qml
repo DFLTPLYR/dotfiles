@@ -1,34 +1,18 @@
 import QtQuick
 import QtQuick.Layouts
 
+import Quickshell.Io
 import qs.core
-
-import QtCore
-import QtQuick.Dialogs
+import qs.components
 
 Item {
     Layout.fillWidth: true
     Layout.fillHeight: true
 
-    MouseArea {
+    FilePicker {
         anchors.fill: parent
-        onClicked: fileDialog.open()
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: "FilePicker"
-        fileMode: FileDialog.OpenFile
-        currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-        nameFilters: ["Images (*.png *.jpg *.jpeg *.webp)"]
-
-        onAccepted: {
-            Wallpaper.config.source.push({
-                monitor: screen.name,
-                timestamp: Date.now(),
-                path: selectedFile
-            });
-            Wallpaper.save();
+        onOutput: data => {
+            console.log(data);
         }
     }
 }

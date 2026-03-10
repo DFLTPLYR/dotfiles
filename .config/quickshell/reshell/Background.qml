@@ -9,7 +9,7 @@ Variants {
     delegate: PanelWindow {
         id: panel
         required property ShellScreen modelData
-        readonly property string path: Wallpaper.config.source.find(s => s && s.monitor === modelData.name)?.path || ""
+        readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
         screen: modelData
 
         color: "transparent"
@@ -23,18 +23,30 @@ Variants {
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
 
+        // warning
+        Rectangle {
+            visible: path.length <= 0
+            color: Qt.rgba(0, 0, 0, 1)
+            width: parent.width
+            height: parent.height
+        }
+
         // Basic Background
-        Image {
-            visible: Wallpaper.config.mode === "standard"
-            width: panel.screen.width
-            height: panel.screen.height
-            sourceSize.width: panel.screen.width
-            sourceSize.height: panel.screen.height
-            source: panel.path
-            smooth: true
-            mipmap: true
-            antialiasing: true
-            fillMode: Image.PreserveAspectCrop
+        Repeater {
+            model: [...panel.path]
+            delegate: Image {
+                id: image
+                visible: Wallpaper.config.mode === "standard"
+                width: panel.screen.width
+                height: panel.screen.height
+                sourceSize.width: panel.screen.width
+                sourceSize.height: panel.screen.height
+                source: modelData.path
+                smooth: true
+                mipmap: true
+                antialiasing: true
+                fillMode: Image.PreserveAspectCrop
+            }
         }
     }
 }
