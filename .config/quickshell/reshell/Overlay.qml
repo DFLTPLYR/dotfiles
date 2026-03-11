@@ -56,7 +56,7 @@ Variants {
         mask: Region {
             regions: [
                 Region {
-                    item: volume
+                    item: panel.shouldShowOsd ? volume : null
                 },
                 Region {
                     item: notification.contentItem
