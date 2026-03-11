@@ -6,13 +6,13 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: control.down ? Global.general.button.hover : Global.general.button.unhover
+    property var state: control.down ? Components.general.button.hover : Global.general.button.unhover
 
     text: qsTr("Button")
 
     contentItem: Text {
         id: content
-        property var state: Global.general.button.content
+        property var state: Components.general.button.content
 
         text: control.text
         font: control.font
@@ -37,7 +37,7 @@ Button {
     background: Rectangle {
         id: background
 
-        property var state: Global.general.button.background
+        property var state: Components.general.button.background
 
         implicitWidth: 100
         implicitHeight: 40

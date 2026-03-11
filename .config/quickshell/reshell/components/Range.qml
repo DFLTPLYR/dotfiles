@@ -9,7 +9,7 @@ RangeSlider {
 
     background: Rectangle {
         id: background
-        property var state: Global.general.range.background
+        property var state: Components.general.range.background
 
         x: control.leftPadding
         y: control.topPadding + control.availableHeight / 2 - height / 2
@@ -44,7 +44,7 @@ RangeSlider {
 
     first.handle: Rectangle {
         id: first
-        property var state: Global.general.range.first
+        property var state: Components.general.range.first
         x: control.leftPadding + control.first.visualPosition * (control.availableWidth - width)
         y: control.topPadding + control.availableHeight / 2 - height / 2
 
@@ -66,7 +66,7 @@ RangeSlider {
 
     second.handle: Rectangle {
         id: second
-        property var state: Global.general.range.second
+        property var state: Components.general.range.second
         x: control.leftPadding + control.second.visualPosition * (control.availableWidth - width)
         y: control.topPadding + control.availableHeight / 2 - height / 2
 
