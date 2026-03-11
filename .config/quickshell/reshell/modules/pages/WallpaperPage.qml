@@ -20,9 +20,51 @@ ColumnLayout {
         }
     }
 
-    Button {
-        text: "Add File"
-        onClicked: file.running = true
+    Row {
+        Button {
+            text: "Add File"
+            onClicked: file.running = true
+        }
+        Button {
+            text: "Save Preset"
+        }
+        Button {
+            text: "Check pos"
+            onClicked: {
+                for (var i = 0; i < overview.children.length; i++) {
+                    var child = overview.children[i];
+                    var isScreen = child.objectName === "screen";
+                    if (!isScreen && child.image) {
+                        var image = child.image;
+                        var imgX = image.x;
+                        var imgY = image.y;
+                        var imgW = image.width;
+                        var imgH = image.height;
+                        var overlapping = [];
+                        for (var j = 0; j < overview.children.length; j++) {
+                            var screen = overview.children[j];
+                            if (screen.objectName === "screen" && screen.width > 0 && screen.height > 0) {
+                                if (imgX < screen.x + screen.width && imgX + imgW > screen.x && imgY < screen.y + screen.height && imgY + imgH > screen.y) {
+                                    overlapping.push(screen);
+                                }
+                            }
+                        }
+                        for (var k = 0; k < overlapping.length; k++) {
+                            var screen = overlapping[k];
+                            var properties = {
+                                x: imgX,
+                                y: imgY,
+                                relativeX: screen.x - image.x,
+                                relativeY: screen.y - image.y,
+                                width: imgW,
+                                height: imgH
+                            };
+                            console.log(JSON.stringify(properties));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     Flickable {
@@ -54,21 +96,11 @@ ColumnLayout {
 
             Instantiator {
                 model: Quickshell.screens
-                delegate: Rectangle {
-                    border {
-                        width: 1
-                        color: Colors.color.primary
-                    }
-                    color: Colors.setOpacity(Colors.color.background, 0.3)
-                    width: modelData.width / flick.zoom
-                    height: modelData.height / flick.zoom
-                    parent: overview
-                    x: modelData.x / flick.zoom
-                    y: modelData.y / flick.zoom
-                }
+                delegate: Screens {}
             }
 
             Instantiator {
+                id: imageInstantiator
                 model: ScriptModel {
                     values: {
                         return [...overview.paths];
@@ -94,40 +126,43 @@ ColumnLayout {
         }
     }
 
+    component Screens: Rectangle {
+        id: screenRect
+        objectName: "screen"
+        border {
+            width: 1
+            color: Colors.color.primary
+        }
+        color: Colors.setOpacity(Colors.color.background, 0.3)
+        width: modelData.width / flick.zoom
+        height: modelData.height / flick.zoom
+        parent: overview
+        x: modelData.x / flick.zoom
+        y: modelData.y / flick.zoom
+    }
+
     component CustomImage: Rectangle {
         id: container
 
         required property var modelData
-        property Item image: draggableImage
+        property Image image: draggableImage
 
         Image {
             id: draggableImage
             property bool lock
-            width: sourceSize.width / flick.zoom
-            height: sourceSize.height / flick.zoom
+
+            width: (modelData.width || sourceSize.width) / flick.zoom
+            height: (modelData.height || sourceSize.height) / flick.zoom
 
             source: Qt.resolvedUrl(modelData) || ""
-            Drag.active: imageMa.drag.active
+            Drag.active: drag.active
             Drag.hotSpot.x: 10
             Drag.hotSpot.y: 10
 
-            Connections {
-                target: flick
-                function onZoomChanged() {
-                    x = x / flick.zoom;
-                    y = y / flick.zoom;
-                }
-            }
-
-            MouseArea {
-                id: imageMa
-                anchors.fill: parent
-                drag.target: parent
-                hoverEnabled: true
+            DragHandler {
+                id: drag
+                target: draggableImage
                 enabled: !draggableImage.lock
-                onPressed: flick.interactive = false
-                onReleased: flick.interactive = true
-                onCanceled: flick.interactive = true
             }
 
             Row {
@@ -199,7 +234,6 @@ ColumnLayout {
                     onPositionChanged: mouse => {
                         if (drag.active) {
                             var anchors = modelData.anchors;
-
                             if (anchors.includes("right")) {
                                 draggableImage.width = Math.max(50, parent.x - draggableImage.x);
                             }
