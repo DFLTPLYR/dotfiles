@@ -41,6 +41,14 @@ ColumnLayout {
                         var imgW = image.width;
                         var imgH = image.height;
                         var overlapping = [];
+                        var properties = {
+                            x: imgX,
+                            y: imgY,
+                            width: imgW * flick.zoom,
+                            height: imgH * flick.zoom,
+                            screens: []
+                        };
+
                         for (var j = 0; j < overview.children.length; j++) {
                             var screen = overview.children[j];
                             if (screen.objectName === "screen" && screen.width > 0 && screen.height > 0) {
@@ -49,18 +57,17 @@ ColumnLayout {
                                 }
                             }
                         }
+                        var panel = [];
                         for (var k = 0; k < overlapping.length; k++) {
                             var screen = overlapping[k];
-                            var properties = {
-                                x: imgX,
-                                y: imgY,
+                            var screenData = {
                                 relativeX: screen.x - image.x,
                                 relativeY: screen.y - image.y,
-                                width: imgW,
-                                height: imgH
+                                screenName: screen.modelData.name
                             };
-                            console.log(JSON.stringify(properties));
+                            panel.push(screenData);
                         }
+                        properties.screens = panel;
                     }
                 }
             }
@@ -128,6 +135,7 @@ ColumnLayout {
 
     component Screens: Rectangle {
         id: screenRect
+        required property ShellScreen modelData
         objectName: "screen"
         border {
             width: 1
