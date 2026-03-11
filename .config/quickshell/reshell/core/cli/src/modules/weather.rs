@@ -63,9 +63,13 @@ pub fn get_weather_info(mut stream: UnixStream, use_curl: bool, running: Arc<Ato
                 }
             })
         };
+
         let weather_data = match cached_data {
             Some(data) => data,
             None => {
+                if !running.load(Ordering::SeqCst) {
+                    break;
+                }
                 let client = Client::new();
                 let url = format!(
                     "https://api.weatherapi.com/v1/forecast.json?key={}&q={}&days=3&aqi=no&alerts=no",
@@ -107,7 +111,7 @@ pub fn get_weather_info(mut stream: UnixStream, use_curl: bool, running: Arc<Ato
         if writeln!(stream, "{}", weather_data).is_err() {
             break;
         }
-        thread::sleep(Duration::from_secs(60));
+        thread::sleep(Duration::from_secs(1));
     }
 
     clear_cache();

@@ -13,7 +13,7 @@ Singleton {
     property var focusedWindow: null
     property bool overviewOpened: false
     property bool ready: false
-    readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/pdaemon.sock"
+    readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/quickcli.sock"
 
     Component {
         id: windowComponent

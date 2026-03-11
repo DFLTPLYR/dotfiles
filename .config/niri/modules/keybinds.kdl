@@ -14,10 +14,7 @@ binds {
     Mod+Shift+G hotkey-overlay-title="Game mode" { spawn-sh "~/dotfiles/.config/niri/scripts/gamemode.sh"; }
 
     // Quickshell IPC commands
-    Mod+R hotkey-overlay-title="Open Wallpaper Picker" { spawn-sh "pcli launch wallpaper-picker";}
-    Mod+Shift+E hotkey-overlay-title="Open Extended Bar" { spawn-sh "pcli launch extended-bar";}
-    Mod+Shift+A hotkey-overlay-title="Open App Launcher" { spawn-sh "pcli launch app-launcher";}
-    Mod+S hotkey-overlay-title="Open Shell Settings" { spawn-sh "pcli launch shell-settings";}
+    Mod+S hotkey-overlay-title="Open Shell Settings" { spawn-sh "quickcli launch settings";}
 
     // move focus between windows in the current column.
     Mod+H     { focus-column-or-monitor-left; }
