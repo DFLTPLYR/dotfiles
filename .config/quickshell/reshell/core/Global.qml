@@ -303,19 +303,7 @@ Singleton {
 
     IpcHandler {
         target: "config"
-        function toggleWallpaperPicker() {
-        }
-
-        function toggleAppLauncher() {
-        }
-
-        function toggleSessionMenu() {
-        }
-
-        function toggleExtendedBar() {
-        }
-
-        function toggleSettingsPanel() {
+        function settings() {
             config.enableSetting = !config.enableSetting;
         }
     }

@@ -20,7 +20,7 @@ use std::{
 // local imports
 use quickcli::{
     Commands, DesktopEnvironment, Request,
-    modules::{compositor, hardware, wallpaper, weather},
+    modules::{compositor, hardware, shell, wallpaper, weather},
 };
 
 #[derive(Parser)]
@@ -36,19 +36,18 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     match args.command {
         Some(cmd) => handle_command(cmd)?,
-        None => println!("Provide a subcommand or run 'quickcli daemon' to start the daemon"),
+        None => run_daemon()?,
     }
 
     Ok(())
 }
 
 fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
-    if let Commands::Daemon = command {
-        run_daemon()?;
-        return Ok(());
+    if let Commands::Launch { target } = &command {
+        return Ok(shell::shell_query(target));
     }
     let runtime_dir = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set");
-    let socket_path = format!("{}/pdaemon.sock", runtime_dir);
+    let socket_path = format!("{}/quickcli.sock", runtime_dir);
 
     let mut stream = UnixStream::connect(&socket_path)?;
     let request = command.to_request_string();
@@ -82,7 +81,7 @@ fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
 
 fn run_daemon() -> Result<(), Box<dyn Error>> {
     let runtime_dir = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set");
-    let socket_path = format!("{}/pdaemon.sock", runtime_dir);
+    let socket_path = format!("{}/quickcli.sock", runtime_dir);
 
     if let Err(e) = fs::remove_file(&socket_path) {
         if e.kind() != std::io::ErrorKind::NotFound {
@@ -138,7 +137,9 @@ fn handle_request(mut stream: UnixStream, _running: Arc<AtomicBool>) {
                     DesktopEnvironment::Hyprland => {
                         compositor::hyprland_ipc_listener(stream, _running)
                     }
-                    DesktopEnvironment::Unknown => {}
+                    DesktopEnvironment::Unknown => {
+                        let _ = writeln!(stream, "unknown compositor");
+                    }
                 },
                 Request::GeneratePalette { type_, paths } => {
                     wallpaper::generate_color_palette(type_, paths, stream);
@@ -146,7 +147,9 @@ fn handle_request(mut stream: UnixStream, _running: Arc<AtomicBool>) {
                 Request::WindowManagerRules => match DesktopEnvironment::from_env() {
                     DesktopEnvironment::Niri => compositor::get_rules(stream),
                     DesktopEnvironment::Hyprland => {}
-                    DesktopEnvironment::Unknown => {}
+                    DesktopEnvironment::Unknown => {
+                        let _ = writeln!(stream, "unknown compositor");
+                    }
                 },
                 Request::Weather { use_curl } => {
                     let use_curl = use_curl.unwrap_or(true);

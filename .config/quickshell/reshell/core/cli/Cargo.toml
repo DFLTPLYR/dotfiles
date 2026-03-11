@@ -18,3 +18,4 @@ reqwest = { version = "0.13.1", features = ["blocking"] }
 knuffel = "3.2"
 ctrlc = "3.2"
 rfd = "0.15"
+strum = { version = "0.26", features = ["derive"] }

@@ -1,13 +1,8 @@
-use crate::{LaunchTarget, is_qs_running};
+use crate::is_qs_running;
 use std::process::Command;
 
-pub fn shell_query(target: &LaunchTarget) {
-    match target {
-        LaunchTarget::WallpaperPicker => compositor_action("toggleWallpaperPicker"),
-        LaunchTarget::AppLauncher => compositor_action("toggleAppLauncher"),
-        LaunchTarget::ExtendedBar => compositor_action("toggleExtendedBar"),
-        LaunchTarget::ShellSettings => compositor_action("toggleSettingsPanel"),
-    }
+pub fn shell_query(target: &String) {
+    compositor_action(target);
 }
 
 // compositor actions based on wayland compositor type
