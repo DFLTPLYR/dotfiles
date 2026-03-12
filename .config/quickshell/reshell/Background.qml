@@ -56,10 +56,8 @@ Variants {
                 property var pos: modelData.screens.find(s => s.name === panel.screen.name)
                 width: pos.width
                 height: pos.height
-                // x: pos ? pos.posX : 0
-                // y: pos ? pos.posY : 0
-                y: modelData.y
-                x: modelData.x
+                x: pos ? pos.posX : 0
+                y: pos ? pos.posY : 0
                 source: modelData.source
                 visible: !!pos
             }
