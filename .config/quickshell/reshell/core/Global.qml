@@ -12,7 +12,6 @@ Singleton {
     id: config
     property bool enableSetting: false
     property alias general: adapter
-    property alias icon: customIconFont.font
 
     // global item
     property list<var> fileManager: []
@@ -21,11 +20,6 @@ Singleton {
     function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
         return entry?.ref || null;
-    }
-
-    FontLoader {
-        id: customIconFont
-        source: Qt.resolvedUrl("./icon.otf")
     }
 
     FileView {
@@ -54,13 +48,6 @@ Singleton {
             property CornerJson rounding: CornerJson {}
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
-            property ButtonJson button: ButtonJson {}
-            property SpinBoxJson spinbox: SpinBoxJson {}
-            property SwitchJson toggle: SwitchJson {}
-            property PageIndicator pageIndicator: PageIndicator {}
-            property Slider slider: Slider {}
-            property Label label: Label {}
-            property Range range: Range {}
 
             property list<var> widgets: []
         }

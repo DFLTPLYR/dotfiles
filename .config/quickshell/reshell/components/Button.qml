@@ -6,9 +6,7 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: control.down ? Components.general.button.hover : Global.general.button.unhover
-
-    text: qsTr("Button")
+    property var state: control.down ? Components.general.button.hover : Components.general.button.unhover
 
     contentItem: Text {
         id: content
