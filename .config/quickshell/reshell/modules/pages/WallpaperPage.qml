@@ -55,8 +55,6 @@ ColumnLayout {
 
             for (var k = 0; k < overlapping.length; k++) {
                 var screen = overlapping[k];
-                console.log("screen.x:", screen.x, "screen.modelData.x:", screen.modelData.x, "image.x:", image.x);
-                console.log("expected:", screen.modelData.x - image.x, "got:", screen.x - image.x);
                 var screenData = {
                     width: image.width * flick.zoom,
                     height: image.height * flick.zoom,
@@ -64,6 +62,7 @@ ColumnLayout {
                     posY: screen.y - image.y,
                     name: screen.modelData.name
                 };
+                console.log(screen.x, image.x, screen.y, image.y);
                 panel.push(screenData);
             }
             properties.screens = panel;
@@ -134,6 +133,13 @@ ColumnLayout {
                     wallpaperpage.checkPos();
                 }
             }
+            Button {
+                text: "Nuke"
+                onClicked: {
+                    Wallpaper.config.source = [];
+                    Wallpaper.save();
+                }
+            }
         }
 
         ColumnLayout {
@@ -188,6 +194,7 @@ ColumnLayout {
                 returnToBounds();
             }
 
+            // background grid
             Canvas {
                 id: canvas
                 width: flick.contentWidth
@@ -215,6 +222,7 @@ ColumnLayout {
                 }
             }
 
+            // items
             Item {
                 id: overview
                 anchors.centerIn: parent
@@ -270,6 +278,8 @@ ColumnLayout {
         color: Colors.setOpacity(Colors.color.background, 0.3)
         width: modelData.width / flick.zoom
         height: modelData.height / flick.zoom
+        x: modelData.x / flick.zoom
+        y: modelData.y / flick.zoom
         z: 5
     }
 
