@@ -10,10 +10,13 @@ import qs.types
 
 Singleton {
     id: config
+
+    // states
     property bool enableSetting: false
-    property alias general: adapter
+    property bool enableSystemPanel: false
 
     // global item
+    property alias general: adapter
     property list<var> fileManager: []
     property list<var> slots: []
 
@@ -43,7 +46,9 @@ Singleton {
 
         adapter: JsonAdapter {
             id: adapter
-            property BorderJson border: BorderJson {}
+            property BorderJson border: BorderJson {
+                color: Colors.color.primary
+            }
             property DirectionJson margin: DirectionJson {}
             property CornerJson rounding: CornerJson {}
             // set it to 0.0 hehe haha moment
@@ -292,6 +297,9 @@ Singleton {
         target: "config"
         function settings() {
             config.enableSetting = !config.enableSetting;
+        }
+        function session() {
+            config.enableSystemPanel = !config.enableSystemPanel;
         }
     }
 }

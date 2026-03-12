@@ -8,9 +8,11 @@ import qs.core
 import qs.components
 
 ColumnLayout {
+    id: wallpaperpage
     Layout.fillWidth: true
     Layout.fillHeight: true
     clip: true
+
     // filepicker
     FilePicker {
         id: file
@@ -20,14 +22,78 @@ ColumnLayout {
         }
     }
 
+    function checkPos() {
+        var images = overview.children.filter(s => s instanceof CustomImage);
+        var screens = overview.children.filter(s => s instanceof Screens);
+
+        for (var i = 0; i < images.length; i++) {
+            var image = images[i].image;
+            var imgX = image.x;
+            var imgY = image.y;
+            var imgW = image.width;
+            var imgH = image.height;
+            var overlapping = [];
+            var properties = {
+                x: imgX,
+                y: imgY,
+                source: image.source,
+                width: imgW * flick.zoom,
+                height: imgH * flick.zoom,
+                screens: [],
+                name: image.objectName === "null" ? Math.random().toString(36).substring(2, 10) : image.objectName
+            };
+
+            for (var j = 0; j < screens.length; j++) {
+                var screen = screens[j];
+                var overlapX = Math.min(imgX + imgW, screen.x + screen.width) - Math.max(imgX, screen.x);
+                var overlapY = Math.min(imgY + imgH, screen.y + screen.height) - Math.max(imgY, screen.y);
+                if (overlapX > 50 && overlapY > 50) {
+                    overlapping.push(screen);
+                }
+            }
+            var panel = [];
+
+            for (var k = 0; k < overlapping.length; k++) {
+                var screen = overlapping[k];
+                console.log("screen.x:", screen.x, "screen.modelData.x:", screen.modelData.x, "image.x:", image.x);
+                console.log("expected:", screen.modelData.x - image.x, "got:", screen.x - image.x);
+                var screenData = {
+                    width: image.width * flick.zoom,
+                    height: image.height * flick.zoom,
+                    posX: screen.x - image.x,
+                    posY: screen.y - image.y,
+                    name: screen.modelData.name
+                };
+                panel.push(screenData);
+            }
+            properties.screens = panel;
+
+            if (properties.screens.length > 0) {
+                var exist = Wallpaper.config.source.findIndex(s => s && s.name === properties.name);
+                if (exist === -1) {
+                    Wallpaper.config.source.push(properties);
+                } else {
+                    var target = Wallpaper.config.source[exist];
+                    target.x = properties.x;
+                    target.y = properties.y;
+                    target.width = properties.width;
+                    target.height = properties.height;
+                    target.screens = panel;
+                }
+                Wallpaper.save();
+            }
+        }
+    }
+
     Rectangle {
         color: "transparent"
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
         border {
             width: 1
             color: Colors.color.primary
         }
-        Layout.fillWidth: true
-        Layout.fillHeight: true
 
         Column {
             z: 10
@@ -47,7 +113,7 @@ ColumnLayout {
                 Repeater {
                     model: overview.children.filter(s => s instanceof Screens)
                     delegate: Button {
-                        text: modelData.modelData.name
+                        text: modelData.objectName
                         onClicked: {
                             var screenCenterX = overview.x + modelData.x + modelData.width / 2;
                             var screenCenterY = overview.y + modelData.y + modelData.height / 2;
@@ -65,50 +131,13 @@ ColumnLayout {
             Button {
                 text: "Check pos"
                 onClicked: {
-                    var images = overview.children.filter(s => s instanceof CustomImage);
-                    var screens = overview.children.filter(s => s instanceof Screens);
-
-                    for (var i = 0; i < images.length; i++) {
-                        var container = images[i];
-                        var image = container.image;
-                        var imgX = image.x;
-                        var imgY = image.y;
-                        var imgW = image.width;
-                        var imgH = image.height;
-                        var overlapping = [];
-                        var properties = {
-                            x: imgX,
-                            y: imgY,
-                            width: imgW * flick.zoom,
-                            height: imgH * flick.zoom,
-                            screens: []
-                        };
-
-                        for (var j = 0; j < screens.length; j++) {
-                            var screen = screens[j];
-                            if (screen.width > 0 && screen.height > 0) {
-                                if (imgX < screen.x + screen.width && imgX + imgW > screen.x && imgY < screen.y + screen.height && imgY + imgH > screen.y) {
-                                    overlapping.push(screen);
-                                }
-                            }
-                        }
-                        var panel = [];
-                        for (var k = 0; k < overlapping.length; k++) {
-                            var screen = overlapping[k];
-                            var screenData = {
-                                relativeX: screen.x - image.x,
-                                relativeY: screen.y - image.y,
-                                screenName: screen.modelData.name
-                            };
-                            panel.push(screenData);
-                        }
-                        properties.screens = panel;
-                        console.log(JSON.stringify(properties));
-                    }
+                    wallpaperpage.checkPos();
                 }
             }
         }
+
         ColumnLayout {
+            z: 10
             anchors {
                 right: parent.right
                 margins: 2
@@ -121,12 +150,20 @@ ColumnLayout {
             Repeater {
                 model: ["zoom in", "zoom out"]
                 delegate: Button {
+                    property string type: modelData === "zoom in" ? "search-plus" : "search-minus"
                     Layout.preferredWidth: 40
                     height: 40
                     Icon {
-                        text: modelData === "zoom in" ? "search-plus" : "search-minus"
+                        text: type
                         font.pixelSize: Math.min(parent.width, parent.height)
                         color: Colors.color.primary
+                    }
+                    onClicked: {
+                        if (modelData === "zoom in") {
+                            flick.zoom = Math.max(0.5, Math.min(flick.zoom * 1.1, 5));
+                        } else {
+                            flick.zoom = Math.max(0.5, Math.min(flick.zoom * 0.9, 5));
+                        }
                     }
                 }
             }
@@ -190,7 +227,7 @@ ColumnLayout {
                     id: screenInstantiator
                     model: Quickshell.screens
                     delegate: Screens {
-                        id: screenItem
+                        parent: overview
                     }
                 }
 
@@ -225,7 +262,7 @@ ColumnLayout {
     component Screens: Rectangle {
         id: screenRect
         required property ShellScreen modelData
-        objectName: "screen"
+        objectName: modelData.name
         border {
             width: 1
             color: Colors.color.primary
@@ -233,29 +270,25 @@ ColumnLayout {
         color: Colors.setOpacity(Colors.color.background, 0.3)
         width: modelData.width / flick.zoom
         height: modelData.height / flick.zoom
-        parent: overview
-        x: modelData.x / flick.zoom
-        y: modelData.y / flick.zoom
+        z: 5
     }
 
     component CustomImage: Rectangle {
         id: container
-
+        z: 2
         required property var modelData
         property Image image: draggableImage
 
         Image {
             id: draggableImage
             property bool lock
-
             width: (modelData.width || sourceSize.width) / flick.zoom
             height: (modelData.height || sourceSize.height) / flick.zoom
-
             source: Qt.resolvedUrl(modelData) || ""
             Drag.active: drag.active
             Drag.hotSpot.x: 10
             Drag.hotSpot.y: 10
-
+            objectName: modelData.name || null
             DragHandler {
                 id: drag
                 target: draggableImage
