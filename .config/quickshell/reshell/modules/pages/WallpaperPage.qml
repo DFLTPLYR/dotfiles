@@ -20,22 +20,57 @@ ColumnLayout {
         }
     }
 
-    Row {
-        Button {
-            text: "Add File"
-            onClicked: file.running = true
+    Rectangle {
+        color: "transparent"
+        border {
+            width: 1
+            color: Colors.color.primary
         }
-        Button {
-            text: "Save Preset"
-        }
-        Button {
-            text: "Check pos"
-            onClicked: {
-                for (var i = 0; i < overview.children.length; i++) {
-                    var child = overview.children[i];
-                    var isScreen = child.objectName === "screen";
-                    if (!isScreen && child.image) {
-                        var image = child.image;
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Column {
+            z: 10
+            anchors {
+                top: parent.top
+                left: parent.left
+                margins: 2
+            }
+
+            Row {
+                Button {
+                    text: flick.showGrid ? "hide grid" : "show grid"
+                    onClicked: {
+                        canvas.visible = !canvas.visible;
+                    }
+                }
+                Repeater {
+                    model: overview.children.filter(s => s instanceof Screens)
+                    delegate: Button {
+                        text: modelData.modelData.name
+                        onClicked: {
+                            var screenCenterX = overview.x + modelData.x + modelData.width / 2;
+                            var screenCenterY = overview.y + modelData.y + modelData.height / 2;
+                            flick.contentX = screenCenterX - flick.width / 2;
+                            flick.contentY = screenCenterY - flick.height / 2;
+                        }
+                    }
+                }
+            }
+            Button {
+                text: "Add File"
+                onClicked: file.running = true
+            }
+
+            Button {
+                text: "Check pos"
+                onClicked: {
+                    var images = overview.children.filter(s => s instanceof CustomImage);
+                    var screens = overview.children.filter(s => s instanceof Screens);
+
+                    for (var i = 0; i < images.length; i++) {
+                        var container = images[i];
+                        var image = container.image;
                         var imgX = image.x;
                         var imgY = image.y;
                         var imgW = image.width;
@@ -49,9 +84,9 @@ ColumnLayout {
                             screens: []
                         };
 
-                        for (var j = 0; j < overview.children.length; j++) {
-                            var screen = overview.children[j];
-                            if (screen.objectName === "screen" && screen.width > 0 && screen.height > 0) {
+                        for (var j = 0; j < screens.length; j++) {
+                            var screen = screens[j];
+                            if (screen.width > 0 && screen.height > 0) {
                                 if (imgX < screen.x + screen.width && imgX + imgW > screen.x && imgY < screen.y + screen.height && imgY + imgH > screen.y) {
                                     overlapping.push(screen);
                                 }
@@ -68,67 +103,121 @@ ColumnLayout {
                             panel.push(screenData);
                         }
                         properties.screens = panel;
+                        console.log(JSON.stringify(properties));
                     }
                 }
             }
         }
-    }
-
-    Flickable {
-        id: flick
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        clip: true
-
-        property real zoom: 1
-
-        contentWidth: 2000 * zoom
-        contentHeight: 2000 * zoom
-        property int baseWidth: 2000
-        property int baseHeight: 2000
-
-        function zoomAt(point, factor) {
-            var newZoom = Math.max(0.5, Math.min(zoom * factor, 5));
-            resizeContent(baseWidth * newZoom, baseHeight * newZoom, point);
-            zoom = newZoom;
-            returnToBounds();
-        }
-
-        Item {
-            id: overview
-            anchors.centerIn: parent
-            width: flick.baseWidth
-            height: flick.baseHeight
-            property list<var> paths: []
-
-            Instantiator {
-                model: Quickshell.screens
-                delegate: Screens {}
+        ColumnLayout {
+            anchors {
+                right: parent.right
+                margins: 2
             }
-
-            Instantiator {
-                id: imageInstantiator
-                model: ScriptModel {
-                    values: {
-                        return [...overview.paths];
+            layoutDirection: Qt.RightToLeft
+            Text {
+                text: `${flick.contentX.toFixed(0)} ${flick.contentY.toFixed(0)}`
+                color: Colors.color.primary
+            }
+            Repeater {
+                model: ["zoom in", "zoom out"]
+                delegate: Button {
+                    Layout.preferredWidth: 40
+                    height: 40
+                    Icon {
+                        text: modelData === "zoom in" ? "search-plus" : "search-minus"
+                        font.pixelSize: Math.min(parent.width, parent.height)
+                        color: Colors.color.primary
                     }
                 }
-                delegate: CustomImage {
-                    parent: overview
-                }
             }
         }
 
-        WheelHandler {
-            id: wheelHandler
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-            target: null
+        Flickable {
+            id: flick
+            clip: true
+            anchors.fill: parent
+            property real zoom: 2
 
-            onWheel: event => {
-                var point = Qt.point(event.x, event.y);
-                var factor = event.angleDelta.y > 0 ? 1.1 : 0.9;
-                flick.zoomAt(point, factor);
-                event.accepted = true;
+            contentWidth: 2000 * zoom
+            contentHeight: 2000 * zoom
+            property int baseWidth: 2000
+            property int baseHeight: 2000
+            property int gridSize: 100
+
+            function zoomAt(point, factor) {
+                var newZoom = Math.max(0.5, Math.min(zoom * factor, 5));
+                resizeContent(baseWidth * newZoom, baseHeight * newZoom, point);
+                zoom = newZoom;
+                returnToBounds();
+            }
+
+            Canvas {
+                id: canvas
+                width: flick.contentWidth
+                height: flick.contentHeight
+                onPaint: {
+                    var ctx = getContext("2d");
+                    var gridSize = flick.gridSize;
+
+                    ctx.strokeStyle = Qt.rgba(0.3, 0.3, 0.3, 1);
+                    ctx.lineWidth = 1;
+
+                    for (var x = 0; x <= width; x += gridSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, height);
+                        ctx.stroke();
+                    }
+
+                    for (var y = 0; y <= height; y += gridSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(width, y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            Item {
+                id: overview
+                anchors.centerIn: parent
+                width: flick.baseWidth
+                height: flick.baseHeight
+
+                property list<var> paths: []
+
+                Instantiator {
+                    id: screenInstantiator
+                    model: Quickshell.screens
+                    delegate: Screens {
+                        id: screenItem
+                    }
+                }
+
+                Instantiator {
+                    id: imageInstantiator
+                    model: ScriptModel {
+                        values: {
+                            return [...overview.paths];
+                        }
+                    }
+                    delegate: CustomImage {
+                        parent: overview
+                    }
+                }
+            }
+
+            WheelHandler {
+                id: wheelHandler
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                target: null
+
+                onWheel: event => {
+                    var point = Qt.point(event.x, event.y);
+                    var factor = event.angleDelta.y > 0 ? 1.1 : 0.9;
+                    flick.zoomAt(point, factor);
+                    event.accepted = true;
+                }
             }
         }
     }
