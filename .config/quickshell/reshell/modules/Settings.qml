@@ -21,7 +21,7 @@ Rectangle {
     opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
 
     border {
-        width: Global.general.border.width
+        width: 1 || Global.general.border.width
         color: Global.general.border.color
     }
 
@@ -62,13 +62,13 @@ Rectangle {
 
         anchors {
             fill: parent
-            margins: 4
+            margins: 2
         }
-        Item {
+        Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 10
+            Layout.preferredHeight: 20
             Layout.columnSpan: 2
-
+            color: Colors.color.background
             PageIndicator {
                 anchors.centerIn: parent
                 count: tablist.model.length
