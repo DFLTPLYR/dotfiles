@@ -20,6 +20,7 @@ ColumnLayout {
         for (var i in images) {
             const target = images[i].image;
             var props = {
+                source: target.source,
                 width: target.width,
                 height: target.height,
                 x: target.x,
@@ -39,9 +40,16 @@ ColumnLayout {
                 var screenRight = sx + sw;
                 var screenBottom = sy + sh;
                 if (props.x < screenRight && imgRight > sx && props.y < screenBottom && imgBottom > sy) {
-                    props.screens.push(screen.objectName);
+                    var relative = {
+                        x: target.x - screen.x,
+                        y: target.y - screen.y,
+                        name: screen.objectName
+                    };
+                    props.screens.push(relative);
                 }
             }
+
+            Wallpaper.config.layers = Wallpaper.config.layers.filter(s => s.name !== target.objectName);
             Wallpaper.config.layers.push(props);
         }
 
@@ -109,9 +117,9 @@ ColumnLayout {
                 height: flick.contentHeight
                 onPaint: {
                     var ctx = getContext("2d");
-                    var gridSize = flick.gridSize;
+                    var gridSize = 10;
 
-                    ctx.strokeStyle = Qt.rgba(0.3, 0.3, 0.3, 1);
+                    ctx.strokeStyle = Colors.setOpacity(Colors.color.tertiary, 0.5);
                     ctx.lineWidth = 1;
 
                     for (var x = 0; x <= width; x += gridSize) {
@@ -132,33 +140,37 @@ ColumnLayout {
 
             // overview
             Item {
-                id: content
+                id: overview
                 width: flick.contentWidth
                 height: flick.contentHeight
-                scale: flick.zoom
-                transformOrigin: Item.TopLeft
 
-                // screens/monitors
-                Instantiator {
-                    model: Quickshell.screens
-                    delegate: Monitor {
-                        parent: content
+                Item {
+                    id: content
+                    scale: flick.zoom
+                    transformOrigin: Item.TopLeft
+                    anchors.centerIn: parent
+                    // screens/monitors
+                    Instantiator {
+                        model: Quickshell.screens
+                        delegate: Monitor {
+                            parent: content
+                        }
+                        onObjectAdded: (idx, obj) => {
+                            obj.parent = content;
+                            var m = obj.modelData;
+                            if (m.x + m.width > flick.maxX)
+                                flick.maxX = m.x + m.width;
+                            if (m.y + m.height > flick.maxY)
+                                flick.maxY = m.y + m.height;
+                        }
                     }
-                    onObjectAdded: (idx, obj) => {
-                        obj.parent = content;
-                        var m = obj.modelData;
-                        if (m.x + m.width > flick.maxX)
-                            flick.maxX = m.x + m.width;
-                        if (m.y + m.height > flick.maxY)
-                            flick.maxY = m.y + m.height;
-                    }
-                }
 
-                // Images
-                Instantiator {
-                    model: Wallpaper.config.source
-                    delegate: PreviewImage {
-                        parent: content
+                    // Images
+                    Instantiator {
+                        model: Wallpaper.config.source
+                        delegate: PreviewImage {
+                            parent: content
+                        }
                     }
                 }
             }
