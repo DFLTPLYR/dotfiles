@@ -34,13 +34,13 @@ ColumnLayout {
             var imgH = image.height;
             var overlapping = [];
             var properties = {
-                x: imgX,
-                y: imgY,
+                x: imgX * flick.zoom,
+                y: imgY * flick.zoom,
                 source: image.source,
                 width: imgW * flick.zoom,
                 height: imgH * flick.zoom,
                 screens: [],
-                name: image.objectName === "null" ? Math.random().toString(36).substring(2, 10) : image.objectName
+                name: image.objectName
             };
 
             for (var j = 0; j < screens.length; j++) {
@@ -56,13 +56,13 @@ ColumnLayout {
             for (var k = 0; k < overlapping.length; k++) {
                 var screen = overlapping[k];
                 var screenData = {
-                    width: image.width * flick.zoom,
-                    height: image.height * flick.zoom,
-                    posX: screen.x - image.x,
-                    posY: screen.y - image.y,
+                    width: screen.width * flick.zoom,
+                    height: screen.height * flick.zoom,
+                    posX: (screen.x - image.x) * flick.zoom,
+                    posY: (screen.y - image.y) * flick.zoom,
                     name: screen.modelData.name
                 };
-                console.log(screen.x, image.x, screen.y, image.y);
+                console.log("screen:", screen.x, "image:", image.x, "zoom:", flick.zoom);
                 panel.push(screenData);
             }
             properties.screens = panel;
@@ -270,7 +270,7 @@ ColumnLayout {
     component Screens: Rectangle {
         id: screenRect
         required property ShellScreen modelData
-        objectName: modelData.name
+        objectName: modelData.name || Math.random().toString(36).substring(2, 10)
         border {
             width: 1
             color: Colors.color.primary
