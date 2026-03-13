@@ -29,6 +29,7 @@ Singleton {
             property JsonObject config: JsonObject {
                 property string mode: "standard"
                 property list<var> source: []
+                property list<var> layers: []
             }
         }
     }
