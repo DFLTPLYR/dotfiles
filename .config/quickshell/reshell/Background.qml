@@ -22,26 +22,26 @@ Variants {
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
 
-        Item {
-            id: layercontainer
-            width: panel.screen.width
-            height: panel.screen.height
-            Instantiator {
-                model: ScriptModel {
-                    values: [...Wallpaper.config.source].filter(item => item.screens.some(s => s.name === panel.screen.name))
-                }
-                delegate: Image {
-                    required property var modelData
-                    property var pos: modelData.screens.find(s => s.name === panel.screen.name)
-                    width: pos.width
-                    height: pos.height
-                    x: pos ? pos.posX : 0
-                    y: pos ? pos.posY : 0
-                    source: modelData.source
-                    parent: layercontainer
-                    visible: !!pos
-                }
-            }
-        }
+        // Item {
+        //     id: layercontainer
+        //     width: panel.screen.width
+        //     height: panel.screen.height
+        //     Instantiator {
+        //         model: ScriptModel {
+        //             values: [...Wallpaper.config.source].filter(item => item.screens.some(s => s.name === panel.screen.name))
+        //         }
+        //         delegate: Image {
+        //             required property var modelData
+        //             property var pos: modelData.screens.find(s => s.name === panel.screen.name)
+        //             width: pos.width
+        //             height: pos.height
+        //             x: pos ? pos.posX : 0
+        //             y: pos ? pos.posY : 0
+        //             source: modelData.source
+        //             parent: layercontainer
+        //             visible: !!pos
+        //         }
+        //     }
+        // }
     }
 }

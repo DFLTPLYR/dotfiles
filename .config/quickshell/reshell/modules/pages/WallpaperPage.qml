@@ -17,68 +17,12 @@ ColumnLayout {
     FilePicker {
         id: file
         onOutput: data => {
-            if (data)
-                overview.paths.push(data.trim("%0A"));
-        }
-    }
-
-    function checkPos() {
-        var images = overview.children.filter(s => s instanceof CustomImage);
-        var screens = overview.children.filter(s => s instanceof Screens);
-
-        for (var i = 0; i < images.length; i++) {
-            var image = images[i].image;
-            var imgX = image.x;
-            var imgY = image.y;
-            var imgW = image.width;
-            var imgH = image.height;
-            var overlapping = [];
-            var properties = {
-                x: imgX * flick.zoom,
-                y: imgY * flick.zoom,
-                source: image.source,
-                width: imgW * flick.zoom,
-                height: imgH * flick.zoom,
-                screens: [],
-                name: image.objectName
-            };
-
-            for (var j = 0; j < screens.length; j++) {
-                var screen = screens[j];
-                var overlapX = Math.min(imgX + imgW, screen.x + screen.width) - Math.max(imgX, screen.x);
-                var overlapY = Math.min(imgY + imgH, screen.y + screen.height) - Math.max(imgY, screen.y);
-                if (overlapX > 50 && overlapY > 50) {
-                    overlapping.push(screen);
-                }
-            }
-            var panel = [];
-
-            for (var k = 0; k < overlapping.length; k++) {
-                var screen = overlapping[k];
-                var screenData = {
-                    width: screen.width * flick.zoom,
-                    height: screen.height * flick.zoom,
-                    posX: (screen.x - image.x) * flick.zoom,
-                    posY: (screen.y - image.y) * flick.zoom,
-                    name: screen.modelData.name
+            if (data) {
+                var image = {
+                    source: data.trim("%0A"),
+                    name: Math.random().toString(36).substring(2, 10)
                 };
-                console.log("screen:", screen.x, "image:", image.x, "zoom:", flick.zoom);
-                panel.push(screenData);
-            }
-            properties.screens = panel;
-
-            if (properties.screens.length > 0) {
-                var exist = Wallpaper.config.source.findIndex(s => s && s.name === properties.name);
-                if (exist === -1) {
-                    Wallpaper.config.source.push(properties);
-                } else {
-                    var target = Wallpaper.config.source[exist];
-                    target.x = properties.x;
-                    target.y = properties.y;
-                    target.width = properties.width;
-                    target.height = properties.height;
-                    target.screens = panel;
-                }
+                Wallpaper.config.source.push(image);
                 Wallpaper.save();
             }
         }
@@ -94,105 +38,29 @@ ColumnLayout {
             color: Colors.color.primary
         }
 
-        Column {
-            z: 10
+        Row {
+            z: 2
             anchors {
                 top: parent.top
                 left: parent.left
-                margins: 2
-            }
-
-            Row {
-                Button {
-                    text: flick.showGrid ? "hide grid" : "show grid"
-                    onClicked: {
-                        canvas.visible = !canvas.visible;
-                    }
-                }
-                Repeater {
-                    model: overview.children.filter(s => s instanceof Screens)
-                    delegate: Button {
-                        text: modelData.objectName
-                        onClicked: {
-                            var screenCenterX = overview.x + modelData.x + modelData.width / 2;
-                            var screenCenterY = overview.y + modelData.y + modelData.height / 2;
-                            flick.contentX = screenCenterX - flick.width / 2;
-                            flick.contentY = screenCenterY - flick.height / 2;
-                        }
-                    }
-                }
             }
             Button {
-                text: "Add File"
-                onClicked: file.running = true
-            }
-
-            Button {
-                text: "Check pos"
-                onClicked: {
-                    wallpaperpage.checkPos();
-                }
-            }
-            Button {
-                text: "Nuke"
-                onClicked: {
-                    Wallpaper.config.source = [];
-                    Wallpaper.save();
-                }
-            }
-        }
-
-        ColumnLayout {
-            z: 10
-            anchors {
-                right: parent.right
-                margins: 2
-            }
-            layoutDirection: Qt.RightToLeft
-            Text {
-                text: `${flick.contentX.toFixed(0)} ${flick.contentY.toFixed(0)}`
-                color: Colors.color.primary
-            }
-            Repeater {
-                model: ["zoom in", "zoom out"]
-                delegate: Button {
-                    property string type: modelData === "zoom in" ? "search-plus" : "search-minus"
-                    Layout.preferredWidth: 40
-                    height: 40
-                    Icon {
-                        text: type
-                        font.pixelSize: Math.min(parent.width, parent.height)
-                        color: Colors.color.primary
-                    }
-                    onClicked: {
-                        if (modelData === "zoom in") {
-                            flick.zoom = Math.max(0.5, Math.min(flick.zoom * 1.1, 5));
-                        } else {
-                            flick.zoom = Math.max(0.5, Math.min(flick.zoom * 0.9, 5));
-                        }
-                    }
-                }
+                text: "add file"
+                onClicked: file.active()
             }
         }
 
         Flickable {
             id: flick
-            clip: true
+
+            property real zoom: 1
+            property int maxX: 0
+            property int maxY: 0
+
             anchors.fill: parent
-            property real zoom: 2
-
-            contentWidth: 2000 * zoom
-            contentHeight: 2000 * zoom
-            property int baseWidth: 2000
-            property int baseHeight: 2000
-            property int gridSize: 100
-
-            function zoomAt(point, factor) {
-                var newZoom = Math.max(0.5, Math.min(zoom * factor, 5));
-                resizeContent(baseWidth * newZoom, baseHeight * newZoom, point);
-                zoom = newZoom;
-                returnToBounds();
-            }
+            contentWidth: maxX + 2000
+            contentHeight: maxY + 2000
+            transformOrigin: Item.Center
 
             // background grid
             Canvas {
@@ -222,89 +90,88 @@ ColumnLayout {
                 }
             }
 
-            // items
+            // overview
             Item {
-                id: overview
-                anchors.centerIn: parent
-                width: flick.baseWidth
-                height: flick.baseHeight
+                id: content
+                width: flick.contentWidth
+                height: flick.contentHeight
+                scale: flick.zoom
+                transformOrigin: Item.TopLeft
 
-                property list<var> paths: []
-
+                // screens/monitors
                 Instantiator {
-                    id: screenInstantiator
                     model: Quickshell.screens
-                    delegate: Screens {
-                        parent: overview
+                    delegate: Screen {
+                        parent: content
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        obj.parent = content;
+                        var m = obj.modelData;
+                        if (m.x + m.width > flick.maxX)
+                            flick.maxX = m.x + m.width;
+                        if (m.y + m.height > flick.maxY)
+                            flick.maxY = m.y + m.height;
                     }
                 }
 
+                // Images
                 Instantiator {
-                    id: imageInstantiator
-                    model: ScriptModel {
-                        values: {
-                            return [...overview.paths];
-                        }
-                    }
-                    delegate: CustomImage {
-                        parent: overview
+                    model: Wallpaper.config.source
+                    delegate: PreviewImage {
+                        parent: content
                     }
                 }
             }
 
+            // zoom in/out
             WheelHandler {
                 id: wheelHandler
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                 target: null
 
                 onWheel: event => {
-                    var point = Qt.point(event.x, event.y);
-                    var factor = event.angleDelta.y > 0 ? 1.1 : 0.9;
-                    flick.zoomAt(point, factor);
-                    event.accepted = true;
+                    var delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
+                    flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
                 }
             }
         }
     }
 
-    component Screens: Rectangle {
-        id: screenRect
+    component Screen: Rectangle {
         required property ShellScreen modelData
-        objectName: modelData.name || Math.random().toString(36).substring(2, 10)
+        width: modelData.width
+        height: modelData.height
+        color: Colors.color.background
         border {
-            width: 1
+            width: 1 * flick.zoom
             color: Colors.color.primary
         }
-        color: Colors.setOpacity(Colors.color.background, 0.3)
-        width: modelData.width / flick.zoom
-        height: modelData.height / flick.zoom
-        x: modelData.x / flick.zoom
-        y: modelData.y / flick.zoom
-        z: 5
+        x: modelData.x
+        y: modelData.y
     }
 
-    component CustomImage: Rectangle {
+    component PreviewImage: Item {
         id: container
-        z: 2
-        required property var modelData
-        property Image image: draggableImage
 
+        required property var modelData
+
+        // image
         Image {
             id: draggableImage
             property bool lock
-            width: (modelData.width || sourceSize.width) / flick.zoom
-            height: (modelData.height || sourceSize.height) / flick.zoom
-            source: Qt.resolvedUrl(modelData) || ""
+            width: (modelData.width || sourceSize.width)
+            height: (modelData.height || sourceSize.height)
+            source: Qt.resolvedUrl(modelData.source) || ""
             Drag.active: drag.active
             Drag.hotSpot.x: 10
             Drag.hotSpot.y: 10
-            objectName: modelData.name || null
+            objectName: modelData.name
+
             DragHandler {
                 id: drag
                 target: draggableImage
                 enabled: !draggableImage.lock
             }
-
             Row {
                 z: 2
                 opacity: 1
@@ -330,6 +197,7 @@ ColumnLayout {
             }
         }
 
+        // corner handler for resizing
         Repeater {
             model: [
                 {
@@ -348,7 +216,7 @@ ColumnLayout {
             delegate: Rectangle {
                 id: cornerHandle
                 z: 10
-                height: 10
+                height: 50 * flick.zoom
                 width: height
                 radius: height / 2
                 color: "green"

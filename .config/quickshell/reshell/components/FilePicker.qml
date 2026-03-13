@@ -14,4 +14,7 @@ Process {
             }
         }
     }
+    function active() {
+        process.running = true;
+    }
 }
