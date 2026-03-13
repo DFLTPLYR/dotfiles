@@ -13,6 +13,41 @@ ColumnLayout {
     Layout.fillHeight: true
     clip: true
 
+    function imageToScreenPosition() {
+        var images = content.children.filter(s => s instanceof PreviewImage);
+        var screens = content.children.filter(s => s instanceof Monitor);
+
+        for (var i in images) {
+            const target = images[i].image;
+            var props = {
+                width: target.width,
+                height: target.height,
+                x: target.x,
+                y: target.y,
+                z: target.z,
+                name: target.objectName,
+                screens: []
+            };
+            for (var j in screens) {
+                const screen = screens[j];
+                var sx = screen.x;
+                var sy = screen.y;
+                var sw = screen.width;
+                var sh = screen.height;
+                var imgRight = props.x + props.width;
+                var imgBottom = props.y + props.height;
+                var screenRight = sx + sw;
+                var screenBottom = sy + sh;
+                if (props.x < screenRight && imgRight > sx && props.y < screenBottom && imgBottom > sy) {
+                    props.screens.push(screen.objectName);
+                }
+            }
+            Wallpaper.config.layers.push(props);
+        }
+
+        Wallpaper.save();
+    }
+
     // filepicker
     FilePicker {
         id: file
@@ -47,6 +82,11 @@ ColumnLayout {
             Button {
                 text: "add file"
                 onClicked: file.active()
+            }
+
+            Button {
+                text: "check"
+                onClicked: wallpaperpage.imageToScreenPosition()
             }
         }
 
@@ -101,7 +141,7 @@ ColumnLayout {
                 // screens/monitors
                 Instantiator {
                     model: Quickshell.screens
-                    delegate: Screen {
+                    delegate: Monitor {
                         parent: content
                     }
                     onObjectAdded: (idx, obj) => {
@@ -137,11 +177,12 @@ ColumnLayout {
         }
     }
 
-    component Screen: Rectangle {
+    component Monitor: Rectangle {
         required property ShellScreen modelData
         width: modelData.width
         height: modelData.height
         color: Colors.color.background
+        objectName: modelData.name
         border {
             width: 1 * flick.zoom
             color: Colors.color.primary
@@ -154,6 +195,7 @@ ColumnLayout {
         id: container
 
         required property var modelData
+        property Image image: draggableImage
 
         // image
         Image {
@@ -215,7 +257,7 @@ ColumnLayout {
             ]
             delegate: Rectangle {
                 id: cornerHandle
-                z: 10
+                z: 2
                 height: 50 * flick.zoom
                 width: height
                 radius: height / 2
