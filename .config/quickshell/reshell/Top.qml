@@ -107,7 +107,7 @@ Variants {
                     color: Colors.color.background
                     border {
                         width: 1
-                        color: Colors.color.primary
+                        color: Colors.color.outline
                     }
                 }
                 property WallpaperJson wallpaper: WallpaperJson {}
@@ -123,6 +123,11 @@ Variants {
                         fileView.reslot();
                     });
                 }
+            }
+
+            function updateColor() {
+                adapter.style.color = Colors.color.background;
+                adapter.style.border.color = Colors.color.outline;
             }
 
             function reslot() {
