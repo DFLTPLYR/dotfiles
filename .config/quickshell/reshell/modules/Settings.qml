@@ -21,7 +21,7 @@ Rectangle {
     opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
 
     border {
-        width: 1 || Global.general.border.width
+        width: Global.general.border.width
         color: Global.general.border.color
     }
 

@@ -1,6 +1,9 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
+
+import QtCore
 
 import qs.core
 
@@ -24,9 +27,33 @@ Variants {
 
         Item {
             id: layered
+            width: parent.width
+            height: parent.width
+
+            Process {
+                id: cmdGenerateColor
+            }
+
+            Connections {
+                target: Wallpaper
+                function onGeneratecolor() {
+                    layered.onSaveCustomWallpaper();
+                }
+            }
+            function onSaveCustomWallpaper() {
+                layered.grabToImage(function (result) {
+                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+                    Qt.callLater(() => {
+                        Quickshell.execDetached({
+                            command: ["pcli", "generate-palette", "--type", "scheme-content", ...Wallpaper.config.layers.map(image => image.source)]
+                        });
+                    });
+                }, Qt.size(panel.screen.width, panel.screen.height));
+            }
+
             Instantiator {
                 model: ScriptModel {
-                    values: [...Wallpaper.config.layers].filter(item => item.screens.some(s => s && s.name === panel.screen.name))
+                    values: [...Wallpaper.config.layers].filter(item => item && item.screens.some(s => s && s.name === panel.screen.name))
                 }
                 delegate: Image {
                     id: wallpaperImage

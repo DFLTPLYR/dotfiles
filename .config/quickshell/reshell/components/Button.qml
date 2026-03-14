@@ -6,7 +6,7 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: control.down ? Components.general.button.hover : Components.general.button.unhover
+    property var state: (control.down || control.hovered) ? Components.general.button.hover : Components.general.button.unhover
 
     contentItem: Text {
         id: content

@@ -64,7 +64,7 @@ ColumnLayout {
                     source: data.trim("%0A"),
                     name: Math.random().toString(36).substring(2, 10)
                 };
-                Wallpaper.config.source.push(image);
+                Wallpaper.config.layers.push(image);
                 Wallpaper.save();
             }
         }
@@ -75,30 +75,11 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
+        TopLeftControl {}
+
         border {
             width: 1
             color: Colors.color.primary
-        }
-
-        Row {
-            z: 2
-            anchors {
-                top: parent.top
-                left: parent.left
-            }
-            Button {
-                text: "add file"
-                onClicked: file.active()
-            }
-
-            Button {
-                text: "check"
-                onClicked: wallpaperpage.imageToScreenPosition()
-            }
-            Button {
-                text: "Snap"
-                onClicked: content.snap()
-            }
         }
 
         Flickable {
@@ -107,7 +88,6 @@ ColumnLayout {
             property real zoom: 1
             property int maxX: 0
             property int maxY: 0
-
             anchors.fill: parent
 
             contentWidth: maxX + 2000
@@ -153,6 +133,7 @@ ColumnLayout {
                     scale: flick.zoom
                     transformOrigin: Item.TopLeft
                     anchors.centerIn: parent
+
                     // screens/monitors
                     Instantiator {
                         model: Quickshell.screens
@@ -166,21 +147,6 @@ ColumnLayout {
                                 flick.maxX = m.x + m.width;
                             if (m.y + m.height > flick.maxY)
                                 flick.maxY = m.y + m.height;
-                        }
-                    }
-
-                    function snap() {
-                        var screens = content.children.filter(s => s instanceof Monitor);
-                        console.log(screens);
-                        for (let i in screens) {
-                            let screen = screens[i];
-                            let x = screen.x;
-                            let y = screen.y;
-                            let width = screen.width;
-                            let height = screen.height;
-                            content.grabToImage(function (result) {
-                                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.objectName}.jpg`);
-                            }, Qt.size(height, width));
                         }
                     }
 
@@ -208,6 +174,29 @@ ColumnLayout {
         }
     }
 
+    component TopLeftControl: Row {
+        z: 2
+        anchors {
+            top: parent.top
+            left: parent.left
+            leftMargin: 5
+            topMargin: 5
+        }
+        Button {
+            text: "add file"
+            onClicked: file.active()
+        }
+
+        Button {
+            text: "check"
+            onClicked: wallpaperpage.imageToScreenPosition()
+        }
+        Button {
+            text: "generate color"
+            onClicked: Wallpaper.generatecolor()
+        }
+    }
+
     component Monitor: Rectangle {
         required property ShellScreen modelData
         width: modelData.width
@@ -227,11 +216,12 @@ ColumnLayout {
 
         required property var modelData
         property Image image: draggableImage
-
+        property var found
         // image
         Image {
             id: draggableImage
             property bool lock
+
             width: (modelData.width || sourceSize.width)
             height: (modelData.height || sourceSize.height)
             source: Qt.resolvedUrl(modelData.source) || ""
@@ -257,8 +247,8 @@ ColumnLayout {
                 }
 
                 Button {
-                    width: 40
-                    height: 40
+                    width: 40 / flick.zoom
+                    height: 40 / flick.zoom
                     Icon {
                         anchors.centerIn: parent
                         text: draggableImage.lock ? "lock" : "lock-slash"
@@ -291,7 +281,7 @@ ColumnLayout {
             delegate: Rectangle {
                 id: cornerHandle
                 z: 2
-                height: 50 * flick.zoom
+                height: 20 / flick.zoom
                 width: height
                 radius: height / 2
                 color: "green"

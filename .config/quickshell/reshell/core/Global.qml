@@ -27,7 +27,7 @@ Singleton {
 
     FileView {
         id: fileView
-        path: Qt.resolvedUrl("./general.json")
+        path: Qt.resolvedUrl("./global.json")
         watchChanges: true
         preload: true
 
@@ -48,6 +48,7 @@ Singleton {
             id: adapter
             property BorderJson border: BorderJson {
                 color: Colors.color.primary
+                width: 1
             }
             property DirectionJson margin: DirectionJson {}
             property CornerJson rounding: CornerJson {}
