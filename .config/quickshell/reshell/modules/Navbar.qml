@@ -87,7 +87,21 @@ Item {
 
     Rectangle {
         id: container
-        color: config && config.style ? config.style.color : 'transparent'
+        color: config.style.color
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         border {
             width: config && config.style && config.style.border ? config.style.border.width : 0

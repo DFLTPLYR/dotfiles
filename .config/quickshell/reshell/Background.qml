@@ -40,13 +40,12 @@ Variants {
                     layered.onSaveCustomWallpaper();
                 }
             }
+
             function onSaveCustomWallpaper() {
                 layered.grabToImage(function (result) {
                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
                     Qt.callLater(() => {
-                        Quickshell.execDetached({
-                            command: ["pcli", "generate-palette", "--type", "scheme-content", ...Wallpaper.config.layers.map(image => image.source)]
-                        });
+                        Global.updateColor();
                     });
                 }, Qt.size(panel.screen.width, panel.screen.height));
             }
