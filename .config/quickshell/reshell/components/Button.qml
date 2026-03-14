@@ -6,17 +6,17 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: (control.down || control.hovered) ? Components.general.button.hover : Components.general.button.unhover
+    property var state: Components.general.button
 
     contentItem: Text {
         id: content
-        property var state: Components.general.button.content
+        property var state: control.state.content
 
         text: control.text
         font: control.font
 
-        color: control.hovered || control.down ? Qt.darker(content.state.down, 1.5) : content.state.up
-
+        color: Colors.color.primary
+        // control.hovered || control.down ? Qt.darker(content.state.color, 1.5) : content.state.color
         opacity: enabled ? 1.0 : 0.3
 
         horizontalAlignment: Text.AlignHCenter
@@ -35,7 +35,7 @@ Button {
     background: Rectangle {
         id: background
 
-        property var state: Components.general.button.background
+        property var state: control.state.background
 
         implicitWidth: 100
         implicitHeight: 40
@@ -47,7 +47,7 @@ Button {
             color: background.state.border.color
         }
 
-        color: control.hovered || control.down ? background.state.up : background.state.down
+        color: control.hovered || control.down ? Qt.darker(background.state.color, 1.5) : background.state.color
 
         bottomLeftRadius: background.state.rounding.bottomLeft
         bottomRightRadius: background.state.rounding.bottomRight

@@ -2,22 +2,22 @@
 
 require("base16-colorscheme").setup({
 	base00 = "#111318",
-	base01 = "#0c0e13",
+	base01 = "#0c0e12",
 	base02 = "#191c20",
-	base03 = "#43474e",
-	base04 = "#c4c6cf",
-	base05 = "#e1e2e9",
+	base03 = "#424750",
+	base04 = "#c2c6d2",
+	base05 = "#e2e2e8",
 	base06 = "#2e3035",
 	base07 = "#37393e",
 
-	base08 = "#d1abda",
-	base09 = "#dbbde2",
-	base0A = "#bdc7dc",
+	base08 = "#ed98f8",
+	base09 = "#f1b0fa",
+	base0A = "#b7c7e6",
 	base0B = "#a7c8ff",
-	base0C = "#553f5d",
-	base0D = "#234777",
-	base0E = "#3d4758",
-	base0F = "#9cabca",
+	base0C = "#824b8d",
+	base0D = "#2f61a1",
+	base0E = "#374761",
+	base0F = "#91aad9",
 })
 
 -- We first theme base16, but we also need to fix some other colors that don't
@@ -32,27 +32,27 @@ end
 
 -- Make "string" text contrast better
 set_hl_mutliple({ "String", "TSString" }, {
-	fg = "#be88cb",
+	fg = "#e468f5",
 })
 
 -- Grey out comments
 set_hl_mutliple({ "TSComment", "Comment" }, {
-	fg = "#8d9199",
+	fg = "#8c919b",
 	italic = true,
 })
 
 -- Color in other highlight groups as you see fit!
 
 set_hl_mutliple({ "TSMethod", "Method" }, {
-	fg = "#dbbde2",
+	fg = "#f1b0fa",
 })
 
 set_hl_mutliple({ "TSFunction", "Function" }, {
-	fg = "#bdc7dc",
+	fg = "#b7c7e6",
 })
 
 set_hl_mutliple({ "Keyword", "TSKeyword", "TSKeywordFunction", "TSRepeat" }, {
-	fg = "#3d5f90",
+	fg = "#2d5f9f",
 })
 
 local function set_transparent_bg(groups)
@@ -84,7 +84,7 @@ local function set_bufferline_highlights()
 				separator = { bg = "NONE", fg = "NONE" },
 				buffer_selected = {
 					bg = "#111318",
-					fg = "#dbbde2",
+					fg = "#f1b0fa",
 					bold = true,
 				},
 			},
@@ -118,7 +118,7 @@ local function set_snacks_highlights()
 		"SnacksPickerListBorder",
 		"SnacksPickerBoxBorder",
 	}, {
-		fg = "#8d9199",
+		fg = "#8c919b",
 		bg = "NONE",
 	})
 
@@ -128,14 +128,14 @@ local function set_snacks_highlights()
 		"SnacksInput",
 	}, {
 		bg = "NONE",
-		fg = "#e1e2e9",
+		fg = "#e2e2e8",
 	})
 
 	set_hl_mutliple({
 		"SnacksInputBorder",
 		"SnacksPickerInputBorder",
 	}, {
-		fg = "#8d9199",
+		fg = "#8c919b",
 		bg = "NONE",
 	})
 
@@ -165,14 +165,14 @@ local function set_snacks_highlights()
 		"SnacksPickerTotals",
 		"SnacksPickerSpinner",
 	}, {
-		fg = "#8d9199",
+		fg = "#8c919b",
 	})
 
 	set_hl_mutliple({
 		"SnacksPickerLabel",
 		"SnacksPickerSpecial",
 	}, {
-		fg = "#bdc7dc",
+		fg = "#b7c7e6",
 	})
 
 	set_hl_mutliple({
@@ -192,14 +192,14 @@ local function set_snacks_highlights()
 	set_hl_mutliple({
 		"SnacksPickerDir",
 	}, {
-		fg = "#c4c6cf",
+		fg = "#c2c6d2",
 	})
 
 	set_hl_mutliple({
 		"SnacksIndent",
 		"SnacksIndentBlank",
 	}, {
-		fg = "#43474e",
+		fg = "#424750",
 	})
 
 	set_hl_mutliple({
@@ -222,7 +222,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleWarn",
 		"SnacksNotifierIconWarn",
 	}, {
-		fg = "#dbbde2",
+		fg = "#f1b0fa",
 	})
 
 	set_hl_mutliple({
@@ -238,7 +238,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleDebug",
 		"SnacksNotifierIconDebug",
 	}, {
-		fg = "#8d9199",
+		fg = "#8c919b",
 	})
 
 	set_hl_mutliple({
@@ -246,7 +246,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierTitleTrace",
 		"SnacksNotifierIconTrace",
 	}, {
-		fg = "#bdc7dc",
+		fg = "#b7c7e6",
 	})
 
 	set_hl_mutliple({
@@ -255,7 +255,7 @@ local function set_snacks_highlights()
 		"SnacksNotifierHistoryDateTime",
 		"SnacksNotifierHistoryType",
 	}, {
-		fg = "#c4c6cf",
+		fg = "#c2c6d2",
 	})
 
 	set_hl_mutliple({
@@ -269,20 +269,20 @@ local function set_snacks_highlights()
 		"SnacksDashboardDesc",
 		"SnacksDashboardIcon",
 	}, {
-		fg = "#c4c6cf",
+		fg = "#c2c6d2",
 	})
 
 	set_hl_mutliple({
 		"SnacksDashboardKey",
 		"SnacksDashboardSpecial",
 	}, {
-		fg = "#dbbde2",
+		fg = "#f1b0fa",
 	})
 
 	set_hl_mutliple({
 		"SnacksDashboardDir",
 	}, {
-		fg = "#8d9199",
+		fg = "#8c919b",
 	})
 end
 
@@ -297,30 +297,30 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 local lualine_theme = {
 	normal = {
 		a = {
-			bg = "#234777",
-			fg = "#d5e3ff",
+			bg = "#2f61a1",
+			fg = "#ffffff",
 			gui = "bold",
 		},
-		b = { bg = "#1d2024", fg = "#e1e2e9" },
-		c = { bg = "NONE", fg = "#e1e2e9" },
+		b = { bg = "#1e2024", fg = "#e2e2e8" },
+		c = { bg = "NONE", fg = "#e2e2e8" },
 	},
 	insert = {
 		a = {
-			bg = "#3d4758",
-			fg = "#d9e3f8",
+			bg = "#374761",
+			fg = "#d1e1ff",
 			gui = "bold",
 		},
-		b = { bg = "#1d2024", fg = "#e1e2e9" },
-		c = { bg = "NONE", fg = "#e1e2e9" },
+		b = { bg = "#1e2024", fg = "#e2e2e8" },
+		c = { bg = "NONE", fg = "#e2e2e8" },
 	},
 	visual = {
 		a = {
-			bg = "#553f5d",
-			fg = "#f8d8ff",
+			bg = "#824b8d",
+			fg = "#ffffff",
 			gui = "bold",
 		},
-		b = { bg = "#1d2024", fg = "#e1e2e9" },
-		c = { bg = "NONE", fg = "#e1e2e9" },
+		b = { bg = "#1e2024", fg = "#e2e2e8" },
+		c = { bg = "NONE", fg = "#e2e2e8" },
 	},
 	replace = {
 		a = {
@@ -328,22 +328,22 @@ local lualine_theme = {
 			fg = "#ffdad6",
 			gui = "bold",
 		},
-		b = { bg = "#1d2024", fg = "#e1e2e9" },
-		c = { bg = "NONE", fg = "#e1e2e9" },
+		b = { bg = "#1e2024", fg = "#e2e2e8" },
+		c = { bg = "NONE", fg = "#e2e2e8" },
 	},
 	command = {
 		a = {
-			bg = "#43474e",
-			fg = "#c4c6cf",
+			bg = "#424750",
+			fg = "#c2c6d2",
 			gui = "bold",
 		},
-		b = { bg = "#1d2024", fg = "#e1e2e9" },
-		c = { bg = "NONE", fg = "#e1e2e9" },
+		b = { bg = "#1e2024", fg = "#e2e2e8" },
+		c = { bg = "NONE", fg = "#e2e2e8" },
 	},
 	inactive = {
-		a = { bg = "#191c20", fg = "#8d9199", gui = "bold" },
-		b = { bg = "#191c20", fg = "#8d9199" },
-		c = { bg = "NONE", fg = "#8d9199" },
+		a = { bg = "#191c20", fg = "#8c919b", gui = "bold" },
+		b = { bg = "#191c20", fg = "#8c919b" },
+		c = { bg = "NONE", fg = "#8c919b" },
 	},
 }
 -- Apply the theme to lualine
