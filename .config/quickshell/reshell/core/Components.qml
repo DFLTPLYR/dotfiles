@@ -19,7 +19,7 @@ Singleton {
 
     FileView {
         id: fileView
-        path: Qt.resolvedUrl("./components.json")
+        path: Qt.resolvedUrl("data/components.json")
         watchChanges: true
         preload: true
 
@@ -40,55 +40,37 @@ Singleton {
             id: adapter
 
             function updateColors() {
-                if (!button)
-                    return;
                 button.content.down = Colors.color.primary;
                 button.content.up = Colors.color.primary;
                 button.background.down = Qt.darker(Colors.color.background, 1.2);
                 button.background.up = Qt.darker(Colors.color.primary, 1);
 
-                if (!spinbox)
-                    return;
                 spinbox.color = Colors.color.background;
                 spinbox.text = Colors.color.on_background;
                 spinbox.hover.color = Colors.color.primary;
                 spinbox.unhover.color = Colors.setOpacity(Colors.color.primary, 0.7);
 
-                if (!toggle)
-                    return;
                 toggle.content.color = Colors.color.primary;
                 toggle.indicator.down = Colors.color.surface_dim;
                 toggle.indicator.up = Colors.color.surface_bright;
                 toggle.indicator.inner.down = Colors.color.primary;
                 toggle.indicator.inner.up = Colors.color.secondary;
 
-                if (!pageIndicator)
-                    return;
                 pageIndicator.color = Colors.color.primary;
 
-                if (!slider)
-                    return;
                 slider.background.color = Colors.color.background;
                 slider.background.progress.color = Colors.color.primary;
                 slider.handle.color = Colors.color.primary;
 
-                if (!label)
-                    return;
                 label.text = Colors.color.primary;
-                if (label.background)
-                    label.background.color = Colors.color.background;
+                label.background.color = Colors.color.background;
 
-                if (!range)
-                    return;
                 range.background.color = Colors.color.primary;
-                if (range.background.indicator)
-                    range.background.indicator.color = Colors.color.tertiary;
+                range.background.indicator.color = Colors.color.tertiary;
                 range.first.color = Colors.color.primary;
-                if (range.first.border)
-                    range.first.border.color = Colors.color.outline;
+                range.first.border.color = Colors.color.outline;
                 range.second.color = Colors.color.primary;
-                if (range.second.border)
-                    range.second.border.color = Colors.color.outline;
+                range.second.border.color = Colors.color.outline;
             }
 
             property BorderJson border: BorderJson {}
