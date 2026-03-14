@@ -15,7 +15,7 @@ Button {
         text: control.text
         font: control.font
 
-        color: control.down ? Qt.darker(content.state.down, 1.5) : content.state.up
+        color: control.hovered || control.down ? Qt.darker(content.state.down, 1.5) : content.state.up
 
         opacity: enabled ? 1.0 : 0.3
 
@@ -47,7 +47,7 @@ Button {
             color: background.state.border.color
         }
 
-        color: control.down ? background.state.up : background.state.down
+        color: control.hovered || control.down ? background.state.up : background.state.down
 
         bottomLeftRadius: background.state.rounding.bottomLeft
         bottomRightRadius: background.state.rounding.bottomRight

@@ -90,12 +90,14 @@ Singleton {
 
     component ButtonJson: JsonObject {
         property JsonObject content: JsonObject {
+            property color color: Colors.color.primary
             property color down: Colors.setOpacity(Colors.color.primary, 1)
             property color up: Colors.setOpacity(Colors.color.primary, 1)
         }
         property JsonObject background: JsonObject {
             property color down: Qt.darker(Colors.color.background, 1.2)
             property color up: Qt.darker(Colors.color.primary, 1)
+            property color color: Colors.color.background
             property real opacity: 0.5
             property BorderJson border: BorderJson {}
             property DirectionJson margin: DirectionJson {}
