@@ -2,8 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import Quickshell
-import Quickshell.Io
-
+import QtCore
 import qs.core
 import qs.components
 
@@ -96,6 +95,10 @@ ColumnLayout {
                 text: "check"
                 onClicked: wallpaperpage.imageToScreenPosition()
             }
+            Button {
+                text: "Snap"
+                onClicked: content.snap()
+            }
         }
 
         Flickable {
@@ -106,6 +109,7 @@ ColumnLayout {
             property int maxY: 0
 
             anchors.fill: parent
+
             contentWidth: maxX + 2000
             contentHeight: maxY + 2000
             transformOrigin: Item.Center
@@ -165,9 +169,24 @@ ColumnLayout {
                         }
                     }
 
+                    function snap() {
+                        var screens = content.children.filter(s => s instanceof Monitor);
+                        console.log(screens);
+                        for (let i in screens) {
+                            let screen = screens[i];
+                            let x = screen.x;
+                            let y = screen.y;
+                            let width = screen.width;
+                            let height = screen.height;
+                            content.grabToImage(function (result) {
+                                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${screen.objectName}.jpg`);
+                            }, Qt.size(height, width));
+                        }
+                    }
+
                     // Images
                     Instantiator {
-                        model: Wallpaper.config.source
+                        model: Wallpaper.config.layers
                         delegate: PreviewImage {
                             parent: content
                         }
@@ -216,6 +235,8 @@ ColumnLayout {
             width: (modelData.width || sourceSize.width)
             height: (modelData.height || sourceSize.height)
             source: Qt.resolvedUrl(modelData.source) || ""
+            x: (modelData.x || 0)
+            y: (modelData.y || 0)
             Drag.active: drag.active
             Drag.hotSpot.x: 10
             Drag.hotSpot.y: 10

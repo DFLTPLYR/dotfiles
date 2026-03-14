@@ -22,18 +22,47 @@ Variants {
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
 
-        Repeater {
-            model: ScriptModel {
-                values: [...Wallpaper.config.layers].filter(item => item.screens.some(s => s && s.name === panel.screen.name))
-            }
-            delegate: Image {
-                required property var modelData
-                property var relative: modelData.screens.find(s => s.name === panel.screen.name)
-                width: modelData.width
-                height: modelData.height
-                x: relative.x
-                y: relative.y
-                source: modelData.source
+        Item {
+            id: layered
+            Instantiator {
+                model: ScriptModel {
+                    values: [...Wallpaper.config.layers].filter(item => item.screens.some(s => s && s.name === panel.screen.name))
+                }
+                delegate: Image {
+                    id: wallpaperImage
+                    required property var modelData
+                    property var relative: modelData.screens.find(s => s.name === panel.screen.name)
+                    parent: layered
+
+                    width: modelData.width
+                    height: modelData.height
+                    x: relative.x
+                    y: relative.y
+
+                    source: modelData.source
+                    opacity: 0
+
+                    states: State {
+                        name: "visible"
+                        PropertyChanges {
+                            target: wallpaperImage
+                            opacity: 1
+                        }
+                    }
+
+                    transitions: [
+                        Transition {
+                            from: "*"
+                            to: "*"
+                            NumberAnimation {
+                                properties: "opacity,scale"
+                                duration: 300
+                                easing.type: Easing.InOutSine
+                            }
+                        }
+                    ]
+                }
+                onObjectAdded: (idx, obj) => obj.state = "visible"
             }
         }
     }
