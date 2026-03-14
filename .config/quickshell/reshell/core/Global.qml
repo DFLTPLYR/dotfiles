@@ -47,7 +47,7 @@ Singleton {
 
     FileView {
         id: fileView
-        path: Qt.resolvedUrl("./global.json")
+        path: Qt.resolvedUrl("data/global.json")
         watchChanges: true
         preload: true
 

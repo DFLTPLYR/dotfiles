@@ -63,7 +63,7 @@ Variants {
 
         FileView {
             id: fileView
-            path: Qt.resolvedUrl(`./core/${screen.name}.json`)
+            path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
             watchChanges: true
             preload: true
 

@@ -52,12 +52,12 @@ Variants {
 
             Instantiator {
                 model: ScriptModel {
-                    values: [...Wallpaper.config.layers].filter(item => item && item.screens.some(s => s && s.name === panel.screen.name))
+                    values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name))
                 }
                 delegate: Image {
                     id: wallpaperImage
                     required property var modelData
-                    property var relative: modelData.screens.find(s => s.name === panel.screen.name)
+                    property var relative: modelData.screens.find(s => s && s.name === panel.screen.name)
                     parent: layered
 
                     width: modelData.width

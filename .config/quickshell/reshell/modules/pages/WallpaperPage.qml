@@ -191,6 +191,19 @@ ColumnLayout {
             text: "check"
             onClicked: wallpaperpage.imageToScreenPosition()
         }
+
+        Button {
+            text: "save preset"
+            onClicked: {
+                var preset = {
+                    source: Wallpaper.config.layers,
+                    name: Math.random().toString(36).substring(2, 10)
+                };
+                Wallpaper.config.preset.push(preset);
+                Wallpaper.config.layers = [];
+            }
+        }
+
         Button {
             text: "generate color"
             onClicked: Wallpaper.generatecolor()
@@ -220,7 +233,7 @@ ColumnLayout {
         // image
         Image {
             id: draggableImage
-            property bool lock
+            property bool lock: (modelData.x && modelData.y) ? true : false
 
             width: (modelData.width || sourceSize.width)
             height: (modelData.height || sourceSize.height)
