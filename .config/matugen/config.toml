@@ -2,7 +2,8 @@
 
 [templates.dots]
 input_path = "templates/colors.json.template"
-output_path = "~/.config/quickshell/dots/config/colors.json"
+output_path = "~/.config/quickshell/reshell/core/colors.json"
+# output_path = "~/.config/quickshell/dots/config/colors.json"
 
 [templates.niri]
 input_path = "templates/niri-colors.kdl"

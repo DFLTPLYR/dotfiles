@@ -133,6 +133,7 @@ Item {
         property string position: "left"
         property int spacing: 2
         default property alias content: innerGrid.data
+
         color: "transparent"
 
         Layout.fillWidth: true

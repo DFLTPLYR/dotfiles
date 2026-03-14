@@ -9,7 +9,7 @@ Singleton {
     id: config
     property bool enableSetting: false
     property alias config: adapter.config
-
+    signal generatecolor
     FileView {
         id: fileView
         path: Qt.resolvedUrl("./wallpaper.json")
