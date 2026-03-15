@@ -31,7 +31,11 @@ ShellRoot {
         }
     }
 
-    Top {}
+    LazyLoader {
+        active: !lock.locked
+        component: Top {}
+    }
+
     Background {}
     Overlay {}
 }
