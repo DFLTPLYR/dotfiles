@@ -132,8 +132,8 @@ Variants {
 
             function reslot() {
                 const sorted = [...widgets].sort((a, b) => {
-                    const targetA = adapter.widgets.find(s => s.name === a.objectName);
-                    const targetB = adapter.widgets.find(s => s.name === b.objectName);
+                    const targetA = adapter.widgets.find(s => s && s.name === a.objectName);
+                    const targetB = adapter.widgets.find(s => s && s.name === b.objectName);
                     return (targetA?.position ?? Infinity) - (targetB?.position ?? Infinity);
                 });
                 for (const widget of sorted) {

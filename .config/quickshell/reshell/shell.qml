@@ -21,7 +21,7 @@ ShellRoot {
         id: lock
 
         // Lock the session immediately when quickshell starts.
-        locked: true
+        locked: false
 
         WlSessionLockSurface {
             LockSurface {
