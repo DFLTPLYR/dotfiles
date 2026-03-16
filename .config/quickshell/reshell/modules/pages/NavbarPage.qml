@@ -156,11 +156,7 @@ ColumnLayout {
         }
     }
 
-    Component {
-        id: widgetmodel
-        ScriptModel {}
-    }
-
+    // layout slots
     Popup {
         id: layoutSlot
         visible: layoutSlot.opened && Global.enableSetting
@@ -171,8 +167,10 @@ ColumnLayout {
 
         contentItem: ColumnLayout {
             id: layoutPopup
+
+            width: parent.width
+
             anchors {
-                fill: parent
                 margins: 4
             }
 
@@ -181,12 +179,42 @@ ColumnLayout {
                     values: [...navbarpage.config.layouts]
                 }
                 delegate: Rectangle {
+                    id: slot
+                    required property var modelData
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
                     color: "transparent"
                     border {
                         width: 1
                         color: Colors.color.outline
+                    }
+                    GridLayout {
+                        id: grid
+                        anchors.fill: parent
+
+                        Repeater {
+                            model: ['left', 'center', 'right']
+                            delegate: Button {
+                                height: parent.height
+                                width: height
+                                Layout.alignment: {
+                                    switch (modelData) {
+                                    case "left":
+                                        return Qt.AlignLeft;
+                                    case "center":
+                                        return Qt.AlignCenter;
+                                    case "right":
+                                        return Qt.AlignRight;
+                                    default:
+                                        return Qt.AlignLeft;
+                                    }
+                                }
+                                onClicked: {
+                                    const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
+                                    target.position = modelData;
+                                }
+                            }
+                        }
                     }
                 }
                 onObjectAdded: (idx, obj) => obj.parent = layoutPopup
@@ -252,6 +280,11 @@ ColumnLayout {
                 }
             }
         }
+    }
+
+    Component {
+        id: widgetmodel
+        ScriptModel {}
     }
 
     Component.onCompleted: {

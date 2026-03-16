@@ -118,7 +118,7 @@ Variants {
                     property list<var> widget: []
                     property list<var> layout: []
                 }
-                onWidgetsChanged: {
+                onLayoutsChanged: {
                     Qt.callLater(() => {
                         fileView.reslot();
                     });
@@ -139,7 +139,7 @@ Variants {
                 for (const widget of sorted) {
                     const target = adapter.widgets.find(s => s.name === widget.objectName);
                     if (target !== undefined) {
-                        const slot = slots.find(s => s.objectName === target.slot);
+                        const slot = slots.find(s => s && s.objectName === target.slot);
                         widget.parent = slot;
                     }
                 }

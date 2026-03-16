@@ -124,7 +124,7 @@ Item {
 
             Instantiator {
                 model: ScriptModel {
-                    values: config.layouts
+                    values: [...config.layouts]
                 }
                 delegate: Slot {
                     required property var modelData
