@@ -20,8 +20,7 @@ ShellRoot {
     WlSessionLock {
         id: lock
 
-        // Lock the session immediately when quickshell starts.
-        locked: false
+        locked: Global.general.greeter
 
         WlSessionLockSurface {
             LockSurface {

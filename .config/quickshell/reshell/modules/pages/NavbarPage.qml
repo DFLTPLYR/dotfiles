@@ -19,22 +19,50 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
 
-        Label {
-            font.pixelSize: 32
-            text: "Anchor Positions"
-        }
+        RowLayout {
+            Layout.fillWidth: true
 
-        Row {
-            Repeater {
-                id: positions
-                model: ["left", "top", "right", "bottom"]
-                delegate: Button {
-                    required property string modelData
-                    text: modelData
-                    onClicked: {
-                        config.position = modelData;
+            Label {
+                font.pixelSize: 32
+                text: "Anchor Positions"
+            }
+
+            Row {
+                Repeater {
+                    id: positions
+                    model: ["left", "top", "right", "bottom"]
+                    delegate: Button {
+                        required property string modelData
+                        text: modelData
+                        onClicked: {
+                            config.position = modelData;
+                        }
                     }
                 }
+            }
+        }
+
+        // Fill options
+
+        Row {
+            spacing: 8
+
+            Button {
+                text: "Slots"
+                width: 60
+                // onClicked: {
+                // const layout = {
+                //     position: "left",
+                //     spacing: 2,
+                //     name: Math.random().toString(36).substring(2, 10)
+                // };
+                // config.layouts.push(layout);
+                // }
+                onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
+            }
+            Button {
+                text: "widgets"
+                onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
             }
         }
 
@@ -43,115 +71,116 @@ ColumnLayout {
             checked: config.fill.enable
             onCheckedChanged: config.fill.enable = checked
         }
+    }
 
-        // Fill options
-        Column {
-            visible: config.fill.enable
+    Column {
+        visible: config.fill.enable || false
+        spacing: 10
+
+        Row {
             spacing: 10
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "width"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.fill.width
-                    onValueChanged: config.fill.width = value
-                }
+            Label {
+                text: "width"
+                anchors.verticalCenter: parent.verticalCenter
             }
-            Row {
-                spacing: 10
-                Label {
-                    text: "height"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
+            Slider {
+                enabled: config.fill.enable
+                stepSize: 1
+                from: 0
+                to: 100
 
-                    value: config.fill.height
-                    onValueChanged: config.fill.height = value
-                }
-            }
-            Row {
-                spacing: 10
-                Label {
-                    text: "axis"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.fill.axis
-                    onValueChanged: config.fill.axis = value
-                }
+                value: config.fill.width
+                onValueChanged: config.fill.width = value
             }
         }
 
-        Row {}
-    }
-
-    // layout slots
-    ColumnLayout {
-        Layout.fillWidth: true
         Row {
-            spacing: 8
+            spacing: 10
             Label {
-                text: "Navbar Slots"
-                font.pixelSize: 32
+                text: "height"
+                anchors.verticalCenter: parent.verticalCenter
             }
+            Slider {
+                enabled: config.fill.enable
+                stepSize: 1
+                from: 0
+                to: 100
 
-            Button {
-                text: "add"
-                width: 60
-                onClicked: {
-                    const layout = {
-                        position: "left",
-                        spacing: 2,
-                        name: Math.random().toString(36).substring(2, 10)
-                    };
-                    config.layouts.push(layout);
-                }
+                value: config.fill.height
+                onValueChanged: config.fill.height = value
+            }
+        }
+
+        Row {
+            spacing: 10
+            Label {
+                text: "axis"
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            Slider {
+                enabled: config.fill.enable
+                stepSize: 1
+                from: 0
+                to: 100
+
+                value: config.fill.axis
+                onValueChanged: config.fill.axis = value
             }
         }
     }
 
     // widgets
-    FlexboxLayout {
-        id: widgetContainer
+    Popup {
+        id: widgetPopup
+        visible: opened && Global.enableSetting
+        anchors.centerIn: parent
+        width: parent.width * 0.9
+        height: parent.height
 
-        Layout.fillWidth: true
+        FlexboxLayout {
+            id: widgetContainer
 
-        Instantiator {
-            id: widgetInstantiator
-            active: false
-            delegate: WidgetContainer {
-                model: `${modelData.objectName}.qml`
-            }
-            onObjectAdded: (idx, obj) => {
-                obj.parent = widgetContainer;
-            }
-        }
+            Layout.fillWidth: true
 
-        Component.onCompleted: {
-            Global.general.onWidgetsChanged.connect(() => {
-                if (Global.general.widgets.length !== 0) {
-                    widgetInstantiator.model = Global.general.widgets;
-                    widgetInstantiator.active = true;
+            Instantiator {
+                id: widgetInstantiator
+                active: false
+                delegate: WidgetContainer {
+                    model: `${modelData.objectName}.qml`
                 }
-            });
+                onObjectAdded: (idx, obj) => {
+                    obj.parent = widgetContainer;
+                }
+            }
+
+            Component.onCompleted: {
+                Global.general.onWidgetsChanged.connect(() => {
+                    if (Global.general.widgets.length !== 0) {
+                        const model = widgetmodel.createObject(null, {
+                            values: [...Global.general.widgets]
+                        });
+                        widgetInstantiator.model = model;
+                        widgetInstantiator.active = true;
+                    }
+                });
+            }
         }
+    }
+
+    Component {
+        id: widgetmodel
+        ScriptModel {}
+    }
+
+    Popup {
+        id: layoutSlot
+        visible: opened && Global.enableSetting
+        anchors.centerIn: parent
+        width: parent.width * 0.9
+        height: navbarpage.height
+        focus: true
+
+        Repeater {}
     }
 
     component WidgetContainer: Rectangle {

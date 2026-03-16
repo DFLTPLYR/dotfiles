@@ -75,7 +75,7 @@ Singleton {
             property CornerJson rounding: CornerJson {}
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
-
+            property bool greeter: false
             property list<var> widgets: []
         }
     }
