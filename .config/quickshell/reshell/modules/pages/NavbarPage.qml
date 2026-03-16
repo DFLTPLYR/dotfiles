@@ -175,9 +175,7 @@ ColumnLayout {
             }
 
             Instantiator {
-                model: ScriptModel {
-                    values: [...navbarpage.config.layouts]
-                }
+                model: navbarpage.config.layouts
                 delegate: Rectangle {
                     id: slot
                     required property var modelData
