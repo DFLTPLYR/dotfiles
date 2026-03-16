@@ -10,7 +10,6 @@ Popup {
         color: Colors.setOpacity(Colors.color.background, 0.6)
         border.color: Colors.color.outline
     }
-    contentItem: Column {}
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     focus: true
 
