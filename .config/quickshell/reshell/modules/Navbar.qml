@@ -123,19 +123,24 @@ Item {
             flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
             Instantiator {
-                model: ScriptModel {
-                    values: [...config.layouts]
-                }
+                model: config.layouts
                 delegate: Slot {
                     required property var modelData
-                    objectName: modelData.name
-                    position: modelData.position
-                    spacing: modelData.spacing
+                    objectName: modelData.name || ""
+                    position: modelData.position || ""
+                    spacing: modelData.spacing || 0
                 }
                 onObjectAdded: (idx, obj) => {
                     obj.parent = navbarSlot;
                     const file = Global.getConfigManager(`${screen.name}-navbar`);
-                    file.slots.push(obj);
+                    if (!file)
+                        return;
+                    const index = file.slots.findIndex(s => s.objectName === obj.objectName);
+                    if (index !== -1) {
+                        file.slots[index] = obj;
+                    } else {
+                        file.slots.push(obj);
+                    }
                     file.reslot();
                 }
             }
