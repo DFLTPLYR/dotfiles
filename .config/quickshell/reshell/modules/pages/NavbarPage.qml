@@ -60,6 +60,7 @@ ColumnLayout {
                 // }
                 onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
             }
+
             Button {
                 text: "widgets"
                 onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
@@ -137,7 +138,7 @@ ColumnLayout {
         width: parent.width * 0.9
         height: parent.height
 
-        FlexboxLayout {
+        contentItem: FlexboxLayout {
             id: widgetContainer
 
             Layout.fillWidth: true
@@ -152,18 +153,6 @@ ColumnLayout {
                     obj.parent = widgetContainer;
                 }
             }
-
-            Component.onCompleted: {
-                Global.general.onWidgetsChanged.connect(() => {
-                    if (Global.general.widgets.length !== 0) {
-                        const model = widgetmodel.createObject(null, {
-                            values: [...Global.general.widgets]
-                        });
-                        widgetInstantiator.model = model;
-                        widgetInstantiator.active = true;
-                    }
-                });
-            }
         }
     }
 
@@ -174,13 +163,35 @@ ColumnLayout {
 
     Popup {
         id: layoutSlot
-        visible: opened && Global.enableSetting
+        visible: layoutSlot.opened && Global.enableSetting
         anchors.centerIn: parent
         width: parent.width * 0.9
         height: navbarpage.height
         focus: true
 
-        Repeater {}
+        contentItem: ColumnLayout {
+            id: layoutPopup
+            anchors {
+                fill: parent
+                margins: 4
+            }
+
+            Instantiator {
+                model: ScriptModel {
+                    values: [...navbarpage.config.layouts]
+                }
+                delegate: Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 40
+                    color: "transparent"
+                    border {
+                        width: 1
+                        color: Colors.color.outline
+                    }
+                }
+                onObjectAdded: (idx, obj) => obj.parent = layoutPopup
+            }
+        }
     }
 
     component WidgetContainer: Rectangle {
@@ -241,6 +252,18 @@ ColumnLayout {
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        Global.general.onWidgetsChanged.connect(() => {
+            if (Global.general.widgets.length !== 0) {
+                const model = widgetmodel.createObject(null, {
+                    values: [...Global.general.widgets]
+                });
+                widgetInstantiator.model = model;
+                widgetInstantiator.active = true;
+            }
+        });
     }
 
     Footer {
