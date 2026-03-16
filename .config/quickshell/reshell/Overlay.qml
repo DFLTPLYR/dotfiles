@@ -73,6 +73,7 @@ Variants {
             id: volume
             visible: panel.shouldShowOsd && Compositor.focusedMonitor === screen.name
             opacity: panel.shouldShowOsd ? 1 : 0
+            width: panel.screen.width / 6
             from: 0
             to: 1
             value: Pipewire.defaultAudioSink?.audio.volume ?? 0

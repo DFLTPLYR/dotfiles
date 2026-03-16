@@ -152,7 +152,9 @@ ColumnLayout {
 
                     // Images
                     Instantiator {
-                        model: Wallpaper.config.layers
+                        model: ScriptModel {
+                            values: [...Wallpaper.config.layers]
+                        }
                         delegate: PreviewImage {
                             parent: content
                         }
@@ -171,42 +173,6 @@ ColumnLayout {
                     flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
                 }
             }
-        }
-    }
-
-    component TopLeftControl: Row {
-        z: 2
-        anchors {
-            top: parent.top
-            left: parent.left
-            leftMargin: 5
-            topMargin: 5
-        }
-        Button {
-            text: "add file"
-            onClicked: file.active()
-        }
-
-        Button {
-            text: "check"
-            onClicked: wallpaperpage.imageToScreenPosition()
-        }
-
-        Button {
-            text: "save preset"
-            onClicked: {
-                var preset = {
-                    source: Wallpaper.config.layers,
-                    name: Math.random().toString(36).substring(2, 10)
-                };
-                Wallpaper.config.preset.push(preset);
-                Wallpaper.config.layers = [];
-            }
-        }
-
-        Button {
-            text: "generate color"
-            onClicked: Wallpaper.generatecolor()
         }
     }
 
@@ -351,6 +317,42 @@ ColumnLayout {
                     }
                 }
             }
+        }
+    }
+
+    component TopLeftControl: Row {
+        z: 2
+        anchors {
+            top: parent.top
+            left: parent.left
+            leftMargin: 5
+            topMargin: 5
+        }
+        Button {
+            text: "add file"
+            onClicked: file.active()
+        }
+
+        Button {
+            text: "check"
+            onClicked: wallpaperpage.imageToScreenPosition()
+        }
+
+        Button {
+            text: "save preset"
+            onClicked: {
+                var preset = {
+                    source: Wallpaper.config.layers,
+                    name: Math.random().toString(36).substring(2, 10)
+                };
+                Wallpaper.config.preset.push(preset);
+                Wallpaper.config.layers = [];
+            }
+        }
+
+        Button {
+            text: "generate color"
+            onClicked: Wallpaper.generatecolor()
         }
     }
 }

@@ -3,11 +3,12 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.core
+import qs.components
 
 Wrapper {
     id: wrap
     // properties
-    objectName: "Clock"
+    objectName: "Cpu"
     setHeight: 100
     setWidth: 100
     relativeX: 0
@@ -19,13 +20,21 @@ Wrapper {
 
     GridLayout {
         anchors.fill: parent
+        columns: wrap.side ? 1 : 2
+        rows: wrap.side ? 2 : 1
 
-        SystemClock {
-            id: clock
-            precision: SystemClock.Seconds
+        Icon {
+            text: "circuit"
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            color: Colors.color.primary
+            font.pixelSize: Math.min(width, height)
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
         Text {
-            text: Qt.formatDateTime(clock.date, wrap.side ? "hh mm AP" : "hh:mm AP")
+            text: `${Hardware.cpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary

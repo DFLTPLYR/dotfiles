@@ -30,10 +30,6 @@ Variants {
             width: parent.width
             height: parent.width
 
-            Process {
-                id: cmdGenerateColor
-            }
-
             Connections {
                 target: Wallpaper
                 function onGeneratecolor() {
