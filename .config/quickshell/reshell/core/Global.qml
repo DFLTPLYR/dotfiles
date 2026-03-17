@@ -79,6 +79,9 @@ Singleton {
             property list<var> widgets: []
         }
     }
+    function save() {
+        fileView.writeAdapter();
+    }
 
     FolderListModel {
         id: folderModel
