@@ -32,9 +32,6 @@ ShellRoot {
 
     LazyLoader {
         active: !lock.locked
-        component: Top {}
+        component: Reshell {}
     }
-
-    Background {}
-    Overlay {}
 }
