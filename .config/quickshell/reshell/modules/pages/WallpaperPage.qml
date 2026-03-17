@@ -180,7 +180,7 @@ ColumnLayout {
         required property ShellScreen modelData
         width: modelData.width
         height: modelData.height
-        color: Colors.color.background
+        color: Colors.setOpacity(Colors.color.background, 0.2)
         objectName: modelData.name
         border {
             width: 1 * flick.zoom
@@ -236,6 +236,25 @@ ColumnLayout {
                     }
                     onClicked: {
                         draggableImage.lock = !draggableImage.lock;
+                    }
+                }
+                Button {
+                    width: 40 / flick.zoom
+                    height: 40 / flick.zoom
+                    Icon {
+                        anchors.centerIn: parent
+                        text: "trash"
+                        font.pixelSize: parent.width / 2
+                        color: Colors.color.secondary
+                    }
+                    onClicked: {
+                        var layers = Wallpaper.config.layers;
+                        var idx = layers.findIndex(s => s.name === container.modelData.name);
+                        if (idx >= 0) {
+                            var newLayers = [...layers];
+                            newLayers.splice(idx, 1);
+                            Wallpaper.config.layers = newLayers;
+                        }
                     }
                 }
             }
