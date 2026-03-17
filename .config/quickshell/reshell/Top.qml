@@ -33,7 +33,7 @@ PanelWindow {
     mask: Region {
         regions: [
             Region {
-                item: Global.enableSetting ? floatingWindow : null
+                item: settingloader.item
             },
             Region {
                 item: navbar
@@ -45,8 +45,35 @@ PanelWindow {
         id: navbar
     }
 
-    Settings {
-        id: floatingWindow
+    Loader {
+        id: settingloader
+        active: Global.enableSetting
+        sourceComponent: Settings {}
+    }
+
+    property list<Item> widgets: []
+
+    Instantiator {
+        model: ScriptModel {
+            values: [...fileView.adapter.widgets]
+        }
+        delegate: LazyLoader {
+            required property var modelData
+            active: true
+            source: {
+                if (model !== "") {
+                    return Quickshell.shellPath(`components/widgets/${modelData.name}.qml`);
+                } else {
+                    return "";
+                }
+            }
+            onLoadingChanged: {
+                if (item) {
+                    item.objectName = modelData.name;
+                    fileView.widgets.push(item);
+                }
+            }
+        }
     }
 
     Connections {
@@ -127,12 +154,12 @@ PanelWindow {
 
         function reslot() {
             const sorted = [...widgets].sort((a, b) => {
-                const targetA = adapter.widgets.find(s => s && s.name === a.objectName);
-                const targetB = adapter.widgets.find(s => s && s.name === b.objectName);
+                const targetA = adapter.widgets.find(s => s && a && s.name === a.objectName);
+                const targetB = adapter.widgets.find(s => s && b && s.name === b.objectName);
                 return (targetA?.position ?? Infinity) - (targetB?.position ?? Infinity);
             });
             for (const widget of sorted) {
-                const target = adapter.widgets.find(s => s.name === widget.objectName);
+                const target = adapter.widgets.find(s => s && widget && s.name === widget.objectName);
                 if (target !== undefined) {
                     const slot = slots.find(s => s && s.objectName === target.slot);
                     widget.parent = slot;

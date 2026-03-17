@@ -270,12 +270,7 @@ ColumnLayout {
                     item.origparent = origparent;
                     item.parent = origparent;
                     origparent.widget = item;
-                    const file = Global.getConfigManager(`${screen.name}-navbar`);
-                    const exists = file.widgets.some(w => w && w.objectName === item.objectName);
-                    if (!exists) {
-                        file.widgets.push(item);
-                    }
-                }
+                                   }
             }
         }
     }
