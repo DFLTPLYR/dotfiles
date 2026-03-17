@@ -10,7 +10,7 @@ Rectangle {
     id: root
     required property LockContext context
     readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
-
+    required property ShellScreen monitor
     color: colors.window
 
     Item {
@@ -20,12 +20,12 @@ Rectangle {
 
         Instantiator {
             model: ScriptModel {
-                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === screen.name))
+                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === root.monitor.name))
             }
             delegate: Image {
                 id: wallpaperImage
                 required property var modelData
-                property var relative: modelData.screens.find(s => s && s.name === panel.screen.name)
+                property var relative: modelData.screens.find(s => s && s.name === root.monitor.name)
                 parent: layered
 
                 width: modelData.width

@@ -2,6 +2,7 @@ import QtQuick
 
 import Quickshell.Wayland
 import qs.core
+import qs.components
 import qs.modules
 
 Item {
@@ -23,6 +24,7 @@ Item {
             LockSurface {
                 anchors.fill: parent
                 context: lockContext
+                monitor: screen
             }
         }
     }
