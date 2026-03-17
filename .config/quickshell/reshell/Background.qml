@@ -7,85 +7,80 @@ import QtCore
 
 import qs.core
 
-Variants {
-    model: Quickshell.screens
-    delegate: PanelWindow {
-        id: panel
-        required property ShellScreen modelData
-        readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
-        screen: modelData
-        color: "transparent"
+PanelWindow {
+    id: panel
+    readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
+    color: "transparent"
 
-        implicitHeight: screen.height
-        implicitWidth: screen.width
+    implicitHeight: screen.height
+    implicitWidth: screen.width
 
-        exclusionMode: ExclusionMode.Ignore
+    exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.layer: WlrLayer.Background
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-        WlrLayershell.namespace: `Background-${screen.name}`
+    WlrLayershell.layer: WlrLayer.Background
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.namespace: `Background-${screen.name}`
 
-        Item {
-            id: layered
-            width: parent.width
-            height: parent.width
+    Item {
+        id: layered
+        width: parent.width
+        height: parent.width
 
-            Connections {
-                target: Wallpaper
-                function onGeneratecolor() {
-                    layered.onSaveCustomWallpaper();
-                }
+        Connections {
+            target: Wallpaper
+            function onGeneratecolor() {
+                layered.onSaveCustomWallpaper();
             }
+        }
 
-            function onSaveCustomWallpaper() {
-                layered.grabToImage(function (result) {
-                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-                    Qt.callLater(() => {
-                        Global.updateColor();
-                    });
-                }, Qt.size(panel.screen.width, panel.screen.height));
+        function onSaveCustomWallpaper() {
+            layered.grabToImage(function (result) {
+                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+                Qt.callLater(() => {
+                    Global.updateColor();
+                });
+            }, Qt.size(panel.screen.width, panel.screen.height));
+        }
+
+        Instantiator {
+            model: ScriptModel {
+                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name))
             }
+            delegate: Image {
+                id: wallpaperImage
+                required property var modelData
+                property var relative: modelData.screens.find(s => s && s.name === panel.screen.name)
+                parent: layered
 
-            Instantiator {
-                model: ScriptModel {
-                    values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name))
+                width: modelData.width
+                height: modelData.height
+                x: relative.x
+                y: relative.y
+
+                source: modelData.source
+                opacity: 0
+
+                states: State {
+                    name: "visible"
+                    PropertyChanges {
+                        target: wallpaperImage
+                        opacity: 1
+                    }
                 }
-                delegate: Image {
-                    id: wallpaperImage
-                    required property var modelData
-                    property var relative: modelData.screens.find(s => s && s.name === panel.screen.name)
-                    parent: layered
 
-                    width: modelData.width
-                    height: modelData.height
-                    x: relative.x
-                    y: relative.y
-
-                    source: modelData.source
-                    opacity: 0
-
-                    states: State {
-                        name: "visible"
-                        PropertyChanges {
-                            target: wallpaperImage
-                            opacity: 1
+                transitions: [
+                    Transition {
+                        from: "*"
+                        to: "*"
+                        NumberAnimation {
+                            properties: "opacity,scale"
+                            duration: 300
+                            easing.type: Easing.InOutSine
                         }
                     }
-
-                    transitions: [
-                        Transition {
-                            from: "*"
-                            to: "*"
-                            NumberAnimation {
-                                properties: "opacity,scale"
-                                duration: 300
-                                easing.type: Easing.InOutSine
-                            }
-                        }
-                    ]
-                }
-                onObjectAdded: (idx, obj) => obj.state = "visible"
+                ]
             }
+            onObjectAdded: (idx, obj) => obj.state = "visible"
         }
     }
 }
