@@ -50,14 +50,6 @@ ColumnLayout {
             Button {
                 text: "Slots"
                 width: 60
-                // onClicked: {
-                // const layout = {
-                //     position: "left",
-                //     spacing: 2,
-                //     name: Math.random().toString(36).substring(2, 10)
-                // };
-                // config.layouts.push(layout);
-                // }
                 onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
             }
 
@@ -75,7 +67,7 @@ ColumnLayout {
     }
 
     Column {
-        visible: config.fill.enable || false
+        visible: config.fill.enable
         spacing: 10
 
         Row {
@@ -145,7 +137,9 @@ ColumnLayout {
 
             Instantiator {
                 id: widgetInstantiator
-                active: false
+                model: ScriptModel {
+                    values: [...Global.general.widgets]
+                }
                 delegate: WidgetContainer {
                     model: `${modelData.objectName}.qml`
                 }
@@ -270,26 +264,9 @@ ColumnLayout {
                     item.origparent = origparent;
                     item.parent = origparent;
                     origparent.widget = item;
-                                   }
+                }
             }
         }
-    }
-
-    Component {
-        id: widgetmodel
-        ScriptModel {}
-    }
-
-    Component.onCompleted: {
-        Global.general.onWidgetsChanged.connect(() => {
-            if (Global.general.widgets.length !== 0) {
-                const model = widgetmodel.createObject(null, {
-                    values: [...Global.general.widgets]
-                });
-                widgetInstantiator.model = model;
-                widgetInstantiator.active = true;
-            }
-        });
     }
 
     Footer {

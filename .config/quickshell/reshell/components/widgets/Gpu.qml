@@ -24,7 +24,7 @@ Wrapper {
         rows: wrap.side ? 2 : 1
 
         Icon {
-            text: "circuit"
+            text: "gaming-pad-alt"
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
