@@ -10,12 +10,10 @@ Rectangle {
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
-
     width: screen.width / 1.5
     height: screen.height / 1.5
     x: (screen.width - width) / 2
     y: (screen.height - height) / 2
-
     color: Colors.setOpacity(Colors.color.background, Global.general.opacity)
     opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
 
