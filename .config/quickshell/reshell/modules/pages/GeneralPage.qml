@@ -14,6 +14,9 @@ ColumnLayout {
     Toggle {
         text: "Enable Greeter"
         checked: Global.general.greeter
-        onCheckedChanged: Global.general.greeter = checked
+        onCheckedChanged: {
+            Global.general.greeter = checked;
+            Global.save();
+        }
     }
 }
