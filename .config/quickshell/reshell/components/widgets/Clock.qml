@@ -15,8 +15,6 @@ Wrapper {
     position: -1
     // properties
 
-    color: "transparent"
-
     GridLayout {
         anchors.fill: parent
 

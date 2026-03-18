@@ -17,8 +17,6 @@ Wrapper {
     position: -1
     // properties
 
-    color: "transparent"
-
     Button {
         hoverEnabled: true
         enabled: !wrap.active

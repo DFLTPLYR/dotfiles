@@ -16,8 +16,6 @@ Wrapper {
     position: -1
     // properties
 
-    color: "transparent"
-
     GridLayout {
         anchors.fill: parent
         columns: wrap.side ? 1 : 2
