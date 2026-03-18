@@ -25,7 +25,7 @@ Rectangle {
     }
 
     clip: true
-    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+    color: "transparent"
 
     width: parent ? parent.width : 0
     height: parent ? parent.height : 0
