@@ -20,7 +20,7 @@ Rectangle {
 
         Instantiator {
             model: ScriptModel {
-                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === root.monitor.name))
+                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && root.monitor && s.name === root.monitor.name))
             }
             delegate: Image {
                 id: wallpaperImage

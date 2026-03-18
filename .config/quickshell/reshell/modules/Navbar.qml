@@ -1,12 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import qs.core
 
 Item {
     id: navbar
     default property alias content: container.data
-    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
+    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`)?.adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     Behavior on width {
