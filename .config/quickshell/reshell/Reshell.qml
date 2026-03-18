@@ -26,7 +26,6 @@ Variants {
                 Background {
                     screen: modelData
                 }
-
                 Overlay {
                     screen: modelData
                 }

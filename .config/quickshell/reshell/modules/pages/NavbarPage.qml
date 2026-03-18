@@ -138,7 +138,10 @@ ColumnLayout {
             Instantiator {
                 id: widgetInstantiator
                 model: ScriptModel {
-                    values: [...Global.general.widgets].filter(widget => !navbarpage.config.widgets.some(w => w && widget && w.name === widget.objectName))
+                    values: {
+                        let widgets = Global.general.widgets.filter(widget => !navbarpage.config.widgets.some(w => w && widget && w.name === widget.objectName));
+                        return [...widgets];
+                    }
                 }
                 delegate: WidgetContainer {
                     model: `${modelData.objectName}.qml`
@@ -154,27 +157,53 @@ ColumnLayout {
     Popup {
         id: layoutSlot
         visible: layoutSlot.opened && Global.enableSetting
-        anchors.centerIn: parent
         width: parent.width * 0.9
-        height: navbarpage.height
-        focus: true
+        height: parent.height * 2
+        clip: true
 
         contentItem: ColumnLayout {
             id: layoutPopup
-
+            height: parent.height
             width: parent.width
 
             anchors {
                 margins: 4
             }
 
-            Instantiator {
-                model: navbarpage.config.layouts
+            Row {
+                Label {
+                    text: "Slots"
+                    font.pixelSize: 32
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Button {
+                    text: "Add more"
+                    onClicked: {
+                        const layout = {
+                            position: "left",
+                            spacing: 2,
+                            name: Math.random().toString(36).substring(2, 10)
+                        };
+                        config.layouts.push(layout);
+                    }
+                }
+            }
+
+            ListView {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                model: ScriptModel {
+                    values: [...navbarpage.config.layouts]
+                }
+                clip: true
+                spacing: 4
+                orientation: ListView.Vertical
                 delegate: Rectangle {
                     id: slot
                     required property var modelData
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+
+                    width: parent.width
+                    height: 40
                     color: "transparent"
                     border {
                         width: 1
@@ -182,12 +211,14 @@ ColumnLayout {
                     }
                     GridLayout {
                         id: grid
-                        anchors.fill: parent
+                        anchors {
+                            fill: parent
+                        }
 
                         Repeater {
                             model: ['left', 'center', 'right']
                             delegate: Button {
-                                height: parent.height
+                                Layout.fillHeight: true
                                 width: height
                                 Layout.alignment: {
                                     switch (modelData) {
@@ -209,7 +240,6 @@ ColumnLayout {
                         }
                     }
                 }
-                onObjectAdded: (idx, obj) => obj.parent = layoutPopup
             }
         }
     }
