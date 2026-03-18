@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 
 import qs.core
@@ -18,7 +19,10 @@ Wrapper {
     Button {
         id: button
         enabled: !wrap.active
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 2
+        }
 
         Icon {
             text: "power-off"
@@ -52,14 +56,19 @@ Wrapper {
                 }
             }
 
-            implicitWidth: 200
-            implicitHeight: 400
+            implicitWidth: 100
+            implicitHeight: content.height
             visible: load.active
 
             Rectangle {
                 id: content
                 width: test.width
-                height: test.height
+                implicitHeight: childrenRect.height
+                border {
+                    width: 2
+                    color: Colors.color.outline
+                }
+
                 state: "hidden"
                 color: Colors.color.background
 
@@ -105,6 +114,21 @@ Wrapper {
                         }
                     }
                 ]
+
+                ListView {
+                    anchors.left: content.left
+                    anchors.right: content.left
+                    height: childrenRect.height
+                    model: ["suspend", "poweroff", "hibernate", "reboot"]
+                    delegate: Button {
+                        text: modelData
+                        onClicked: {
+                            Quickshell.execDetached({
+                                command: ["sh", "-c", `systemctl ${modelData}`]
+                            });
+                        }
+                    }
+                }
             }
         }
     }

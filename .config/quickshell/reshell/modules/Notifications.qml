@@ -79,6 +79,9 @@ ListView {
             drag.maximumX: 0
             drag.threshold: 0
 
+            onClicked: {
+                Notifications.discardNotification(modelData.notificationId);
+            }
             onReleased: {
                 if (parent.x < -30) {
                     Notifications.discardNotification(modelData.notificationId);
@@ -93,6 +96,7 @@ ListView {
                 fill: parent
                 margins: 2
             }
+
             // icon
             Image {
                 id: notificationIcon
