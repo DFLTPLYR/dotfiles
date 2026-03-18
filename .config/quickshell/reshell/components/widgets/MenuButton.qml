@@ -52,7 +52,7 @@ Wrapper {
                 }
             }
 
-            implicitWidth: 400
+            implicitWidth: 200
             implicitHeight: 400
             visible: load.active
 
