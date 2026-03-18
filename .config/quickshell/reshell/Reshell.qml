@@ -42,11 +42,9 @@ Variants {
                 required property var modelData
                 active: true
                 source: {
-                    if (model !== "") {
-                        return Quickshell.shellPath(`components/widgets/${modelData.name}.qml`);
-                    } else {
+                    if (modelData === undefined)
                         return "";
-                    }
+                    return Quickshell.shellPath(`components/widgets/${modelData.name}.qml`);
                 }
                 onLoadingChanged: {
                     if (item) {
@@ -134,7 +132,7 @@ Variants {
                 });
                 for (const widget of sorted) {
                     const target = adapter.widgets.find(s => s && widget && s.name === widget.objectName);
-                    if (target !== undefined) {
+                    if (target && target !== undefined) {
                         const slot = fileView.slots.find(s => (s && target) && (s.objectName === target.slot));
                         if (slot)
                             widget.parent = slot;

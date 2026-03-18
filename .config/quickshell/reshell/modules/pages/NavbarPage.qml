@@ -138,7 +138,7 @@ ColumnLayout {
             Instantiator {
                 id: widgetInstantiator
                 model: ScriptModel {
-                    values: [...Global.general.widgets]
+                    values: [...Global.general.widgets].filter(widget => !navbarpage.config.widgets.some(w => w && widget && w.name === widget.objectName))
                 }
                 delegate: WidgetContainer {
                     model: `${modelData.objectName}.qml`

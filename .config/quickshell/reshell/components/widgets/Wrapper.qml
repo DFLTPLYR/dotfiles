@@ -74,11 +74,13 @@ Rectangle {
             const dropArea = widget.Drag.target;
             widget.Drag.drop();
             if (!dropArea) {
-                widget.parent = origparent;
-                widget.x = 0;
-                widget.y = 0;
-                widget.width = origparent.width;
-                widget.height = origparent.height;
+                if (origparent) {
+                    widget.parent = origparent;
+                    widget.x = 0;
+                    widget.y = 0;
+                    widget.width = origparent.width;
+                    widget.height = origparent.height;
+                }
                 widget.position = -1;
 
                 const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
