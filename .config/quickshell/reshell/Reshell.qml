@@ -75,13 +75,13 @@ Variants {
             onFileChanged: {
                 reload();
                 snapHistory();
-                Quickshell.reload(true);
             }
 
             onLoadFailed: error => {
                 if (error === FileViewError.FileNotFound) {
                     fileView.setText("{}");
                     fileView.writeAdapter();
+                    Quickshell.reload(true);
                 }
             }
 
