@@ -38,11 +38,20 @@ input_path = 'templates/nvim-colors.lua'
 output_path = '~/.config/nvim/generated.lua'
 post_hook = 'pkill -SIGUSR1 nvim'
 
-[templates.zen]
-input_path = 'templates/zen.css'
+[templates.zenChrome]
+input_path = 'templates/userChrome.css.tpl'
 output_path = '~/dotfiles/.config/matugen/data/userChrome.css'
 pre_hook = '''
 PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default Profile" | head -n 1)
 mkdir -p "$PROFILE_DIR/chrome"
-ln -sf ~/dotfiles/.config/matugen/data/userChrome.css "$PROFILE_DIR/chrome/userChrome.css"
+[ -L "$PROFILE_DIR/chrome/userChrome.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userChrome.css "$PROFILE_DIR/chrome/userChrome.css"
+'''
+
+[templates.zenContent]
+input_path = 'templates/userContent.css.tpl'
+output_path = '~/dotfiles/.config/matugen/data/userContent.css'
+pre_hook = '''
+PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default Profile" | head -n 1)
+mkdir -p "$PROFILE_DIR/chrome"
+[ -L "$PROFILE_DIR/chrome/userContent.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userContent.css "$PROFILE_DIR/chrome/userContent.css"
 '''
