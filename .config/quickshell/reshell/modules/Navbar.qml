@@ -33,9 +33,9 @@ Item {
             PropertyChanges {
                 target: navbar
                 x: 0
-                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
+                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : parent.height / 2 - height / 2
                 width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height & (config.height / 100)
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height * (config.height / 100)
             }
         },
         State {

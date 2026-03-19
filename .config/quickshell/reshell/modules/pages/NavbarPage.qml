@@ -19,24 +19,21 @@ Page {
         ColumnLayout {
             Layout.fillWidth: true
 
-            RowLayout {
-                Layout.fillWidth: true
+            Label {
+                font.pixelSize: 32
+                text: "Anchor Positions"
+            }
 
-                Label {
-                    font.pixelSize: 32
-                    text: "Anchor Positions"
-                }
-
-                Row {
-                    Repeater {
-                        id: positions
-                        model: ["left", "top", "right", "bottom"]
-                        delegate: Button {
-                            required property string modelData
-                            text: modelData
-                            onClicked: {
-                                config.position = modelData;
-                            }
+            Row {
+                spacing: 2
+                Repeater {
+                    id: positions
+                    model: ["left", "top", "right", "bottom"]
+                    delegate: Button {
+                        required property string modelData
+                        text: modelData
+                        onClicked: {
+                            config.position = modelData;
                         }
                     }
                 }
@@ -159,23 +156,6 @@ Page {
                     onValueChanged: config.height = value
                 }
             }
-            //
-            // Row {
-            //     spacing: 10
-            //     Label {
-            //         text: "axis"
-            //         anchors.verticalCenter: parent.verticalCenter
-            //     }
-            //     Slider {
-            //         enabled: !config.enable
-            //         stepSize: 1
-            //         from: 0
-            //         to: 100
-            //
-            //         value: config.axis
-            //         onValueChanged: config.axis = value
-            //     }
-            // }
         }
 
         // widgets
@@ -257,7 +237,6 @@ Page {
                     delegate: Rectangle {
                         id: slot
                         required property var modelData
-
                         width: parent.width
                         height: 40
                         color: "transparent"
