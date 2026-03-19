@@ -77,6 +77,7 @@ Singleton {
             property real opacity: 0.5
             property bool greeter: false
             property list<var> widgets: []
+            property int notificationTimer: 5000
         }
     }
     function save() {

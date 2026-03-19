@@ -320,7 +320,7 @@ Page {
             }
         }
 
-        LazyLoader {
+        Loader {
             active: true
             source: {
                 if (model !== "") {
@@ -329,11 +329,17 @@ Page {
                     return "";
                 }
             }
-            onLoadingChanged: {
+            onItemChanged: {
                 if (item) {
                     item.origparent = origparent;
                     item.parent = origparent;
                     origparent.widget = item;
+                }
+            }
+            onStatusChanged: {
+                if (status === Loader.Error) {
+                    Global.general.widgets = Global.general.widgets.filter(s => s.objectName !== origparent.model.replace(/\.qml$/, ''));
+                    Global.save();
                 }
             }
         }
