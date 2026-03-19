@@ -6,7 +6,6 @@ import qs.components
 import qs.modules
 
 Item {
-
     LockContext {
         id: lockContext
 

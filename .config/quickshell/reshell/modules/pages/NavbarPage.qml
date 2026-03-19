@@ -8,239 +8,244 @@ import qs.core
 import qs.components
 import qs.components.widgets
 
-ColumnLayout {
-    id: navbarpage
-    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
-    property bool side: config ? (config.position === "left" || config.position === "right") : false
-
-    Layout.fillWidth: true
-    Layout.minimumHeight: 1
+Page {
 
     ColumnLayout {
-        Layout.fillWidth: true
+        id: navbarpage
+        property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
+        property bool side: config ? (config.position === "left" || config.position === "right") : false
+        width: parent.width
 
-        RowLayout {
+        ColumnLayout {
             Layout.fillWidth: true
 
-            Label {
-                font.pixelSize: 32
-                text: "Anchor Positions"
-            }
+            RowLayout {
+                Layout.fillWidth: true
 
-            Row {
-                Repeater {
-                    id: positions
-                    model: ["left", "top", "right", "bottom"]
-                    delegate: Button {
-                        required property string modelData
-                        text: modelData
-                        onClicked: {
-                            config.position = modelData;
+                Label {
+                    font.pixelSize: 32
+                    text: "Anchor Positions"
+                }
+
+                Row {
+                    Repeater {
+                        id: positions
+                        model: ["left", "top", "right", "bottom"]
+                        delegate: Button {
+                            required property string modelData
+                            text: modelData
+                            onClicked: {
+                                config.position = modelData;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Fill options
-
-        Row {
-            spacing: 8
-
-            Button {
-                text: "Slots"
-                width: 60
-                onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
-            }
-
-            Button {
-                text: "widgets"
-                onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
-            }
-        }
-
-        Toggle {
-            text: "Fill"
-            checked: config.fill.enable
-            onCheckedChanged: config.fill.enable = checked
-        }
-    }
-
-    Column {
-        visible: config.fill.enable
-        spacing: 10
-
-        Row {
-            spacing: 10
-            Label {
-                text: "width"
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Slider {
-                enabled: config.fill.enable
-                stepSize: 1
-                from: 0
-                to: 100
-
-                value: config.fill.width
-                onValueChanged: config.fill.width = value
-            }
-        }
-
-        Row {
-            spacing: 10
-            Label {
-                text: "height"
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Slider {
-                enabled: config.fill.enable
-                stepSize: 1
-                from: 0
-                to: 100
-
-                value: config.fill.height
-                onValueChanged: config.fill.height = value
-            }
-        }
-
-        Row {
-            spacing: 10
-            Label {
-                text: "axis"
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Slider {
-                enabled: config.fill.enable
-                stepSize: 1
-                from: 0
-                to: 100
-
-                value: config.fill.axis
-                onValueChanged: config.fill.axis = value
-            }
-        }
-    }
-
-    // widgets
-    Popup {
-        id: widgetPopup
-        visible: opened && Global.enableSetting
-        anchors.centerIn: parent
-        width: parent.width * 0.9
-        height: parent.height
-
-        contentItem: FlexboxLayout {
-            id: widgetContainer
-
-            Layout.fillWidth: true
-
-            Instantiator {
-                id: widgetInstantiator
-                model: ScriptModel {
-                    values: {
-                        let widgets = Global.general.widgets.filter(widget => !navbarpage.config.widgets.some(w => w && widget && w.name === widget.objectName));
-                        return [...widgets];
-                    }
-                }
-                delegate: WidgetContainer {
-                    model: `${modelData.objectName}.qml`
-                }
-                onObjectAdded: (idx, obj) => {
-                    obj.parent = widgetContainer;
-                }
-            }
-        }
-    }
-
-    // layout slots
-    Popup {
-        id: layoutSlot
-        visible: layoutSlot.opened && Global.enableSetting
-        width: parent.width * 0.9
-        height: parent.height * 2
-        clip: true
-
-        contentItem: ColumnLayout {
-            id: layoutPopup
-            height: parent.height
-            width: parent.width
-
-            anchors {
-                margins: 4
-            }
+            // Fill options
 
             Row {
-                Label {
+                spacing: 8
+
+                Button {
                     text: "Slots"
-                    font.pixelSize: 32
+                    width: 60
+                    onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
+                }
+
+                Button {
+                    text: "widgets"
+                    onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
+                }
+            }
+
+            Toggle {
+                text: "Fill"
+                checked: config.fill.enable
+                onCheckedChanged: config.fill.enable = checked
+            }
+        }
+
+        Column {
+            visible: config.fill.enable
+            spacing: 10
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "width"
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                Button {
-                    text: "Add more"
-                    onClicked: {
-                        const layout = {
-                            position: "left",
-                            spacing: 2,
-                            name: Math.random().toString(36).substring(2, 10)
-                        };
-                        config.layouts.push(layout);
-                    }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.width
+                    onValueChanged: config.fill.width = value
                 }
             }
 
-            ListView {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                model: ScriptModel {
-                    values: [...navbarpage.config.layouts]
+            Row {
+                spacing: 10
+                Label {
+                    text: "height"
+                    anchors.verticalCenter: parent.verticalCenter
                 }
-                clip: true
-                spacing: 4
-                orientation: ListView.Vertical
-                delegate: Rectangle {
-                    id: slot
-                    required property var modelData
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
 
-                    width: parent.width
-                    height: 40
-                    color: "transparent"
-                    border {
-                        width: 1
-                        color: Colors.color.outline
-                    }
-                    GridLayout {
-                        id: grid
-                        anchors {
-                            fill: parent
+                    value: config.fill.height
+                    onValueChanged: config.fill.height = value
+                }
+            }
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "axis"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.axis
+                    onValueChanged: config.fill.axis = value
+                }
+            }
+        }
+
+        // widgets
+        Popup {
+            id: widgetPopup
+            visible: opened && Global.enableSetting
+            anchors.centerIn: parent
+            width: parent.width * 0.9
+            height: parent.height
+
+            contentItem: FlexboxLayout {
+                id: widgetContainer
+
+                Layout.fillWidth: true
+
+                Instantiator {
+                    id: widgetInstantiator
+                    model: ScriptModel {
+                        values: {
+                            let widgets = Global.general.widgets.filter(widget => !navbarpage.config.widgets.some(w => w && widget && w.name === widget.objectName));
+                            return [...widgets];
                         }
+                    }
+                    delegate: WidgetContainer {
+                        model: `${modelData.objectName}.qml`
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        obj.parent = widgetContainer;
+                    }
+                }
+            }
+        }
 
-                        Repeater {
-                            model: ['left', 'center', 'right']
-                            delegate: Button {
-                                Layout.fillHeight: true
-                                width: height
-                                Layout.alignment: {
-                                    switch (modelData) {
-                                    case "left":
-                                        return Qt.AlignLeft;
-                                    case "center":
-                                        return Qt.AlignCenter;
-                                    case "right":
-                                        return Qt.AlignRight;
-                                    default:
-                                        return Qt.AlignLeft;
+        // layout slots
+        Popup {
+            id: layoutSlot
+            visible: layoutSlot.opened && Global.enableSetting
+            width: parent.width * 0.9
+            height: parent.height * 2
+            clip: true
+
+            contentItem: ColumnLayout {
+                id: layoutPopup
+                height: parent.height
+                width: parent.width
+
+                anchors {
+                    margins: 4
+                }
+
+                Row {
+                    Label {
+                        text: "Slots"
+                        font.pixelSize: 32
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Button {
+                        text: "Add more"
+                        onClicked: {
+                            const layout = {
+                                position: "left",
+                                spacing: 2,
+                                name: Math.random().toString(36).substring(2, 10)
+                            };
+                            config.layouts.push(layout);
+                        }
+                    }
+                }
+
+                ListView {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    model: ScriptModel {
+                        values: [...navbarpage.config.layouts]
+                    }
+                    clip: true
+                    spacing: 4
+                    orientation: ListView.Vertical
+                    delegate: Rectangle {
+                        id: slot
+                        required property var modelData
+
+                        width: parent.width
+                        height: 40
+                        color: "transparent"
+                        border {
+                            width: 1
+                            color: Colors.color.outline
+                        }
+                        GridLayout {
+                            id: grid
+                            anchors {
+                                fill: parent
+                            }
+
+                            Repeater {
+                                model: ['left', 'center', 'right']
+                                delegate: Button {
+                                    Layout.fillHeight: true
+                                    width: height
+                                    Layout.alignment: {
+                                        switch (modelData) {
+                                        case "left":
+                                            return Qt.AlignLeft;
+                                        case "center":
+                                            return Qt.AlignCenter;
+                                        case "right":
+                                            return Qt.AlignRight;
+                                        default:
+                                            return Qt.AlignLeft;
+                                        }
                                     }
-                                }
-                                onClicked: {
-                                    const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
-                                    target.position = modelData;
+                                    onClicked: {
+                                        const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
+                                        target.position = modelData;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+
+        Footer {
+            config: Global.getConfigManager(`${screen.name}-navbar`)
         }
     }
 
@@ -297,9 +302,5 @@ ColumnLayout {
                 }
             }
         }
-    }
-
-    Footer {
-        config: Global.getConfigManager(`${screen.name}-navbar`)
     }
 }
