@@ -1,4 +1,5 @@
 [config]
+base16_backend = "wal"
 
 [templates.dots]
 input_path = "templates/colors.json.template"
@@ -36,3 +37,12 @@ post_hook = "kitty +kitten themes --reload-in=all Matugen"
 input_path = 'templates/nvim-colors.lua'
 output_path = '~/.config/nvim/generated.lua'
 post_hook = 'pkill -SIGUSR1 nvim'
+
+[templates.zen]
+input_path = 'templates/zen.css'
+output_path = '~/dotfiles/.config/matugen/data/userChrome.css'
+pre_hook = '''
+PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default Profile" | head -n 1)
+mkdir -p "$PROFILE_DIR/chrome"
+ln -sf ~/dotfiles/.config/matugen/data/userChrome.css "$PROFILE_DIR/chrome/userChrome.css"
+'''
