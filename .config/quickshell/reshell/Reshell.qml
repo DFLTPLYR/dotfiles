@@ -75,6 +75,7 @@ Variants {
             onFileChanged: {
                 reload();
                 snapHistory();
+                Quickshell.reload(true);
             }
 
             onLoadFailed: error => {
@@ -87,7 +88,7 @@ Variants {
             adapter: JsonAdapter {
                 id: adapter
                 property int height: 40
-                property int width: 40
+                property int width: 100
                 property JsonObject fill: JsonObject {
                     property bool enable: false
                     property int height: 10
@@ -125,13 +126,15 @@ Variants {
 
             function reslot() {
                 const sorted = [...widgets].sort((a, b) => {
-                    if (!a || !b) return 0;
+                    if (!a || !b)
+                        return 0;
                     const targetA = adapter.widgets.find(s => s && s.name && a.objectName && s.name === a.objectName);
                     const targetB = adapter.widgets.find(s => s && s.name && b.objectName && s.name === b.objectName);
                     return (targetA?.position ?? Infinity) - (targetB?.position ?? Infinity);
                 });
                 for (const widget of sorted) {
-                    if (!widget || !widget.objectName) continue;
+                    if (!widget || !widget.objectName)
+                        continue;
                     const target = adapter.widgets.find(s => s && s.name && s.name === widget.objectName);
                     if (target && target.slot) {
                         const slot = fileView.slots.find(s => s && s.objectName && s.objectName === target.slot);
