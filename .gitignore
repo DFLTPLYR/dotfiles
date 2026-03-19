@@ -3,3 +3,6 @@
 
 # Generated colors file
 .config/niri/modules/colors.kdl
+
+# Generated matugen outputs
+.config/matugen/data/userChrome.css

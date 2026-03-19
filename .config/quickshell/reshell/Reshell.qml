@@ -125,14 +125,16 @@ Variants {
 
             function reslot() {
                 const sorted = [...widgets].sort((a, b) => {
-                    const targetA = adapter.widgets.find(s => s && a && s.name === a.objectName);
-                    const targetB = adapter.widgets.find(s => s && b && s.name === b.objectName);
+                    if (!a || !b) return 0;
+                    const targetA = adapter.widgets.find(s => s && s.name && a.objectName && s.name === a.objectName);
+                    const targetB = adapter.widgets.find(s => s && s.name && b.objectName && s.name === b.objectName);
                     return (targetA?.position ?? Infinity) - (targetB?.position ?? Infinity);
                 });
                 for (const widget of sorted) {
-                    const target = adapter.widgets.find(s => s && widget && s.name === widget.objectName);
-                    if (target && target !== undefined) {
-                        const slot = fileView.slots.find(s => (s && target) && (s.objectName === target.slot));
+                    if (!widget || !widget.objectName) continue;
+                    const target = adapter.widgets.find(s => s && s.name && s.name === widget.objectName);
+                    if (target && target.slot) {
+                        const slot = fileView.slots.find(s => s && s.objectName && s.objectName === target.slot);
                         if (slot)
                             widget.parent = slot;
                     }
