@@ -9,14 +9,13 @@ import qs.components
 import qs.components.widgets
 
 Page {
-
     ColumnLayout {
         id: navbarpage
         property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
 
-        ColumnLayout {
+        RowLayout {
             Layout.fillWidth: true
 
             Label {
@@ -55,14 +54,12 @@ Page {
                     onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
                 }
             }
-
-            Toggle {
-                text: "Fill"
-                checked: config.fill.enable
-                onCheckedChanged: config.fill.enable = checked
-            }
         }
-
+        Toggle {
+            text: "Fill"
+            checked: config.fill.enable
+            onCheckedChanged: config.fill.enable = checked
+        }
         Column {
             visible: config.fill.enable
             spacing: 10
@@ -70,7 +67,7 @@ Page {
             Row {
                 spacing: 10
                 Label {
-                    text: "width"
+                    text: "Width"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
@@ -87,7 +84,7 @@ Page {
             Row {
                 spacing: 10
                 Label {
-                    text: "height"
+                    text: "Height"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
@@ -104,7 +101,7 @@ Page {
             Row {
                 spacing: 10
                 Label {
-                    text: "axis"
+                    text: "Axis"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
@@ -126,7 +123,7 @@ Page {
             Row {
                 spacing: 10
                 Label {
-                    text: "width"
+                    text: "Width"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
@@ -143,7 +140,7 @@ Page {
             Row {
                 spacing: 10
                 Label {
-                    text: "height"
+                    text: "Height"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
@@ -154,6 +151,18 @@ Page {
 
                     value: config.height
                     onValueChanged: config.height = value
+                }
+            }
+        }
+
+        Row {
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
                 }
             }
         }

@@ -76,14 +76,13 @@ ListView {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             height: 2
-            width: 0
             color: Colors.color.primary
+
             NumberAnimation on width {
                 from: 0
-                to: parent.width
+                to: parent ? parent.width : 0
                 duration: 5000
                 running: true
-                loops: Animation.Infinite
             }
         }
 
