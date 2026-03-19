@@ -10,18 +10,18 @@ Item {
     default property alias content: container.data
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`)?.adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
-
+    clip: true
     Behavior on width {
         NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
+            duration: 100
+            easing.type: Easing.OutCubic
         }
     }
 
     Behavior on height {
         NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
+            duration: 100
+            easing.type: Easing.OutCubic
         }
     }
 
@@ -35,7 +35,7 @@ Item {
                 x: 0
                 y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
                 width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height & (config.height / 100)
             }
         },
         State {
@@ -45,16 +45,16 @@ Item {
                 x: config.fill.enable ? parent.width * (1 - config.fill.width / 100) : parent.width - (config ? config.width : 40)
                 y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
                 width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height
+                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height * (config.height / 100)
             }
         },
         State {
             name: "top"
             PropertyChanges {
                 target: navbar
-                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : 0
+                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : parent.width / 2 - width / 2
                 y: 0
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width * (config.width / 100)
                 height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
             }
         },
@@ -64,7 +64,7 @@ Item {
                 target: navbar
                 x: config.fill.enable ? parent.width * (config.fill.axis / 100) : 0
                 y: config.fill.enable ? parent.height * (1 - config.fill.height / 100) : parent.height - (config ? config.height : 40)
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width
+                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width * (config.width / 100)
                 height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
             }
         }
@@ -76,13 +76,13 @@ Item {
             to: "*"
             NumberAnimation {
                 properties: "width,height"
-                duration: 300
-                easing.type: Easing.InOutSine
+                duration: 100
+                easing.type: Easing.OutCubic
             }
             NumberAnimation {
                 properties: "x,y"
-                duration: 300
-                easing.type: Easing.InOutSine
+                duration: 100
+                easing.type: Easing.InOutQuad
             }
         }
     ]

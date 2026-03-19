@@ -122,6 +122,62 @@ Page {
             }
         }
 
+        Column {
+            visible: !config.fill.enable
+            spacing: 10
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "width"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: !config.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.width
+                    onValueChanged: config.width = value
+                }
+            }
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "height"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: !config.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.height
+                    onValueChanged: config.height = value
+                }
+            }
+            //
+            // Row {
+            //     spacing: 10
+            //     Label {
+            //         text: "axis"
+            //         anchors.verticalCenter: parent.verticalCenter
+            //     }
+            //     Slider {
+            //         enabled: !config.enable
+            //         stepSize: 1
+            //         from: 0
+            //         to: 100
+            //
+            //         value: config.axis
+            //         onValueChanged: config.axis = value
+            //     }
+            // }
+        }
+
         // widgets
         Popup {
             id: widgetPopup
