@@ -11,14 +11,44 @@ Rectangle {
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
-    width: screen.width / 1.5
-    height: screen.height / 1.5
+    state: 'hide'
+    states: [
+        State {
+            name: "hide"
+            PropertyChanges {
+                target: floatingWindow
+                opacity: 0
+                width: 0
+                height: 0
+            }
+        },
+        State {
+            name: "show"
+            PropertyChanges {
+                target: floatingWindow
+                opacity: 1
+                width: screen.width / 1.5
+                height: screen.height / 1.5
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "*"
+            to: "*"
+            NumberAnimation {
+                properties: "width,height,opacity"
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+    ]
 
     x: (screen.width - width) / 2
     y: (screen.height - height) / 2
 
     color: Colors.setOpacity(Colors.color.background, Global.general.opacity)
-    opacity: floatingWindow.isFocused && Global.enableSetting ? 1 : 0
 
     border {
         width: 1
@@ -29,13 +59,6 @@ Rectangle {
     bottomRightRadius: Global.general.rounding.bottomRight
     topLeftRadius: Global.general.rounding.topLeft
     topRightRadius: Global.general.rounding.topRight
-
-    Behavior on opacity {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
 
     MouseArea {
         id: ma
