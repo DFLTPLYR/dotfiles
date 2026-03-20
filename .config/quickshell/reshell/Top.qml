@@ -43,7 +43,31 @@ PanelWindow {
 
     Loader {
         id: settingloader
-        active: Global.enableSetting
+        active: false
         sourceComponent: Settings {}
+
+        property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+
+        Connections {
+            target: settingloader.item
+            enabled: settingloader.item !== null
+            function onStateChanged() {
+                if (settingloader.item.state === 'hide') {
+                    settingloader.active = false;
+                }
+            }
+        }
+
+        onShouldShowChanged: {
+            if (shouldShow) {
+                active = true;
+            } else if (item) {
+                item.state = 'hide';
+            }
+        }
+
+        onLoaded: {
+            item.state = 'show';
+        }
     }
 }
