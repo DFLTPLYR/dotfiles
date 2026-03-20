@@ -21,7 +21,7 @@ Wrapper {
         enabled: !wrap.active
         anchors {
             fill: parent
-            margins: 2
+            margins: 5
         }
 
         Icon {
@@ -46,7 +46,6 @@ Wrapper {
             id: test
             property alias state: content.state
             color: "transparent"
-
             anchor {
                 item: button
                 edges: Edges.Bottom | Edges.Right
