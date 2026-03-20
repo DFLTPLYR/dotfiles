@@ -55,11 +55,13 @@ Page {
                 }
             }
         }
+
         Toggle {
             text: "Fill"
             checked: config.fill.enable
             onCheckedChanged: config.fill.enable = checked
         }
+
         Column {
             visible: config.fill.enable
             spacing: 10
@@ -156,6 +158,8 @@ Page {
         }
 
         Row {
+            id: rounding
+            property var rounding: config.style.rounding
             Column {
                 Label {
                     text: "Left"
@@ -163,10 +167,93 @@ Page {
                 SpinBox {
                     width: 100
                     height: 20
+                    value: rounding.rounding.topLeft
+                    onValueChanged: rounding.rounding.topLeft = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.topRight
+                    onValueChanged: rounding.rounding.topRight = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.bottomLeft
+                    onValueChanged: rounding.rounding.bottomLeft = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.bottomRight
+                    onValueChanged: rounding.rounding.bottomRight = value
                 }
             }
         }
 
+        Row {
+            id: margin
+            property var margin: config.style.margin
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.top
+                    onValueChanged: margin.margin.top = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.right
+                    onValueChanged: margin.margin.right = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.bottom
+                    onValueChanged: margin.margin.bottom = value
+                }
+            }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.left
+                    onValueChanged: margin.margin.left = value
+                }
+            }
+        }
         // widgets
         Popup {
             id: widgetPopup

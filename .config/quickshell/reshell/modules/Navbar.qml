@@ -91,6 +91,12 @@ Item {
         id: container
         color: config.style.color
 
+        bottomRightRadius: config.style.rounding.bottomRight
+        topRightRadius: config.style.rounding.topRight
+        topLeftRadius: config.style.rounding.topLeft
+        bottomLeftRadius: config.style.rounding.bottomLeft
+
+        clip: true
         Behavior on color {
             ColorAnimation {
                 duration: 300
@@ -124,6 +130,7 @@ Item {
             height: parent.height
             flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
+            clip: true
             Instantiator {
                 model: config.layouts
                 delegate: Slot {
@@ -155,6 +162,7 @@ Item {
         property int spacing: 2
         default property alias content: innerGrid.data
 
+        clip: true
         color: "transparent"
 
         Layout.fillWidth: true
