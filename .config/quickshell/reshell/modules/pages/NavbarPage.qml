@@ -15,7 +15,7 @@ Page {
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
 
-        RowLayout {
+        ColumnLayout {
             Layout.fillWidth: true
 
             Label {
@@ -39,7 +39,6 @@ Page {
             }
 
             // Fill options
-
             Row {
                 spacing: 8
 
@@ -157,100 +156,125 @@ Page {
             }
         }
 
-        Row {
-            id: rounding
-            property var rounding: config.style.rounding
-            Column {
-                Label {
-                    text: "Left"
-                }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: rounding.rounding.topLeft
-                    onValueChanged: rounding.rounding.topLeft = value
-                }
+        // rounding
+        ColumnLayout {
+            Layout.fillWidth: true
+
+            Label {
+                font.pixelSize: 32
+                text: "Roundness"
             }
-            Column {
-                Label {
-                    text: "Left"
+
+            Row {
+                id: rounding
+                property var rounding: config.style.rounding
+
+                Column {
+                    Label {
+                        text: "Top Left"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: rounding.rounding.topLeft
+                        onValueChanged: rounding.rounding.topLeft = value
+                    }
                 }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: rounding.rounding.topRight
-                    onValueChanged: rounding.rounding.topRight = value
+
+                Column {
+                    Label {
+                        text: "Top Right"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: rounding.rounding.topRight
+                        onValueChanged: rounding.rounding.topRight = value
+                    }
                 }
-            }
-            Column {
-                Label {
-                    text: "Left"
+
+                Column {
+                    Label {
+                        text: "Bottom Left"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: rounding.rounding.bottomLeft
+                        onValueChanged: rounding.rounding.bottomLeft = value
+                    }
                 }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: rounding.rounding.bottomLeft
-                    onValueChanged: rounding.rounding.bottomLeft = value
-                }
-            }
-            Column {
-                Label {
-                    text: "Left"
-                }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: rounding.rounding.bottomRight
-                    onValueChanged: rounding.rounding.bottomRight = value
+
+                Column {
+                    Label {
+                        text: "Bottom Right"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: rounding.rounding.bottomRight
+                        onValueChanged: rounding.rounding.bottomRight = value
+                    }
                 }
             }
         }
 
-        Row {
-            id: margin
-            property var margin: config.style.margin
-            Column {
-                Label {
-                    text: "Left"
-                }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: margin.margin.top
-                    onValueChanged: margin.margin.top = value
-                }
+        // margins
+        ColumnLayout {
+            Label {
+                font.pixelSize: 32
+                text: "Margins"
             }
-            Column {
-                Label {
-                    text: "Left"
+
+            Row {
+                id: margin
+                property var margin: config.style.margin
+                Column {
+                    Label {
+                        text: "Top"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: margin.margin.top
+                        onValueChanged: margin.margin.top = value
+                    }
                 }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: margin.margin.right
-                    onValueChanged: margin.margin.right = value
+
+                Column {
+                    Label {
+                        text: "Bottom"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: margin.margin.bottom
+                        onValueChanged: margin.margin.bottom = value
+                    }
                 }
-            }
-            Column {
-                Label {
-                    text: "Left"
+
+                Column {
+                    Label {
+                        text: "Right"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: margin.margin.right
+                        onValueChanged: margin.margin.right = value
+                    }
                 }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: margin.margin.bottom
-                    onValueChanged: margin.margin.bottom = value
-                }
-            }
-            Column {
-                Label {
-                    text: "Left"
-                }
-                SpinBox {
-                    width: 100
-                    height: 20
-                    value: margin.margin.left
-                    onValueChanged: margin.margin.left = value
+
+                Column {
+                    Label {
+                        text: "Left"
+                    }
+                    SpinBox {
+                        width: 100
+                        height: 20
+                        value: margin.margin.left
+                        onValueChanged: margin.margin.left = value
+                    }
                 }
             }
         }
@@ -333,7 +357,7 @@ Page {
                     delegate: Rectangle {
                         id: slot
                         required property var modelData
-                        width: parent.width
+                        width: parent ? parent.width : 0
                         height: 40
                         color: "transparent"
                         border {
