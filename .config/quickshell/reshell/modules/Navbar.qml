@@ -131,6 +131,7 @@ Item {
             flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
             clip: true
+
             Instantiator {
                 model: config.layouts
                 delegate: Slot {
