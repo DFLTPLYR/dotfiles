@@ -89,12 +89,8 @@ Variants {
                 id: adapter
                 property int height: 40
                 property int width: 100
-                property JsonObject fill: JsonObject {
-                    property bool enable: false
-                    property int height: 10
-                    property int width: 100
-                    property int axis: 0
-                }
+                property int x: 0
+                property int y: 0
                 property string position: "top"
                 readonly property bool side: position === "left" || position === "right"
                 property StyleJson style: StyleJson {
@@ -150,12 +146,8 @@ Variants {
                     height: adapter.height,
                     width: adapter.width,
                     position: adapter.position,
-                    fill: {
-                        enable: adapter.fill.enable,
-                        height: adapter.fill.height,
-                        width: adapter.fill.width,
-                        axis: adapter.fill.axis
-                    },
+                    x: adapter.x,
+                    y: adapter.y,
                     style: {
                         color: adapter.style.color,
                         border: {
@@ -204,10 +196,8 @@ Variants {
                 adapter.height = history.height;
                 adapter.width = history.width;
                 adapter.position = history.position;
-                adapter.fill.enable = history.fill.enable;
-                adapter.fill.height = history.fill.height;
-                adapter.fill.width = history.fill.width;
-                adapter.fill.axis = history.fill.axis;
+                adapter.x = history.x;
+                adapter.y = history.y;
                 adapter.style.color = history.style.color;
                 adapter.style.border.width = history.style.border.width;
                 adapter.style.border.color = history.style.border.color;
@@ -246,6 +236,8 @@ Variants {
                     height: adapter.height,
                     width: adapter.width,
                     position: adapter.position,
+                    x: adapter.x,
+                    y: adapter.y,
                     fill: {
                         enable: adapter.fill.enable,
                         height: adapter.fill.height,

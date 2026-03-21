@@ -33,39 +33,39 @@ Item {
             PropertyChanges {
                 target: navbar
                 x: 0
-                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : parent.height / 2 - height / 2
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height * (config.height / 100)
+                y: parent.height * (config.y / 100)
+                width: config.width
+                height: parent.height * (config.height / 100)
             }
         },
         State {
             name: "right"
             PropertyChanges {
                 target: navbar
-                x: config.fill.enable ? parent.width * (1 - config.fill.width / 100) : parent.width - (config ? config.width : 40)
-                y: config.fill.enable ? parent.height * (config.fill.axis / 100) : 0
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : (config ? config.width : 40)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : parent.height * (config.height / 100)
+                x: parent.width - config.width
+                y: parent.height * (config.y / 100)
+                width: config.width
+                height: parent.height * (config.height / 100)
             }
         },
         State {
             name: "top"
             PropertyChanges {
                 target: navbar
-                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : parent.width / 2 - width / 2
+                x: parent.height * (config.x / 100)
                 y: 0
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width * (config.width / 100)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
+                width: parent.width * (config.width / 100)
+                height: config.height
             }
         },
         State {
             name: "bottom"
             PropertyChanges {
                 target: navbar
-                x: config.fill.enable ? parent.width * (config.fill.axis / 100) : 0
-                y: config.fill.enable ? parent.height * (1 - config.fill.height / 100) : parent.height - (config ? config.height : 40)
-                width: config.fill.enable ? parent.width * (config.fill.width / 100) : parent.width * (config.width / 100)
-                height: config.fill.enable ? parent.height * (config.fill.height / 100) : (config ? config.height : 40)
+                x: parent.height * (config.x / 100)
+                y: parent.height - config.height
+                width: parent.width * (config.width / 100)
+                height: config.height
             }
         }
     ]
@@ -96,7 +96,6 @@ Item {
         topLeftRadius: config.style.rounding.topLeft
         bottomLeftRadius: config.style.rounding.bottomLeft
 
-        clip: true
         Behavior on color {
             ColorAnimation {
                 duration: 300
@@ -130,8 +129,6 @@ Item {
             height: parent.height
             flow: navbar.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
-            clip: true
-
             Instantiator {
                 model: config.layouts
                 delegate: Slot {
@@ -163,7 +160,6 @@ Item {
         property int spacing: 2
         default property alias content: innerGrid.data
 
-        clip: true
         color: "transparent"
 
         Layout.fillWidth: true
@@ -249,15 +245,9 @@ Item {
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
             item.width = Qt.binding(() => {
-                if (navbar.config.fill.enable) {
-                    return slot.width;
-                }
                 return navbar.side ? slot.width : setWidth;
             });
             item.height = Qt.binding(() => {
-                if (navbar.config.fill.enable) {
-                    return slot.height;
-                }
                 return navbar.side ? setHeight : slot.height;
             });
             const exist = navbar.config.custom.widget.find(w => w.objectName === widget);
