@@ -14,289 +14,275 @@ Page {
         property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
+        spacing: 10
+        Label {
+            font.pixelSize: 32
+            text: "Anchor Positions"
+        }
 
-        ColumnLayout {
-            Layout.fillWidth: true
-
-            Label {
-                font.pixelSize: 32
-                text: "Anchor Positions"
-            }
-
-            Row {
-                spacing: 2
-                Repeater {
-                    id: positions
-                    model: ["left", "top", "right", "bottom"]
-                    delegate: Button {
-                        required property string modelData
-                        text: modelData
-                        onClicked: {
-                            config.position = modelData;
-                        }
+        Row {
+            spacing: 2
+            Repeater {
+                id: positions
+                model: ["left", "top", "right", "bottom"]
+                delegate: Button {
+                    required property string modelData
+                    text: modelData
+                    onClicked: {
+                        config.position = modelData;
                     }
-                }
-            }
-
-            Label {
-                font.pixelSize: 32
-                text: "Widgets and Slots"
-            }
-            // Fill options
-            Row {
-                spacing: 8
-
-                Button {
-                    text: "Slots"
-                    width: 60
-                    onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
-                }
-
-                Button {
-                    text: "widgets"
-                    onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
                 }
             }
         }
 
-        ColumnLayout {
+        Label {
+            font.pixelSize: 32
+            text: "Widgets and Slots"
+        }
+
+        // Fill options
+        Row {
+            spacing: 8
+            Button {
+                text: "Slots"
+                width: 60
+                onClicked: layoutSlot.opened ? layoutSlot.close() : layoutSlot.open()
+            }
+
+            Button {
+                text: "widgets"
+                onClicked: widgetPopup.opened ? widgetPopup.close() : widgetPopup.open()
+            }
+        }
+
+        RowLayout {
             Layout.fillWidth: true
 
-            RowLayout {
-                Layout.fillWidth: true
+            Label {
+                font.pixelSize: 32
+                text: "Navbar Dimensions"
+            }
 
+            Toggle {
+                text: "Fill"
+                checked: config.fill.enable
+                onCheckedChanged: config.fill.enable = checked
+            }
+        }
+
+        Column {
+            visible: config.fill.enable
+            spacing: 10
+
+            Row {
+                spacing: 10
                 Label {
-                    font.pixelSize: 32
-                    text: "Navbar Dimensions"
+                    text: "Width"
+                    anchors.verticalCenter: parent.verticalCenter
                 }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
 
-                Toggle {
-                    text: "Fill"
-                    checked: config.fill.enable
-                    onCheckedChanged: config.fill.enable = checked
-                }
-            }
-
-            Column {
-                visible: config.fill.enable
-                spacing: 10
-
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "Width"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Slider {
-                        enabled: config.fill.enable
-                        stepSize: 1
-                        from: 0
-                        to: 100
-
-                        value: config.fill.width
-                        onValueChanged: config.fill.width = value
-                    }
-                }
-
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "Height"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Slider {
-                        enabled: config.fill.enable
-                        stepSize: 1
-                        from: 0
-                        to: 100
-
-                        value: config.fill.height
-                        onValueChanged: config.fill.height = value
-                    }
-                }
-
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "Axis"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Slider {
-                        enabled: config.fill.enable
-                        stepSize: 1
-                        from: 0
-                        to: 100
-
-                        value: config.fill.axis
-                        onValueChanged: config.fill.axis = value
-                    }
+                    value: config.fill.width
+                    onValueChanged: config.fill.width = value
                 }
             }
 
-            Column {
-                visible: !config.fill.enable
+            Row {
                 spacing: 10
-
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "Width"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Slider {
-                        enabled: !config.enable
-                        stepSize: 1
-                        from: 0
-                        to: 100
-
-                        value: config.width
-                        onValueChanged: config.width = value
-                    }
+                Label {
+                    text: "Height"
+                    anchors.verticalCenter: parent.verticalCenter
                 }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
 
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "Height"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Slider {
-                        enabled: !config.enable
-                        stepSize: 1
-                        from: 0
-                        to: 100
+                    value: config.fill.height
+                    onValueChanged: config.fill.height = value
+                }
+            }
 
-                        value: config.height
-                        onValueChanged: config.height = value
-                    }
+            Row {
+                spacing: 10
+                Label {
+                    text: "Axis"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: config.fill.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.fill.axis
+                    onValueChanged: config.fill.axis = value
+                }
+            }
+        }
+
+        Column {
+            visible: !config.fill.enable
+            spacing: 10
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "Width"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: !config.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.width
+                    onValueChanged: config.width = value
+                }
+            }
+
+            Row {
+                spacing: 10
+                Label {
+                    text: "Height"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    enabled: !config.enable
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.height
+                    onValueChanged: config.height = value
                 }
             }
         }
 
         // rounding
-        ColumnLayout {
-            spacing: 2
-            Layout.fillWidth: true
 
-            Label {
-                font.pixelSize: 32
-                text: "Roundness"
+        Label {
+            font.pixelSize: 32
+            text: "Roundness"
+        }
+
+        Row {
+            id: rounding
+            property var rounding: config.style.rounding
+
+            Column {
+                Label {
+                    text: "Top Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.topLeft
+                    onValueChanged: rounding.rounding.topLeft = value
+                }
             }
 
-            Row {
-                id: rounding
-                property var rounding: config.style.rounding
-
-                Column {
-                    Label {
-                        text: "Top Left"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: rounding.rounding.topLeft
-                        onValueChanged: rounding.rounding.topLeft = value
-                    }
+            Column {
+                Label {
+                    text: "Top Right"
                 }
-
-                Column {
-                    Label {
-                        text: "Top Right"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: rounding.rounding.topRight
-                        onValueChanged: rounding.rounding.topRight = value
-                    }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.topRight
+                    onValueChanged: rounding.rounding.topRight = value
                 }
+            }
 
-                Column {
-                    Label {
-                        text: "Bottom Left"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: rounding.rounding.bottomLeft
-                        onValueChanged: rounding.rounding.bottomLeft = value
-                    }
+            Column {
+                Label {
+                    text: "Bottom Left"
                 }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.bottomLeft
+                    onValueChanged: rounding.rounding.bottomLeft = value
+                }
+            }
 
-                Column {
-                    Label {
-                        text: "Bottom Right"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: rounding.rounding.bottomRight
-                        onValueChanged: rounding.rounding.bottomRight = value
-                    }
+            Column {
+                Label {
+                    text: "Bottom Right"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: rounding.rounding.bottomRight
+                    onValueChanged: rounding.rounding.bottomRight = value
                 }
             }
         }
 
         // margins
-        ColumnLayout {
-            spacing: 2
-            Label {
-                font.pixelSize: 32
-                text: "Margins"
+        Label {
+            font.pixelSize: 32
+            text: "Margins"
+        }
+
+        Row {
+            id: margin
+            property var margin: config.style.margin
+            Column {
+                Label {
+                    text: "Top"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.top
+                    onValueChanged: margin.margin.top = value
+                }
             }
 
-            Row {
-                id: margin
-                property var margin: config.style.margin
-                Column {
-                    Label {
-                        text: "Top"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: margin.margin.top
-                        onValueChanged: margin.margin.top = value
-                    }
+            Column {
+                Label {
+                    text: "Bottom"
                 }
-
-                Column {
-                    Label {
-                        text: "Bottom"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: margin.margin.bottom
-                        onValueChanged: margin.margin.bottom = value
-                    }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.bottom
+                    onValueChanged: margin.margin.bottom = value
                 }
+            }
 
-                Column {
-                    Label {
-                        text: "Right"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: margin.margin.right
-                        onValueChanged: margin.margin.right = value
-                    }
+            Column {
+                Label {
+                    text: "Right"
                 }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.right
+                    onValueChanged: margin.margin.right = value
+                }
+            }
 
-                Column {
-                    Label {
-                        text: "Left"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                        value: margin.margin.left
-                        onValueChanged: margin.margin.left = value
-                    }
+            Column {
+                Label {
+                    text: "Left"
+                }
+                SpinBox {
+                    width: 100
+                    height: 20
+                    value: margin.margin.left
+                    onValueChanged: margin.margin.left = value
                 }
             }
         }
+
         // widgets
         Popup {
             id: widgetPopup

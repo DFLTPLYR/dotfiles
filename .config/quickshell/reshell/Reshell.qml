@@ -223,7 +223,6 @@ Variants {
                 adapter.custom.layout = parseJson(adapter.custom.layout);
                 adapter.layouts = parseJson(history.layouts);
                 adapter.widgets = parseJson(history.widgets);
-                adapter.wallpaper = parseJson(history.wallpaper);
                 Quickshell.reload(false);
             }
 
