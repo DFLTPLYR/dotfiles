@@ -38,6 +38,10 @@ Page {
                 }
             }
 
+            Label {
+                font.pixelSize: 32
+                text: "Widgets and Slots"
+            }
             // Fill options
             Row {
                 spacing: 8
@@ -55,109 +59,123 @@ Page {
             }
         }
 
-        Toggle {
-            text: "Fill"
-            checked: config.fill.enable
-            onCheckedChanged: config.fill.enable = checked
-        }
+        ColumnLayout {
+            Layout.fillWidth: true
 
-        Column {
-            visible: config.fill.enable
-            spacing: 10
+            RowLayout {
+                Layout.fillWidth: true
 
-            Row {
-                spacing: 10
                 Label {
-                    text: "Width"
-                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 32
+                    text: "Navbar Dimensions"
                 }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
 
-                    value: config.fill.width
-                    onValueChanged: config.fill.width = value
+                Toggle {
+                    text: "Fill"
+                    checked: config.fill.enable
+                    onCheckedChanged: config.fill.enable = checked
                 }
             }
 
-            Row {
+            Column {
+                visible: config.fill.enable
                 spacing: 10
-                Label {
-                    text: "Height"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
 
-                    value: config.fill.height
-                    onValueChanged: config.fill.height = value
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "Width"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Slider {
+                        enabled: config.fill.enable
+                        stepSize: 1
+                        from: 0
+                        to: 100
+
+                        value: config.fill.width
+                        onValueChanged: config.fill.width = value
+                    }
+                }
+
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "Height"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Slider {
+                        enabled: config.fill.enable
+                        stepSize: 1
+                        from: 0
+                        to: 100
+
+                        value: config.fill.height
+                        onValueChanged: config.fill.height = value
+                    }
+                }
+
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "Axis"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Slider {
+                        enabled: config.fill.enable
+                        stepSize: 1
+                        from: 0
+                        to: 100
+
+                        value: config.fill.axis
+                        onValueChanged: config.fill.axis = value
+                    }
                 }
             }
 
-            Row {
+            Column {
+                visible: !config.fill.enable
                 spacing: 10
-                Label {
-                    text: "Axis"
-                    anchors.verticalCenter: parent.verticalCenter
+
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "Width"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Slider {
+                        enabled: !config.enable
+                        stepSize: 1
+                        from: 0
+                        to: 100
+
+                        value: config.width
+                        onValueChanged: config.width = value
+                    }
                 }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
 
-                    value: config.fill.axis
-                    onValueChanged: config.fill.axis = value
-                }
-            }
-        }
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "Height"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Slider {
+                        enabled: !config.enable
+                        stepSize: 1
+                        from: 0
+                        to: 100
 
-        Column {
-            visible: !config.fill.enable
-            spacing: 10
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "Width"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: !config.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.width
-                    onValueChanged: config.width = value
-                }
-            }
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "Height"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: !config.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.height
-                    onValueChanged: config.height = value
+                        value: config.height
+                        onValueChanged: config.height = value
+                    }
                 }
             }
         }
 
         // rounding
         ColumnLayout {
+            spacing: 2
             Layout.fillWidth: true
 
             Label {
@@ -221,6 +239,7 @@ Page {
 
         // margins
         ColumnLayout {
+            spacing: 2
             Label {
                 font.pixelSize: 32
                 text: "Margins"
