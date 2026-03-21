@@ -55,23 +55,12 @@ Page {
             }
         }
 
-        RowLayout {
-            Layout.fillWidth: true
-
-            Label {
-                font.pixelSize: 32
-                text: "Navbar Dimensions"
-            }
-
-            Toggle {
-                text: "Fill"
-                checked: config.fill.enable
-                onCheckedChanged: config.fill.enable = checked
-            }
+        Label {
+            font.pixelSize: 32
+            text: "Navbar Dimensions"
         }
 
         Column {
-            visible: config.fill.enable
             spacing: 10
 
             Row {
@@ -81,63 +70,6 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.fill.width
-                    onValueChanged: config.fill.width = value
-                }
-            }
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "Height"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.fill.height
-                    onValueChanged: config.fill.height = value
-                }
-            }
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "Axis"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: config.fill.enable
-                    stepSize: 1
-                    from: 0
-                    to: 100
-
-                    value: config.fill.axis
-                    onValueChanged: config.fill.axis = value
-                }
-            }
-        }
-
-        Column {
-            visible: !config.fill.enable
-            spacing: 10
-
-            Row {
-                spacing: 10
-                Label {
-                    text: "Width"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Slider {
-                    enabled: !config.enable
                     stepSize: 1
                     from: 0
                     to: 100
@@ -154,13 +86,44 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Slider {
-                    enabled: !config.enable
                     stepSize: 1
                     from: 0
                     to: 100
 
                     value: config.height
                     onValueChanged: config.height = value
+                }
+            }
+
+            Row {
+                spacing: 10
+                Label {
+                    text: config.side ? "y" : "x"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Slider {
+                    id: sliderPos
+                    stepSize: 1
+                    from: 0
+                    to: 100
+
+                    value: config.side ? config.y : config.x
+                    onValueChanged: {
+                        if (config.side) {
+                            config.y = value;
+                        } else {
+                            config.x = value;
+                        }
+                    }
+                }
+
+                Button {
+                    text: 'center'
+                    onClicked: {
+                        const navsize = config.side ? config.height : config.width;
+                        sliderPos.value = (100 - navsize) / 2;
+                    }
                 }
             }
         }
