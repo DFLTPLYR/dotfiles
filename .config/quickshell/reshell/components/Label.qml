@@ -20,9 +20,9 @@ Label {
             color: control.state.background.border.color
         }
 
-        bottomLeftRadius: control.state.background.rounding.bottomLeft
-        bottomRightRadius: control.state.background.rounding.bottomRight
-        topLeftRadius: control.state.background.rounding.topLeft
-        topRightRadius: control.state.background.rounding.topRight
+        bottomLeftRadius: control.state.background.rounding.bottomLeft + Global.general.rounding.bottomLeft
+        bottomRightRadius: control.state.background.rounding.bottomRight + Global.general.rounding.bottomRight
+        topLeftRadius: control.state.background.rounding.topLeft + Global.general.rounding.topLeft
+        topRightRadius: control.state.background.rounding.topRight + Global.general.rounding.topRight
     }
 }
