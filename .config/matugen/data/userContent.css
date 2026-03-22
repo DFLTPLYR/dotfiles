@@ -7,8 +7,8 @@
     :root {
       --in-content-page-color: #e2e2ea !important;
       --color-accent-primary: #b2c5ff !important;
-      --color-accent-primary-hover: #0f44a3 !important;
-      --color-accent-primary-active: #dfe5ff !important;
+      --color-accent-primary-hover: #0f46a7 !important;
+      --color-accent-primary-active: #e4e9ff !important;
       background-color: #111319 !important;
       --in-content-page-background: #111319 !important;
     }
@@ -52,7 +52,7 @@
     }
 
     .top-site-outer .search-topsite {
-      background-color: #f1afff !important;
+      background-color: #efb0ff !important;
     }
 
     .compact-cards .card-outer .card-context .card-context-icon.icon-download {
@@ -66,7 +66,7 @@
       --zen-colors-tertiary: #111319 !important;
       --in-content-text-color: #e2e2ea !important;
       --link-color: #b2c5ff !important;
-      --link-color-hover: #0f44a3 !important;
+      --link-color-hover: #0f46a7 !important;
       --zen-colors-primary: #434652 !important;
       --in-content-box-background: #434652 !important;
       --zen-primary-color: #b2c5ff !important;
@@ -87,13 +87,13 @@
     }
 
     .identity-color-blue {
-      --identity-tab-color: #f1afff !important;
-      --identity-icon-color: #f1afff !important;
+      --identity-tab-color: #efb0ff !important;
+      --identity-icon-color: #efb0ff !important;
     }
 
     .identity-color-turquoise {
-      --identity-tab-color: #702b85 !important;
-      --identity-icon-color: #702b85 !important;
+      --identity-tab-color: #722d89 !important;
+      --identity-icon-color: #722d89 !important;
     }
 
     .identity-color-green {
@@ -102,8 +102,8 @@
     }
 
     .identity-color-yellow {
-      --identity-tab-color: #b8c5f1 !important;
-      --identity-icon-color: #b8c5f1 !important;
+      --identity-tab-color: #b8c5f2 !important;
+      --identity-icon-color: #b8c5f2 !important;
     }
 
     .identity-color-orange {
@@ -117,13 +117,13 @@
     }
 
     .identity-color-pink {
-      --identity-tab-color: #0f44a3 !important;
-      --identity-icon-color: #0f44a3 !important;
+      --identity-tab-color: #0f46a7 !important;
+      --identity-icon-color: #0f46a7 !important;
     }
 
     .identity-color-purple {
-      --identity-tab-color: #3b486d !important;
-      --identity-icon-color: #3b486d !important;
+      --identity-tab-color: #3a486d !important;
+      --identity-icon-color: #3a486d !important;
     }
   }
 
@@ -139,10 +139,10 @@
   @-moz-document url-prefix("about:protections") {
     :root {
       --zen-primary-color: #111319 !important;
-      --social-color: #3b486d !important;
-      --coockie-color: #702b85 !important;
-      --fingerprinter-color: #b8c5f1 !important;
-      --cryptominer-color: #f1afff !important;
+      --social-color: #3a486d !important;
+      --coockie-color: #722d89 !important;
+      --fingerprinter-color: #b8c5f2 !important;
+      --cryptominer-color: #efb0ff !important;
       --tracker-color: #b2c5ff !important;
       --in-content-primary-button-background-hover: #434652 !important;
       --in-content-primary-button-text-color-hover: #e2e2ea !important;
