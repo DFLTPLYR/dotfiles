@@ -21,10 +21,10 @@ SpinBox {
             color: spinbox.state.border.color
         }
 
-        bottomLeftRadius: spinbox.state.rounding.bottomLeft
-        bottomRightRadius: spinbox.state.rounding.bottomRight
-        topLeftRadius: spinbox.state.rounding.topLeft
-        topRightRadius: spinbox.state.rounding.topRight
+        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
+        bottomRightRadius: spinbox.state.rounding.bottomRight + Global.general.rounding.bottomRight
+        topLeftRadius: spinbox.state.rounding.topLeft + Global.general.rounding.topLeft
+        topRightRadius: spinbox.state.rounding.topRight + Global.general.rounding.topRight
     }
 
     contentItem: TextInput {
@@ -65,10 +65,10 @@ SpinBox {
             color: leftIndicator.state.border.color
         }
 
-        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft
-        bottomRightRadius: leftIndicator.state.rounding.bottomRight
-        topLeftRadius: leftIndicator.state.rounding.topLeft
-        topRightRadius: leftIndicator.state.rounding.topRight
+        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
+        bottomRightRadius: leftIndicator.state.rounding.bottomRight + Global.general.rounding.bottomRight
+        topLeftRadius: leftIndicator.state.rounding.topLeft + Global.general.rounding.topLeft
+        topRightRadius: leftIndicator.state.rounding.topRight + Global.general.rounding.topRight
 
         Icon {
             text: "plus"
@@ -104,10 +104,10 @@ SpinBox {
             color: rightIndicator.state.border.color
         }
 
-        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft
-        bottomRightRadius: rightIndicator.state.rounding.bottomRight
-        topLeftRadius: rightIndicator.state.rounding.topLeft
-        topRightRadius: rightIndicator.state.rounding.topRight
+        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
+        bottomRightRadius: rightIndicator.state.rounding.bottomRight + Global.general.rounding.bottomRight
+        topLeftRadius: rightIndicator.state.rounding.topLeft + Global.general.rounding.topLeft
+        topRightRadius: rightIndicator.state.rounding.topRight + Global.general.rounding.topRight
 
         Icon {
             text: "minus"
