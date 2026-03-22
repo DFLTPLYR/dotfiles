@@ -11,19 +11,6 @@ Item {
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`)?.adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
     clip: true
-    Behavior on width {
-        NumberAnimation {
-            duration: 100
-            easing.type: Easing.OutCubic
-        }
-    }
-
-    Behavior on height {
-        NumberAnimation {
-            duration: 100
-            easing.type: Easing.OutCubic
-        }
-    }
 
     state: config.position
 

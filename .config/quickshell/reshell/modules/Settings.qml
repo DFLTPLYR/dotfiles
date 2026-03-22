@@ -10,6 +10,7 @@ Rectangle {
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
+    signal hidden
 
     state: 'hide'
     states: [
@@ -18,8 +19,6 @@ Rectangle {
             PropertyChanges {
                 target: floatingWindow
                 opacity: 0
-                width: 0
-                height: 0
             }
         },
         State {
@@ -36,7 +35,21 @@ Rectangle {
     transitions: [
         Transition {
             from: "*"
-            to: "*"
+            to: "hide"
+            SequentialAnimation {
+                NumberAnimation {
+                    properties: "width,height,opacity"
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+                ScriptAction {
+                    script: floatingWindow.hidden()
+                }
+            }
+        },
+        Transition {
+            from: "*"
+            to: "show"
             NumberAnimation {
                 properties: "width,height,opacity"
                 duration: 300
