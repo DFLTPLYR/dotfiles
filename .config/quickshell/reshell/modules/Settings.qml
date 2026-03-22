@@ -11,7 +11,7 @@ Rectangle {
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
     signal hidden
-
+    clip: true
     state: 'hide'
     states: [
         State {
@@ -101,10 +101,11 @@ Rectangle {
             margins: 2
         }
         Rectangle {
+            clip: true
             Layout.fillWidth: true
             Layout.preferredHeight: 20
             Layout.columnSpan: 2
-            color: Colors.color.background
+            color: 'transparent'
             PageIndicator {
                 anchors.centerIn: parent
                 count: tablist.model.length
