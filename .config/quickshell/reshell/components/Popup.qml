@@ -7,6 +7,12 @@ Popup {
     background: Rectangle {
         implicitWidth: popup.width
         implicitHeight: popup.height
+
+        bottomLeftRadius: Global.general.rounding.bottomLeft
+        bottomRightRadius: Global.general.rounding.bottomRight
+        topLeftRadius: Global.general.rounding.topLeft
+        topRightRadius: Global.general.rounding.topRight
+
         color: Colors.setOpacity(Colors.color.background, 0.6)
         border.color: Colors.color.outline
     }
