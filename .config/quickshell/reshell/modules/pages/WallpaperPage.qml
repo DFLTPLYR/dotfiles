@@ -75,16 +75,21 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
+        clip: true
+
         TopLeftControl {}
 
         border {
             width: 1
             color: Colors.color.primary
         }
+        topRightRadius: Global.general.rounding.topRight
+        topLeftRadius: Global.general.rounding.topLeft
+        bottomRightRadius: Global.general.rounding.bottomRight
+        bottomLeftRadius: Global.general.rounding.bottomLeft
 
         Flickable {
             id: flick
-
             property real zoom: 1
             property int maxX: 0
             property int maxY: 0

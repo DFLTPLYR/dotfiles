@@ -138,5 +138,18 @@ Page {
                 }
             }
         }
+        Footer {
+            onCancel: () => {
+                console.log("test");
+            }
+            onSave: quit => {
+                Global.save();
+                if (quit) {
+                    Qt.callLater(() => {
+                        Global.enableSetting = false;
+                    });
+                }
+            }
+        }
     }
 }

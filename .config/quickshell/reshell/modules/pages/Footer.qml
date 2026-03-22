@@ -6,9 +6,9 @@ import qs.components
 
 RowLayout {
     id: footer
-    property QtObject config
     Layout.fillWidth: true
-
+    signal cancel
+    signal save(bool quit)
     Label {
         text: ""
         Layout.fillWidth: true
@@ -21,16 +21,13 @@ RowLayout {
             onClicked: {
                 switch (modelData) {
                 case "cancel":
-                    footer.config.rollbackHistory();
+                    footer.cancel();
                     break;
                 case "save":
-                    footer.config.save();
+                    footer.save(false);
                     break;
                 case "save and quit":
-                    footer.config.save();
-                    Qt.callLater(() => {
-                        Global.enableSetting = false;
-                    });
+                    footer.save(true);
                     break;
                 }
             }

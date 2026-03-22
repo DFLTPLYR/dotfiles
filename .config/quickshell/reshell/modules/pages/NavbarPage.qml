@@ -368,7 +368,17 @@ Page {
         }
 
         Footer {
-            config: Global.getConfigManager(`${screen.name}-navbar`)
+            onCancel: {
+                navbarpage.config.rollbackHistory();
+            }
+            onSave: quit => {
+                navbarpage.config.save();
+                if (quit) {
+                    Qt.callLater(() => {
+                        Global.enableSetting = false;
+                    });
+                }
+            }
         }
     }
 
