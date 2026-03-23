@@ -346,37 +346,48 @@ ColumnLayout {
 
     component TopLeftControl: Row {
         z: 2
+
         anchors {
             top: parent.top
             left: parent.left
             leftMargin: 5
             topMargin: 5
         }
-        Button {
-            text: "add file"
-            onClicked: file.active()
-        }
 
-        Button {
-            text: "check"
-            onClicked: wallpaperpage.imageToScreenPosition()
-        }
+        MenuBar {
+            Menu {
+                leftPadding: 2
+                rightPadding: 2
 
-        Button {
-            text: "save preset"
-            onClicked: {
-                var preset = {
-                    source: Wallpaper.config.layers,
-                    name: Math.random().toString(36).substring(2, 10)
-                };
-                Wallpaper.config.preset.push(preset);
-                Wallpaper.config.layers = [];
+                width: 150
+                title: 'add file'
+
+                Button {
+                    text: "add file"
+                    onClicked: file.active()
+                }
+
+                Button {
+                    text: "check"
+                    onClicked: wallpaperpage.imageToScreenPosition()
+                }
+                Button {
+                    text: "save preset"
+                    onClicked: {
+                        var preset = {
+                            source: Wallpaper.config.layers,
+                            name: Math.random().toString(36).substring(2, 10)
+                        };
+                        Wallpaper.config.preset.push(preset);
+                        Wallpaper.config.layers = [];
+                    }
+                }
+
+                Button {
+                    text: "generate color"
+                    onClicked: Wallpaper.generatecolor()
+                }
             }
-        }
-
-        Button {
-            text: "generate color"
-            onClicked: Wallpaper.generatecolor()
         }
     }
 }

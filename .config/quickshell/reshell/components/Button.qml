@@ -49,11 +49,6 @@ Button {
 
         color: control.hovered || control.down ? Qt.darker(background.state.color, 1.5) : background.state.color
 
-        bottomLeftRadius: background.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: background.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: background.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: background.state.rounding.topRight + Global.general.rounding.topRight
-
         Behavior on color {
             ColorAnimation {
                 duration: 200
@@ -66,6 +61,10 @@ Button {
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
+        }
+
+        Component.onCompleted: {
+            Global.bindRadii(background, background.state.rounding);
         }
     }
 }

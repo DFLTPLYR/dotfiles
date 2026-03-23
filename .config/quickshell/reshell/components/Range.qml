@@ -25,6 +25,10 @@ RangeSlider {
         topLeftRadius: background.state.rounding.topLeft + Global.general.rounding.topLeft
         topRightRadius: background.state.rounding.topRight + Global.general.rounding.topRight
 
+        Component.onCompleted: {
+            Global.bindRadii(background, background.state.rounding);
+        }
+
         color: background.state.color
 
         Rectangle {
@@ -35,10 +39,9 @@ RangeSlider {
 
             color: background.state.indicator.color
 
-            bottomLeftRadius: background.state.indicator.rounding.bottomLeft + Global.general.rounding.bottomLeft
-            bottomRightRadius: background.state.indicator.rounding.bottomRight + Global.general.rounding.bottomRight
-            topLeftRadius: background.state.indicator.rounding.topLeft + Global.general.rounding.topLeft
-            topRightRadius: background.state.indicator.rounding.topRight + Global.general.rounding.topRight
+            Component.onCompleted: {
+                Global.bindRadii(indicator, background.state.indicator.rounding);
+            }
         }
     }
 
@@ -58,10 +61,9 @@ RangeSlider {
             color: first.state.border.color
         }
 
-        bottomLeftRadius: first.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: first.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: first.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: first.state.rounding.topRight + Global.general.rounding.topRight
+        Component.onCompleted: {
+            Global.bindRadii(first, first.state.rounding);
+        }
     }
 
     second.handle: Rectangle {
@@ -80,9 +82,8 @@ RangeSlider {
             color: second.state.border.color
         }
 
-        bottomLeftRadius: second.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: second.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: second.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: second.state.rounding.topRight + Global.general.rounding.topRight
+        Component.onCompleted: {
+            Global.bindRadii(second, second.state.rounding);
+        }
     }
 }

@@ -5,8 +5,7 @@ import qs.core
 Popup {
     id: popup
     background: Rectangle {
-        implicitWidth: popup.width
-        implicitHeight: popup.height
+        id: background
 
         bottomLeftRadius: Global.general.rounding.bottomLeft
         bottomRightRadius: Global.general.rounding.bottomRight

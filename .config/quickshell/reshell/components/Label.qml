@@ -10,6 +10,7 @@ Label {
     color: control.state.text
 
     background: Rectangle {
+        id: background
         implicitWidth: control.state.background.width
         implicitHeight: control.state.background.height
 
@@ -20,9 +21,8 @@ Label {
             color: control.state.background.border.color
         }
 
-        bottomLeftRadius: control.state.background.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: control.state.background.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: control.state.background.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: control.state.background.rounding.topRight + Global.general.rounding.topRight
+        Component.onCompleted: {
+            Global.bindRadii(background, control.state.background.rounding);
+        }
     }
 }
