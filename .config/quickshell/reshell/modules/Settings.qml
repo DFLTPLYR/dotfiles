@@ -113,7 +113,8 @@ Rectangle {
                 currentIndex: stack.currentIndex
             }
             Label {
-                text: tablist.model[tablist.currentIndex].toUpperCase()
+                font.pixelSize: 16
+                text: tablist.model[tablist.currentIndex][0].toUpperCase() + tablist.model[tablist.currentIndex].substring(1)
             }
         }
         // icon container

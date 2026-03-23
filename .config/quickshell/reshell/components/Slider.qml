@@ -22,11 +22,6 @@ Slider {
 
         color: background.state.color
 
-        bottomLeftRadius: progress.state.rounding.bottomLeft
-        bottomRightRadius: progress.state.rounding.bottomRight
-        topLeftRadius: progress.state.rounding.topLeft
-        topRightRadius: progress.state.rounding.topRight
-
         border {
             width: background.state.border.width
             color: background.state.border.color
@@ -60,11 +55,6 @@ Slider {
             height: progress.state.height
             color: progress.state.color
 
-            bottomLeftRadius: progress.state.rounding.bottomLeft
-            bottomRightRadius: progress.state.rounding.bottomRight
-            topLeftRadius: progress.state.rounding.topLeft
-            topRightRadius: progress.state.rounding.topRight
-
             border {
                 width: progress.state.border.width
                 color: progress.state.border.color
@@ -90,6 +80,10 @@ Slider {
                     easing.type: Easing.OutCubic
                 }
             }
+
+            Component.onCompleted: {
+                Global.bindRadii(progress, progress.state.rounding);
+            }
         }
     }
 
@@ -101,11 +95,6 @@ Slider {
 
         implicitWidth: handle.state.height
         implicitHeight: handle.state.width
-
-        bottomLeftRadius: handle.state.rounding.bottomLeft
-        bottomRightRadius: handle.state.rounding.bottomRight
-        topLeftRadius: handle.state.rounding.topLeft
-        topRightRadius: handle.state.rounding.topRight
 
         color: control.pressed ? Qt.darker(handle.state.color, 1.2) : handle.state.color
 
@@ -127,6 +116,7 @@ Slider {
                 easing.type: Easing.InOutQuad
             }
         }
+
         Behavior on x {
             NumberAnimation {
                 duration: 300
@@ -140,5 +130,13 @@ Slider {
                 easing.type: Easing.OutCubic
             }
         }
+
+        Component.onCompleted: {
+            Global.bindRadii(handle, handle.state.rounding);
+        }
+    }
+
+    Component.onCompleted: {
+        Global.bindRadii(background, background.state.rounding);
     }
 }

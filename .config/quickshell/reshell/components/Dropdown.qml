@@ -7,7 +7,6 @@ import qs.core
 
 ComboBox {
     id: control
-    model: ["First", "Second", "Third"]
 
     delegate: ItemDelegate {
         id: delegate

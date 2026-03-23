@@ -80,8 +80,39 @@ Singleton {
             property int notificationTimer: 5000
         }
     }
+
     function save() {
         fileView.writeAdapter();
+    }
+
+    function bindMargins(item, margin) {
+        item.anchors.topMargin = Qt.binding(function () {
+            return margin.top;
+        });
+        item.anchors.leftMargin = Qt.binding(function () {
+            return margin.left;
+        });
+        item.anchors.rightMargin = Qt.binding(function () {
+            return margin.right;
+        });
+        item.anchors.bottomMargin = Qt.binding(function () {
+            return margin.bottom;
+        });
+    }
+
+    function bindRadii(rect, stateRounding) {
+        rect.bottomLeftRadius = Qt.binding(function () {
+            return stateRounding.bottomLeft + adapter.rounding.bottomLeft;
+        });
+        rect.bottomRightRadius = Qt.binding(function () {
+            return stateRounding.bottomRight + adapter.rounding.bottomRight;
+        });
+        rect.topLeftRadius = Qt.binding(function () {
+            return stateRounding.topLeft + adapter.rounding.topLeft;
+        });
+        rect.topRightRadius = Qt.binding(function () {
+            return stateRounding.topRight + adapter.rounding.topLeft;
+        });
     }
 
     FolderListModel {
