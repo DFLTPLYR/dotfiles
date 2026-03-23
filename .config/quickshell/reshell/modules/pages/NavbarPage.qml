@@ -15,6 +15,7 @@ Page {
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
         spacing: 10
+
         Label {
             font.pixelSize: 32
             text: "Anchor Positions"
@@ -282,7 +283,7 @@ Page {
             id: layoutSlot
             visible: layoutSlot.opened && Global.enableSetting
             width: parent.width * 0.9
-            height: parent.height * 2
+            height: parent.height
             clip: true
 
             contentItem: ColumnLayout {
@@ -369,7 +370,8 @@ Page {
 
         Footer {
             onCancel: {
-                navbarpage.config.rollbackHistory();
+                const file = Global.getConfigManager(`${screen.name}-navbar`);
+                file.rollbackHistory();
             }
             onSave: quit => {
                 navbarpage.config.save();
