@@ -323,58 +323,19 @@ Page {
                     clip: true
                     spacing: 4
                     orientation: ListView.Vertical
-                    delegate: Rectangle {
-                        id: slot
-                        required property var modelData
-                        width: parent ? parent.width : 0
-                        height: 40
-                        color: "transparent"
-                        border {
-                            width: 1
-                            color: Colors.color.outline
-                        }
-                        GridLayout {
-                            id: grid
-                            anchors {
-                                fill: parent
-                            }
-
-                            Repeater {
-                                model: ['left', 'center', 'right']
-                                delegate: Button {
-                                    Layout.fillHeight: true
-                                    width: height
-                                    Layout.alignment: {
-                                        switch (modelData) {
-                                        case "left":
-                                            return Qt.AlignLeft;
-                                        case "center":
-                                            return Qt.AlignCenter;
-                                        case "right":
-                                            return Qt.AlignRight;
-                                        default:
-                                            return Qt.AlignLeft;
-                                        }
-                                    }
-                                    onClicked: {
-                                        const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
-                                        target.position = modelData;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    delegate: Slot {}
                 }
             }
         }
 
         Footer {
+            id: footer
+            property var config: Global.getConfigManager(`${screen.name}-navbar`)
             onCancel: {
-                const file = Global.getConfigManager(`${screen.name}-navbar`);
-                file.rollbackHistory();
+                footer.config.rollbackHistory();
             }
             onSave: quit => {
-                navbarpage.config.save();
+                footer.config.save();
                 if (quit) {
                     Qt.callLater(() => {
                         Global.enableSetting = false;
@@ -440,6 +401,52 @@ Page {
                 if (status === Loader.Error) {
                     Global.general.widgets = Global.general.widgets.filter(s => s.objectName !== origparent.model.replace(/\.qml$/, ''));
                     Global.save();
+                }
+            }
+        }
+    }
+
+    component Slot: Rectangle {
+        id: slot
+        required property var modelData
+
+        width: parent ? parent.width : 0
+        height: 40
+        color: "transparent"
+
+        border {
+            width: 1
+            color: Colors.color.outline
+        }
+
+        GridLayout {
+            id: grid
+
+            anchors {
+                fill: parent
+            }
+
+            Repeater {
+                model: ['left', 'center', 'right']
+                delegate: Button {
+                    Layout.fillHeight: true
+                    width: height
+                    Layout.alignment: {
+                        switch (modelData) {
+                        case "left":
+                            return Qt.AlignLeft;
+                        case "center":
+                            return Qt.AlignCenter;
+                        case "right":
+                            return Qt.AlignRight;
+                        default:
+                            return Qt.AlignLeft;
+                        }
+                    }
+                    onClicked: {
+                        const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
+                        target.position = modelData;
+                    }
                 }
             }
         }
