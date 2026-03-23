@@ -106,10 +106,14 @@ Rectangle {
             Layout.preferredHeight: 20
             Layout.columnSpan: 2
             color: 'transparent'
+
             PageIndicator {
                 anchors.centerIn: parent
                 count: tablist.model.length
                 currentIndex: stack.currentIndex
+            }
+            Label {
+                text: tablist.model[tablist.currentIndex].toUpperCase()
             }
         }
         // icon container
