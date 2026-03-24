@@ -46,6 +46,7 @@ Wrapper {
             id: test
             property alias state: content.state
             color: "transparent"
+
             anchor {
                 item: button
                 edges: Edges.Bottom | Edges.Right
@@ -62,7 +63,8 @@ Wrapper {
             Rectangle {
                 id: content
                 width: test.width
-                implicitHeight: childrenRect.height
+                implicitHeight: menulist.contentHeight + (wrapper.anchors.margins + border.width)
+
                 border {
                     width: 2
                     color: Colors.color.outline
@@ -114,17 +116,24 @@ Wrapper {
                     }
                 ]
 
-                ListView {
-                    anchors.left: content.left
-                    anchors.right: content.left
-                    height: childrenRect.height
-                    model: ["suspend", "poweroff", "hibernate", "reboot"]
-                    delegate: Button {
-                        text: modelData
-                        onClicked: {
-                            Quickshell.execDetached({
-                                command: ["sh", "-c", `systemctl ${modelData}`]
-                            });
+                Item {
+                    id: wrapper
+                    anchors {
+                        fill: parent
+                        margins: 2
+                    }
+                    ListView {
+                        id: menulist
+                        height: contentHeight
+                        model: ["suspend", "poweroff", "hibernate", "reboot"]
+                        delegate: Button {
+                            text: modelData
+                            width: wrapper.width
+                            onClicked: {
+                                // Quickshell.execDetached({
+                                //     command: ["sh", "-c", `systemctl ${modelData}`]
+                                // });
+                            }
                         }
                     }
                 }
