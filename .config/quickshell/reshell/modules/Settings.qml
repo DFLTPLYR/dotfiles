@@ -68,10 +68,9 @@ Rectangle {
         color: Colors.color.outline
     }
 
-    bottomLeftRadius: Global.general.rounding.bottomLeft
-    bottomRightRadius: Global.general.rounding.bottomRight
-    topLeftRadius: Global.general.rounding.topLeft
-    topRightRadius: Global.general.rounding.topRight
+    Component.onCompleted: {
+        Global.bindRadii(floatingWindow);
+    }
 
     MouseArea {
         id: ma
@@ -128,54 +127,7 @@ Rectangle {
                 anchors.fill: parent
                 spacing: 1
                 model: ["general", "navbar", "wallpaper"]
-                delegate: Item {
-                    height: 50
-                    width: 50
-
-                    // icons
-                    Rectangle {
-                        anchors.fill: parent
-                        color: itemMa.containsMouse ? Colors.color.background : "transparent"
-                        radius: itemMa.containsMouse ? 8 : 0
-
-                        Icon {
-                            anchors.centerIn: parent
-                            text: floatingWindow.getIcon(modelData)
-                            font.pixelSize: parent.height
-                            color: itemMa.containsMouse || stack.currentIndex === index ? "white" : Qt.rgba(1, 1, 1, 0.6)
-
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: 350
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-                        }
-
-                        Behavior on radius {
-                            NumberAnimation {
-                                duration: 350
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 350
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-                    }
-
-                    MouseArea {
-                        id: itemMa
-                        hoverEnabled: true
-                        anchors.fill: parent
-                        onClicked: {
-                            stack.currentIndex = index;
-                        }
-                    }
-                }
+                delegate: TabButton {}
             }
         }
 
@@ -192,6 +144,55 @@ Rectangle {
 
             // Wallpaper
             WallpaperPage {}
+        }
+    }
+
+    component TabButton: Item {
+        height: 50
+        width: 50
+
+        // icons
+        Rectangle {
+            anchors.fill: parent
+            color: itemMa.containsMouse ? Colors.color.background : "transparent"
+            radius: itemMa.containsMouse ? 8 : 0
+
+            Icon {
+                anchors.centerIn: parent
+                text: floatingWindow.getIcon(modelData)
+                font.pixelSize: parent.height
+                color: itemMa.containsMouse || stack.currentIndex === index ? "white" : Qt.rgba(1, 1, 1, 0.6)
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 350
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+
+            Behavior on radius {
+                NumberAnimation {
+                    duration: 350
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 350
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        MouseArea {
+            id: itemMa
+            hoverEnabled: true
+            anchors.fill: parent
+            onClicked: {
+                stack.currentIndex = index;
+            }
         }
     }
 }

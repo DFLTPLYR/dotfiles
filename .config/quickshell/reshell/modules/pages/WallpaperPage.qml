@@ -71,6 +71,7 @@ ColumnLayout {
     }
 
     Rectangle {
+        id: container
         color: "transparent"
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -83,10 +84,6 @@ ColumnLayout {
             width: 1
             color: Colors.color.primary
         }
-        topRightRadius: Global.general.rounding.topRight
-        topLeftRadius: Global.general.rounding.topLeft
-        bottomRightRadius: Global.general.rounding.bottomRight
-        bottomLeftRadius: Global.general.rounding.bottomLeft
 
         Flickable {
             id: flick
@@ -102,6 +99,7 @@ ColumnLayout {
             // background grid
             Canvas {
                 id: canvas
+                clip: false
                 width: flick.contentWidth
                 height: flick.contentHeight
                 onPaint: {
@@ -178,6 +176,10 @@ ColumnLayout {
                     flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
                 }
             }
+        }
+
+        Component.onCompleted: {
+            Global.bindRadii(container);
         }
     }
 

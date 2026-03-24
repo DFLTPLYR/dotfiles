@@ -15,7 +15,6 @@ Wrapper {
     relativeY: 0
     position: -1
     // properties
-
     GridLayout {
         anchors.fill: parent
         columns: wrap.side ? 1 : 2
