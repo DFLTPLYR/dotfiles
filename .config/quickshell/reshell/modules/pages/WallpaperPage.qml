@@ -53,10 +53,6 @@ ColumnLayout {
         }
 
         Wallpaper.save();
-
-        Qt.callLater(() => {
-            Wallpaper.generatecolor();
-        });
     }
 
     // filepicker
@@ -386,10 +382,13 @@ ColumnLayout {
                 }
 
                 Action {
+                    text: "Check"
+                    onTriggered: wallpaperpage.imageToScreenPosition()
+                }
+
+                Action {
                     text: "Generate"
-                    onTriggered: {
-                        wallpaperpage.imageToScreenPosition();
-                    }
+                    onTriggered: Wallpaper.generatecolor()
                 }
 
                 MenuBar {
