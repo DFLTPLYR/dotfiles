@@ -1,2 +1,3 @@
 *.json
 **/*.json
+matugen/data/userContent.css
