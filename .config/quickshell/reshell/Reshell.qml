@@ -99,6 +99,7 @@ Variants {
                         width: 1
                         color: Colors.color.outline
                     }
+                    property bool centered: false
                 }
                 property WallpaperJson wallpaper: WallpaperJson {}
                 property list<var> layouts: []
