@@ -38,7 +38,7 @@ Button {
 
         property var state: control.state.background
 
-        implicitWidth: 100
+        implicitWidth: 40
         implicitHeight: 40
 
         opacity: enabled ? 1 : 0.3

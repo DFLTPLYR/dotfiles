@@ -130,9 +130,9 @@ Wrapper {
                             text: modelData
                             width: wrapper.width
                             onClicked: {
-                                // Quickshell.execDetached({
-                                //     command: ["sh", "-c", `systemctl ${modelData}`]
-                                // });
+                                Quickshell.execDetached({
+                                    command: ["sh", "-c", `systemctl ${modelData}`]
+                                });
                             }
                         }
                     }
