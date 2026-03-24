@@ -310,21 +310,29 @@ Item {
             return newPosition;
         }
 
-        DropArea {
-            id: dropArea
-            anchors.fill: parent
-            onContainsDragChanged: {
-                slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+        Loader {
+            active: Global.enableSetting
+            sourceComponent: DropArea {
+                id: dropArea
+                onContainsDragChanged: {
+                    slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                }
+                onDropped: drop => {
+                    const isWidget = drop.source.Drag.keys[0];
+                    if (isWidget) {
+                        const item = drop.source;
+                        const newParent = innerGrid;
+                        const oldParent = item.parent;
+                        const oldPosition = item.position;
+                        slot.calculateNewPosition(item, drop, newParent, oldParent, oldPosition);
+                        slot.reorderChildren();
+                    }
+                }
             }
-            onDropped: drop => {
-                const isWidget = drop.source.Drag.keys[0];
-                if (isWidget) {
-                    const item = drop.source;
-                    const newParent = innerGrid;
-                    const oldParent = item.parent;
-                    const oldPosition = item.position;
-                    slot.calculateNewPosition(item, drop, newParent, oldParent, oldPosition);
-                    slot.reorderChildren();
+            onItemChanged: {
+                if (item) {
+                    item.width = slot.width;
+                    item.height = slot.height;
                 }
             }
         }
