@@ -53,6 +53,10 @@ ColumnLayout {
         }
 
         Wallpaper.save();
+
+        Qt.callLater(() => {
+            Wallpaper.generatecolor();
+        });
     }
 
     // filepicker
@@ -362,7 +366,49 @@ ColumnLayout {
                 rightPadding: 2
 
                 width: 150
-                title: 'add file'
+                title: 'Files'
+
+                Action {
+                    text: "add file"
+                    onTriggered: file.active()
+                }
+
+                Action {
+                    text: "Save preset"
+                    onTriggered: {
+                        var preset = {
+                            source: Wallpaper.config.layers,
+                            name: Math.random().toString(36).substring(2, 10)
+                        };
+                        Wallpaper.config.preset.push(preset);
+                        Wallpaper.config.layers = [];
+                    }
+                }
+
+                Action {
+                    text: "Generate"
+                    onTriggered: {
+                        wallpaperpage.imageToScreenPosition();
+                    }
+                }
+
+                MenuBar {
+                    Menu {
+                        title: "Load preset"
+                        leftPadding: 2
+                        rightPadding: 2
+
+                        width: 150
+                    }
+                }
+            }
+
+            Menu {
+                leftPadding: 2
+                rightPadding: 2
+
+                width: 150
+                title: 'Layers'
 
                 Button {
                     text: "add file"
