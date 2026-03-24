@@ -78,11 +78,6 @@ Item {
         id: container
         color: config.style.color
 
-        bottomRightRadius: config.style.rounding.bottomRight
-        topRightRadius: config.style.rounding.topRight
-        topLeftRadius: config.style.rounding.topLeft
-        bottomLeftRadius: config.style.rounding.bottomLeft
-
         Behavior on color {
             ColorAnimation {
                 duration: 300
@@ -104,10 +99,6 @@ Item {
 
         anchors {
             fill: parent
-            topMargin: config && config.style && config.style.margin ? config.style.margin.top : 0
-            bottomMargin: config && config.style && config.style.margin ? config.style.margin.bottom : 0
-            leftMargin: config && config.style && config.style.margin ? config.style.margin.left : 0
-            rightMargin: config && config.style && config.style.margin ? config.style.margin.right : 0
         }
 
         GridLayout {
@@ -138,6 +129,11 @@ Item {
                     file.reslot();
                 }
             }
+        }
+
+        Component.onCompleted: {
+            Global.bindRadii(container, config.style.rounding);
+            Global.bindMargins(container, config.style.margin);
         }
     }
 

@@ -123,7 +123,7 @@ Page {
                     text: 'center'
                     onClicked: {
                         const navsize = config.side ? config.height : config.width;
-                        sliderPos.value = (100 - navsize) / 2;
+                        sliderPos.value = 100 - navsize;
                     }
                 }
             }
