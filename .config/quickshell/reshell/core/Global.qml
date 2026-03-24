@@ -100,18 +100,18 @@ Singleton {
         });
     }
 
-    function bindRadii(rect, stateRounding) {
+    function bindRadii(rect, stateRounding = null) {
         rect.bottomLeftRadius = Qt.binding(function () {
-            return stateRounding.bottomLeft + adapter.rounding.bottomLeft;
+            return (stateRounding ? stateRounding.bottomLeft : 0) + adapter.rounding.bottomLeft;
         });
         rect.bottomRightRadius = Qt.binding(function () {
-            return stateRounding.bottomRight + adapter.rounding.bottomRight;
+            return (stateRounding ? stateRounding.bottomRight : 0) + adapter.rounding.bottomRight;
         });
         rect.topLeftRadius = Qt.binding(function () {
-            return stateRounding.topLeft + adapter.rounding.topLeft;
+            return (stateRounding ? stateRounding.topLeft : 0) + adapter.rounding.topLeft;
         });
         rect.topRightRadius = Qt.binding(function () {
-            return stateRounding.topRight + adapter.rounding.topLeft;
+            return (stateRounding ? stateRounding.topRight : 0) + adapter.rounding.topRight;
         });
     }
 

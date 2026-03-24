@@ -4,17 +4,18 @@ import qs.core
 
 Popup {
     id: popup
+
     background: Rectangle {
         id: background
 
-        bottomLeftRadius: Global.general.rounding.bottomLeft
-        bottomRightRadius: Global.general.rounding.bottomRight
-        topLeftRadius: Global.general.rounding.topLeft
-        topRightRadius: Global.general.rounding.topRight
-
         color: Colors.setOpacity(Colors.color.background, 0.6)
         border.color: Colors.color.outline
+
+        Component.onCompleted: {
+            Global.bindRadii(background);
+        }
     }
+
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     focus: true
 
@@ -25,6 +26,7 @@ Popup {
             to: 1.0
         }
     }
+
     exit: Transition {
         NumberAnimation {
             property: "opacity"

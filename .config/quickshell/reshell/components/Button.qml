@@ -8,6 +8,7 @@ Button {
     id: control
     property var state: Components.general.button
     hoverEnabled: true
+    clip: true
 
     contentItem: Text {
         id: content
