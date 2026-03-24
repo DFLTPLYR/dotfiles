@@ -250,11 +250,14 @@ Page {
         // widgets
         Popup {
             id: widgetPopup
-            visible: opened && Global.enableSetting
-            anchors.centerIn: parent
             width: parent.width * 0.9
             height: parent.height
 
+            anchors {
+                centerIn: parent
+            }
+
+            visible: widgetPopup.opened && Global.enableSetting
             contentItem: FlexboxLayout {
                 id: widgetContainer
 
@@ -281,11 +284,14 @@ Page {
         // layout slots
         Popup {
             id: layoutSlot
-            visible: layoutSlot.opened && Global.enableSetting
             width: parent.width * 0.9
             height: parent.height
-            clip: true
 
+            anchors {
+                centerIn: parent
+            }
+
+            visible: layoutSlot.opened && Global.enableSetting
             contentItem: ColumnLayout {
                 id: layoutPopup
                 height: parent.height
@@ -424,13 +430,16 @@ Page {
 
             anchors {
                 fill: parent
+                margins: 5
             }
 
             Repeater {
                 model: ['left', 'center', 'right']
                 delegate: Button {
+                    text: modelData
+
                     Layout.fillHeight: true
-                    width: height
+
                     Layout.alignment: {
                         switch (modelData) {
                         case "left":
@@ -443,6 +452,7 @@ Page {
                             return Qt.AlignLeft;
                         }
                     }
+
                     onClicked: {
                         const target = navbarpage.config.layouts.find(s => s.name === slot.modelData.name);
                         target.position = modelData;
