@@ -5,4 +5,5 @@
 .config/niri/modules/colors.kdl
 
 # Generated matugen outputs
-.config/matugen/data/userChrome.css
+.config/matugen/data/userChrome.css.config/matugen/data/userContent.css
+.config/matugen/data/
