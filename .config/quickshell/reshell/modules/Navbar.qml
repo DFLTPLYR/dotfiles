@@ -227,10 +227,10 @@ Item {
             const widget = item.objectName;
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
-            item.width = Qt.binding(() => {
+            item.implicitWidth = Qt.binding(() => {
                 return navbar.side ? slot.width : setWidth;
             });
-            item.height = Qt.binding(() => {
+            item.implicitHeight = Qt.binding(() => {
                 return navbar.side ? setHeight : slot.height;
             });
             const exist = navbar.config.custom.widget.find(w => w.objectName === widget);

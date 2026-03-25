@@ -27,8 +27,8 @@ Rectangle {
     clip: true
     color: "transparent"
 
-    width: parent ? parent.width : 0
-    height: parent ? parent.height : 0
+    implicitWidth: parent ? parent.width : 0
+    implicitHeight: parent ? parent.height : 0
 
     Behavior on x {
         NumberAnimation {

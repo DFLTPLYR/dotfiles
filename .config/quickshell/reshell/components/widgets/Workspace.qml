@@ -40,6 +40,7 @@ Wrapper {
                 });
             }
         }
+
         remove: Transition {
             NumberAnimation {
                 property: "x"
