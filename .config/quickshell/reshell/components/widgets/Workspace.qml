@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.core
+import qs.components
 
 Wrapper {
     id: wrap
@@ -19,33 +20,27 @@ Wrapper {
     ListView {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name && ws.windows?.length === 0)]
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            margins: 2
+        }
         orientation: ListView.Horizontal
 
         model: ScriptModel {
             values: [...list.windows]
         }
-        delegate: Rectangle {
-            required property var modelData
-            height: 40
+
+        delegate: Button {
+            text: index
+            height: 30
             width: height
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    console.log(list.model.values);
-                    Quickshell.execDetached({
-                        command: ["niri", "msg", "focus-window", "--id", modelData.idx]
-                    });
-                }
+            onClicked: {
+                Quickshell.execDetached({
+                    command: ["niri", "msg", "action", "focus-workspace", "--", index + 1]
+                });
             }
         }
         remove: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 1
-                to: 0
-                duration: 250
-            }
             NumberAnimation {
                 property: "x"
                 to: -200
@@ -58,12 +53,6 @@ Wrapper {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 250
-            }
-            NumberAnimation {
-                property: "x"
-                from: 200
-                to: 0
                 duration: 250
             }
         }
