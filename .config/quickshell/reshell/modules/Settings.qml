@@ -100,10 +100,10 @@ Rectangle {
             margins: 2
         }
         Rectangle {
-            clip: true
             Layout.fillWidth: true
             Layout.preferredHeight: 20
             Layout.columnSpan: 2
+            clip: true
             color: 'transparent'
 
             PageIndicator {
@@ -111,11 +111,13 @@ Rectangle {
                 count: tablist.model.length
                 currentIndex: stack.currentIndex
             }
+
             Label {
                 font.pixelSize: 16
                 text: tablist.model[tablist.currentIndex][0].toUpperCase() + tablist.model[tablist.currentIndex].substring(1)
             }
         }
+
         // icon container
         Item {
             Layout.fillHeight: true
