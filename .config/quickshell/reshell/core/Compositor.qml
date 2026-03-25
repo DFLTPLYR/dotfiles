@@ -8,12 +8,19 @@ Singleton {
     id: config
     property list<QtObject> workspaces: []
     property list<QtObject> windows: []
+
     property var focusedWorkspace: null
     property var focusedMonitor: Quickshell.screens[0].name
     property var focusedWindow: null
     property bool overviewOpened: false
     property bool ready: false
+
     readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/quickcli.sock"
+
+    function getWindowsForOutput(outputName: string): var {
+        const workspaceIds = workspaces.filter(ws => ws.output === outputName).map(ws => ws.workspaceId);
+        return windows.filter(win => workspaceIds.includes(win.workspaceId));
+    }
 
     Component {
         id: windowComponent

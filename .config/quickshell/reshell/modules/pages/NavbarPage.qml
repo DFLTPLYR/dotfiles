@@ -252,10 +252,7 @@ Page {
             id: widgetPopup
             width: parent.width * 0.9
             height: parent.height
-
-            anchors {
-                centerIn: parent
-            }
+            anchors.centerIn: parent
 
             visible: widgetPopup.opened && Global.enableSetting
             contentItem: FlexboxLayout {
@@ -286,10 +283,7 @@ Page {
             id: layoutSlot
             width: parent.width * 0.9
             height: parent.height
-
-            anchors {
-                centerIn: parent
-            }
+            anchors.centerIn: parent
 
             visible: layoutSlot.opened && Global.enableSetting
             contentItem: ColumnLayout {
