@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 
 import qs.core
@@ -15,14 +14,13 @@ Wrapper {
     relativeY: 0
     position: -1
     // properties
-    clip: false
 
     ListView {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name && ws.windows?.length === 0)]
         anchors {
             fill: parent
-            margins: 2
+            margins: 1
         }
         orientation: ListView.Horizontal
 
@@ -30,20 +28,30 @@ Wrapper {
             values: [...list.windows]
         }
 
-        delegate: Button {
-            text: index
-            height: 30
+        delegate: Rectangle {
+            color: Colors.color.background
             width: height
-            onClicked: {
-                Quickshell.execDetached({
-                    command: ["niri", "msg", "action", "focus-workspace", "--", index + 1]
-                });
+            height: parent ? parent.height : 0
+
+            Text {
+                anchors.centerIn: parent
+                text: index + 1
+                color: Colors.color.primary
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    Quickshell.execDetached({
+                        command: ["niri", "msg", "action", "focus-workspace", "--", index + 1]
+                    });
+                }
             }
         }
 
         remove: Transition {
             NumberAnimation {
-                property: "x"
+                property: "y"
                 to: -200
                 duration: 250
             }
@@ -60,7 +68,7 @@ Wrapper {
 
         displaced: Transition {
             NumberAnimation {
-                properties: "x,y"
+                properties: "y"
                 duration: 250
             }
         }
