@@ -12,13 +12,14 @@ Rectangle {
     property int position: -1
     property bool active: Global.enableSetting
     property bool side: false
+    property var config
 
     Connections {
         target: Compositor
         function onReadyChanged() {
             const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
             widget.side = config.side;
-
+            widget.config = config;
             config.onSideChanged.connect(() => {
                 widget.side = config.side;
             });

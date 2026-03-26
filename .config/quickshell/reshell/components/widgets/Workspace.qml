@@ -21,9 +21,9 @@ Wrapper {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name && ws.windows?.length === 0)]
         anchors {
-            left: parent.left
             top: parent.top
             bottom: parent.bottom
+            left: parent.left
             right: parent.right
             leftMargin: wrap.side ? 1 : 0
             rightMargin: wrap.side ? 1 : 0
@@ -40,8 +40,8 @@ Wrapper {
 
         delegate: Rectangle {
             color: Colors.color.background
-            width: height
-            height: parent ? (!wrap.side ? parent.height : parent.width) : 0
+            width: wrap.side ? wrap.config.width : height
+            height: wrap.side ? height : wrap.config.height
 
             Text {
                 anchors.centerIn: parent
