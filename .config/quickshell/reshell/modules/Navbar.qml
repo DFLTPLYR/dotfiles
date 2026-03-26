@@ -227,13 +227,19 @@ Item {
             const widget = item.objectName;
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
+            const dynamic = item.dynamicsize;
             item.implicitWidth = Qt.binding(() => {
+                if (dynamic) {
+                    return navbar.side ? slot.width : 0;
+                }
                 return navbar.side ? slot.width : setWidth;
             });
             item.implicitHeight = Qt.binding(() => {
+                if (dynamic) {
+                    return navbar.side ? slot.height : 0;
+                }
                 return navbar.side ? setHeight : slot.height;
             });
-            const exist = navbar.config.custom.widget.find(w => w.objectName === widget);
         }
 
         // i vibed coded this shit but basically it compares the new position properties from lowest to heigthest then it reparents it

@@ -4,6 +4,7 @@ import qs.core
 Rectangle {
     id: widget
     property Item origparent
+    property bool dynamicsize: false
     property int setHeight: 100
     property int setWidth: 100
     property int relativeX: 0
