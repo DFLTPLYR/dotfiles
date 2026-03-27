@@ -5,6 +5,7 @@ Rectangle {
     id: widget
     property Item origparent
     property bool dynamicsize: false
+    readonly property int defaultsize: parent ? (widget.side ? parent.width : parent.height) : 0
     property int setHeight: 100
     property int setWidth: 100
     property int relativeX: 0
