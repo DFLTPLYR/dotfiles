@@ -20,7 +20,7 @@ use std::{
 // local imports
 use quickcli::{
     Commands, DesktopEnvironment, Request,
-    modules::{compositor, hardware, shell, wallpaper, weather},
+    modules::{compositor, hardware, rules, shell, wallpaper, weather},
 };
 
 #[derive(Parser)]
@@ -145,7 +145,7 @@ fn handle_request(mut stream: UnixStream, _running: Arc<AtomicBool>) {
                     wallpaper::generate_color_palette(type_, paths, stream);
                 }
                 Request::WindowManagerRules => match DesktopEnvironment::from_env() {
-                    DesktopEnvironment::Niri => compositor::get_rules(stream),
+                    DesktopEnvironment::Niri => rules::get_rules(stream),
                     DesktopEnvironment::Hyprland => {}
                     DesktopEnvironment::Unknown => {
                         let _ = writeln!(stream, "unknown compositor");

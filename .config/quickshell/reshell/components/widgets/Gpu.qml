@@ -30,6 +30,7 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
         Text {
             text: `${Hardware.gpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
