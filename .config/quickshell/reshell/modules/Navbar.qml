@@ -147,7 +147,7 @@ Item {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-
+        Layout.margins: 1
         onChildrenChanged: {
             for (const i in children) {
                 const target = children[i];
@@ -228,18 +228,14 @@ Item {
             const setHeight = item.setHeight || 100;
             const setWidth = item.setWidth || 100;
             const dynamic = item.dynamicsize;
-            item.implicitWidth = Qt.binding(() => {
-                if (dynamic) {
-                    return navbar.side ? slot.width : 0;
-                }
-                return navbar.side ? slot.width : setWidth;
-            });
-            item.implicitHeight = Qt.binding(() => {
-                if (dynamic) {
-                    return navbar.side ? slot.height : 0;
-                }
-                return navbar.side ? setHeight : slot.height;
-            });
+            if (!dynamic) {
+                item.width = Qt.binding(() => {
+                    return navbar.side ? slot.width : setWidth;
+                });
+                item.height = Qt.binding(() => {
+                    return navbar.side ? setHeight : slot.height;
+                });
+            }
         }
 
         // i vibed coded this shit but basically it compares the new position properties from lowest to heigthest then it reparents it

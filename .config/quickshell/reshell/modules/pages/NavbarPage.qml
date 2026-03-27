@@ -257,8 +257,11 @@ Page {
             visible: widgetPopup.opened && Global.enableSetting
             contentItem: FlexboxLayout {
                 id: widgetContainer
-
-                Layout.fillWidth: true
+                wrap: FlexboxLayout.Wrap
+                anchors {
+                    fill: parent
+                    margins: 10
+                }
 
                 Instantiator {
                     id: widgetInstantiator

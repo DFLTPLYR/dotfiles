@@ -13,24 +13,16 @@ Wrapper {
     relativeY: 0
     position: -1
     // properties
-    width: parent ? (wrap.side ? parent.width : list.contentWidth) : 0
-    height: parent ? (wrap.side ? list.contentHeight : parent.height) : 0
+    width: parent ? (wrap.side ? wrap.defaultsize : list.contentWidth) : 0
+    height: parent ? (wrap.side ? list.contentHeight : wrap.defaultsize) : 0
+
     clip: true
 
     ListView {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name && ws.windows?.length === 0)]
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-            leftMargin: wrap.side ? 1 : 0
-            rightMargin: wrap.side ? 1 : 0
-            topMargin: wrap.side ? 0 : 1
-            bottomMargin: wrap.side ? 0 : 1
-        }
-        width: contentWidth
+        width: list.contentWidth
+        height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
         interactive: !wrap.active
 
@@ -40,8 +32,8 @@ Wrapper {
 
         delegate: Rectangle {
             color: Colors.color.background
-            width: wrap.side ? wrap.config.width : height
-            height: wrap.side ? height : wrap.config.height
+            width: wrap.side ? parent.width : height
+            height: wrap.side ? width : parent.height
 
             Text {
                 anchors.centerIn: parent
