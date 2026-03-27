@@ -20,7 +20,7 @@ Wrapper {
 
     ListView {
         id: list
-        property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name && ws.windows?.length === 0)]
+        property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)].slice(0, -1)
         width: list.contentWidth
         height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
@@ -31,9 +31,16 @@ Wrapper {
         }
 
         delegate: Rectangle {
-            color: Colors.color.background
-            width: wrap.side ? parent.width : height
-            height: wrap.side ? width : parent.height
+            color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.color.primary, 0.2)
+            width: parent ? (wrap.side ? parent.width : height) : 0
+            height: parent ? (wrap.side ? width : parent.height) : 0
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             Text {
                 anchors.centerIn: parent
@@ -42,6 +49,8 @@ Wrapper {
             }
 
             MouseArea {
+                id: ma
+                hoverEnabled: true
                 anchors.fill: parent
                 enabled: !wrap.active
                 onClicked: {
