@@ -83,6 +83,9 @@ Singleton {
 
     function save() {
         fileView.writeAdapter();
+        for (const i in fileManager) {
+            fileManager[i].ref.save();
+        }
     }
 
     function bindMargins(item, margin) {

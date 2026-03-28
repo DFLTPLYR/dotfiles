@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import qs.core
 
@@ -66,7 +67,7 @@ Rectangle {
 
     MouseArea {
         id: ma
-        visible: widget.active
+        enabled: widget.active
         anchors.fill: parent
         drag.target: widget
         drag.axis: Drag.XAndYAxis
