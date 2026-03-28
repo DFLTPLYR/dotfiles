@@ -398,6 +398,12 @@ Page {
                     item.origparent = origparent;
                     item.parent = origparent;
                     origparent.widget = item;
+                    item.width = Qt.binding(() => {
+                        return parent.width;
+                    });
+                    item.height = Qt.binding(() => {
+                        return parent.height;
+                    });
                 }
             }
             onStatusChanged: {
