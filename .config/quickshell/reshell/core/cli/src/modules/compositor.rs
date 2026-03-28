@@ -1,9 +1,9 @@
-use niri_ipc::{Event, Response, socket::Socket};
+use niri_ipc::{socket::Socket, Event, Response};
 use serde_json;
 use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::UnixStream;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 
 pub fn niri_ipc_listener(mut stream: UnixStream, running: Arc<AtomicBool>) {
     let mut socket = Socket::connect().expect("Error Occured");
@@ -56,7 +56,7 @@ fn handle_niri_event(event: &Event, stream: &mut UnixStream) {
         Event::WorkspacesChanged { workspaces } => serde_json::json!({
             "WorkspacesChanged": {
                 "workspaces": workspaces.iter().map(|ws| {
-                    serde_json::json!({
+                    let mut obj = serde_json::json!({
                         "id": ws.id,
                         "idx": ws.idx,
                         "name": ws.name,
@@ -64,28 +64,34 @@ fn handle_niri_event(event: &Event, stream: &mut UnixStream) {
                         "is_urgent": ws.is_urgent,
                         "is_active": ws.is_active,
                         "is_focused": ws.is_focused,
-                        "active_window_id": ws.active_window_id
-                    })
+                    });
+                    if let Some(id) = ws.active_window_id {
+                        obj["active_window_id"] = serde_json::json!(id);
+                    }
+                    obj
                 }).collect::<Vec<_>>()
             }
         })
         .to_string(),
-        Event::WindowsChanged { windows } => serde_json::json!({
-            "WindowsChanged": {
-                "windows": windows.iter().map(|w| {
-                    serde_json::json!({
-                        "id": w.id,
-                        "title": w.title,
-                        "app_id": w.app_id,
-                        "pid": w.pid,
-                        "workspace_id": w.workspace_id,
-                        "is_focused": w.is_focused,
-                        "is_floating": w.is_floating,
-                        "is_urgent": w.is_urgent
-                    })
-                }).collect::<Vec<_>>()
-            }
-        })
+        Event::WindowsChanged { windows } => {
+            let windows_without_last = windows.split_last().map(|(_, rest)| rest).unwrap_or(&[]);
+            serde_json::json!({
+                "WindowsChanged": {
+                    "windows": windows_without_last.iter().map(|w| {
+                        serde_json::json!({
+                            "id": w.id,
+                            "title": w.title,
+                            "app_id": w.app_id,
+                            "pid": w.pid,
+                            "workspace_id": w.workspace_id,
+                            "is_focused": w.is_focused,
+                            "is_floating": w.is_floating,
+                            "is_urgent": w.is_urgent
+                        })
+                    }).collect::<Vec<_>>()
+                }
+            })
+        }
         .to_string(),
         Event::WindowOpenedOrChanged { window } => serde_json::json!({
             "WindowOpenedOrChanged": {

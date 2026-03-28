@@ -13,6 +13,7 @@ Wrapper {
     relativeY: 0
     position: -1
     // properties
+
     width: parent ? (wrap.side ? wrap.defaultsize : list.contentWidth) : 0
     height: parent ? (wrap.side ? list.contentHeight : wrap.defaultsize) : 0
 
@@ -20,7 +21,7 @@ Wrapper {
 
     ListView {
         id: list
-        property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)].slice(0, -1)
+        property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)]
         width: list.contentWidth
         height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal

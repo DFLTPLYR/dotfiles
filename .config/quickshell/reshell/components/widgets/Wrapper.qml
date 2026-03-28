@@ -30,9 +30,6 @@ Rectangle {
     clip: true
     color: "transparent"
 
-    implicitWidth: parent ? parent.width : 0
-    implicitHeight: parent ? parent.height : 0
-
     Behavior on x {
         NumberAnimation {
             duration: 300
