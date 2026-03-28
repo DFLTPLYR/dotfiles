@@ -8,6 +8,7 @@ import qs.types
 Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
+        id: reshell
         implicitWidth: screen.width
         implicitHeight: screen.height
         required property ShellScreen modelData
@@ -19,15 +20,28 @@ Variants {
         LazyLoader {
             active: fileView.loaded
             component: Item {
+                id: display
+                // Navbar
                 Top {
-                    screen: modelData
+                    screen: reshell.screen
                 }
-
+                // background
                 Background {
-                    screen: modelData
+                    screen: reshell.screen
                 }
+                // overlay
                 Overlay {
-                    screen: modelData
+                    screen: reshell.screen
+                }
+                // docks
+                Instantiator {
+                    model: []
+                    delegate: Dock {
+                        screen: reshell.screen
+                    }
+                    onObjectAdded: (obj, idx) => {
+                        obj.parent = display;
+                    }
                 }
             }
         }
@@ -93,6 +107,7 @@ Variants {
                 property int y: 0
                 property string position: "top"
                 readonly property bool side: position === "left" || position === "right"
+                property list<var> docks: []
                 property StyleJson style: StyleJson {
                     color: Colors.color.background
                     border {
