@@ -20,7 +20,7 @@ Item {
             PropertyChanges {
                 target: navbar
                 x: 0
-                y: parent.height * (config.y / 100)
+                y: (parent.height - height) * (config.y / 100)
                 width: config.width
                 height: parent.height * (config.height / 100)
             }
@@ -30,7 +30,7 @@ Item {
             PropertyChanges {
                 target: navbar
                 x: parent.width - config.width
-                y: parent.height * (config.y / 100)
+                y: (parent.height - height) * (config.y / 100)
                 width: config.width
                 height: parent.height * (config.height / 100)
             }
@@ -39,8 +39,8 @@ Item {
             name: "top"
             PropertyChanges {
                 target: navbar
-                x: parent.height * (config.x / 100)
                 y: 0
+                x: (parent.width - width) * (config.x / 100)
                 width: parent.width * (config.width / 100)
                 height: config.height
             }
@@ -49,8 +49,8 @@ Item {
             name: "bottom"
             PropertyChanges {
                 target: navbar
-                x: parent.height * (config.x / 100)
                 y: parent.height - config.height
+                x: (parent.width - width) * (config.x / 100)
                 width: parent.width * (config.width / 100)
                 height: config.height
             }
