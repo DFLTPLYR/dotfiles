@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import qs.core
 import qs.modules
@@ -7,97 +8,127 @@ import qs.modules
 PanelWindow {
     id: panel
     color: "transparent"
-    property string pos: {
-        const positions = ["top", "bottom", "left", "right"];
-        return positions[Math.floor(Math.random() * positions.length)];
-    }
-    property bool side: panel.pos === "left" || "right"
-    property var config: QtObject {
-        property real x: 0
-        property real y: 0
-        property real width: 10
-        property real height: 10
-    }
+    // color: Colors.setOpacity(Colors.color.background, 0.2)
+    required property string name
+    objectName: panel.name
 
     anchors {
-        top: panel.pos === "top"
-        bottom: panel.pos === "bottom"
-        left: panel.pos === "left"
-        right: panel.pos === "right"
+        top: config.position === "top"
+        bottom: config.position === "bottom"
+        left: config.position === "left"
+        right: config.position === "right"
     }
 
     implicitHeight: screen.height
     implicitWidth: screen.width
 
     exclusionMode: ExclusionMode.Auto
-    exclusiveZone: panel.side ? container.width : container.height
+    exclusiveZone: config.side ? config.width : config.height
+
     WlrLayershell.layer: WlrLayer.Top
-    WlrLayershell.namespace: `Top-${screen.name}`
+    WlrLayershell.namespace: `Dock-${panel.name}`
 
     mask: Region {
         regions: []
     }
 
-    Rectangle {
-        id: container
-        state: panel.pos
-        states: [
-            State {
-                name: "left"
-                PropertyChanges {
-                    target: container
-                    x: 0
-                    y: parent.height * (config.y / 100)
-                    width: config.width || 40
-                    height: parent.height * (config.height / 100) || parent.height
-                }
-            },
-            State {
-                name: "right"
-                PropertyChanges {
-                    target: container
-                    x: parent.width - (config.width || 40)
-                    y: parent.height * (config.y / 100)
-                    width: config.width || 40
-                    height: parent.height * (config.height / 100) || parent.height
-                }
-            },
-            State {
-                name: "top"
-                PropertyChanges {
-                    target: container
-                    x: parent.width * (config.x / 100)
-                    y: 0
-                    width: parent.width * (config.width / 100) || parent.width
-                    height: config.height || 40
-                }
-            },
-            State {
-                name: "bottom"
-                PropertyChanges {
-                    target: container
-                    x: parent.width * (config.x / 100)
-                    y: parent.height - (config.height || 40)
-                    width: parent.width * (config.width / 100) || parent.width
-                    height: config.height || 40
-                }
+    // Rectangle {
+    //     id: container
+    //
+    //     states: [
+    //         State {
+    //             name: "left"
+    //             when: config.position === "left"
+    //             PropertyChanges {
+    //                 target: panel
+    //                 x: 0
+    //                 y: (parent.height - height) * (config.y / 100)
+    //                 width: config.width
+    //                 height: parent.height * (config.height / 100)
+    //             }
+    //         },
+    //         State {
+    //             name: "right"
+    //             when: config.position === "right"
+    //             PropertyChanges {
+    //                 target: panel
+    //                 explicit: true
+    //                 x: parent.width - config.width
+    //                 y: (parent.height - height) * (config.y / 100)
+    //                 width: config.width
+    //                 height: parent.height * (config.height / 100)
+    //             }
+    //         },
+    //         State {
+    //             name: "top"
+    //             when: config.position === "top"
+    //             PropertyChanges {
+    //                 target: panel
+    //                 y: 0
+    //                 x: (parent.width - width) * (config.x / 100)
+    //                 width: parent.width * (config.width / 100)
+    //                 height: config.height
+    //             }
+    //         },
+    //         State {
+    //             name: "bottom"
+    //             when: config.position === "bottom"
+    //             PropertyChanges {
+    //                 target: panel
+    //                 y: parent.height - config.height
+    //                 x: (parent.width - width) * (config.x / 100)
+    //                 width: parent.width * (config.width / 100)
+    //                 height: config.height
+    //             }
+    //         }
+    //     ]
+    //
+    //     transitions: [
+    //         Transition {
+    //             from: "*"
+    //             to: "*"
+    //             NumberAnimation {
+    //                 properties: "width,height"
+    //                 duration: 100
+    //                 easing.type: Easing.OutCubic
+    //             }
+    //             NumberAnimation {
+    //                 properties: "x,y"
+    //                 duration: 100
+    //                 easing.type: Easing.InOutQuad
+    //             }
+    //         }
+    //     ]
+    // }
+
+    FileView {
+        path: Qt.resolvedUrl(`./core/data/${screen.name}+${panel.name}.json`)
+        watchChanges: true
+        preload: true
+        onLoadFailed: error => {
+            if (error === FileViewError.FileNotFound) {
+                config.setText("{}");
+                config.writeAdapter();
             }
-        ]
-        transitions: [
-            Transition {
-                from: "*"
-                to: "*"
-                NumberAnimation {
-                    properties: "width,height"
-                    duration: 100
-                    easing.type: Easing.OutCubic
-                }
-                NumberAnimation {
-                    properties: "x,y"
-                    duration: 100
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        ]
+        }
+        adapter: JsonAdapter {
+            id: config
+            property int height: 40
+            property int width: 100
+            property int x: 0
+            property int y: 0
+            property string position: "top"
+            readonly property bool side: position === "left" || position === "right"
+        }
+
+        onLoaded: {
+            container.width = config.width;
+            container.height = config.height;
+
+            // container.state = config.position;
+            // container.state = Qt.binding(() => {
+            //     return config.position;
+            // });
+        }
     }
 }

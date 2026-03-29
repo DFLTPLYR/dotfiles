@@ -35,7 +35,7 @@ Variants {
                 }
                 // docks
                 Instantiator {
-                    model: []
+                    model: adapter.docks
                     delegate: Dock {
                         screen: reshell.screen
                     }
