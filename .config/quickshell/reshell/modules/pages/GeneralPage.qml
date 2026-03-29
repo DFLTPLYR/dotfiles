@@ -141,82 +141,41 @@ Page {
 
         Button {
             text: "add Dock"
-            onClicked: docksPopup.opened ? docksPopup.close() : docksPopup.open()
-        }
-
-        Popup {
-            id: docksPopup
-            width: parent.width * 0.9
-            height: parent.height
-            anchors.centerIn: parent
-
-            contentItem: FlexboxLayout {
-                id: dockContainer
-
-                Column {
-                    Label {
-                        text: "Docks"
-                        font.pixelSize: 32
-                    }
-
-                    Row {
-                        spacing: 10
-                        Label {
-                            text: "Width"
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        Slider {
-                            id: dockWidth
-                            stepSize: 1
-                            from: 0
-                            to: 100
-                        }
-                    }
-
-                    Row {
-                        spacing: 10
-                        Label {
-                            text: "Height"
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        Slider {
-                            id: dockHeight
-                            stepSize: 1
-                            from: 0
-                            to: 100
-                        }
-                    }
-
-                    Row {
-                        spacing: 10
-                        Label {
-                            text: config.side ? "y" : "x"
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Slider {
-                            id: dockPos
-                            stepSize: 1
-                            from: 0
-                            to: 100
-                        }
-
-                        Button {
-                            text: 'center'
-                            onClicked: {
-                                const navsize = config.side ? config.height : config.width;
-                                sliderPos.value = 100 - navsize;
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    text: "Confirm"
-                    onClicked: {}
-                }
+            onClicked: {
+                // docksPopup.opened ? docksPopup.close() : docksPopup.open()
+                config.docks.push({
+                    name: Math.random().toString(36).substring(2, 10)
+                });
             }
         }
+
+        // Popup {
+        //     id: docksPopup
+        //     width: parent.width * 0.95
+        //     height: parent.height
+        //     anchors.centerIn: parent
+        //
+        //     contentItem: FlexboxLayout {
+        //         id: dockContainer
+        //         focus: true
+        //         Column {
+        //             Label {
+        //                 text: "Docks"
+        //                 font.pixelSize: 32
+        //             }
+        //         }
+        //         TextInput {
+        //             id: dockName
+        //             focus: true
+        //             Layout.fillWidth: true
+        //             Layout.preferredHeight: 40
+        //         }
+        //         Button {
+        //             text: "Confirm"
+        //             onClicked: {}
+        //         }
+        //     }
+        // }
 
         Footer {
             onCancel: () => {
