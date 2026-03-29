@@ -138,6 +138,86 @@ Page {
                 }
             }
         }
+
+        Button {
+            text: "add Dock"
+            onClicked: docksPopup.opened ? docksPopup.close() : docksPopup.open()
+        }
+
+        Popup {
+            id: docksPopup
+            width: parent.width * 0.9
+            height: parent.height
+            anchors.centerIn: parent
+
+            contentItem: FlexboxLayout {
+                id: dockContainer
+
+                Column {
+                    Label {
+                        text: "Docks"
+                        font.pixelSize: 32
+                    }
+
+                    Row {
+                        spacing: 10
+                        Label {
+                            text: "Width"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Slider {
+                            id: dockWidth
+                            stepSize: 1
+                            from: 0
+                            to: 100
+                        }
+                    }
+
+                    Row {
+                        spacing: 10
+                        Label {
+                            text: "Height"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Slider {
+                            id: dockHeight
+                            stepSize: 1
+                            from: 0
+                            to: 100
+                        }
+                    }
+
+                    Row {
+                        spacing: 10
+                        Label {
+                            text: config.side ? "y" : "x"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Slider {
+                            id: dockPos
+                            stepSize: 1
+                            from: 0
+                            to: 100
+                        }
+
+                        Button {
+                            text: 'center'
+                            onClicked: {
+                                const navsize = config.side ? config.height : config.width;
+                                sliderPos.value = 100 - navsize;
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    text: "Confirm"
+                    onClicked: {}
+                }
+            }
+        }
+
         Footer {
             onCancel: () => {
                 console.log("test");

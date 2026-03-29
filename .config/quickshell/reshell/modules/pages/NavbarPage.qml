@@ -105,11 +105,14 @@ Page {
 
                 Slider {
                     id: sliderPos
-                    stepSize: 1
+                    property int barsize: config.side ? config.height : config.width
+
                     from: 0
                     to: 100
+                    stepSize: 1
 
                     value: config.side ? config.y : config.x
+
                     onValueChanged: {
                         if (config.side) {
                             config.y = value;
@@ -120,10 +123,9 @@ Page {
                 }
 
                 Button {
-                    text: 'center'
+                    text: "center"
                     onClicked: {
-                        const navsize = config.side ? config.height : config.width;
-                        sliderPos.value = 100 - navsize;
+                        sliderPos.value = 50;
                     }
                 }
             }

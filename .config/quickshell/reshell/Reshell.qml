@@ -124,6 +124,7 @@ Variants {
                     property list<var> widget: []
                     property list<var> layout: []
                 }
+
                 onLayoutsChanged: {
                     Qt.callLater(() => {
                         fileView.reslot();

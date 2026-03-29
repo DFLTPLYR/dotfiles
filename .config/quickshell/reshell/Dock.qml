@@ -11,12 +11,14 @@ PanelWindow {
         const positions = ["top", "bottom", "left", "right"];
         return positions[Math.floor(Math.random() * positions.length)];
     }
+    property bool side: panel.pos === "left" || "right"
     property var config: QtObject {
         property real x: 0
         property real y: 0
-        property real width: 40
-        property real height: 40
+        property real width: 10
+        property real height: 10
     }
+
     anchors {
         top: panel.pos === "top"
         bottom: panel.pos === "bottom"
@@ -27,7 +29,8 @@ PanelWindow {
     implicitHeight: screen.height
     implicitWidth: screen.width
 
-    exclusionMode: ExclusionMode.Ignore
+    exclusionMode: ExclusionMode.Auto
+    exclusiveZone: panel.side ? container.width : container.height
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: `Top-${screen.name}`
 
