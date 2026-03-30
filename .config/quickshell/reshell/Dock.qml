@@ -52,25 +52,30 @@ Scope {
                 right: config.position === "right"
             }
 
-            implicitHeight: screen.height
-            implicitWidth: screen.width
+            implicitHeight: Global.enableSetting ? screen.height : (config.side ? screen.height : config.height)
+            implicitWidth: Global.enableSetting ? screen.width : (!config.side ? screen.width : config.width)
 
-            exclusionMode: ExclusionMode.Auto
+            exclusionMode: ExclusionMode.Ignore
             exclusiveZone: config.side ? config.width : config.height
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
             mask: Region {
-                regions: []
+                regions: [
+                    Region {
+                        item: container
+                    },
+                    Region {
+                        item: settingloader.item
+                    }
+                ]
             }
 
             Rectangle {
                 id: container
-                onHeightChanged: {
-                    console.log(height);
-                }
                 state: config.position
+                color: "transparent"
                 states: [
                     State {
                         name: "left"
@@ -130,6 +135,54 @@ Scope {
                         }
                     }
                 ]
+
+                Loader {
+                    active: Global.enableSetting
+                    sourceComponent: DropArea {
+                        id: dropArea
+                        width: container.width
+                        height: container.height
+                        onContainsDragChanged: {
+                            container.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                        }
+                    }
+                }
+            }
+
+            Loader {
+                id: settingloader
+                property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+                active: false
+                sourceComponent: Rectangle {
+                    width: 500
+                    height: 500
+                    color: "transparent"
+                    visible: settingloader.shouldShow
+
+                    Rectangle {
+                        id: widget
+                        width: 50
+                        height: 50
+                        Drag.active: ma.drag.active
+
+                        MouseArea {
+                            id: ma
+                            anchors.fill: parent
+                            drag.target: widget
+                            drag.axis: Drag.XAndYAxis
+                        }
+                    }
+                }
+                onShouldShowChanged: {
+                    if (shouldShow) {
+                        active = true;
+                    } else if (item) {
+                        item.state = 'hide';
+                    }
+                }
+                onLoaded: {
+                    // item.state = 'show';
+                }
             }
         }
     }

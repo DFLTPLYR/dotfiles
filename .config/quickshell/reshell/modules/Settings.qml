@@ -70,6 +70,7 @@ Rectangle {
 
     Component.onCompleted: {
         Global.bindRadii(floatingWindow);
+        Global.settingpanel = this;
     }
 
     MouseArea {
