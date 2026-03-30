@@ -40,6 +40,7 @@ Scope {
         component: PanelWindow {
             id: panel
             property JsonAdapter config: file.adapter
+            property int size: config.side ? config.width : config.height
             screen: dock.screen
             color: "transparent"
             // color: Colors.setOpacity(Colors.color.background, 0.2)
@@ -56,7 +57,7 @@ Scope {
             implicitWidth: Global.enableSetting ? screen.width : (!config.side ? screen.width : config.width)
 
             exclusionMode: ExclusionMode.Ignore
-            exclusiveZone: config.side ? config.width : config.height
+            exclusiveZone: panel.size
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
@@ -151,15 +152,70 @@ Scope {
 
             Loader {
                 id: settingloader
-                property bool shouldShow: Global.dockpanel
+                property bool shouldShow: Global.dockpanel && Global.enableSetting
                 active: false
                 sourceComponent: Rectangle {
-                    x: Global.settingpanel.x
-                    y: Global.settingpanel.y
-                    width: 500
-                    height: 500
-                    color: "red"
-                    visible: settingloader.shouldShow
+                    id: settingWindow
+
+                    x: Global.settingpanel ? Global.settingpanel.x : 0
+                    y: Global.settingpanel ? config.height + Global.settingpanel.y : 0
+                    color: Global.settingpanel.color
+                    width: Global.settingpanel.width
+                    height: Global.settingpanel.height
+
+                    state: 'hide'
+                    states: [
+                        State {
+                            name: "hide"
+                            PropertyChanges {
+                                target: settingWindow
+                                opacity: 0
+                            }
+                        },
+                        State {
+                            name: "show"
+                            PropertyChanges {
+                                target: settingWindow
+                                opacity: 1
+                            }
+                        }
+                    ]
+
+                    transitions: [
+                        Transition {
+                            from: "*"
+                            to: "hide"
+                            SequentialAnimation {
+                                NumberAnimation {
+                                    properties: "width,height,opacity"
+                                    duration: 300
+                                    easing.type: Easing.InOutQuad
+                                }
+                                ScriptAction {
+                                    script: {
+                                        settingloader.active = false;
+                                        Global.dockpanel = null;
+                                    }
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "*"
+                            to: "show"
+                            NumberAnimation {
+                                properties: "width,height,opacity"
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    ]
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            settingWindow.state = "hide";
+                        }
+                    }
 
                     Rectangle {
                         id: widget
@@ -175,16 +231,16 @@ Scope {
                         }
                     }
                 }
+
                 onShouldShowChanged: {
                     if (shouldShow) {
                         active = true;
                     } else if (item) {
                         item.state = 'hide';
-                        Global.settingpanel = null;
                     }
                 }
                 onLoaded: {
-                    // item.state = 'show';
+                    item.state = 'show';
                 }
             }
 
