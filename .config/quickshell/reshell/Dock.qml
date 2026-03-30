@@ -12,7 +12,7 @@ Scope {
 
     FileView {
         id: file
-        path: Qt.resolvedUrl(`./core/data/${screen.name}+${dock.name}.json`)
+        path: Qt.resolvedUrl(`./core/data/docks/${screen.name}+${dock.name}.json`)
         watchChanges: true
         preload: true
         onLoadFailed: error => {

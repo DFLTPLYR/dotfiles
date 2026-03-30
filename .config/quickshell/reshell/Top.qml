@@ -27,38 +27,10 @@ PanelWindow {
     WlrLayershell.namespace: `Top-${screen.name}`
 
     mask: Region {
-        regions: [
-            Region {
-                item: settingloader.item
-            },
-            Region {
-                item: navbar
-            }
-        ]
+        item: navbar
     }
 
     Navbar {
         id: navbar
-    }
-
-    Loader {
-        id: settingloader
-        property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
-        active: false
-        sourceComponent: Settings {
-            onHidden: {
-                settingloader.active = false;
-            }
-        }
-        onShouldShowChanged: {
-            if (shouldShow) {
-                active = true;
-            } else if (item) {
-                item.state = 'hide';
-            }
-        }
-        onLoaded: {
-            item.state = 'show';
-        }
     }
 }
