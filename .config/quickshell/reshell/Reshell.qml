@@ -18,9 +18,9 @@ Variants {
 
         mask: Region {
             regions: [
-                // Region {
-                //     item: settingloader.item
-                // },
+                Region {
+                    item: settingloader.item
+                },
                 Region {
                     item: content.item
                 }
@@ -59,27 +59,28 @@ Variants {
         }
 
         // settings
-        // Loader {
-        //     id: settingloader
-        //     property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
-        //     active: false
-        //     sourceComponent: Settings {
-        //         onHidden: {
-        //             settingloader.active = false;
-        //         }
-        //     }
-        //     onShouldShowChanged: {
-        //         if (shouldShow) {
-        //             active = true;
-        //         } else if (item) {
-        //             item.state = 'hide';
-        //         }
-        //     }
-        //     onLoaded: {
-        //         item.state = 'show';
-        //     }
-        // }
-        //
+        Loader {
+            id: settingloader
+            property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+            active: false
+            sourceComponent: Settings {
+                onHidden: {
+                    settingloader.active = false;
+                }
+            }
+            onShouldShowChanged: {
+                if (shouldShow) {
+                    active = true;
+                    Global.settingpanel = this.item;
+                } else if (item) {
+                    item.state = 'hide';
+                }
+            }
+            onLoaded: {
+                item.state = 'show';
+            }
+        }
+
         // Per monitor data
         Instantiator {
             model: ScriptModel {

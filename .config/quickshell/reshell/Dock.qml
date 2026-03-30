@@ -151,12 +151,14 @@ Scope {
 
             Loader {
                 id: settingloader
-                property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+                property bool shouldShow: Global.dockpanel
                 active: false
                 sourceComponent: Rectangle {
+                    x: Global.settingpanel.x
+                    y: Global.settingpanel.y
                     width: 500
                     height: 500
-                    color: "transparent"
+                    color: "red"
                     visible: settingloader.shouldShow
 
                     Rectangle {
@@ -178,12 +180,15 @@ Scope {
                         active = true;
                     } else if (item) {
                         item.state = 'hide';
+                        Global.settingpanel = null;
                     }
                 }
                 onLoaded: {
                     // item.state = 'show';
                 }
             }
+
+            Component.onCompleted: Global.docks.push(this)
         }
     }
 }

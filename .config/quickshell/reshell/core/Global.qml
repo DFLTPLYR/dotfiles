@@ -16,11 +16,13 @@ Singleton {
     property bool enableSetting: false
     property bool enableSystemPanel: false
     property Item settingpanel: null
+    property QtObject dockpanel: null
 
     // global item
     property alias general: adapter
     property list<var> fileManager: []
     property list<var> slots: []
+    property list<var> docks: []
 
     function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
