@@ -4,6 +4,7 @@ import Quickshell.Io
 
 import qs.core
 import qs.types
+import qs.modules
 
 Variants {
     model: Quickshell.screens
@@ -14,7 +15,10 @@ Variants {
         required property ShellScreen modelData
         screen: modelData
         color: "transparent"
-        mask: Region {}
+
+        mask: Region {
+            item: settingloader.item
+        }
 
         // Wayland Layers
         LazyLoader {
@@ -43,6 +47,28 @@ Variants {
                         obj.parent = display;
                     }
                 }
+            }
+        }
+
+        // settings
+        Loader {
+            id: settingloader
+            property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+            active: false
+            sourceComponent: Settings {
+                onHidden: {
+                    settingloader.active = false;
+                }
+            }
+            onShouldShowChanged: {
+                if (shouldShow) {
+                    active = true;
+                } else if (item) {
+                    item.state = 'hide';
+                }
+            }
+            onLoaded: {
+                item.state = 'show';
             }
         }
 
