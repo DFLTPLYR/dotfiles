@@ -15,6 +15,7 @@ Singleton {
     // states
     property bool enableSetting: false
     property bool enableSystemPanel: false
+    property Item settingpanel: null
 
     // global item
     property alias general: adapter

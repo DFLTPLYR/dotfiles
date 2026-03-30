@@ -17,11 +17,19 @@ Variants {
         color: "transparent"
 
         mask: Region {
-            item: settingloader.item
+            regions: [
+                // Region {
+                //     item: settingloader.item
+                // },
+                Region {
+                    item: content.item
+                }
+            ]
         }
 
         // Wayland Layers
         LazyLoader {
+            id: content
             active: fileView.loaded
             component: Item {
                 id: display
@@ -51,27 +59,27 @@ Variants {
         }
 
         // settings
-        Loader {
-            id: settingloader
-            property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
-            active: false
-            sourceComponent: Settings {
-                onHidden: {
-                    settingloader.active = false;
-                }
-            }
-            onShouldShowChanged: {
-                if (shouldShow) {
-                    active = true;
-                } else if (item) {
-                    item.state = 'hide';
-                }
-            }
-            onLoaded: {
-                item.state = 'show';
-            }
-        }
-
+        // Loader {
+        //     id: settingloader
+        //     property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
+        //     active: false
+        //     sourceComponent: Settings {
+        //         onHidden: {
+        //             settingloader.active = false;
+        //         }
+        //     }
+        //     onShouldShowChanged: {
+        //         if (shouldShow) {
+        //             active = true;
+        //         } else if (item) {
+        //             item.state = 'hide';
+        //         }
+        //     }
+        //     onLoaded: {
+        //         item.state = 'show';
+        //     }
+        // }
+        //
         // Per monitor data
         Instantiator {
             model: ScriptModel {
