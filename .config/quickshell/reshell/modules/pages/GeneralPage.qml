@@ -139,6 +139,20 @@ Page {
             }
         }
 
+        Label {
+            font.pixelSize: 32
+            text: "Docks"
+        }
+
+        ListView {
+            height: contentHeight
+            model: [...Global.docks]
+            delegate: Button {
+                text: modelData.objectName
+                onClicked: Global.dockpanel = modelData
+            }
+        }
+
         Button {
             text: "add Dock"
             onClicked: {
