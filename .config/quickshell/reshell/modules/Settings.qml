@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
@@ -10,8 +11,11 @@ Rectangle {
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
+
     signal hidden
+
     clip: true
+
     state: 'hide'
     states: [
         State {
@@ -75,6 +79,7 @@ Rectangle {
 
     MouseArea {
         id: ma
+        enabled: Global.general.moveablesetting
         anchors.fill: parent
         drag.target: floatingWindow
     }
