@@ -152,7 +152,7 @@ Scope {
 
             Loader {
                 id: settingloader
-                property bool shouldShow: Global.dockpanel && Global.enableSetting
+                property bool shouldShow: Global.enableSetting && Global.dockpanel === panel
                 active: false
                 sourceComponent: Rectangle {
                     id: settingWindow
