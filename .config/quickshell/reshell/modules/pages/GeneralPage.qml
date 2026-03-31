@@ -148,58 +148,6 @@ Page {
             }
         }
 
-        Label {
-            font.pixelSize: 32
-            text: "Docks"
-        }
-
-        ListView {
-            height: contentHeight
-            model: [...Global.docks]
-            delegate: Button {
-                text: modelData.objectName
-                onClicked: Global.dockpanel = modelData
-            }
-        }
-
-        Button {
-            text: "add Dock"
-            onClicked: {
-                // docksPopup.opened ? docksPopup.close() : docksPopup.open()
-                config.docks.push({
-                    name: Math.random().toString(36).substring(2, 10)
-                });
-            }
-        }
-
-        // Popup {
-        //     id: docksPopup
-        //     width: parent.width * 0.95
-        //     height: parent.height
-        //     anchors.centerIn: parent
-        //
-        //     contentItem: FlexboxLayout {
-        //         id: dockContainer
-        //         focus: true
-        //         Column {
-        //             Label {
-        //                 text: "Docks"
-        //                 font.pixelSize: 32
-        //             }
-        //         }
-        //         TextInput {
-        //             id: dockName
-        //             focus: true
-        //             Layout.fillWidth: true
-        //             Layout.preferredHeight: 40
-        //         }
-        //         Button {
-        //             text: "Confirm"
-        //             onClicked: {}
-        //         }
-        //     }
-        // }
-
         Footer {
             onCancel: () => {
                 console.log("test");
