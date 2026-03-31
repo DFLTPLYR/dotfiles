@@ -74,7 +74,6 @@ Rectangle {
 
     Component.onCompleted: {
         Global.bindRadii(floatingWindow);
-        Global.settingpanel = this;
     }
 
     MouseArea {
@@ -105,6 +104,7 @@ Rectangle {
             fill: parent
             margins: 2
         }
+
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 20
@@ -134,7 +134,7 @@ Rectangle {
                 id: tablist
                 anchors.fill: parent
                 spacing: 1
-                model: ["general", "navbar", "wallpaper"]
+                model: ["general", "navbar", "wallpaper", "docks"]
                 delegate: TabButton {}
             }
         }
@@ -152,6 +152,9 @@ Rectangle {
 
             // Wallpaper
             WallpaperPage {}
+
+            // Docks
+            DocksPage {}
         }
     }
 
