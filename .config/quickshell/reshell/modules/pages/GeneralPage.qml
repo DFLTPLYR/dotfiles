@@ -22,6 +22,15 @@ Page {
             }
         }
 
+        Toggle {
+            text: "Movable Setting Panel"
+            checked: Global.general.moveablesetting
+            onCheckedChanged: {
+                Global.general.moveablesetting = checked;
+                Global.save();
+            }
+        }
+
         // rounding
         Label {
             font.pixelSize: 32
