@@ -87,6 +87,7 @@ Scope {
             DockContainer {
                 id: container
             }
+
             // Widgets
             Loader {
                 id: widgetloader
@@ -131,7 +132,7 @@ Scope {
                                 }
                                 ScriptAction {
                                     script: {
-                                        settingloader.active = false;
+                                        widgetloader.active = false;
                                         Global.widgetpanelEnabled = false;
                                         Global.widgetpanelTarget = null;
                                     }
@@ -214,7 +215,7 @@ Scope {
                                 }
                                 ScriptAction {
                                     script: {
-                                        settingloader.active = false;
+                                        slotloader.active = false;
                                         Global.slotpanelEnabled = false;
                                         Global.slotpanelTarget = null;
                                     }
