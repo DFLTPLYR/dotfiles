@@ -145,9 +145,6 @@ Rectangle {
                 windowconfig: floatingpanel.config
             }
 
-            // Navbar
-            // NavbarPage {}
-
             // Wallpaper
             WallpaperPage {}
 

@@ -96,6 +96,10 @@ Page {
 
             Button {
                 text: "Slots"
+                onClicked: {
+                    Global.slotpanelEnabled = true;
+                    Global.slotpanelTarget = page.selected.panel;
+                }
             }
         }
 
