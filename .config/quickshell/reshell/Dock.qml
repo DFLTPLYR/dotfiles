@@ -76,7 +76,10 @@ Scope {
                         item: container
                     },
                     Region {
-                        item: settingloader.item
+                        item: widgetloader.item
+                    },
+                    Region {
+                        item: slotloader.item
                     }
                 ]
             }
@@ -84,13 +87,13 @@ Scope {
             DockContainer {
                 id: container
             }
-
+            // Widgets
             Loader {
-                id: settingloader
+                id: widgetloader
                 property bool shouldShow: Global.widgetpanelEnabled && Global.widgetpanelTarget === panel
                 active: false
                 sourceComponent: Rectangle {
-                    id: settingWindow
+                    id: widgetWindow
 
                     x: Global.settingpanel ? Global.settingpanel.x : 0
                     y: Global.settingpanel ? config.height + Global.settingpanel.y : 0
@@ -103,14 +106,14 @@ Scope {
                         State {
                             name: "hide"
                             PropertyChanges {
-                                target: settingWindow
+                                target: widgetWindow
                                 opacity: 0
                             }
                         },
                         State {
                             name: "show"
                             PropertyChanges {
-                                target: settingWindow
+                                target: widgetWindow
                                 opacity: 1
                             }
                         }
@@ -149,21 +152,90 @@ Scope {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            settingWindow.state = "hide";
+                            widgetWindow.state = "hide";
                         }
                     }
+                }
 
-                    Rectangle {
-                        id: widget
-                        width: 50
-                        height: 50
-                        Drag.active: ma.drag.active
+                onShouldShowChanged: {
+                    if (shouldShow) {
+                        active = true;
+                    } else if (item) {
+                        item.state = 'hide';
+                    }
+                }
 
-                        MouseArea {
-                            id: ma
-                            anchors.fill: parent
-                            drag.target: widget
-                            drag.axis: Drag.XAndYAxis
+                onLoaded: {
+                    item.state = 'show';
+                }
+            }
+
+            // Slots
+            Loader {
+                id: slotloader
+                property bool shouldShow: Global.slotpanelEnabled && Global.slotpanelTarget === panel
+                active: false
+                sourceComponent: Rectangle {
+                    id: slotWindow
+
+                    x: Global.settingpanel ? Global.settingpanel.x : 0
+                    y: Global.settingpanel ? config.height + Global.settingpanel.y : 0
+                    color: Global.settingpanel.color
+                    width: Global.settingpanel.width
+                    height: Global.settingpanel.height
+
+                    state: 'hide'
+                    states: [
+                        State {
+                            name: "hide"
+                            PropertyChanges {
+                                target: slotWindow
+                                opacity: 0
+                            }
+                        },
+                        State {
+                            name: "show"
+                            PropertyChanges {
+                                target: slotWindow
+                                opacity: 1
+                            }
+                        }
+                    ]
+
+                    transitions: [
+                        Transition {
+                            from: "*"
+                            to: "hide"
+                            SequentialAnimation {
+                                NumberAnimation {
+                                    properties: "width,height,opacity"
+                                    duration: 300
+                                    easing.type: Easing.InOutQuad
+                                }
+                                ScriptAction {
+                                    script: {
+                                        settingloader.active = false;
+                                        Global.slotpanelEnabled = false;
+                                        Global.slotpanelTarget = null;
+                                    }
+                                }
+                            }
+                        },
+                        Transition {
+                            from: "*"
+                            to: "show"
+                            NumberAnimation {
+                                properties: "width,height,opacity"
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    ]
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            slotWindow.state = "hide";
                         }
                     }
                 }

@@ -20,6 +20,9 @@ Singleton {
     property bool widgetpanelEnabled: false
     property var widgetpanelTarget: null
 
+    property bool slotpanelEnabled: false
+    property var slotpanelTarget: null
+
     // global item
     property alias general: adapter
     property list<var> fileManager: []
