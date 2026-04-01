@@ -12,7 +12,6 @@ Variants {
     delegate: PanelWindow {
         id: reshell
         required property ShellScreen modelData
-
         implicitWidth: screen.width
         implicitHeight: screen.height
 
@@ -36,7 +35,7 @@ Variants {
         // Wayland Layers
         LazyLoader {
             id: content
-            active: fileView.loaded
+            active: fileview.loaded
             component: Item {
                 id: display
                 // Navbar
@@ -56,6 +55,9 @@ Variants {
                     model: adapter.docks
                     delegate: Dock {
                         screen: reshell.screen
+                        onAddDock: item => {
+                            fileview.docklist = fileview.docklist.concat([item]);
+                        }
                     }
                     onObjectAdded: (obj, idx) => {
                         obj.parent = display;
@@ -90,7 +92,7 @@ Variants {
         // Per monitor data
         Instantiator {
             model: ScriptModel {
-                values: [...fileView.adapter.widgets]
+                values: [...fileview.adapter.widgets]
             }
             delegate: LazyLoader {
                 required property var modelData
@@ -103,26 +105,27 @@ Variants {
                 onLoadingChanged: {
                     if (item) {
                         item.objectName = modelData.name;
-                        fileView.widgets.push(item);
+                        fileview.widgets.push(item);
                     }
                 }
             }
         }
 
         FileView {
-            id: fileView
+            id: fileview
             path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
             watchChanges: true
             preload: true
 
+            property list<var> docklist: []
             property list<Item> slots: []
             property list<Item> widgets: []
 
             onSlotsChanged: {
-                fileView.reslot();
+                fileview.reslot();
             }
             onWidgetsChanged: {
-                fileView.reslot();
+                fileview.reslot();
             }
 
             onLoaded: snapHistory()
@@ -134,8 +137,8 @@ Variants {
 
             onLoadFailed: error => {
                 if (error === FileViewError.FileNotFound) {
-                    fileView.setText("{}");
-                    fileView.writeAdapter();
+                    fileview.setText("{}");
+                    fileview.writeAdapter();
                     Quickshell.reload(true);
                 }
             }
@@ -168,7 +171,7 @@ Variants {
 
                 onLayoutsChanged: {
                     Qt.callLater(() => {
-                        fileView.reslot();
+                        fileview.reslot();
                     });
                 }
             }
@@ -191,7 +194,7 @@ Variants {
                         continue;
                     const target = adapter.widgets.find(s => s && s.name && s.name === widget.objectName);
                     if (target && target.slot) {
-                        const slot = fileView.slots.find(s => s && s.objectName && s.objectName === target.slot);
+                        const slot = fileview.slots.find(s => s && s.objectName && s.objectName === target.slot);
                         if (slot)
                             widget.parent = slot;
                     }
@@ -238,7 +241,7 @@ Variants {
                     existing.history = history;
                 } else {
                     Global.fileManager.push({
-                        ref: fileView,
+                        ref: fileview,
                         subject: key,
                         history: history
                     });
@@ -271,7 +274,7 @@ Variants {
                 adapter.custom.layout = parseJson(adapter.custom.layout);
                 adapter.layouts = parseJson(history.layouts);
                 adapter.widgets = parseJson(history.widgets);
-                fileView.writeAdapter();
+                fileview.writeAdapter();
             }
 
             function parseJson(json) {
@@ -279,8 +282,8 @@ Variants {
             }
 
             function save() {
-                fileView.writeAdapter();
-                fileView.snapHistory();
+                fileview.writeAdapter();
+                fileview.snapHistory();
                 reload();
             }
 
@@ -359,7 +362,7 @@ Variants {
         Connections {
             target: Quickshell
             function onReloadCompleted() {
-                fileView.reslot();
+                fileview.reslot();
             }
         }
     }

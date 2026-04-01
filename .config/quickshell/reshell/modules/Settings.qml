@@ -141,7 +141,9 @@ Rectangle {
             Layout.fillWidth: true
 
             // General
-            GeneralPage {}
+            GeneralPage {
+                windowconfig: floatingpanel.config
+            }
 
             // Navbar
             // NavbarPage {}
@@ -150,7 +152,10 @@ Rectangle {
             WallpaperPage {}
 
             // Docks
-            DocksPage {}
+            DocksPage {
+                windowconfig: floatingpanel.config
+                docks: Global.getConfigManager(`${screen.name}-navbar`).docklist
+            }
         }
     }
 
