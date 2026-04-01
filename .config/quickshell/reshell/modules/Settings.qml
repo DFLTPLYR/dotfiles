@@ -7,7 +7,7 @@ import qs.components
 import qs.modules.pages
 
 Rectangle {
-    id: floatingWindow
+    id: floatingpanel
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
     property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
@@ -21,14 +21,14 @@ Rectangle {
         State {
             name: "hide"
             PropertyChanges {
-                target: floatingWindow
+                target: floatingpanel
                 opacity: 0
             }
         },
         State {
             name: "show"
             PropertyChanges {
-                target: floatingWindow
+                target: floatingpanel
                 opacity: 1
                 width: screen.width / 1.5
                 height: screen.height / 1.5
@@ -47,7 +47,7 @@ Rectangle {
                     easing.type: Easing.InOutQuad
                 }
                 ScriptAction {
-                    script: floatingWindow.hidden()
+                    script: floatingpanel.hidden()
                 }
             }
         },
@@ -72,15 +72,11 @@ Rectangle {
         color: Colors.color.outline
     }
 
-    Component.onCompleted: {
-        Global.bindRadii(floatingWindow);
-    }
-
     MouseArea {
         id: ma
         enabled: Global.general.moveablesetting
         anchors.fill: parent
-        drag.target: floatingWindow
+        drag.target: floatingpanel
     }
 
     function getIcon(name) {
@@ -134,7 +130,7 @@ Rectangle {
                 id: tablist
                 anchors.fill: parent
                 spacing: 1
-                model: ["general", "navbar", "wallpaper", "docks"]
+                model: ["general", "wallpaper", "docks"]
                 delegate: TabButton {}
             }
         }
@@ -148,7 +144,7 @@ Rectangle {
             GeneralPage {}
 
             // Navbar
-            NavbarPage {}
+            // NavbarPage {}
 
             // Wallpaper
             WallpaperPage {}
@@ -170,9 +166,9 @@ Rectangle {
 
             Icon {
                 anchors.centerIn: parent
-                text: floatingWindow.getIcon(modelData)
+                text: floatingpanel.getIcon(modelData)
                 font.pixelSize: parent.height
-                color: itemMa.containsMouse || stack.currentIndex === index ? "white" : Qt.rgba(1, 1, 1, 0.6)
+                color: itemMa.containsMouse || stack.currentIndex === index ? Colors.color.tertiary : Colors.color.primary
 
                 Behavior on color {
                     ColorAnimation {
@@ -205,5 +201,9 @@ Rectangle {
                 stack.currentIndex = index;
             }
         }
+    }
+
+    Component.onCompleted: {
+        Global.bindRadii(floatingpanel);
     }
 }
