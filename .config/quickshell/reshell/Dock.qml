@@ -11,6 +11,7 @@ Scope {
     id: dock
     property ShellScreen screen
     required property string name
+    signal addDock(var item)
 
     FileView {
         id: file
@@ -50,7 +51,6 @@ Scope {
             property int size: config.side ? config.width : config.height
             screen: dock.screen
             color: "transparent"
-            // color: Colors.setOpacity(Colors.color.background, 0.2)
             objectName: dock.name
 
             anchors {
@@ -253,7 +253,7 @@ Scope {
             }
 
             Component.onCompleted: {
-                Global.docks.push({
+                dock.addDock({
                     panel: panel,
                     config: config
                 });
