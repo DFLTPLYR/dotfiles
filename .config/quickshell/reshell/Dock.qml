@@ -80,82 +80,8 @@ Scope {
                 ]
             }
 
-            Rectangle {
+            DockContainer {
                 id: container
-                color: config.style.color
-
-                state: config.position
-                states: [
-                    State {
-                        name: "left"
-                        PropertyChanges {
-                            target: container
-                            x: 0
-                            y: (parent.height - height) * (config.y / 100)
-                            width: panel.config.width
-                            height: parent.height * (panel.config.height / 100)
-                        }
-                    },
-                    State {
-                        name: "right"
-                        PropertyChanges {
-                            target: container
-                            x: parent.width - config.width
-                            y: (parent.height - height) * (config.y / 100)
-                            width: config.width
-                            height: parent.height * (config.height / 100)
-                        }
-                    },
-                    State {
-                        name: "top"
-                        PropertyChanges {
-                            target: container
-                            width: parent.width * (config.width / 100)
-                            height: config.height
-                            y: 0
-                            x: (parent.width - width) * (config.x / 100)
-                        }
-                    },
-                    State {
-                        name: "bottom"
-                        PropertyChanges {
-                            target: container
-                            y: parent.height - config.height
-                            x: (parent.width - width) * (config.x / 100)
-                            width: parent.width * (config.width / 100)
-                            height: config.height
-                        }
-                    }
-                ]
-
-                transitions: [
-                    Transition {
-                        from: "*"
-                        to: "*"
-                        NumberAnimation {
-                            properties: "width,height"
-                            duration: 100
-                            easing.type: Easing.OutCubic
-                        }
-                        NumberAnimation {
-                            properties: "x,y"
-                            duration: 100
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                ]
-
-                Loader {
-                    active: Global.enableSetting
-                    sourceComponent: DropArea {
-                        id: dropArea
-                        width: container.width
-                        height: container.height
-                        onContainsDragChanged: {
-                            container.border.color = containsDrag ? Colors.color.tertiary : "transparent";
-                        }
-                    }
-                }
             }
 
             Loader {
@@ -259,6 +185,84 @@ Scope {
                 });
                 Global.bindRadii(container, config.style.rounding);
                 Global.bindMargins(container, config.style.margin);
+            }
+        }
+    }
+
+    component DockContainer: Rectangle {
+        id: container
+        color: config.style.color
+
+        state: config.position
+        states: [
+            State {
+                name: "left"
+                PropertyChanges {
+                    target: container
+                    x: 0
+                    y: (parent.height - height) * (config.y / 100)
+                    width: panel.config.width
+                    height: parent.height * (panel.config.height / 100)
+                }
+            },
+            State {
+                name: "right"
+                PropertyChanges {
+                    target: container
+                    x: parent.width - config.width
+                    y: (parent.height - height) * (config.y / 100)
+                    width: config.width
+                    height: parent.height * (config.height / 100)
+                }
+            },
+            State {
+                name: "top"
+                PropertyChanges {
+                    target: container
+                    width: parent.width * (config.width / 100)
+                    height: config.height
+                    y: 0
+                    x: (parent.width - width) * (config.x / 100)
+                }
+            },
+            State {
+                name: "bottom"
+                PropertyChanges {
+                    target: container
+                    y: parent.height - config.height
+                    x: (parent.width - width) * (config.x / 100)
+                    width: parent.width * (config.width / 100)
+                    height: config.height
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                from: "*"
+                to: "*"
+                NumberAnimation {
+                    properties: "width,height"
+                    duration: 100
+                    easing.type: Easing.OutCubic
+                }
+                NumberAnimation {
+                    properties: "x,y"
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        ]
+
+        Loader {
+            active: Global.enableSetting
+            sourceComponent: DropArea {
+                id: dropArea
+                width: container.width
+                height: container.height
+                onContainsDragChanged: {
+                    container.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                }
             }
         }
     }
