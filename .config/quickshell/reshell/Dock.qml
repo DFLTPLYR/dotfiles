@@ -36,6 +36,7 @@ Scope {
             property StyleJson style: StyleJson {
                 color: Colors.setOpacity(Colors.color.background, 0.5)
             }
+            property list<var> slots: []
             Component.onCompleted: {
                 panelLoader.active = true;
             }
@@ -86,7 +87,7 @@ Scope {
 
             Loader {
                 id: settingloader
-                property bool shouldShow: Global.enableSetting && Global.dockpanel === panel
+                property bool shouldShow: Global.widgetpanelEnabled && Global.widgetpanelTarget === panel
                 active: false
                 sourceComponent: Rectangle {
                     id: settingWindow
@@ -128,7 +129,8 @@ Scope {
                                 ScriptAction {
                                     script: {
                                         settingloader.active = false;
-                                        Global.dockpanel = null;
+                                        Global.widgetpanelEnabled = false;
+                                        Global.widgetpanelTarget = null;
                                     }
                                 }
                             }
@@ -173,6 +175,7 @@ Scope {
                         item.state = 'hide';
                     }
                 }
+
                 onLoaded: {
                     item.state = 'show';
                 }

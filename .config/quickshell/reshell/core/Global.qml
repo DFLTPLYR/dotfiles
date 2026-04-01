@@ -16,7 +16,9 @@ Singleton {
     property bool enableSetting: false
     property bool enableSystemPanel: false
     property Item settingpanel: null
-    property QtObject dockpanel: null
+
+    property bool widgetpanelEnabled: false
+    property var widgetpanelTarget: null
 
     // global item
     property alias general: adapter
