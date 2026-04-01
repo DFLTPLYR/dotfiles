@@ -42,7 +42,7 @@ post_hook = 'pkill -SIGUSR1 nvim'
 input_path = 'templates/userChrome.css.tpl'
 output_path = '~/dotfiles/.config/matugen/data/userChrome.css'
 pre_hook = '''
-PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default Profile" | head -n 1)
+PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default (release)" | head -n 1)
 mkdir -p "$PROFILE_DIR/chrome"
 [ -L "$PROFILE_DIR/chrome/userChrome.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userChrome.css "$PROFILE_DIR/chrome/userChrome.css"
 '''
@@ -51,7 +51,7 @@ mkdir -p "$PROFILE_DIR/chrome"
 input_path = 'templates/userContent.css.tpl'
 output_path = '~/dotfiles/.config/matugen/data/userContent.css'
 pre_hook = '''
-PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default Profile" | head -n 1)
+PROFILE_DIR=$(find ~/.zen -maxdepth 1 -type d -name "*.Default (release)" | head -n 1)
 mkdir -p "$PROFILE_DIR/chrome"
 [ -L "$PROFILE_DIR/chrome/userContent.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userContent.css "$PROFILE_DIR/chrome/userContent.css"
 '''

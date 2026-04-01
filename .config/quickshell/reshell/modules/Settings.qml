@@ -153,8 +153,16 @@ Rectangle {
 
             // Docks
             DocksPage {
+                property var reshell: Global.getConfigManager(`${screen.name}-navbar`)
                 windowconfig: floatingpanel.config
-                docks: Global.getConfigManager(`${screen.name}-navbar`).docklist
+                docks: reshell.docklist
+                onRemove: item => {
+                    const index = reshell.adapter.docks.findIndex(d => d.name === item);
+                    if (index !== -1) {
+                        reshell.adapter.docks.splice(index, 1);
+                        reshell.save();
+                    }
+                }
             }
         }
     }
