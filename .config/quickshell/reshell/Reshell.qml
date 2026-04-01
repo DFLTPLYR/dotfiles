@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 
 import qs.core
 import qs.types
@@ -10,9 +11,14 @@ Variants {
     model: Quickshell.screens
     delegate: PanelWindow {
         id: reshell
+        required property ShellScreen modelData
+
         implicitWidth: screen.width
         implicitHeight: screen.height
-        required property ShellScreen modelData
+
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.namespace: `Reshell-${screen.name}`
+
         screen: modelData
         color: "transparent"
 
@@ -34,9 +40,9 @@ Variants {
             component: Item {
                 id: display
                 // Navbar
-                Top {
-                    screen: reshell.screen
-                }
+                // Top {
+                //     screen: reshell.screen
+                // }
                 // background
                 Background {
                     screen: reshell.screen

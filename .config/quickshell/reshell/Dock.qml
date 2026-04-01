@@ -1,9 +1,11 @@
 import QtQuick
+
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+
 import qs.core
-import qs.modules
+import qs.types
 
 Scope {
     id: dock
@@ -30,7 +32,12 @@ Scope {
             property int y: 0
             property string position: "top"
             readonly property bool side: position === "left" || position === "right"
-            Component.onCompleted: panelLoader.active = true
+            property StyleJson style: StyleJson {
+                color: Colors.setOpacity(Colors.color.background, 0.5)
+            }
+            Component.onCompleted: {
+                panelLoader.active = true;
+            }
         }
     }
 
@@ -75,8 +82,9 @@ Scope {
 
             Rectangle {
                 id: container
+                color: config.style.color
+
                 state: config.position
-                color: "transparent"
                 states: [
                     State {
                         name: "left"
@@ -244,7 +252,14 @@ Scope {
                 }
             }
 
-            Component.onCompleted: Global.docks.push(this)
+            Component.onCompleted: {
+                Global.docks.push({
+                    panel: panel,
+                    config: config
+                });
+                Global.bindRadii(container, config.style.rounding);
+                Global.bindMargins(container, config.style.margin);
+            }
         }
     }
 }
