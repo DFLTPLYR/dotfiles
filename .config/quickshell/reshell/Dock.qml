@@ -54,6 +54,11 @@ Scope {
             color: "transparent"
             objectName: dock.name
 
+            signal openwidgets
+            signal openslots
+
+            onOpenwidgets: console.log("test")
+
             anchors {
                 top: config.position === "top"
                 bottom: config.position === "bottom"
@@ -96,12 +101,11 @@ Scope {
                 sourceComponent: Rectangle {
                     id: widgetWindow
 
-                    x: Global.settingpanel ? Global.settingpanel.x : 0
-                    y: Global.settingpanel ? config.height + Global.settingpanel.y : 0
-                    color: Global.settingpanel.color
-                    width: Global.settingpanel.width
-                    height: Global.settingpanel.height
-
+                    color: Colors.setOpacity(Colors.color.background, 0.5)
+                    width: screen.width / 2
+                    height: screen.height / 2
+                    x: screen.width / 2 - width / 2
+                    y: screen.height / 2 - height / 2
                     state: 'hide'
                     states: [
                         State {
@@ -179,11 +183,11 @@ Scope {
                 sourceComponent: Rectangle {
                     id: slotWindow
 
-                    x: Global.settingpanel ? Global.settingpanel.x : 0
-                    y: Global.settingpanel ? config.height + Global.settingpanel.y : 0
-                    color: Global.settingpanel.color
-                    width: Global.settingpanel.width
-                    height: Global.settingpanel.height
+                    color: Colors.setOpacity(Colors.color.background, 0.5)
+                    width: screen.width / 2
+                    height: screen.height / 2
+                    x: screen.width / 2 - width / 2
+                    y: screen.height / 2 - height / 2
 
                     state: 'hide'
                     states: [

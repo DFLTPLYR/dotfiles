@@ -97,8 +97,8 @@ Page {
             Button {
                 text: "Slots"
                 onClicked: {
-                    Global.slotpanelEnabled = true;
-                    Global.slotpanelTarget = page.selected.panel;
+                    Global.widgetpanelEnabled = true;
+                    Global.widgetpanelTarget = page.selected.panel;
                 }
             }
         }
