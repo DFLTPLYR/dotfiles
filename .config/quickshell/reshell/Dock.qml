@@ -37,9 +37,12 @@ Scope {
                 color: Colors.setOpacity(Colors.color.background, 0.5)
             }
             property list<var> slots: []
-            Component.onCompleted: {
-                panelLoader.active = true;
+
+            function save() {
+                file.writeAdapter();
             }
+
+            Component.onCompleted: panelLoader.active = true
         }
     }
 
@@ -188,6 +191,11 @@ Scope {
                     height: screen.height / 2
                     x: screen.width / 2 - width / 2
                     y: screen.height / 2 - height / 2
+
+                    border {
+                        width: 2
+                        color: Colors.color.primary
+                    }
 
                     state: 'hide'
                     states: [

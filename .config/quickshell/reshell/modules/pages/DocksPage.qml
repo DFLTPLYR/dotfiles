@@ -313,5 +313,9 @@ Page {
                 }
             }
         }
+        Button {
+            text: "Save"
+            onClicked: page.config.save()
+        }
     }
 }
