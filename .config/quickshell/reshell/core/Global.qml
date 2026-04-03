@@ -26,8 +26,6 @@ Singleton {
     // global item
     property alias general: adapter
     property list<var> fileManager: []
-    property list<var> slots: []
-    property list<var> docks: []
 
     function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
@@ -44,13 +42,6 @@ Singleton {
         Quickshell.execDetached({
             command: ["quickcli", "generate-palette", "--type", "scheme-content", ...paths]
         });
-
-        for (const i in config.fileManager) {
-            const target = config.fileManager[i];
-
-            target.ref.updateColor();
-            target.ref.save();
-        }
     }
 
     FileView {

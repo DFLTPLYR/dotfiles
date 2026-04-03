@@ -41,8 +41,11 @@ Scope {
             function save() {
                 file.writeAdapter();
             }
-
             Component.onCompleted: panelLoader.active = true
+        }
+        function updateColor() {
+            config.style.color = Colors.color.background;
+            config.style.border.color = Colors.color.outline;
         }
     }
 
