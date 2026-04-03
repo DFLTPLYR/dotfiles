@@ -15,13 +15,15 @@ Singleton {
     // states
     property bool enableSetting: false
     property bool enableSystemPanel: false
-    property Item settingpanel: null
+    property Item setttingPanel: null
 
     property bool widgetpanelEnabled: false
     property var widgetpanelTarget: null
 
     property bool slotpanelEnabled: false
     property var slotpanelTarget: null
+
+    property var selectedItem: null
 
     // global item
     property alias general: adapter

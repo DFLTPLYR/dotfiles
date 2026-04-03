@@ -91,7 +91,6 @@ Scope {
             DockContainer {
                 id: container
             }
-
             // Widgets
             WidgetLoader {
                 id: widgetloader
@@ -100,6 +99,7 @@ Scope {
             SlotLoader {
                 id: slotloader
             }
+
             Component.onCompleted: {
                 dock.addDock({
                     panel: panel,
@@ -107,28 +107,6 @@ Scope {
                 });
                 Global.bindRadii(container, config.style.rounding);
                 Global.bindMargins(container, config.style.margin);
-            }
-        }
-    }
-
-    component DockContentContainer: GridLayout {
-        id: slotcontainer
-        width: parent.width
-        height: parent.height
-        flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
-        Instantiator {
-            model: ScriptModel {
-                values: {
-                    const data = config.slots;
-                    return [...data];
-                }
-            }
-            delegate: Slot {
-                required property var modelData
-                parent: slotcontainer
-                objectName: modelData.name || ""
-                position: modelData.position || ""
-                spacing: modelData.spacing || 0
             }
         }
     }
@@ -200,12 +178,119 @@ Scope {
         DockContentContainer {}
     }
 
+    component DockContentContainer: GridLayout {
+        id: slotcontainer
+        width: parent.width
+        height: parent.height
+        flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
+
+        Instantiator {
+            model: ScriptModel {
+                values: {
+                    const data = config.slots;
+                    return [...data];
+                }
+            }
+            delegate: Slot {
+                required property var modelData
+                parent: slotcontainer
+                objectName: modelData.name || ""
+                position: modelData.position || ""
+                spacing: modelData.spacing || 0
+            }
+        }
+    }
+
     component Slot: Rectangle {
         id: slot
+        property bool selected: Global.enableSetting && Global.selectedItem === slot
+        onSelectedChanged: slot.state = slot.selected ? "selected" : "none"
+
         property string position: "left"
         property int spacing: 2
         default property alias content: innerGrid.data
+        border.width: 5
+        state: "none"
 
+        states: [
+            State {
+                name: "hovered"
+                PropertyChanges {
+                    target: slot
+                    border.width: 2
+                    border.color: Colors.color.tertiary
+                }
+            },
+            State {
+                name: "selected"
+                PropertyChanges {
+                    target: slot
+                    border.width: 2
+                    border.color: Colors.color.tertiary
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                to: "hovered"
+                NumberAnimation {
+                    property: "border.width"
+                    duration: 150
+                }
+                ColorAnimation {
+                    property: "border.color"
+                    duration: 150
+                }
+            },
+            Transition {
+                to: "none"
+                NumberAnimation {
+                    property: "border.width"
+                    duration: 150
+                }
+                ColorAnimation {
+                    property: "border.color"
+                    duration: 150
+                }
+            },
+            Transition {
+                to: "selected"
+                NumberAnimation {
+                    property: "border.width"
+                    duration: 150
+                }
+                ColorAnimation {
+                    property: "border.color"
+                    duration: 150
+                }
+            }
+        ]
+
+        Loader {
+            active: Global.enableSetting
+            anchors.fill: parent
+            sourceComponent: DropArea {
+                onContainsDragChanged: {
+                    slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                }
+                onDropped: drop => {
+                    console.log(drop);
+                }
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onHoveredChanged: {
+                if (!slot.state === "selected")
+                    slot.state = containsMouse ? "hovered" : "none";
+            }
+            onClicked: {
+                Global.selectedItem = slot;
+            }
+        }
         color: "transparent"
 
         Layout.fillWidth: true
@@ -282,23 +367,6 @@ Scope {
                         duration: 300
                         easing.type: Easing.InOutSine
                     }
-                }
-            }
-        }
-
-        Loader {
-            active: Global.enableSetting
-            sourceComponent: DropArea {
-                id: dropArea
-                onContainsDragChanged: {
-                    slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
-                }
-                onDropped: drop => {}
-            }
-            onItemChanged: {
-                if (item) {
-                    item.width = slot.width;
-                    item.height = slot.height;
                 }
             }
         }
@@ -481,6 +549,21 @@ Scope {
                 anchors.fill: parent
                 onClicked: {
                     widgetWindow.state = "hide";
+                }
+            }
+
+            Rectangle {
+                width: 50
+                height: 50
+                color: "red"
+                Drag.active: ma.drag.active
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+                    drag.target: parent
+                    onReleased: {
+                        parent.Drag.drop();
+                    }
                 }
             }
         }
