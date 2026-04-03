@@ -451,14 +451,14 @@ ColumnLayout {
                 width: 150
                 title: 'Files'
 
-                Action {
+                Button {
                     text: "add file"
-                    onTriggered: file.active()
+                    onClicked: file.active()
                 }
 
-                Action {
+                Button {
                     text: "Save preset"
-                    onTriggered: {
+                    onClicked: {
                         var preset = {
                             source: Wallpaper.config.layers,
                             name: Math.random().toString(36).substring(2, 10)
@@ -468,23 +468,18 @@ ColumnLayout {
                     }
                 }
 
-                Action {
-                    text: "Check"
-                    onTriggered: wallpaperpage.imageToScreenPosition()
-                }
-
-                Action {
+                Button {
                     text: "Generate"
-                    onTriggered: Wallpaper.generatecolor()
+                    onClicked: Wallpaper.generatecolor()
                 }
 
                 MenuBar {
+                    width: parent.width
                     Menu {
                         title: "Load preset"
+                        width: parent.width
                         leftPadding: 2
                         rightPadding: 2
-
-                        width: 150
                     }
                 }
             }

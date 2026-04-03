@@ -30,8 +30,8 @@ Rectangle {
             PropertyChanges {
                 target: floatingpanel
                 opacity: 1
-                width: screen.width / 1.5
-                height: screen.height / 1.5
+                width: screen.width / 1.2
+                height: screen.height / 1.2
             }
         }
     ]
