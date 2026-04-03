@@ -11,7 +11,7 @@ import qs.components.widgets
 Page {
     ColumnLayout {
         id: navbarpage
-        property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
+        property QtObject config: Global.getConfigManager(`${screen.name}-dock`).adapter
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
         spacing: 10
@@ -335,7 +335,7 @@ Page {
 
         Footer {
             id: footer
-            property var config: Global.getConfigManager(`${screen.name}-navbar`)
+            property var config: Global.getConfigManager(`${screen.name}-dock`)
             onCancel: {
                 footer.config.rollbackHistory();
             }

@@ -70,6 +70,7 @@ ListView {
         width: container.width
         height: 80
         color: Colors.setOpacity(Colors.color.background, 0.5)
+        clip: true
 
         Rectangle {
             id: progressOutline

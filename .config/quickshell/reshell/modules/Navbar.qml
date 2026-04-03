@@ -8,7 +8,7 @@ import qs.core
 Item {
     id: navbar
     default property alias content: container.data
-    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`)?.adapter
+    property QtObject config: Global.getConfigManager(`${screen.name}-dock`)?.adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
     clip: true
 
@@ -117,7 +117,7 @@ Item {
                 }
                 onObjectAdded: (idx, obj) => {
                     obj.parent = navbarSlot;
-                    const file = Global.getConfigManager(`${screen.name}-navbar`);
+                    const file = Global.getConfigManager(`${screen.name}-dock`);
                     if (!file)
                         return;
                     const index = file.slots.findIndex(s => s.objectName === obj.objectName);

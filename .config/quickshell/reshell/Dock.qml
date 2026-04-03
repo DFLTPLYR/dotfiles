@@ -53,14 +53,12 @@ Scope {
             id: panel
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
-            screen: dock.screen
-            color: "transparent"
-            objectName: dock.name
-
             signal openwidgets
             signal openslots
 
-            onOpenwidgets: console.log("test")
+            screen: dock.screen
+            color: "transparent"
+            objectName: dock.name
 
             anchors {
                 top: config.position === "top"
@@ -73,7 +71,6 @@ Scope {
             implicitWidth: Global.enableSetting ? screen.width : (!config.side ? screen.width : config.width)
 
             exclusionMode: ExclusionMode.Ignore
-            exclusiveZone: panel.size
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
@@ -107,8 +104,10 @@ Scope {
                     color: Colors.setOpacity(Colors.color.background, 0.5)
                     width: screen.width / 2
                     height: screen.height / 2
+
                     x: screen.width / 2 - width / 2
                     y: screen.height / 2 - height / 2
+
                     state: 'hide'
                     states: [
                         State {
@@ -280,7 +279,6 @@ Scope {
     component DockContainer: Rectangle {
         id: container
         color: config.style.color
-
         state: config.position
         states: [
             State {

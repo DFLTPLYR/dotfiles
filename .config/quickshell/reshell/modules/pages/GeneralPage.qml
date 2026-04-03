@@ -7,7 +7,7 @@ import qs.core
 Page {
     ColumnLayout {
         id: general
-        property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
+        property QtObject config: Global.getConfigManager(`${screen.name}-dock`).adapter
         property bool side: config ? (config.position === "left" || config.position === "right") : false
         width: parent.width
 
