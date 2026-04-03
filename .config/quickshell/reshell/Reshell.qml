@@ -79,7 +79,7 @@ Variants {
             onShouldShowChanged: {
                 if (shouldShow) {
                     active = true;
-                    Global.settingpanel = settingloader.item;
+                    Global.setttingPanel = settingloader.item;
                 } else if (item) {
                     item.state = 'hide';
                 }

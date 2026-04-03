@@ -314,6 +314,7 @@ Item {
 
         Loader {
             active: Global.enableSetting
+            anchors.fill: parent
             sourceComponent: DropArea {
                 id: dropArea
                 onContainsDragChanged: {
@@ -329,12 +330,6 @@ Item {
                         slot.calculateNewPosition(item, drop, newParent, oldParent, oldPosition);
                         slot.reorderChildren();
                     }
-                }
-            }
-            onItemChanged: {
-                if (item) {
-                    item.width = slot.width;
-                    item.height = slot.height;
                 }
             }
         }
