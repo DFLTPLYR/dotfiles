@@ -1,10 +1,12 @@
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 
 import qs.core
+import qs.components
 import qs.types
 
 Scope {
@@ -43,10 +45,6 @@ Scope {
             }
             Component.onCompleted: panelLoader.active = true
         }
-        function updateColor() {
-            config.style.color = Colors.color.background;
-            config.style.border.color = Colors.color.outline;
-        }
     }
 
     LazyLoader {
@@ -56,8 +54,6 @@ Scope {
             id: panel
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
-            signal openwidgets
-            signal openslots
 
             screen: dock.screen
             color: "transparent"
@@ -97,177 +93,13 @@ Scope {
             }
 
             // Widgets
-            Loader {
+            WidgetLoader {
                 id: widgetloader
-                property bool shouldShow: Global.widgetpanelEnabled && Global.widgetpanelTarget === panel
-                active: false
-                sourceComponent: Rectangle {
-                    id: widgetWindow
-
-                    color: Colors.setOpacity(Colors.color.background, 0.5)
-                    width: screen.width / 2
-                    height: screen.height / 2
-
-                    x: screen.width / 2 - width / 2
-                    y: screen.height / 2 - height / 2
-
-                    state: 'hide'
-                    states: [
-                        State {
-                            name: "hide"
-                            PropertyChanges {
-                                target: widgetWindow
-                                opacity: 0
-                            }
-                        },
-                        State {
-                            name: "show"
-                            PropertyChanges {
-                                target: widgetWindow
-                                opacity: 1
-                            }
-                        }
-                    ]
-
-                    transitions: [
-                        Transition {
-                            from: "*"
-                            to: "hide"
-                            SequentialAnimation {
-                                NumberAnimation {
-                                    properties: "width,height,opacity"
-                                    duration: 300
-                                    easing.type: Easing.InOutQuad
-                                }
-                                ScriptAction {
-                                    script: {
-                                        widgetloader.active = false;
-                                        Global.widgetpanelEnabled = false;
-                                        Global.widgetpanelTarget = null;
-                                    }
-                                }
-                            }
-                        },
-                        Transition {
-                            from: "*"
-                            to: "show"
-                            NumberAnimation {
-                                properties: "width,height,opacity"
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            widgetWindow.state = "hide";
-                        }
-                    }
-                }
-
-                onShouldShowChanged: {
-                    if (shouldShow) {
-                        active = true;
-                    } else if (item) {
-                        item.state = 'hide';
-                    }
-                }
-
-                onLoaded: {
-                    item.state = 'show';
-                }
             }
-
             // Slots
-            Loader {
+            SlotLoader {
                 id: slotloader
-                property bool shouldShow: Global.slotpanelEnabled && Global.slotpanelTarget === panel
-                active: false
-                sourceComponent: Rectangle {
-                    id: slotWindow
-
-                    color: Colors.setOpacity(Colors.color.background, 0.5)
-                    width: screen.width / 2
-                    height: screen.height / 2
-                    x: screen.width / 2 - width / 2
-                    y: screen.height / 2 - height / 2
-
-                    border {
-                        width: 2
-                        color: Colors.color.primary
-                    }
-
-                    state: 'hide'
-                    states: [
-                        State {
-                            name: "hide"
-                            PropertyChanges {
-                                target: slotWindow
-                                opacity: 0
-                            }
-                        },
-                        State {
-                            name: "show"
-                            PropertyChanges {
-                                target: slotWindow
-                                opacity: 1
-                            }
-                        }
-                    ]
-
-                    transitions: [
-                        Transition {
-                            from: "*"
-                            to: "hide"
-                            SequentialAnimation {
-                                NumberAnimation {
-                                    properties: "width,height,opacity"
-                                    duration: 300
-                                    easing.type: Easing.InOutQuad
-                                }
-                                ScriptAction {
-                                    script: {
-                                        slotloader.active = false;
-                                        Global.slotpanelEnabled = false;
-                                        Global.slotpanelTarget = null;
-                                    }
-                                }
-                            }
-                        },
-                        Transition {
-                            from: "*"
-                            to: "show"
-                            NumberAnimation {
-                                properties: "width,height,opacity"
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            slotWindow.state = "hide";
-                        }
-                    }
-                }
-
-                onShouldShowChanged: {
-                    if (shouldShow) {
-                        active = true;
-                    } else if (item) {
-                        item.state = 'hide';
-                    }
-                }
-
-                onLoaded: {
-                    item.state = 'show';
-                }
             }
-
             Component.onCompleted: {
                 dock.addDock({
                     panel: panel,
@@ -275,6 +107,28 @@ Scope {
                 });
                 Global.bindRadii(container, config.style.rounding);
                 Global.bindMargins(container, config.style.margin);
+            }
+        }
+    }
+
+    component DockContentContainer: GridLayout {
+        id: slotcontainer
+        width: parent.width
+        height: parent.height
+        flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
+        Instantiator {
+            model: ScriptModel {
+                values: {
+                    const data = config.slots;
+                    return [...data];
+                }
+            }
+            delegate: Slot {
+                required property var modelData
+                parent: slotcontainer
+                objectName: modelData.name || ""
+                position: modelData.position || ""
+                spacing: modelData.spacing || 0
             }
         }
     }
@@ -343,16 +197,304 @@ Scope {
             }
         ]
 
+        DockContentContainer {}
+    }
+
+    component Slot: Rectangle {
+        id: slot
+        property string position: "left"
+        property int spacing: 2
+        default property alias content: innerGrid.data
+
+        color: "transparent"
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.margins: 1
+        onChildrenChanged: {
+            for (const i in children) {
+                const target = children[i];
+                if (target.objectName) {
+                    target.parent = innerGrid;
+                }
+            }
+        }
+
+        GridLayout {
+            id: grid
+            anchors.fill: parent
+
+            Grid {
+                id: innerGrid
+                flow: config.side ? Grid.TopToBottom : Grid.LeftToRight
+
+                rows: config.side ? children.length : 1
+                columns: config.side ? 1 : children.length
+
+                Layout.alignment: {
+                    switch (slot.position) {
+                    case "left":
+                    case "top":
+                        return Qt.AlignLeft | Qt.AlignTop;
+                    case "right":
+                    case "bottom":
+                        return Qt.AlignRight | Qt.AlignBottom;
+                    case "center":
+                        return Qt.AlignCenter;
+                    default:
+                        return Qt.AlignLeft | Qt.AlignTop;
+                    }
+                }
+
+                spacing: slot.spacing
+                onChildrenChanged: {
+                    for (let i = 0; children.length > i; i++) {
+                        const target = children[i];
+                        slot.bindSize(target);
+                    }
+                }
+
+                populate: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
+
+                add: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
+
+                move: Transition {
+                    from: "*"
+                    to: "*"
+                    NumberAnimation {
+                        properties: "x,y,width,height"
+                        duration: 300
+                        easing.type: Easing.InOutSine
+                    }
+                }
+            }
+        }
+
         Loader {
             active: Global.enableSetting
             sourceComponent: DropArea {
                 id: dropArea
-                width: container.width
-                height: container.height
                 onContainsDragChanged: {
-                    container.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                    slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                }
+                onDropped: drop => {}
+            }
+            onItemChanged: {
+                if (item) {
+                    item.width = slot.width;
+                    item.height = slot.height;
                 }
             }
+        }
+    }
+
+    component SlotLoader: Loader {
+        id: slotloader
+        property bool shouldShow: Global.slotpanelEnabled && Global.slotpanelTarget === panel
+        active: false
+        sourceComponent: Rectangle {
+            id: slotWindow
+
+            color: Colors.setOpacity(Colors.color.background, 1)
+            width: screen.width / 2
+            height: screen.height / 2
+            x: screen.width / 2 - width / 2
+            y: screen.height / 2 - height / 2
+
+            border {
+                width: 2
+                color: Colors.color.primary
+            }
+            state: 'hide'
+            states: [
+                State {
+                    name: "hide"
+                    PropertyChanges {
+                        target: slotWindow
+                        opacity: 0
+                    }
+                },
+                State {
+                    name: "show"
+                    PropertyChanges {
+                        target: slotWindow
+                        opacity: 1
+                    }
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    from: "*"
+                    to: "hide"
+                    SequentialAnimation {
+                        NumberAnimation {
+                            properties: "width,height,opacity"
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                        ScriptAction {
+                            script: {
+                                slotloader.active = false;
+                                Global.slotpanelEnabled = false;
+                                Global.slotpanelTarget = null;
+                            }
+                        }
+                    }
+                },
+                Transition {
+                    from: "*"
+                    to: "show"
+                    NumberAnimation {
+                        properties: "width,height,opacity"
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            ]
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    slotWindow.state = "hide";
+                }
+            }
+
+            // Data
+            ColumnLayout {
+                width: parent.width
+                Label {
+                    text: "Slots"
+                    font.pixelSize: 32
+                }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Button {
+                        text: "Add Slot"
+                        onClicked: {
+                            const slot = {
+                                name: Math.random().toString(36).substring(2, 10),
+                                position: "left",
+                                spacing: 0
+                            };
+                            config.slots.push(slot);
+                        }
+                    }
+                }
+            }
+        }
+
+        onShouldShowChanged: {
+            if (shouldShow) {
+                active = true;
+            } else if (item) {
+                item.state = 'hide';
+            }
+        }
+
+        onLoaded: {
+            item.state = 'show';
+        }
+    }
+
+    component WidgetLoader: Loader {
+        id: widgetloader
+        property bool shouldShow: Global.widgetpanelEnabled && Global.widgetpanelTarget === panel
+        active: false
+        sourceComponent: Rectangle {
+            id: widgetWindow
+
+            color: Colors.setOpacity(Colors.color.background, 1)
+            width: screen.width / 2
+            height: screen.height / 2
+
+            x: screen.width / 2 - width / 2
+            y: screen.height / 2 - height / 2
+
+            state: 'hide'
+            states: [
+                State {
+                    name: "hide"
+                    PropertyChanges {
+                        target: widgetWindow
+                        opacity: 0
+                    }
+                },
+                State {
+                    name: "show"
+                    PropertyChanges {
+                        target: widgetWindow
+                        opacity: 1
+                    }
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    from: "*"
+                    to: "hide"
+                    SequentialAnimation {
+                        NumberAnimation {
+                            properties: "width,height,opacity"
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                        ScriptAction {
+                            script: {
+                                widgetloader.active = false;
+                                Global.widgetpanelEnabled = false;
+                                Global.widgetpanelTarget = null;
+                            }
+                        }
+                    }
+                },
+                Transition {
+                    from: "*"
+                    to: "show"
+                    NumberAnimation {
+                        properties: "width,height,opacity"
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            ]
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    widgetWindow.state = "hide";
+                }
+            }
+        }
+
+        onShouldShowChanged: {
+            if (shouldShow) {
+                active = true;
+            } else if (item) {
+                item.state = 'hide';
+            }
+        }
+
+        onLoaded: {
+            item.state = 'show';
         }
     }
 }
