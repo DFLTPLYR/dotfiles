@@ -8,6 +8,7 @@ import qs.modules.notification
 import qs.modules.sessionmenu
 import qs.modules.settings
 import qs.modules.wallpaper
+import qs.components
 
 ShellRoot {
     id: root
@@ -32,4 +33,14 @@ ShellRoot {
 
     //Session Menu Overlay
     SessionOverlay {}
+
+    // Cutout Square
+    Variants {
+        model: Quickshell.screens
+        delegate: Cutout {
+            screen: modelData
+            // Put items in container:
+            // container.content: [ ... ]
+        }
+    }
 }

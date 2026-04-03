@@ -184,7 +184,9 @@ ColumnLayout {
     }
 
     component Monitor: Rectangle {
+        id: monitor
         required property ShellScreen modelData
+        property var dock: Global.getConfigManager(`${modelData.name}-dock`)
         width: modelData.width
         height: modelData.height
         color: Colors.setOpacity(Colors.color.background, 0.2)
@@ -195,6 +197,91 @@ ColumnLayout {
         }
         x: modelData.x
         y: modelData.y
+
+        Instantiator {
+            property int margins: 0
+            model: [...dock.docklist]
+            delegate: Item {
+                required property var modelData
+                property var config: modelData.config
+                property int index: 0
+                width: parent.width
+                height: parent.height
+
+                parent: monitor
+                DockContainer {}
+            }
+            onObjectAdded: (idx, obj) => {
+                obj.index = idx;
+            }
+        }
+    }
+
+    component DockContainer: Rectangle {
+        id: container
+
+        color: config.style.color
+        state: config.position
+
+        states: [
+            State {
+                name: "left"
+                PropertyChanges {
+                    target: container
+                    x: 0
+                    y: (parent.height - height) * (config.y / 100)
+                    width: config.width
+                    height: parent.height * (config.height / 100)
+                }
+            },
+            State {
+                name: "right"
+                PropertyChanges {
+                    target: container
+                    x: parent.width - config.width
+                    y: (parent.height - height) * (config.y / 100)
+                    width: config.width
+                    height: parent.height * (config.height / 100)
+                }
+            },
+            State {
+                name: "top"
+                PropertyChanges {
+                    target: container
+                    width: parent.width * (config.width / 100)
+                    height: config.height
+                    y: 0
+                    x: (parent.width - width) * (config.x / 100)
+                }
+            },
+            State {
+                name: "bottom"
+                PropertyChanges {
+                    target: container
+                    y: parent.height - config.height
+                    x: (parent.width - width) * (config.x / 100)
+                    width: parent.width * (config.width / 100)
+                    height: config.height
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                from: "*"
+                to: "*"
+                NumberAnimation {
+                    properties: "width,height"
+                    duration: 100
+                    easing.type: Easing.OutCubic
+                }
+                NumberAnimation {
+                    properties: "x,y"
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        ]
     }
 
     component PreviewImage: Item {

@@ -19,7 +19,7 @@ Rectangle {
     Connections {
         target: Compositor
         function onReadyChanged() {
-            const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
+            const config = Global.getConfigManager(`${Compositor.focusedMonitor}-dock`).adapter;
             widget.side = config.side;
             widget.config = config;
             config.onSideChanged.connect(() => {
@@ -84,7 +84,7 @@ Rectangle {
                 }
                 widget.position = -1;
 
-                const config = Global.getConfigManager(`${Compositor.focusedMonitor}-navbar`).adapter;
+                const config = Global.getConfigManager(`${Compositor.focusedMonitor}-dock`).adapter;
                 const index = config.widgets.findIndex(s => s.name === widget.objectName);
 
                 if (index !== -1) {

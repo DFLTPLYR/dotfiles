@@ -121,7 +121,7 @@ Variants {
             Component.onCompleted: {
                 Global.fileManager.push({
                     ref: fileview,
-                    subject: `${screen.name}-navbar`
+                    subject: `${screen.name}-dock`
                 });
             }
         }

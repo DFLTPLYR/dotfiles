@@ -9,7 +9,7 @@ import qs.modules.pages
 Rectangle {
     id: floatingpanel
     readonly property bool isFocused: screen.name === Compositor.focusedMonitor
-    property QtObject config: Global.getConfigManager(`${screen.name}-navbar`).adapter
+    property QtObject config: Global.getConfigManager(`${screen.name}-dock`).adapter
     property bool side: config ? (config.position === "left" || config.position === "right") : false
 
     signal hidden
@@ -150,7 +150,7 @@ Rectangle {
 
             // Docks
             DocksPage {
-                property var reshell: Global.getConfigManager(`${screen.name}-navbar`)
+                property var reshell: Global.getConfigManager(`${screen.name}-dock`)
                 windowconfig: floatingpanel.config
                 docks: reshell.docklist
                 onRemove: item => {
