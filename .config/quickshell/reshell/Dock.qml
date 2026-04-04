@@ -191,13 +191,16 @@ Scope {
             anchors.fill: parent
             active: Global.enableSetting
             sourceComponent: MouseArea {
-                anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: mouse => {
                     if (mouse.button === Qt.RightButton) {
                         if (!modalPopup.opened) {
-                            modalPopup.x = mouseX;
-                            modalPopup.y = mouseY;
+                            var globalX = mapToItem(null, mouseX, mouseY).x;
+                            var globalY = mapToItem(null, mouseX, mouseY).y;
+                            var mWidth = screen.width / 4;
+                            var mHeight = screen.height / 2;
+                            modalPopup.x = mouseX + mWidth > screen.width ? mouseX - mWidth : mouseX;
+                            modalPopup.y = globalY + mHeight > screen.height ? globalY - mHeight : globalY;
                         }
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
                     }
@@ -664,6 +667,7 @@ Scope {
                     }
                 }
             }
+
             Rectangle {
                 color: "green"
                 width: parent.width
@@ -682,6 +686,7 @@ Scope {
                     }
                 }
             }
+
             Rectangle {
                 color: "red"
                 width: parent.width

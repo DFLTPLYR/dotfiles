@@ -35,4 +35,12 @@ PanelWindow {
     VolumeSlider {
         id: volumeSlider
     }
+
+    MouseArea {
+        id: test
+        width: parent.width
+        height: parent.width
+
+        onClicked: console.log('test')
+    }
 }

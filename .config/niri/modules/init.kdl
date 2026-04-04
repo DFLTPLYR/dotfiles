@@ -34,8 +34,3 @@ spawn-sh-at-startup "qs -c reshell"
 spawn-sh-at-startup "mpdris2-rs -n"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 
-layer-rule {
-  match namespace="Background"
-  place-within-backdrop true
-}
-

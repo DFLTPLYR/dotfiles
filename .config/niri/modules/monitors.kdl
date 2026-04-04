@@ -9,6 +9,7 @@ output "DP-1" {
     off
   }
 
+
   layout {
     preset-column-widths {
         proportion 0.25
@@ -31,6 +32,11 @@ output "DP-1" {
         bottom 0
     }
   }
+}
+
+layer-rule {
+  match namespace="Background-DP-1"
+  place-within-backdrop true
 }
 
 output "DP-2" {
