@@ -18,7 +18,7 @@ PanelWindow {
 
     exclusionMode: ExclusionMode.Ignore
 
-    WlrLayershell.layer: Global.enableSetting ? WlrLayer.Bottom : WlrLayer.Background
+    WlrLayershell.layer: Global.edit ? WlrLayer.Bottom : WlrLayer.Background
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Background-${screen.name}`
 
@@ -96,17 +96,25 @@ PanelWindow {
 
         Loader {
             anchors.fill: parent
-            active: Global.edit
+            active: true
             sourceComponent: MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: mouse => {
-                    if (mouse.button === Qt.RightButton) {
+                    switch (mouse.button) {
+                    case Qt.RightButton:
                         if (!modal.opened) {
                             modal.x = mouseX + modal.width > screen.width ? mouseX - modal.width : mouseX;
                             modal.y = mouseY + modal.height > screen.height ? mouseY - modal.height : mouseY;
                         }
                         modal.opened ? modal.close() : modal.open();
+                        return;
+                    case Qt.LeftButton:
+                        if (modal.opened)
+                            modal.close();
+                        return;
+                    default:
+                        return;
                     }
                 }
             }

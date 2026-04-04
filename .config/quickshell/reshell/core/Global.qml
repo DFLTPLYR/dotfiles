@@ -22,7 +22,7 @@ Singleton {
     readonly property bool normal: state === states.normal
 
     property var modal: null
-    onModalChanged: console.log(modal)
+
     IpcHandler {
         target: "config"
         function cycleState() {

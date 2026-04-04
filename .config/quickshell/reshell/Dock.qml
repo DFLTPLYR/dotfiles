@@ -80,12 +80,6 @@ Scope {
                         item: container
                     },
                     Region {
-                        item: widgetloader.item
-                    },
-                    Region {
-                        item: slotloader.item
-                    },
-                    Region {
                         width: modalPopup.opened ? modalPopup.width : 0
                         height: modalPopup.opened ? modalPopup.height : 0
                         x: modalPopup.opened ? modalPopup.x : 0
@@ -100,14 +94,6 @@ Scope {
 
             Modal {
                 id: modalPopup
-            }
-            // Widgets
-            WidgetLoader {
-                id: widgetloader
-            }
-            // Slots
-            SlotLoader {
-                id: slotloader
             }
 
             Component.onCompleted: {
@@ -193,7 +179,8 @@ Scope {
             sourceComponent: MouseArea {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: mouse => {
-                    if (mouse.button === Qt.RightButton) {
+                    switch (mouse.button) {
+                    case Qt.RightButton:
                         if (!modalPopup.opened) {
                             var globalX = mapToItem(null, mouseX, mouseY).x;
                             var globalY = mapToItem(null, mouseX, mouseY).y;
@@ -203,6 +190,13 @@ Scope {
                             modalPopup.y = globalY + mHeight > screen.height ? globalY - mHeight : globalY;
                         }
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
+                        return;
+                    case Qt.LeftButton:
+                        if (modalPopup.opened)
+                            modalPopup.close();
+                        return;
+                    default:
+                        return;
                     }
                 }
             }
@@ -477,112 +471,6 @@ Scope {
             }
 
             // Data
-            ColumnLayout {
-                width: parent.width
-                Label {
-                    text: "Slots"
-                    font.pixelSize: 32
-                }
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    Button {
-                        text: "Add Slot"
-                        onClicked: {
-                            const slot = {
-                                name: Math.random().toString(36).substring(2, 10),
-                                position: "left",
-                                spacing: 0
-                            };
-                            config.slots.push(slot);
-                        }
-                    }
-                }
-            }
-        }
-
-        onShouldShowChanged: {
-            if (shouldShow) {
-                active = true;
-            } else if (item) {
-                item.state = 'hide';
-            }
-        }
-
-        onLoaded: {
-            item.state = 'show';
-        }
-    }
-
-    component WidgetLoader: Loader {
-        id: widgetloader
-        property bool shouldShow: Global.widgetpanelEnabled && Global.widgetpanelTarget === panel
-        active: false
-        sourceComponent: Rectangle {
-            id: widgetWindow
-
-            color: Colors.setOpacity(Colors.color.background, 1)
-            width: screen.width / 2
-            height: screen.height / 2
-
-            x: screen.width / 2 - width / 2
-            y: screen.height / 2 - height / 2
-
-            state: 'hide'
-            states: [
-                State {
-                    name: "hide"
-                    PropertyChanges {
-                        target: widgetWindow
-                        opacity: 0
-                    }
-                },
-                State {
-                    name: "show"
-                    PropertyChanges {
-                        target: widgetWindow
-                        opacity: 1
-                    }
-                }
-            ]
-
-            transitions: [
-                Transition {
-                    from: "*"
-                    to: "hide"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "width,height,opacity"
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                        ScriptAction {
-                            script: {
-                                widgetloader.active = false;
-                                Global.widgetpanelEnabled = false;
-                                Global.widgetpanelTarget = null;
-                            }
-                        }
-                    }
-                },
-                Transition {
-                    from: "*"
-                    to: "show"
-                    NumberAnimation {
-                        properties: "width,height,opacity"
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            ]
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    widgetWindow.state = "hide";
-                }
-            }
         }
 
         onShouldShowChanged: {
@@ -603,35 +491,35 @@ Scope {
         width: screen.width / 4
         height: screen.height / 2
 
-        TabBar {
-            id: tabbar
-            anchors {
-                left: modalPopup.left
-                right: modalPopup.right
-            }
-            TabButton {
-                text: "Properties"
-            }
-            TabButton {
-                text: "Slots"
-            }
-            TabButton {
-                text: "Widgets"
+        Rectangle {
+            id: tabContainer
+            color: Colors.color.background
+
+            implicitHeight: tabbar.height
+            width: parent.width
+
+            TabBar {
+                id: tabbar
+                TabButton {
+                    text: "Slots"
+                }
+                TabButton {
+                    text: "Properties"
+                }
             }
         }
-        Item {
-            id: stack
-        }
+
         StackLayout {
             height: parent.height - tabbar.height
             width: parent.width
+            currentIndex: tabbar.currentIndex
+
             anchors {
                 left: modalPopup.left
                 right: modalPopup.right
-                top: tabbar.bottom
+                top: tabContainer.bottom
                 bottom: modalPopup.bottom
             }
-            currentIndex: tabbar.currentIndex
 
             Flickable {
                 width: parent.width
@@ -668,29 +556,45 @@ Scope {
                 }
             }
 
-            Rectangle {
-                color: "green"
-                width: parent.width
-                height: parent.height
-                Rectangle {
-                    color: "red"
-                    width: parent.width
-                    height: 200
-                    Drag.active: ma2.drag.active
-                    Drag.hotSpot: Qt.point(width / 2, height / 2)
+            PropertyTab {
+                id: propertyTab
+            }
+        }
 
-                    MouseArea {
-                        id: ma2
-                        anchors.fill: parent
-                        drag.target: parent
+        Item {
+            id: stack
+        }
+    }
+
+    component PropertyTab: Flickable {
+        width: parent.width
+        height: parent.height
+
+        ColumnLayout {
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: 2
+            }
+            Label {
+                text: "Slots"
+                font.pixelSize: 32
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Button {
+                    text: "Add Slot"
+                    onClicked: {
+                        const slot = {
+                            name: Math.random().toString(36).substring(2, 10),
+                            position: "left",
+                            spacing: 0
+                        };
+                        config.slots.push(slot);
                     }
                 }
-            }
-
-            Rectangle {
-                color: "red"
-                width: parent.width
-                height: parent.height
             }
         }
     }
