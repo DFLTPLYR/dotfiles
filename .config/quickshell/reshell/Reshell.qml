@@ -24,9 +24,6 @@ Variants {
         mask: Region {
             regions: [
                 Region {
-                    item: settingloader.item
-                },
-                Region {
                     item: content.item
                 }
             ]
@@ -38,13 +35,11 @@ Variants {
             active: fileview.loaded
             component: Item {
                 id: display
-                // Navbar
-                // Top {
-                //     screen: reshell.screen
-                // }
                 // background
                 Background {
                     screen: reshell.screen
+                    file: fileview
+                    onDockUpdate: dock => fileview.updateQueue.push(dock)
                 }
                 // overlay
                 Overlay {
@@ -55,37 +50,12 @@ Variants {
                     model: adapter.docks
                     delegate: Dock {
                         screen: reshell.screen
-                        onAddDock: item => {
-                            fileview.docklist = fileview.docklist.concat([item]);
-                        }
+                        onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
                     }
                     onObjectAdded: (obj, idx) => {
                         obj.parent = display;
                     }
                 }
-            }
-        }
-
-        // settings
-        Loader {
-            id: settingloader
-            property bool shouldShow: Global.enableSetting && Compositor.focusedMonitor === screen.name
-            active: false
-            sourceComponent: Settings {
-                onHidden: {
-                    settingloader.active = false;
-                }
-            }
-            onShouldShowChanged: {
-                if (shouldShow) {
-                    active = true;
-                    Global.setttingPanel = settingloader.item;
-                } else if (item) {
-                    item.state = 'hide';
-                }
-            }
-            onLoaded: {
-                item.state = 'show';
             }
         }
 
@@ -96,6 +66,24 @@ Variants {
             preload: true
 
             property list<var> docklist: []
+            property list<var> updateQueue: []
+
+            onDocklistChanged: {
+                for (let i = 0; i < docklist.length; i++) {
+                    const panelObj = docklist[i].panel;
+                    if (panelObj && panelObj.objectName !== null) {
+                        const matched = updateQueue.find(obj => obj.name === panelObj.objectName);
+                        if (matched) {
+                            const config = docklist[i].config;
+                            const direction = matched.direction;
+                            config.setUp(direction);
+                            const idx = updateQueue.indexOf(matched);
+                            if (idx !== -1)
+                                updateQueue.splice(idx, 1);
+                        }
+                    }
+                }
+            }
 
             onFileChanged: {
                 reload();

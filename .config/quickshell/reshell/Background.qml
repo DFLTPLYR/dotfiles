@@ -1,4 +1,6 @@
 import QtQuick
+import QtQuick.Layouts
+
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -10,8 +12,10 @@ import qs.components
 
 PanelWindow {
     id: panel
+    property var file
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     color: "transparent"
+    signal dockUpdate(var data)
 
     implicitHeight: screen.height
     implicitWidth: screen.width
@@ -123,7 +127,38 @@ PanelWindow {
 
     PopupModal {
         id: modal
-        width: 200
-        height: screen.height / 2
+        width: 100
+        height: container.height + (modal.bottomPadding + modal.topPadding)
+        ColumnLayout {
+            id: container
+            spacing: 0
+
+            width: parent.width
+
+            Button {
+                text: "Add Dock"
+                Layout.fillWidth: true
+                onClicked: mouse => {
+                    var globalPos = mapToItem(null, modal.x, modal.y);
+                    var l = globalPos.x;
+                    var r = screen.width - globalPos.x;
+                    var t = globalPos.y;
+                    var b = screen.height - globalPos.y;
+
+                    var min = Math.min(l, r, t, b);
+                    var direction = min === l ? "left" : min === r ? "right" : min === t ? "top" : "bottom";
+
+                    var name = Math.random().toString(36).substring(2, 10);
+                    panel.file.adapter.docks.push({
+                        name
+                    });
+
+                    panel.dockUpdate({
+                        name,
+                        direction
+                    });
+                }
+            }
+        }
     }
 }

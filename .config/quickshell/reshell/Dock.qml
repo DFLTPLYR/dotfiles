@@ -24,7 +24,6 @@ Scope {
             if (error === FileViewError.FileNotFound) {
                 file.setText("{}");
                 file.writeAdapter();
-                Quickshell.reload();
             }
         }
         adapter: JsonAdapter {
@@ -44,6 +43,24 @@ Scope {
                 file.writeAdapter();
             }
             Component.onCompleted: panelLoader.active = true
+
+            function setUp(direction) {
+                switch (direction) {
+                case "top":
+                    break;
+                case "bottom":
+                    config.position = direction.toString();
+                    break;
+                case "right":
+                case "left":
+                    config.position = direction.toString();
+                    config.height = 100;
+                    config.width = 40;
+                    break;
+                }
+                console.log(direction);
+                file.writeAdapter();
+            }
         }
     }
 
@@ -66,8 +83,10 @@ Scope {
                 right: config.position === "right"
             }
 
-            implicitHeight: Global.edit ? screen.height : (config.side ? screen.height : config.height)
-            implicitWidth: Global.edit ? screen.width : (!config.side ? screen.width : config.width)
+            // implicitHeight: Global.edit ? screen.height : (config.side ? screen.height : config.height)
+            // implicitWidth: Global.edit ? screen.width : (!config.side ? screen.width : config.width)
+            implicitWidth: screen.width
+            implicitHeight: screen.height
 
             exclusionMode: ExclusionMode.Ignore
 
@@ -395,94 +414,6 @@ Scope {
                     }
                 }
             }
-        }
-    }
-
-    component SlotLoader: Loader {
-        id: slotloader
-        property bool shouldShow: Global.slotpanelEnabled && Global.slotpanelTarget === panel
-        active: false
-        sourceComponent: Rectangle {
-            id: slotWindow
-
-            color: Colors.setOpacity(Colors.color.background, 1)
-            width: screen.width / 2
-            height: screen.height / 2
-            x: screen.width / 2 - width / 2
-            y: screen.height / 2 - height / 2
-
-            border {
-                width: 2
-                color: Colors.color.primary
-            }
-            state: 'hide'
-            states: [
-                State {
-                    name: "hide"
-                    PropertyChanges {
-                        target: slotWindow
-                        opacity: 0
-                    }
-                },
-                State {
-                    name: "show"
-                    PropertyChanges {
-                        target: slotWindow
-                        opacity: 1
-                    }
-                }
-            ]
-
-            transitions: [
-                Transition {
-                    from: "*"
-                    to: "hide"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            properties: "width,height,opacity"
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                        ScriptAction {
-                            script: {
-                                slotloader.active = false;
-                                Global.slotpanelEnabled = false;
-                                Global.slotpanelTarget = null;
-                            }
-                        }
-                    }
-                },
-                Transition {
-                    from: "*"
-                    to: "show"
-                    NumberAnimation {
-                        properties: "width,height,opacity"
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            ]
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    slotWindow.state = "hide";
-                }
-            }
-
-            // Data
-        }
-
-        onShouldShowChanged: {
-            if (shouldShow) {
-                active = true;
-            } else if (item) {
-                item.state = 'hide';
-            }
-        }
-
-        onLoaded: {
-            item.state = 'show';
         }
     }
 
