@@ -84,12 +84,22 @@ Scope {
                     },
                     Region {
                         item: slotloader.item
+                    },
+                    Region {
+                        width: modalPopup.opened ? modalPopup.width : 0
+                        height: modalPopup.opened ? modalPopup.height : 0
+                        x: modalPopup.opened ? modalPopup.x : 0
+                        y: modalPopup.opened ? modalPopup.y : 0
                     }
                 ]
             }
 
             DockContainer {
                 id: container
+            }
+
+            Modal {
+                id: modalPopup
             }
             // Widgets
             WidgetLoader {
@@ -176,6 +186,24 @@ Scope {
         ]
 
         DockContentContainer {}
+
+        Loader {
+            anchors.fill: parent
+            active: Global.enableSetting
+            sourceComponent: MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        if (!modalPopup.opened) {
+                            modalPopup.x = mouseX;
+                            modalPopup.y = mouseY;
+                        }
+                        modalPopup.opened ? modalPopup.close() : modalPopup.open();
+                    }
+                }
+            }
+        }
     }
 
     component DockContentContainer: GridLayout {
@@ -551,21 +579,6 @@ Scope {
                     widgetWindow.state = "hide";
                 }
             }
-
-            Rectangle {
-                width: 50
-                height: 50
-                color: "red"
-                Drag.active: ma.drag.active
-                MouseArea {
-                    id: ma
-                    anchors.fill: parent
-                    drag.target: parent
-                    onReleased: {
-                        parent.Drag.drop();
-                    }
-                }
-            }
         }
 
         onShouldShowChanged: {
@@ -578,6 +591,111 @@ Scope {
 
         onLoaded: {
             item.state = 'show';
+        }
+    }
+
+    component Modal: Popup {
+        id: modalPopup
+        width: screen.width / 4
+        height: screen.height / 2
+        visible: modalPopup.opened
+
+        TabBar {
+            id: tabbar
+            anchors {
+                left: modalPopup.left
+                right: modalPopup.right
+            }
+            TabButton {
+                text: "Properties"
+            }
+            TabButton {
+                text: "Slots"
+            }
+            TabButton {
+                text: "Widgets"
+            }
+        }
+        Item {
+            id: stack
+        }
+        StackLayout {
+            height: parent.height - tabbar.height
+            width: parent.width
+            anchors {
+                left: modalPopup.left
+                right: modalPopup.right
+                top: tabbar.bottom
+                bottom: modalPopup.bottom
+            }
+            currentIndex: tabbar.currentIndex
+
+            Flickable {
+                width: parent.width
+                height: parent.height
+                clip: true
+                contentHeight: column.implicitHeight
+
+                Column {
+                    id: column
+                    width: parent.width
+                    Rectangle {
+                        id: test
+                        color: "blue"
+                        width: 400
+                        height: 200
+                        Drag.active: ma.drag.active
+                        Drag.hotSpot: Qt.point(width / 2, height / 2)
+                        Drag.onActiveChanged: {
+                            if (Drag.active) {
+                                test.parent = stack;
+                            }
+                        }
+                        MouseArea {
+                            id: ma
+                            anchors.fill: parent
+                            drag.target: test
+                            onReleased: {
+                                test.parent = column;
+                                test.x = 0;
+                                test.y = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            Rectangle {
+                color: "green"
+                width: parent.width
+                height: parent.height
+                Rectangle {
+                    color: "red"
+                    width: parent.width
+                    height: 200
+                    Drag.active: ma2.drag.active
+                    Drag.hotSpot: Qt.point(width / 2, height / 2)
+
+                    MouseArea {
+                        id: ma2
+                        anchors.fill: parent
+                        drag.target: parent
+                    }
+                }
+            }
+            Rectangle {
+                color: "red"
+                width: parent.width
+                height: parent.height
+            }
+        }
+
+        Connections {
+            target: Global
+            function onEnableSettingChanged() {
+                if (modalPopup.opened) {
+                    modalPopup.close();
+                }
+            }
         }
     }
 }
