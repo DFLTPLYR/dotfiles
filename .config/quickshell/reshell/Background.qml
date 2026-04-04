@@ -149,9 +149,7 @@ PanelWindow {
                     var direction = min === l ? "left" : min === r ? "right" : min === t ? "top" : "bottom";
 
                     var name = Math.random().toString(36).substring(2, 10);
-                    panel.file.adapter.docks.push({
-                        name
-                    });
+                    panel.file.adapter.docks.push(name);
 
                     panel.dockUpdate({
                         name,

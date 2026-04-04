@@ -47,13 +47,14 @@ Variants {
                 }
                 // docks
                 Instantiator {
+                    id: dockInstantiator
                     model: adapter.docks
                     delegate: Dock {
+                        required property var modelData
                         screen: reshell.screen
+                        name: modelData
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
-                    }
-                    onObjectAdded: (obj, idx) => {
-                        obj.parent = display;
+                        onRemoveDock: name => fileview.removeDock(name)
                     }
                 }
             }
@@ -82,7 +83,20 @@ Variants {
                                 updateQueue.splice(idx, 1);
                         }
                     }
+                    fileview.save();
                 }
+            }
+
+            function removeDock(name) {
+                const idx = fileview.adapter.docks.findIndex(s => s === name);
+                if (idx) {
+                    fileview.adapter.docks.splice(idx, 1);
+                }
+                const dock = fileview.docklist.find(s => s.panel.objectName === name);
+                if (dock) {
+                    dock.parent.destroy();
+                }
+                fileview.save();
             }
 
             onFileChanged: {

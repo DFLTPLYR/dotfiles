@@ -14,6 +14,7 @@ Scope {
     property ShellScreen screen
     required property string name
     signal addDock(var item)
+    signal removeDock(string name)
 
     FileView {
         id: file
@@ -58,7 +59,6 @@ Scope {
                     config.width = 40;
                     break;
                 }
-                console.log(direction);
                 file.writeAdapter();
             }
         }
@@ -85,11 +85,12 @@ Scope {
 
             // implicitHeight: Global.edit ? screen.height : (config.side ? screen.height : config.height)
             // implicitWidth: Global.edit ? screen.width : (!config.side ? screen.width : config.width)
+
             implicitWidth: screen.width
             implicitHeight: screen.height
 
             exclusionMode: ExclusionMode.Ignore
-
+            exclusiveZone: config.side ? config.width : config.height
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
@@ -203,9 +204,9 @@ Scope {
                         if (!modalPopup.opened) {
                             var globalX = mapToItem(null, mouseX, mouseY).x;
                             var globalY = mapToItem(null, mouseX, mouseY).y;
-                            var mWidth = screen.width / 4;
-                            var mHeight = screen.height / 2;
-                            modalPopup.x = mouseX + mWidth > screen.width ? mouseX - mWidth : mouseX;
+                            var mWidth = modalPopup.width;
+                            var mHeight = modalPopup.height;
+                            modalPopup.x = globalX + mWidth > screen.width ? globalX - mWidth : globalX;
                             modalPopup.y = globalY + mHeight > screen.height ? globalY - mHeight : globalY;
                         }
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
@@ -526,6 +527,10 @@ Scope {
                         config.slots.push(slot);
                     }
                 }
+            }
+            Button {
+                text: "delete"
+                onClicked: dock.removeDock(dock.name)
             }
         }
     }

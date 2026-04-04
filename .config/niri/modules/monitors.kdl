@@ -28,7 +28,7 @@ output "DP-1" {
     struts {
         left 0
         right 0
-        top 32
+        top 0
         bottom 0
     }
   }
