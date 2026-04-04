@@ -6,6 +6,7 @@ import Quickshell.Wayland
 import QtCore
 
 import qs.core
+import qs.components
 
 PanelWindow {
     id: panel
@@ -17,9 +18,13 @@ PanelWindow {
 
     exclusionMode: ExclusionMode.Ignore
 
-    WlrLayershell.layer: WlrLayer.Background
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.layer: Global.enableSetting ? WlrLayer.Bottom : WlrLayer.Background
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Background-${screen.name}`
+
+    mask: Region {
+        item: mask
+    }
 
     Item {
         id: layered
@@ -82,5 +87,35 @@ PanelWindow {
             }
             onObjectAdded: (idx, obj) => obj.state = "visible"
         }
+    }
+
+    Item {
+        id: mask
+        width: parent.width
+        height: parent.width
+
+        Loader {
+            anchors.fill: parent
+            active: Global.enableSetting
+            sourceComponent: MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        if (!modal.opened) {
+                            modal.x = mouseX + modal.width > screen.width ? mouseX - modal.width : mouseX;
+                            modal.y = mouseY + modal.height > screen.height ? mouseY - modal.height : mouseY;
+                        }
+                        modal.opened ? modal.close() : modal.open();
+                    }
+                }
+            }
+        }
+    }
+
+    PopupModal {
+        id: modal
+        width: 200
+        height: screen.height / 2
     }
 }
