@@ -13,6 +13,26 @@ Singleton {
     id: config
 
     // states
+    readonly property QtObject states: QtObject {
+        readonly property int normal: 0
+        readonly property int edit: 1
+    }
+    property int state: states.normal
+    readonly property bool edit: state === states.edit
+    readonly property bool normal: state === states.normal
+
+    property var modal: null
+    onModalChanged: console.log(modal)
+    IpcHandler {
+        target: "config"
+        function cycleState() {
+            config.state = (config.state + 1) % 2;
+            Quickshell.execDetached({
+                command: ["notify-send", "State", config.state === states.normal ? "Normal" : "Edit"]
+            });
+        }
+    }
+    //
     property bool enableSetting: false
     property bool enableSystemPanel: false
     property Item setttingPanel: null
@@ -199,16 +219,6 @@ Singleton {
                 }
                 this.destroy();
             }
-        }
-    }
-
-    IpcHandler {
-        target: "config"
-        function settings() {
-            config.enableSetting = !config.enableSetting;
-        }
-        function session() {
-            config.enableSystemPanel = !config.enableSystemPanel;
         }
     }
 }

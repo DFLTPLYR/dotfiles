@@ -68,3 +68,7 @@ output "DP-2" {
     }
 }
 
+layer-rule {
+  match namespace="Background-DP-2"
+  place-within-backdrop true
+}

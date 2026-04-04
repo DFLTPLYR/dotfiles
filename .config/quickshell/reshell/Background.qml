@@ -96,7 +96,7 @@ PanelWindow {
 
         Loader {
             anchors.fill: parent
-            active: Global.enableSetting
+            active: Global.edit
             sourceComponent: MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton

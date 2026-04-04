@@ -66,8 +66,8 @@ Scope {
                 right: config.position === "right"
             }
 
-            implicitHeight: Global.enableSetting ? screen.height : (config.side ? screen.height : config.height)
-            implicitWidth: Global.enableSetting ? screen.width : (!config.side ? screen.width : config.width)
+            implicitHeight: Global.edit ? screen.height : (config.side ? screen.height : config.height)
+            implicitWidth: Global.edit ? screen.width : (!config.side ? screen.width : config.width)
 
             exclusionMode: ExclusionMode.Ignore
 
@@ -189,7 +189,7 @@ Scope {
 
         Loader {
             anchors.fill: parent
-            active: Global.enableSetting
+            active: Global.edit
             sourceComponent: MouseArea {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: mouse => {
@@ -234,7 +234,7 @@ Scope {
 
     component Slot: Rectangle {
         id: slot
-        property bool selected: Global.enableSetting && Global.selectedItem === slot
+        property bool selected: Global.edit && Global.selectedItem === slot
         onSelectedChanged: slot.state = slot.selected ? "selected" : "none"
 
         property string position: "left"
@@ -299,7 +299,7 @@ Scope {
         ]
 
         Loader {
-            active: Global.enableSetting
+            active: Global.edit
             anchors.fill: parent
             sourceComponent: DropArea {
                 onContainsDragChanged: {
@@ -322,6 +322,7 @@ Scope {
                 Global.selectedItem = slot;
             }
         }
+
         color: "transparent"
 
         Layout.fillWidth: true
@@ -597,11 +598,10 @@ Scope {
         }
     }
 
-    component Modal: Popup {
+    component Modal: PopupModal {
         id: modalPopup
         width: screen.width / 4
         height: screen.height / 2
-        visible: modalPopup.opened
 
         TabBar {
             id: tabbar
@@ -691,15 +691,6 @@ Scope {
                 color: "red"
                 width: parent.width
                 height: parent.height
-            }
-        }
-
-        Connections {
-            target: Global
-            function onEnableSettingChanged() {
-                if (modalPopup.opened) {
-                    modalPopup.close();
-                }
             }
         }
     }
