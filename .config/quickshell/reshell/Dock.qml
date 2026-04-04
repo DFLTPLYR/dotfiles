@@ -468,7 +468,19 @@ Scope {
                         width: 400
                         height: 200
                         Drag.active: ma.drag.active
-                        Drag.hotSpot: Qt.point(width / 2, height / 2)
+                        Drag.hotSpot: {
+                            switch (config.position) {
+                            case "top":
+                            case "left":
+                                return Qt.point(0, 0);
+                            case "bottom":
+                                return Qt.point(0, height);
+                            case "right":
+                                return Qt.point(width, height);
+                            default:
+                                return Qt.point(0, 0);
+                            }
+                        }
                         Drag.onActiveChanged: {
                             if (Drag.active) {
                                 test.parent = stack;
