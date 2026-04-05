@@ -192,7 +192,6 @@ Scope {
         Rectangle {
             color: config.style.color
             anchors.fill: parent
-            clip: true
 
             DockContentContainer {}
 
@@ -236,7 +235,6 @@ Scope {
         id: slotcontainer
         width: parent.width
         height: parent.height
-        clip: true
         flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
         Instantiator {
@@ -258,15 +256,15 @@ Scope {
 
     component Slot: Rectangle {
         id: slot
+
         property bool selected: Global.edit && Global.selectedItem === slot
         onSelectedChanged: slot.state = slot.selected ? "selected" : "none"
 
         property string position: "left"
         property int spacing: 2
         default property alias content: innerGrid.data
-        border.width: 5
         state: "none"
-
+        border.width: 2
         states: [
             State {
                 name: "hovered"
@@ -425,6 +423,11 @@ Scope {
                     }
                 }
             }
+        }
+
+        Component.onCompleted: {
+            Global.bindRadii(this, config.style.rounding);
+            Global.bindMargins(this, config.style.margin);
         }
     }
 
