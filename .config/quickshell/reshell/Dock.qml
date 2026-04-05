@@ -427,7 +427,6 @@ Scope {
 
         Component.onCompleted: {
             Global.bindRadii(this, config.style.rounding);
-            Global.bindMargins(this, config.style.margin);
         }
     }
 
@@ -467,6 +466,7 @@ Scope {
                     height: parent.height
                     clip: true
                     contentHeight: column.implicitHeight
+
                     ColumnLayout {
                         id: column
                         width: parent.width
