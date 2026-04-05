@@ -13,7 +13,7 @@ Button {
     contentItem: Text {
         id: content
         property var state: control.state.content
-
+        width: parent.width
         text: control.text
         font: control.font
 
@@ -24,6 +24,7 @@ Button {
         verticalAlignment: Text.AlignVCenter
 
         elide: Text.ElideRight
+        wrapMode: Text.WordWrap
 
         Behavior on color {
             ColorAnimation {

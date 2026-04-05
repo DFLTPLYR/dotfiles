@@ -5,7 +5,7 @@ import Quickshell.Io
 Process {
     id: process
     signal output(string path)
-    command: ["pcli", "file-picker"]
+    command: ["quickcli", "file-picker"]
     stdout: StdioCollector {
         onStreamFinished: {
             const path = this.text;
