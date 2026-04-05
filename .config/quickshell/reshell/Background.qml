@@ -14,6 +14,7 @@ PanelWindow {
     id: panel
     property var file
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
+    property bool edit: false
     color: "transparent"
     signal dockUpdate(var data)
 
@@ -22,7 +23,7 @@ PanelWindow {
 
     exclusionMode: ExclusionMode.Ignore
 
-    WlrLayershell.layer: Global.edit ? WlrLayer.Bottom : WlrLayer.Background
+    WlrLayershell.layer: Global.edit ? (Global.wallpaper ? WlrLayer.Top : WlrLayer.Bottom) : WlrLayer.Background
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Background-${screen.name}`
 
@@ -93,33 +94,28 @@ PanelWindow {
         }
     }
 
-    Item {
+    Loader {
         id: mask
-        width: parent.width
-        height: parent.width
-
-        Loader {
+        anchors.fill: parent
+        active: Global.edit
+        sourceComponent: MouseArea {
             anchors.fill: parent
-            active: true
-            sourceComponent: MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: mouse => {
-                    switch (mouse.button) {
-                    case Qt.RightButton:
-                        if (!modal.opened) {
-                            modal.x = mouseX + modal.width > screen.width ? mouseX - modal.width : mouseX;
-                            modal.y = mouseY + modal.height > screen.height ? mouseY - modal.height : mouseY;
-                        }
-                        modal.opened ? modal.close() : modal.open();
-                        return;
-                    case Qt.LeftButton:
-                        if (modal.opened)
-                            modal.close();
-                        return;
-                    default:
-                        return;
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: mouse => {
+                switch (mouse.button) {
+                case Qt.RightButton:
+                    if (!modal.opened) {
+                        modal.x = mouseX + modal.width > screen.width ? mouseX - modal.width : mouseX;
+                        modal.y = mouseY + modal.height > screen.height ? mouseY - modal.height : mouseY;
                     }
+                    modal.opened ? modal.close() : modal.open();
+                    return;
+                case Qt.LeftButton:
+                    if (modal.opened)
+                        modal.close();
+                    return;
+                default:
+                    return;
                 }
             }
         }
@@ -127,7 +123,6 @@ PanelWindow {
 
     PopupModal {
         id: modal
-        property bool wallpaper: false
         width: popupContent.width + (modal.leftPadding + modal.rightPadding)
         height: popupContent.height + (modal.bottomPadding + modal.topPadding)
 
@@ -174,124 +169,180 @@ PanelWindow {
 
             Button {
                 text: "Change Wallpaper"
-                onClicked: modal.wallpaper = !modal.wallpaper
-            }
-
-            Loader {
-                active: modal.wallpaper
-                sourceComponent: Rectangle {
-                    id: container
-                    color: "transparent"
-                    clip: true
-                    width: screen.width / 1.5
-                    height: screen.height / 1.5
-                    TopLeftControl {}
-
-                    border {
-                        width: 1
-                        color: Colors.color.primary
-                    }
-
-                    Flickable {
-                        id: flick
-                        property real zoom: 1
-                        property int maxX: 0
-                        property int maxY: 0
-                        anchors.fill: parent
-
-                        contentWidth: maxX + 2000
-                        contentHeight: maxY + 2000
-                        transformOrigin: Item.Center
-
-                        // background grid
-                        Canvas {
-                            id: canvas
-                            clip: false
-                            width: flick.contentWidth
-                            height: flick.contentHeight
-                            onPaint: {
-                                var ctx = getContext("2d");
-                                var gridSize = 10;
-
-                                ctx.strokeStyle = Colors.setOpacity(Colors.color.tertiary, 0.5);
-                                ctx.lineWidth = 1;
-
-                                for (var x = 0; x <= width; x += gridSize) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(x, 0);
-                                    ctx.lineTo(x, height);
-                                    ctx.stroke();
-                                }
-
-                                for (var y = 0; y <= height; y += gridSize) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(0, y);
-                                    ctx.lineTo(width, y);
-                                    ctx.stroke();
-                                }
-                            }
-                        }
-
-                        // overview
-                        Item {
-                            id: overview
-                            width: flick.contentWidth
-                            height: flick.contentHeight
-
-                            Item {
-                                id: content
-                                scale: flick.zoom
-                                transformOrigin: Item.TopLeft
-                                anchors.centerIn: parent
-
-                                // screens/monitors
-                                Instantiator {
-                                    model: Quickshell.screens
-                                    delegate: Monitor {
-                                        parent: content
-                                    }
-                                    onObjectAdded: (idx, obj) => {
-                                        obj.parent = content;
-                                        var m = obj.modelData;
-                                        if (m.x + m.width > flick.maxX)
-                                            flick.maxX = m.x + m.width;
-                                        if (m.y + m.height > flick.maxY)
-                                            flick.maxY = m.y + m.height;
-                                    }
-                                }
-
-                                // Images
-                                Instantiator {
-                                    model: ScriptModel {
-                                        values: [...Wallpaper.config.layers]
-                                    }
-                                    delegate: PreviewImage {
-                                        parent: content
-                                    }
-                                }
-                            }
-                        }
-
-                        // zoom in/out
-                        WheelHandler {
-                            id: wheelHandler
-                            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                            target: null
-
-                            onWheel: event => {
-                                var delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
-                                flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
-                            }
-                        }
-                    }
-
-                    Component.onCompleted: {
-                        Global.bindRadii(container);
-                    }
+                onClicked: {
+                    wallpaperModal.open();
                 }
             }
         }
     }
+
+    PopupModal {
+        id: wallpaperModal
+        x: screen.width / 2 - wallpaperModal.width / 2
+        y: screen.height / 2 - wallpaperModal.height / 2
+
+        Loader {
+            active: wallpaperModal.opened
+            sourceComponent: Rectangle {
+                id: container
+                color: "transparent"
+                clip: true
+                width: screen.width / 1.5
+                height: screen.height / 1.5
+
+                // Nav
+                TopLeftControl {}
+
+                border {
+                    width: 1
+                    color: Colors.color.primary
+                }
+
+                Flickable {
+                    id: flick
+                    property real zoom: 1
+                    property int maxX: 0
+                    property int maxY: 0
+                    anchors.fill: parent
+
+                    contentWidth: maxX + 2000
+                    contentHeight: maxY + 2000
+                    transformOrigin: Item.Center
+
+                    // background grid
+                    Canvas {
+                        id: canvas
+                        clip: false
+                        width: flick.contentWidth
+                        height: flick.contentHeight
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            var gridSize = 10;
+
+                            ctx.strokeStyle = Colors.setOpacity(Colors.color.tertiary, 0.5);
+                            ctx.lineWidth = 1;
+
+                            for (var x = 0; x <= width; x += gridSize) {
+                                ctx.beginPath();
+                                ctx.moveTo(x, 0);
+                                ctx.lineTo(x, height);
+                                ctx.stroke();
+                            }
+
+                            for (var y = 0; y <= height; y += gridSize) {
+                                ctx.beginPath();
+                                ctx.moveTo(0, y);
+                                ctx.lineTo(width, y);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+
+                    // overview
+                    Item {
+                        id: overview
+                        width: flick.contentWidth
+                        height: flick.contentHeight
+
+                        Item {
+                            id: content
+                            scale: flick.zoom
+                            transformOrigin: Item.TopLeft
+                            anchors.centerIn: parent
+
+                            // screens/monitors
+                            Instantiator {
+                                model: Quickshell.screens
+                                delegate: Monitor {
+                                    parent: content
+                                }
+                                onObjectAdded: (idx, obj) => {
+                                    obj.parent = content;
+                                    var m = obj.modelData;
+                                    if (m.x + m.width > flick.maxX)
+                                        flick.maxX = m.x + m.width;
+                                    if (m.y + m.height > flick.maxY)
+                                        flick.maxY = m.y + m.height;
+                                }
+                            }
+
+                            // Images
+                            Instantiator {
+                                model: ScriptModel {
+                                    values: [...Wallpaper.config.layers]
+                                }
+                                delegate: PreviewImage {
+                                    parent: content
+                                }
+                            }
+                        }
+                    }
+
+                    // zoom in/out
+                    WheelHandler {
+                        id: wheelHandler
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                        target: null
+
+                        onWheel: event => {
+                            var delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
+                            flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
+                        }
+                    }
+                }
+
+                function imageToScreenPosition() {
+                    var images = content.children.filter(s => s instanceof PreviewImage);
+                    var screens = content.children.filter(s => s instanceof Monitor);
+
+                    for (var i in images) {
+                        const target = images[i].image;
+                        var props = {
+                            source: target.source,
+                            width: target.width,
+                            height: target.height,
+                            x: target.x,
+                            y: target.y,
+                            z: target.z,
+                            name: target.objectName,
+                            screens: []
+                        };
+                        for (var j in screens) {
+                            const screen = screens[j];
+                            var sx = screen.x;
+                            var sy = screen.y;
+                            var sw = screen.width;
+                            var sh = screen.height;
+                            var imgRight = props.x + props.width;
+                            var imgBottom = props.y + props.height;
+                            var screenRight = sx + sw;
+                            var screenBottom = sy + sh;
+                            if (props.x < screenRight && imgRight > sx && props.y < screenBottom && imgBottom > sy) {
+                                var relative = {
+                                    x: target.x - screen.x,
+                                    y: target.y - screen.y,
+                                    name: screen.objectName
+                                };
+                                props.screens.push(relative);
+                            }
+                        }
+
+                        Wallpaper.config.layers = Wallpaper.config.layers.filter(s => s.name !== target.objectName);
+                        Wallpaper.config.layers.push(props);
+                    }
+
+                    Wallpaper.save();
+                }
+
+                Component.onCompleted: {
+                    Global.bindRadii(container);
+                    Global.wallpaper = true;
+                }
+                Component.onDestruction: Global.wallpaper = false
+            }
+        }
+    }
+
     component Monitor: Rectangle {
         id: monitor
         required property ShellScreen modelData
@@ -473,46 +524,6 @@ PanelWindow {
                 rightPadding: 2
 
                 width: 150
-                title: 'Files'
-
-                Button {
-                    text: "add file"
-                    onClicked: file.active()
-                }
-
-                Button {
-                    text: "Save preset"
-                    onClicked: {
-                        var preset = {
-                            source: Wallpaper.config.layers,
-                            name: Math.random().toString(36).substring(2, 10)
-                        };
-                        Wallpaper.config.preset.push(preset);
-                        Wallpaper.config.layers = [];
-                    }
-                }
-
-                Button {
-                    text: "Generate"
-                    onClicked: Wallpaper.generatecolor()
-                }
-
-                MenuBar {
-                    width: parent.width
-                    Menu {
-                        title: "Load preset"
-                        width: parent.width
-                        leftPadding: 2
-                        rightPadding: 2
-                    }
-                }
-            }
-
-            Menu {
-                leftPadding: 2
-                rightPadding: 2
-
-                width: 150
                 title: 'Layers'
 
                 Button {
@@ -522,8 +533,14 @@ PanelWindow {
 
                 Button {
                     text: "check"
-                    onClicked: wallpaperpage.imageToScreenPosition()
+                    onClicked: container.imageToScreenPosition()
                 }
+
+                Button {
+                    text: Global.docks ? "Hide Docks" : "Show Docks"
+                    onClicked: Global.docks = !Global.docks
+                }
+
                 Button {
                     text: "save preset"
                     onClicked: {
