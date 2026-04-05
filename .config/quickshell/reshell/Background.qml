@@ -23,7 +23,13 @@ PanelWindow {
 
     exclusionMode: ExclusionMode.Ignore
 
-    WlrLayershell.layer: Global.edit ? (Global.wallpaper ? WlrLayer.Top : WlrLayer.Bottom) : WlrLayer.Background
+    WlrLayershell.layer: {
+        if (!Global.edit)
+            return WlrLayer.Background;
+        if (Global.wallpaper && Compositor.focusedMonitor === screen.name)
+            return WlrLayer.Top;
+        return WlrLayer.Bottom;
+    }
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Background-${screen.name}`
 
@@ -207,6 +213,7 @@ PanelWindow {
 
                     contentWidth: maxX + 2000
                     contentHeight: maxY + 2000
+
                     transformOrigin: Item.Center
 
                     // background grid
@@ -237,7 +244,6 @@ PanelWindow {
                             }
                         }
                     }
-
                     // overview
                     Item {
                         id: overview
@@ -246,6 +252,7 @@ PanelWindow {
 
                         Item {
                             id: content
+
                             scale: flick.zoom
                             transformOrigin: Item.TopLeft
                             anchors.centerIn: parent
@@ -445,72 +452,77 @@ PanelWindow {
                     anchors: ["right", "bottom"]
                 },
             ]
-            delegate: Rectangle {
-                id: cornerHandle
-                z: 2
-                height: 20 / flick.zoom
-                width: height
-                radius: height / 2
-                color: "green"
-                opacity: !draggableImage.lock ? 1 : 0
+            delegate: Positioner {}
+        }
+    }
 
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
+    component Positioner: Rectangle {
+        id: cornerHandle
+        z: 2
+        height: 20 / flick.zoom
+        width: height
+        opacity: !draggableImage.lock ? 1 : 0
+
+        radius: height / 2
+        color: Colors.color.tertiary
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        anchors {
+            horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
+            verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
+        }
+
+        MouseArea {
+            id: cornerPoint
+            anchors.fill: parent
+            drag.target: parent
+            enabled: !draggableImage.lock
+            onPositionChanged: mouse => {
+                if (drag.active) {
+                    var anchors = modelData.anchors;
+                    if (anchors.includes("right")) {
+                        draggableImage.width = Math.max(50, parent.x - draggableImage.x);
+                    }
+                    if (anchors.includes("left")) {
+                        var newWidth = draggableImage.width + (draggableImage.x - parent.x);
+                        draggableImage.x = parent.x;
+                        draggableImage.width = Math.max(50, newWidth);
+                    }
+                    if (anchors.includes("bottom")) {
+                        draggableImage.height = Math.max(50, parent.y - draggableImage.y);
+                    }
+                    if (anchors.includes("top")) {
+                        var newHeight = draggableImage.height + (draggableImage.y - parent.y);
+                        draggableImage.y = parent.y;
+                        draggableImage.height = Math.max(50, newHeight);
                     }
                 }
+            }
+        }
 
+        states: State {
+            when: cornerPoint.drag.active
+            AnchorChanges {
+                target: cornerHandle
                 anchors {
-                    horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
-                    verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
-                }
-
-                MouseArea {
-                    id: cornerPoint
-                    anchors.fill: parent
-                    drag.target: parent
-                    enabled: !draggableImage.lock
-                    onPositionChanged: mouse => {
-                        if (drag.active) {
-                            var anchors = modelData.anchors;
-                            if (anchors.includes("right")) {
-                                draggableImage.width = Math.max(50, parent.x - draggableImage.x);
-                            }
-                            if (anchors.includes("left")) {
-                                var newWidth = draggableImage.width + (draggableImage.x - parent.x);
-                                draggableImage.x = parent.x;
-                                draggableImage.width = Math.max(50, newWidth);
-                            }
-                            if (anchors.includes("bottom")) {
-                                draggableImage.height = Math.max(50, parent.y - draggableImage.y);
-                            }
-                            if (anchors.includes("top")) {
-                                var newHeight = draggableImage.height + (draggableImage.y - parent.y);
-                                draggableImage.y = parent.y;
-                                draggableImage.height = Math.max(50, newHeight);
-                            }
-                        }
-                    }
-                }
-
-                states: State {
-                    when: cornerPoint.drag.active
-                    AnchorChanges {
-                        target: cornerHandle
-                        anchors {
-                            horizontalCenter: undefined
-                            verticalCenter: undefined
-                        }
-                    }
+                    horizontalCenter: undefined
+                    verticalCenter: undefined
                 }
             }
         }
     }
 
     component TopLeftControl: Row {
+        id: controlContainer
         z: 2
-
+        readonly property list<PreviewImage> imageList: content.children.filter(s => s instanceof PreviewImage)
+        readonly property list<Monitor> screenList: content.children.filter(s => s instanceof Monitor)
         anchors {
             top: parent.top
             left: parent.left
@@ -527,12 +539,12 @@ PanelWindow {
                 title: 'Layers'
 
                 Button {
-                    text: "add file"
+                    text: "Add file"
                     onClicked: file.active()
                 }
 
                 Button {
-                    text: "check"
+                    text: "Check"
                     onClicked: container.imageToScreenPosition()
                 }
 
@@ -542,7 +554,7 @@ PanelWindow {
                 }
 
                 Button {
-                    text: "save preset"
+                    text: "Save preset"
                     onClicked: {
                         var preset = {
                             source: Wallpaper.config.layers,
@@ -554,8 +566,27 @@ PanelWindow {
                 }
 
                 Button {
-                    text: "generate color"
+                    text: "Generate color"
                     onClicked: Wallpaper.generatecolor()
+                }
+            }
+
+            Menu {
+                title: "Screens"
+                Repeater {
+                    model: [...controlContainer.screenList]
+                    delegate: Button {
+                        text: modelData.objectName
+                    }
+                }
+            }
+            Menu {
+                title: "Images"
+                Repeater {
+                    model: [...controlContainer.imageList]
+                    delegate: Button {
+                        text: modelData.objectName
+                    }
                 }
             }
         }
