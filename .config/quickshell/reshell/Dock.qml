@@ -189,6 +189,15 @@ Scope {
             }
         ]
 
+        opacity: !Global.docks ? 0 : 1
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         Rectangle {
             color: config.style.color
             anchors.fill: parent
