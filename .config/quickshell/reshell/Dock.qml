@@ -422,127 +422,152 @@ Scope {
         id: modalPopup
         width: screen.width / 6
         height: screen.height / 2
+        // Content
+        ColumnLayout {
+            anchors.fill: parent
 
-        Rectangle {
-            id: tabContainer
-            color: Colors.color.background
+            Rectangle {
+                id: tabContainer
+                color: Colors.color.background
 
-            implicitHeight: tabbar.height
-            width: parent.width
+                Layout.preferredHeight: tabbar.height
+                Layout.fillWidth: true
 
-            TabBar {
-                id: tabbar
-                TabButton {
-                    text: "Slots"
-                }
-                TabButton {
-                    text: "Properties"
+                TabBar {
+                    id: tabbar
+                    TabButton {
+                        text: "Slots"
+                    }
+                    TabButton {
+                        text: "Properties"
+                    }
                 }
             }
-        }
 
-        StackLayout {
-            height: parent.height - tabbar.height
-            width: parent.width
-            currentIndex: tabbar.currentIndex
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabbar.currentIndex
 
-            anchors {
-                left: modalPopup.left
-                right: modalPopup.right
-                top: tabContainer.bottom
-                bottom: modalPopup.bottom
-            }
-
-            Flickable {
-                width: parent.width
-                height: parent.height
-                clip: true
-                contentHeight: column.implicitHeight
-                ColumnLayout {
-                    id: column
+                Flickable {
                     width: parent.width
+                    height: parent.height
+                    clip: true
+                    contentHeight: column.implicitHeight
+                    ColumnLayout {
+                        id: column
+                        width: parent.width
 
-                    Repeater {
-                        id: testContainer
-                        model: [1, 2, 3, 4, 5]
-                        delegate: Item {
-                            id: origPlacement
-                            implicitHeight: test.height
-                            implicitWidth: test.width
+                        Repeater {
+                            id: testContainer
+                            model: [1, 2, 3, 4, 5]
+                            delegate: Item {
+                                id: origPlacement
+                                implicitHeight: test.height
+                                implicitWidth: test.width
 
-                            Rectangle {
-                                id: test
-                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                                width: 400
-                                height: 200
-                                Drag.active: ma.drag.active
-                                Drag.hotSpot: {
-                                    switch (config.position) {
-                                    case "top":
-                                    case "left":
-                                        return Qt.point(0, 0);
-                                    case "bottom":
-                                        return Qt.point(0, height);
-                                    case "right":
-                                        return Qt.point(width, height);
-                                    default:
-                                        return Qt.point(0, 0);
-                                    }
-                                }
-
-                                Drag.onActiveChanged: {
-                                    if (Drag.active) {
-                                        test.parent = stack;
-                                    }
-                                }
-
-                                states: [
-                                    State {
-                                        when: ma.drag.active
-                                        ParentChange {
-                                            target: test
-                                            parent: stack
-                                        }
-                                    },
-                                    State {
-                                        when: !ma.drag.active
-                                        ParentChange {
-                                            target: test
-                                            parent: origPlacement
+                                Rectangle {
+                                    id: test
+                                    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                                    width: 400
+                                    height: 200
+                                    Drag.active: ma.drag.active
+                                    Drag.hotSpot: {
+                                        switch (config.position) {
+                                        case "top":
+                                        case "left":
+                                            return Qt.point(0, 0);
+                                        case "bottom":
+                                            return Qt.point(0, height);
+                                        case "right":
+                                            return Qt.point(width, height);
+                                        default:
+                                            return Qt.point(0, 0);
                                         }
                                     }
-                                ]
 
-                                MouseArea {
-                                    id: ma
-                                    anchors.fill: parent
-                                    drag.target: test
-                                    onReleased: {
-                                        test.x = 0;
-                                        test.y = 0;
+                                    Drag.onActiveChanged: {
+                                        if (Drag.active) {
+                                            test.parent = stack;
+                                        }
                                     }
-                                }
 
-                                Behavior on x {
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.InOutQuad
+                                    states: [
+                                        State {
+                                            when: ma.drag.active
+                                            ParentChange {
+                                                target: test
+                                                parent: stack
+                                            }
+                                        },
+                                        State {
+                                            when: !ma.drag.active
+                                            ParentChange {
+                                                target: test
+                                                parent: origPlacement
+                                            }
+                                        }
+                                    ]
+
+                                    MouseArea {
+                                        id: ma
+                                        anchors.fill: parent
+                                        drag.target: test
+                                        onReleased: {
+                                            test.x = 0;
+                                            test.y = 0;
+                                        }
                                     }
-                                }
-                                Behavior on y {
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.InOutQuad
+
+                                    Behavior on x {
+                                        NumberAnimation {
+                                            duration: 300
+                                            easing.type: Easing.InOutQuad
+                                        }
+                                    }
+                                    Behavior on y {
+                                        NumberAnimation {
+                                            duration: 300
+                                            easing.type: Easing.InOutQuad
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                PropertyTab {
+                    id: propertyTab
+                }
             }
 
-            PropertyTab {
-                id: propertyTab
+            Rectangle {
+                color: Colors.color.background
+                Layout.fillWidth: true
+                Layout.preferredHeight: footerContainer.height
+
+                Row {
+                    id: footerContainer
+                    layoutDirection: Qt.RightToLeft
+                    spacing: 0
+                    width: parent.width
+
+                    Button {
+                        text: "Quit and Save"
+                        onClicked: {
+                            config.save();
+                            Qt.callLater(() => {
+                                modalPopup.close();
+                            });
+                        }
+                    }
+
+                    Button {
+                        text: "Save"
+                        onClicked: config.save()
+                    }
+                }
             }
         }
 
