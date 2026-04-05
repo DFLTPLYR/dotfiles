@@ -420,7 +420,7 @@ Scope {
 
     component Modal: PopupModal {
         id: modalPopup
-        width: screen.width / 4
+        width: screen.width / 6
         height: screen.height / 2
 
         Rectangle {
@@ -458,42 +458,83 @@ Scope {
                 height: parent.height
                 clip: true
                 contentHeight: column.implicitHeight
-
-                Column {
+                ColumnLayout {
                     id: column
                     width: parent.width
-                    Rectangle {
-                        id: test
-                        color: "blue"
-                        width: 400
-                        height: 200
-                        Drag.active: ma.drag.active
-                        Drag.hotSpot: {
-                            switch (config.position) {
-                            case "top":
-                            case "left":
-                                return Qt.point(0, 0);
-                            case "bottom":
-                                return Qt.point(0, height);
-                            case "right":
-                                return Qt.point(width, height);
-                            default:
-                                return Qt.point(0, 0);
-                            }
-                        }
-                        Drag.onActiveChanged: {
-                            if (Drag.active) {
-                                test.parent = stack;
-                            }
-                        }
-                        MouseArea {
-                            id: ma
-                            anchors.fill: parent
-                            drag.target: test
-                            onReleased: {
-                                test.parent = column;
-                                test.x = 0;
-                                test.y = 0;
+
+                    Repeater {
+                        id: testContainer
+                        model: [1, 2, 3, 4, 5]
+                        delegate: Item {
+                            id: origPlacement
+                            implicitHeight: test.height
+                            implicitWidth: test.width
+
+                            Rectangle {
+                                id: test
+                                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                                width: 400
+                                height: 200
+                                Drag.active: ma.drag.active
+                                Drag.hotSpot: {
+                                    switch (config.position) {
+                                    case "top":
+                                    case "left":
+                                        return Qt.point(0, 0);
+                                    case "bottom":
+                                        return Qt.point(0, height);
+                                    case "right":
+                                        return Qt.point(width, height);
+                                    default:
+                                        return Qt.point(0, 0);
+                                    }
+                                }
+
+                                Drag.onActiveChanged: {
+                                    if (Drag.active) {
+                                        test.parent = stack;
+                                    }
+                                }
+
+                                states: [
+                                    State {
+                                        when: ma.drag.active
+                                        ParentChange {
+                                            target: test
+                                            parent: stack
+                                        }
+                                    },
+                                    State {
+                                        when: !ma.drag.active
+                                        ParentChange {
+                                            target: test
+                                            parent: origPlacement
+                                        }
+                                    }
+                                ]
+
+                                MouseArea {
+                                    id: ma
+                                    anchors.fill: parent
+                                    drag.target: test
+                                    onReleased: {
+                                        test.x = 0;
+                                        test.y = 0;
+                                    }
+                                }
+
+                                Behavior on x {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
+                                Behavior on y {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
                             }
                         }
                     }

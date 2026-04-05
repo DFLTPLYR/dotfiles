@@ -33,6 +33,7 @@ Popup {
         }
         if (Global.modal)
             Global.modal.close();
+
         Global.modal = modalPopup;
     }
 
