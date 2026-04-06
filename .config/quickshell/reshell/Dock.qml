@@ -706,7 +706,6 @@ Item {
                     }
                 }
             }
-
             // rounding
             Label {
                 font.pixelSize: 32
@@ -716,52 +715,57 @@ Item {
                 id: rounding
                 property var rounding: config.style.rounding
                 wrap: FlexboxLayout.Wrap
-                width: parent.width
+                Layout.fillWidth: true
+                Layout.preferredHeight: 80
                 Column {
+                    width: rounding.width / 2
                     Label {
                         text: "Top Left"
                     }
                     SpinBox {
                         width: 100
+                        height: 20
                         value: rounding.rounding.topLeft
                         onValueChanged: rounding.rounding.topLeft = value
                     }
                 }
-
                 Column {
+                    width: rounding.width / 2
                     Label {
                         text: "Top Right"
                     }
                     SpinBox {
                         width: 100
+                        height: 20
                         value: rounding.rounding.topRight
                         onValueChanged: rounding.rounding.topRight = value
                     }
                 }
-
                 Column {
+                    width: rounding.width / 2
                     Label {
                         text: "Bottom Left"
                     }
                     SpinBox {
                         width: 100
+                        height: 20
                         value: rounding.rounding.bottomLeft
                         onValueChanged: rounding.rounding.bottomLeft = value
                     }
                 }
-
                 Column {
+                    width: rounding.width / 2
                     Label {
                         text: "Bottom Right"
                     }
                     SpinBox {
                         width: 100
+                        height: 20
                         value: rounding.rounding.bottomRight
                         onValueChanged: rounding.rounding.bottomRight = value
                     }
                 }
             }
-
             // margins
             Label {
                 font.pixelSize: 32
@@ -769,10 +773,10 @@ Item {
             }
             FlexboxLayout {
                 id: margin
-                width: parent.width
-                wrap: FlexboxLayout.Wrap
                 property var margin: config.style.margin
-
+                wrap: FlexboxLayout.Wrap
+                Layout.fillWidth: true
+                Layout.preferredHeight: 80
                 Column {
                     Label {
                         text: "Top"
@@ -784,7 +788,6 @@ Item {
                         onValueChanged: margin.margin.top = value
                     }
                 }
-
                 Column {
                     Label {
                         text: "Bottom"
@@ -796,7 +799,6 @@ Item {
                         onValueChanged: margin.margin.bottom = value
                     }
                 }
-
                 Column {
                     Label {
                         text: "Right"
@@ -808,7 +810,6 @@ Item {
                         onValueChanged: margin.margin.right = value
                     }
                 }
-
                 Column {
                     Label {
                         text: "Left"
