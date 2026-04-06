@@ -114,16 +114,34 @@ ListView {
             }
 
             // icon
-            Image {
-                id: notificationIcon
-                property string path: modelData.image || modelData.appIcon
-                property string image: Quickshell.iconPath(notificationIcon.path, true)
-                visible: notificationIcon.image || Qt.resolvedUrl(path)
+            Item {
+                id: iconContainer
+                visible: modelData.image
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
                 Layout.margins: 2
-                fillMode: Image.PreserveAspectCrop
-                source: notificationIcon.image || Qt.resolvedUrl(path)
+
+                Loader {
+                    anchors.fill: parent
+                    active: modelData.image !== ""
+                    sourceComponent: Image {
+                        fillMode: Image.PreserveAspectCrop
+                        source: modelData.image
+                    }
+                }
+
+                Loader {
+                    anchors.fill: parent
+                    active: modelData.appIcon !== ""
+                    sourceComponent: Image {
+                        id: notificationIcon
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: height
+                        Layout.margins: 2
+                        fillMode: Image.PreserveAspectCrop
+                        source: Quickshell.iconPath(modelData.appIcon, true)
+                    }
+                }
             }
 
             // content
