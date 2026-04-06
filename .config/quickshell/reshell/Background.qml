@@ -13,6 +13,7 @@ PanelWindow {
     property var file
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
+    property bool fileExplorerOpen: false
     color: "transparent"
     signal dockUpdate(var data)
 
@@ -24,7 +25,7 @@ PanelWindow {
     WlrLayershell.layer: {
         if (!Global.edit)
             return WlrLayer.Background;
-        if (Global.wallpaper && Compositor.focusedMonitor === screen.name)
+        if (Global.wallpaper && Compositor.focusedMonitor === screen.name && !fileExplorerOpen)
             return WlrLayer.Top;
         return WlrLayer.Bottom;
     }
@@ -39,22 +40,6 @@ PanelWindow {
         id: layered
         width: parent.width
         height: parent.width
-
-        Connections {
-            target: Wallpaper
-            function onGeneratecolor() {
-                layered.onSaveCustomWallpaper();
-            }
-        }
-
-        function onSaveCustomWallpaper() {
-            layered.grabToImage(function (result) {
-                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-                Qt.callLater(() => {
-                    Global.updateColor();
-                });
-            }, Qt.size(panel.screen.width, panel.screen.height));
-        }
 
         Instantiator {
             model: ScriptModel {
@@ -131,7 +116,7 @@ PanelWindow {
         height: popupContent.height + (modal.bottomPadding + modal.topPadding)
 
         FilePicker {
-            id: file
+            id: fileExplorer
             onOutput: data => {
                 if (data) {
                     var image = {
@@ -141,6 +126,7 @@ PanelWindow {
                     Wallpaper.config.layers.push(image);
                     Wallpaper.save();
                 }
+                fileExplorerOpen = false;
             }
         }
 
@@ -357,6 +343,15 @@ PanelWindow {
         }
     }
 
+    function onSaveCustomWallpaper() {
+        layered.grabToImage(function (result) {
+            result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+            Qt.callLater(() => {
+                Global.updateColor();
+            });
+        }, Qt.size(panel.screen.width, panel.screen.height));
+    }
+
     component Monitor: Rectangle {
         id: monitor
         required property ShellScreen modelData
@@ -549,7 +544,10 @@ PanelWindow {
 
                 Button {
                     text: "Add file"
-                    onClicked: file.active()
+                    onClicked: {
+                        fileExplorerOpen = true;
+                        fileExplorer.active();
+                    }
                 }
 
                 Button {
@@ -576,7 +574,7 @@ PanelWindow {
 
                 Button {
                     text: "Generate color"
-                    onClicked: Wallpaper.generatecolor()
+                    onClicked: panel.onSaveCustomWallpaper()
                 }
             }
 
