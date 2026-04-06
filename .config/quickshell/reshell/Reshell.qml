@@ -93,9 +93,11 @@ Variants {
                 if (found) {
                     found.panel.visible = false;
                 }
-                const idx = fileview.adapter.docks.findIndex(s => s === name);
+                const docks = fileview.adapter.docks;
+                const idx = docks.findIndex(s => s === name);
                 if (idx !== -1) {
-                    fileview.adapter.docks.splice(idx, 1);
+                    docks.splice(idx, 1);
+                    fileview.adapter.docks = docks;
                 }
                 fileview.save();
             }
