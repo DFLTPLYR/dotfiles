@@ -6,6 +6,7 @@ import Quickshell.Io
 
 Singleton {
     id: config
+
     property list<QtObject> workspaces: []
     property list<QtObject> windows: []
 

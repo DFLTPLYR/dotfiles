@@ -9,12 +9,13 @@ import qs.core
 import qs.components
 import qs.types
 
-Scope {
+Item {
     id: dock
     property ShellScreen screen
     required property string name
     signal addDock(var item)
     signal removeDock(string name)
+    objectName: dock.name
 
     FileView {
         id: file
@@ -83,15 +84,12 @@ Scope {
                 right: config.position === "right"
             }
 
-            // implicitHeight: Global.edit ? screen.height : (config.side ? screen.height : config.height)
-            // implicitWidth: Global.edit ? screen.width : (!config.side ? screen.width : config.width)
-
             implicitWidth: screen.width
             implicitHeight: screen.height
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: config.side ? config.width : config.height
-            WlrLayershell.layer: WlrLayer.Top
+            WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
             mask: Region {
@@ -118,8 +116,9 @@ Scope {
 
             Component.onCompleted: {
                 dock.addDock({
-                    panel: panel,
-                    config: config
+                    panel,
+                    config,
+                    dock
                 });
             }
         }
