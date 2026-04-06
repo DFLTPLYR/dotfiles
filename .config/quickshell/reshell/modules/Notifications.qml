@@ -116,12 +116,14 @@ ListView {
             // icon
             Image {
                 id: notificationIcon
-                visible: modelData.appIcon || modelData.image
+                property string path: modelData.image || modelData.appIcon
+                property string image: Quickshell.iconPath(notificationIcon.path, true)
+                visible: notificationIcon.image || Qt.resolvedUrl(path)
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
                 Layout.margins: 2
                 fillMode: Image.PreserveAspectCrop
-                source: Qt.resolvedUrl(modelData.image || modelData.appIcon)
+                source: notificationIcon.image || Qt.resolvedUrl(path)
             }
 
             // content

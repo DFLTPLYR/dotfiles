@@ -48,7 +48,7 @@ Variants {
                 // docks
                 Instantiator {
                     id: dockInstantiator
-                    model: adapter.docks
+                    model: [...adapter.docks]
                     delegate: Dock {
                         required property var modelData
                         screen: reshell.screen
@@ -88,13 +88,14 @@ Variants {
             }
 
             function removeDock(name) {
-                const idx = fileview.adapter.docks.findIndex(s => s === name);
-                if (idx) {
-                    fileview.adapter.docks.splice(idx, 1);
+                const array = fileview.docklist.filter(s => s && s.dock);
+                const found = array.find(s => s.dock.objectName === name);
+                if (found) {
+                    found.panel.visible = false;
                 }
-                const dock = fileview.docklist.find(s => s.panel.objectName === name);
-                if (dock) {
-                    dock.parent.destroy();
+                const idx = fileview.adapter.docks.findIndex(s => s === name);
+                if (idx !== -1) {
+                    fileview.adapter.docks.splice(idx, 1);
                 }
                 fileview.save();
             }

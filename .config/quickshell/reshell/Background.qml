@@ -5,8 +5,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 
-import QtCore
-
 import qs.core
 import qs.components
 
@@ -151,6 +149,12 @@ PanelWindow {
             spacing: 0
 
             Button {
+                text: "Refresh"
+                Layout.fillWidth: true
+                onClicked: Quickshell.reload(true)
+            }
+
+            Button {
                 text: "Add Dock"
                 Layout.fillWidth: true
                 onClicked: mouse => {
@@ -175,6 +179,7 @@ PanelWindow {
 
             Button {
                 text: "Change Wallpaper"
+                Layout.fillWidth: true
                 onClicked: {
                     wallpaperModal.open();
                 }
@@ -192,17 +197,18 @@ PanelWindow {
             sourceComponent: Rectangle {
                 id: container
                 color: "transparent"
-                clip: true
+
                 width: screen.width / 1.5
                 height: screen.height / 1.5
-
-                // Nav
-                TopLeftControl {}
 
                 border {
                     width: 1
                     color: Colors.color.primary
                 }
+                clip: true
+
+                // Nav
+                TopLeftControl {}
 
                 Flickable {
                     id: flick
@@ -244,6 +250,7 @@ PanelWindow {
                             }
                         }
                     }
+
                     // overview
                     Item {
                         id: overview
@@ -372,6 +379,8 @@ PanelWindow {
         required property var modelData
         property Image image: draggableImage
         property var found
+        objectName: modelData.name
+
         // image
         Image {
             id: draggableImage
