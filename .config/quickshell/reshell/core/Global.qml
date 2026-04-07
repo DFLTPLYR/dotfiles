@@ -21,8 +21,9 @@ Singleton {
     readonly property bool edit: state === states.edit
     readonly property bool normal: state === states.normal
 
-    // State
+    // Modal State
     property bool wallpaper: false
+    property bool properties: false
     property bool docks: true
 
     property var modal: null

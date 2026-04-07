@@ -17,6 +17,7 @@ Popup {
     leftPadding: 2
 
     background: Rectangle {
+        id: background
         anchors.fill: parent
         color: Colors.setOpacity(Colors.color.background, 0.9)
         border {
@@ -24,6 +25,26 @@ Popup {
             color: Colors.color.outline
         }
         clip: true
+    }
+
+    enter: Transition {
+        NumberAnimation {
+            target: background
+            property: "opacity"
+            from: 0.0
+            to: 1.0
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    exit: Transition {
+        NumberAnimation {
+            target: background
+            property: "opacity"
+            from: 1.0
+            to: 0.0
+            easing.type: Easing.InQuad
+        }
     }
 
     onOpenedChanged: {

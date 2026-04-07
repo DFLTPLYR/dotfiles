@@ -440,8 +440,8 @@ Item {
 
     component Modal: PopupModal {
         id: modalPopup
-        width: screen.width / 6
-        height: screen.height / 2
+        width: Math.min(400, screen.width / 2)
+        height: Math.min(600, screen.height / 2)
         // Content
         ColumnLayout {
             anchors.fill: parent

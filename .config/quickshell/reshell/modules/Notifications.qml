@@ -135,9 +135,6 @@ ListView {
                     active: modelData.appIcon !== ""
                     sourceComponent: Image {
                         id: notificationIcon
-                        Layout.fillHeight: true
-                        Layout.preferredWidth: height
-                        Layout.margins: 2
                         fillMode: Image.PreserveAspectCrop
                         source: Quickshell.iconPath(modelData.appIcon, true)
                     }
