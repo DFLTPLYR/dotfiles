@@ -29,6 +29,8 @@ Popup {
         clip: true
     }
 
+    transformOrigin: Item.Center
+
     enter: Transition {
         NumberAnimation {
             target: background

@@ -351,8 +351,7 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onHoveredChanged: {
-                if (!slot.state === "selected")
-                    slot.state = containsMouse ? "hovered" : "none";
+                slot.state = containsMouse ? "hovered" : "none";
             }
             onClicked: {
                 Global.selectedItem = slot;
@@ -448,6 +447,7 @@ Item {
         id: modalPopup
         width: Math.min(400, screen.width / 2)
         height: Math.min(600, screen.height / 2)
+
         // Content
         ColumnLayout {
             anchors.fill: parent
@@ -462,10 +462,13 @@ Item {
                 TabBar {
                     id: tabbar
                     TabButton {
-                        text: "Slots"
+                        text: "Properties"
                     }
                     TabButton {
-                        text: "Properties"
+                        text: "Widgets"
+                    }
+                    TabButton {
+                        text: "Slots"
                     }
                 }
             }
@@ -474,6 +477,10 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: tabbar.currentIndex
+
+                PropertyTab {
+                    id: propertyTab
+                }
 
                 Flickable {
                     width: parent.width
@@ -564,8 +571,8 @@ Item {
                     }
                 }
 
-                PropertyTab {
-                    id: propertyTab
+                SlotTab {
+                    id: slotTab
                 }
             }
 
@@ -826,6 +833,37 @@ Item {
                         value: margin.margin.left
                         onValueChanged: margin.margin.left = value
                     }
+                }
+            }
+        }
+    }
+
+    component SlotTab: Flickable {
+        width: parent.width
+        height: parent.height
+        contentHeight: container.height
+        clip: true
+
+        ColumnLayout {
+            id: container
+            property var selectedSlot: null
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: 2
+            }
+            Label {
+                text: "Slots"
+                font.pixelSize: 32
+            }
+
+            ListView {
+                Layout.fillWidth: true
+                model: [...config.slots]
+                delegate: Button {
+                    text: modelData.name
+                    onClicked: container.selectedSlot = modelData
                 }
             }
         }
