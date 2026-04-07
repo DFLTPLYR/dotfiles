@@ -25,7 +25,7 @@ PanelWindow {
     WlrLayershell.layer: {
         if (!Global.edit)
             return WlrLayer.Background;
-        if (Global.wallpaper && Compositor.focusedMonitor === screen.name && !fileExplorerOpen)
+        if ((wallpaperModal.opened || propertiesModal.opened) && !fileExplorerOpen)
             return WlrLayer.Top;
         return WlrLayer.Bottom;
     }
@@ -164,6 +164,14 @@ PanelWindow {
             }
 
             Button {
+                text: "Properties"
+                Layout.fillWidth: true
+                onClicked: {
+                    propertiesModal.open();
+                }
+            }
+
+            Button {
                 text: "Change Wallpaper"
                 Layout.fillWidth: true
                 onClicked: {
@@ -173,6 +181,35 @@ PanelWindow {
         }
     }
 
+    // Properties Modal
+    PopupModal {
+        id: propertiesModal
+        x: screen.width / 2 - propertiesModal.width / 2
+        y: screen.height / 2 - propertiesModal.height / 2
+
+        Loader {
+            active: propertiesModal.opened
+            sourceComponent: Rectangle {
+                color: Colors.color.background
+
+                width: screen.width / 1.5
+                height: screen.height / 1.5
+
+                border {
+                    width: 1
+                    color: Colors.color.primary
+                }
+
+                Component.onCompleted: {
+                    Global.bindRadii(this);
+                    Global.properties = true;
+                }
+                Component.onDestruction: Global.properties = false
+            }
+        }
+    }
+
+    // Wallpaper Modal
     PopupModal {
         id: wallpaperModal
         x: screen.width / 2 - wallpaperModal.width / 2
@@ -181,7 +218,6 @@ PanelWindow {
         Loader {
             active: wallpaperModal.opened
             sourceComponent: Rectangle {
-                id: container
                 color: "transparent"
 
                 width: screen.width / 1.5
@@ -191,6 +227,7 @@ PanelWindow {
                     width: 1
                     color: Colors.color.primary
                 }
+
                 clip: true
 
                 // Nav
@@ -335,7 +372,7 @@ PanelWindow {
                 }
 
                 Component.onCompleted: {
-                    Global.bindRadii(container);
+                    Global.bindRadii(this);
                     Global.wallpaper = true;
                 }
                 Component.onDestruction: Global.wallpaper = false
