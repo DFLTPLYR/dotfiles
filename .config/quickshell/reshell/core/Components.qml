@@ -71,6 +71,7 @@ Singleton {
                 range.first.border.color = Colors.color.outline;
                 range.second.color = Colors.color.primary;
                 range.second.border.color = Colors.color.outline;
+                fileView.writeAdapter();
             }
 
             property BorderJson border: BorderJson {}

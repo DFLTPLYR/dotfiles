@@ -87,21 +87,6 @@ Variants {
                 }
             }
 
-            function removeDock(name) {
-                const array = fileview.docklist.filter(s => s && s.dock);
-                const found = array.find(s => s.dock.objectName === name);
-                if (found) {
-                    found.panel.visible = false;
-                }
-                const docks = fileview.adapter.docks;
-                const idx = docks.findIndex(s => s === name);
-                if (idx !== -1) {
-                    docks.splice(idx, 1);
-                    fileview.adapter.docks = docks;
-                }
-                fileview.save();
-            }
-
             onFileChanged: {
                 reload();
             }
@@ -123,11 +108,35 @@ Variants {
                 fileview.writeAdapter();
             }
 
+            function removeDock(name) {
+                const array = fileview.docklist.filter(s => s && s.dock);
+                const found = array.find(s => s.dock.objectName === name);
+                if (found) {
+                    found.panel.visible = false;
+                }
+                const docks = fileview.adapter.docks;
+                const idx = docks.findIndex(s => s === name);
+                if (idx !== -1) {
+                    docks.splice(idx, 1);
+                    fileview.adapter.docks = docks;
+                }
+                fileview.save();
+            }
             Component.onCompleted: {
                 Global.fileManager.push({
                     ref: fileview,
                     subject: `${screen.name}-dock`
                 });
+            }
+        }
+
+        Connections {
+            target: Global
+            function onColorUpdate() {
+                const docks = fileview.docklist;
+                for (const i in docks) {
+                    docks[i].config.updateColor();
+                }
             }
         }
     }

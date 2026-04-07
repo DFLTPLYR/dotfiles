@@ -44,6 +44,7 @@ Item {
             function save() {
                 file.writeAdapter();
             }
+
             Component.onCompleted: panelLoader.active = true
 
             function setUp(direction) {
@@ -60,6 +61,11 @@ Item {
                     config.width = 40;
                     break;
                 }
+                file.writeAdapter();
+            }
+
+            function updateColor() {
+                config.style.color = Colors.setOpacity(Colors.color.background, 0.5);
                 file.writeAdapter();
             }
         }

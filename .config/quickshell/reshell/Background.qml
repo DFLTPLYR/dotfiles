@@ -420,14 +420,13 @@ PanelWindow {
         y: modelData.y
     }
 
-    component PreviewImage: SelectRect {
+    component PreviewImage: ResizeableRect {
         id: container
 
         required property var modelData
         property Image image: draggableImage
         property var found
 
-        dragArea.enabled: draggableImage.lock
         objectName: modelData.name
 
         width: (modelData.width || draggableImage.sourceSize.width)
@@ -444,7 +443,8 @@ PanelWindow {
             height: container.height
             source: Qt.resolvedUrl(modelData.source) || ""
             objectName: modelData.name
-            z: -10
+            z: -1
+
             Row {
                 z: 2
                 opacity: 1
@@ -457,16 +457,19 @@ PanelWindow {
                 Button {
                     width: 40 / flick.zoom
                     height: 40 / flick.zoom
+
                     Icon {
                         anchors.centerIn: parent
                         text: draggableImage.lock ? "lock" : "lock-slash"
                         font.pixelSize: parent.width / 2
                         color: Colors.color.secondary
                     }
+
                     onClicked: {
                         draggableImage.lock = !draggableImage.lock;
                     }
                 }
+
                 Button {
                     width: 40 / flick.zoom
                     height: 40 / flick.zoom
@@ -487,67 +490,11 @@ PanelWindow {
                     }
                 }
             }
-        }
-    }
 
-    component Positioner: Rectangle {
-        id: cornerHandle
-        z: 2
-        height: 20 / flick.zoom
-        width: height
-        opacity: !draggableImage.lock ? 1 : 0
-
-        radius: height / 2
-        color: Colors.color.tertiary
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        anchors {
-            horizontalCenter: modelData.anchors.includes("left") ? draggableImage.left : modelData.anchors.includes("right") ? draggableImage.right : undefined
-            verticalCenter: modelData.anchors.includes("top") ? draggableImage.top : modelData.anchors.includes("bottom") ? draggableImage.bottom : undefined
-        }
-
-        MouseArea {
-            id: cornerPoint
-            anchors.fill: parent
-            drag.target: parent
-            enabled: !draggableImage.lock
-            onPositionChanged: mouse => {
-                if (drag.active) {
-                    var anchors = modelData.anchors;
-                    if (anchors.includes("right")) {
-                        draggableImage.width = Math.max(50, parent.x - draggableImage.x);
-                    }
-                    if (anchors.includes("left")) {
-                        var newWidth = draggableImage.width + (draggableImage.x - parent.x);
-                        draggableImage.x = parent.x;
-                        draggableImage.width = Math.max(50, newWidth);
-                    }
-                    if (anchors.includes("bottom")) {
-                        draggableImage.height = Math.max(50, parent.y - draggableImage.y);
-                    }
-                    if (anchors.includes("top")) {
-                        var newHeight = draggableImage.height + (draggableImage.y - parent.y);
-                        draggableImage.y = parent.y;
-                        draggableImage.height = Math.max(50, newHeight);
-                    }
-                }
-            }
-        }
-
-        states: State {
-            when: cornerPoint.drag.active
-            AnchorChanges {
-                target: cornerHandle
-                anchors {
-                    horizontalCenter: undefined
-                    verticalCenter: undefined
-                }
+            DragHandler {
+                id: dragHandler
+                target: container
+                enabled: !draggableImage.lock
             }
         }
     }
@@ -605,8 +552,7 @@ PanelWindow {
                 Button {
                     text: "Generate color"
                     onClicked: {
-                        onSaveCustomWallpaper();
-                        console.log("in Button");
+                        panel.onSaveCustomWallpaper();
                     }
                 }
             }
@@ -632,10 +578,9 @@ PanelWindow {
         }
     }
 
-    component SelectRect: Rectangle {
+    component ResizeableRect: Rectangle {
         id: selComp
-        property int rulersSize: 18
-        property alias dragArea: ma
+        property int rulersSize: 15 / flick.zoom
 
         border {
             width: 2
@@ -643,26 +588,17 @@ PanelWindow {
         }
         color: "transparent"
 
-        // drag mouse area
-        MouseArea {
-            id: ma
-            anchors.fill: parent
-            drag {
-                target: parent
-                smoothed: true
-            }
-        }
-
         Rectangle {
             width: rulersSize
             height: rulersSize
             radius: rulersSize
-            color: "steelblue"
+            color: Colors.color.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
-
+            z: 10
             MouseArea {
                 anchors.fill: parent
+                propagateComposedEvents: true
                 drag {
                     target: parent
                     axis: Drag.XAxis
@@ -682,12 +618,14 @@ PanelWindow {
             width: rulersSize
             height: rulersSize
             radius: rulersSize
-            color: "steelblue"
+            color: Colors.color.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.verticalCenter
+            z: 10
 
             MouseArea {
                 anchors.fill: parent
+                propagateComposedEvents: true
                 drag {
                     target: parent
                     axis: Drag.XAxis
@@ -708,12 +646,14 @@ PanelWindow {
             radius: rulersSize
             x: parent.x / 2
             y: 0
-            color: "steelblue"
+            color: Colors.color.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.top
+            z: 10
 
             MouseArea {
                 anchors.fill: parent
+                propagateComposedEvents: true
                 drag {
                     target: parent
                     axis: Drag.YAxis
@@ -736,12 +676,14 @@ PanelWindow {
             radius: rulersSize
             x: parent.x / 2
             y: parent.y
-            color: "steelblue"
+            color: Colors.color.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.bottom
+            z: 10
 
             MouseArea {
                 anchors.fill: parent
+                propagateComposedEvents: true
                 drag {
                     target: parent
                     axis: Drag.YAxis
@@ -751,140 +693,6 @@ PanelWindow {
                         selComp.height = selComp.height + mouseY;
                         if (selComp.height < 50)
                             selComp.height = 50;
-                    }
-                }
-            }
-        }
-    }
-
-    Component {
-        id: selectionComponent
-
-        Rectangle {
-            id: selComp
-            border {
-                width: 2
-                color: "steelblue"
-            }
-            color: "#354682B4"
-
-            property int rulersSize: 18
-
-            MouseArea {     // drag mouse area
-                anchors.fill: parent
-                drag {
-                    target: parent
-                    minimumX: 0
-                    minimumY: 0
-                    maximumX: parent.parent.width - parent.width
-                    maximumY: parent.parent.height - parent.height
-                    smoothed: true
-                }
-
-                onDoubleClicked: {
-                    parent.destroy();        // destroy component
-                }
-            }
-
-            Rectangle {
-                width: rulersSize
-                height: rulersSize
-                radius: rulersSize
-                color: "steelblue"
-                anchors.horizontalCenter: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag {
-                        target: parent
-                        axis: Drag.XAxis
-                    }
-                    onMouseXChanged: {
-                        if (drag.active) {
-                            selComp.width = selComp.width - mouseX;
-                            selComp.x = selComp.x + mouseX;
-                            if (selComp.width < 30)
-                                selComp.width = 30;
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                width: rulersSize
-                height: rulersSize
-                radius: rulersSize
-                color: "steelblue"
-                anchors.horizontalCenter: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag {
-                        target: parent
-                        axis: Drag.XAxis
-                    }
-                    onMouseXChanged: {
-                        if (drag.active) {
-                            selComp.width = selComp.width + mouseX;
-                            if (selComp.width < 50)
-                                selComp.width = 50;
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                width: rulersSize
-                height: rulersSize
-                radius: rulersSize
-                x: parent.x / 2
-                y: 0
-                color: "steelblue"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.top
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag {
-                        target: parent
-                        axis: Drag.YAxis
-                    }
-
-                    onMouseYChanged: {
-                        if (drag.active) {
-                            selComp.height = selComp.height - mouseY;
-                            selComp.y = selComp.y + mouseY;
-                            if (selComp.height < 50)
-                                selComp.height = 50;
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                width: rulersSize
-                height: rulersSize
-                radius: rulersSize
-                x: parent.x / 2
-                y: parent.y
-                color: "steelblue"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.bottom
-
-                MouseArea {
-                    anchors.fill: parent
-                    drag {
-                        target: parent
-                        axis: Drag.YAxis
-                    }
-                    onMouseYChanged: {
-                        if (drag.active) {
-                            selComp.height = selComp.height + mouseY;
-                            if (selComp.height < 50)
-                                selComp.height = 50;
-                        }
                     }
                 }
             }
