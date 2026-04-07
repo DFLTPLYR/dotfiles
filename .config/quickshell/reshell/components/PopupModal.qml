@@ -20,10 +20,12 @@ Popup {
         id: background
         anchors.fill: parent
         color: Colors.setOpacity(Colors.color.background, 0.9)
+
         border {
             width: 2
             color: Colors.color.outline
         }
+
         clip: true
     }
 
@@ -33,6 +35,7 @@ Popup {
             property: "opacity"
             from: 0.0
             to: 1.0
+            duration: 0
             easing.type: Easing.InOutQuad
         }
     }
@@ -43,6 +46,7 @@ Popup {
             property: "opacity"
             from: 1.0
             to: 0.0
+            duration: 0
             easing.type: Easing.InQuad
         }
     }

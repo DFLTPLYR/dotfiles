@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-
+import QtCore
 import qs.core
 import qs.components
 
@@ -93,15 +93,15 @@ PanelWindow {
             onClicked: mouse => {
                 switch (mouse.button) {
                 case Qt.RightButton:
-                    if (!modal.opened) {
-                        modal.x = mouseX + modal.width > screen.width ? mouseX - modal.width : mouseX;
-                        modal.y = mouseY + modal.height > screen.height ? mouseY - modal.height : mouseY;
+                    if (!contextMenu.opened) {
+                        contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
+                        contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
                     }
-                    modal.opened ? modal.close() : modal.open();
+                    contextMenu.opened ? contextMenu.close() : contextMenu.open();
                     return;
                 case Qt.LeftButton:
-                    if (modal.opened)
-                        modal.close();
+                    if (contextMenu.opened)
+                        contextMenu.close();
                     return;
                 default:
                     return;
@@ -110,25 +110,49 @@ PanelWindow {
         }
     }
 
-    PopupModal {
+    FilePicker {
+        id: fileExplorer
+        onOutput: data => {
+            if (data) {
+                var image = {
+                    source: data.trim("%0A"),
+                    name: Math.random().toString(36).substring(2, 10)
+                };
+                Wallpaper.config.layers.push(image);
+                Wallpaper.save();
+            }
+            panel.fileExplorerOpen = false;
+        }
+    }
+
+    // simple desktop popup
+    ContextMenu {
+        id: contextMenu
+    }
+
+    // Properties Modal
+    PropertiesMenu {
+        id: propertiesModal
+    }
+
+    // Wallpaper Modal
+    WallpaperMenu {
+        id: wallpaperModal
+    }
+
+    function onSaveCustomWallpaper() {
+        layered.grabToImage(function (result) {
+            result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+            Qt.callLater(() => {
+                Global.updateColor();
+            });
+        }, Qt.size(panel.screen.width, panel.screen.height));
+    }
+
+    component ContextMenu: PopupModal {
         id: modal
         width: popupContent.width + (modal.leftPadding + modal.rightPadding)
         height: popupContent.height + (modal.bottomPadding + modal.topPadding)
-
-        FilePicker {
-            id: fileExplorer
-            onOutput: data => {
-                if (data) {
-                    var image = {
-                        source: data.trim("%0A"),
-                        name: Math.random().toString(36).substring(2, 10)
-                    };
-                    Wallpaper.config.layers.push(image);
-                    Wallpaper.save();
-                }
-                fileExplorerOpen = false;
-            }
-        }
 
         ColumnLayout {
             id: popupContent
@@ -181,8 +205,7 @@ PanelWindow {
         }
     }
 
-    // Properties Modal
-    PopupModal {
+    component PropertiesMenu: PopupModal {
         id: propertiesModal
         x: screen.width / 2 - propertiesModal.width / 2
         y: screen.height / 2 - propertiesModal.height / 2
@@ -209,8 +232,7 @@ PanelWindow {
         }
     }
 
-    // Wallpaper Modal
-    PopupModal {
+    component WallpaperMenu: PopupModal {
         id: wallpaperModal
         x: screen.width / 2 - wallpaperModal.width / 2
         y: screen.height / 2 - wallpaperModal.height / 2
@@ -218,6 +240,7 @@ PanelWindow {
         Loader {
             active: wallpaperModal.opened
             sourceComponent: Rectangle {
+                id: container
                 color: "transparent"
 
                 width: screen.width / 1.5
@@ -235,6 +258,7 @@ PanelWindow {
 
                 Flickable {
                     id: flick
+                    property var selection: undefined
                     property real zoom: 1
                     property int maxX: 0
                     property int maxY: 0
@@ -333,9 +357,9 @@ PanelWindow {
                     var screens = content.children.filter(s => s instanceof Monitor);
 
                     for (var i in images) {
-                        const target = images[i].image;
+                        const target = images[i];
                         var props = {
-                            source: target.source,
+                            source: target.image.source,
                             width: target.width,
                             height: target.height,
                             x: target.x,
@@ -380,15 +404,6 @@ PanelWindow {
         }
     }
 
-    function onSaveCustomWallpaper() {
-        layered.grabToImage(function (result) {
-            result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-            Qt.callLater(() => {
-                Global.updateColor();
-            });
-        }, Qt.size(panel.screen.width, panel.screen.height));
-    }
-
     component Monitor: Rectangle {
         id: monitor
         required property ShellScreen modelData
@@ -405,34 +420,31 @@ PanelWindow {
         y: modelData.y
     }
 
-    component PreviewImage: Item {
+    component PreviewImage: SelectRect {
         id: container
 
         required property var modelData
         property Image image: draggableImage
         property var found
+
+        dragArea.enabled: draggableImage.lock
         objectName: modelData.name
+
+        width: (modelData.width || draggableImage.sourceSize.width)
+        height: (modelData.height || draggableImage.sourceSize.height)
+
+        x: (modelData.x || 0)
+        y: (modelData.y || 0)
 
         // image
         Image {
             id: draggableImage
             property bool lock: (modelData.x && modelData.y) ? true : false
-
-            width: (modelData.width || sourceSize.width)
-            height: (modelData.height || sourceSize.height)
+            width: container.width
+            height: container.height
             source: Qt.resolvedUrl(modelData.source) || ""
-            x: (modelData.x || 0)
-            y: (modelData.y || 0)
-            Drag.active: drag.active
-            Drag.hotSpot.x: 10
-            Drag.hotSpot.y: 10
             objectName: modelData.name
-
-            DragHandler {
-                id: drag
-                target: draggableImage
-                enabled: !draggableImage.lock
-            }
+            z: -10
             Row {
                 z: 2
                 opacity: 1
@@ -475,25 +487,6 @@ PanelWindow {
                     }
                 }
             }
-        }
-
-        // corner handler for resizing
-        Repeater {
-            model: [
-                {
-                    anchors: ["left", "top"]
-                },
-                {
-                    anchors: ["right", "top"]
-                },
-                {
-                    anchors: ["left", "bottom"]
-                },
-                {
-                    anchors: ["right", "bottom"]
-                },
-            ]
-            delegate: Positioner {}
         }
     }
 
@@ -582,7 +575,7 @@ PanelWindow {
                 Button {
                     text: "Add file"
                     onClicked: {
-                        fileExplorerOpen = true;
+                        panel.fileExplorerOpen = true;
                         fileExplorer.active();
                     }
                 }
@@ -611,7 +604,10 @@ PanelWindow {
 
                 Button {
                     text: "Generate color"
-                    onClicked: panel.onSaveCustomWallpaper()
+                    onClicked: {
+                        onSaveCustomWallpaper();
+                        console.log("in Button");
+                    }
                 }
             }
 
@@ -630,6 +626,265 @@ PanelWindow {
                     model: [...controlContainer.imageList]
                     delegate: Button {
                         text: modelData.objectName
+                    }
+                }
+            }
+        }
+    }
+
+    component SelectRect: Rectangle {
+        id: selComp
+        property int rulersSize: 18
+        property alias dragArea: ma
+
+        border {
+            width: 2
+            color: Colors.color.tertiary
+        }
+        color: "transparent"
+
+        // drag mouse area
+        MouseArea {
+            id: ma
+            anchors.fill: parent
+            drag {
+                target: parent
+                smoothed: true
+            }
+        }
+
+        Rectangle {
+            width: rulersSize
+            height: rulersSize
+            radius: rulersSize
+            color: "steelblue"
+            anchors.horizontalCenter: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+
+            MouseArea {
+                anchors.fill: parent
+                drag {
+                    target: parent
+                    axis: Drag.XAxis
+                }
+                onMouseXChanged: {
+                    if (drag.active) {
+                        selComp.width = selComp.width - mouseX;
+                        selComp.x = selComp.x + mouseX;
+                        if (selComp.width < 30)
+                            selComp.width = 30;
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            width: rulersSize
+            height: rulersSize
+            radius: rulersSize
+            color: "steelblue"
+            anchors.horizontalCenter: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+
+            MouseArea {
+                anchors.fill: parent
+                drag {
+                    target: parent
+                    axis: Drag.XAxis
+                }
+                onMouseXChanged: {
+                    if (drag.active) {
+                        selComp.width = selComp.width + mouseX;
+                        if (selComp.width < 50)
+                            selComp.width = 50;
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            width: rulersSize
+            height: rulersSize
+            radius: rulersSize
+            x: parent.x / 2
+            y: 0
+            color: "steelblue"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.top
+
+            MouseArea {
+                anchors.fill: parent
+                drag {
+                    target: parent
+                    axis: Drag.YAxis
+                }
+
+                onMouseYChanged: {
+                    if (drag.active) {
+                        selComp.height = selComp.height - mouseY;
+                        selComp.y = selComp.y + mouseY;
+                        if (selComp.height < 50)
+                            selComp.height = 50;
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            width: rulersSize
+            height: rulersSize
+            radius: rulersSize
+            x: parent.x / 2
+            y: parent.y
+            color: "steelblue"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.bottom
+
+            MouseArea {
+                anchors.fill: parent
+                drag {
+                    target: parent
+                    axis: Drag.YAxis
+                }
+                onMouseYChanged: {
+                    if (drag.active) {
+                        selComp.height = selComp.height + mouseY;
+                        if (selComp.height < 50)
+                            selComp.height = 50;
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: selectionComponent
+
+        Rectangle {
+            id: selComp
+            border {
+                width: 2
+                color: "steelblue"
+            }
+            color: "#354682B4"
+
+            property int rulersSize: 18
+
+            MouseArea {     // drag mouse area
+                anchors.fill: parent
+                drag {
+                    target: parent
+                    minimumX: 0
+                    minimumY: 0
+                    maximumX: parent.parent.width - parent.width
+                    maximumY: parent.parent.height - parent.height
+                    smoothed: true
+                }
+
+                onDoubleClicked: {
+                    parent.destroy();        // destroy component
+                }
+            }
+
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                color: "steelblue"
+                anchors.horizontalCenter: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag {
+                        target: parent
+                        axis: Drag.XAxis
+                    }
+                    onMouseXChanged: {
+                        if (drag.active) {
+                            selComp.width = selComp.width - mouseX;
+                            selComp.x = selComp.x + mouseX;
+                            if (selComp.width < 30)
+                                selComp.width = 30;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                color: "steelblue"
+                anchors.horizontalCenter: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag {
+                        target: parent
+                        axis: Drag.XAxis
+                    }
+                    onMouseXChanged: {
+                        if (drag.active) {
+                            selComp.width = selComp.width + mouseX;
+                            if (selComp.width < 50)
+                                selComp.width = 50;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                x: parent.x / 2
+                y: 0
+                color: "steelblue"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.top
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag {
+                        target: parent
+                        axis: Drag.YAxis
+                    }
+
+                    onMouseYChanged: {
+                        if (drag.active) {
+                            selComp.height = selComp.height - mouseY;
+                            selComp.y = selComp.y + mouseY;
+                            if (selComp.height < 50)
+                                selComp.height = 50;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                x: parent.x / 2
+                y: parent.y
+                color: "steelblue"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag {
+                        target: parent
+                        axis: Drag.YAxis
+                    }
+                    onMouseYChanged: {
+                        if (drag.active) {
+                            selComp.height = selComp.height + mouseY;
+                            if (selComp.height < 50)
+                                selComp.height = 50;
+                        }
                     }
                 }
             }
