@@ -37,7 +37,8 @@ Item {
             property string position: "top"
             readonly property bool side: position === "left" || position === "right"
             property StyleJson style: StyleJson {
-                color: Colors.setOpacity(Colors.color.background, 0.5)
+                color: Colors.color.background
+                opacity: 0.5
             }
             property list<var> slots: []
 
@@ -65,7 +66,7 @@ Item {
             }
 
             function updateColor() {
-                config.style.color = Colors.setOpacity(Colors.color.background, 0.5);
+                config.style.color = Colors.setOpacity(Colors.color.background, config.style.opacity);
                 file.writeAdapter();
             }
         }
@@ -204,7 +205,7 @@ Item {
         }
 
         Rectangle {
-            color: config.style.color
+            color: Colors.setOpacity(config.style.color, config.style.opacity)
             anchors.fill: parent
 
             DockContentContainer {}
@@ -270,9 +271,6 @@ Item {
 
     component Slot: Rectangle {
         id: slot
-
-        property bool selected: Global.edit && Global.selectedItem === slot
-        onSelectedChanged: slot.state = slot.selected ? "selected" : "none"
 
         property string position: "left"
         property int spacing: 2
@@ -347,22 +345,12 @@ Item {
             }
         }
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onHoveredChanged: {
-                slot.state = containsMouse ? "hovered" : "none";
-            }
-            onClicked: {
-                Global.selectedItem = slot;
-            }
-        }
-
         color: "transparent"
 
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 1
+
         onChildrenChanged: {
             for (const i in children) {
                 const target = children[i];
@@ -615,6 +603,7 @@ Item {
         height: parent.height
         contentHeight: container.height
         clip: true
+
         ColumnLayout {
             id: container
             anchors {
@@ -832,6 +821,69 @@ Item {
                         height: 20
                         value: margin.margin.left
                         onValueChanged: margin.margin.left = value
+                    }
+                }
+            }
+
+            // opacity
+            Label {
+                font.pixelSize: 32
+                text: "Opacity"
+            }
+            Slider {
+                id: opacitySlider
+                to: 1.0
+                onValueChanged: {
+                    config.style.opacity = value;
+                }
+            }
+            // Colors
+            Label {
+                font.pixelSize: 32
+                text: "Colors"
+            }
+            GridView {
+                id: colorGrid
+                interactive: false
+                Layout.fillWidth: true
+                Layout.preferredHeight: colorGrid.contentHeight
+                cellWidth: colorGrid.width / 4
+                cellHeight: cellWidth
+                model: [...Colors.colors]
+                delegate: Rectangle {
+                    width: colorGrid.cellWidth
+                    height: colorGrid.cellHeight
+                    color: Colors.color[modelData]
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            config.style.color = parent.color;
+                        }
+                    }
+                }
+            }
+            // Palette
+            Label {
+                font.pixelSize: 32
+                text: "Palette"
+            }
+            GridView {
+                id: paletteGrid
+                interactive: false
+                Layout.fillWidth: true
+                Layout.preferredHeight: paletteGrid.contentHeight
+                cellWidth: paletteGrid.width / 4
+                cellHeight: cellWidth
+                model: [...Colors.palettes]
+                delegate: Rectangle {
+                    width: paletteGrid.cellWidth
+                    height: paletteGrid.cellHeight
+                    color: Colors.palette[modelData]
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            config.style.color = parent.color;
+                        }
                     }
                 }
             }
