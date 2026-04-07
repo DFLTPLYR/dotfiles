@@ -11,7 +11,8 @@ import qs.types
 
 Singleton {
     id: config
-
+    // signal
+    signal colorUpdate
     // states
     readonly property QtObject states: QtObject {
         readonly property int normal: 0
@@ -69,6 +70,7 @@ Singleton {
         Quickshell.execDetached({
             command: ["quickcli", "generate-palette", "--type", "scheme-content", ...paths]
         });
+        config.colorUpdate();
     }
 
     FileView {
