@@ -387,12 +387,6 @@ Item {
                 }
 
                 spacing: slot.spacing
-                onChildrenChanged: {
-                    for (let i = 0; children.length > i; i++) {
-                        const target = children[i];
-                        slot.bindSize(target);
-                    }
-                }
 
                 populate: Transition {
                     from: "*"
@@ -453,10 +447,10 @@ Item {
                         text: "Properties"
                     }
                     TabButton {
-                        text: "Widgets"
+                        text: "Slots"
                     }
                     TabButton {
-                        text: "Slots"
+                        text: "Widgets"
                     }
                 }
             }
@@ -470,97 +464,12 @@ Item {
                     id: propertyTab
                 }
 
-                Flickable {
-                    width: parent.width
-                    height: parent.height
-                    clip: true
-                    contentHeight: column.implicitHeight
-
-                    ColumnLayout {
-                        id: column
-                        width: parent.width
-
-                        Repeater {
-                            id: testContainer
-                            model: [1, 2, 3, 4, 5]
-                            delegate: Item {
-                                id: origPlacement
-                                implicitHeight: test.height
-                                implicitWidth: test.width
-
-                                Rectangle {
-                                    id: test
-                                    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                                    width: 400
-                                    height: 200
-                                    Drag.active: ma.drag.active
-                                    Drag.hotSpot: {
-                                        switch (config.position) {
-                                        case "top":
-                                        case "left":
-                                            return Qt.point(0, 0);
-                                        case "bottom":
-                                            return Qt.point(0, height);
-                                        case "right":
-                                            return Qt.point(width, height);
-                                        default:
-                                            return Qt.point(0, 0);
-                                        }
-                                    }
-
-                                    Drag.onActiveChanged: {
-                                        if (Drag.active) {
-                                            test.parent = stack;
-                                        }
-                                    }
-
-                                    states: [
-                                        State {
-                                            when: ma.drag.active
-                                            ParentChange {
-                                                target: test
-                                                parent: stack
-                                            }
-                                        },
-                                        State {
-                                            when: !ma.drag.active
-                                            ParentChange {
-                                                target: test
-                                                parent: origPlacement
-                                            }
-                                        }
-                                    ]
-
-                                    MouseArea {
-                                        id: ma
-                                        anchors.fill: parent
-                                        drag.target: test
-                                        onReleased: {
-                                            test.x = 0;
-                                            test.y = 0;
-                                        }
-                                    }
-
-                                    Behavior on x {
-                                        NumberAnimation {
-                                            duration: 300
-                                            easing.type: Easing.InOutQuad
-                                        }
-                                    }
-                                    Behavior on y {
-                                        NumberAnimation {
-                                            duration: 300
-                                            easing.type: Easing.InOutQuad
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
                 SlotTab {
                     id: slotTab
+                }
+
+                WidgetsTab {
+                    id: widgetsTab
                 }
             }
 
@@ -916,6 +825,95 @@ Item {
                 delegate: Button {
                     text: modelData.name
                     onClicked: container.selectedSlot = modelData
+                }
+            }
+        }
+    }
+
+    component WidgetsTab: Flickable {
+        width: parent.width
+        height: parent.height
+        clip: true
+        contentHeight: column.implicitHeight
+
+        ColumnLayout {
+            id: column
+            width: parent.width
+
+            Repeater {
+                id: testContainer
+                model: [1, 2, 3, 4, 5]
+                delegate: Item {
+                    id: origPlacement
+                    implicitHeight: test.height
+                    implicitWidth: test.width
+
+                    Rectangle {
+                        id: test
+                        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        width: 400
+                        height: 200
+                        Drag.active: ma.drag.active
+                        Drag.hotSpot: {
+                            switch (config.position) {
+                            case "top":
+                            case "left":
+                                return Qt.point(0, 0);
+                            case "bottom":
+                                return Qt.point(0, height);
+                            case "right":
+                                return Qt.point(width, height);
+                            default:
+                                return Qt.point(0, 0);
+                            }
+                        }
+
+                        Drag.onActiveChanged: {
+                            if (Drag.active) {
+                                test.parent = stack;
+                            }
+                        }
+
+                        states: [
+                            State {
+                                when: ma.drag.active
+                                ParentChange {
+                                    target: test
+                                    parent: stack
+                                }
+                            },
+                            State {
+                                when: !ma.drag.active
+                                ParentChange {
+                                    target: test
+                                    parent: origPlacement
+                                }
+                            }
+                        ]
+
+                        MouseArea {
+                            id: ma
+                            anchors.fill: parent
+                            drag.target: test
+                            onReleased: {
+                                test.x = 0;
+                                test.y = 0;
+                            }
+                        }
+
+                        Behavior on x {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                        Behavior on y {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    }
                 }
             }
         }
