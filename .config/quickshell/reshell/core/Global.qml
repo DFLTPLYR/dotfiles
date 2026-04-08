@@ -38,7 +38,7 @@ Singleton {
             });
         }
     }
-    //
+
     property bool enableSetting: false
     property bool enableSystemPanel: false
     property Item setttingPanel: null
