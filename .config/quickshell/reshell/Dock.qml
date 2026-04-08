@@ -274,6 +274,7 @@ Item {
 
         property string position: "left"
         property int spacing: 2
+        property list<var> widgets: []
         default property alias content: innerGrid.data
         state: "none"
         border.width: 2
@@ -340,7 +341,7 @@ Item {
                     slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
                 }
                 onDropped: drop => {
-                    console.log(drop);
+                    slot.widgets = [...slot.widgets, drop.keys[0]];
                 }
             }
         }
@@ -351,12 +352,12 @@ Item {
         Layout.fillHeight: true
         Layout.margins: 1
 
-        onChildrenChanged: {
-            for (const i in children) {
-                const target = children[i];
-                if (target.objectName) {
-                    target.parent = innerGrid;
-                }
+        Instantiator {
+            model: ScriptModel {
+                values: [...slot.widgets]
+            }
+            delegate: WidgetWrap {
+                parent: innerGrid
             }
         }
 
@@ -371,6 +372,16 @@ Item {
                 rows: config.side ? children.length : 1
                 columns: config.side ? 1 : children.length
 
+                onChildrenChanged: {
+                    for (const i in children) {
+                        const target = children[i];
+                        if (target instanceof Widget) {
+                            target.size = Qt.binding(function () {
+                                return config.side ? grid.width : grid.height;
+                            });
+                        }
+                    }
+                }
                 Layout.alignment: {
                     switch (slot.position) {
                     case "left":
@@ -831,8 +842,8 @@ Item {
     }
 
     component WidgetsTab: Flickable {
-        width: parent.width
-        height: parent.height
+        width: modalPopup.width
+        height: modalPopup.height
         clip: true
         contentHeight: column.implicitHeight
 
@@ -841,19 +852,20 @@ Item {
             width: parent.width
 
             Repeater {
-                id: testContainer
-                model: [1, 2, 3, 4, 5]
+                model: ["red", "green", "blue"]
                 delegate: Item {
                     id: origPlacement
-                    implicitHeight: test.height
-                    implicitWidth: test.width
+                    width: parent.width
+                    height: 200
 
                     Rectangle {
-                        id: test
+                        id: container
                         color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
-                        width: 400
-                        height: 200
+                        width: origPlacement.width
+                        height: origPlacement.height
+
                         Drag.active: ma.drag.active
+                        Drag.keys: [modelData]
                         Drag.hotSpot: {
                             switch (config.position) {
                             case "top":
@@ -870,7 +882,7 @@ Item {
 
                         Drag.onActiveChanged: {
                             if (Drag.active) {
-                                test.parent = stack;
+                                container.parent = stack;
                             }
                         }
 
@@ -878,14 +890,14 @@ Item {
                             State {
                                 when: ma.drag.active
                                 ParentChange {
-                                    target: test
+                                    target: container
                                     parent: stack
                                 }
                             },
                             State {
                                 when: !ma.drag.active
                                 ParentChange {
-                                    target: test
+                                    target: container
                                     parent: origPlacement
                                 }
                             }
@@ -894,10 +906,11 @@ Item {
                         MouseArea {
                             id: ma
                             anchors.fill: parent
-                            drag.target: test
+                            drag.target: container
                             onReleased: {
-                                test.x = 0;
-                                test.y = 0;
+                                container.x = 0;
+                                container.y = 0;
+                                container.Drag.drop();
                             }
                         }
 
@@ -915,6 +928,23 @@ Item {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component WidgetWrap: Item {
+        id: widget
+        required property var modelData
+        property int size: 0
+        implicitWidth: size
+        implicitHeight: size
+
+        Rectangle {
+            anchors.fill: parent
+            color: widget.modelData
+            Text {
+                anchors.centerIn: parent
+                text: widget.modelData
             }
         }
     }
