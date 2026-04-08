@@ -559,10 +559,13 @@ PanelWindow {
                     Instantiator {
                         readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
                         model: schemes
-                        delegate: Button {
+                        delegate: CheckBox {
                             text: modelData
+                            checked: modelData === Wallpaper.config.theme
                             onClicked: {
+                                Wallpaper.config.theme = modelData;
                                 panel.onSaveCustomWallpaper();
+                                Wallpaper.save();
                             }
                         }
                         onObjectAdded: (idx, obj) => {

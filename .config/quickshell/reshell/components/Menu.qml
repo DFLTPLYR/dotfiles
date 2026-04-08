@@ -67,7 +67,7 @@ Menu {
             implicitWidth: 200
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: menuItem.highlighted ? Colors.color.on_background : "transparent"
+            color: menuItem.highlighted ? Colors.color.background : "transparent"
         }
     }
 

@@ -35,6 +35,7 @@ Singleton {
                 property list<var> source: []
                 property list<var> preset: []
                 property list<var> layers: []
+                property string theme: "scheme-content"
             }
         }
     }

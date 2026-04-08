@@ -68,7 +68,7 @@ Singleton {
             paths.push(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${target.name}.jpg`);
         }
         Quickshell.execDetached({
-            command: ["quickcli", "generate-palette", "--type", "scheme-content", ...paths]
+            command: ["quickcli", "generate-palette", "--type", Wallpaper.config.theme, ...paths]
         });
         config.colorUpdate();
     }
