@@ -393,6 +393,9 @@ PanelWindow {
                     }
 
                     Wallpaper.save();
+                    Qt.callLater(() => {
+                        panel.onSaveCustomWallpaper();
+                    });
                 }
 
                 Component.onCompleted: {
@@ -549,10 +552,22 @@ PanelWindow {
                     }
                 }
 
-                Button {
-                    text: "Generate color"
-                    onClicked: {
-                        panel.onSaveCustomWallpaper();
+                Menu {
+                    id: colorScheme
+                    title: "Theme Picker"
+                    width: 150
+                    Instantiator {
+                        readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
+                        model: schemes
+                        delegate: Button {
+                            text: modelData
+                            onClicked: {
+                                panel.onSaveCustomWallpaper();
+                            }
+                        }
+                        onObjectAdded: (idx, obj) => {
+                            colorScheme.insertItem(idx, obj);
+                        }
                     }
                 }
             }
@@ -566,6 +581,7 @@ PanelWindow {
                     }
                 }
             }
+
             Menu {
                 title: "Images"
                 Repeater {

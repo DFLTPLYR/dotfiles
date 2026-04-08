@@ -37,8 +37,15 @@ Popup {
             property: "opacity"
             from: 0.0
             to: 1.0
-            duration: 0
+            duration: 100
             easing.type: Easing.InOutQuad
+        }
+        PropertyAnimation {
+            target: modalPopup.contentItem
+            property: "visible"
+            from: false
+            to: true
+            duration: 0
         }
     }
 
@@ -48,8 +55,15 @@ Popup {
             property: "opacity"
             from: 1.0
             to: 0.0
-            duration: 0
+            duration: 100
             easing.type: Easing.InQuad
+        }
+        PropertyAnimation {
+            target: modalPopup.contentItem
+            property: "visible"
+            from: true
+            to: false
+            duration: 0
         }
     }
 
