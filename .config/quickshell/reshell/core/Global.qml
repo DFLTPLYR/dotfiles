@@ -148,27 +148,6 @@ Singleton {
         });
     }
 
-    // FolderListModel {
-    //     id: folderModel
-    //     folder: Qt.resolvedUrl("../components/widgets")
-    //     nameFilters: ["*.qml"]
-    //     showDirs: false
-    //
-    //     onCountChanged: {
-    //         for (let i = 0; i < count; i++) {
-    //             const fileName = get(i, "fileName");
-    //             if (fileName !== "Wrapper.qml") {
-    //                 const widgetName = fileName;
-    //                 const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
-    //                 propertyCheckerComponent.createObject(config, {
-    //                     path: target,
-    //                     widget: widgetName
-    //                 });
-    //             }
-    //         }
-    //     }
-    // }
-
     FolderListModel {
         folder: Qt.resolvedUrl("../widgets")
         nameFilters: ["*.qml"]
@@ -177,35 +156,16 @@ Singleton {
         onCountChanged: {
             for (let i = 0; i < count; i++) {
                 const fileName = get(i, "fileName");
-                if (fileName !== "Property.qml") {
-                    const widgetName = fileName;
-                    const target = Quickshell.shellPath(`widgets/${widgetName}`);
-                    propertyCheckerComponent.createObject(config, {
-                        path: target,
-                        widget: widgetName.replace(/\.qml$/, '')
-                    });
-                }
-            }
-        }
-    }
-    Component {
-        id: propertyCheckerComponent
-        FileView {
-            property string widget: ""
-
-            onPathChanged: {
-                this.reload();
-            }
-            onLoaded: {
-                const widget = {
-                    name: this.widget,
-                    source: this.path
-                };
-                const exist = config.widgets.find(s => s && s.name === widget.name);
+                const name = fileName.replace(/\.qml$/, '');
+                const exist = config.widgets.find(s => s && s.name === name);
                 if (!exist) {
+                    const path = Quickshell.shellPath(`widgets/${fileName}`);
+                    const widget = {
+                        name: name,
+                        source: path
+                    };
                     config.widgets = [...config.widgets, widget];
                 }
-                this.destroy();
             }
         }
     }
