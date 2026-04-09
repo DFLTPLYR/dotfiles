@@ -868,7 +868,7 @@ Item {
                 delegate: Item {
                     id: origPlacement
                     width: parent.width
-                    height: 200
+                    height: 100
 
                     Rectangle {
                         id: container
