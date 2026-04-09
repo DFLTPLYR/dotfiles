@@ -29,16 +29,6 @@ Singleton {
 
     property var modal: null
 
-    IpcHandler {
-        target: "config"
-        function cycleState() {
-            config.state = (config.state + 1) % 2;
-            Quickshell.execDetached({
-                command: ["notify-send", "State", config.state === states.normal ? "Normal" : "Edit"]
-            });
-        }
-    }
-
     property bool enableSetting: false
     property bool enableSystemPanel: false
     property Item setttingPanel: null
@@ -54,6 +44,17 @@ Singleton {
     // global item
     property alias general: adapter
     property list<var> fileManager: []
+    property list<var> widgets: []
+
+    IpcHandler {
+        target: "config"
+        function cycleState() {
+            config.state = (config.state + 1) % 2;
+            Quickshell.execDetached({
+                command: ["notify-send", "State", config.state === states.normal ? "Normal" : "Edit"]
+            });
+        }
+    }
 
     function getConfigManager(tag) {
         const entry = fileManager.find(s => s && s.subject === tag);
@@ -168,13 +169,33 @@ Singleton {
         }
     }
 
+    FolderListModel {
+        folder: Qt.resolvedUrl("../widgets")
+        nameFilters: ["*.qml"]
+        showDirs: false
+
+        onCountChanged: {
+            for (let i = 0; i < count; i++) {
+                const fileName = get(i, "fileName");
+                if (fileName !== "Wrapper.qml") {
+                    const widgetName = fileName;
+                    const target = Quickshell.shellPath(`widgets/${widgetName}`);
+                    propertyCheckerComponent.createObject(config, {
+                        path: target,
+                        widget: widgetName.replace(/\.qml$/, '')
+                    });
+                }
+            }
+        }
+    }
     Component {
         id: propertyCheckerComponent
         FileView {
             property string widget: ""
 
             function getProperties(content) {
-                const regex = /\/\/ properties\n([\s\S]*?)\n\s*\/\/ properties/;
+                // const regex = /\/\/ properties\n([\s\S]*?)\n\s*\/\/ properties/;
+                const regex = /\/\*\*\s*\n([\s\S]*?)\s*\*\*\//;
                 const match = returnJsonObject(content.match(regex));
                 return match;
             }
@@ -218,11 +239,17 @@ Singleton {
             onLoaded: {
                 var props = getProperties(text());
                 if (props) {
-                    const exist = fileView.adapter.widgets.find(s => s && s.objectName === props.objectName);
-                    if (!exist) {
-                        fileView.adapter.widgets.push(props);
-                        fileView.writeAdapter();
-                    }
+                    const widget = {
+                        name: this.widget,
+                        source: this.path,
+                        properties: props
+                    };
+                    config.widgets = [...config.widgets, widget];
+                    // const exist = fileView.adapter.widgets.find(s => s && s.objectName === props.objectName);
+                    // if (!exist) {
+                    //     fileView.adapter.widgets.push(props);
+                    //     fileView.writeAdapter();
+                    // }
                 }
                 this.destroy();
             }
