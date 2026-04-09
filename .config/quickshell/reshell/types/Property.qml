@@ -1,6 +1,8 @@
 import QtQuick
 
 QtObject {
+    property bool floating: false
+
     function keys() {
         const ks = Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
         const result = [];

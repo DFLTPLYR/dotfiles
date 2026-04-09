@@ -916,15 +916,17 @@ Item {
                 }
                 delegate: Item {
                     id: origPlacement
-                    width: parent.width
-                    height: 100
-
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    Layout.preferredHeight: 100
                     Rectangle {
                         id: container
-                        color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+                        color: "transparent"
+
                         width: origPlacement.width
                         height: origPlacement.height
-
+                        border.color: Colors.color.primary
                         Drag.active: ma.drag.active
                         Drag.keys: [modelData.source]
                         Drag.hotSpot: {
