@@ -177,7 +177,7 @@ Singleton {
         onCountChanged: {
             for (let i = 0; i < count; i++) {
                 const fileName = get(i, "fileName");
-                if (fileName !== "Wrapper.qml") {
+                if (fileName !== "Property.qml") {
                     const widgetName = fileName;
                     const target = Quickshell.shellPath(`widgets/${widgetName}`);
                     propertyCheckerComponent.createObject(config, {
@@ -201,10 +201,9 @@ Singleton {
                     name: this.widget,
                     source: this.path
                 };
-                config.widgets = [...config.widgets, widget];
                 const exist = config.widgets.find(s => s && s.name === widget.name);
                 if (!exist) {
-                    config.widgets.push(props);
+                    config.widgets = [...config.widgets, widget];
                 }
                 this.destroy();
             }

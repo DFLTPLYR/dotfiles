@@ -3,17 +3,12 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.core
+import qs.types
 
 GridLayout {
-    property int baseSize
-
-    property var config: QtObject {
+    property Property config: Property {
         property int height: 100
         property int width: 100
-
-        function keys() {
-            return Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
-        }
     }
 
     SystemClock {
