@@ -2,17 +2,14 @@ import QtQuick
 import Quickshell
 
 import qs.core
-import qs.components
+import qs.types
 
-Wrapper {
+Item {
     id: wrap
-    // properties
-    objectName: "Workspace"
-    dynamicsize: true
-    relativeX: 0
-    relativeY: 0
-    position: -1
-    // properties
+    property Property config: Property {
+        property int height: 100
+        property int width: 100
+    }
 
     width: parent ? (wrap.side ? wrap.defaultsize : list.contentWidth) : 0
     height: parent ? (wrap.side ? list.contentHeight : wrap.defaultsize) : 0

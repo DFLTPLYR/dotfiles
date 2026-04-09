@@ -361,13 +361,12 @@ Item {
                 model: ScriptModel {
                     values: [...slot.widgets]
                 }
-                delegate: WidgetWrap {
+                delegate: Loader {
                     required property var modelData
                     parent: innerGrid
                     source: modelData
                     width: config.side ? grid.width : grid.height * 2
                     height: config.side ? grid.width * 2 : grid.height
-                    onItemChanged: console.log(item.config.keys())
                 }
             }
 
@@ -380,7 +379,7 @@ Item {
                 onChildrenChanged: {
                     for (const i in children) {
                         const target = children[i];
-                        if (target instanceof WidgetWrap) {
+                        if (target instanceof Loader) {
                             // target.width = config.side ? grid.width : grid.height * 2;
                             // target.height = config.side ? grid.width * 2 : grid.height;
                             //
@@ -469,9 +468,11 @@ Item {
                     TabButton {
                         text: "Properties"
                     }
+
                     TabButton {
                         text: "Slots"
                     }
+
                     TabButton {
                         text: "Widgets"
                     }
@@ -543,29 +544,9 @@ Item {
                 right: parent.right
                 margins: 2
             }
-            Label {
-                text: "Slots"
-                font.pixelSize: 32
-            }
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                Button {
-                    text: "Add Slot"
-                    onClicked: {
-                        const slot = {
-                            name: Math.random().toString(36).substring(2, 10),
-                            position: "left",
-                            spacing: 0
-                        };
-                        config.slots.push(slot);
-                    }
-                }
-                Button {
-                    text: "Delete Dock"
-                    onClicked: dock.removeDock(dock.name)
-                }
+            Button {
+                text: "Delete Dock"
+                onClicked: dock.removeDock(dock.name)
             }
 
             Label {
@@ -842,6 +823,23 @@ Item {
                 font.pixelSize: 32
             }
 
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Button {
+                    text: "Add Slot"
+                    onClicked: {
+                        const slot = {
+                            name: Math.random().toString(36).substring(2, 10),
+                            position: "left",
+                            spacing: 0
+                        };
+                        config.slots.push(slot);
+                    }
+                }
+            }
+
             ListView {
                 Layout.fillWidth: true
                 model: [...config.slots]
@@ -939,6 +937,7 @@ Item {
                                 easing.type: Easing.InOutQuad
                             }
                         }
+
                         Behavior on y {
                             NumberAnimation {
                                 duration: 300
@@ -948,12 +947,6 @@ Item {
                     }
                 }
             }
-        }
-    }
-
-    component WidgetWrap: Loader {
-        onItemChanged: {
-            item.baseSize = config.side ? parent.width : parent.height;
         }
     }
 }

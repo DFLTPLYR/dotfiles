@@ -19,7 +19,7 @@ Popup {
     background: Rectangle {
         id: background
         anchors.fill: parent
-        color: Colors.setOpacity(Colors.color.background, 0.9)
+        color: Colors.setOpacity(Colors.color.background, 1)
 
         border {
             width: 2
