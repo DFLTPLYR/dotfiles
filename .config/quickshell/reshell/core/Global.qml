@@ -17,10 +17,14 @@ Singleton {
     readonly property QtObject states: QtObject {
         readonly property int normal: 0
         readonly property int edit: 1
+        readonly property int widget: 2
     }
+    readonly property var stateNames: ["Normal", "Edit", "Widget"]
+
     property int state: states.normal
     readonly property bool edit: state === states.edit
     readonly property bool normal: state === states.normal
+    readonly property bool widget: state === states.widget
 
     // Modal State
     property bool wallpaper: false
@@ -49,9 +53,9 @@ Singleton {
     IpcHandler {
         target: "config"
         function cycleState() {
-            config.state = (config.state + 1) % 2;
+            config.state = (config.state + 1) % stateNames.length;
             Quickshell.execDetached({
-                command: ["notify-send", "State", config.state === states.normal ? "Normal" : "Edit"]
+                command: ["notify-send", "State", stateNames[config.state]]
             });
         }
     }
@@ -156,6 +160,9 @@ Singleton {
         onCountChanged: {
             for (let i = 0; i < count; i++) {
                 const fileName = get(i, "fileName");
+                if (fileName === "Wrapper.qml") {
+                    return;
+                }
                 const name = fileName.replace(/\.qml$/, '');
                 const exist = config.widgets.find(s => s && s.name === name);
                 if (!exist) {

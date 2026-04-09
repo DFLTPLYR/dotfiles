@@ -3,27 +3,32 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.core
-import qs.types
 
 Wrapper {
-    property Property config: Property {
-        property int height: 100
-        property int width: 100
-    }
+    id: wrap
+    // properties
+    objectName: "Clock"
+    setHeight: 100
+    setWidth: 100
+    relativeX: 0
+    relativeY: 0
+    position: -1
+    // properties
+
     GridLayout {
         anchors.fill: parent
+
         SystemClock {
             id: clock
             precision: SystemClock.Seconds
         }
-
         Text {
-            text: Qt.formatDateTime(clock.date, "hh:mm AP")
+            text: Qt.formatDateTime(clock.date, wrap.side ? "hh mm AP" : "hh:mm AP")
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
             font {
-                pixelSize: Math.min(parent.width, parent.height) / 3
+                pixelSize: Math.min(wrap.width, wrap.height) / 2
             }
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
