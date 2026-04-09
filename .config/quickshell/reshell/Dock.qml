@@ -367,6 +367,7 @@ Item {
                     source: modelData
                     width: config.side ? grid.width : grid.height * 2
                     height: config.side ? grid.width * 2 : grid.height
+                    onItemChanged: console.log(item.config.keys())
                 }
             }
 

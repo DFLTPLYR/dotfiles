@@ -7,10 +7,14 @@ import qs.core
 GridLayout {
     property int baseSize
 
-    /**
-    property int height: 100
-    property int width: 100
-    **/
+    property var config: QtObject {
+        property int height: 100
+        property int width: 100
+
+        function keys() {
+            return Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
+        }
+    }
 
     SystemClock {
         id: clock
@@ -23,7 +27,7 @@ GridLayout {
         Layout.fillHeight: true
         color: Colors.color.primary
         font {
-            pixelSize: Math.min(parent.width, parent.height) / 4
+            pixelSize: Math.min(parent.width, parent.height) / 3
         }
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter

@@ -148,26 +148,26 @@ Singleton {
         });
     }
 
-    FolderListModel {
-        id: folderModel
-        folder: Qt.resolvedUrl("../components/widgets")
-        nameFilters: ["*.qml"]
-        showDirs: false
-
-        onCountChanged: {
-            for (let i = 0; i < count; i++) {
-                const fileName = get(i, "fileName");
-                if (fileName !== "Wrapper.qml") {
-                    const widgetName = fileName;
-                    const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
-                    propertyCheckerComponent.createObject(config, {
-                        path: target,
-                        widget: widgetName
-                    });
-                }
-            }
-        }
-    }
+    // FolderListModel {
+    //     id: folderModel
+    //     folder: Qt.resolvedUrl("../components/widgets")
+    //     nameFilters: ["*.qml"]
+    //     showDirs: false
+    //
+    //     onCountChanged: {
+    //         for (let i = 0; i < count; i++) {
+    //             const fileName = get(i, "fileName");
+    //             if (fileName !== "Wrapper.qml") {
+    //                 const widgetName = fileName;
+    //                 const target = Quickshell.shellPath(`components/widgets/${widgetName}`);
+    //                 propertyCheckerComponent.createObject(config, {
+    //                     path: target,
+    //                     widget: widgetName
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }
 
     FolderListModel {
         folder: Qt.resolvedUrl("../widgets")
@@ -193,63 +193,18 @@ Singleton {
         FileView {
             property string widget: ""
 
-            function getProperties(content) {
-                // const regex = /\/\/ properties\n([\s\S]*?)\n\s*\/\/ properties/;
-                const regex = /\/\*\*\s*\n([\s\S]*?)\s*\*\*\//;
-                const match = returnJsonObject(content.match(regex));
-                return match;
-            }
-
-            function returnJsonObject(match) {
-                if (!match)
-                    return null;
-                const props = {};
-                const lines = match[1].trim().split('\n');
-                for (let line of lines) {
-                    let key, value;
-                    if (line.trim().startsWith('property ')) {
-                        const parts = line.trim().slice(9).split(':');
-                        if (parts.length < 2)
-                            continue;
-                        key = parts[0].trim().split(' ').pop();
-                        value = parts.slice(1).join(':').trim();
-                    } else {
-                        const colonIdx = line.indexOf(':');
-                        if (colonIdx === -1)
-                            continue;
-                        key = line.slice(0, colonIdx).trim();
-                        value = line.slice(colonIdx + 1).trim();
-                    }
-                    if (value === 'true')
-                        value = true;
-                    else if (value === 'false')
-                        value = false;
-                    else if (!isNaN(value) && value !== '')
-                        value = Number(value);
-                    else if (value.startsWith('"') && value.endsWith('"'))
-                        value = value.slice(1, -1);
-                    props[key] = value;
-                }
-                return props;
-            }
-
             onPathChanged: {
                 this.reload();
             }
             onLoaded: {
-                var props = getProperties(text());
-                if (props) {
-                    const widget = {
-                        name: this.widget,
-                        source: this.path,
-                        properties: props
-                    };
-                    config.widgets = [...config.widgets, widget];
-                    // const exist = fileView.adapter.widgets.find(s => s && s.objectName === props.objectName);
-                    // if (!exist) {
-                    //     fileView.adapter.widgets.push(props);
-                    //     fileView.writeAdapter();
-                    // }
+                const widget = {
+                    name: this.widget,
+                    source: this.path
+                };
+                config.widgets = [...config.widgets, widget];
+                const exist = config.widgets.find(s => s && s.name === widget.name);
+                if (!exist) {
+                    config.widgets.push(props);
                 }
                 this.destroy();
             }
