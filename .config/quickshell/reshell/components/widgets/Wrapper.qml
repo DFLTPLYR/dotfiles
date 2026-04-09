@@ -1,96 +1,19 @@
-pragma ComponentBehavior: Bound
+import Quickshell
 import QtQuick
 import qs.core
 
-Rectangle {
-    id: widget
-    property Item origparent
-    property bool dynamicsize: false
-    readonly property int defaultsize: parent ? (widget.side ? parent.width : parent.height) : 0
-    property int setHeight: 100
-    property int setWidth: 100
-    property int relativeX: 0
-    property int relativeY: 0
-    property int position: -1
-    property bool active: Global.enableSetting
-    property bool side: false
-    property var config
-
-    Connections {
-        target: Compositor
-        function onReadyChanged() {
-            const config = Global.getConfigManager(`${Compositor.focusedMonitor}-dock`).adapter;
-            widget.side = config.side;
-            widget.config = config;
-            config.onSideChanged.connect(() => {
-                widget.side = config.side;
-            });
-        }
-    }
-
-    clip: true
-    color: "transparent"
-
-    Behavior on x {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Behavior on y {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Behavior on width {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Behavior on height {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Drag.active: ma.drag.active
-
-    Drag.hotSpot.x: width * 0.6
-    Drag.hotSpot.y: height * 0.6
-    Drag.keys: ["widget", widget.position]
+Item {
+    id: container
+    Drag.active: ma.Drag.active
 
     MouseArea {
         id: ma
-        enabled: widget.active
+        enabled: Global.widget
         anchors.fill: parent
-        drag.target: widget
-        drag.axis: Drag.XAndYAxis
+        propagateComposedEvents: true
+        drag.target: container
         onReleased: {
-            const dropArea = widget.Drag.target;
-            widget.Drag.drop();
-            if (!dropArea) {
-                if (origparent) {
-                    widget.parent = origparent;
-                    widget.x = 0;
-                    widget.y = 0;
-                    widget.width = origparent.width;
-                    widget.height = origparent.height;
-                }
-                widget.position = -1;
-
-                const config = Global.getConfigManager(`${Compositor.focusedMonitor}-dock`).adapter;
-                const index = config.widgets.findIndex(s => s.name === widget.objectName);
-
-                if (index !== -1) {
-                    config.widgets.splice(index, 1);
-                }
-            }
+            container.Drag.drop();
         }
     }
 }

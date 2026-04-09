@@ -121,6 +121,54 @@ Item {
                 id: modalPopup
             }
 
+            Rectangle {
+                id: background
+                property bool show: modalPopup.opened
+                anchors.fill: parent
+                color: "transparent"
+                border.width: 2
+                onShowChanged: {
+                    background.state = show ? "show" : "hide";
+                }
+                state: "hide"
+
+                states: [
+                    State {
+                        name: "hide"
+                        PropertyChanges {
+                            target: background
+                            opacity: 0
+                            border.color: "transparent"
+                        }
+                    },
+                    State {
+                        name: "show"
+                        PropertyChanges {
+                            target: background
+                            opacity: 1
+                            border.color: Colors.color.tertiary
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "*"
+                        to: "*"
+                        NumberAnimation {
+                            properties: "opacity"
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                        ColorAnimation {
+                            properties: "border.color"
+                            duration: 300
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                ]
+            }
+
             Component.onCompleted: {
                 dock.addDock({
                     panel,
@@ -220,7 +268,8 @@ Item {
             anchors.fill: parent
             active: Global.edit
             sourceComponent: MouseArea {
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                propagateComposedEvents: true
+                acceptedButtons: modalPopup.opened ? Qt.LeftButton | Qt.RightButton : Qt.RightButton
                 onClicked: mouse => {
                     switch (mouse.button) {
                     case Qt.RightButton:
@@ -854,8 +903,8 @@ Item {
     component WidgetsTab: Flickable {
         width: modalPopup.width
         height: modalPopup.height
+        contentHeight: column.height
         clip: true
-        contentHeight: column.implicitHeight
 
         ColumnLayout {
             id: column
