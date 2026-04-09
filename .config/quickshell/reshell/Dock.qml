@@ -278,6 +278,7 @@ Item {
         default property alias content: innerGrid.data
         state: "none"
         border.width: 2
+        clip: true
         states: [
             State {
                 name: "hovered"
@@ -352,36 +353,46 @@ Item {
         Layout.fillHeight: true
         Layout.margins: 1
 
-        Instantiator {
-            model: ScriptModel {
-                values: [...slot.widgets]
-            }
-            delegate: WidgetWrap {
-                parent: innerGrid
-            }
-        }
-
         GridLayout {
             id: grid
             anchors.fill: parent
 
+            Instantiator {
+                model: ScriptModel {
+                    values: [...slot.widgets]
+                }
+                delegate: WidgetWrap {
+                    required property var modelData
+                    parent: innerGrid
+                    source: modelData
+                    width: config.side ? grid.width : grid.height * 2
+                    height: config.side ? grid.width * 2 : grid.height
+                }
+            }
+
             Grid {
                 id: innerGrid
                 flow: config.side ? Grid.TopToBottom : Grid.LeftToRight
-
                 rows: config.side ? children.length : 1
                 columns: config.side ? 1 : children.length
 
                 onChildrenChanged: {
                     for (const i in children) {
                         const target = children[i];
-                        if (target instanceof Widget) {
-                            target.size = Qt.binding(function () {
-                                return config.side ? grid.width : grid.height;
-                            });
+                        if (target instanceof WidgetWrap) {
+                            // target.width = config.side ? grid.width : grid.height * 2;
+                            // target.height = config.side ? grid.width * 2 : grid.height;
+                            //
+                            // target.width = Qt.binding(function () {
+                            //     return config.side ? grid.width : grid.height * 4;
+                            // });
+                            // target.height = Qt.binding(function () {
+                            //     return config.side ? grid.width : grid.height;
+                            // });
                         }
                     }
                 }
+
                 Layout.alignment: {
                     switch (slot.position) {
                     case "left":
@@ -852,7 +863,9 @@ Item {
             width: parent.width
 
             Repeater {
-                model: ["red", "green", "blue"]
+                model: ScriptModel {
+                    values: [...Global.widgets]
+                }
                 delegate: Item {
                     id: origPlacement
                     width: parent.width
@@ -865,7 +878,7 @@ Item {
                         height: origPlacement.height
 
                         Drag.active: ma.drag.active
-                        Drag.keys: [modelData]
+                        Drag.keys: [modelData.source]
                         Drag.hotSpot: {
                             switch (config.position) {
                             case "top":
@@ -878,6 +891,11 @@ Item {
                             default:
                                 return Qt.point(0, 0);
                             }
+                        }
+
+                        Loader {
+                            anchors.fill: parent
+                            source: modelData.source
                         }
 
                         Drag.onActiveChanged: {
@@ -932,20 +950,9 @@ Item {
         }
     }
 
-    component WidgetWrap: Item {
-        id: widget
-        required property var modelData
-        property int size: 0
-        implicitWidth: size
-        implicitHeight: size
-
-        Rectangle {
-            anchors.fill: parent
-            color: widget.modelData
-            Text {
-                anchors.centerIn: parent
-                text: widget.modelData
-            }
+    component WidgetWrap: Loader {
+        onItemChanged: {
+            item.baseSize = config.side ? parent.width : parent.height;
         }
     }
 }
