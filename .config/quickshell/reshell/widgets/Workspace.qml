@@ -3,21 +3,16 @@ import Quickshell
 
 import qs.core
 import qs.components
-import qs.types
 
 Wrapper {
     id: wrap
-    property Property config: Property {
-        property int height: 100
-        property int width: 100
-    }
-
     clip: true
 
     ListView {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)]
         width: list.contentWidth
+        visible: false
         height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
         interactive: false
