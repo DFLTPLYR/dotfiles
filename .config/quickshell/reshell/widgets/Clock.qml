@@ -3,8 +3,8 @@ import QtQuick.Layouts
 import Quickshell
 
 import qs.core
+import qs.components
 import qs.types
-import qs.components.widgets
 
 Wrapper {
     property Property config: Property {

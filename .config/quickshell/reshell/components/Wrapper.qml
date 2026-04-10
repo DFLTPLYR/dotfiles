@@ -4,7 +4,11 @@ import qs.core
 
 Item {
     id: container
-    Drag.active: ma.Drag.active
+    property int widgetIndex: -1
+    property var innerGridRef: null
+    signal drop(int mouseX, int mouseY)
+
+    Drag.active: ma.drag.active
 
     MouseArea {
         id: ma
@@ -14,6 +18,7 @@ Item {
         drag.target: container
         onReleased: {
             container.Drag.drop();
+            container.drop(mouseX, mouseY);
         }
     }
 }

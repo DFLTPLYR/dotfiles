@@ -412,10 +412,8 @@ Item {
                 }
                 delegate: Loader {
                     required property var modelData
-                    parent: innerGrid
                     source: modelData
-                    width: config.side ? grid.width : grid.height * 2
-                    height: config.side ? grid.width * 2 : grid.height
+                    onItemChanged: item.parent = innerGrid
                 }
             }
 
@@ -428,17 +426,15 @@ Item {
                 onChildrenChanged: {
                     for (const i in children) {
                         const target = children[i];
-                        if (target instanceof Loader) {
-                            // target.width = config.side ? grid.width : grid.height * 2;
-                            // target.height = config.side ? grid.width * 2 : grid.height;
-                            //
-                            // target.width = Qt.binding(function () {
-                            //     return config.side ? grid.width : grid.height * 4;
-                            // });
-                            // target.height = Qt.binding(function () {
-                            //     return config.side ? grid.width : grid.height;
-                            // });
-                        }
+                        // target.width = config.side ? grid.width : grid.height * 2;
+                        // target.height = config.side ? grid.width * 2 : grid.height;
+                        //
+                        target.width = Qt.binding(function () {
+                            return config.side ? grid.width : grid.height * 2;
+                        });
+                        target.height = Qt.binding(function () {
+                            return config.side ? grid.width * 2 : grid.height;
+                        });
                     }
                 }
 
