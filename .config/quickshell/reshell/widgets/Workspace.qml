@@ -2,17 +2,15 @@ import QtQuick
 import Quickshell
 
 import qs.core
+import qs.components
 import qs.types
 
-Item {
+Wrapper {
     id: wrap
     property Property config: Property {
         property int height: 100
         property int width: 100
     }
-
-    width: parent ? (wrap.side ? wrap.defaultsize : list.contentWidth) : 0
-    height: parent ? (wrap.side ? list.contentHeight : wrap.defaultsize) : 0
 
     clip: true
 
@@ -22,7 +20,7 @@ Item {
         width: list.contentWidth
         height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
-        interactive: !wrap.active
+        interactive: false
 
         model: ScriptModel {
             values: [...list.windows]
@@ -50,7 +48,7 @@ Item {
                 id: ma
                 hoverEnabled: true
                 anchors.fill: parent
-                enabled: !wrap.active
+                enabled: !Global.edit || !Global.widget
                 onClicked: {
                     Quickshell.execDetached({
                         command: ["niri", "msg", "action", "focus-workspace", "--", index + 1]
