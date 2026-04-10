@@ -408,12 +408,18 @@ Item {
 
             Instantiator {
                 model: ScriptModel {
+                    id: widgetsInstantiator
                     values: [...slot.widgets]
                 }
                 delegate: Loader {
+                    id: widgetLoader
                     required property var modelData
+                    required property int index
                     source: modelData
-                    onItemChanged: item.parent = innerGrid
+                    onItemChanged: {
+                        item.parent = innerGrid;
+                        item.config.position = index;
+                    }
                 }
             }
 
@@ -426,14 +432,21 @@ Item {
                 onChildrenChanged: {
                     for (const i in children) {
                         const target = children[i];
-                        // target.width = config.side ? grid.width : grid.height * 2;
-                        // target.height = config.side ? grid.width * 2 : grid.height;
-                        //
+                        target.config.position = i;
                         target.width = Qt.binding(function () {
                             return config.side ? grid.width : grid.height * 2;
                         });
                         target.height = Qt.binding(function () {
                             return config.side ? grid.width * 2 : grid.height;
+                        });
+                        target.swap.connect((fromIndex, toIndex) => {
+                            print(target);
+                            const temp = slot.widgets[fromIndex];
+                            slot.widgets[fromIndex] = slot.widgets[toIndex];
+                            slot.widgets[toIndex] = temp;
+
+                            // Trigger model update
+                            slot.widgets = [...slot.widgets];
                         });
                     }
                 }
