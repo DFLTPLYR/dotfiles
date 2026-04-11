@@ -324,6 +324,7 @@ Item {
         property string position: "left"
         property int spacing: 2
         property list<var> widgets: []
+        property list<var> tempWidgets: []
         default property alias content: innerGrid.data
         state: "none"
         border.width: 2
@@ -391,7 +392,12 @@ Item {
                     slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
                 }
                 onDropped: drop => {
-                    slot.widgets = [...slot.widgets, drop.keys[0]];
+                    slot.widgets = [...slot.widgets,
+                        {
+                            source: drop.keys[0],
+                            name: drop.keys[1]
+                        }
+                    ];
                 }
             }
         }
@@ -411,14 +417,60 @@ Item {
                     id: widgetsInstantiator
                     values: [...slot.widgets]
                 }
-                delegate: Loader {
-                    id: widgetLoader
+                delegate: Item {
+                    id: widgetContainer
+
                     required property var modelData
                     required property int index
-                    source: modelData
-                    onItemChanged: {
-                        item.parent = innerGrid;
-                        item.config.position = index;
+                    property var content: widgetLoader
+                    property var currentWidget: null
+
+                    parent: innerGrid
+                    implicitHeight: widgetContainer?.currentWidget?.height || 0
+                    implicitWidth: widgetContainer?.currentWidget?.width || 0
+
+                    LazyLoader {
+                        id: widgetLoader
+                        active: true
+                        source: modelData.source
+                        onItemChanged: {
+                            item.width = Qt.binding(function () {
+                                return config.side ? grid.width : grid.height * 2;
+                            });
+                            item.height = Qt.binding(function () {
+                                return config.side ? grid.width * 2 : grid.height;
+                            });
+                            item.parent = widgetContainer;
+                            item.config.position = index;
+                            widgetContainer.currentWidget = item;
+                            item.swap.connect((fromIndex, toIndex) => {
+                                const containers = innerGrid.children.filter(c => c.content !== undefined);
+                                const current = containers.find(c => c.currentWidget?.config?.position === fromIndex);
+                                const destination = containers.find(c => c.currentWidget?.config?.position === toIndex);
+
+                                if (!current || !destination)
+                                    return;
+                                const temp = current.currentWidget;
+                                current.currentWidget = destination.currentWidget;
+                                destination.currentWidget = temp;
+                                current.currentWidget.parent = current;
+                                destination.currentWidget.parent = destination;
+
+                                current.currentWidget.config.position = fromIndex;
+                                destination.currentWidget.config.position = toIndex;
+                            });
+                            item.remove.connect(idx => {
+                                const containers = innerGrid.children.filter(c => c.content !== undefined);
+                                const container = containers.find(c => c.currentWidget?.config?.position === idx);
+                                if (container) {
+                                    container.content.source = "";
+                                    container.currentWidget = null;
+                                    container.visible = false;
+                                    container.destroy();
+                                }
+                                slot.widgets.splice(idx, 1);
+                            });
+                        }
                     }
                 }
             }
@@ -428,28 +480,6 @@ Item {
                 flow: config.side ? Grid.TopToBottom : Grid.LeftToRight
                 rows: config.side ? children.length : 1
                 columns: config.side ? 1 : children.length
-
-                onChildrenChanged: {
-                    for (const i in children) {
-                        const target = children[i];
-                        target.config.position = i;
-                        target.width = Qt.binding(function () {
-                            return config.side ? grid.width : grid.height * 2;
-                        });
-                        target.height = Qt.binding(function () {
-                            return config.side ? grid.width * 2 : grid.height;
-                        });
-                        target.swap.connect((fromIndex, toIndex) => {
-                            print(target);
-                            const temp = slot.widgets[fromIndex];
-                            slot.widgets[fromIndex] = slot.widgets[toIndex];
-                            slot.widgets[toIndex] = temp;
-
-                            // Trigger model update
-                            slot.widgets = [...slot.widgets];
-                        });
-                    }
-                }
 
                 Layout.alignment: {
                     switch (slot.position) {
