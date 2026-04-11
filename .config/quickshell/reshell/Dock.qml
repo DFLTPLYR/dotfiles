@@ -395,7 +395,8 @@ Item {
                     slot.widgets = [...slot.widgets,
                         {
                             source: drop.keys[0],
-                            name: drop.keys[1]
+                            name: Math.random().toString(36).substring(2, 10),
+                            position: slot.widgets.length
                         }
                     ];
                 }
@@ -458,6 +459,13 @@ Item {
 
                                 current.currentWidget.config.position = fromIndex;
                                 destination.currentWidget.config.position = toIndex;
+                                // replace
+                                const arr = [...slot.widgets];
+                                const temparr = [...arr];
+                                [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
+                                Qt.callLater(() => {
+                                    slot.widgets = temparr;
+                                });
                             });
                             item.remove.connect(idx => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
