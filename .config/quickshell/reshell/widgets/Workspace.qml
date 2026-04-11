@@ -12,7 +12,6 @@ Wrapper {
         id: list
         property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)]
         width: list.contentWidth
-        visible: false
         height: wrap.height
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
         interactive: false
