@@ -10,8 +10,8 @@ FloatingWindow {
     id: wallpaperModal
 
     title: "Reshell"
-    color: "transparent"
 
+    color: "transparent"
     visible: Compositor.focusedWindow === screen.name && Global.edit
 
     minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
@@ -208,7 +208,7 @@ FloatingWindow {
         required property var modelData
         property Image image: draggableImage
         property var found
-
+        pointerVisible: hoverHandler.hovered
         objectName: modelData.name
 
         width: (modelData.width || draggableImage.sourceSize.width)
@@ -277,6 +277,14 @@ FloatingWindow {
                 id: dragHandler
                 target: container
                 enabled: !draggableImage.lock
+                onActiveChanged: container.z = active ? (container.z + 10) : (container.z - 10)
+            }
+
+            HoverHandler {
+                id: hoverHandler
+                target: container
+                enabled: !draggableImage.lock
+                onHoveredChanged: container.z = hovered ? (container.z + 10) : (container.z - 10)
             }
         }
     }
@@ -377,13 +385,15 @@ FloatingWindow {
     }
 
     component ResizeableRect: Rectangle {
-        id: selComp
+        id: resizeableRect
         property int rulersSize: 15 / flick.zoom
+        required property bool pointerVisible
 
         border {
             width: 2
             color: Colors.color.tertiary
         }
+
         color: "transparent"
 
         Rectangle {
@@ -393,9 +403,16 @@ FloatingWindow {
             color: Colors.color.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            z: 10
+            opacity: resizeableRect.pointerVisible ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
             MouseArea {
                 anchors.fill: parent
+                enabled: resizeableRect.pointerVisible
                 propagateComposedEvents: true
                 drag {
                     target: parent
@@ -403,10 +420,10 @@ FloatingWindow {
                 }
                 onMouseXChanged: {
                     if (drag.active) {
-                        selComp.width = selComp.width - mouseX;
-                        selComp.x = selComp.x + mouseX;
-                        if (selComp.width < 30)
-                            selComp.width = 30;
+                        resizeableRect.width = resizeableRect.width - mouseX;
+                        resizeableRect.x = resizeableRect.x + mouseX;
+                        if (resizeableRect.width < 30)
+                            resizeableRect.width = 30;
                     }
                 }
             }
@@ -419,20 +436,27 @@ FloatingWindow {
             color: Colors.color.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            z: 10
+            opacity: resizeableRect.pointerVisible ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent
                 propagateComposedEvents: true
+                enabled: resizeableRect.pointerVisible
                 drag {
                     target: parent
                     axis: Drag.XAxis
                 }
                 onMouseXChanged: {
                     if (drag.active) {
-                        selComp.width = selComp.width + mouseX;
-                        if (selComp.width < 50)
-                            selComp.width = 50;
+                        resizeableRect.width = resizeableRect.width + mouseX;
+                        if (resizeableRect.width < 50)
+                            resizeableRect.width = 50;
                     }
                 }
             }
@@ -447,11 +471,19 @@ FloatingWindow {
             color: Colors.color.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.top
-            z: 10
+            opacity: resizeableRect.pointerVisible ? 1 : 0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent
                 propagateComposedEvents: true
+                enabled: resizeableRect.pointerVisible
                 drag {
                     target: parent
                     axis: Drag.YAxis
@@ -459,10 +491,10 @@ FloatingWindow {
 
                 onMouseYChanged: {
                     if (drag.active) {
-                        selComp.height = selComp.height - mouseY;
-                        selComp.y = selComp.y + mouseY;
-                        if (selComp.height < 50)
-                            selComp.height = 50;
+                        resizeableRect.height = resizeableRect.height - mouseY;
+                        resizeableRect.y = resizeableRect.y + mouseY;
+                        if (resizeableRect.height < 50)
+                            resizeableRect.height = 50;
                     }
                 }
             }
@@ -477,20 +509,27 @@ FloatingWindow {
             color: Colors.color.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.bottom
-            z: 10
+            opacity: resizeableRect.pointerVisible ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent
                 propagateComposedEvents: true
+                enabled: resizeableRect.pointerVisible
                 drag {
                     target: parent
                     axis: Drag.YAxis
                 }
                 onMouseYChanged: {
                     if (drag.active) {
-                        selComp.height = selComp.height + mouseY;
-                        if (selComp.height < 50)
-                            selComp.height = 50;
+                        resizeableRect.height = resizeableRect.height + mouseY;
+                        if (resizeableRect.height < 50)
+                            resizeableRect.height = 50;
                     }
                 }
             }
