@@ -314,6 +314,7 @@ Item {
                 objectName: modelData.name || ""
                 position: modelData.position || ""
                 spacing: modelData.spacing || 0
+                widgets: modelData.widgets
             }
         }
     }
@@ -324,7 +325,6 @@ Item {
         property string position: "left"
         property int spacing: 2
         property list<var> widgets: []
-        property list<var> tempWidgets: []
         default property alias content: innerGrid.data
         state: "none"
         border.width: 2
@@ -465,6 +465,8 @@ Item {
                                 [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
                                 Qt.callLater(() => {
                                     slot.widgets = temparr;
+                                    const slotObj = config.slots.find(s => s === s.name === slot.objectName);
+                                    print(slotObj, config.slots);
                                 });
                             });
                             item.remove.connect(idx => {
@@ -907,29 +909,28 @@ Item {
 
         ColumnLayout {
             id: container
-            property var selectedSlot: null
+            property var selectedSlot: config.slots[0] || null
 
             anchors {
                 left: parent.left
                 right: parent.right
                 margins: 2
             }
-            Label {
-                text: "Slots"
-                font.pixelSize: 32
-            }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-
+                Label {
+                    text: "Slots"
+                    font.pixelSize: 32
+                }
                 Button {
                     text: "Add Slot"
                     onClicked: {
                         const slot = {
                             name: Math.random().toString(36).substring(2, 10),
                             position: "left",
-                            spacing: 0
+                            spacing: 0,
+                            widgets: []
                         };
                         config.slots.push(slot);
                     }
@@ -938,10 +939,23 @@ Item {
 
             ListView {
                 Layout.fillWidth: true
+                Layout.preferredHeight: contentHeight
                 model: [...config.slots]
                 delegate: Button {
                     text: modelData.name
                     onClicked: container.selectedSlot = modelData
+                }
+            }
+
+            Label {
+                text: "Delete"
+                font.pixelSize: 32
+            }
+            Button {
+                text: `Delete ${container.selectedSlot?.name || null}`
+                onClicked: {
+                    const item = config.slots.find(s => s.name === container.selectedSlot.objectName);
+                    print(item);
                 }
             }
         }

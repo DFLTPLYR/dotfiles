@@ -14,12 +14,12 @@ Singleton {
     // signal
     signal colorUpdate
     // states
+    readonly property var stateNames: ["Normal", "Edit", "Widget"]
     readonly property QtObject states: QtObject {
         readonly property int normal: 0
         readonly property int edit: 1
         readonly property int widget: 2
     }
-    readonly property var stateNames: ["Normal", "Edit", "Widget"]
 
     property int state: states.normal
     readonly property bool edit: state === states.edit
