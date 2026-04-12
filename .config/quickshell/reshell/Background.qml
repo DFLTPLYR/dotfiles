@@ -133,10 +133,12 @@ PanelWindow {
         onAction: action => {
             switch (action) {
             case "property":
-                propertiesModal.open();
+                propertiesModal.visible = true;
+                contextMenu.close();
                 break;
             case "wallpaper":
-                wallpaperModal.open();
+                wallpaperModal.visible = true;
+                contextMenu.close();
                 break;
             default:
                 break;
@@ -147,11 +149,13 @@ PanelWindow {
     // Properties Modal
     PropertyMenu {
         id: propertiesModal
+        screen: panel.screen
     }
 
     // Wallpaper Modal
     WallpaperMenu {
         id: wallpaperModal
+        screen: panel.screen
     }
 
     function onSaveCustomWallpaper() {

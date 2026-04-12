@@ -6,13 +6,19 @@ import Quickshell
 import qs.core
 import qs.components
 
-PopupModal {
+FloatingWindow {
     id: wallpaperModal
-    x: screen.width / 2 - wallpaperModal.width / 2
-    y: screen.height / 2 - wallpaperModal.height / 2
+
+    title: "Reshell"
+    color: "transparent"
+
+    visible: Compositor.focusedWindow === screen.name && Global.edit
+
+    minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
+    maximumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
 
     Loader {
-        active: wallpaperModal.opened
+        active: wallpaperModal.visible
         sourceComponent: Rectangle {
             id: container
             color: "transparent"

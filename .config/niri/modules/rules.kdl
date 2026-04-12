@@ -18,8 +18,7 @@ window-rule {
 }
 
 window-rule {
-  match title="FilePicker"
-  default-floating-position x=10 y=10
+  match title="Reshell"
   open-floating true
 }
 
