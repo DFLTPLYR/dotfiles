@@ -8,6 +8,8 @@ import qs.types
 Rectangle {
     id: container
     property var container
+    property var containerConfig
+
     property Property config: Property {}
 
     color: "transparent"

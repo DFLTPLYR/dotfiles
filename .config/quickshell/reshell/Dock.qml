@@ -407,8 +407,9 @@ Item {
             }
         ]
 
+        // todo: Do a transfer
         Loader {
-            active: Global.edit
+            active: Global.edit || Global.widgets
             anchors.fill: parent
             sourceComponent: DropArea {
                 onContainsDragChanged: {
@@ -450,6 +451,7 @@ Item {
                     property var currentWidget: null
 
                     parent: innerGrid
+
                     implicitHeight: widgetContainer?.currentWidget?.height || 0
                     implicitWidth: widgetContainer?.currentWidget?.width || 0
 
@@ -458,15 +460,17 @@ Item {
                         active: modelData?.source ? true : ""
                         source: modelData.source
                         onItemChanged: {
-                            item.implicitWidth = Qt.binding(function () {
-                                return config.side ? grid.width : grid.height * 2;
-                            });
-                            item.implicitHeight = Qt.binding(function () {
-                                return config.side ? 0 : grid.height;
-                            });
+                            const timer = syncTimer;
+                            const cfg = config;
+
                             item.parent = widgetContainer;
                             item.config.position = index;
+                            item.container = grid;
+                            item.containerConfig = cfg;
+
                             widgetContainer.currentWidget = item;
+
+                            // Signal
                             item.swap.connect((fromIndex, toIndex) => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
                                 const current = containers.find(c => c.currentWidget?.config?.position === fromIndex);
@@ -487,13 +491,12 @@ Item {
                                 const temparr = [...arr];
                                 [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
                                 slot.widgets = temparr;
-                                syncTimer.restart();
+                                timer.restart();
                             });
 
                             item.remove.connect(idx => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
                                 const container = containers.find(c => c.currentWidget?.config?.position === idx);
-                                const cfg = config;
                                 if (container) {
                                     container.content.source = "";
                                     container.currentWidget = null;
@@ -501,7 +504,7 @@ Item {
                                 }
                                 const sub = slot;
                                 sub.widgets.splice(idx, 1);
-                                syncTimer.restart();
+                                timer.restart();
                             });
                         }
                     }

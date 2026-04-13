@@ -9,7 +9,8 @@ Wrapper {
     id: wrap
     clip: true
 
-    width: list.contentWidth
+    width: wrap.container ? (wrap.containerConfig.side ? wrap.container.width : list.contentWidth) : 0
+    height: wrap.container ? (!wrap.containerConfig.side ? wrap.container.height : list.contentHeight) : 0
 
     config: Property {
         property bool dynamic: true
