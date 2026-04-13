@@ -6,7 +6,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 import qs.core
-import qs.components
 import qs.modules
 import qs.types
 
@@ -337,8 +336,19 @@ Item {
         property int spacing: 2
         property list<var> widgets: []
         default property alias content: innerGrid.data
-
         state: "none"
+
+        Timer {
+            id: syncTimer
+            interval: 5000
+            running: false
+            onTriggered: {
+                const cfg = config;
+                const data = cfg.slots.find(s => s.name === slot.objectName);
+                data.widgets = [...slot.widgets];
+                cfg.save();
+            }
+        }
 
         border.width: 2
 
@@ -425,11 +435,11 @@ Item {
         GridLayout {
             id: grid
             anchors.fill: parent
-            clip: true
+
             Instantiator {
                 model: ScriptModel {
                     id: widgetsInstantiator
-                    values: [...slot.widgets]
+                    values: [...slot.widgets].filter(s => s !== undefined)
                 }
                 delegate: Item {
                     id: widgetContainer
@@ -445,14 +455,14 @@ Item {
 
                     LazyLoader {
                         id: widgetLoader
-                        active: true
+                        active: modelData?.source ? true : ""
                         source: modelData.source
                         onItemChanged: {
-                            item.width = Qt.binding(function () {
+                            item.implicitWidth = Qt.binding(function () {
                                 return config.side ? grid.width : grid.height * 2;
                             });
-                            item.height = Qt.binding(function () {
-                                return config.side ? grid.width * 2 : grid.height;
+                            item.implicitHeight = Qt.binding(function () {
+                                return config.side ? 0 : grid.height;
                             });
                             item.parent = widgetContainer;
                             item.config.position = index;
@@ -476,22 +486,22 @@ Item {
                                 const arr = [...slot.widgets];
                                 const temparr = [...arr];
                                 [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
-                                Qt.callLater(() => {
-                                    slot.widgets = temparr;
-                                    const slotObj = config.slots.find(s => s === s.name === slot.objectName);
-                                    print(slotObj, config.slots);
-                                });
+                                slot.widgets = temparr;
+                                syncTimer.restart();
                             });
+
                             item.remove.connect(idx => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
                                 const container = containers.find(c => c.currentWidget?.config?.position === idx);
+                                const cfg = config;
                                 if (container) {
                                     container.content.source = "";
                                     container.currentWidget = null;
                                     container.visible = false;
-                                    container.destroy();
                                 }
-                                slot.widgets.splice(idx, 1);
+                                const sub = slot;
+                                sub.widgets.splice(idx, 1);
+                                syncTimer.restart();
                             });
                         }
                     }

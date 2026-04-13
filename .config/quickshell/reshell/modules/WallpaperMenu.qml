@@ -227,6 +227,7 @@ FloatingWindow {
             objectName: modelData.name
             z: -1
 
+            // controls
             Row {
                 z: 2
                 opacity: 1
@@ -277,7 +278,6 @@ FloatingWindow {
                 id: dragHandler
                 target: container
                 enabled: !draggableImage.lock
-                onActiveChanged: container.z = active ? (container.z + 10) : (container.z - 10)
             }
 
             HoverHandler {
@@ -386,7 +386,7 @@ FloatingWindow {
 
     component ResizeableRect: Rectangle {
         id: resizeableRect
-        property int rulersSize: 15 / flick.zoom
+        property int rulersSize: 12 / flick.zoom
         required property bool pointerVisible
 
         border {

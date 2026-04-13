@@ -2,11 +2,18 @@ import QtQuick
 import Quickshell
 
 import qs.core
+import qs.types
 import qs.components
 
 Wrapper {
     id: wrap
     clip: true
+
+    width: list.contentWidth
+
+    config: Property {
+        property bool dynamic: true
+    }
 
     ListView {
         id: list
