@@ -7,8 +7,11 @@ import qs.types
 
 Rectangle {
     id: container
+    property var container
     property Property config: Property {}
-    color: Qt.rgba(Math.random(), Math.random(), Math.random(), 0.5)
+
+    color: "transparent"
+
     signal drop(int mouseX, int mouseY)
     signal swap(int item1, int item2)
     signal remove(int idx)
@@ -52,6 +55,7 @@ Rectangle {
 
     DropArea {
         z: 1
+        enabled: Global.widget
         anchors.fill: parent
         onDropped: drop => {
             container.swap(config.position, drop.source.config.position);

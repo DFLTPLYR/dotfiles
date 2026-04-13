@@ -7,6 +7,12 @@ import qs.components
 import qs.types
 
 Wrapper {
+
+    config: Property {
+        property int width: 80
+        property int height: 80
+    }
+
     GridLayout {
         anchors.fill: parent
         SystemClock {
