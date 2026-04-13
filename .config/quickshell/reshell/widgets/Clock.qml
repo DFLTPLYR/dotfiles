@@ -7,11 +7,14 @@ import qs.components
 import qs.types
 
 Wrapper {
-
+    id: wrap
     config: Property {
-        property int width: 80
+        property int width: 40
         property int height: 80
     }
+
+    width: wrap.containerConfig.side ? wrap.container.width : config.width
+    height: !wrap.containerConfig.side ? wrap.container.height : config.height
 
     GridLayout {
         anchors.fill: parent
