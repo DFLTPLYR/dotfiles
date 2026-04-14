@@ -18,8 +18,15 @@ Rectangle {
     signal swap(int item1, int item2)
     signal remove(int idx)
 
+    function setSize() {
+        if (wrapper.container && wrapper.slotConfig) {
+            return wrapper.slotConfig.side ? wrapper.container.width : wrapper.container.height;
+        }
+        return 0;
+    }
+
     function setWidth(data) {
-        if (wrapper.slotConfig && wrapper.container) {
+        if (wrapper.slotConfig) {
             return wrapper.slotConfig.side ? wrapper.container.width : data;
         } else if (wrapper.container) {
             return wrapper.container.width;
@@ -60,7 +67,7 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         preventStealing: true
         drag.target: wrapper
-        drag.axis: wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis
+        drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
         onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
                 wrapper.Drag.drop();
