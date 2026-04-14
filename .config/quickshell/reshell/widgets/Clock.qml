@@ -8,13 +8,24 @@ import qs.types
 
 Wrapper {
     id: wrap
+
     config: Property {
         property int width: 40
         property int height: 80
     }
 
-    width: wrap.containerConfig.side ? wrap.container.width : config.width
-    height: !wrap.containerConfig.side ? wrap.container.height : config.height
+    width: {
+        if (wrap.containerConfig) {
+            return wrap.containerConfig.side ? wrap.container.width : config.width;
+        }
+        return 0;
+    }
+    height: {
+        if (wrap.containerConfig) {
+            return !wrap.containerConfig.side ? wrap.container.height : config.height;
+        }
+        return 0;
+    }
 
     GridLayout {
         anchors.fill: parent

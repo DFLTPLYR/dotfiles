@@ -9,8 +9,18 @@ Wrapper {
     id: wrap
     clip: true
 
-    width: wrap.container ? (wrap.containerConfig.side ? wrap.container.width : list.contentWidth) : 0
-    height: wrap.container ? (!wrap.containerConfig.side ? wrap.container.height : list.contentHeight) : 0
+    width: {
+        if (wrap.containerConfig) {
+            return wrap.containerConfig.side ? wrap.container.width : list.contentWidth;
+        }
+        return 0;
+    }
+    height: {
+        if (wrap.containerConfig) {
+            return !wrap.containerConfig.side ? wrap.container.height : list.contentHeight;
+        }
+        return 0;
+    }
 
     config: Property {
         property bool dynamic: true
