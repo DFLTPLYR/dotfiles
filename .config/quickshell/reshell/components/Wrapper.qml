@@ -6,7 +6,7 @@ import qs.core
 import qs.types
 
 Rectangle {
-    id: container
+    id: wrapper
     property var container
     property var containerConfig
 
@@ -17,6 +17,20 @@ Rectangle {
     signal drop(int mouseX, int mouseY)
     signal swap(int item1, int item2)
     signal remove(int idx)
+
+    function setWidth(data) {
+        if (wrapper.containerConfig) {
+            return wrapper.containerConfig.side ? wrapper.container.width : data;
+        }
+        return 0;
+    }
+
+    function setHeight(data) {
+        if (wrapper.containerConfig) {
+            return !wrapper.containerConfig.side ? wrapper.container.height : data;
+        }
+        return 0;
+    }
 
     Drag.hotSpot: Qt.point(width / 2, height / 2)
     Drag.active: ma.drag.active
@@ -41,16 +55,16 @@ Rectangle {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         propagateComposedEvents: true
-        drag.target: container
+        drag.target: wrapper
         drag.axis: Drag.XAxis
         onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
-                container.Drag.drop();
-                container.drop(mouseX, mouseY);
+                wrapper.Drag.drop();
+                wrapper.drop(mouseX, mouseY);
                 parent.x = 0;
                 parent.y = 0;
             } else {
-                container.remove(config.position);
+                wrapper.remove(config.position);
             }
         }
     }
@@ -60,7 +74,7 @@ Rectangle {
         enabled: Global.widget
         anchors.fill: parent
         onDropped: drop => {
-            container.swap(config.position, drop.source.config.position);
+            wrappper.swap(config.position, drop.source.config.position);
         }
         onContainsDragChanged: {
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";

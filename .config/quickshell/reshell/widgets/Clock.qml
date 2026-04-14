@@ -10,22 +10,11 @@ Wrapper {
     id: wrap
 
     config: Property {
-        property int width: 40
-        property int height: 80
+        property int size: 40
     }
 
-    width: {
-        if (wrap.containerConfig) {
-            return wrap.containerConfig.side ? wrap.container.width : config.width;
-        }
-        return 0;
-    }
-    height: {
-        if (wrap.containerConfig) {
-            return !wrap.containerConfig.side ? wrap.container.height : config.height;
-        }
-        return 0;
-    }
+    width: wrap.setWidth(config.size)
+    height: wrap.setHeight(config.height)
 
     GridLayout {
         anchors.fill: parent

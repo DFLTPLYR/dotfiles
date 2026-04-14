@@ -9,22 +9,10 @@ Wrapper {
     id: wrap
     clip: true
 
-    width: {
-        if (wrap.containerConfig) {
-            return wrap.containerConfig.side ? wrap.container.width : list.contentWidth;
-        }
-        return 0;
-    }
-    height: {
-        if (wrap.containerConfig) {
-            return !wrap.containerConfig.side ? wrap.container.height : list.contentHeight;
-        }
-        return 0;
-    }
+    config: Property {}
 
-    config: Property {
-        property bool dynamic: true
-    }
+    width: wrap.setWidth(list.contentWidth)
+    height: wrap.setHeight(list.contentHeight)
 
     ListView {
         id: list
