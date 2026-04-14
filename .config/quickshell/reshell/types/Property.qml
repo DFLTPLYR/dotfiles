@@ -1,7 +1,6 @@
 import QtQuick
 
 QtObject {
-    property bool floating: false
     property int position: -1
 
     function keys() {

@@ -9,12 +9,12 @@ import qs.types
 Wrapper {
     id: wrap
 
-    config: Property {
+    property: Property {
         property int size: 40
     }
 
-    width: wrap.setWidth(config.size)
-    height: wrap.setHeight(config.height)
+    width: wrap.setWidth(property.size)
+    height: wrap.setHeight(property.size)
 
     GridLayout {
         anchors.fill: parent
