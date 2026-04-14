@@ -335,6 +335,7 @@ Item {
         property string position: "left"
         property int spacing: 2
         property list<var> widgets: []
+        property var filteredWidgets: [...widgets].filter(s => s !== undefined)
         default property alias content: innerGrid.data
         state: "none"
 
@@ -438,10 +439,7 @@ Item {
             anchors.fill: parent
 
             Instantiator {
-                model: ScriptModel {
-                    id: widgetsInstantiator
-                    values: [...slot.widgets].filter(s => s !== undefined)
-                }
+                model: slot.filteredWidgets
                 delegate: Item {
                     id: widgetContainer
 

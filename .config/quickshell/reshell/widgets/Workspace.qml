@@ -34,9 +34,7 @@ Wrapper {
         orientation: wrap.side ? ListView.Vertical : ListView.Horizontal
         interactive: false
 
-        model: ScriptModel {
-            values: [...list.windows]
-        }
+        model: [...list.windows]
 
         delegate: Rectangle {
             color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.color.primary, 0.2)
