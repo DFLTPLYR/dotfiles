@@ -8,9 +8,9 @@ import qs.types
 Rectangle {
     id: wrapper
     property var container
-    property var containerConfig
+    property var slotConfig
 
-    property Property config: Property {}
+    property Property property: Property {}
 
     color: "transparent"
 
@@ -19,15 +19,19 @@ Rectangle {
     signal remove(int idx)
 
     function setWidth(data) {
-        if (wrapper.containerConfig) {
-            return wrapper.containerConfig.side ? wrapper.container.width : data;
+        if (wrapper.slotConfig && wrapper.container) {
+            return wrapper.slotConfig.side ? wrapper.container.width : data;
+        } else if (wrapper.container) {
+            return wrapper.container.width;
         }
         return 0;
     }
 
     function setHeight(data) {
-        if (wrapper.containerConfig) {
-            return !wrapper.containerConfig.side ? wrapper.container.height : data;
+        if (wrapper.slotConfig) {
+            return !wrapper.slotConfig.side ? wrapper.container.height : data;
+        } else if (wrapper.container) {
+            return wrapper.container.height;
         }
         return 0;
     }
@@ -54,9 +58,9 @@ Rectangle {
         enabled: Global.widget
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        propagateComposedEvents: true
+        preventStealing: true
         drag.target: wrapper
-        drag.axis: Drag.XAxis
+        drag.axis: wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis
         onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
                 wrapper.Drag.drop();
@@ -74,7 +78,7 @@ Rectangle {
         enabled: Global.widget
         anchors.fill: parent
         onDropped: drop => {
-            wrappper.swap(config.position, drop.source.config.position);
+            wrapper.swap(property.position, drop.source.property.position);
         }
         onContainsDragChanged: {
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";

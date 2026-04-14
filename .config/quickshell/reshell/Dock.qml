@@ -11,10 +11,13 @@ import qs.types
 
 Item {
     id: dock
-    property ShellScreen screen
+
     required property string name
+    property ShellScreen screen
+
     signal addDock(var item)
     signal removeDock(string name)
+
     objectName: dock.name
 
     FileView {
@@ -462,17 +465,17 @@ Item {
                             const cfg = config;
 
                             item.parent = widgetContainer;
-                            item.config.position = index;
+                            item.property.position = index;
                             item.container = grid;
-                            item.containerConfig = cfg;
+                            item.slotConfig = cfg;
 
                             widgetContainer.currentWidget = item;
 
                             // Signal
                             item.swap.connect((fromIndex, toIndex) => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
-                                const current = containers.find(c => c.currentWidget?.config?.position === fromIndex);
-                                const destination = containers.find(c => c.currentWidget?.config?.position === toIndex);
+                                const current = containers.find(c => c.currentWidget?.property?.position === fromIndex);
+                                const destination = containers.find(c => c.currentWidget?.property?.position === toIndex);
 
                                 if (!current || !destination)
                                     return;
@@ -482,8 +485,8 @@ Item {
                                 current.currentWidget.parent = current;
                                 destination.currentWidget.parent = destination;
 
-                                current.currentWidget.config.position = fromIndex;
-                                destination.currentWidget.config.position = toIndex;
+                                current.currentWidget.property.position = fromIndex;
+                                destination.currentWidget.property.position = toIndex;
                                 // replace
                                 const arr = [...slot.widgets];
                                 const temparr = [...arr];
@@ -494,7 +497,7 @@ Item {
 
                             item.remove.connect(idx => {
                                 const containers = innerGrid.children.filter(c => c.content !== undefined);
-                                const container = containers.find(c => c.currentWidget?.config?.position === idx);
+                                const container = containers.find(c => c.currentWidget?.property?.position === idx);
                                 if (container) {
                                     container.content.source = "";
                                     container.currentWidget = null;

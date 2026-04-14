@@ -109,6 +109,22 @@ PopupModal {
 
             Label {
                 font.pixelSize: 32
+                text: "Position"
+            }
+
+            Row {
+                Layout.fillWidth: true
+                Repeater {
+                    model: ["left", "right", "top", "bottom"]
+                    delegate: Button {
+                        text: modelData
+                        onClicked: config.position = modelData
+                    }
+                }
+            }
+
+            Label {
+                font.pixelSize: 32
                 text: "Dimensions"
             }
             // Width
@@ -464,9 +480,17 @@ PopupModal {
                             }
                         }
 
-                        Loader {
-                            anchors.fill: parent
+                        LazyLoader {
+                            active: parent.visible
                             source: modelData.source
+                            onItemChanged: {
+                                if (item) {
+                                    item.parent = container;
+                                    item.width = container.width;
+                                    item.height = container.height;
+                                    // item.anchors.fill = container;
+                                }
+                            }
                         }
 
                         Drag.onActiveChanged: {
