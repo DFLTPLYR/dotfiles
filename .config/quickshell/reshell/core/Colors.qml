@@ -24,14 +24,14 @@ Singleton {
         }
     }
 
-    function setOpacity(color, alpha) {
+    function setOpacity(color, alpha = 1) {
         if (!color)
-            return Qt.rgba(0, 0, 0, alpha || 1);
+            return Qt.rgba(0, 0, 0, alpha);
 
         if (typeof color === "string")
             color = Qt.color(color);
 
-        return Qt.rgba(color.r, color.g, color.b, alpha || 1);
+        return Qt.rgba(color.r, color.g, color.b, alpha);
     }
 
     component Color: JsonObject {
