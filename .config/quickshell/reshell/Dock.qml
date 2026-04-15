@@ -273,18 +273,91 @@ Item {
             color: Colors.setOpacity(config.style.color, config.style.opacity)
             anchors.fill: parent
 
-            DockContentContainer {}
+            GridLayout {
+                id: slotcontainer
 
+                width: parent.width
+                height: parent.height
+                onChildrenChanged: panel.dockSlots = [...children].filter(s => s instanceof Slot)
+                flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
+
+                Instantiator {
+                    model: config.slots.filter(s => s !== undefined)
+                    delegate: Slot {
+                        required property var modelData
+                        parent: slotcontainer
+                        objectName: modelData.name || ""
+                        position: modelData.position || ""
+                        spacing: modelData.spacing || 0
+                        widgets: modelData.widgets
+                        onUpdate: slot => {
+                            if (slot) {
+                                syncTimer.slots = slot;
+                            }
+                            syncTimer.restart();
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: timerProgress
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                height: 2
+                color: Colors.color.primary
+                z: 100
+
+                NumberAnimation on width {
+                    from: 0
+                    to: parent ? slotcontainer.width : 0
+                    duration: syncTimer.interval
+                    running: syncTimer.running
+                    onFinished: {
+                        timerProgress.width = 0;
+                    }
+                }
+            }
+
+            Timer {
+                id: syncTimer
+                property list<var> slots
+                interval: 1000
+                running: false
+                onTriggered: {
+                    const cfg = config;
+                    if (slots.length >= 1) {
+                        cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
+                        cfg.save();
+                        return;
+                    }
+                    let slot = [];
+                    for (const i in panel.dockSlots) {
+                        const item = panel.dockSlots[i];
+                        const data = {
+                            name: item.objectName,
+                            widgets: item.filteredWidgets,
+                            position: item.position,
+                            spacing: item.spacing
+                        };
+                        slot.push(data);
+                    }
+                    cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
+                    cfg.save();
+                }
+                Component.onCompleted: panel.timer = syncTimer
+            }
             Component.onCompleted: {
                 Global.bindRadii(this, config.style.rounding);
                 Global.bindMargins(this, config.style.margin);
             }
         }
 
-        Loader {
-            anchors.fill: parent
+        LazyLoader {
             active: Global.edit
-            sourceComponent: MouseArea {
+            component: MouseArea {
+                parent: container
+                anchors.fill: parent
                 propagateComposedEvents: true
                 acceptedButtons: modalPopup.opened ? Qt.LeftButton | Qt.RightButton : Qt.RightButton
                 onClicked: mouse => {
@@ -308,82 +381,6 @@ Item {
                         return;
                     }
                 }
-            }
-        }
-    }
-
-    component DockContentContainer: GridLayout {
-        id: slotcontainer
-
-        width: parent.width
-        height: parent.height
-        onChildrenChanged: panel.dockSlots = [...children].filter(s => s instanceof Slot)
-        flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
-
-        Instantiator {
-            model: ScriptModel {
-                values: {
-                    const data = config.slots.filter(s => s !== undefined);
-                    return [...data];
-                }
-            }
-            delegate: Slot {
-                required property var modelData
-                parent: slotcontainer
-                objectName: modelData.name || ""
-                position: modelData.position || ""
-                spacing: modelData.spacing || 0
-                widgets: modelData.widgets
-                onUpdate: slot => {
-                    if (slot) {
-                        syncTimer.slots = slot;
-                    }
-                    syncTimer.restart();
-                }
-            }
-        }
-
-        Timer {
-            id: syncTimer
-            property list<var> slots
-            interval: 1000
-            running: false
-            onTriggered: {
-                const cfg = config;
-                if (slots.length >= 1) {
-                    cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
-                    cfg.save();
-                    return;
-                }
-                let slot = [];
-                for (const i in panel.dockSlots) {
-                    const item = panel.dockSlots[i];
-                    const data = {
-                        name: item.objectName,
-                        widgets: item.filteredWidgets,
-                        position: item.position,
-                        spacing: item.spacing
-                    };
-                    slot.push(data);
-                }
-                cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
-                cfg.save();
-            }
-            Component.onCompleted: panel.timer = syncTimer
-        }
-
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            height: 2
-            color: Colors.color.primary
-            z: 100
-
-            NumberAnimation on width {
-                from: 0
-                to: parent ? slotcontainer.width : 0
-                duration: syncTimer.interval
-                running: syncTimer.running
             }
         }
     }

@@ -324,9 +324,10 @@ PopupModal {
                 id: opacitySlider
                 to: 1.0
                 onValueChanged: {
-                    config.style.opacity = value;
+                    config.style.opacity = value.toFixed(2);
                 }
             }
+
             // Colors
             Label {
                 font.pixelSize: 32
