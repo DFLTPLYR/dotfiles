@@ -9,6 +9,7 @@ import qs.core
 PopupModal {
     id: modalPopup
     property list<var> slots
+    signal save
 
     width: Math.min(400, screen.width / 2)
     height: Math.min(600, screen.height / 2)
@@ -72,7 +73,7 @@ PopupModal {
                 Button {
                     text: "Quit and Save"
                     onClicked: {
-                        config.save();
+                        modalPopup.save();
                         Qt.callLater(() => {
                             modalPopup.close();
                         });
@@ -81,7 +82,7 @@ PopupModal {
 
                 Button {
                     text: "Save"
-                    onClicked: config.save()
+                    onClicked: modalPopup.save()
                 }
             }
         }
@@ -400,11 +401,14 @@ PopupModal {
 
         ColumnLayout {
             id: container
+
             property var selectedSlot: modalPopup.slots[0] || null
+
             onSelectedSlotChanged: {
                 if (modalPopup.visible && container.selectedSlot)
                     container.selectedSlot.state = "selected";
             }
+
             anchors {
                 left: parent.left
                 right: parent.right
