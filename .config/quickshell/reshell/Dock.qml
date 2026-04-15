@@ -83,6 +83,7 @@ Item {
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
 
+            property list<var> dockSlots: []
             screen: dock.screen
             color: "transparent"
             objectName: dock.name
@@ -122,6 +123,7 @@ Item {
 
             DockMenu {
                 id: modalPopup
+                slots: panel.dockSlots
             }
 
             Background {}
@@ -311,13 +313,13 @@ Item {
 
         width: parent.width
         height: parent.height
-
+        onChildrenChanged: panel.dockSlots = [...children]
         flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
         Instantiator {
             model: ScriptModel {
                 values: {
-                    const data = config.slots;
+                    const data = config.slots.filter(s => s !== undefined);
                     return [...data];
                 }
             }
@@ -340,7 +342,51 @@ Item {
         property list<var> widgets: []
         property var filteredWidgets: [...widgets].filter(s => s !== undefined)
         default property alias content: innerGrid.data
+
+        function removeSlot() {
+            const idx = config.slots.findIndex(s => s.name === slot.objectName);
+            if (idx !== -1) {
+                config.slots.splice(idx, 1);
+            }
+        }
+
+        function updateSlot() {
+            const idx = config.slots.findIndex(s => s.name === slot.objectName);
+            if (idx !== -1) {}
+        }
+
+        function updatePosition(pos) {
+            switch (pos) {
+            case "center":
+                slot.position = "center";
+                return;
+            case "bottom":
+            case "right":
+                slot.position = "right";
+                return;
+            case "top":
+            case "left":
+                slot.position = "left";
+                return;
+            }
+        }
+
         state: "none"
+
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            height: 2
+            color: Colors.color.primary
+            z: 100
+
+            NumberAnimation on width {
+                from: 0
+                to: parent ? parent.width : 0
+                duration: syncTimer.interval
+                running: syncTimer.running
+            }
+        }
 
         Timer {
             id: syncTimer
@@ -362,7 +408,7 @@ Item {
                 PropertyChanges {
                     target: slot
                     border.width: 2
-                    border.color: Colors.color.tertiary
+                    border.color: Colors.color.secondary
                 }
             },
             State {
@@ -442,7 +488,9 @@ Item {
             anchors.fill: parent
 
             Instantiator {
-                model: slot.filteredWidgets
+                model: ScriptModel {
+                    values: [...slot.filteredWidgets]
+                }
                 delegate: Item {
                     id: widgetContainer
 

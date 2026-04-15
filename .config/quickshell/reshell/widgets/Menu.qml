@@ -7,6 +7,14 @@ import qs.components
 
 Wrapper {
     id: wrap
+    property bool show: Global.normal
+
+    onShowChanged: {
+        if (load.active && !show) {
+            load.item.state = "hidden";
+        }
+    }
+
     property: Property {}
 
     width: wrap.setSize()
@@ -16,9 +24,9 @@ Wrapper {
         id: button
         enabled: Global.normal
         background: Item {}
+
         anchors {
             fill: parent
-            margins: 5
         }
 
         Icon {
@@ -40,13 +48,12 @@ Wrapper {
     LazyLoader {
         id: load
         component: PopupWindow {
-            id: test
+            id: popup
             property alias state: content.state
             color: "transparent"
 
             anchor {
                 item: button
-                edges: Edges.Bottom | Edges.Right
                 rect {
                     x: wrap.slotConfig.side ? button.width : (button.width - width) / 2
                     y: wrap.slotConfig.side ? (button.height - height) / 2 : button.height
@@ -59,8 +66,8 @@ Wrapper {
 
             Rectangle {
                 id: content
-                width: test.width
-                implicitHeight: menulist.contentHeight + (wrapper.anchors.margins + border.width)
+                implicitWidth: menulist.contentWidth
+                implicitHeight: menulist.contentHeight
 
                 border {
                     width: 2
@@ -115,10 +122,9 @@ Wrapper {
 
                 Item {
                     id: wrapper
-                    anchors {
-                        fill: parent
-                        margins: 2
-                    }
+                    width: popup.width
+                    height: menulist.contentHeight
+
                     ListView {
                         id: menulist
                         height: contentHeight

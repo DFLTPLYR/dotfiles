@@ -1,28 +1,25 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 
 import qs.core
+import qs.types
 import qs.components
 
 Wrapper {
     id: wrap
-    // properties
-    objectName: "Cpu"
-    setHeight: 100
-    setWidth: 100
-    relativeX: 0
-    relativeY: 0
-    position: -1
-    // properties
+    property: Property {
+        property int size: 120
+    }
 
+    width: wrap.setWidth(property.size)
+    height: wrap.setHeight(property.size)
     GridLayout {
         anchors.fill: parent
         columns: wrap.side ? 1 : 2
         rows: wrap.side ? 2 : 1
 
         Icon {
-            text: "circuit"
+            text: "gaming-pad-alt"
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
@@ -31,8 +28,9 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
         Text {
-            text: `${Hardware.cpuUsagePercent.toFixed(0)} %`
+            text: `${Hardware.gpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary

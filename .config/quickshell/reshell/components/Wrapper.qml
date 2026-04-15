@@ -75,7 +75,7 @@ Rectangle {
                 parent.x = 0;
                 parent.y = 0;
             } else {
-                wrapper.remove(config.position);
+                wrapper.remove(property.position);
             }
         }
     }

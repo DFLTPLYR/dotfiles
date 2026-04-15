@@ -8,6 +8,8 @@ import qs.core
 
 PopupModal {
     id: modalPopup
+    property list<var> slots
+
     width: Math.min(400, screen.width / 2)
     height: Math.min(600, screen.height / 2)
 
@@ -383,10 +385,26 @@ PopupModal {
         contentHeight: container.height
         clip: true
 
+        Connections {
+            target: modalPopup
+            function onVisibleChanged() {
+                if (!container.selectedSlot)
+                    return;
+                if (modalPopup.visible) {
+                    container.selectedSlot.state = "selected";
+                } else {
+                    container.selectedSlot.state = "none";
+                }
+            }
+        }
+
         ColumnLayout {
             id: container
-            property var selectedSlot: config.slots[0] || null
-
+            property var selectedSlot: modalPopup.slots[0] || null
+            onSelectedSlotChanged: {
+                if (modalPopup.visible && container.selectedSlot)
+                    container.selectedSlot.state = "selected";
+            }
             anchors {
                 left: parent.left
                 right: parent.right
@@ -416,22 +434,69 @@ PopupModal {
             ListView {
                 Layout.fillWidth: true
                 Layout.preferredHeight: contentHeight
-                model: [...config.slots]
-                delegate: Button {
-                    text: modelData.name
-                    onClicked: container.selectedSlot = modelData
+                model: [...modalPopup.slots]
+                delegate: Rectangle {
+                    width: 60
+                    height: 40
+                    color: modelData.state === "selected" ? Colors.color.primary : Colors.color.background
+
+                    Text {
+                        color: modelData.state === "selected" ? Colors.color.on_primary : Colors.color.on_background
+                        anchors.centerIn: parent
+                        text: modelData.objectName
+                    }
+
+                    MouseArea {
+                        id: ma
+                        hoverEnabled: true
+                        onHoveredChanged: {
+                            if (modelData.state !== "selected") {
+                                modelData.state = containsMouse ? "hovered" : "none";
+                            }
+                        }
+                        anchors.fill: parent
+                        onClicked: {
+                            if (container.selectedSlot) {
+                                container.selectedSlot.state = "none";
+                            }
+                            container.selectedSlot = modelData;
+                        }
+                    }
                 }
             }
 
-            Label {
-                text: "Delete"
-                font.pixelSize: 32
-            }
-            Button {
-                text: `Delete ${container.selectedSlot?.name || null}`
-                onClicked: {
-                    const item = config.slots.find(s => s.name === container.selectedSlot.objectName);
-                    print(item);
+            Column {
+                visible: container.selectedSlot
+                Layout.fillWidth: true
+
+                //Position
+                Row {
+                    Layout.fillWidth: true
+                    Repeater {
+                        model: config.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
+                        delegate: Button {
+                            text: modelData.toUpperCase()
+                            onClicked: container.selectedSlot.updatePosition(modelData)
+                        }
+                    }
+                }
+
+                // Remove
+                Label {
+                    text: "Remove"
+                    font.pixelSize: 32
+                }
+
+                Button {
+                    text: `Remove ${container.selectedSlot?.objectName || null}`
+                    onClicked: {
+                        container.selectedSlot.removeSlot();
+                        Qt.callLater(() => {
+                            if (modalPopup.slots.length > 0) {
+                                container.selectedSlot = modalPopup.slots[0];
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -451,96 +516,98 @@ PopupModal {
                 model: ScriptModel {
                     values: [...Global.widgets]
                 }
-                delegate: Item {
-                    id: origPlacement
-                    Layout.fillWidth: true
-                    Layout.leftMargin: 10
-                    Layout.rightMargin: 10
-                    Layout.preferredHeight: 100
-                    Rectangle {
-                        id: container
-                        color: "transparent"
+                delegate: WidgetPlaceholder {}
+            }
+        }
+    }
 
-                        width: origPlacement.width
-                        height: origPlacement.height
-                        border.color: Colors.color.primary
-                        Drag.active: ma.drag.active
-                        Drag.keys: [modelData.source]
-                        Drag.hotSpot: {
-                            switch (config.position) {
-                            case "top":
-                            case "left":
-                                return Qt.point(0, 0);
-                            case "bottom":
-                                return Qt.point(0, height);
-                            case "right":
-                                return Qt.point(width, height);
-                            default:
-                                return Qt.point(0, 0);
-                            }
-                        }
+    component WidgetPlaceholder: Item {
+        id: origPlacement
+        Layout.fillWidth: true
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.preferredHeight: 100
 
-                        LazyLoader {
-                            active: parent.visible
-                            source: modelData.source
-                            onItemChanged: {
-                                if (item) {
-                                    item.parent = container;
-                                    item.width = container.width;
-                                    item.height = container.height;
-                                    // item.anchors.fill = container;
-                                }
-                            }
-                        }
+        Rectangle {
+            id: container
+            color: "transparent"
 
-                        Drag.onActiveChanged: {
-                            if (Drag.active) {
-                                container.parent = stack;
-                            }
-                        }
+            width: origPlacement.width
+            height: origPlacement.height
+            border.color: Colors.color.primary
+            Drag.active: ma.drag.active
+            Drag.keys: [modelData.source]
+            Drag.hotSpot: {
+                switch (config.position) {
+                case "top":
+                case "left":
+                    return Qt.point(0, 0);
+                case "bottom":
+                    return Qt.point(0, height);
+                case "right":
+                    return Qt.point(width, height);
+                default:
+                    return Qt.point(0, 0);
+                }
+            }
 
-                        states: [
-                            State {
-                                when: ma.drag.active
-                                ParentChange {
-                                    target: container
-                                    parent: stack
-                                }
-                            },
-                            State {
-                                when: !ma.drag.active
-                                ParentChange {
-                                    target: container
-                                    parent: origPlacement
-                                }
-                            }
-                        ]
-
-                        MouseArea {
-                            id: ma
-                            anchors.fill: parent
-                            drag.target: container
-                            onReleased: {
-                                container.x = 0;
-                                container.y = 0;
-                                container.Drag.drop();
-                            }
-                        }
-
-                        Behavior on x {
-                            NumberAnimation {
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-
-                        Behavior on y {
-                            NumberAnimation {
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
+            LazyLoader {
+                active: parent.visible
+                source: modelData.source
+                onItemChanged: {
+                    if (item) {
+                        item.parent = container;
+                        item.width = container.width;
+                        item.height = container.height;
                     }
+                }
+            }
+
+            Drag.onActiveChanged: {
+                if (Drag.active) {
+                    container.parent = stack;
+                }
+            }
+
+            states: [
+                State {
+                    when: ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: stack
+                    }
+                },
+                State {
+                    when: !ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: origPlacement
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: ma
+                anchors.fill: parent
+                drag.target: container
+                onReleased: {
+                    container.x = 0;
+                    container.y = 0;
+                    container.Drag.drop();
+                }
+            }
+
+            Behavior on x {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on y {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
