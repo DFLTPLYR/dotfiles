@@ -82,8 +82,9 @@ Item {
             id: panel
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
-
             property list<var> dockSlots: []
+            property var timer
+
             screen: dock.screen
             color: "transparent"
             objectName: dock.name
@@ -124,6 +125,9 @@ Item {
             DockMenu {
                 id: modalPopup
                 slots: panel.dockSlots
+                onSave: {
+                    timer.restart();
+                }
             }
 
             Background {}
@@ -313,7 +317,7 @@ Item {
 
         width: parent.width
         height: parent.height
-        onChildrenChanged: panel.dockSlots = [...children]
+        onChildrenChanged: panel.dockSlots = [...children].filter(s => s instanceof Slot)
         flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
         Instantiator {
@@ -330,13 +334,63 @@ Item {
                 position: modelData.position || ""
                 spacing: modelData.spacing || 0
                 widgets: modelData.widgets
+                onUpdate: slot => {
+                    if (slot) {
+                        syncTimer.slots = slot;
+                    }
+                    syncTimer.restart();
+                }
+            }
+        }
+
+        Timer {
+            id: syncTimer
+            property list<var> slots
+            interval: 1000
+            running: false
+            onTriggered: {
+                const cfg = config;
+                if (slots.length >= 1) {
+                    cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
+                    cfg.save();
+                    return;
+                }
+                let slot = [];
+                for (const i in panel.dockSlots) {
+                    const item = panel.dockSlots[i];
+                    const data = {
+                        name: item.objectName,
+                        widgets: item.filteredWidgets,
+                        position: item.position,
+                        spacing: item.spacing
+                    };
+                    slot.push(data);
+                }
+                cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
+                cfg.save();
+            }
+            Component.onCompleted: panel.timer = syncTimer
+        }
+
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            height: 2
+            color: Colors.color.primary
+            z: 100
+
+            NumberAnimation on width {
+                from: 0
+                to: parent ? slotcontainer.width : 0
+                duration: syncTimer.interval
+                running: syncTimer.running
             }
         }
     }
 
     component Slot: Rectangle {
         id: slot
-
+        signal update(var slot)
         property string position: "left"
         property int spacing: 2
         property list<var> widgets: []
@@ -352,7 +406,14 @@ Item {
 
         function updateSlot() {
             const idx = config.slots.findIndex(s => s.name === slot.objectName);
-            if (idx !== -1) {}
+            if (idx !== -1) {
+                const replace = {
+                    position: slot.position,
+                    spacing: slot.spacing,
+                    widgets: [...slot.filteredWidgets],
+                    name: slot.objectName
+                };
+            }
         }
 
         function updatePosition(pos) {
@@ -372,33 +433,6 @@ Item {
         }
 
         state: "none"
-
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            height: 2
-            color: Colors.color.primary
-            z: 100
-
-            NumberAnimation on width {
-                from: 0
-                to: parent ? parent.width : 0
-                duration: syncTimer.interval
-                running: syncTimer.running
-            }
-        }
-
-        Timer {
-            id: syncTimer
-            interval: 5000
-            running: false
-            onTriggered: {
-                const cfg = config;
-                const data = cfg.slots.find(s => s.name === slot.objectName);
-                data.widgets = [...slot.widgets];
-                cfg.save();
-            }
-        }
 
         border.width: 2
 
@@ -466,13 +500,58 @@ Item {
                     slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
                 }
                 onDropped: drop => {
-                    slot.widgets = [...slot.widgets,
-                        {
-                            source: drop.keys[0],
-                            name: Math.random().toString(36).substring(2, 10),
-                            position: slot.widgets.length
+                    switch (Global.state) {
+                    case Global.states.edit:
+                        slot.widgets = [...slot.widgets,
+                            {
+                                source: drop.keys[0],
+                                name: Math.random().toString(36).substring(2, 10),
+                                position: slot.widgets.length
+                            }
+                        ];
+                        slot.update(null);
+                        return;
+                    case Global.states.widget:
+                        if (drop.source.parent.parent === innerGrid) {
+                            return;
                         }
-                    ];
+                        drop.source.parent.parent = innerGrid;
+                        let slots = [];
+
+                        let foundWidget = null;
+                        let foundSlot = null;
+                        for (const slot of config.slots) {
+                            for (const widget of slot.widgets) {
+                                if (widget.name === drop.source.objectName) {
+                                    foundWidget = widget;
+                                    foundSlot = slot;
+                                    break;
+                                }
+                            }
+                            if (foundWidget)
+                                break;
+                        }
+
+                        for (const i in panel.dockSlots) {
+                            const item = panel.dockSlots[i];
+                            const data = {
+                                name: item.objectName,
+                                widgets: item.widgets,
+                                spacing: item.spacing,
+                                position: item.position
+                            };
+                            if (item.objectName === foundSlot.name)
+                                data.widgets = data.widgets.filter(s => s.name !== foundWidget.name);
+                            if (item.objectName === slot.objectName)
+                                data.widgets = [...data.widgets, foundWidget];
+                            slots.push(data);
+                        }
+
+                        slot.update(slots);
+                        return;
+                    default:
+                        return;
+                    }
                 }
             }
         }
@@ -509,10 +588,10 @@ Item {
                         active: modelData?.source ? true : ""
                         source: modelData.source
                         onItemChanged: {
-                            const timer = syncTimer;
                             const cfg = config;
 
                             item.parent = widgetContainer;
+                            item.objectName = modelData.name;
                             item.property.position = index;
                             item.container = grid;
                             item.slotConfig = cfg;
@@ -540,7 +619,7 @@ Item {
                                 const temparr = [...arr];
                                 [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
                                 slot.widgets = temparr;
-                                timer.restart();
+                                slot.update(null);
                             });
 
                             item.remove.connect(idx => {
@@ -553,7 +632,7 @@ Item {
                                 }
                                 const sub = slot;
                                 sub.widgets.splice(idx, 1);
-                                timer.restart();
+                                slot.update(null);
                             });
                         }
                     }
