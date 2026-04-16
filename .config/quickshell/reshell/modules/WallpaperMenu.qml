@@ -195,39 +195,42 @@ FloatingWindow {
         // border
         Outline {
             anchors.fill: parent
+            zoom: flick.zoom
         }
 
         width: modelData.width
         height: modelData.height
-        color: Colors.setOpacity(Colors.color.background, 0.2)
+        color: Colors.setOpacity(Colors.color.background, 0.5)
         objectName: modelData.name
         x: modelData.x
         y: modelData.y
+        z: -10
     }
 
     component Outline: Item {
-        property int zoom: flick.zoom
+        id: outline
+        property real zoom: 1
         focusPolicy: Qt.NoFocus
         // border
         Rectangle {
             width: parent.width
-            height: 2 / flick.zoom
+            height: 2 / outline.zoom
             color: Colors.color.primary
         }
         Rectangle {
             width: parent.width
-            height: 2 / flick.zoom
+            height: 2 / outline.zoom
             color: Colors.color.primary
             y: parent.height
         }
 
         Rectangle {
-            width: 2 / flick.zoom
+            width: 2 / outline.zoom
             height: parent.height
             color: Colors.color.primary
         }
         Rectangle {
-            width: 2 / flick.zoom
+            width: 2 / outline.zoom
             height: parent.height
             color: Colors.color.primary
             x: parent.width
@@ -252,6 +255,7 @@ FloatingWindow {
 
         Outline {
             anchors.fill: parent
+            zoom: flick.zoom
         }
 
         // image
