@@ -438,8 +438,9 @@ PopupModal {
 
             ListView {
                 Layout.fillWidth: true
-                Layout.preferredHeight: contentHeight
+                Layout.preferredHeight: 50
                 model: [...modalPopup.slots]
+                orientation: ListView.Horizontal
                 delegate: Rectangle {
                     width: 60
                     height: 40
@@ -453,6 +454,7 @@ PopupModal {
 
                     MouseArea {
                         id: ma
+                        enabled: container.selectedSlot !== modelData
                         hoverEnabled: true
                         onHoveredChanged: {
                             if (modelData.state !== "selected") {

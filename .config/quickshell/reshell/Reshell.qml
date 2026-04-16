@@ -1,11 +1,10 @@
 import QtQuick
+
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 
 import qs.core
-import qs.types
-import qs.modules
 
 Variants {
     model: Quickshell.screens

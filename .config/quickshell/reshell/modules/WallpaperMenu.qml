@@ -11,7 +11,7 @@ FloatingWindow {
 
     title: "Reshell"
 
-    color: "transparent"
+    color: Colors.setOpacity(Colors.color.background, Global.general.opacity)
     visible: Compositor.focusedWindow === screen.name && Global.edit
 
     minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
@@ -182,6 +182,7 @@ FloatingWindow {
                 Global.bindRadii(this);
                 Global.wallpaper = true;
             }
+
             Component.onDestruction: Global.wallpaper = false
         }
     }
@@ -190,14 +191,36 @@ FloatingWindow {
         id: monitor
         required property ShellScreen modelData
         property var dock: Global.getConfigManager(`${modelData.name}-dock`)
+
+        // border
+        Rectangle {
+            width: parent.width
+            height: 2 / flick.zoom
+            color: Colors.color.primary
+        }
+        Rectangle {
+            width: parent.width
+            height: 2 / flick.zoom
+            color: Colors.color.primary
+            y: monitor.height
+        }
+
+        Rectangle {
+            width: 2 / flick.zoom
+            height: parent.height
+            color: Colors.color.primary
+        }
+        Rectangle {
+            width: 2 / flick.zoom
+            height: parent.height
+            color: Colors.color.primary
+            x: monitor.width
+        }
+
         width: modelData.width
         height: modelData.height
         color: Colors.setOpacity(Colors.color.background, 0.2)
         objectName: modelData.name
-        border {
-            width: 1 * flick.zoom
-            color: Colors.color.primary
-        }
         x: modelData.x
         y: modelData.y
     }

@@ -109,7 +109,6 @@ Singleton {
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
             property bool greeter: false
-            property bool moveablesetting: false
             property list<var> widgets: []
             property int notificationTimer: 5000
         }
