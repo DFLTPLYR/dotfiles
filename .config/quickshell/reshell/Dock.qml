@@ -610,7 +610,7 @@ Item {
                             item.swap.connect((fromIndex, toIndex) => {
                                 const current = findByPosition(fromIndex);
                                 const destination = findByPosition(toIndex);
-                                print(current, destination);
+
                                 if (!current || !destination)
                                     return;
                                 const temp = current.currentWidget;
@@ -623,7 +623,6 @@ Item {
                                 const arr = [...slt.widgets];
                                 [arr[fromIndex], arr[toIndex]] = [arr[toIndex], arr[fromIndex]];
                                 slt.widgets = arr;
-                                print(slt);
                                 slt.update(null);
                             });
 
