@@ -193,28 +193,8 @@ FloatingWindow {
         property var dock: Global.getConfigManager(`${modelData.name}-dock`)
 
         // border
-        Rectangle {
-            width: parent.width
-            height: 2 / flick.zoom
-            color: Colors.color.primary
-        }
-        Rectangle {
-            width: parent.width
-            height: 2 / flick.zoom
-            color: Colors.color.primary
-            y: monitor.height
-        }
-
-        Rectangle {
-            width: 2 / flick.zoom
-            height: parent.height
-            color: Colors.color.primary
-        }
-        Rectangle {
-            width: 2 / flick.zoom
-            height: parent.height
-            color: Colors.color.primary
-            x: monitor.width
+        Outline {
+            anchors.fill: parent
         }
 
         width: modelData.width
@@ -225,12 +205,42 @@ FloatingWindow {
         y: modelData.y
     }
 
+    component Outline: Item {
+        property int zoom: flick.zoom
+        focusPolicy: Qt.NoFocus
+        // border
+        Rectangle {
+            width: parent.width
+            height: 2 / flick.zoom
+            color: Colors.color.primary
+        }
+        Rectangle {
+            width: parent.width
+            height: 2 / flick.zoom
+            color: Colors.color.primary
+            y: parent.height
+        }
+
+        Rectangle {
+            width: 2 / flick.zoom
+            height: parent.height
+            color: Colors.color.primary
+        }
+        Rectangle {
+            width: 2 / flick.zoom
+            height: parent.height
+            color: Colors.color.primary
+            x: parent.width
+        }
+    }
+
     component PreviewImage: ResizeableRect {
         id: container
 
         required property var modelData
         property Image image: draggableImage
         property var found
+
         pointerVisible: hoverHandler.hovered
         objectName: modelData.name
 
@@ -239,6 +249,10 @@ FloatingWindow {
 
         x: (modelData.x || 0)
         y: (modelData.y || 0)
+
+        Outline {
+            anchors.fill: parent
+        }
 
         // image
         Image {
