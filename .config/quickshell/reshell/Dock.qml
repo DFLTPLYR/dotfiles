@@ -272,24 +272,34 @@ Item {
         Rectangle {
             color: Colors.setOpacity(config.style.color, config.style.opacity)
             anchors.fill: parent
+            clip: true
 
             GridLayout {
                 id: slotcontainer
 
                 width: parent.width
                 height: parent.height
-                onChildrenChanged: panel.dockSlots = [...children].filter(s => s instanceof Slot)
+                onChildrenChanged: {
+                    const slots = [...children].filter(s => s instanceof Slot);
+                    if (slots.length === config.slots.length) {
+                        slots.sort((a, b) => (a.position || 0) - (b.position || 0));
+                        children = slots;
+                        slotcontainer.activeFocusOnTabChanged;
+                        panel.dockSlots = slots;
+                    }
+                }
                 flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
                 Instantiator {
                     model: config.slots.filter(s => s !== undefined)
                     delegate: Slot {
                         required property var modelData
-                        parent: slotcontainer
-                        objectName: modelData.name || ""
-                        position: modelData.position || ""
-                        spacing: modelData.spacing || 0
+                        required property int index
+                        objectName: modelData.name
+                        position: modelData.position
+                        spacing: modelData.spacing
                         widgets: modelData.widgets
+                        parent: slotcontainer
                         onUpdate: slot => {
                             if (slot) {
                                 syncTimer.slots = slot;
@@ -347,6 +357,7 @@ Item {
                 }
                 Component.onCompleted: panel.timer = syncTimer
             }
+
             Component.onCompleted: {
                 Global.bindRadii(this, config.style.rounding);
                 Global.bindMargins(this, config.style.margin);
@@ -585,22 +596,21 @@ Item {
                         active: modelData?.source ? true : ""
                         source: modelData.source
                         onItemChanged: {
-                            const cfg = config;
+                            const slt = slot;
 
                             item.parent = widgetContainer;
                             item.objectName = modelData.name;
                             item.property.position = index;
                             item.container = grid;
-                            item.slotConfig = cfg;
-
+                            item.slotConfig = config;
                             widgetContainer.currentWidget = item;
 
-                            // Signal
-                            item.swap.connect((fromIndex, toIndex) => {
-                                const containers = innerGrid.children.filter(c => c.content !== undefined);
-                                const current = containers.find(c => c.currentWidget?.property?.position === fromIndex);
-                                const destination = containers.find(c => c.currentWidget?.property?.position === toIndex);
+                            const findByPosition = pos => innerGrid.children.find(c => c.currentWidget?.property?.position === pos);
 
+                            item.swap.connect((fromIndex, toIndex) => {
+                                const current = findByPosition(fromIndex);
+                                const destination = findByPosition(toIndex);
+                                print(current, destination);
                                 if (!current || !destination)
                                     return;
                                 const temp = current.currentWidget;
@@ -608,28 +618,24 @@ Item {
                                 destination.currentWidget = temp;
                                 current.currentWidget.parent = current;
                                 destination.currentWidget.parent = destination;
-
                                 current.currentWidget.property.position = fromIndex;
                                 destination.currentWidget.property.position = toIndex;
-                                // replace
-                                const arr = [...slot.widgets];
-                                const temparr = [...arr];
-                                [temparr[fromIndex], temparr[toIndex]] = [temparr[toIndex], temparr[fromIndex]];
-                                slot.widgets = temparr;
-                                slot.update(null);
+                                const arr = [...slt.widgets];
+                                [arr[fromIndex], arr[toIndex]] = [arr[toIndex], arr[fromIndex]];
+                                slt.widgets = arr;
+                                print(slt);
+                                slt.update(null);
                             });
 
                             item.remove.connect(idx => {
-                                const containers = innerGrid.children.filter(c => c.content !== undefined);
-                                const container = containers.find(c => c.currentWidget?.property?.position === idx);
+                                const container = findByPosition(idx);
                                 if (container) {
                                     container.content.source = "";
                                     container.currentWidget = null;
                                     container.visible = false;
                                 }
-                                const sub = slot;
-                                sub.widgets.splice(idx, 1);
-                                slot.update(null);
+                                slt.widgets.splice(idx, 1);
+                                slt.update(null);
                             });
                         }
                     }
