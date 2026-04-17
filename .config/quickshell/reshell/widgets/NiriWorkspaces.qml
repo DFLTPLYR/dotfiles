@@ -25,7 +25,9 @@ Wrapper {
 
         interactive: false
 
-        model: [...list.windows]
+        model: ScriptModel {
+            values: list.windows
+        }
 
         delegate: Rectangle {
             color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.color.primary, 0.2)
@@ -71,7 +73,7 @@ Wrapper {
 
         remove: Transition {
             NumberAnimation {
-                property: "y"
+                properties: "y,x"
                 to: -200
                 duration: 250
             }
@@ -82,13 +84,13 @@ Wrapper {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 20000
+                duration: 200
             }
         }
 
         displaced: Transition {
             NumberAnimation {
-                properties: "y"
+                properties: "y,x"
                 duration: 250
             }
         }

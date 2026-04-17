@@ -37,6 +37,7 @@ Item {
             property int width: 100
             property int x: 0
             property int y: 0
+            property bool exclusiveZone: true
             property string position: "top"
             readonly property bool side: position === "left" || position === "right"
             property StyleJson style: StyleJson {
@@ -99,8 +100,8 @@ Item {
             implicitWidth: screen.width
             implicitHeight: screen.height
 
-            exclusionMode: ExclusionMode.Ignore
-            exclusiveZone: config.side ? config.width : config.height
+            exclusionMode: config.exclusiveZone ? ExclusionMode.Auto : ExclusionMode.Ignore
+            exclusiveZone: config.exclusiveZone ? (config.side ? config.width : config.height) : 0
             WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
@@ -398,6 +399,7 @@ Item {
 
     component Slot: Rectangle {
         id: slot
+
         signal update(var slot)
         property string position: "left"
         property int spacing: 2
