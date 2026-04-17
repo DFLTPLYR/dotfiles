@@ -172,6 +172,7 @@ binds {
     Mod+Ctrl+P{ screenshot-screen; }
     Mod+Alt+P { screenshot-window; }
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Alt+E { spawn-sh "killall -SIGUSR1 gpu-screen-recorder && sleep 0.5 && notify-send -t 1500 -u low -- 'GPU Screen Recorder' 'Replay saved'"; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
     // Mod+Shift+E { quit; }
