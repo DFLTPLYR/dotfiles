@@ -110,6 +110,10 @@ PopupModal {
                 onClicked: dock.removeDock(dock.name)
             }
 
+            Button {
+                text: `${config.exclusiveZone ? "Disable" : "Enable"} Exclusive Zone`
+                onClicked: config.exclusiveZone = !config.exclusiveZone
+            }
             Label {
                 font.pixelSize: 32
                 text: "Position"
