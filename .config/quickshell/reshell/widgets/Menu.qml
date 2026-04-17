@@ -23,17 +23,19 @@ Wrapper {
     Button {
         id: button
         enabled: Global.normal
-        background: Item {}
+        text: "power-off"
 
         anchors {
             fill: parent
         }
 
-        Icon {
-            text: "power-off"
-            anchors.centerIn: parent
-            color: Colors.color.primary
-            font.pixelSize: Math.min(wrap.width, wrap.height) * 0.8
+        content.color: load.active ? Colors.color.tertiary : Colors.color.primary
+
+        font {
+            family: Components.icon.family
+            weight: Components.icon.weight
+            styleName: Components.icon.styleName
+            pixelSize: parent ? Math.min(parent.width, parent.height) / 3 : 0
         }
 
         onClicked: {
@@ -68,11 +70,6 @@ Wrapper {
                 id: content
                 implicitWidth: menulist.contentWidth
                 implicitHeight: menulist.contentHeight
-
-                border {
-                    width: 2
-                    color: Colors.color.outline
-                }
 
                 state: "hidden"
                 color: Colors.color.background

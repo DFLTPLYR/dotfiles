@@ -1,13 +1,14 @@
 import Quickshell
 
 import QtQuick
-import QtQuick.Layouts
 
 import qs.core
 import qs.components
 
 Wrapper {
     id: wrap
+    property bool recording: false
+
     width: wrap.setSize()
     height: wrap.setSize()
 
@@ -18,6 +19,7 @@ Wrapper {
         text: "camcorder"
         anchors.fill: parent
 
+        content.color: load.active ? Colors.color.tertiary : Colors.color.primary
         font {
             family: Components.icon.family
             weight: Components.icon.weight
@@ -58,11 +60,6 @@ Wrapper {
                 implicitWidth: wrapper.width
                 implicitHeight: wrapper.height
 
-                border {
-                    width: 2
-                    color: Colors.color.outline
-                }
-
                 state: "hidden"
                 color: Colors.color.background
 
@@ -72,7 +69,8 @@ Wrapper {
                         PropertyChanges {
                             target: content
                             scale: 0.9
-                            y: -500
+                            y: wrap.slotConfig.side ? 0 : -500
+                            x: wrap.slotConfig.side ? -500 : 0
                         }
                     },
                     State {
@@ -81,6 +79,7 @@ Wrapper {
                             target: content
                             scale: 1
                             y: 0
+                            x: 0
                         }
                     }
                 ]

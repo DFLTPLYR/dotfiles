@@ -442,9 +442,15 @@ Item {
 
         state: "none"
 
-        border.width: 2
-
         states: [
+            State {
+                name: "none"
+                PropertyChanges {
+                    target: slot
+                    border.width: 0
+                    border.color: "transparent"
+                }
+            },
             State {
                 name: "hovered"
                 PropertyChanges {

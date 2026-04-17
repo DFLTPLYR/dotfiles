@@ -7,6 +7,7 @@ import QtQuick.Controls.Basic
 Button {
     id: control
     property var state: Components.general.button
+    property alias content: content
     hoverEnabled: true
     clip: true
 
