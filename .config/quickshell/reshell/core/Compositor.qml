@@ -13,6 +13,7 @@ Singleton {
     property var focusedWorkspace: null
     property var focusedMonitor: Quickshell.screens[0].name
     property var focusedWindow: null
+    property bool overviewOpened: false
     property bool ready: false
 
     readonly property string daemonSocket: Quickshell.env("XDG_RUNTIME_DIR") + "/quickcli.sock"
@@ -65,7 +66,8 @@ Singleton {
                     WindowsChanged: "WindowsChanged",
                     WindowClosed: "WindowClosed",
                     FocusedMonitor: "FocusedMonitor",
-                    WindowFocusChanged: "WindowFocusChanged"
+                    WindowFocusChanged: "WindowFocusChanged",
+                    WorkspaceActivated: "WorkspaceActivated"
                 };
                 switch (key) {
                 case EventType.WorkspacesChanged:
@@ -186,7 +188,16 @@ Singleton {
                         config.windows.push(winObj);
                     }
                     return;
-                default:
+                case EventType.WorkspaceActivated:
+                    const wsId = event.WorkspaceActivated.id;
+                    for (const ws of config.workspaces) {
+                        if (ws.workspaceId === wsId) {
+                            config.focusedWorkspace = ws;
+                            ws.isFocused = true;
+                        } else {
+                            ws.isFocused = false;
+                        }
+                    }
                     break;
                 }
             }

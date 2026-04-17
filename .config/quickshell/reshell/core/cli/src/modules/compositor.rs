@@ -1,9 +1,9 @@
-use niri_ipc::{socket::Socket, Event, Response};
+use niri_ipc::{Event, Response, socket::Socket};
 use serde_json;
 use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::UnixStream;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 pub fn niri_ipc_listener(mut stream: UnixStream, running: Arc<AtomicBool>) {
     let mut socket = Socket::connect().expect("Error Occured");
@@ -21,6 +21,7 @@ pub fn niri_ipc_listener(mut stream: UnixStream, running: Arc<AtomicBool>) {
                     if matches!(
                         event,
                         Event::WorkspaceActivated { .. }
+                            | Event::WorkspacesChanged { .. }
                             | Event::WindowFocusChanged { .. }
                             | Event::WindowFocusTimestampChanged { .. }
                     ) {
