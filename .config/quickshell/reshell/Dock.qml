@@ -37,7 +37,7 @@ Item {
             property int width: 100
             property int x: 0
             property int y: 0
-            property bool exclusiveZone: true
+            property bool exclusiveZone: false
             property string position: "top"
             readonly property bool side: position === "left" || position === "right"
             property StyleJson style: StyleJson {
@@ -101,7 +101,8 @@ Item {
             implicitHeight: screen.height
 
             exclusionMode: config.exclusiveZone ? ExclusionMode.Auto : ExclusionMode.Ignore
-            exclusiveZone: config.exclusiveZone ? (config.side ? config.width : config.height) : 0
+            exclusiveZone: (config.exclusiveZone === true || config.exclusiveZone === "true") ? (config.side ? config.width : config.height) : 0
+
             WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
@@ -139,6 +140,7 @@ Item {
                     config,
                     dock
                 });
+                print(exclusionMode, ExclusionMode.Normal, config.exclusiveZone);
             }
         }
     }

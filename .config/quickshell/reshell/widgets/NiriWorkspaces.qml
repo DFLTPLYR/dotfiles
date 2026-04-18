@@ -43,11 +43,12 @@ Wrapper {
             }
 
             Rectangle {
-                anchors.centerIn: parent
                 width: parent.width / 2
                 height: parent.height / 2
                 radius: width / 2
-                color: index === Compositor.focusedWorkspace.idx - 1 ? Colors.color.primary : Colors.color.tertiary
+                x: (parent.width - width) / 2
+                y: (parent.height - height) / 2
+                color: (index === Compositor.focusedWorkspace.idx - 1) ? Colors.color.primary : Colors.color.tertiary
 
                 Behavior on color {
                     ColorAnimation {
