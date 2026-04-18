@@ -13,6 +13,7 @@ Singleton {
     id: config
     // signal
     signal colorUpdate
+
     // states
     readonly property var stateNames: ["Normal", "Edit", "Widget"]
     readonly property QtObject states: QtObject {
@@ -31,23 +32,8 @@ Singleton {
     property bool properties: false
     property bool docks: true
 
-    property var modal: null
-
-    property bool enableSetting: false
-    property bool enableSystemPanel: false
-    property Item setttingPanel: null
-
-    property bool widgetpanelEnabled: false
-    property var widgetpanelTarget: null
-
-    property bool slotpanelEnabled: false
-    property var slotpanelTarget: null
-
-    property var selectedItem: null
-
     // global item
     property alias general: adapter
-    property list<var> fileManager: []
     property list<var> widgets: []
 
     IpcHandler {
@@ -58,11 +44,6 @@ Singleton {
                 command: ["notify-send", "State", stateNames[config.state]]
             });
         }
-    }
-
-    function getConfigManager(tag) {
-        const entry = fileManager.find(s => s && s.subject === tag);
-        return entry?.ref || null;
     }
 
     function updateColor() {
@@ -111,13 +92,6 @@ Singleton {
             property bool greeter: false
             property list<var> widgets: []
             property int notificationTimer: 5000
-        }
-    }
-
-    function save() {
-        fileView.writeAdapter();
-        for (const i in fileManager) {
-            fileManager[i].ref.save();
         }
     }
 

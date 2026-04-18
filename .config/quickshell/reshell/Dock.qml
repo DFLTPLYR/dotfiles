@@ -140,7 +140,6 @@ Item {
                     config,
                     dock
                 });
-                print(exclusionMode, ExclusionMode.Normal, config.exclusiveZone);
             }
         }
     }
@@ -511,7 +510,7 @@ Item {
 
         // todo: Do a transfer
         Loader {
-            active: Global.edit || Global.widgets
+            active: Global.edit || Global.widget
             anchors.fill: parent
             sourceComponent: DropArea {
                 onContainsDragChanged: {

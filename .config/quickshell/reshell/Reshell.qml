@@ -124,13 +124,6 @@ Variants {
                 }
                 fileview.save();
             }
-
-            Component.onCompleted: {
-                Global.fileManager.push({
-                    ref: fileview,
-                    subject: `${screen.name}-dock`
-                });
-            }
         }
 
         Connections {
