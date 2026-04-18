@@ -513,7 +513,9 @@ Item {
             active: Global.edit || Global.widget
             anchors.fill: parent
             sourceComponent: DropArea {
+                objectName: "Slot"
                 onContainsDragChanged: {
+                    slot.border.width = containsDrag ? 1 : 0;
                     slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
                 }
                 onDropped: drop => {
@@ -529,6 +531,7 @@ Item {
                         slot.update(null);
                         return;
                     case Global.states.widget:
+                        print(drop);
                         if (drop.source.parent.parent === innerGrid) {
                             return;
                         }
