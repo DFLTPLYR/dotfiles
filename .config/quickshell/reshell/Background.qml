@@ -112,6 +112,60 @@ PanelWindow {
         }
     }
 
+    Rectangle {
+        id: selectionRect
+        x: 0
+        y: 0
+        z: 99
+        visible: false
+        width: 0
+        height: 0
+        rotation: 0
+        color: Colors.setOpacity(Colors.color.primary, 0.5)
+        border.width: 1
+        border.color: Colors.color.tertiary
+        transformOrigin: Item.TopLeft
+    }
+
+    MouseArea {
+        id: selectionMouseArea
+        property point startPoint
+        property bool selecting
+        anchors.fill: parent
+        z: 2
+
+        onPressed: mouse => {
+            if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                selecting = true;
+                startPoint = Qt.point(mouse.x, mouse.y);
+                selectionRect.x = mouse.x;
+                selectionRect.y = mouse.y;
+                selectionRect.width = 0;
+                selectionRect.height = 0;
+                selectionRect.visible = true;
+            }
+        }
+
+        onPositionChanged: mouse => {
+            if (selecting) {
+                var minX = Math.min(startPoint.x, mouse.x);
+                var minY = Math.min(startPoint.y, mouse.y);
+                var maxX = Math.max(startPoint.x, mouse.x);
+                var maxY = Math.max(startPoint.y, mouse.y);
+
+                selectionRect.x = minX;
+                selectionRect.y = minY;
+                selectionRect.width = maxX - minX;
+                selectionRect.height = maxY - minY;
+            }
+        }
+
+        onReleased: {
+            selecting = false;
+            selectionRect.visible = false;
+        }
+    }
+
     FilePicker {
         id: fileExplorer
         onOutput: data => {

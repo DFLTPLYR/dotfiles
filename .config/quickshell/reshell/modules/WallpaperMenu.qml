@@ -126,8 +126,11 @@ FloatingWindow {
                     target: null
 
                     onWheel: event => {
-                        var delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
-                        flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
+                        let isShiftWheel = event.modifiers & Qt.ShiftModifier;
+                        if (isShiftWheel) {
+                            let delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
+                            flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
+                        }
                     }
                 }
             }
@@ -190,7 +193,6 @@ FloatingWindow {
     component Monitor: Rectangle {
         id: monitor
         required property ShellScreen modelData
-        property var dock: Global.getConfigManager(`${modelData.name}-dock`)
 
         // border
         Outline {
