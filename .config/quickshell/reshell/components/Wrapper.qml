@@ -88,6 +88,8 @@ Rectangle {
             wrapper.swap(property.position, drop.source.property.position);
         }
         onContainsDragChanged: {
+            print(containsDrag);
+            background.border.width = containsDrag ? 1 : 0;
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";
         }
 
