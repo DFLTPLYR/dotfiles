@@ -84,6 +84,7 @@ Item {
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
             property list<var> dockSlots: []
+            property list<var> activeWidgets: []
             property var timer
 
             screen: dock.screen
@@ -127,6 +128,7 @@ Item {
             DockMenu {
                 id: modalPopup
                 slots: panel.dockSlots
+                activeWidgets: panel.activeWidgets
                 onSave: {
                     timer.restart();
                 }
@@ -616,9 +618,9 @@ Item {
                             item.container = grid;
                             item.slotConfig = config;
                             widgetContainer.currentWidget = item;
+                            panel.activeWidgets = [...panel.activeWidgets, item];
 
                             const findByPosition = pos => innerGrid.children.find(c => c.currentWidget?.property?.position === pos);
-
                             item.swap.connect((fromIndex, toIndex) => {
                                 const current = findByPosition(fromIndex);
                                 const destination = findByPosition(toIndex);
@@ -640,11 +642,17 @@ Item {
 
                             item.remove.connect(idx => {
                                 const container = findByPosition(idx);
+                                const widget = panel.activeWidgets.findIndex(s => s === container.currentWidget);
+                                if (widget) {
+                                    panel.activeWidgets.splice(widget, 1);
+                                    panel.activeWidgets = [...panel.activeWidgets];
+                                }
                                 if (container) {
                                     container.content.source = "";
                                     container.currentWidget = null;
                                     container.visible = false;
                                 }
+
                                 slt.widgets.splice(idx, 1);
                                 slt.update(null);
                             });
@@ -658,7 +666,6 @@ Item {
                 flow: config.side ? Grid.TopToBottom : Grid.LeftToRight
                 rows: config.side ? children.length : 1
                 columns: config.side ? 1 : children.length
-
                 Layout.alignment: {
                     switch (slot.position) {
                     case "left":
