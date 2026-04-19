@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQml.Models
 
 import Quickshell
 
@@ -9,6 +10,7 @@ import qs.core
 PopupModal {
     id: modalPopup
     property list<var> slots
+    property list<var> activeWidgets
     signal save
 
     width: Math.min(400, screen.width / 2)
@@ -38,6 +40,10 @@ PopupModal {
                 TabButton {
                     text: "Widgets"
                 }
+
+                TabButton {
+                    text: "Active Widget"
+                }
             }
         }
 
@@ -56,6 +62,10 @@ PopupModal {
 
             WidgetsTab {
                 id: widgetsTab
+            }
+
+            ActiveWidgetsTab {
+                id: activeWidgetsTab
             }
         }
 
@@ -620,6 +630,79 @@ PopupModal {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+            }
+        }
+    }
+
+    component ActiveWidgetsTab: Flickable {
+        property var selectedWidget: modalPopup.activeWidgets[0] || null
+
+        width: modalPopup.width
+        height: modalPopup.height
+        contentHeight: container.height
+        clip: true
+
+        ColumnLayout {
+            id: container
+            width: parent.width
+
+            ListView {
+                id: widgetList
+                Layout.fillWidth: true
+                Layout.preferredHeight: 20
+                orientation: ListView.Horizontal
+
+                model: ScriptModel {
+                    values: [...modalPopup.activeWidgets]
+                }
+                delegate: Button {
+                    text: modelData.objectName
+                    onClicked: {
+                        selectedWidget = modelData;
+                    }
+                }
+            }
+
+            ListView {
+                id: properties
+                Layout.topMargin: widgetList.height
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                orientation: ListView.Vertical
+
+                model: ScriptModel {
+                    values: selectedWidget?.property ? [...selectedWidget.property.keys()].filter(s => s.property !== "position") : []
+                }
+
+                DelegateChooser {
+                    id: chooser
+                    role: "type"
+
+                    DelegateChoice {
+                        roleValue: "number"
+                        SpinBox {
+                            height: 40
+                            width: parent.width
+                            value: selectedWidget.property[modelData.property]
+                            onValueChanged: {
+                                selectedWidget.property[modelData.property] = value;
+                            }
+                        }
+                    }
+
+                    DelegateChoice {
+                        roleValue: "string"
+                        SpinBox {
+                            height: 40
+                            width: parent.width
+                            value: selectedWidget.property[modelData.property]
+                            onValueChanged: {
+                                selectedWidget.property[modelData.property] = value;
+                            }
+                        }
+                    }
+                }
+                delegate: chooser
             }
         }
     }

@@ -1,4 +1,4 @@
-import Quickshell
+import Quickshell.Io
 
 import QtQuick
 
@@ -26,6 +26,14 @@ Wrapper {
             styleName: Components.icon.styleName
             pixelSize: parent ? Math.min(parent.width, parent.height) / 3 : 0
         }
-        onClicked: {}
+        onClicked: proc.running = true
+    }
+
+    Process {
+        id: proc
+        command: ["sh", "-c", "slurp"]
+        onRunningChanged: {
+            print(command);
+        }
     }
 }
