@@ -327,8 +327,37 @@ FloatingWindow {
                 id: hoverHandler
                 target: container
                 enabled: !draggableImage.lock
-                onHoveredChanged: container.z = hovered ? (container.z + 10) : (container.z - 10)
             }
+
+            WheelHandler {
+                id: wheelHandler
+                enabled: hoverHandler.hovered
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                target: null
+
+                onWheel: event => {
+                    let isShiftWheel = event.modifiers & Qt.ShiftModifier;
+                    if (isShiftWheel && wheelHandler.enabled) {
+                        if (event.angleDelta.y > 0) {
+                            container.z++;
+                        } else {
+                            container.z--;
+                        }
+                        print(container.z);
+                    }
+                }
+            }
+        }
+
+        Text {
+            anchors {
+                left: parent.left
+                top: parent.top
+                margins: 4
+            }
+            text: `z: ${container.z}`
+            color: Colors.color.primary
+            font.pixelSize: 12 / flick.zoom
         }
     }
 
