@@ -16,14 +16,17 @@ PanelWindow {
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
     property bool fileExplorerOpen: false
-    color: "transparent"
+
     signal dockUpdate(var data)
 
+    color: "transparent"
     implicitHeight: screen.height
     implicitWidth: screen.width
 
     exclusionMode: ExclusionMode.Ignore
 
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+    WlrLayershell.namespace: `Background-${screen.name}`
     WlrLayershell.layer: {
         if (!Global.edit)
             return WlrLayer.Background;
@@ -31,8 +34,6 @@ PanelWindow {
             return WlrLayer.Top;
         return WlrLayer.Bottom;
     }
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-    WlrLayershell.namespace: `Background-${screen.name}`
 
     mask: Region {
         item: mask
@@ -57,6 +58,7 @@ PanelWindow {
                 height: modelData.height
                 x: relative.x
                 y: relative.y
+                z: modelData.z
 
                 source: modelData.source
                 opacity: 0

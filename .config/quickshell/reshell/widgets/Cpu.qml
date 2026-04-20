@@ -10,6 +10,8 @@ Wrapper {
 
     property: Property {
         property int size: 120
+        property int icon: 10
+        property int text: 10
     }
 
     width: wrap.setWidth(property.size)
@@ -36,9 +38,7 @@ Wrapper {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
-            font {
-                pixelSize: Math.min(wrap.width, wrap.height) / 2
-            }
+            font.pixelSize: property.text
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
