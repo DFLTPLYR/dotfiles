@@ -11,6 +11,7 @@ Wrapper {
 
     property: Property {
         property int size: 40
+        property int fontSize: 10
     }
 
     width: wrap.setWidth(property.size)
@@ -29,7 +30,7 @@ Wrapper {
             Layout.fillHeight: true
             color: Colors.color.primary
             font {
-                pixelSize: Math.min(parent.width, parent.height) / 3
+                pixelSize: property.fontSize
             }
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter

@@ -354,8 +354,17 @@ Item {
                             position: item.position,
                             spacing: item.spacing
                         };
+                        for (const j in data.widgets) {
+                            const widget = data.widgets[j];
+                            const current = panel.activeWidgets.find(w => w !== null && w.objectName !== null && w.objectName === widget.name);
+                            if (current) {
+                                const props = current.property.getProperty();
+                                data.widgets[j].props = props;
+                            }
+                        }
                         slot.push(data);
                     }
+
                     cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
                     cfg.save();
                 }
@@ -614,7 +623,12 @@ Item {
 
                             item.parent = widgetContainer;
                             item.objectName = modelData.name;
+
+                            if (modelData.props) {
+                                item.property.setProperty(modelData.props);
+                            }
                             item.property.position = index;
+
                             item.container = grid;
                             item.slotConfig = config;
                             widgetContainer.currentWidget = item;

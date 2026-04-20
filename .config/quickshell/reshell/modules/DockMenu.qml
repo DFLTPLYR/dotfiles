@@ -653,10 +653,10 @@ PopupModal {
                 orientation: ListView.Horizontal
 
                 model: ScriptModel {
-                    values: [...modalPopup.activeWidgets]
+                    values: [...modalPopup.activeWidgets].filter(s => s !== undefined && s !== null && s.objectName !== null)
                 }
                 delegate: Button {
-                    text: modelData.objectName
+                    text: modelData ? modelData.objectName : ""
                     onClicked: {
                         selectedWidget = modelData;
                     }
@@ -667,13 +667,15 @@ PopupModal {
                 id: properties
                 Layout.topMargin: widgetList.height
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Layout.preferredHeight: contentHeight
                 orientation: ListView.Vertical
 
                 model: ScriptModel {
-                    values: selectedWidget?.property ? [...selectedWidget.property.keys()].filter(s => s.property !== "position") : []
+                    values: {
+                        const data = selectedWidget?.property ? [...selectedWidget.property.keys()].filter(s => s.property !== "position") : [];
+                        return [...data];
+                    }
                 }
-
                 DelegateChooser {
                     id: chooser
                     role: "type"
@@ -682,10 +684,11 @@ PopupModal {
                         roleValue: "number"
                         SpinBox {
                             height: 40
-                            width: parent.width
-                            value: selectedWidget.property[modelData.property]
+                            width: parent ? parent.width : 0
+                            value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
                             onValueChanged: {
-                                selectedWidget.property[modelData.property] = value;
+                                if (selectedWidget)
+                                    selectedWidget.property[modelData.property] = value;
                             }
                         }
                     }
