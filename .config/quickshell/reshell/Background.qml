@@ -13,6 +13,7 @@ import qs.components
 PanelWindow {
     id: panel
     property var file
+    property Item area: null
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
     property bool fileExplorerOpen: false
@@ -36,11 +37,108 @@ PanelWindow {
     }
 
     mask: Region {
-        item: mask
+        item: panel.area
     }
 
+    FilePicker {
+        id: fileExplorer
+        onOutput: data => {
+            if (data) {
+                var image = {
+                    source: data.trim("%0A"),
+                    name: Math.random().toString(36).substring(2, 10)
+                };
+                Wallpaper.config.layers.push(image);
+                Wallpaper.save();
+            }
+            panel.fileExplorerOpen = false;
+        }
+    }
+
+    // MouseArea
+    LazyLoader {
+        active: Global.edit
+        component: MouseArea {
+            parent: layered
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            property bool selecting
+            property point startPoint
+
+            onPressed: mouse => {
+                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                    selecting = true;
+                    startPoint = Qt.point(mouse.x, mouse.y);
+                    selectionRect.x = mouse.x;
+                    selectionRect.y = mouse.y;
+                    selectionRect.width = 0;
+                    selectionRect.height = 0;
+                    selectionRect.visible = true;
+                } else {
+                    if (!contextMenu.opened) {
+                        contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
+                        contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
+                    }
+                    contextMenu.opened ? contextMenu.close() : contextMenu.open();
+                    return;
+                }
+            }
+
+            onPositionChanged: mouse => {
+                if (selecting) {
+                    var minX = Math.min(startPoint.x, mouse.x);
+                    var minY = Math.min(startPoint.y, mouse.y);
+                    var maxX = Math.max(startPoint.x, mouse.x);
+                    var maxY = Math.max(startPoint.y, mouse.y);
+
+                    selectionRect.x = minX;
+                    selectionRect.y = minY;
+                    selectionRect.width = maxX - minX;
+                    selectionRect.height = maxY - minY;
+                }
+            }
+
+            onReleased: {
+                selecting = false;
+                selectionRect.visible = false;
+                const container = {
+                    w: selectionRect.width,
+                    h: selectionRect.height,
+                    x: selectionRect.x,
+                    y: selectionRect.y,
+                    z: selectionRect.z
+                };
+
+                layered.containers.push(container);
+            }
+
+            Component.onCompleted: {
+                panel.area = this;
+            }
+        }
+    }
+
+    // selectionRect
+    Rectangle {
+        id: selectionRect
+        x: 0
+        y: 0
+        z: 9999
+        visible: false
+        width: 0
+        height: 0
+        rotation: 0
+        color: Colors.setOpacity(Colors.color.primary, 0.5)
+        border.width: 1
+        border.color: Colors.color.tertiary
+        transformOrigin: Item.TopLeft
+    }
+
+    // Contents
     Item {
         id: layered
+        property list<var> containers: []
         width: parent.width
         height: parent.width
 
@@ -85,101 +183,18 @@ PanelWindow {
             }
             onObjectAdded: (idx, obj) => obj.state = "visible"
         }
-    }
 
-    Loader {
-        id: mask
-        anchors.fill: parent
-        active: Global.edit
-        sourceComponent: MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            onClicked: mouse => {
-                switch (mouse.button) {
-                case Qt.RightButton:
-                    if (!contextMenu.opened) {
-                        contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
-                        contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
-                    }
-                    contextMenu.opened ? contextMenu.close() : contextMenu.open();
-                    return;
-                case Qt.LeftButton:
-                    if (contextMenu.opened)
-                        contextMenu.close();
-                    return;
-                default:
-                    return;
-                }
+        Instantiator {
+            model: [...layered.containers]
+            delegate: Rectangle {
+                required property var modelData
+                parent: layered
+                width: modelData.w
+                height: modelData.h
+                x: modelData.x
+                y: modelData.y
+                z: modelData.z
             }
-        }
-    }
-
-    Rectangle {
-        id: selectionRect
-        x: 0
-        y: 0
-        z: 99
-        visible: false
-        width: 0
-        height: 0
-        rotation: 0
-        color: Colors.setOpacity(Colors.color.primary, 0.5)
-        border.width: 1
-        border.color: Colors.color.tertiary
-        transformOrigin: Item.TopLeft
-    }
-
-    MouseArea {
-        id: selectionMouseArea
-        property point startPoint
-        property bool selecting
-        anchors.fill: parent
-        z: 2
-
-        onPressed: mouse => {
-            if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
-                selecting = true;
-                startPoint = Qt.point(mouse.x, mouse.y);
-                selectionRect.x = mouse.x;
-                selectionRect.y = mouse.y;
-                selectionRect.width = 0;
-                selectionRect.height = 0;
-                selectionRect.visible = true;
-            }
-        }
-
-        onPositionChanged: mouse => {
-            if (selecting) {
-                var minX = Math.min(startPoint.x, mouse.x);
-                var minY = Math.min(startPoint.y, mouse.y);
-                var maxX = Math.max(startPoint.x, mouse.x);
-                var maxY = Math.max(startPoint.y, mouse.y);
-
-                selectionRect.x = minX;
-                selectionRect.y = minY;
-                selectionRect.width = maxX - minX;
-                selectionRect.height = maxY - minY;
-            }
-        }
-
-        onReleased: {
-            selecting = false;
-            selectionRect.visible = false;
-        }
-    }
-
-    FilePicker {
-        id: fileExplorer
-        onOutput: data => {
-            if (data) {
-                var image = {
-                    source: data.trim("%0A"),
-                    name: Math.random().toString(36).substring(2, 10)
-                };
-                Wallpaper.config.layers.push(image);
-                Wallpaper.save();
-            }
-            panel.fileExplorerOpen = false;
         }
     }
 
