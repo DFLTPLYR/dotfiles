@@ -102,8 +102,12 @@ Item {
             implicitWidth: screen.width
             implicitHeight: screen.height
 
-            exclusionMode: config.exclusiveZone ? ExclusionMode.Auto : ExclusionMode.Ignore
-            exclusiveZone: (config.exclusiveZone === true || config.exclusiveZone === "true") ? (config.side ? config.width : config.height) : 0
+            exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Ignore
+            onExclusionModeChanged: {
+                if (ExclusionMode.Normal === exclusionMode) {
+                    this.exclusiveZone = config.side ? config.width : config.height;
+                }
+            }
 
             WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
