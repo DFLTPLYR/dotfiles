@@ -684,6 +684,7 @@ PopupModal {
                         roleValue: "number"
                         SpinBox {
                             height: 40
+
                             width: parent ? parent.width : 0
                             value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
                             onValueChanged: {
