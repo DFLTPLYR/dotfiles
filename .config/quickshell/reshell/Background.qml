@@ -100,18 +100,20 @@ PanelWindow {
                 }
             }
 
-            onReleased: {
-                selecting = false;
-                selectionRect.visible = false;
-                const container = {
-                    w: selectionRect.width,
-                    h: selectionRect.height,
-                    x: selectionRect.x,
-                    y: selectionRect.y,
-                    z: selectionRect.z
-                };
+            onReleased: mouse => {
+                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                    selecting = false;
+                    selectionRect.visible = false;
+                    const container = {
+                        w: selectionRect.width,
+                        h: selectionRect.height,
+                        x: selectionRect.x,
+                        y: selectionRect.y,
+                        z: 1
+                    };
 
-                layered.containers.push(container);
+                    layered.containers.push(container);
+                }
             }
 
             Component.onCompleted: {
@@ -187,20 +189,39 @@ PanelWindow {
 
         Instantiator {
             model: [...layered.containers]
-            delegate: Rectangle {
+            delegate: ResizeableRect {
                 required property var modelData
+                pointerVisible: true
                 parent: layered
                 width: modelData.w
                 height: modelData.h
                 x: modelData.x
                 y: modelData.y
                 z: modelData.z
-                color: "transparent"
+                color: Colors.setOpacity(Colors.color.primary, 0.4)
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onHoveredChanged: print('test')
+                DragHandler {
+                    id: dragHandler
+                    target: parent
+                }
+
+                WheelHandler {
+                    id: wheelHandler
+                    enabled: true
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    target: null
+
+                    onWheel: event => {
+                        let isShiftWheel = event.modifiers & Qt.ShiftModifier;
+                        if (isShiftWheel && wheelHandler.enabled) {
+                            if (event.angleDelta.y > 0) {
+                                parent.z++;
+                            } else {
+                                parent.z--;
+                            }
+                            print(parent.z);
+                        }
+                    }
                 }
             }
         }
