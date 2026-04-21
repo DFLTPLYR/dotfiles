@@ -32,6 +32,7 @@ Singleton {
             id: adapter
             property JsonObject config: JsonObject {
                 property string mode: "standard"
+                property string current: ""
                 property list<var> source: []
                 property list<var> preset: []
                 property list<var> layers: []

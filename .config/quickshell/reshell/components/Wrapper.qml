@@ -17,6 +17,7 @@ Rectangle {
     signal drop(int mouseX, int mouseY)
     signal swap(int item1, int item2)
     signal remove(int idx)
+    signal modal(var modal)
 
     function setSize() {
         if (wrapper.container && wrapper.slotConfig) {
@@ -88,7 +89,6 @@ Rectangle {
             wrapper.swap(property.position, drop.source.property.position);
         }
         onContainsDragChanged: {
-            print(containsDrag);
             background.border.width = containsDrag ? 1 : 0;
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";
         }

@@ -1,0 +1,152 @@
+{
+    "exclusiveZone": true,
+    "height": 32,
+    "position": "top",
+    "side": false,
+    "slots": [
+        {
+            "name": "xll9yasf",
+            "position": "left",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "mrgxq9wz",
+                    "position": 1,
+                    "props": {
+                        "fontSize": 13,
+                        "position": 0,
+                        "size": 77
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Clock.qml"
+                },
+                {
+                    "name": "w90ugbz1",
+                    "position": 3,
+                    "props": {
+                        "color": "#afc6ff",
+                        "position": 1,
+                        "thickness": 2
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/LineSpacer.qml"
+                },
+                {
+                    "name": "ahlxcnvy",
+                    "position": 2,
+                    "props": {
+                        "icon": 27,
+                        "position": 2,
+                        "size": 62,
+                        "text": 13
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Gpu.qml"
+                },
+                {
+                    "name": "fpty133c",
+                    "position": 3,
+                    "props": {
+                        "icon": 18,
+                        "position": 3,
+                        "size": 54,
+                        "text": 12
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Cpu.qml"
+                },
+                {
+                    "name": "eobwn2rz",
+                    "position": 4,
+                    "props": {
+                        "fontSize": 10,
+                        "position": 4,
+                        "size": 40
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Clock.qml"
+                }
+            ]
+        },
+        {
+            "name": "t155wjk8",
+            "position": "right",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "hdwvdhtq",
+                    "position": 0,
+                    "props": {
+                        "icon": 12,
+                        "position": 0
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                },
+                {
+                    "name": "x4g4d91a",
+                    "position": 1,
+                    "props": {
+                        "icon": 12,
+                        "position": 1
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                },
+                {
+                    "name": "xerqa3jh",
+                    "position": 2,
+                    "props": {
+                        "icon": 12,
+                        "position": 2
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                },
+                {
+                    "name": "hqqinulp",
+                    "position": 3,
+                    "props": {
+                        "icon": 12,
+                        "position": 3
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                },
+                {
+                    "name": "v9lnuqde",
+                    "position": 4,
+                    "props": {
+                        "icon": 12,
+                        "position": 4
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                }
+            ]
+        }
+    ],
+    "style": {
+        "border": {
+            "color": "#00000000",
+            "width": 0
+        },
+        "borderImage": {
+            "border": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            },
+            "enable": false,
+            "source": ""
+        },
+        "color": "#111319",
+        "margin": {
+            "bottom": 4,
+            "left": 0,
+            "right": 0,
+            "top": 10
+        },
+        "opacity": 1,
+        "rounding": {
+            "bottomLeft": 13,
+            "bottomRight": 13,
+            "topLeft": 13,
+            "topRight": 13
+        }
+    },
+    "width": 41,
+    "x": 50,
+    "y": 50
+}

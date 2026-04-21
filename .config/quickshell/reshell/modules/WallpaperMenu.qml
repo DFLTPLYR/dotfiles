@@ -23,8 +23,8 @@ FloatingWindow {
             id: container
             color: "transparent"
 
-            width: screen.width / 1.5
-            height: screen.height / 1.5
+            width: wallpaperModal.width
+            height: wallpaperModal.height
 
             border {
                 width: 1
@@ -38,11 +38,33 @@ FloatingWindow {
 
             Flickable {
                 id: flick
-                property var selection: undefined
                 property real zoom: 1
                 property int maxX: 0
                 property int maxY: 0
+
+                interactive: !selectionMa.selecting
                 anchors.fill: parent
+
+                focus: true
+                Keys.onPressed: event => {
+                    print(event);
+                    switch (event.key) {
+                    case Qt.Key_Up:
+                        print("up pressed");
+                        break;
+                    case Qt.Key_Down:
+                        print("down pressed");
+                        break;
+                    case Qt.Key_Left:
+                        print("left pressed");
+                        break;
+                    case Qt.Key_Right:
+                        print("right pressed");
+                        break;
+                    default:
+                        break;
+                    }
+                }
 
                 contentWidth: maxX + 2000
                 contentHeight: maxY + 2000
@@ -116,6 +138,14 @@ FloatingWindow {
                                 parent: content
                             }
                         }
+
+                        // Container
+                        Instantiator {
+                            model: []
+                            delegate: Rectangle {
+                                parent: content
+                            }
+                        }
                     }
                 }
 
@@ -132,6 +162,69 @@ FloatingWindow {
                             flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
                         }
                     }
+                }
+
+                MouseArea {
+                    id: selectionMa
+                    enabled: false
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton
+                    property bool selecting
+                    property point startPoint
+
+                    onPressed: mouse => {
+                        if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ControlModifier) {
+                            selecting = true;
+                            startPoint = Qt.point(mouse.x, mouse.y);
+                            selectionRect.x = mouse.x;
+                            selectionRect.y = mouse.y;
+                            selectionRect.width = 0;
+                            selectionRect.height = 0;
+                            selectionRect.visible = true;
+                        }
+                    }
+
+                    onPositionChanged: mouse => {
+                        if (selecting) {
+                            var minX = Math.min(startPoint.x, mouse.x);
+                            var minY = Math.min(startPoint.y, mouse.y);
+                            var maxX = Math.max(startPoint.x, mouse.x);
+                            var maxY = Math.max(startPoint.y, mouse.y);
+
+                            selectionRect.x = minX;
+                            selectionRect.y = minY;
+                            selectionRect.width = maxX - minX;
+                            selectionRect.height = maxY - minY;
+                        }
+                    }
+
+                    onReleased: {
+                        selecting = false;
+                        selectionRect.visible = false;
+                        const container = {
+                            w: selectionRect.width,
+                            h: selectionRect.height,
+                            x: selectionRect.x,
+                            y: selectionRect.y,
+                            z: selectionRect.z
+                        };
+                    }
+                }
+
+                // selectionRect
+                Rectangle {
+                    id: selectionRect
+                    x: 0
+                    y: 0
+                    z: 9999
+                    visible: false
+                    width: 0
+                    height: 0
+                    rotation: 0
+                    color: Colors.setOpacity(Colors.color.primary, 0.5)
+                    border.width: 1
+                    border.color: Colors.color.tertiary
+                    transformOrigin: Item.TopLeft
                 }
             }
 

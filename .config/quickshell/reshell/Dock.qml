@@ -82,6 +82,7 @@ Item {
         component: PanelWindow {
             id: panel
             property JsonAdapter config: file.adapter
+            property var modal: null
             property int size: config.side ? config.width : config.height
             property list<var> dockSlots: []
             property list<var> activeWidgets: []
@@ -117,6 +118,9 @@ Item {
                         height: modalPopup.opened ? modalPopup.height : 0
                         x: modalPopup.opened ? modalPopup.x : 0
                         y: modalPopup.opened ? modalPopup.y : 0
+                    },
+                    Region {
+                        item: modal ? modal.parent : null
                     }
                 ]
             }
@@ -542,7 +546,6 @@ Item {
                         slot.update(null);
                         return;
                     case Global.states.widget:
-                        print(drop);
                         if (drop.source.parent.parent === innerGrid) {
                             return;
                         }
@@ -669,6 +672,10 @@ Item {
 
                                 slt.widgets.splice(idx, 1);
                                 slt.update(null);
+                            });
+
+                            item.modal.connect(modal => {
+                                panel.modal = modal;
                             });
                         }
                     }
