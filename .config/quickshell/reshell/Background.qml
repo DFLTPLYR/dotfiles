@@ -195,6 +195,13 @@ PanelWindow {
                 x: modelData.x
                 y: modelData.y
                 z: modelData.z
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onHoveredChanged: print('test')
+                }
             }
         }
     }
