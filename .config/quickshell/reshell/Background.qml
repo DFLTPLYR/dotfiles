@@ -14,6 +14,7 @@ PanelWindow {
     id: panel
     property var file
     property Item area: null
+    readonly property var images: Wallpaper.config.preset.find(s => s.name === Wallpaper.config.current)
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
     property bool fileExplorerOpen: false
@@ -75,7 +76,7 @@ PanelWindow {
                     selectionRect.width = 0;
                     selectionRect.height = 0;
                     selectionRect.visible = true;
-                } else {
+                } else if (mouse.button === Qt.RightButton) {
                     if (!contextMenu.opened) {
                         contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
                         contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;

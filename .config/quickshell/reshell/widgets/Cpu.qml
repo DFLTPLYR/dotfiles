@@ -27,7 +27,7 @@ Wrapper {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
-            font.pixelSize: Math.min(width, height)
+            font.pixelSize: property.icon
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
