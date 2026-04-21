@@ -46,8 +46,8 @@ Wrapper {
         id: modal
         implicitWidth: 120 + modal.background.border.width * 2
         implicitHeight: content.height + modal.background.border.width * 2
-        y: wrap.slotConfig.side ? 0 : wrap.height
-        x: wrap.slotConfig.side ? wrap.width : 0
+        y: wrap.slotConfig && wrap.slotConfig.side ? 0 : wrap.height
+        x: wrap.slotConfig && wrap.slotConfig.side ? wrap.width : 0
 
         Rectangle {
             id: content

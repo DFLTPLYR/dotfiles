@@ -11,11 +11,13 @@ SpinBox {
     editable: false
     wheelEnabled: true
 
+    from: -999999999
+    to: 999999999
+
     background: Rectangle {
         id: background
         anchors.fill: parent
         color: spinbox.state.color
-
         border {
             width: spinbox.state.border.width
             color: spinbox.state.border.color
