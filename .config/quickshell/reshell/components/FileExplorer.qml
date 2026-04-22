@@ -15,6 +15,7 @@ FloatingWindow {
         id: folderModel
         folder: "file://" + StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
         showDirsFirst: true
+        showFiles: false
         nameFilters: ["*"]
     }
 
@@ -27,12 +28,17 @@ FloatingWindow {
     ColumnLayout {
         anchors.fill: parent
         // Header
-        Header {}
+        Header {
+            Layout.fillWidth: true
+        }
         // Content
-        Content {}
+        Content {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
     }
 
-    component Header: Row {
+    component Header: RowLayout {
         Button {
             text: "Up"
             enabled: fileExplorer.folder.folder !== "file:///"
@@ -41,6 +47,10 @@ FloatingWindow {
             }
         }
         Text {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: Colors.color.primary
             text: folderModel.folder
             elide: Text.ElideMiddle
         }
