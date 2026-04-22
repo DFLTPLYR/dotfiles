@@ -15,29 +15,57 @@ Wrapper {
     width: wrap.setSize()
     height: wrap.setSize()
 
-    Button {
-        id: button
-        enabled: Global.normal
-        text: "power-off"
+    Rectangle {
+        anchors.fill: parent
+        color: button.containsMouse || button.toggled ? Colors.setOpacity(Colors.color.primary, 0.2) : "transparent"
+        radius: width / 2
 
-        anchors {
-            fill: parent
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
         }
 
-        font {
-            family: Components.icon.family
-            weight: Components.icon.weight
-            styleName: Components.icon.styleName
-            pixelSize: property.icon
+        Text {
+            anchors.fill: parent
+            text: "power-off"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            color: button.toggled ? Colors.color.tertiary : Colors.color.primary
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            font {
+                family: Components.icon.family
+                weight: Components.icon.weight
+                styleName: Components.icon.styleName
+                pixelSize: property.icon
+            }
         }
 
-        onClicked: {
-            if (modal.opened) {
-                modal.close();
-                wrap.modal(null);
-            } else {
-                modal.open();
-                wrap.modal(content);
+        MouseArea {
+            id: button
+            property bool toggled: false
+            enabled: Global.normal
+            hoverEnabled: true
+
+            anchors.fill: parent
+
+            onClicked: {
+                if (modal.opened) {
+                    modal.close();
+                    wrap.modal(null);
+                    button.toggled = false;
+                } else {
+                    modal.open();
+                    wrap.modal(content);
+                    button.toggled = true;
+                }
             }
         }
     }

@@ -28,6 +28,7 @@ Singleton {
     readonly property bool widget: state === states.widget
 
     // Modal State
+    property var modal: null
     property bool wallpaper: false
     property bool properties: false
     property bool docks: true
