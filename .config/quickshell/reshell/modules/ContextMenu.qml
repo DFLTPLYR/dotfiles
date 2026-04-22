@@ -62,5 +62,13 @@ PopupModal {
                 modal.action("wallpaper");
             }
         }
+
+        Button {
+            text: "File Explorer"
+            Layout.fillWidth: true
+            onClicked: {
+                modal.action("fileExplorer");
+            }
+        }
     }
 }
