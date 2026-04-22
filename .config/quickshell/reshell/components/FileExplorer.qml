@@ -19,6 +19,12 @@ FloatingWindow {
         nameFilters: ["*"]
     }
 
+    property FolderListModel contents: FolderListModel {
+        folder: fileExplorer.folder.folder
+        showFiles: true
+        showDirs: false
+    }
+
     title: "Reshell"
     color: Colors.setOpacity(Colors.color.background, 0.5)
 
@@ -61,11 +67,7 @@ FloatingWindow {
         Sidebar {}
 
         // Files
-        Rectangle {
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
+        Files {}
     }
 
     component Sidebar: ListView {
@@ -73,6 +75,23 @@ FloatingWindow {
         Layout.fillHeight: true
         clip: true
         model: fileExplorer.folder
+        delegate: ItemDelegate {
+            readonly property bool isDir: folderModel.isFolder(index)
+            width: ListView.view.width
+            text: model.fileName
+            onClicked: {
+                if (isDir) {
+                    folderModel.folder = model.fileUrl;
+                }
+            }
+        }
+    }
+
+    component Files: ListView {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        clip: true
+        model: fileExplorer.contents
         delegate: ItemDelegate {
             readonly property bool isDir: folderModel.isFolder(index)
             width: ListView.view.width
