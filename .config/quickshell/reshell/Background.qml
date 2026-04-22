@@ -240,10 +240,18 @@ PanelWindow {
                 wallpaperModal.visible = true;
                 contextMenu.close();
                 break;
+            case "fileExplorer":
+                panel.fileExplorerOpen = true;
+                break;
             default:
                 break;
             }
         }
+    }
+
+    FileExplorer {
+        screen: panel.screen
+        visible: panel.fileExplorerOpen
     }
 
     // Properties Modal
