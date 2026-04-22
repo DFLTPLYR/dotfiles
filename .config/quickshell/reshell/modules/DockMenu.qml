@@ -89,11 +89,6 @@ PopupModal {
                         });
                     }
                 }
-
-                Button {
-                    text: "Save"
-                    onClicked: modalPopup.save()
-                }
             }
         }
     }
@@ -347,24 +342,9 @@ PopupModal {
                 font.pixelSize: 32
                 text: "Colors"
             }
-            GridView {
-                id: colorGrid
-                interactive: false
-                Layout.fillWidth: true
-                Layout.preferredHeight: colorGrid.contentHeight
-                cellWidth: colorGrid.width / 4
-                cellHeight: cellWidth
-                model: [...Colors.colors]
-                delegate: Rectangle {
-                    width: colorGrid.cellWidth
-                    height: colorGrid.cellHeight
-                    color: Colors.color[modelData]
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            config.style.color = parent.color;
-                        }
-                    }
+            ColorGrid {
+                onSetColor: color => {
+                    config.style.color = color;
                 }
             }
             // Palette
@@ -372,24 +352,9 @@ PopupModal {
                 font.pixelSize: 32
                 text: "Palette"
             }
-            GridView {
-                id: paletteGrid
-                interactive: false
-                Layout.fillWidth: true
-                Layout.preferredHeight: paletteGrid.contentHeight
-                cellWidth: paletteGrid.width / 4
-                cellHeight: cellWidth
-                model: [...Colors.palettes]
-                delegate: Rectangle {
-                    width: paletteGrid.cellWidth
-                    height: paletteGrid.cellHeight
-                    color: Colors.palette[modelData]
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            config.style.color = parent.color;
-                        }
-                    }
+            PaletteGrid {
+                onSetColor: color => {
+                    config.style.color = color;
                 }
             }
         }
@@ -417,7 +382,7 @@ PopupModal {
         ColumnLayout {
             id: container
 
-            property var selectedSlot: modalPopup.slots[0] || null
+            property var selectedSlot: null
 
             onSelectedSlotChanged: {
                 if (modalPopup.visible && container.selectedSlot)
@@ -468,7 +433,6 @@ PopupModal {
 
                     MouseArea {
                         id: ma
-                        enabled: container.selectedSlot !== modelData
                         hoverEnabled: true
                         onHoveredChanged: {
                             if (modelData.state !== "selected") {
@@ -477,10 +441,14 @@ PopupModal {
                         }
                         anchors.fill: parent
                         onClicked: {
-                            if (container.selectedSlot) {
-                                container.selectedSlot.state = "none";
+                            if (container.selectedSlot == modelData) {
+                                modelData.state = "none";
+                                return container.selectedSlot = null;
+                            } else {
+                                if (container.selectedSlot)
+                                    container.selectedSlot.state = "none";
+                                container.selectedSlot = modelData;
                             }
-                            container.selectedSlot = modelData;
                         }
                     }
                 }
