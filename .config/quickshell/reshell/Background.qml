@@ -61,7 +61,8 @@ PanelWindow {
         active: Global.edit
         component: MouseArea {
             parent: layered
-            anchors.fill: parent
+            width: screen.width
+            height: screen.height
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             property bool selecting
