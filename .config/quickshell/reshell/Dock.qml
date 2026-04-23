@@ -25,6 +25,7 @@ Item {
         path: Qt.resolvedUrl(`./core/data/docks/${screen.name}+${dock.name}.json`)
         watchChanges: true
         preload: true
+        onLoaded: panelLoader.active = true
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
                 file.setText("{}");
@@ -49,8 +50,6 @@ Item {
             function save() {
                 file.writeAdapter();
             }
-
-            Component.onCompleted: panelLoader.active = true
 
             function setUp(direction) {
                 switch (direction) {
