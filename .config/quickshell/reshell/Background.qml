@@ -30,11 +30,9 @@ PanelWindow {
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Background-${screen.name}`
     WlrLayershell.layer: {
-        if (!Global.edit)
-            return WlrLayer.Background;
-        if ((wallpaperModal.opened || propertiesModal.opened) && !fileExplorerOpen)
-            return WlrLayer.Top;
-        return WlrLayer.Bottom;
+        if (Global.edit)
+            return WlrLayer.Bottom;
+        return WlrLayer.Background;
     }
 
     mask: Region {
@@ -115,7 +113,7 @@ PanelWindow {
                         y: selectionRect.y,
                         z: 1
                     };
-                    layered.containers.push(container);
+                    Wallpaper.config.containers.push(container);
                 }
             }
 
@@ -144,9 +142,24 @@ PanelWindow {
     // Contents
     Item {
         id: layered
-        property list<var> containers: []
         width: parent.width
         height: parent.width
+
+        property ListModel containers: ListModel {
+            id: containerModel
+
+            function save() {
+                for (let i = 0; i < count; i++) {
+                    print(containerModel.get(i));
+                }
+            }
+            Component.onCompleted: {
+                const container = Wallpaper.config.containers;
+                for (const i in container) {
+                    containerModel.append(container[i]);
+                }
+            }
+        }
 
         Instantiator {
             model: ScriptModel {
@@ -191,16 +204,27 @@ PanelWindow {
         }
 
         Instantiator {
-            model: [...layered.containers]
+            model: layered.containers
             delegate: ResizeableRect {
-                required property var modelData
+                id: container
+                required property var model
+                required property int index
+
                 pointerVisible: true
                 parent: layered
-                width: modelData.w
-                height: modelData.h
-                x: modelData.x
-                y: modelData.y
-                z: modelData.z
+                width: model.w
+                height: model.h
+                opacity: Global.edit ? 1 : 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                x: model.x
+                y: model.y
+                z: model.z
                 color: Colors.setOpacity(Colors.color.primary, 0.4)
 
                 DragHandler {
@@ -244,6 +268,20 @@ PanelWindow {
                     id: rectMenu
                     width: 300
                     height: 300
+
+                    Button {
+                        text: "save"
+                        onClicked: {
+                            containerModel.set(model.index, {
+                                "w": container.width,
+                                "h": container.height,
+                                "x": container.x,
+                                "y": container.y,
+                                "z": container.z
+                            });
+                            containerModel.save();
+                        }
+                    }
                 }
             }
         }

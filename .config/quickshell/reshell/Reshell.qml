@@ -35,10 +35,13 @@ Variants {
             component: Item {
                 id: display
                 // background
-                Background {
-                    screen: reshell.screen
-                    file: fileview
-                    onDockUpdate: dock => fileview.updateQueue.push(dock)
+                LazyLoader {
+                    active: Wallpaper.ready
+                    component: Background {
+                        screen: reshell.screen
+                        file: fileview
+                        onDockUpdate: dock => fileview.updateQueue.push(dock)
+                    }
                 }
                 // overlay
                 Overlay {
