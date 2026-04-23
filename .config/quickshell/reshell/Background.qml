@@ -113,7 +113,7 @@ PanelWindow {
                         y: selectionRect.y,
                         z: 1
                     };
-                    Wallpaper.config.containers.push(container);
+                    layered.containers.append(container);
                 }
             }
 
@@ -149,9 +149,13 @@ PanelWindow {
             id: containerModel
 
             function save() {
+                const list = [];
                 for (let i = 0; i < count; i++) {
-                    print(containerModel.get(i));
+                    const object = containerModel.get(i);
+                    list.push(JSON.parse(JSON.stringify(object)));
                 }
+                Wallpaper.config.containers = [...list];
+                Wallpaper.save();
             }
             Component.onCompleted: {
                 const container = Wallpaper.config.containers;
