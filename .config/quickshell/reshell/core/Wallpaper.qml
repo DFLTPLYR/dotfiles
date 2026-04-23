@@ -7,6 +7,7 @@ import Quickshell.Io
 
 Singleton {
     id: config
+    property bool ready: false
     property bool enableSetting: false
     property alias config: adapter.config
     signal generatecolor
@@ -16,7 +17,7 @@ Singleton {
         path: Qt.resolvedUrl("data/wallpaper.json")
         watchChanges: true
         preload: true
-
+        onLoaded: config.ready = true
         onFileChanged: {
             reload();
         }
@@ -36,6 +37,7 @@ Singleton {
                 property list<var> source: []
                 property list<var> preset: []
                 property list<var> layers: []
+                property list<var> containers: []
                 property string theme: "scheme-content"
             }
         }
