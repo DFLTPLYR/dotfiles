@@ -105,6 +105,9 @@ PanelWindow {
                 if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
                     selecting = false;
                     selectionRect.visible = false;
+
+                    if (selectionRect.x == 0 && selectionRect.y == 0)
+                        return;
                     const container = {
                         w: selectionRect.width,
                         h: selectionRect.height,
@@ -112,7 +115,6 @@ PanelWindow {
                         y: selectionRect.y,
                         z: 1
                     };
-
                     layered.containers.push(container);
                 }
             }
@@ -223,6 +225,25 @@ PanelWindow {
                             print(parent.z);
                         }
                     }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: {
+                        if (!rectMenu.opened) {
+                            rectMenu.x = mouseX + rectMenu.width > screen.width ? mouseX - rectMenu.width : mouseX;
+                            rectMenu.y = mouseY + rectMenu.height > screen.height ? mouseY - rectMenu.height : mouseY;
+                        }
+                        rectMenu.opened ? rectMenu.close() : rectMenu.open();
+                        return;
+                    }
+                }
+
+                PopupModal {
+                    id: rectMenu
+                    width: 300
+                    height: 300
                 }
             }
         }
