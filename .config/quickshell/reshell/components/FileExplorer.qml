@@ -11,6 +11,9 @@ import qs.core
 
 FloatingWindow {
     id: fileExplorer
+
+    signal selected(var file)
+
     property FolderListModel folder: FolderListModel {
         id: folderModel
         folder: "file://" + StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
@@ -45,13 +48,6 @@ FloatingWindow {
     }
 
     component Header: RowLayout {
-        Button {
-            text: "Up"
-            enabled: fileExplorer.folder.folder !== "file:///"
-            onClicked: {
-                fileExplorer.folder.folder = fileExplorer.folder.parentFolder;
-            }
-        }
         Text {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
@@ -70,37 +66,93 @@ FloatingWindow {
         Files {}
     }
 
-    component Sidebar: ListView {
+    component Sidebar: ColumnLayout {
         Layout.preferredWidth: 100
         Layout.fillHeight: true
-        clip: true
-        model: fileExplorer.folder
-        delegate: ItemDelegate {
-            readonly property bool isDir: folderModel.isFolder(index)
-            width: ListView.view.width
-            text: model.fileName
+
+        Button {
+            Layout.preferredWidth: 100
+            text: "Up"
+            enabled: fileExplorer.folder.folder !== "file:///"
             onClicked: {
-                if (isDir) {
-                    folderModel.folder = model.fileUrl;
+                fileExplorer.folder.folder = fileExplorer.folder.parentFolder;
+            }
+        }
+
+        ListView {
+            Layout.preferredWidth: 100
+            Layout.fillHeight: true
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            model: fileExplorer.folder
+
+            delegate: ItemDelegate {
+                id: dir
+                readonly property bool isDir: folderModel.isFolder(index)
+
+                width: ListView.view.width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: dir.hovered ? Colors.setOpacity(Colors.color.background, 0.5) : Colors.setOpacity(Colors.color.background, 0.9)
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+
+                contentItem: Text {
+                    text: model.fileName
+
+                    verticalAlignment: Text.AlignVCenter
+                    color: Colors.color.primary
+                    elide: Text.ElideMiddle
+                }
+
+                onClicked: {
+                    if (isDir) {
+                        folderModel.folder = model.fileUrl;
+                    }
                 }
             }
         }
     }
-
     component Files: ListView {
         Layout.fillHeight: true
         Layout.fillWidth: true
         clip: true
         model: fileExplorer.contents
         delegate: ItemDelegate {
-            readonly property bool isDir: folderModel.isFolder(index)
+            id: file
+
             width: ListView.view.width
-            text: model.fileName
-            onClicked: {
-                if (isDir) {
-                    folderModel.folder = model.fileUrl;
+            hoverEnabled: true
+
+            // Decor
+            background: Rectangle {
+                anchors.fill: parent
+                color: file.hovered ? Colors.setOpacity(Colors.color.background, 0.5) : Colors.setOpacity(Colors.color.background, 0.9)
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 100
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
+            // Text
+            contentItem: Text {
+                text: model.fileName
+
+                verticalAlignment: Text.AlignVCenter
+                color: Colors.color.primary
+                elide: Text.ElideMiddle
+            }
+            onClicked: {}
         }
     }
 }
