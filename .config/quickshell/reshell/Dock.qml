@@ -111,7 +111,6 @@ Item {
                             const widget = item.activeWidgets.find(s => s.objectName === target);
                             data.widgets[i] = {
                                 name: widget.objectName,
-                                position: widget.parent.modelData.position,
                                 source: widget.parent.modelData.source,
                                 props: widget.property.getProperty()
                             };
@@ -547,8 +546,7 @@ Item {
                     case Global.states.edit:
                         const widget = {
                             source: drop.keys[0],
-                            name: Math.random().toString(36).substring(2, 10),
-                            position: slot.widgets.count
+                            name: Math.random().toString(36).substring(2, 10)
                         };
                         slot.widgets.append(widget);
                         return;

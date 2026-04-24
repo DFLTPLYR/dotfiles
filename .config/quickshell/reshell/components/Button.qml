@@ -6,7 +6,7 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: Components.general.button
+    property var state: Components.general?.button
     property alias content: content
     hoverEnabled: true
     clip: true
@@ -18,7 +18,7 @@ Button {
         text: control.text
         font: control.font
 
-        color: control.hovered || control.down ? Qt.darker(content.state.color, 1.5) : content.state.color
+        color: control.hovered || control.down ? Qt.darker(content?.state?.color, 1.5) : content?.state?.color
         opacity: enabled ? 1.0 : 0.3
 
         horizontalAlignment: Text.AlignHCenter
