@@ -165,20 +165,29 @@ PanelWindow {
             }
         }
 
-        Instantiator {
-            model: ScriptModel {
-                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name))
+        property ListModel wallpaper: ListModel {
+            id: wallpaperModel
+
+            Component.onCompleted: {
+                const container = Wallpaper.config.layers.filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name));
+                for (const i in container) {
+                    const obj = container[i];
+                    wallpaperModel.append(obj);
+                }
             }
+        }
+
+        Instantiator {
+            model: wallpaperModel
             delegate: Image {
                 id: wallpaperImage
                 required property var modelData
-                property var relative: modelData.screens.find(s => s && s.name === panel.screen.name)
                 parent: layered
 
                 width: modelData.width
                 height: modelData.height
-                x: relative.x
-                y: relative.y
+                // x: relative.x
+                // y: relative.y
                 z: modelData.z
 
                 source: modelData.source
@@ -270,20 +279,34 @@ PanelWindow {
 
                 PopupModal {
                     id: rectMenu
-                    width: 300
-                    height: 300
-
-                    Button {
-                        text: "save"
-                        onClicked: {
-                            containerModel.set(model.index, {
-                                "w": container.width,
-                                "h": container.height,
-                                "x": container.x,
-                                "y": container.y,
-                                "z": container.z
-                            });
-                            containerModel.save();
+                    width: 100
+                    height: content.height
+                    ColumnLayout {
+                        id: content
+                        width: rectMenu.width
+                        Button {
+                            Layout.fillWidth: true
+                            text: "save"
+                            onClicked: {
+                                const model = containerModel;
+                                model.set(model.index, {
+                                    "w": container.width,
+                                    "h": container.height,
+                                    "x": container.x,
+                                    "y": container.y,
+                                    "z": container.z
+                                });
+                                model.save();
+                            }
+                        }
+                        Button {
+                            Layout.fillWidth: true
+                            text: "remove"
+                            onClicked: {
+                                const model = containerModel;
+                                model.remove(model.index, 1);
+                                model.save();
+                            }
                         }
                     }
                 }
