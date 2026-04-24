@@ -25,11 +25,19 @@ Item {
         path: Qt.resolvedUrl(`./core/data/docks/${screen.name}+${dock.name}.json`)
         watchChanges: true
         preload: true
-        onLoaded: panelLoader.active = true
+        blockLoading: true
+        onLoaded: {
+            panelLoader.active = true;
+        }
+        onSaved: {
+            if (!panelLoader.active)
+                panelLoader.active = true;
+        }
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
                 file.setText("{}");
                 file.writeAdapter();
+                // Quickshell.reload(false);
             }
         }
         adapter: JsonAdapter {
@@ -551,6 +559,7 @@ Item {
                         slot.widgets.append(widget);
                         return;
                     case Global.states.widget:
+                        print(drop.source.parent);
                         // remake this
                         return;
                         drop.source.parent.parent = innerGrid;
@@ -575,8 +584,7 @@ Item {
                             const data = {
                                 name: item.objectName,
                                 widgets: item.widgets,
-                                spacing: item.spacing,
-                                position: item.position
+                                spacing: item.spacing
                             };
                             if (item.objectName === foundSlot.name)
                                 data.widgets = data.widgets.filter(s => s.name !== foundWidget.name);
