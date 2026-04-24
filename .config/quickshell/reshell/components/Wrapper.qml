@@ -10,6 +10,7 @@ Rectangle {
     property var container
     property var slotConfig
     property Property property: Property {}
+    property bool swapping: false
     color: "transparent"
 
     signal drop(int mouseX, int mouseY)
@@ -45,20 +46,6 @@ Rectangle {
     Drag.hotSpot: Qt.point(width / 2, height / 2)
     Drag.active: ma.drag.active
 
-    Behavior on x {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    Behavior on y {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-    }
-
     MouseArea {
         id: ma
         enabled: Global.widget
@@ -83,13 +70,16 @@ Rectangle {
         z: 1
         enabled: Global.widget
         anchors.fill: parent
+        // stupid ass
         onEntered: drag => {
             const widgetA = drag.source.parent.DelegateModel.itemsIndex;
             const widgetB = wrapper.parent.DelegateModel.itemsIndex;
             wrapper.swap(widgetB, widgetA);
         }
         onDropped: drop => {
-            wrapper.swap(property.position, drop.source.property.position);
+            const widgetA = drop.source.parent.DelegateModel.itemsIndex;
+            const widgetB = wrapper.parent.DelegateModel.itemsIndex;
+            wrapper.swap(widgetB, widgetA);
         }
         onContainsDragChanged: {
             background.border.width = containsDrag ? 1 : 0;

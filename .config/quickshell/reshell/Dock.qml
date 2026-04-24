@@ -89,6 +89,7 @@ Item {
 
             property ListModel slots: ListModel {
                 id: slotModel
+
                 function sync2File() {
                     const cfg = config;
                     if (slots.length >= 1) {
@@ -101,20 +102,19 @@ Item {
                         const item = panel.dockSlots[i];
                         const data = {
                             name: item.objectName,
-                            widgets: item.activeWidgets.slice(),
+                            widgets: [],
                             position: item.position,
                             spacing: item.spacing
                         };
-                        for (const j in data.widgets) {
-                            const widget = data.widgets[j];
-                            if (widget) {
-                                data.widgets[j] = {
-                                    name: widget.objectName,
-                                    position: widget.parent.modelData.position,
-                                    source: widget.parent.modelData.source,
-                                    props: widget.property.getProperty()
-                                };
-                            }
+                        for (let i = 0; i < item.widgets.count; i++) {
+                            const target = item.widgets.get(i).name;
+                            const widget = item.activeWidgets.find(s => s.objectName === target);
+                            data.widgets[i] = {
+                                name: widget.objectName,
+                                position: widget.parent.modelData.position,
+                                source: widget.parent.modelData.source,
+                                props: widget.property.getProperty()
+                            };
                         }
                         slot.push(data);
                     }
@@ -341,7 +341,7 @@ Item {
                 height: parent.height
                 onChildrenChanged: {
                     const slots = [...children].filter(s => s instanceof Slot);
-                    if (slots.length === config.slots.length) {
+                    if (slots.length === panel.slots.count) {
                         slots.sort((a, b) => (a.position || 0) - (b.position || 0));
                         children = slots;
                         slotcontainer.activeFocusOnTabChanged;
@@ -360,6 +360,10 @@ Item {
                         position: model.position
                         spacing: model.spacing
                         widgets: model.widgets
+
+                        onRemove: idx => {
+                            panel.slots.remove(idx, 1);
+                        }
                     }
                 }
             }
@@ -436,15 +440,14 @@ Item {
         id: slot
 
         signal update(var slot)
+        signal remove(int idx)
         property string position: "left"
         property int spacing: 2
         property ListModel widgets
         property list<var> activeWidgets: []
+
         function removeSlot() {
-            const idx = config.slots.findIndex(s => s.name === slot.objectName);
-            if (idx !== -1) {
-                config.slots.splice(idx, 1);
-            }
+            slot.remove(index);
         }
 
         function updateSlot() {
@@ -636,12 +639,14 @@ Item {
                         return Qt.AlignLeft | Qt.AlignTop;
                     }
                 }
+                cacheBuffer: 50
             }
 
             DelegateModel {
                 id: widgetsModel
 
                 model: slot.widgets
+
                 delegate: Item {
                     id: widgetContainer
                     required property var modelData
@@ -671,35 +676,13 @@ Item {
                             slot.activeWidgets = [...slot.activeWidgets, item];
 
                             item.swap.connect((fromIndex, toIndex) => {
-                                const current = findByPosition(fromIndex);
-                                const destination = findByPosition(toIndex);
-
-                                if (!current || !destination)
-                                    return;
-                                const temp = current.currentWidget;
-                                current.currentWidget = destination.currentWidget;
-                                destination.currentWidget = temp;
-                                current.currentWidget.parent = current;
-                                destination.currentWidget.parent = destination;
-                                current.currentWidget.property.position = fromIndex;
-                                destination.currentWidget.property.position = toIndex;
+                                widgetsModel.items.move(fromIndex, toIndex);
+                                slot.widgets.move(fromIndex, toIndex, 1);
                             });
 
                             item.remove.connect(idx => {
-                                const container = findByPosition(idx);
-                                const widget = panel.activeWidgets.findIndex(s => s === container.currentWidget);
-                                if (widget) {
-                                    panel.activeWidgets.splice(widget, 1);
-                                    panel.activeWidgets = [...panel.activeWidgets];
-                                }
-                                if (container) {
-                                    container.content.source = "";
-                                    container.currentWidget = null;
-                                    container.visible = false;
-                                }
-
-                                slt.widgets.splice(idx, 1);
-                                slt.update(null);
+                                widgetsModel.items.remove(idx, 1);
+                                slot.widgets.remove(idx, 1);
                             });
 
                             item.modal.connect(modal => {
