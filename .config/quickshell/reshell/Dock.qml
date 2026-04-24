@@ -90,7 +90,7 @@ Item {
             property ListModel slots: ListModel {
                 id: slotModel
 
-                function sync2File() {
+                function sync() {
                     const cfg = config;
                     if (slots.length >= 1) {
                         cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
@@ -130,6 +130,7 @@ Item {
                     }
                 }
             }
+
             screen: dock.screen
             color: "transparent"
             objectName: dock.name
@@ -393,7 +394,7 @@ Item {
                 interval: 1000
                 running: false
                 onTriggered: {
-                    panel.slots.sync2File();
+                    panel.slots.sync();
                 }
                 Component.onCompleted: panel.timer = syncTimer
             }

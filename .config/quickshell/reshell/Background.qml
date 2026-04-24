@@ -186,9 +186,6 @@ PanelWindow {
 
                 width: modelData.width
                 height: modelData.height
-                // x: relative.x
-                // y: relative.y
-                z: modelData.z
 
                 source: modelData.source
                 opacity: 0
