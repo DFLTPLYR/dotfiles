@@ -104,6 +104,16 @@ Variants {
 
                 property ListModel docks: ListModel {
                     id: dockModel
+                    function sync() {
+                        let arr = [];
+                        for (let i = 0; i < dockModel.count; i++) {
+                            const name = dockModel.get(i).name;
+                            arr.push(name);
+                        }
+                        adapter.docks = [...arr];
+                        fileview.writeAdapter();
+                    }
+
                     Component.onCompleted: {
                         const container = adapter.docks;
                         for (const i in container) {
@@ -124,7 +134,8 @@ Variants {
                             dockModel.append({
                                 "name": dock.name
                             });
-                        // fileview.updateQueue.push(dock);
+                            dockModel.sync();
+                            fileview.updateQueue.push(dock);
                         }
                     }
                 }
@@ -141,13 +152,6 @@ Variants {
                         screen: reshell.screen
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
                         onRemoveDock: name => fileview.removeDock(name)
-                    }
-                }
-
-                Instantiator {
-                    model: dockModel
-                    delegate: Item {
-                        Component.onCompleted: print('test')
                     }
                 }
             }
