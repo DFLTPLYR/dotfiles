@@ -9,9 +9,7 @@ Rectangle {
     id: wrapper
     property var container
     property var slotConfig
-
     property Property property: Property {}
-
     color: "transparent"
 
     signal drop(int mouseX, int mouseY)
@@ -85,6 +83,11 @@ Rectangle {
         z: 1
         enabled: Global.widget
         anchors.fill: parent
+        onEntered: drag => {
+            const widgetA = drag.source.parent.DelegateModel.itemsIndex;
+            const widgetB = wrapper.parent.DelegateModel.itemsIndex;
+            wrapper.swap(widgetB, widgetA);
+        }
         onDropped: drop => {
             wrapper.swap(property.position, drop.source.property.position);
         }

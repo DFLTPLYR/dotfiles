@@ -87,6 +87,49 @@ Item {
             property list<var> activeWidgets: []
             property var timer
 
+            property ListModel slots: ListModel {
+                id: slotModel
+                function sync2File() {
+                    const cfg = config;
+                    if (slots.length >= 1) {
+                        cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
+                        cfg.save();
+                        return;
+                    }
+                    let slot = [];
+                    for (const i in panel.dockSlots) {
+                        const item = panel.dockSlots[i];
+                        const data = {
+                            name: item.objectName,
+                            widgets: item.activeWidgets.slice(),
+                            position: item.position,
+                            spacing: item.spacing
+                        };
+                        for (const j in data.widgets) {
+                            const widget = data.widgets[j];
+                            if (widget) {
+                                data.widgets[j] = {
+                                    name: widget.objectName,
+                                    position: widget.parent.modelData.position,
+                                    source: widget.parent.modelData.source,
+                                    props: widget.property.getProperty()
+                                };
+                            }
+                        }
+                        slot.push(data);
+                    }
+
+                    cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
+                    cfg.save();
+                }
+
+                Component.onCompleted: {
+                    const container = config.slots;
+                    for (const i in container) {
+                        slotModel.append(container[i]);
+                    }
+                }
+            }
             screen: dock.screen
             color: "transparent"
             objectName: dock.name
@@ -138,6 +181,12 @@ Item {
                 activeWidgets: panel.activeWidgets
                 onSave: {
                     timer.restart();
+                }
+                onAdd: (type, obj) => {
+                    switch (type) {
+                    case "slot":
+                        return slotModel.append(obj);
+                    }
                 }
             }
 
@@ -302,21 +351,15 @@ Item {
                 flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
                 Instantiator {
-                    model: config.slots.filter(s => s !== undefined)
+                    model: panel.slots
                     delegate: Slot {
-                        required property var modelData
+                        required property QtObject model
                         required property int index
-                        objectName: modelData.name
-                        position: modelData.position
-                        spacing: modelData.spacing
-                        widgets: modelData.widgets
                         parent: slotcontainer
-                        onUpdate: slot => {
-                            if (slot) {
-                                syncTimer.slots = slot;
-                            }
-                            syncTimer.restart();
-                        }
+                        objectName: model.name
+                        position: model.position
+                        spacing: model.spacing
+                        widgets: model.widgets
                     }
                 }
             }
@@ -346,34 +389,7 @@ Item {
                 interval: 1000
                 running: false
                 onTriggered: {
-                    const cfg = config;
-                    if (slots.length >= 1) {
-                        cfg.slots = [...syncTimer.slots].filter(s => s.position !== null && s.position !== undefined);
-                        cfg.save();
-                        return;
-                    }
-                    let slot = [];
-                    for (const i in panel.dockSlots) {
-                        const item = panel.dockSlots[i];
-                        const data = {
-                            name: item.objectName,
-                            widgets: item.filteredWidgets,
-                            position: item.position,
-                            spacing: item.spacing
-                        };
-                        for (const j in data.widgets) {
-                            const widget = data.widgets[j];
-                            const current = panel.activeWidgets.find(w => w !== null && w.objectName !== null && w.objectName === widget.name);
-                            if (current) {
-                                const props = current.property.getProperty();
-                                data.widgets[j].props = props;
-                            }
-                        }
-                        slot.push(data);
-                    }
-
-                    cfg.slots = [...slot].filter(s => s.position !== null && s.position !== undefined);
-                    cfg.save();
+                    panel.slots.sync2File();
                 }
                 Component.onCompleted: panel.timer = syncTimer
             }
@@ -422,10 +438,8 @@ Item {
         signal update(var slot)
         property string position: "left"
         property int spacing: 2
-        property list<var> widgets: []
-        property var filteredWidgets: [...widgets].filter(s => s !== undefined)
-        default property alias content: innerGrid.data
-
+        property ListModel widgets
+        property list<var> activeWidgets: []
         function removeSlot() {
             const idx = config.slots.findIndex(s => s.name === slot.objectName);
             if (idx !== -1) {
@@ -539,19 +553,16 @@ Item {
                 onDropped: drop => {
                     switch (Global.state) {
                     case Global.states.edit:
-                        slot.widgets = [...slot.widgets,
-                            {
-                                source: drop.keys[0],
-                                name: Math.random().toString(36).substring(2, 10),
-                                position: slot.widgets.length
-                            }
-                        ];
-                        slot.update(null);
+                        const widget = {
+                            source: drop.keys[0],
+                            name: Math.random().toString(36).substring(2, 10),
+                            position: slot.widgets.count
+                        };
+                        slot.widgets.append(widget);
                         return;
                     case Global.states.widget:
-                        if (drop.source.parent.parent === innerGrid) {
-                            return;
-                        }
+                        // remake this
+                        return;
                         drop.source.parent.parent = innerGrid;
                         let slots = [];
 
@@ -603,22 +614,42 @@ Item {
             id: grid
             anchors.fill: parent
 
-            Instantiator {
-                model: ScriptModel {
-                    values: [...slot.filteredWidgets]
+            ListView {
+                id: widgetList
+                interactive: false
+                orientation: config.side ? ListView.Vertical : ListView.Horizontal
+                spacing: slot.spacing
+                model: widgetsModel
+                Layout.preferredHeight: config.side ? contentHeight : parent.height
+                Layout.preferredWidth: config.side ? parent.width : contentWidth
+                Layout.alignment: {
+                    switch (slot.position) {
+                    case "left":
+                    case "top":
+                        return Qt.AlignLeft | Qt.AlignTop;
+                    case "right":
+                    case "bottom":
+                        return Qt.AlignRight | Qt.AlignBottom;
+                    case "center":
+                        return Qt.AlignCenter;
+                    default:
+                        return Qt.AlignLeft | Qt.AlignTop;
+                    }
                 }
+            }
+
+            DelegateModel {
+                id: widgetsModel
+
+                model: slot.widgets
                 delegate: Item {
                     id: widgetContainer
-
                     required property var modelData
                     required property int index
                     property var content: widgetLoader
                     property var currentWidget: null
-
-                    parent: innerGrid
-
-                    implicitHeight: widgetContainer?.currentWidget?.height || 0
-                    implicitWidth: widgetContainer?.currentWidget?.width || 0
+                    implicitHeight: currentWidget ? currentWidget.height : 0
+                    implicitWidth: currentWidget ? currentWidget.width : 0
 
                     LazyLoader {
                         id: widgetLoader
@@ -626,10 +657,8 @@ Item {
                         source: modelData.source
                         onItemChanged: {
                             const slt = slot;
-
                             item.parent = widgetContainer;
                             item.objectName = modelData.name;
-
                             if (modelData.props) {
                                 item.property.setProperty(modelData.props);
                             }
@@ -639,8 +668,8 @@ Item {
                             item.slotConfig = config;
                             widgetContainer.currentWidget = item;
                             panel.activeWidgets = [...panel.activeWidgets, item];
+                            slot.activeWidgets = [...slot.activeWidgets, item];
 
-                            const findByPosition = pos => innerGrid.children.find(c => c.currentWidget?.property?.position === pos);
                             item.swap.connect((fromIndex, toIndex) => {
                                 const current = findByPosition(fromIndex);
                                 const destination = findByPosition(toIndex);
@@ -654,10 +683,6 @@ Item {
                                 destination.currentWidget.parent = destination;
                                 current.currentWidget.property.position = fromIndex;
                                 destination.currentWidget.property.position = toIndex;
-                                const arr = [...slt.widgets];
-                                [arr[fromIndex], arr[toIndex]] = [arr[toIndex], arr[fromIndex]];
-                                slt.widgets = arr;
-                                slt.update(null);
                             });
 
                             item.remove.connect(idx => {
@@ -681,59 +706,6 @@ Item {
                                 panel.modal = modal;
                             });
                         }
-                    }
-                }
-            }
-
-            Grid {
-                id: innerGrid
-                flow: config.side ? Grid.TopToBottom : Grid.LeftToRight
-                rows: config.side ? children.length : 1
-                columns: config.side ? 1 : children.length
-                Layout.alignment: {
-                    switch (slot.position) {
-                    case "left":
-                    case "top":
-                        return Qt.AlignLeft | Qt.AlignTop;
-                    case "right":
-                    case "bottom":
-                        return Qt.AlignRight | Qt.AlignBottom;
-                    case "center":
-                        return Qt.AlignCenter;
-                    default:
-                        return Qt.AlignLeft | Qt.AlignTop;
-                    }
-                }
-
-                spacing: slot.spacing
-
-                populate: Transition {
-                    from: "*"
-                    to: "*"
-                    NumberAnimation {
-                        properties: "x,y,width,height"
-                        duration: 300
-                        easing.type: Easing.InOutSine
-                    }
-                }
-
-                add: Transition {
-                    from: "*"
-                    to: "*"
-                    NumberAnimation {
-                        properties: "x,y,width,height"
-                        duration: 300
-                        easing.type: Easing.InOutSine
-                    }
-                }
-
-                move: Transition {
-                    from: "*"
-                    to: "*"
-                    NumberAnimation {
-                        properties: "x,y,width,height"
-                        duration: 300
-                        easing.type: Easing.InOutSine
                     }
                 }
             }

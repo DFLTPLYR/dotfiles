@@ -9,6 +9,7 @@ import qs.core
 
 PopupModal {
     id: modalPopup
+    signal add(string identifier, var obj)
     property list<var> slots
     property list<var> activeWidgets
     signal save
@@ -410,7 +411,7 @@ PopupModal {
                             spacing: 0,
                             widgets: []
                         };
-                        config.slots.push(slot);
+                        modalPopup.add("slot", slot);
                     }
                 }
             }
