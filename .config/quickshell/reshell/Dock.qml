@@ -450,18 +450,6 @@ Item {
             slot.remove(index);
         }
 
-        function updateSlot() {
-            const idx = config.slots.findIndex(s => s.name === slot.objectName);
-            if (idx !== -1) {
-                const replace = {
-                    position: slot.position,
-                    spacing: slot.spacing,
-                    widgets: [...slot.filteredWidgets],
-                    name: slot.objectName
-                };
-            }
-        }
-
         function updatePosition(pos) {
             switch (pos) {
             case "center":
@@ -623,6 +611,8 @@ Item {
                 orientation: config.side ? ListView.Vertical : ListView.Horizontal
                 spacing: slot.spacing
                 model: widgetsModel
+                cacheBuffer: 50
+
                 Layout.preferredHeight: config.side ? contentHeight : parent.height
                 Layout.preferredWidth: config.side ? parent.width : contentWidth
                 Layout.alignment: {
@@ -639,14 +629,12 @@ Item {
                         return Qt.AlignLeft | Qt.AlignTop;
                     }
                 }
-                cacheBuffer: 50
             }
 
             DelegateModel {
                 id: widgetsModel
 
                 model: slot.widgets
-
                 delegate: Item {
                     id: widgetContainer
                     required property var modelData
