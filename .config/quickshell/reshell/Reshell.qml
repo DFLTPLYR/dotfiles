@@ -28,46 +28,12 @@ Variants {
             ]
         }
 
-        // Wayland Layers
-        LazyLoader {
-            id: content
-            active: fileview.loaded
-            component: Item {
-                id: display
-                // background
-                LazyLoader {
-                    active: Wallpaper.ready
-                    component: Background {
-                        screen: reshell.screen
-                        file: fileview
-                        onDockUpdate: dock => fileview.updateQueue.push(dock)
-                    }
-                }
-                // overlay
-                Overlay {
-                    screen: reshell.screen
-                }
-                // docks
-                Instantiator {
-                    id: dockInstantiator
-                    model: [...adapter.docks]
-                    delegate: Dock {
-                        required property var modelData
-                        screen: reshell.screen
-                        name: modelData
-                        onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
-                        onRemoveDock: name => fileview.removeDock(name)
-                    }
-                }
-            }
-        }
-
         FileView {
             id: fileview
             path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
             watchChanges: true
             preload: true
-
+            onLoaded: content.active = true
             property list<var> docklist: []
             property list<var> updateQueue: []
 
@@ -126,6 +92,64 @@ Variants {
                     fileview.adapter.docks = docks;
                 }
                 fileview.save();
+            }
+        }
+
+        // Wayland Layers
+        LazyLoader {
+            id: content
+            active: false
+            component: Item {
+                id: display
+
+                property ListModel docks: ListModel {
+                    id: dockModel
+                    Component.onCompleted: {
+                        const container = adapter.docks;
+                        for (const i in container) {
+                            dockModel.append({
+                                "name": container[i]
+                            });
+                        }
+                    }
+                }
+
+                // background
+                LazyLoader {
+                    active: Wallpaper.ready
+                    component: Background {
+                        screen: reshell.screen
+                        file: fileview
+                        onDockUpdate: dock => {
+                            dockModel.append({
+                                "name": dock.name
+                            });
+                        // fileview.updateQueue.push(dock);
+                        }
+                    }
+                }
+                // overlay
+                Overlay {
+                    screen: reshell.screen
+                }
+
+                // docks
+                Instantiator {
+                    id: dockInstantiator
+                    model: dockModel
+                    delegate: Dock {
+                        screen: reshell.screen
+                        onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
+                        onRemoveDock: name => fileview.removeDock(name)
+                    }
+                }
+
+                Instantiator {
+                    model: dockModel
+                    delegate: Item {
+                        Component.onCompleted: print('test')
+                    }
+                }
             }
         }
 
