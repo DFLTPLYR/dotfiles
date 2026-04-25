@@ -116,12 +116,15 @@ Item {
                         };
                         for (let i = 0; i < item.widgets.count; i++) {
                             const target = item.widgets.get(i).name;
-                            const widget = item.activeWidgets.find(s => s.objectName === target);
-                            data.widgets[i] = {
-                                name: widget.objectName,
-                                source: widget.parent.modelData.source,
-                                props: widget.property.getProperty()
-                            };
+                            const widget = item.activeWidgets.find(s => s?.objectName === target);
+
+                            if (widget) {
+                                data.widgets[i] = {
+                                    name: widget.objectName,
+                                    source: widget.parent.modelData.source,
+                                    props: widget.property.getProperty()
+                                };
+                            }
                         }
                         slot.push(data);
                     }
@@ -559,41 +562,12 @@ Item {
                         slot.widgets.append(widget);
                         return;
                     case Global.states.widget:
-                        print(drop.source.parent);
-                        // remake this
-                        return;
-                        drop.source.parent.parent = innerGrid;
-                        let slots = [];
-
-                        let foundWidget = null;
-                        let foundSlot = null;
-                        for (const slot of config.slots) {
-                            for (const widget of slot.widgets) {
-                                if (widget.name === drop.source.objectName) {
-                                    foundWidget = widget;
-                                    foundSlot = slot;
-                                    break;
-                                }
-                            }
-                            if (foundWidget)
-                                break;
-                        }
-
-                        for (const i in panel.dockSlots) {
-                            const item = panel.dockSlots[i];
-                            const data = {
-                                name: item.objectName,
-                                widgets: item.widgets,
-                                spacing: item.spacing
-                            };
-                            if (item.objectName === foundSlot.name)
-                                data.widgets = data.widgets.filter(s => s.name !== foundWidget.name);
-                            if (item.objectName === slot.objectName)
-                                data.widgets = [...data.widgets, foundWidget];
-                            slots.push(data);
-                        }
-
-                        slot.update(slots);
+                        const target = drop.source.parent;
+                        const delegateModel = target.DelegateModel;
+                        const index = delegateModel.itemsIndex;
+                        const obj = target.widget.get(index);
+                        slot.widgets.append(obj);
+                        target.widget.remove(index, 1);
                         return;
                     default:
                         return;
@@ -646,6 +620,8 @@ Item {
                     id: widgetContainer
                     required property var modelData
                     required property int index
+                    property ListModel widget: widgetsModel.model
+
                     property var content: widgetLoader
                     property var currentWidget: null
                     implicitHeight: currentWidget ? currentWidget.height : 0
