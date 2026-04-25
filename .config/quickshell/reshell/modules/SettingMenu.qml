@@ -22,12 +22,42 @@ FloatingWindow {
 
     Drawer {
         id: drawer
-        width: 0.20 * settingpanel.width
+        width: Math.min(0.20 * settingpanel.width, 150)
         height: settingpanel.height
         focus: true
-        Label {
-            text: "Content goes here!"
-            anchors.centerIn: parent
+        background: Rectangle {
+            anchors.fill: parent
+            color: Colors.setOpacity(Colors.color.background, 0.5)
+        }
+
+        DelegateModel {
+            id: navModel
+            model: ListModel {
+                id: navList
+                ListElement {
+                    name: "Property"
+                    page: 0
+                }
+                ListElement {
+                    name: "Wallpaper"
+                    page: 1
+                }
+            }
+
+            delegate: Button {
+                required property string name
+                required property int page
+                width: ListView.view.width
+                text: name
+                onClicked: {
+                    contentContainer.currentIndex = page;
+                }
+            }
+        }
+
+        ListView {
+            anchors.fill: parent
+            model: navModel
         }
     }
 
