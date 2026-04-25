@@ -5,7 +5,7 @@ import qs.core
 
 Slider {
     id: control
-    property var state: Components.general.slider
+    property var state: Components.config.slider
 
     background: Rectangle {
         id: background

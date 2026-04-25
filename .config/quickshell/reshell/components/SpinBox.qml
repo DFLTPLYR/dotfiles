@@ -6,7 +6,7 @@ import qs.core
 SpinBox {
     id: spinbox
 
-    property var state: Components.general.spinbox
+    property var state: Components.config.spinbox
 
     editable: false
     wheelEnabled: true
@@ -49,7 +49,7 @@ SpinBox {
 
     up.indicator: Rectangle {
         id: leftIndicator
-        property var state: spinbox.up.pressed ? Components.general.spinbox.hover : Components.general.spinbox.unhover
+        property var state: spinbox.up.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
 
         height: parent.height - 4
         width: height
@@ -88,7 +88,7 @@ SpinBox {
 
     down.indicator: Rectangle {
         id: rightIndicator
-        property var state: spinbox.down.pressed ? Components.general.spinbox.hover : Components.general.spinbox.unhover
+        property var state: spinbox.down.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
 
         height: parent.height - 4
         width: height
