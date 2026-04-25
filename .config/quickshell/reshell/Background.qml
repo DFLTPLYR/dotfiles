@@ -219,8 +219,6 @@ PanelWindow {
                 id: container
                 required property var model
                 required property int index
-
-                pointerVisible: true
                 parent: layered
                 width: model.w
                 height: model.h
@@ -276,11 +274,14 @@ PanelWindow {
 
                 PopupModal {
                     id: rectMenu
-                    width: 100
-                    height: content.height
+
+                    width: content.width + (rectMenu.leftPadding + rectMenu.rightPadding)
+                    height: content.height + (rectMenu.bottomPadding + rectMenu.topPadding)
+
                     ColumnLayout {
                         id: content
-                        width: rectMenu.width
+                        spacing: 0
+                        width: 75
                         Button {
                             Layout.fillWidth: true
                             text: "save"
@@ -314,40 +315,6 @@ PanelWindow {
     // simple desktop popup
     ContextMenu {
         id: contextMenu
-        onAction: action => {
-            switch (action) {
-            case "property":
-                propertiesModal.visible = true;
-                contextMenu.close();
-                break;
-            case "wallpaper":
-                wallpaperModal.visible = true;
-                contextMenu.close();
-                break;
-            case "fileExplorer":
-                panel.fileExplorerOpen = true;
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    FileExplorer {
-        screen: panel.screen
-        visible: panel.fileExplorerOpen
-    }
-
-    // Properties Modal
-    PropertyMenu {
-        id: propertiesModal
-        screen: panel.screen
-    }
-
-    // Wallpaper Modal
-    WallpaperMenu {
-        id: wallpaperModal
-        screen: panel.screen
     }
 
     function onSaveCustomWallpaper() {

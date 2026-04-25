@@ -6,7 +6,7 @@ import qs.core
 PageIndicator {
     id: control
 
-    property var state: Components.general.pageIndicator
+    property var state: Components.config.pageIndicator
 
     delegate: Rectangle {
         implicitWidth: control.state.width

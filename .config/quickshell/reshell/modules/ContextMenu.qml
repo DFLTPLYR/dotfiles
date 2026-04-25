@@ -48,27 +48,27 @@ PopupModal {
         }
 
         Button {
-            text: "Properties"
+            text: "Open Settings"
             Layout.fillWidth: true
             onClicked: {
-                modal.action("property");
+                settingPanel.visible = true;
+                settingPanel.page = 0;
+                modal.close();
             }
         }
 
         Button {
-            text: "Change Wallpaper"
+            text: "Open Wallpaper"
             Layout.fillWidth: true
             onClicked: {
-                modal.action("wallpaper");
+                settingPanel.visible = true;
+                settingPanel.page = 1;
+                modal.close();
             }
         }
+    }
 
-        Button {
-            text: "File Explorer"
-            Layout.fillWidth: true
-            onClicked: {
-                modal.action("fileExplorer");
-            }
-        }
+    SettingMenu {
+        id: settingPanel
     }
 }

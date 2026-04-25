@@ -5,7 +5,7 @@ import qs.core
 
 SwitchDelegate {
     id: toggle
-    property var state: Components.general.toggle
+    property var state: Components.config.toggle
 
     text: qsTr("SwitchDelegate")
     checked: true

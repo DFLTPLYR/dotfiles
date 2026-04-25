@@ -9,7 +9,7 @@ import qs.types
 
 Singleton {
     id: config
-    property alias general: adapter
+    property alias config: adapter
     property alias icon: customIconFont.font
 
     FontLoader {

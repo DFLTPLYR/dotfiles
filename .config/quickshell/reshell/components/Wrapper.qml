@@ -76,11 +76,6 @@ Rectangle {
             const widgetB = wrapper.parent.DelegateModel.itemsIndex;
             wrapper.swap(widgetB, widgetA);
         }
-        onDropped: drop => {
-            const widgetA = drop.source.parent.DelegateModel.itemsIndex;
-            const widgetB = wrapper.parent.DelegateModel.itemsIndex;
-            wrapper.swap(widgetB, widgetA);
-        }
         onContainsDragChanged: {
             background.border.width = containsDrag ? 1 : 0;
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";

@@ -4,7 +4,7 @@ import qs.core
 Rectangle {
     id: resizeableRect
     property int rulersSize: 12
-    required property bool pointerVisible
+    property bool pointerVisible: true
 
     border {
         width: 2

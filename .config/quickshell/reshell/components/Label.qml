@@ -5,7 +5,7 @@ import qs.core
 
 Label {
     id: control
-    property var state: Components.general.label
+    property var state: Components.config.label
 
     color: control.state.text
 
