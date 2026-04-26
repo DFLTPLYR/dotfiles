@@ -18,9 +18,11 @@ config.mpris = true
 -- Automatically increment play count on song change
 rmpcd.install("#builtin.playcount")
 
+rmpcd.install("plugins.lyrics")
+
 -- Install notification on song change builtin
-rmpcd.install("plugin.notify"):setup({
-	debounce_delay = 1000,
+rmpcd.install("plugins.notify"):setup({
+	debounce_delay = 0,
 })
 
 return config
