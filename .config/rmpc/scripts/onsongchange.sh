@@ -27,7 +27,7 @@ else
   rmpc sticker set "$FILE" playCount "$new_count"
   echo "playCount updated to $new_count for: $FILE"
 fi
-~/dotfiles/.config/rmpc/scripts/notification.sh
+
 LRCLIB_INSTANCE="https://lrclib.net"
 
 if [ "$HAS_LRC" = "false" ]; then
