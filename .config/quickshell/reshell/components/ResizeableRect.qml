@@ -7,7 +7,7 @@ Rectangle {
     property bool pointerVisible: true
 
     border {
-        width: 2
+        width: pointerVisible ? 2 : 0
         color: Colors.color.tertiary
     }
 
