@@ -24,7 +24,7 @@ FloatingWindow {
         anchors.fill: parent
 
         Rectangle {
-            Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 150)
+            Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
             Layout.fillHeight: true
 
             color: Colors.setOpacity(Colors.color.background, 0.5)
