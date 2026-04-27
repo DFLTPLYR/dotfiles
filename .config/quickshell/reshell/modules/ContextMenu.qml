@@ -68,7 +68,7 @@ PopupModal {
         }
     }
 
-    SettingMenu {
+    SettingPanel {
         id: settingPanel
     }
 }
