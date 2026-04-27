@@ -33,9 +33,33 @@ Variants {
             path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
             watchChanges: true
             preload: true
-            onLoaded: content.active = true
+            onLoaded: {
+                content.active = true;
+                containerModel.sync();
+            }
             property list<var> docklist: []
             property list<var> updateQueue: []
+
+            property ListModel containers: ListModel {
+                id: containerModel
+
+                function save() {
+                    const list = [];
+                    for (let i = 0; i < count; i++) {
+                        const object = containerModel.get(i);
+                        list.push(JSON.parse(JSON.stringify(object)));
+                    }
+                    adapter.container = [...list];
+                    fileview.save();
+                }
+
+                function sync() {
+                    const containers = adapter.container;
+                    for (const i in containers) {
+                        containerModel.append(containers[i]);
+                    }
+                }
+            }
 
             onDocklistChanged: {
                 for (let i = 0; i < docklist.length; i++) {
@@ -131,13 +155,18 @@ Variants {
                     component: Background {
                         screen: reshell.screen
                         file: fileview
-                        onDockUpdate: dock => {
-                            dockModel.append({
-                                "name": dock.name
-                            });
-                            dockModel.sync();
-                            fileview.updateQueue.push(dock);
-                        }
+                    }
+                }
+
+                Bottom {
+                    screen: reshell.screen
+                    file: fileview
+                    onDockUpdate: dock => {
+                        dockModel.append({
+                            "name": dock.name
+                        });
+                        dockModel.sync();
+                        fileview.updateQueue.push(dock);
                     }
                 }
 
