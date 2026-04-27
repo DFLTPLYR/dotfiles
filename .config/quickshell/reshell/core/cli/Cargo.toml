@@ -9,7 +9,7 @@ clap = { version = "4.5.54", features = ["derive"] }
 serde = { version = "1.0.228", features = ["derive"] }
 daemonize = "0.5.0"
 gfxinfo = "0.1.2"
-niri-ipc = "25.11.0"
+niri-ipc = "26.4.0"
 serde_json = "1.0"
 sysinfo = "0.38.2"
 kdl = "6.5.0"
