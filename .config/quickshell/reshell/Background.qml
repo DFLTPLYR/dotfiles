@@ -154,13 +154,13 @@ PanelWindow {
                     const object = containerModel.get(i);
                     list.push(JSON.parse(JSON.stringify(object)));
                 }
-                Wallpaper.config.containers = [...list];
-                Wallpaper.save();
+                file.adapter.container = [...list];
+                file.save();
             }
             Component.onCompleted: {
-                const container = Wallpaper.config.containers;
-                for (const i in container) {
-                    containerModel.append(container[i]);
+                const containers = file.adapter.container;
+                for (const i in containers) {
+                    containerModel.append(containers[i]);
                 }
             }
         }

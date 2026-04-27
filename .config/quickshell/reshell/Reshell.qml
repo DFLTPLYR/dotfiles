@@ -70,6 +70,7 @@ Variants {
             adapter: JsonAdapter {
                 id: adapter
                 property list<var> docks: []
+                property list<var> container: []
             }
 
             function save() {
@@ -139,6 +140,7 @@ Variants {
                         }
                     }
                 }
+
                 // overlay
                 Overlay {
                     screen: reshell.screen
