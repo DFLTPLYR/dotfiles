@@ -108,6 +108,7 @@ PanelWindow {
                         id: content
                         spacing: 0
                         width: 75
+
                         Button {
                             Layout.fillWidth: true
                             text: "save"
@@ -124,6 +125,7 @@ PanelWindow {
                                 print(model);
                             }
                         }
+
                         Button {
                             Layout.fillWidth: true
                             text: "remove"
@@ -140,70 +142,67 @@ PanelWindow {
     }
 
     // MouseArea
-    LazyLoader {
-        active: Global.edit
-        component: MouseArea {
-            parent: controlContainer
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+    MouseArea {
+        parent: controlContainer
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-            property bool selecting
-            property point startPoint
+        property bool selecting
+        property point startPoint
 
-            onPressed: mouse => {
-                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
-                    selecting = true;
-                    startPoint = Qt.point(mouse.x, mouse.y);
-                    selectionRect.x = mouse.x;
-                    selectionRect.y = mouse.y;
-                    selectionRect.width = 0;
-                    selectionRect.height = 0;
-                    selectionRect.visible = true;
-                } else if (mouse.button === Qt.RightButton) {
-                    if (!contextMenu.opened) {
-                        contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
-                        contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
-                    }
-                    contextMenu.opened ? contextMenu.close() : contextMenu.open();
+        onPressed: mouse => {
+            if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                selecting = true;
+                startPoint = Qt.point(mouse.x, mouse.y);
+                selectionRect.x = mouse.x;
+                selectionRect.y = mouse.y;
+                selectionRect.width = 0;
+                selectionRect.height = 0;
+                selectionRect.visible = true;
+            } else if (mouse.button === Qt.RightButton) {
+                if (!contextMenu.opened) {
+                    contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
+                    contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
+                }
+                contextMenu.opened ? contextMenu.close() : contextMenu.open();
+                return;
+            }
+        }
+
+        onPositionChanged: mouse => {
+            if (selecting) {
+                var minX = Math.min(startPoint.x, mouse.x);
+                var minY = Math.min(startPoint.y, mouse.y);
+                var maxX = Math.max(startPoint.x, mouse.x);
+                var maxY = Math.max(startPoint.y, mouse.y);
+
+                selectionRect.x = minX;
+                selectionRect.y = minY;
+                selectionRect.width = maxX - minX;
+                selectionRect.height = maxY - minY;
+            }
+        }
+
+        onReleased: mouse => {
+            if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                selecting = false;
+                selectionRect.visible = false;
+
+                if (selectionRect.x == 0 && selectionRect.y == 0)
                     return;
-                }
+                const container = {
+                    w: selectionRect.width,
+                    h: selectionRect.height,
+                    x: selectionRect.x,
+                    y: selectionRect.y,
+                    z: 1
+                };
+                file.containers.append(container);
             }
+        }
 
-            onPositionChanged: mouse => {
-                if (selecting) {
-                    var minX = Math.min(startPoint.x, mouse.x);
-                    var minY = Math.min(startPoint.y, mouse.y);
-                    var maxX = Math.max(startPoint.x, mouse.x);
-                    var maxY = Math.max(startPoint.y, mouse.y);
-
-                    selectionRect.x = minX;
-                    selectionRect.y = minY;
-                    selectionRect.width = maxX - minX;
-                    selectionRect.height = maxY - minY;
-                }
-            }
-
-            onReleased: mouse => {
-                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
-                    selecting = false;
-                    selectionRect.visible = false;
-
-                    if (selectionRect.x == 0 && selectionRect.y == 0)
-                        return;
-                    const container = {
-                        w: selectionRect.width,
-                        h: selectionRect.height,
-                        x: selectionRect.x,
-                        y: selectionRect.y,
-                        z: 1
-                    };
-                    file.containers.append(container);
-                }
-            }
-
-            Component.onCompleted: {
-                panel.area = this;
-            }
+        Component.onCompleted: {
+            panel.area = this;
         }
     }
 

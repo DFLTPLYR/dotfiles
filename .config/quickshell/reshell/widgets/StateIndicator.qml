@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 
 import qs.core
@@ -10,6 +11,7 @@ Wrapper {
 
     property: Property {
         property int size: 12
+        property int width: 100
     }
 
     width: wrap.setSize()
@@ -46,7 +48,6 @@ Wrapper {
         MouseArea {
             id: button
             property bool toggled: false
-            enabled: Global.normal
             hoverEnabled: true
 
             anchors.fill: parent
@@ -67,34 +68,29 @@ Wrapper {
 
     PopupModal {
         id: modal
-        implicitWidth: 120 + modal.background.border.width * 2
-        implicitHeight: content.height + modal.background.border.width * 2
-        y: wrap.slotConfig && wrap.slotConfig.side ? 0 : wrap.height
-        x: wrap.slotConfig && wrap.slotConfig.side ? wrap.width : 0
+        width: content.width + (modal.leftPadding + modal.rightPadding)
+        height: content.height + (modal.bottomPadding + modal.topPadding)
+        y: wrap.slotConfig && wrap.slotConfig.side ? wrap.height / 2 - modal.height / 2 : wrap.height
+        x: wrap.slotConfig && wrap.slotConfig.side ? wrap.width : wrap.width / 2 - modal.width / 2
 
-        Rectangle {
+        ColumnLayout {
             id: content
-            implicitWidth: menulist.contentWidth
-            implicitHeight: menulist.contentHeight
+            spacing: 0
+            width: wrap.property.width
+            height: menulist.height
 
-            color: Colors.color.primary
-
-            Item {
-                id: wrapper
-                width: modal.width
-                height: menulist.contentHeight
-
-                ListView {
-                    id: menulist
-                    height: contentHeight
-                    model: ["suspend", "poweroff", "hibernate", "reboot"]
-                    delegate: Button {
-                        text: modelData
-                        width: wrapper.width
-                        onClicked: {
-                            Quickshell.execDetached({
-                                command: ["sh", "-c", `systemctl ${modelData}`]
-                            });
+            ListView {
+                id: menulist
+                width: parent.width
+                height: contentHeight
+                model: Global.stateNames
+                delegate: Button {
+                    text: modelData
+                    width: ListView.view.width
+                    onClicked: {
+                        const idx = Global.stateNames.findIndex(s => s === modelData);
+                        if (idx !== -1) {
+                            Global.state = idx;
                         }
                     }
                 }
