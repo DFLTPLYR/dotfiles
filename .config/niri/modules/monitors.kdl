@@ -35,7 +35,7 @@ output "DP-1" {
 }
 
 layer-rule {
-  match namespace="Background-DP-1"
+  match layer="background"
   place-within-backdrop true
 }
 
@@ -66,9 +66,4 @@ output "DP-2" {
       default-column-width { proportion 1.0; }
       always-center-single-column
     }
-}
-
-layer-rule {
-  match namespace="Background-DP-2"
-  place-within-backdrop true
 }

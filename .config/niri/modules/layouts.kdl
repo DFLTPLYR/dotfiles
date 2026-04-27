@@ -12,7 +12,7 @@ layout {
         active-gradient from="#80c8ff" to="#c7ff7f" angle=45 relative-to="workspace-view"
         inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
-
+ 
     border {
       on 
       width 2
