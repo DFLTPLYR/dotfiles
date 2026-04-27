@@ -219,13 +219,13 @@ PanelWindow {
                 id: container
                 required property var model
                 required property int index
+                pointerVisible: Global.edit
                 parent: layered
                 width: model.w
                 height: model.h
-                opacity: Global.edit ? 1 : 0
 
-                Behavior on opacity {
-                    NumberAnimation {
+                Behavior on color {
+                    ColorAnimation {
                         duration: 300
                         easing.type: Easing.InOutQuad
                     }
@@ -233,7 +233,7 @@ PanelWindow {
                 x: model.x
                 y: model.y
                 z: model.z
-                color: Colors.setOpacity(Colors.color.primary, 0.4)
+                color: Global.edit ? Colors.setOpacity(Colors.color.primary, 0.4) : "transparent"
 
                 DragHandler {
                     id: dragHandler
