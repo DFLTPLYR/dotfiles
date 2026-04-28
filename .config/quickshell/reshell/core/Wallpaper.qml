@@ -73,5 +73,6 @@ Singleton {
 
     function save() {
         fileView.writeAdapter();
+        config.generatecolor();
     }
 }
