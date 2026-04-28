@@ -10,7 +10,7 @@ Process {
         onStreamFinished: {
             const path = this.text;
             if (path.length > 0) {
-                process.output(this.text);
+                process.output(this.text.trim("%0A"));
             }
         }
     }

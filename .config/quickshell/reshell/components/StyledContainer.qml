@@ -66,6 +66,23 @@ ResizeableRect {
         }
     }
 
+    FilePicker {
+        id: filepicker
+        onOutput: data => {
+            image.createObject(container, {
+                source: data
+            });
+        }
+    }
+
+    Component {
+        id: image
+        Image {
+            anchors.fill: parent
+            z: -100
+        }
+    }
+
     PopupModal {
         id: rectMenu
 
@@ -97,6 +114,14 @@ ResizeableRect {
                 text: "remove"
                 onClicked: {
                     container.remove(model.index);
+                }
+            }
+
+            Button {
+                Layout.fillWidth: true
+                text: "Add Image"
+                onClicked: {
+                    filepicker.active();
                 }
             }
         }

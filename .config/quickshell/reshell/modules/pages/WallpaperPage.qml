@@ -12,6 +12,18 @@ Rectangle {
     width: parent.width
     height: parent.height
 
+    FilePicker {
+        id: filepicker
+        onOutput: data => {
+            Wallpaper.config.layers = [...Wallpaper.config.layers,
+                {
+                    source: data,
+                    name: Math.random().toString(36).substring(2, 10)
+                }
+            ];
+        }
+    }
+
     border {
         width: 1
         color: Colors.color.primary
@@ -462,8 +474,7 @@ Rectangle {
                 Button {
                     text: "Add file"
                     onClicked: {
-                        panel.fileExplorerOpen = true;
-                        fileExplorer.active();
+                        filepicker.active();
                     }
                 }
 
