@@ -28,6 +28,7 @@ Variants {
             ]
         }
 
+        // config
         FileView {
             id: fileview
             path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
