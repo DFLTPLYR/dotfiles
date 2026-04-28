@@ -110,7 +110,8 @@ PanelWindow {
                     h: selectionRect.height,
                     x: selectionRect.x,
                     y: selectionRect.y,
-                    z: 1
+                    z: 1,
+                    content: []
                 };
                 file.containers.append(container);
             }

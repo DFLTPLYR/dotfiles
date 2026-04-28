@@ -46,6 +46,25 @@ PanelWindow {
             }
         }
 
+        // Causes Crash as of now
+        // SortFilterProxyModel {
+        //     id: wallpaperSort
+        //     model: Wallpaper.list
+        //     filters: [
+        //         FunctionFilter {
+        //             function filter(data: RoleData): bool {
+        //                 for (let i = 0; i < data.screens.count; i++) {
+        //                     const screen = data.screens.get(i);
+        //                     if (screen.name === panel.screen.name) {
+        //                         return true;
+        //                     }
+        //                 }
+        //                 return false;
+        //             }
+        //         }
+        //     ]
+        // }
+
         Instantiator {
             model: wallpaperModel
             delegate: Image {
@@ -82,6 +101,17 @@ PanelWindow {
             onObjectAdded: (idx, obj) => obj.state = "visible"
         }
     }
+
+    // component RoleData: QtObject {
+    //     property string name
+    //     property ListModel screens
+    //     property string source
+    //     property real height
+    //     property real width
+    //     property real x
+    //     property real y
+    //     property real z
+    // }
 
     function onSaveCustomWallpaper() {
         layered.grabToImage(function (result) {

@@ -12,12 +12,40 @@ Singleton {
     property alias config: adapter.config
     signal generatecolor
 
+    property ListModel list: ListModel {
+        id: wallpaperModel
+
+        function save() {
+            const list = [];
+            for (let i = 0; i < count; i++) {
+                const object = wallpaperModel.get(i);
+                list.push(JSON.parse(JSON.stringify(object)));
+            }
+            adapter.container = [...list];
+            fileview.save();
+        }
+
+        function sync() {
+            wallpaperModel.clear();
+            const current = adapter.config.current;
+            const theme = adapter.config.preset.find(s => s.name === current);
+            const sources = theme.source;
+
+            for (const i in sources) {
+                wallpaperModel.append(sources[i]);
+            }
+        }
+    }
+
     FileView {
         id: fileView
         path: Qt.resolvedUrl("data/wallpaper.json")
         watchChanges: true
         preload: true
-        onLoaded: config.ready = true
+        onLoaded: {
+            wallpaperModel.sync();
+            config.ready = true;
+        }
         onFileChanged: {
             reload();
         }
