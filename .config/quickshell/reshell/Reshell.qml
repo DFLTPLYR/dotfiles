@@ -149,12 +149,19 @@ Variants {
                     }
                 }
 
-                // background
-                LazyLoader {
-                    active: Wallpaper.ready
-                    component: Background {
+                // overlay
+                Overlay {
+                    screen: reshell.screen
+                }
+
+                // docks
+                Instantiator {
+                    id: dockInstantiator
+                    model: dockModel
+                    delegate: Dock {
                         screen: reshell.screen
-                        file: fileview
+                        onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
+                        onRemoveDock: name => fileview.removeDock(name)
                     }
                 }
 
@@ -170,19 +177,12 @@ Variants {
                     }
                 }
 
-                // overlay
-                Overlay {
-                    screen: reshell.screen
-                }
-
-                // docks
-                Instantiator {
-                    id: dockInstantiator
-                    model: dockModel
-                    delegate: Dock {
+                // background
+                LazyLoader {
+                    active: Wallpaper.ready
+                    component: Background {
                         screen: reshell.screen
-                        onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
-                        onRemoveDock: name => fileview.removeDock(name)
+                        file: fileview
                     }
                 }
             }

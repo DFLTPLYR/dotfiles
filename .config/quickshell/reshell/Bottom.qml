@@ -26,7 +26,7 @@ PanelWindow {
 
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Bottom-${screen.name}`
-    WlrLayershell.layer: WlrLayer.Bottom
+    WlrLayershell.layer: Global.edit ? WlrLayer.Bottom : WlrLayer.Background
 
     mask: Region {
         item: panel.area
@@ -39,103 +39,17 @@ PanelWindow {
 
         Instantiator {
             model: file.containers
-            delegate: ResizeableRect {
-                id: container
-                property bool active: Global.edit
-                required property var model
-                required property int index
-                pointerVisible: container.active
+            delegate: StyledContainer {
                 parent: controlContainer
-                width: model.w
-                height: model.h
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
+                onSave: (idx, obj) => {
+                    const container = file.containers;
+                    container.set(idx, obj);
+                    container.save();
                 }
-                x: model.x
-                y: model.y
-                z: model.z
-                color: container.active ? Colors.setOpacity(Colors.color.primary, 0.4) : "transparent"
-
-                DragHandler {
-                    id: dragHandler
-                    target: parent
-                }
-
-                WheelHandler {
-                    id: wheelHandler
-                    enabled: container.active
-                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                    target: null
-
-                    onWheel: event => {
-                        let isShiftWheel = event.modifiers & Qt.ShiftModifier;
-                        if (isShiftWheel && wheelHandler.enabled) {
-                            if (event.angleDelta.y > 0) {
-                                parent.z++;
-                            } else {
-                                parent.z--;
-                            }
-                            print(parent.z);
-                        }
-                    }
-                }
-
-                MouseArea {
-                    enabled: container.active
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: {
-                        if (!rectMenu.opened) {
-                            rectMenu.x = mouseX + rectMenu.width > screen.width ? mouseX - rectMenu.width : mouseX;
-                            rectMenu.y = mouseY + rectMenu.height > screen.height ? mouseY - rectMenu.height : mouseY;
-                        }
-                        rectMenu.opened ? rectMenu.close() : rectMenu.open();
-                        return;
-                    }
-                }
-
-                PopupModal {
-                    id: rectMenu
-
-                    width: content.width + (rectMenu.leftPadding + rectMenu.rightPadding)
-                    height: content.height + (rectMenu.bottomPadding + rectMenu.topPadding)
-
-                    ColumnLayout {
-                        id: content
-                        spacing: 0
-                        width: 75
-
-                        Button {
-                            Layout.fillWidth: true
-                            text: "save"
-                            onClicked: {
-                                const model = file.containers;
-                                model.set(model.index, {
-                                    "w": container.width,
-                                    "h": container.height,
-                                    "x": container.x,
-                                    "y": container.y,
-                                    "z": container.z
-                                });
-                                model.save();
-                                print(model);
-                            }
-                        }
-
-                        Button {
-                            Layout.fillWidth: true
-                            text: "remove"
-                            onClicked: {
-                                const model = file.containers;
-                                model.remove(model.index, 1);
-                                model.save();
-                            }
-                        }
-                    }
+                onRemove: idx => {
+                    const container = file.containers;
+                    container.remove(idx);
+                    container.save();
                 }
             }
         }
