@@ -70,10 +70,25 @@ PanelWindow {
             delegate: Image {
                 id: wallpaperImage
                 required property var modelData
+                property var relative: modelData.screens
+                property var coords
+                onRelativeChanged: {
+                    for (let i = 0; i < relative.count; i++) {
+                        const screen = relative.get(i);
+                        if (screen.name === panel.screen.name) {
+                            return coords = screen;
+                        }
+                    }
+                }
+
                 parent: layered
 
                 width: modelData.width
                 height: modelData.height
+
+                x: coords.x
+                y: coords.y
+                z: coords.z
 
                 source: modelData.source
                 opacity: 0
@@ -113,12 +128,15 @@ PanelWindow {
     //     property real z
     // }
 
-    function onSaveCustomWallpaper() {
-        layered.grabToImage(function (result) {
-            result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-            Qt.callLater(() => {
-                Global.updateColor();
-            });
-        }, Qt.size(panel.screen.width, panel.screen.height));
+    Connections {
+        target: Wallpaper
+        function generateColor() {
+            layered.grabToImage(function (result) {
+                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+                Qt.callLater(() => {
+                    Global.updateColor();
+                });
+            }, Qt.size(panel.screen.width, panel.screen.height));
+        }
     }
 }

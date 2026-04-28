@@ -267,9 +267,6 @@ Rectangle {
         }
 
         Wallpaper.save();
-        Qt.callLater(() => {
-            panel.onSaveCustomWallpaper();
-        });
     }
 
     Component.onCompleted: {
