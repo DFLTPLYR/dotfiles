@@ -13,13 +13,10 @@ import qs.components
 PanelWindow {
     id: panel
     property var file
-    property Item area: null
     readonly property var images: Wallpaper.config.preset.find(s => s.name === Wallpaper.config.current)
     readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
     property bool fileExplorerOpen: false
-
-    signal dockUpdate(var data)
 
     color: "transparent"
     implicitHeight: screen.height
@@ -31,35 +28,11 @@ PanelWindow {
     WlrLayershell.namespace: `Background-${screen.name}`
     WlrLayershell.layer: WlrLayer.Background
 
-    mask: Region {
-        item: panel.area
-    }
-
     // Contents
     Item {
         id: layered
         width: parent.width
         height: parent.width
-
-        property ListModel containers: ListModel {
-            id: containerModel
-
-            function save() {
-                const list = [];
-                for (let i = 0; i < count; i++) {
-                    const object = containerModel.get(i);
-                    list.push(JSON.parse(JSON.stringify(object)));
-                }
-                file.adapter.container = [...list];
-                file.save();
-            }
-            Component.onCompleted: {
-                const containers = file.adapter.container;
-                for (const i in containers) {
-                    containerModel.append(containers[i]);
-                }
-            }
-        }
 
         property ListModel wallpaper: ListModel {
             id: wallpaperModel

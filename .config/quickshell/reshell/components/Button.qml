@@ -6,19 +6,19 @@ import QtQuick.Controls.Basic
 
 Button {
     id: control
-    property var state: Components.config?.button
+    property var config: Components.config?.button
     property alias content: content
     hoverEnabled: true
     clip: true
 
     contentItem: Text {
         id: content
-        property var state: control.state.content
+        property var config: control.config.content
         width: parent.width
         text: control.text
         font: control.font
 
-        color: control.hovered || control.down ? Qt.darker(content?.state?.color, 1.5) : content?.state?.color
+        color: control.hovered || control.down ? Qt.darker(content?.config?.color, 1.5) : content?.config?.color
         opacity: enabled ? 1.0 : 0.3
 
         horizontalAlignment: Text.AlignHCenter
@@ -38,7 +38,7 @@ Button {
     background: Rectangle {
         id: background
 
-        property var state: control.state.background
+        property var config: control.config.background
 
         implicitWidth: 40
         implicitHeight: 40
@@ -46,11 +46,11 @@ Button {
         opacity: enabled ? 1 : 0.3
 
         border {
-            width: background.state.border.width
-            color: background.state.border.color
+            width: background.config.border.width
+            color: background.config.border.color
         }
 
-        color: control.hovered || control.down ? Qt.darker(background.state.color, 1.5) : background.state.color
+        color: control.hovered || control.down ? Qt.darker(background.config.color, 1.5) : background.config.color
 
         Behavior on color {
             ColorAnimation {
@@ -67,7 +67,7 @@ Button {
         }
 
         Component.onCompleted: {
-            Global.bindRadii(background, background.state.rounding);
+            Global.bindRadii(background, background.config.rounding);
         }
     }
 }
