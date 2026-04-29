@@ -68,6 +68,7 @@ FloatingWindow {
 
             // property
             Pane {
+                visible: contentContainer.currentIndex === 0
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 background: Rectangle {
