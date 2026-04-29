@@ -19,6 +19,7 @@ Singleton {
             const list = [];
             for (let i = 0; i < count; i++) {
                 const object = wallpaperModel.get(i);
+                print(object.z);
                 list.push(JSON.parse(JSON.stringify(object)));
             }
             const current = adapter.config.current;
