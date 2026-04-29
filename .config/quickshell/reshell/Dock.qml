@@ -14,10 +14,12 @@ Item {
     id: dock
 
     required property string name
+    required property int index
+
     property ShellScreen screen
 
     signal addDock(var item)
-    signal removeDock(string name)
+    signal removeDock(int idx)
 
     objectName: dock.name
 
@@ -200,6 +202,7 @@ Item {
                         return slotModel.append(obj);
                     }
                 }
+                onRemove: dock.removeDock(index)
             }
 
             Background {}

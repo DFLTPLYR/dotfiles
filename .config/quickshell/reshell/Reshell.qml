@@ -130,7 +130,7 @@ Variants {
 
                 property ListModel docks: ListModel {
                     id: dockModel
-                    function sync() {
+                    function save() {
                         let arr = [];
                         for (let i = 0; i < dockModel.count; i++) {
                             const name = dockModel.get(i).name;
@@ -139,7 +139,16 @@ Variants {
                         adapter.docks = [...arr];
                         fileview.writeAdapter();
                     }
+                    function sync() {
+                        dockModel.clear();
 
+                        const container = adapter.docks;
+                        for (const i in container) {
+                            dockModel.append({
+                                "name": container[i]
+                            });
+                        }
+                    }
                     Component.onCompleted: {
                         const container = adapter.docks;
                         for (const i in container) {
@@ -162,7 +171,16 @@ Variants {
                     delegate: Dock {
                         screen: reshell.screen
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
-                        onRemoveDock: name => fileview.removeDock(name)
+                        onRemoveDock: idx => {
+                            const model = docks;
+                            const screen = reshell.screen.name;
+                            const obj = model.get(idx);
+                            const fileUrl = Qt.resolvedUrl(`./core/data/docks/${screen}+${obj.name}.json`);
+                            const filePath = fileUrl.toString().replace('file://', '');
+                            Quickshell.execDetached(["rm", "-rf", filePath]);
+                            model.remove(idx, 1);
+                            model.save();
+                        }
                     }
                 }
 
@@ -173,7 +191,7 @@ Variants {
                         dockModel.append({
                             "name": dock.name
                         });
-                        dockModel.sync();
+                        dockModel.save();
                         fileview.updateQueue.push(dock);
                     }
                 }
