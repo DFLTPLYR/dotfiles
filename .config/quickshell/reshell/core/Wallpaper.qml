@@ -21,8 +21,11 @@ Singleton {
                 const object = wallpaperModel.get(i);
                 list.push(JSON.parse(JSON.stringify(object)));
             }
-            adapter.container = [...list];
-            fileview.save();
+            const current = adapter.config.current;
+            const theme = adapter.config.preset.find(s => s.name === current);
+            theme.source = [...list];
+            fileView.writeAdapter();
+            config.generatecolor();
         }
 
         function sync() {

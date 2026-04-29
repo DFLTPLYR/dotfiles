@@ -37,33 +37,19 @@ PanelWindow {
         property ListModel wallpaper: ListModel {
             id: wallpaperModel
 
-            Component.onCompleted: {
-                const container = Wallpaper.config.layers.filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name));
+            function sync() {
+                const current = Wallpaper.config.current;
+                const theme = Wallpaper.config.preset.find(s => s.name === current);
+                const sources = theme.source;
+                const container = sources.filter(item => item && item.screens && item.screens.some(s => s && s.name === panel.screen.name));
                 for (const i in container) {
                     const obj = container[i];
                     wallpaperModel.append(obj);
                 }
             }
-        }
 
-        // Causes Crash as of now
-        // SortFilterProxyModel {
-        //     id: wallpaperSort
-        //     model: Wallpaper.list
-        //     filters: [
-        //         FunctionFilter {
-        //             function filter(data: RoleData): bool {
-        //                 for (let i = 0; i < data.screens.count; i++) {
-        //                     const screen = data.screens.get(i);
-        //                     if (screen.name === panel.screen.name) {
-        //                         return true;
-        //                     }
-        //                 }
-        //                 return false;
-        //             }
-        //         }
-        //     ]
-        // }
+            Component.onCompleted: this.sync()
+        }
 
         Instantiator {
             model: wallpaperModel
@@ -88,7 +74,7 @@ PanelWindow {
 
                 x: coords.x
                 y: coords.y
-                z: coords.z
+                z: modelData.z
 
                 source: modelData.source
                 opacity: 0
@@ -117,20 +103,10 @@ PanelWindow {
         }
     }
 
-    // component RoleData: QtObject {
-    //     property string name
-    //     property ListModel screens
-    //     property string source
-    //     property real height
-    //     property real width
-    //     property real x
-    //     property real y
-    //     property real z
-    // }
-
     Connections {
         target: Wallpaper
-        function generateColor() {
+        function onGeneratecolor() {
+            wallpaperModel.sync();
             layered.grabToImage(function (result) {
                 result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
                 Qt.callLater(() => {

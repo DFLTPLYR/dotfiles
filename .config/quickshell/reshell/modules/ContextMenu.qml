@@ -21,7 +21,7 @@ PopupModal {
         Button {
             text: "Refresh"
             Layout.fillWidth: true
-            onClicked: Quickshell.reload(true)
+            onClicked: Quickshell.reload(false)
         }
 
         Button {
