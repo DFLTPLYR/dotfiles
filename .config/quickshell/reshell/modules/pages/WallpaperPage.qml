@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 
 import Quickshell
@@ -231,7 +232,8 @@ Rectangle {
         item.x = target.x;
         item.y = target.y;
         item.z = target.z;
-
+        item.width = target.width;
+        item.height = target.height;
         Wallpaper.list.set(target.index, item);
         return false;
     }
@@ -341,6 +343,7 @@ Rectangle {
 
         x: (modelData.x || 0)
         y: (modelData.y || 0)
+        z: (modelData.z || 0)
 
         onXChanged: debounceTimer.restart()
         onYChanged: debounceTimer.restart()
@@ -476,8 +479,10 @@ Rectangle {
                 Button {
                     text: "Check"
                     onClicked: {
+                        for (const i in imageList) {
+                            overlapsAny(imageList[i]);
+                        }
                         Wallpaper.list.save();
-                        // container.imageToScreenPosition()
                     }
                 }
 
@@ -502,20 +507,56 @@ Rectangle {
                     id: colorScheme
                     title: "Theme Picker"
                     width: 150
-                    Instantiator {
-                        readonly property list<string> schemes: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
-                        model: schemes
+
+                    ListModel {
+                        id: themes
+                        ListElement {
+                            scheme: "scheme-content"
+                        }
+                        ListElement {
+                            scheme: "scheme-expressive"
+                        }
+                        ListElement {
+                            scheme: "scheme-fidelity"
+                        }
+                        ListElement {
+                            scheme: "scheme-fruit-salad"
+                        }
+                        ListElement {
+                            scheme: "scheme-monochrome"
+                        }
+                        ListElement {
+                            scheme: "scheme-neutral"
+                        }
+                        ListElement {
+                            scheme: "scheme-rainbow"
+                        }
+                        ListElement {
+                            scheme: "scheme-tonal-spot"
+                        }
+                        ListElement {
+                            scheme: "scheme-vibrant"
+                        }
+                    }
+                    DelegateModel {
+                        id: themeDM
+                        model: themes
                         delegate: CheckBox {
-                            text: modelData
-                            checked: modelData === Wallpaper.config.theme
+                            required property string scheme
+                            width: ListView.view.width
+                            text: scheme
+                            checked: scheme === Wallpaper.config.theme
                             onClicked: {
-                                Wallpaper.config.theme = modelData;
+                                Wallpaper.config.theme = scheme;
                                 Wallpaper.generatecolor();
                             }
                         }
-                        onObjectAdded: (idx, obj) => {
-                            colorScheme.insertItem(idx, obj);
-                        }
+                    }
+
+                    ListView {
+                        width: parent.width
+                        height: contentHeight
+                        model: themeDM
                     }
                 }
             }

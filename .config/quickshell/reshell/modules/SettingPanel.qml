@@ -10,7 +10,7 @@ import qs.modules.pages
 
 FloatingWindow {
     id: settingpanel
-    property alias page: contentContainer.currentIndex
+    property int page: 0
     screen: panel.screen
     title: "Reshell"
     color: Colors.setOpacity(Colors.color.background, 0.5)
@@ -20,65 +20,66 @@ FloatingWindow {
     minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
     maximumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
 
-    RowLayout {
+    Loader {
         anchors.fill: parent
+        active: settingpanel.visible
+        sourceComponent: RowLayout {
+            Rectangle {
+                Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
+                Layout.fillHeight: true
 
-        Rectangle {
-            Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
-            Layout.fillHeight: true
+                color: Colors.setOpacity(Colors.color.background, 0.5)
 
-            color: Colors.setOpacity(Colors.color.background, 0.5)
-
-            DelegateModel {
-                id: navModel
-                model: ListModel {
-                    id: navList
-                    ListElement {
-                        name: "Property"
-                        page: 0
+                DelegateModel {
+                    id: navModel
+                    model: ListModel {
+                        id: navList
+                        ListElement {
+                            name: "Property"
+                            page: 0
+                        }
+                        ListElement {
+                            name: "Wallpaper"
+                            page: 1
+                        }
                     }
-                    ListElement {
-                        name: "Wallpaper"
-                        page: 1
+
+                    delegate: Button {
+                        required property string name
+                        required property int page
+                        width: ListView.view.width
+                        text: name
+                        onClicked: {
+                            contentContainer.currentIndex = page;
+                        }
                     }
                 }
 
-                delegate: Button {
-                    required property string name
-                    required property int page
-                    width: ListView.view.width
-                    text: name
-                    onClicked: {
-                        contentContainer.currentIndex = page;
-                    }
+                ListView {
+                    width: parent.width
+                    height: contentHeight
+                    model: navModel
                 }
             }
 
-            ListView {
-                width: parent.width
-                height: contentHeight
-                model: navModel
-            }
-        }
-
-        StackLayout {
-            id: contentContainer
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            // property
-            Pane {
-                visible: contentContainer.currentIndex === 0
+            StackLayout {
+                id: contentContainer
+                currentIndex: settingpanel.page
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: Colors.setOpacity(Colors.color.background, 0.5)
-                }
-            }
 
-            // WallpaperPage
-            WallpaperPage {}
+                Pane {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: Colors.setOpacity(Colors.color.background, 0.5)
+                    }
+                }
+
+                // WallpaperPage
+                WallpaperPage {}
+            }
         }
     }
 }
