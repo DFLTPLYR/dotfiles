@@ -38,6 +38,7 @@ PanelWindow {
             id: wallpaperModel
 
             function sync() {
+                wallpaperModel.clear();
                 const current = Wallpaper.config.current;
                 const theme = Wallpaper.config.preset.find(s => s.name === current);
                 const sources = theme.source;
@@ -107,12 +108,14 @@ PanelWindow {
         target: Wallpaper
         function onGeneratecolor() {
             wallpaperModel.sync();
-            layered.grabToImage(function (result) {
-                result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-                Qt.callLater(() => {
-                    Global.updateColor();
-                });
-            }, Qt.size(panel.screen.width, panel.screen.height));
+            Qt.callLater(() => {
+                layered.grabToImage(function (result) {
+                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+                    Qt.callLater(() => {
+                        Global.updateColor();
+                    });
+                }, Qt.size(panel.screen.width, panel.screen.height));
+            });
         }
     }
 }
