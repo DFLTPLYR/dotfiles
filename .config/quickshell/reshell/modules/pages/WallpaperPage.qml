@@ -15,12 +15,11 @@ Rectangle {
     FilePicker {
         id: filepicker
         onOutput: data => {
-            Wallpaper.config.layers = [...Wallpaper.config.layers,
-                {
-                    source: data,
-                    name: Math.random().toString(36).substring(2, 10)
-                }
-            ];
+            const item = {
+                name: Math.random().toString(36).substring(2, 10),
+                source: data
+            };
+            Wallpaper.list.append(item);
         }
     }
 
@@ -48,16 +47,12 @@ Rectangle {
             print(event);
             switch (event.key) {
             case Qt.Key_Up:
-                print("up pressed");
                 break;
             case Qt.Key_Down:
-                print("down pressed");
                 break;
             case Qt.Key_Left:
-                print("left pressed");
                 break;
             case Qt.Key_Right:
-                print("right pressed");
                 break;
             default:
                 break;
@@ -129,18 +124,8 @@ Rectangle {
 
                 // Images
                 Instantiator {
-                    model: ScriptModel {
-                        values: [...Wallpaper.config.layers]
-                    }
+                    model: Wallpaper.list
                     delegate: PreviewImage {
-                        parent: content
-                    }
-                }
-
-                // Container
-                Instantiator {
-                    model: []
-                    delegate: Rectangle {
                         parent: content
                     }
                 }
@@ -226,47 +211,55 @@ Rectangle {
         }
     }
 
-    function imageToScreenPosition() {
-        var images = content.children.filter(s => s instanceof PreviewImage);
-        var screens = content.children.filter(s => s instanceof Monitor);
+    function overlapsAny(target) {
+        const screens = content.children.filter(s => s instanceof Monitor);
+        const newScreens = [];
+        for (let i = 0; i < screens.length; i++) {
+            const screen = screens[i];
 
-        for (var i in images) {
-            const target = images[i];
-            var props = {
-                source: target.image.source,
-                width: target.width,
-                height: target.height,
-                x: target.x,
-                y: target.y,
-                z: target.z,
-                name: target.objectName,
-                screens: []
-            };
-            for (var j in screens) {
-                const screen = screens[j];
-                var sx = screen.x;
-                var sy = screen.y;
-                var sw = screen.width;
-                var sh = screen.height;
-                var imgRight = props.x + props.width;
-                var imgBottom = props.y + props.height;
-                var screenRight = sx + sw;
-                var screenBottom = sy + sh;
-                if (props.x < screenRight && imgRight > sx && props.y < screenBottom && imgBottom > sy) {
-                    var relative = {
-                        x: target.x - screen.x,
-                        y: target.y - screen.y,
-                        name: screen.objectName
-                    };
-                    props.screens.push(relative);
-                }
+            if (intersects(target, screen)) {
+                newScreens.push(getRelativePos(target, screen));
             }
-
-            Wallpaper.config.layers = Wallpaper.config.layers.filter(s => s.name !== target.objectName);
-            Wallpaper.config.layers.push(props);
         }
 
-        Wallpaper.save();
+        target.screens.clear();
+        for (let i = 0; i < newScreens.length; i++) {
+            target.screens.append(newScreens[i]);
+        }
+
+        let item = Wallpaper.list.get(target.index);
+        item.x = target.x;
+        item.y = target.y;
+        item.z = target.z;
+
+        Wallpaper.list.set(target.index, item);
+        return false;
+    }
+
+    function find(model, criteria) {
+        for (var i = 0; i < model.count; ++i)
+            if (criteria(model.get(i)))
+                return model.get(i);
+        return null;
+    }
+
+    function findIndex(model, criteria) {
+        for (var i = 0; i < model.count; ++i)
+            if (criteria(model.get(i)))
+                return i;
+        return -1;
+    }
+    function intersects(a, b) {
+        return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
+    function getRelativePos(target, screen) {
+        var relative = {
+            x: target.x - screen.x,
+            y: target.y - screen.y,
+            name: screen.objectName
+        };
+        return relative;
     }
 
     Component.onCompleted: {
@@ -328,7 +321,14 @@ Rectangle {
     component PreviewImage: ResizeableRect {
         id: container
 
+        property Timer debounceTimer: Timer {
+            interval: 100
+            onTriggered: overlapsAny(container)
+        }
+
         required property var modelData
+        required property int index
+        required property ListModel screens
         property Image image: draggableImage
         property var found
 
@@ -342,10 +342,8 @@ Rectangle {
         x: (modelData.x || 0)
         y: (modelData.y || 0)
 
-        Outline {
-            anchors.fill: parent
-            zoom: flick.zoom
-        }
+        onXChanged: debounceTimer.restart()
+        onYChanged: debounceTimer.restart()
 
         // image
         Image {
@@ -393,13 +391,8 @@ Rectangle {
                         color: Colors.color.secondary
                     }
                     onClicked: {
-                        var layers = Wallpaper.config.layers;
-                        var idx = layers.findIndex(s => s.name === container.modelData.name);
-                        if (idx >= 0) {
-                            var newLayers = [...layers];
-                            newLayers.splice(idx, 1);
-                            Wallpaper.config.layers = newLayers;
-                        }
+                        Wallpaper.list.remove(container.index, 1);
+                        Wallpaper.list.save();
                     }
                 }
             }
@@ -430,7 +423,6 @@ Rectangle {
                         } else {
                             container.z--;
                         }
-                        print(container.z);
                     }
                 }
             }
@@ -445,6 +437,12 @@ Rectangle {
             text: `z: ${container.z}`
             color: Colors.color.primary
             font.pixelSize: 12 / flick.zoom
+        }
+
+        // outline
+        Outline {
+            anchors.fill: parent
+            zoom: flick.zoom
         }
     }
 
@@ -477,7 +475,10 @@ Rectangle {
 
                 Button {
                     text: "Check"
-                    onClicked: container.imageToScreenPosition()
+                    onClicked: {
+                        Wallpaper.list.save();
+                        // container.imageToScreenPosition()
+                    }
                 }
 
                 Button {
@@ -509,8 +510,7 @@ Rectangle {
                             checked: modelData === Wallpaper.config.theme
                             onClicked: {
                                 Wallpaper.config.theme = modelData;
-                                panel.onSaveCustomWallpaper();
-                                Wallpaper.save();
+                                Wallpaper.generatecolor();
                             }
                         }
                         onObjectAdded: (idx, obj) => {
