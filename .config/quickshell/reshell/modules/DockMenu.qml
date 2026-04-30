@@ -8,13 +8,15 @@ import qs.components
 import qs.core
 
 PopupModal {
-    id: modalPopup
-
+    id: modal
+    property var specs
     property list<var> slots
     property list<var> activeWidgets
+
     signal add(string identifier, var obj)
     signal remove
     signal save
+
     width: Math.min(400, screen.width / 2)
     height: Math.min(600, screen.height / 2)
 
@@ -85,9 +87,9 @@ PopupModal {
                 Button {
                     text: "Quit and Save"
                     onClicked: {
-                        modalPopup.save();
+                        modal.save();
                         Qt.callLater(() => {
-                            modalPopup.close();
+                            modal.close();
                         });
                     }
                 }
@@ -114,13 +116,13 @@ PopupModal {
             }
             Button {
                 text: "Delete Dock"
-                onClicked: modalPopup.remove()
+                onClicked: modal.remove()
             }
 
             Button {
-                text: `${config.exclusiveZone ? "Disable" : "Enable"} Exclusive Zone`
+                text: `${modal.specs.exclusiveZone ? "Disable" : "Enable"} Exclusive Zone`
                 onClicked: {
-                    config.exclusiveZone = !config.exclusiveZone;
+                    modal.specs.exclusiveZone = !modal.specs.exclusiveZone;
                 }
             }
 
@@ -135,7 +137,7 @@ PopupModal {
                     model: ["left", "right", "top", "bottom"]
                     delegate: Button {
                         text: modelData
-                        onClicked: config.position = modelData
+                        onClicked: modal.specs.position = modelData
                     }
                 }
             }
@@ -156,8 +158,8 @@ PopupModal {
                     from: 0
                     to: 100
 
-                    value: config.width
-                    onValueChanged: config.width = value
+                    value: modal.specs.width
+                    onValueChanged: modal.specs.width = value
                 }
             }
             // Height
@@ -172,34 +174,34 @@ PopupModal {
                     from: 0
                     to: 100
 
-                    value: config.height
-                    onValueChanged: config.height = value
+                    value: modal.specs.height
+                    onValueChanged: modal.specs.height = value
                 }
             }
             // Position
             Row {
                 spacing: 10
                 Label {
-                    text: config.side ? "y" : "x"
+                    text: modal.specs.side ? "y" : "x"
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Slider {
                     id: sliderPos
-                    property int barsize: config.side ? config.height : config.width
+                    property int barsize: modal.specs.side ? modal.specs.height : modal.specs.width
                     enabled: barsize !== 100
 
                     from: 0
                     to: 100
                     stepSize: 1
 
-                    value: config.side ? config.y : config.x
+                    value: modal.specs.side ? modal.specs.y : modal.specs.x
 
                     onValueChanged: {
-                        if (config.side) {
-                            config.y = value;
+                        if (modal.specs.side) {
+                            modal.specs.y = value;
                         } else {
-                            config.x = value;
+                            modal.specs.x = value;
                         }
                     }
                 }
@@ -219,7 +221,7 @@ PopupModal {
             }
             FlexboxLayout {
                 id: rounding
-                property var rounding: config.style.rounding
+                property var rounding: modal.specs.style.rounding
                 wrap: FlexboxLayout.Wrap
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
@@ -279,7 +281,7 @@ PopupModal {
             }
             FlexboxLayout {
                 id: margin
-                property var margin: config.style.margin
+                property var margin: modal.specs.style.margin
                 wrap: FlexboxLayout.Wrap
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
@@ -338,7 +340,7 @@ PopupModal {
                 id: opacitySlider
                 to: 1.0
                 onValueChanged: {
-                    config.style.opacity = value.toFixed(2);
+                    modal.specs.style.opacity = value.toFixed(2);
                 }
             }
 
@@ -349,7 +351,7 @@ PopupModal {
             }
             ColorGrid {
                 onSetColor: color => {
-                    config.style.color = color;
+                    modal.specs.style.color = color;
                 }
             }
             // Palette
@@ -359,7 +361,7 @@ PopupModal {
             }
             PaletteGrid {
                 onSetColor: color => {
-                    config.style.color = color;
+                    modal.specs.style.color = color;
                 }
             }
         }
@@ -372,11 +374,11 @@ PopupModal {
         clip: true
 
         Connections {
-            target: modalPopup
+            target: modal
             function onVisibleChanged() {
                 if (!container.selectedSlot)
                     return;
-                if (modalPopup.visible) {
+                if (modal.visible) {
                     container.selectedSlot.state = "selected";
                 } else {
                     container.selectedSlot.state = "none";
@@ -390,7 +392,7 @@ PopupModal {
             property var selectedSlot: null
 
             onSelectedSlotChanged: {
-                if (modalPopup.visible && container.selectedSlot)
+                if (modal.visible && container.selectedSlot)
                     container.selectedSlot.state = "selected";
             }
 
@@ -415,7 +417,7 @@ PopupModal {
                             spacing: 0,
                             widgets: []
                         };
-                        modalPopup.add("slot", slot);
+                        modal.add("slot", slot);
                     }
                 }
             }
@@ -423,7 +425,7 @@ PopupModal {
             ListView {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                model: [...modalPopup.slots]
+                model: [...modal.slots]
                 orientation: ListView.Horizontal
                 delegate: Rectangle {
                     width: 60
@@ -467,7 +469,7 @@ PopupModal {
                 Row {
                     Layout.fillWidth: true
                     Repeater {
-                        model: config.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
+                        model: modal.specs.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
                         delegate: Button {
                             text: modelData.toUpperCase()
                             onClicked: container.selectedSlot.updatePosition(modelData)
@@ -486,8 +488,8 @@ PopupModal {
                     onClicked: {
                         container.selectedSlot.removeSlot();
                         Qt.callLater(() => {
-                            if (modalPopup.slots.length > 0) {
-                                container.selectedSlot = modalPopup.slots[0];
+                            if (modal.slots.length > 0) {
+                                container.selectedSlot = modal.slots[0];
                             }
                         });
                     }
@@ -497,8 +499,8 @@ PopupModal {
     }
 
     component WidgetsTab: Flickable {
-        width: modalPopup.width
-        height: modalPopup.height
+        width: modal.width
+        height: modal.height
         contentHeight: column.height
         clip: true
 
@@ -532,7 +534,7 @@ PopupModal {
             Drag.active: ma.drag.active
             Drag.keys: [modelData.source]
             Drag.hotSpot: {
-                switch (config.position) {
+                switch (modal.specs.position) {
                 case "top":
                 case "left":
                     return Qt.point(0, 0);
@@ -608,10 +610,10 @@ PopupModal {
     }
 
     component ActiveWidgetsTab: Flickable {
-        property var selectedWidget: modalPopup.activeWidgets[0] || null
+        property var selectedWidget: modal.activeWidgets[0] || null
 
-        width: modalPopup.width
-        height: modalPopup.height
+        width: modal.width
+        height: modal.height
         contentHeight: container.height
         clip: true
 
@@ -626,7 +628,7 @@ PopupModal {
                 orientation: ListView.Horizontal
 
                 model: ScriptModel {
-                    values: [...modalPopup.activeWidgets].filter(s => s !== undefined && s !== null && s.objectName !== null)
+                    values: [...modal.activeWidgets].filter(s => s !== undefined && s !== null && s.objectName !== null)
                 }
                 delegate: Button {
                     text: modelData ? modelData.objectName : ""

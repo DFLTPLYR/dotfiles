@@ -190,6 +190,7 @@ Item {
 
             DockMenu {
                 id: modalPopup
+                specs: file.adapter
                 slots: panel.dockSlots
                 activeWidgets: panel.activeWidgets
                 onSave: {

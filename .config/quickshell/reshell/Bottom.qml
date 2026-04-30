@@ -13,11 +13,15 @@ import qs.components
 
 PanelWindow {
     id: panel
+    property var containers
     property var file
     property Item area: null
     property bool fileExplorerOpen: false
 
     signal dockUpdate(var data)
+    signal addContainer(var obj)
+    signal removeContainer(int idx)
+    signal save
 
     color: "transparent"
     implicitHeight: screen.height
@@ -39,18 +43,14 @@ PanelWindow {
         height: parent.height
 
         Instantiator {
-            model: file.containers
+            model: panel.containers
             delegate: StyledContainer {
                 parent: controlContainer
                 onSave: (idx, obj) => {
-                    const container = file.containers;
-                    container.set(idx, obj);
-                    container.save();
+                    panel.save();
                 }
                 onRemove: idx => {
-                    const container = file.containers;
-                    container.remove(idx);
-                    container.save();
+                    panel.removeContainer(idx);
                 }
             }
         }
@@ -115,7 +115,7 @@ PanelWindow {
                         z: 1,
                         content: []
                     };
-                    file.containers.append(container);
+                    panel.addContainer(container);
                 }
             }
 
