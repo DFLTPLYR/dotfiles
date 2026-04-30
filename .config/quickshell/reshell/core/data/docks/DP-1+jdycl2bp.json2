@@ -1,0 +1,96 @@
+{
+    "exclusiveZone": true,
+    "height": 27,
+    "position": "top",
+    "side": false,
+    "slots": [
+        {
+            "name": "lx8iy0t2",
+            "position": "left",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "jhrwjdvb",
+                    "props": {
+                        "position": 0
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/NiriWorkspaces.qml"
+                }
+            ]
+        },
+        {
+            "name": "7vxnc688",
+            "position": "center",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "kjpvhuwv",
+                    "props": {
+                        "fontSize": 13,
+                        "position": 0,
+                        "size": 57
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Clock.qml"
+                },
+                {
+                    "name": "5gp8a2q3",
+                    "props": {
+                        "fontSize": 14,
+                        "position": 1,
+                        "size": 59
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Date.qml"
+                }
+            ]
+        },
+        {
+            "name": "fyslfknt",
+            "position": "right",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "j5n9sjys",
+                    "props": {
+                        "icon": 19,
+                        "position": 0,
+                        "width": 95
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/Menu.qml"
+                }
+            ]
+        }
+    ],
+    "style": {
+        "border": {
+            "color": "#00000000",
+            "width": 0
+        },
+        "borderImage": {
+            "border": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            },
+            "enable": false,
+            "source": ""
+        },
+        "color": "#0f131c",
+        "margin": {
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+        },
+        "opacity": 0.5,
+        "rounding": {
+            "bottomLeft": 0,
+            "bottomRight": 0,
+            "topLeft": 0,
+            "topRight": 0
+        }
+    },
+    "width": 25,
+    "x": 50,
+    "y": 0
+}

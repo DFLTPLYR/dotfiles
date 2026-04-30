@@ -1,0 +1,55 @@
+{
+    "exclusiveZone": false,
+    "height": 40,
+    "position": "left",
+    "side": true,
+    "slots": [
+        {
+            "name": "qxy9ypqx",
+            "position": "center",
+            "spacing": 0,
+            "widgets": [
+                {
+                    "name": "o30ua1hw",
+                    "props": {
+                        "position": 0
+                    },
+                    "source": "/home/dfltplyr/.config/quickshell/reshell/widgets/NiriWorkspaces.qml"
+                }
+            ]
+        }
+    ],
+    "style": {
+        "border": {
+            "color": "#00000000",
+            "width": 0
+        },
+        "borderImage": {
+            "border": {
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+            },
+            "enable": false,
+            "source": ""
+        },
+        "color": "#0f131c",
+        "margin": {
+            "bottom": -1,
+            "left": 0,
+            "right": 0,
+            "top": 0
+        },
+        "opacity": 0,
+        "rounding": {
+            "bottomLeft": 0,
+            "bottomRight": 0,
+            "topLeft": 0,
+            "topRight": 0
+        }
+    },
+    "width": 29,
+    "x": 0,
+    "y": 50
+}
