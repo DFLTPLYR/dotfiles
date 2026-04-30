@@ -506,48 +506,18 @@ Rectangle {
                 Menu {
                     id: colorScheme
                     title: "Theme Picker"
-                    width: 150
+                    width: 125
 
-                    ListModel {
-                        id: themes
-                        ListElement {
-                            scheme: "scheme-content"
-                        }
-                        ListElement {
-                            scheme: "scheme-expressive"
-                        }
-                        ListElement {
-                            scheme: "scheme-fidelity"
-                        }
-                        ListElement {
-                            scheme: "scheme-fruit-salad"
-                        }
-                        ListElement {
-                            scheme: "scheme-monochrome"
-                        }
-                        ListElement {
-                            scheme: "scheme-neutral"
-                        }
-                        ListElement {
-                            scheme: "scheme-rainbow"
-                        }
-                        ListElement {
-                            scheme: "scheme-tonal-spot"
-                        }
-                        ListElement {
-                            scheme: "scheme-vibrant"
-                        }
-                    }
                     DelegateModel {
                         id: themeDM
-                        model: themes
+                        model: Colors.themes
                         delegate: CheckBox {
-                            required property string scheme
+                            required property string modelData
                             width: ListView.view.width
-                            text: scheme
-                            checked: scheme === Wallpaper.config.theme
+                            text: modelData.replace("scheme-", "")
+                            checked: modelData === Wallpaper.config.theme
                             onClicked: {
-                                Wallpaper.config.theme = scheme;
+                                Wallpaper.config.theme = modelData;
                                 Wallpaper.generatecolor();
                             }
                         }
