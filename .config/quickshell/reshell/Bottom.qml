@@ -58,7 +58,7 @@ PanelWindow {
 
     // MouseArea
     LazyLoader {
-        activeAsync: Global.edit
+        active: Global.edit
         component: MouseArea {
             parent: controlContainer
             anchors.fill: parent
