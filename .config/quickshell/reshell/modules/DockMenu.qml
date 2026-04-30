@@ -9,12 +9,12 @@ import qs.core
 
 PopupModal {
     id: modalPopup
+
     property list<var> slots
     property list<var> activeWidgets
     signal add(string identifier, var obj)
     signal remove
     signal save
-
     width: Math.min(400, screen.width / 2)
     height: Math.min(600, screen.height / 2)
 
@@ -119,8 +119,11 @@ PopupModal {
 
             Button {
                 text: `${config.exclusiveZone ? "Disable" : "Enable"} Exclusive Zone`
-                onClicked: config.exclusiveZone = !config.exclusiveZone
+                onClicked: {
+                    config.exclusiveZone = !config.exclusiveZone;
+                }
             }
+
             Label {
                 font.pixelSize: 32
                 text: "Position"

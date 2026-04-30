@@ -12,32 +12,13 @@ Singleton {
     property alias config: adapter.config
     signal generatecolor
 
-    property ListModel list: ListModel {
-        id: wallpaperModel
-
-        function save() {
-            const list = [];
-            for (let i = 0; i < count; i++) {
-                const object = wallpaperModel.get(i);
-                print(object.z);
-                list.push(JSON.parse(JSON.stringify(object)));
-            }
+    property FileModel list: FileModel {
+        onSaved: arr => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
-            theme.source = [...list];
+            theme.source = [...arr];
             fileView.writeAdapter();
             config.generatecolor();
-        }
-
-        function sync() {
-            wallpaperModel.clear();
-            const current = adapter.config.current;
-            const theme = adapter.config.preset.find(s => s.name === current);
-            const sources = theme.source;
-
-            for (const i in sources) {
-                wallpaperModel.append(sources[i]);
-            }
         }
     }
 
@@ -47,7 +28,10 @@ Singleton {
         watchChanges: true
         preload: true
         onLoaded: {
-            wallpaperModel.sync();
+            const current = adapter.config.current;
+            const theme = adapter.config.preset.find(s => s.name === current);
+            const sources = theme.source;
+            list.sources = sources;
             config.ready = true;
         }
         onFileChanged: {

@@ -36,29 +36,22 @@ Variants {
             preload: true
             onLoaded: {
                 content.active = true;
-                containerModel.sync();
+                containers.sources = adapter.container;
             }
             property list<var> docklist: []
             property list<var> updateQueue: []
 
-            property ListModel containers: ListModel {
-                id: containerModel
-
-                function save() {
-                    const list = [];
-                    for (let i = 0; i < count; i++) {
-                        const object = containerModel.get(i);
-                        list.push(JSON.parse(JSON.stringify(object)));
-                    }
+            property FileModel containers: FileModel {
+                onSaved: list => {
                     adapter.container = [...list];
                     fileview.save();
                 }
+            }
 
-                function sync() {
-                    const containers = adapter.container;
-                    for (const i in containers) {
-                        containerModel.append(containers[i]);
-                    }
+            property FileModel dock: FileModel {
+                onSaved: list => {
+                    adapter.container = [...list];
+                    fileview.save();
                 }
             }
 
