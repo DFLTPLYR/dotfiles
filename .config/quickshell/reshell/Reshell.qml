@@ -106,37 +106,6 @@ Variants {
             component: Item {
                 id: display
 
-                property ListModel docks: ListModel {
-                    id: dockModel
-                    function save() {
-                        let arr = [];
-                        for (let i = 0; i < dockModel.count; i++) {
-                            const name = dockModel.get(i).name;
-                            arr.push(name);
-                        }
-                        adapter.docks = [...arr];
-                        fileview.writeAdapter();
-                    }
-                    function sync() {
-                        dockModel.clear();
-
-                        const container = adapter.docks;
-                        for (const i in container) {
-                            dockModel.append({
-                                "name": container[i]
-                            });
-                        }
-                    }
-                    Component.onCompleted: {
-                        const container = adapter.docks;
-                        for (const i in container) {
-                            dockModel.append({
-                                "name": container[i]
-                            });
-                        }
-                    }
-                }
-
                 // overlay
                 Overlay {
                     screen: reshell.screen

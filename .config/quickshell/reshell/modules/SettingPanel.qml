@@ -20,10 +20,10 @@ FloatingWindow {
     minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
     maximumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
 
-    Loader {
-        anchors.fill: parent
+    LazyLoader {
         active: settingpanel.visible
-        sourceComponent: RowLayout {
+        component: RowLayout {
+            anchors.fill: parent
             Rectangle {
                 Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
                 Layout.fillHeight: true
@@ -78,6 +78,7 @@ FloatingWindow {
                 // WallpaperPage
                 WallpaperPage {}
             }
+            Component.onCompleted: settingpanel.data.push(this)
         }
     }
 }
