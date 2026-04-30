@@ -13,7 +13,7 @@ PopupModal {
     property list<var> slots
     property list<var> activeWidgets
 
-    signal add(string identifier, var obj)
+    signal add(var obj)
     signal remove
     signal save
 
@@ -417,7 +417,7 @@ PopupModal {
                             spacing: 0,
                             widgets: []
                         };
-                        modal.add("slot", slot);
+                        modal.add(slot);
                     }
                 }
             }
