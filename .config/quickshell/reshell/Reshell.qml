@@ -122,7 +122,6 @@ Variants {
                             const model = reshell.dock;
                             const screen = reshell.screen.name;
                             const obj = model.get(idx);
-                            print(obj);
                             const fileUrl = Qt.resolvedUrl(`./core/data/docks/${screen}+${obj.name}.json`);
                             const filePath = fileUrl.toString().replace('file://', '');
                             Quickshell.execDetached(["rm", "-rf", filePath]);
@@ -134,6 +133,7 @@ Variants {
 
                 Bottom {
                     screen: reshell.screen
+                    containers: reshell.containers
                     file: fileview
                     onDockUpdate: dock => {
                         reshell.dock.append({
@@ -141,6 +141,12 @@ Variants {
                         });
                         reshell.dock.save();
                         fileview.updateQueue.push(dock);
+                    }
+                    onSave: reshell.containers.save()
+                    onAddContainer: obj => reshell.containers.append(obj)
+                    onRemoveContainer: idx => {
+                        reshell.containers.remove(idx, 1);
+                        reshell.containers.save();
                     }
                 }
 
