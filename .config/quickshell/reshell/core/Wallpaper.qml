@@ -17,6 +17,7 @@ Singleton {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
             theme.source = [...arr];
+            print(arr);
             fileView.writeAdapter();
             config.generatecolor();
         }

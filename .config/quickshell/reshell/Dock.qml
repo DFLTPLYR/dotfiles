@@ -193,15 +193,8 @@ Item {
                 specs: file.adapter
                 slots: panel.dockSlots
                 activeWidgets: panel.activeWidgets
-                onSave: {
-                    timer.restart();
-                }
-                onAdd: (type, obj) => {
-                    switch (type) {
-                    case "slot":
-                        return slotModel.append(obj);
-                    }
-                }
+                onSave: timer.restart()
+                onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
             }
 
@@ -271,7 +264,6 @@ Item {
     }
 
     component DockContainer: Item {
-        id: container
 
         state: config.position
 

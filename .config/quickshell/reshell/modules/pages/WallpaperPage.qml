@@ -220,18 +220,15 @@ Rectangle {
 
             if (intersects(target, screen)) {
                 newScreens.push(getRelativePos(target, screen));
+                print(target, screen);
             }
-        }
-
-        target.screens.clear();
-        for (let i = 0; i < newScreens.length; i++) {
-            target.screens.append(newScreens[i]);
         }
 
         let item = Wallpaper.list.get(target.index);
         item.x = target.x;
         item.y = target.y;
         item.z = target.z;
+        item.screens = newScreens;
         item.width = target.width;
         item.height = target.height;
         Wallpaper.list.set(target.index, item);
@@ -321,16 +318,17 @@ Rectangle {
     }
 
     component PreviewImage: ResizeableRect {
-        id: container
+        id: resizeableRect
 
         property Timer debounceTimer: Timer {
             interval: 100
-            onTriggered: overlapsAny(container)
+            onTriggered: overlapsAny(resizeableRect)
         }
 
         required property var modelData
         required property int index
-        required property ListModel screens
+        property ListModel screens: ListModel {}
+        onScreensChanged: print(screens)
         property Image image: draggableImage
         property var found
 
@@ -352,8 +350,8 @@ Rectangle {
         Image {
             id: draggableImage
             property bool lock: (modelData.x && modelData.y) ? true : false
-            width: container.width
-            height: container.height
+            width: resizeableRect.width
+            height: resizeableRect.height
             source: Qt.resolvedUrl(modelData.source) || ""
             objectName: modelData.name
             z: -1
@@ -394,7 +392,7 @@ Rectangle {
                         color: Colors.color.secondary
                     }
                     onClicked: {
-                        Wallpaper.list.remove(container.index, 1);
+                        Wallpaper.list.remove(resizeableRect.index, 1);
                         Wallpaper.list.save();
                     }
                 }
@@ -402,13 +400,13 @@ Rectangle {
 
             DragHandler {
                 id: dragHandler
-                target: container
+                target: resizeableRect
                 enabled: !draggableImage.lock
             }
 
             HoverHandler {
                 id: hoverHandler
-                target: container
+                target: resizeableRect
                 enabled: !draggableImage.lock
             }
 
@@ -422,9 +420,9 @@ Rectangle {
                     let isShiftWheel = event.modifiers & Qt.ShiftModifier;
                     if (isShiftWheel && wheelHandler.enabled) {
                         if (event.angleDelta.y > 0) {
-                            container.z++;
+                            resizeableRect.z++;
                         } else {
-                            container.z--;
+                            resizeableRect.z--;
                         }
                     }
                 }
@@ -437,7 +435,7 @@ Rectangle {
                 top: parent.top
                 margins: 4
             }
-            text: `z: ${container.z}`
+            text: `z: ${resizeableRect.z}`
             color: Colors.color.primary
             font.pixelSize: 12 / flick.zoom
         }
@@ -454,6 +452,7 @@ Rectangle {
         z: 2
         readonly property list<PreviewImage> imageList: content.children.filter(s => s instanceof PreviewImage)
         readonly property list<Monitor> screenList: content.children.filter(s => s instanceof Monitor)
+
         anchors {
             top: parent.top
             left: parent.left
