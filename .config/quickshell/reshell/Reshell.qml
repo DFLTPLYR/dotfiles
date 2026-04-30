@@ -21,7 +21,7 @@ Variants {
 
         property FileModel dock: FileModel {
             onSaved: list => {
-                adapter.container = [...list];
+                adapter.docks = list.map(item => item.name);
                 fileview.save();
             }
         }
@@ -122,6 +122,7 @@ Variants {
                             const model = reshell.dock;
                             const screen = reshell.screen.name;
                             const obj = model.get(idx);
+                            print(obj);
                             const fileUrl = Qt.resolvedUrl(`./core/data/docks/${screen}+${obj.name}.json`);
                             const filePath = fileUrl.toString().replace('file://', '');
                             Quickshell.execDetached(["rm", "-rf", filePath]);
