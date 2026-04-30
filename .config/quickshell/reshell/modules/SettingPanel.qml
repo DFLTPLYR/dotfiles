@@ -32,18 +32,16 @@ FloatingWindow {
 
                 DelegateModel {
                     id: navModel
-                    model: ListModel {
-                        id: navList
-                        ListElement {
-                            name: "Property"
-                            page: 0
+                    model: [
+                        {
+                            "name": "Property",
+                            "page": 0
+                        },
+                        {
+                            "name": "Wallpaper",
+                            "page": 1
                         }
-                        ListElement {
-                            name: "Wallpaper"
-                            page: 1
-                        }
-                    }
-
+                    ]
                     delegate: Button {
                         required property string name
                         required property int page

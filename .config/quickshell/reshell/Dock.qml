@@ -40,7 +40,6 @@ Item {
             if (error === FileViewError.FileNotFound) {
                 file.setText("{}");
                 file.writeAdapter();
-                // Quickshell.reload(false);
             }
         }
         adapter: JsonAdapter {

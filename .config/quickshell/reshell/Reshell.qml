@@ -11,6 +11,21 @@ Variants {
     delegate: PanelWindow {
         id: reshell
         required property ShellScreen modelData
+
+        property FileModel containers: FileModel {
+            onSaved: list => {
+                adapter.container = [...list];
+                fileview.save();
+            }
+        }
+
+        property FileModel dock: FileModel {
+            onSaved: list => {
+                adapter.container = [...list];
+                fileview.save();
+            }
+        }
+
         implicitWidth: screen.width
         implicitHeight: screen.height
 
@@ -36,24 +51,13 @@ Variants {
             preload: true
             onLoaded: {
                 content.active = true;
-                containers.sources = adapter.container;
+                reshell.containers.sources = adapter.container;
+                reshell.dock.sources = adapter.docks.map(value => ({
+                            name: value
+                        }));
             }
             property list<var> docklist: []
             property list<var> updateQueue: []
-
-            property FileModel containers: FileModel {
-                onSaved: list => {
-                    adapter.container = [...list];
-                    fileview.save();
-                }
-            }
-
-            property FileModel dock: FileModel {
-                onSaved: list => {
-                    adapter.container = [...list];
-                    fileview.save();
-                }
-            }
 
             onDocklistChanged: {
                 for (let i = 0; i < docklist.length; i++) {
@@ -141,12 +145,12 @@ Variants {
                 // docks
                 Instantiator {
                     id: dockInstantiator
-                    model: dockModel
+                    model: reshell.dock
                     delegate: Dock {
                         screen: reshell.screen
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
                         onRemoveDock: idx => {
-                            const model = docks;
+                            const model = reshell.dock;
                             const screen = reshell.screen.name;
                             const obj = model.get(idx);
                             const fileUrl = Qt.resolvedUrl(`./core/data/docks/${screen}+${obj.name}.json`);
@@ -162,10 +166,10 @@ Variants {
                     screen: reshell.screen
                     file: fileview
                     onDockUpdate: dock => {
-                        dockModel.append({
+                        reshell.dock.append({
                             "name": dock.name
                         });
-                        dockModel.save();
+                        reshell.dock.save();
                         fileview.updateQueue.push(dock);
                     }
                 }
