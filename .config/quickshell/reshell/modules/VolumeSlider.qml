@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 
 import Quickshell.Services.Pipewire
@@ -36,10 +37,11 @@ Item {
         }
     }
 
-    Loader {
+    LazyLoader {
         id: volumeSliderLoader
         active: scope.shouldShowOsd
-        sourceComponent: Slider {
+        component: Slider {
+            parent: scope
             visible: scope.shouldShowOsd && Compositor.focusedMonitor === screen.name
             opacity: scope.shouldShowOsd ? 1 : 0
             width: 300
