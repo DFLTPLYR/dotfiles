@@ -45,7 +45,6 @@ Rectangle {
 
         focus: true
         Keys.onPressed: event => {
-            print(event);
             switch (event.key) {
             case Qt.Key_Up:
                 break;
@@ -232,6 +231,7 @@ Rectangle {
         item.width = target.width;
         item.height = target.height;
         Wallpaper.list.set(target.index, item);
+        Wallpaper.list.update(target.index);
         return false;
     }
 
