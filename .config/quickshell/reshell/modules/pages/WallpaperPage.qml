@@ -343,9 +343,6 @@ Rectangle {
         y: (modelData.y || 0)
         z: (modelData.z || 0)
 
-        onXChanged: debounceTimer.restart()
-        onYChanged: debounceTimer.restart()
-
         // image
         Image {
             id: draggableImage
@@ -402,6 +399,7 @@ Rectangle {
                 id: dragHandler
                 target: resizeableRect
                 enabled: !draggableImage.lock
+                onActiveChanged: overlapsAny(resizeableRect)
             }
 
             HoverHandler {
