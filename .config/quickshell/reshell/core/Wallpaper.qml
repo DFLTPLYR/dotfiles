@@ -13,6 +13,7 @@ Singleton {
     signal generatecolor
 
     property FileModel list: FileModel {
+        signal update(int index)
         onSaved: arr => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
@@ -50,9 +51,7 @@ Singleton {
             property JsonObject config: JsonObject {
                 property string mode: "standard"
                 property string current: ""
-                property list<var> source: []
                 property list<var> preset: []
-                property list<var> layers: []
                 property list<var> containers: []
                 property string theme: "scheme-content"
             }

@@ -1,3 +1,4 @@
+import QtQml.Models
 import QtQuick
 import QtQuick.Layouts
 
@@ -13,8 +14,6 @@ import qs.components
 PanelWindow {
     id: panel
     property var file
-    readonly property var images: Wallpaper.config.preset.find(s => s.name === Wallpaper.config.current)
-    readonly property var path: Wallpaper.config.source.filter(s => s && s.monitor === screen.name) || []
     property bool edit: false
     property bool fileExplorerOpen: false
 
@@ -67,14 +66,14 @@ PanelWindow {
         }
 
         delegate: Item {
-            id: image
+            id: container
             required property var model
             required property int index
             required property string source
             required property ListModel screens
             property var relativePos: findMatchingScreen()
             function findMatchingScreen() {
-                if (!screens || !panel || !panel.screen) {
+                if (!screens || !panel || !panel.screen || screens.count === 0) {
                     return null;
                 }
 
@@ -88,26 +87,38 @@ PanelWindow {
                 }
                 return null;
             }
-            width: model.width
-            height: model.height
-            x: relativePos.x
-            y: relativePos.y
+            width: image.width
+            height: image.height
+            x: image.x
+            y: image.y
             z: model.z
 
             Image {
-                anchors.fill: parent
-                source: model.source
+                id: image
+                width: container.model.width
+                height: container.model.height
+                source: container.model.source
+                x: container.relativePos ? container.relativePos.x : 0
+                y: container.relativePos ? container.relativePos.y : 0
             }
         }
 
         Component.onCompleted: images.setGroups(model.count)
     }
 
+    Connections {
+        target: Wallpaper.list
+        function onUpdate(idx) {
+            images.setGroups(model.count);
+        }
+    }
+
     ListView {
-        id: imagelistview
+        id: layered
         interactive: false
         width: parent.width
         height: parent.width
+        snapMode: ListView.NoSnap
         model: images
         Component.onCompleted: model.setup = false
     }
@@ -191,7 +202,6 @@ PanelWindow {
     Connections {
         target: Wallpaper
         function onGeneratecolor() {
-            wallpaperModel.sync();
             Qt.callLater(() => {
                 layered.grabToImage(function (result) {
                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
