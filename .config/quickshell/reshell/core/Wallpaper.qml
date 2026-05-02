@@ -13,7 +13,10 @@ Singleton {
     signal generatecolor
 
     property FileModel list: FileModel {
-        signal update(int index)
+        signal update
+        onDataChanged: {
+            update();
+        }
         onSaved: arr => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
