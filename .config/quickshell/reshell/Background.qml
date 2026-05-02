@@ -30,14 +30,13 @@ PanelWindow {
     DelegateModel {
         id: images
         model: Wallpaper.list
-        filterOnGroup: panel.screen.name.toLowerCase()
+        filterOnGroup: panel.screen.name
         groups: [
             DelegateModelGroup {
-                name: panel.screen.name.toLowerCase()
+                name: panel.screen.name
                 includeByDefault: false
             }
         ]
-
         function setGroups() {
             if (items.count <= 0)
                 return;
@@ -51,7 +50,8 @@ PanelWindow {
 
                     for (let j = 0; j < screenArr.count; j++) {
                         const screenObj = screenArr.get(j);
-                        screens.push(screenObj.name.toLowerCase());
+
+                        screens.push(screenObj.name);
                     }
 
                     items.setGroups(i, 1, screens);
@@ -59,7 +59,7 @@ PanelWindow {
             }
         }
 
-        onCountChanged: setGroups(model.count)
+        onCountChanged: images.setGroups()
 
         delegate: Image {
             id: image
@@ -67,6 +67,7 @@ PanelWindow {
             required property var modelData
             property var relative: modelData.screens
             property var coords
+
             onRelativeChanged: {
                 if (!relative || !relative.count)
                     return;
@@ -90,7 +91,7 @@ PanelWindow {
             source: modelData.source
         }
 
-        Component.onCompleted: images.setGroups(model.count)
+        Component.onCompleted: setGroups()
     }
 
     Item {
@@ -103,14 +104,11 @@ PanelWindow {
 
     Connections {
         target: Wallpaper.list
+
         function onUpdate() {
             images.setGroups();
         }
-    }
-
-    Connections {
-        target: Wallpaper
-        function onGeneratecolor() {
+        function onGenerate() {
             Qt.callLater(() => {
                 layered.grabToImage(function (result) {
                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);

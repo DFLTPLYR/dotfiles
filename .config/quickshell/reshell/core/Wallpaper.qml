@@ -10,10 +10,13 @@ Singleton {
     property bool ready: false
     property bool enableSetting: false
     property alias config: adapter.config
-    signal generatecolor
 
     property FileModel list: FileModel {
         signal update
+        signal generate
+        onCountChanged: {
+            update();
+        }
         onDataChanged: {
             update();
         }
@@ -22,7 +25,6 @@ Singleton {
             const theme = adapter.config.preset.find(s => s.name === current);
             theme.source = [...arr];
             fileView.writeAdapter();
-            config.generatecolor();
         }
     }
 
