@@ -221,15 +221,16 @@ Rectangle {
                 newScreens.push(getRelativePos(target, screen));
             }
         }
+        const obj = {
+            x: target.x,
+            y: target.y,
+            z: target.z,
+            screens: newScreens,
+            width: target.width,
+            height: target.height
+        };
 
-        let item = Wallpaper.list.get(target.index);
-        item.x = target.x;
-        item.y = target.y;
-        item.z = target.z;
-        item.screens = newScreens;
-        item.width = target.width;
-        item.height = target.height;
-        Wallpaper.list.set(target.index, item);
+        Wallpaper.list.set(target.index, obj);
         return false;
     }
 
@@ -514,7 +515,7 @@ Rectangle {
                             checked: modelData === Wallpaper.config.theme
                             onClicked: {
                                 Wallpaper.config.theme = modelData;
-                                Wallpaper.generatecolor();
+                                Wallpaper.list.generate();
                             }
                         }
                     }
