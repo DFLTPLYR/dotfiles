@@ -219,7 +219,6 @@ Rectangle {
 
             if (intersects(target, screen)) {
                 newScreens.push(getRelativePos(target, screen));
-                print(target, screen);
             }
         }
 
@@ -231,7 +230,6 @@ Rectangle {
         item.width = target.width;
         item.height = target.height;
         Wallpaper.list.set(target.index, item);
-        Wallpaper.list.update(target.index);
         return false;
     }
 
@@ -328,7 +326,6 @@ Rectangle {
         required property var modelData
         required property int index
         property ListModel screens: ListModel {}
-        onScreensChanged: print(screens)
         property Image image: draggableImage
         property var found
 
@@ -349,6 +346,8 @@ Rectangle {
             property bool lock: (modelData.x && modelData.y) ? true : false
             width: resizeableRect.width
             height: resizeableRect.height
+            // onWidthChanged: overlapsAny(resizeableRect)
+            // onHeightChanged: overlapsAny(resizeableRect)
             source: Qt.resolvedUrl(modelData.source) || ""
             objectName: modelData.name
             z: -1
