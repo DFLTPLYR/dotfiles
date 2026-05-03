@@ -1,14 +1,15 @@
-import QtQuick
-import QtQuick.Layouts
+pragma ComponentBehavior: Bound
 
 import Quickshell
+import QtQuick
+import QtQuick.Layouts
 
 import qs.core
 import qs.components
 
 PopupModal {
     id: modal
-
+    property ShellScreen screen
     signal action(string action)
 
     width: popupContent.width + (modal.leftPadding + modal.rightPadding)
@@ -70,5 +71,6 @@ PopupModal {
 
     SettingPanel {
         id: settingPanel
+        screen: modal.screen
     }
 }
