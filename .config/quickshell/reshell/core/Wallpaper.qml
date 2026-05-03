@@ -12,14 +12,7 @@ Singleton {
     property alias config: adapter.config
 
     property FileModel list: FileModel {
-        signal update
         signal generate
-        onCountChanged: {
-            update();
-        }
-        onDataChanged: {
-            update();
-        }
         onSaved: arr => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
