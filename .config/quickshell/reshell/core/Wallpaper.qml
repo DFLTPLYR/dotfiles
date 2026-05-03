@@ -18,6 +18,14 @@ Singleton {
             const theme = adapter.config.preset.find(s => s.name === current);
             theme.source = [...arr];
             fileView.writeAdapter();
+            generate();
+        }
+    }
+
+    property FileModel containers: FileModel {
+        onSaved: list => {
+            adapter.config.container = [...list];
+            fileview.save();
         }
     }
 
@@ -31,6 +39,7 @@ Singleton {
             const theme = adapter.config.preset.find(s => s.name === current);
             const sources = theme.source;
             list.sources = sources;
+            containers.sources = adapter.config.containers;
             config.ready = true;
         }
         onFileChanged: {

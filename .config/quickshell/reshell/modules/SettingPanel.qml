@@ -10,6 +10,7 @@ import qs.modules.pages
 FloatingWindow {
     id: settingpanel
     property int page: 0
+
     title: "Reshell"
     color: Colors.setOpacity(Colors.color.background, 0.5)
 
