@@ -74,8 +74,8 @@ Wrapper {
 
     PopupModal {
         id: modal
-        width: content.width + (modal.leftPadding + modal.rightPadding)
-        height: content.height + (modal.bottomPadding + modal.topPadding)
+        width: content.contentWidth + (modal.leftPadding + modal.rightPadding)
+        height: content.contentHeight + (modal.bottomPadding + modal.topPadding)
         y: wrap.slotConfig && wrap.slotConfig.side ? wrap.height / 2 - modal.height / 2 : wrap.height
         x: wrap.slotConfig && wrap.slotConfig.side ? wrap.width : wrap.width / 2 - modal.width / 2
 
@@ -87,7 +87,7 @@ Wrapper {
 
             ListView {
                 id: menulist
-                width: parent.width
+                width: 100
                 height: contentHeight
                 model: ["suspend", "poweroff", "hibernate", "reboot"]
                 delegate: Button {

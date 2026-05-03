@@ -1,8 +1,7 @@
+import Quickshell
+
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
-
-import Quickshell
 
 import qs.core
 import qs.components
@@ -11,7 +10,6 @@ import qs.modules.pages
 FloatingWindow {
     id: settingpanel
     property int page: 0
-    screen: panel.screen
     title: "Reshell"
     color: Colors.setOpacity(Colors.color.background, 0.5)
 
@@ -24,6 +22,8 @@ FloatingWindow {
         active: settingpanel.visible
         component: RowLayout {
             anchors.fill: parent
+            spacing: 0
+
             Rectangle {
                 Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
                 Layout.fillHeight: true
@@ -34,7 +34,7 @@ FloatingWindow {
                     id: navModel
                     model: [
                         {
-                            "name": "Property",
+                            "name": "Components",
                             "page": 0
                         },
                         {
@@ -66,14 +66,8 @@ FloatingWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                Pane {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    background: Rectangle {
-                        anchors.fill: parent
-                        color: Colors.setOpacity(Colors.color.background, 0.5)
-                    }
-                }
+                // ComponentsPage
+                ComponentsPage {}
 
                 // WallpaperPage
                 WallpaperPage {}

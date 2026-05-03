@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -14,7 +15,6 @@ import qs.components
 PanelWindow {
     id: panel
     property var containers
-    property var file
     property Item area: null
     property bool fileExplorerOpen: false
 
@@ -124,6 +124,7 @@ PanelWindow {
             }
         }
     }
+
     // selectionRect
     Rectangle {
         id: selectionRect
@@ -143,5 +144,6 @@ PanelWindow {
     // simple desktop popup
     ContextMenu {
         id: contextMenu
+        screen: panel.screen
     }
 }

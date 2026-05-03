@@ -134,7 +134,8 @@ Variants {
                 Bottom {
                     screen: reshell.screen
                     containers: reshell.containers
-                    file: fileview
+                    onSave: reshell.containers.save()
+                    onAddContainer: obj => reshell.containers.append(obj)
                     onDockUpdate: dock => {
                         reshell.dock.append({
                             "name": dock.name
@@ -142,8 +143,6 @@ Variants {
                         reshell.dock.save();
                         fileview.updateQueue.push(dock);
                     }
-                    onSave: reshell.containers.save()
-                    onAddContainer: obj => reshell.containers.append(obj)
                     onRemoveContainer: idx => {
                         reshell.containers.remove(idx, 1);
                         reshell.containers.save();
