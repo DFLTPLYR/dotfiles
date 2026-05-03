@@ -17,6 +17,39 @@ PanelWindow {
     property bool edit: false
     property bool fileExplorerOpen: false
 
+    component LazyImage: LazyLoader {
+        id: imageloader
+        required property int index
+        required property var model
+        property var relative: model.screens
+        property var coords
+
+        active: coords
+        onRelativeChanged: {
+            if (!relative || !relative.count)
+                return;
+            for (let i = 0; i < relative.count; i++) {
+                const screen = relative.get(i);
+                if (screen.name === panel.screen.name) {
+                    return coords = screen;
+                }
+            }
+        }
+
+        component: Image {
+            parent: layered
+
+            width: imageloader.model.width
+            height: imageloader.model.height
+            visible: imageloader.coords ? true : false
+            x: imageloader.coords ? imageloader.coords.x : 0
+            y: imageloader.coords ? imageloader.coords.y : 0
+            z: imageloader.model.z
+
+            source: imageloader.model.source
+        }
+    }
+
     color: "transparent"
     implicitHeight: screen.height
     implicitWidth: screen.width
@@ -30,68 +63,7 @@ PanelWindow {
     DelegateModel {
         id: images
         model: Wallpaper.list
-        filterOnGroup: panel.screen.name
-        groups: [
-            DelegateModelGroup {
-                name: panel.screen.name
-                includeByDefault: false
-            }
-        ]
-        function setGroups() {
-            if (items.count <= 0)
-                return;
-            for (let i = 0; i < items.count; i++) {
-                const item = items.get(i);
-                const modelData = item.model;
-
-                if (modelData && modelData.screens) {
-                    const screenArr = modelData.screens;
-                    const screens = ["list"]; // Start with default group
-
-                    for (let j = 0; j < screenArr.count; j++) {
-                        const screenObj = screenArr.get(j);
-
-                        screens.push(screenObj.name);
-                    }
-
-                    items.setGroups(i, 1, screens);
-                }
-            }
-        }
-
-        onCountChanged: images.setGroups()
-
-        delegate: Image {
-            id: image
-            required property int index
-            required property var modelData
-            property var relative: modelData.screens
-            property var coords
-
-            onRelativeChanged: {
-                if (!relative || !relative.count)
-                    return;
-                for (let i = 0; i < relative.count; i++) {
-                    const screen = relative.get(i);
-                    if (screen.name === panel.screen.name) {
-                        return coords = screen;
-                    }
-                }
-            }
-
-            parent: layered
-
-            width: modelData.width
-            height: modelData.height
-            visible: coords ? true : false
-            x: coords ? coords.x : 0
-            y: coords ? coords.y : 0
-            z: modelData.z
-
-            source: modelData.source
-        }
-
-        Component.onCompleted: setGroups()
+        delegate: LazyImage {}
     }
 
     Item {
@@ -99,15 +71,14 @@ PanelWindow {
         anchors.fill: parent
         Instantiator {
             model: images
+            onObjectRemoved: (idx, obj) => {
+                obj.destroy();
+            }
         }
     }
 
     Connections {
         target: Wallpaper.list
-
-        function onUpdate() {
-            images.setGroups();
-        }
         function onGenerate() {
             Qt.callLater(() => {
                 layered.grabToImage(function (result) {
