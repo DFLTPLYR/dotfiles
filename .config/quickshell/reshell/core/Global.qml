@@ -36,6 +36,20 @@ Singleton {
     // global item
     property alias general: adapter
     property list<var> widgets: []
+    property list<var> settings: [
+        {
+            "name": "General",
+            "page": 0
+        },
+        {
+            "name": "Components",
+            "page": 1
+        },
+        {
+            "name": "Wallpaper",
+            "page": 2
+        }
+    ]
 
     IpcHandler {
         target: "config"
