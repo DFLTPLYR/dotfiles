@@ -25,24 +25,14 @@ FloatingWindow {
             anchors.fill: parent
             spacing: 0
 
-            Rectangle {
+            Pane {
                 Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
                 Layout.fillHeight: true
-
-                color: Colors.setOpacity(Colors.color.background, 0.5)
+                // color: Colors.setOpacity(Colors.color.background, 0.5)
 
                 DelegateModel {
                     id: navModel
-                    model: [
-                        {
-                            "name": "Components",
-                            "page": 0
-                        },
-                        {
-                            "name": "Wallpaper",
-                            "page": 1
-                        }
-                    ]
+                    model: Global.settings
                     delegate: Button {
                         required property string name
                         required property int page
@@ -66,6 +56,9 @@ FloatingWindow {
                 currentIndex: settingpanel.page
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
+                // General Page
+                GeneralPage {}
 
                 // ComponentsPage
                 ComponentsPage {}

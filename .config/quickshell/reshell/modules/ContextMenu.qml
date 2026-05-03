@@ -46,23 +46,18 @@ PopupModal {
             }
         }
 
-        Button {
-            text: "Open Settings"
-            Layout.fillWidth: true
-            onClicked: {
-                settingPanel.visible = true;
-                settingPanel.page = 0;
-                modal.close();
-            }
-        }
-
-        Button {
-            text: "Open Wallpaper"
-            Layout.fillWidth: true
-            onClicked: {
-                settingPanel.visible = true;
-                settingPanel.page = 1;
-                modal.close();
+        Repeater {
+            model: Global.settings
+            delegate: Button {
+                required property string name
+                required property int page
+                Layout.fillWidth: true
+                text: `Open ${name}`
+                onClicked: {
+                    settingPanel.visible = true;
+                    settingPanel.page = page;
+                    modal.close();
+                }
             }
         }
     }
