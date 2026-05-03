@@ -102,7 +102,6 @@ Variants {
         // Wayland Layers
         LazyLoader {
             id: content
-            active: false
             component: Item {
                 id: display
 
@@ -129,9 +128,11 @@ Variants {
                             model.save();
                         }
                     }
+                    onObjectRemoved: (_idx, object) => object.destroy()
                 }
 
                 Bottom {
+                    file: fileview
                     screen: reshell.screen
                     containers: reshell.containers
                     onSave: reshell.containers.save()

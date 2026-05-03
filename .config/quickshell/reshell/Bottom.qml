@@ -14,6 +14,7 @@ import qs.components
 
 PanelWindow {
     id: panel
+    property var file
     property var containers
     property Item area: null
     property bool fileExplorerOpen: false
