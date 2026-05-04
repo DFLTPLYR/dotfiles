@@ -8,7 +8,7 @@ SpinBox {
 
     property var state: Components.config.spinbox
 
-    editable: false
+    editable: true
     wheelEnabled: true
 
     from: -999999999

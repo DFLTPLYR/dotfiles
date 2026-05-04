@@ -61,7 +61,7 @@ Singleton {
 
     component NotifTimer: Timer {
         required property int notificationId
-        interval: 5000
+        interval: Global.general.notificationTimer
         running: true
         onTriggered: () => {
             root.timeoutNotification(notificationId);
