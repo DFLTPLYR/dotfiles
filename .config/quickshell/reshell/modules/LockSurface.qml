@@ -11,6 +11,7 @@ Rectangle {
     required property LockContext context
     readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
     required property ShellScreen monitor
+
     color: colors.window
 
     component LazyImage: LazyLoader {
@@ -18,15 +19,17 @@ Rectangle {
         required property int index
         required property var model
         property var relative: model.screens
+        property ShellScreen monitor: root.monitor
         property var coords
 
-        active: coords
-        onRelativeChanged: {
+        onMonitorChanged: {
             if (!relative || !relative.count)
                 return;
             for (let i = 0; i < relative.count; i++) {
                 const screen = relative.get(i);
-                if (screen.name === panel.screen.name) {
+                print(screen.name, root.monitor);
+                if (screen.name === root.monitor.name) {
+                    imageloader.active = true;
                     return coords = screen;
                 }
             }

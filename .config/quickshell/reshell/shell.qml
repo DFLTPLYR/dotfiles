@@ -9,7 +9,7 @@ ShellRoot {
     id: root
 
     LazyLoader {
-        active: Global.general.greeter
+        active: Global.general.greeter && Wallpaper.ready
         component: Greeter {}
     }
     Reshell {}

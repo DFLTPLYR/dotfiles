@@ -21,10 +21,11 @@ Item {
         locked: Global.general.greeter
 
         WlSessionLockSurface {
+            id: sessionLockSurface
             LockSurface {
                 anchors.fill: parent
                 context: lockContext
-                monitor: screen
+                monitor: sessionLockSurface.screen
             }
         }
     }
