@@ -13,50 +13,53 @@ Rectangle {
     required property ShellScreen monitor
     color: colors.window
 
+    component LazyImage: LazyLoader {
+        id: imageloader
+        required property int index
+        required property var model
+        property var relative: model.screens
+        property var coords
+
+        active: coords
+        onRelativeChanged: {
+            if (!relative || !relative.count)
+                return;
+            for (let i = 0; i < relative.count; i++) {
+                const screen = relative.get(i);
+                if (screen.name === panel.screen.name) {
+                    return coords = screen;
+                }
+            }
+        }
+
+        component: Image {
+            parent: layered
+
+            width: imageloader.model.width
+            height: imageloader.model.height
+            visible: imageloader.coords ? true : false
+            x: imageloader.coords ? imageloader.coords.x : 0
+            y: imageloader.coords ? imageloader.coords.y : 0
+            z: imageloader.model.z
+
+            source: imageloader.model.source
+        }
+    }
+
+    DelegateModel {
+        id: images
+        model: Wallpaper.list
+        delegate: LazyImage {}
+    }
+
     Item {
         id: layered
-        width: parent.width
-        height: parent.width
-
+        anchors.fill: parent
         Instantiator {
-            model: ScriptModel {
-                values: [...Wallpaper.config.layers].filter(item => item && item.screens && item.screens.some(s => s && root.monitor && s.name === root.monitor.name))
+            model: images
+            onObjectRemoved: (idx, obj) => {
+                obj.destroy();
             }
-            delegate: Image {
-                id: wallpaperImage
-                required property var modelData
-                property var relative: modelData.screens.find(s => s && s.name === root.monitor.name)
-                parent: layered
-
-                width: modelData.width
-                height: modelData.height
-                x: relative.x
-                y: relative.y
-
-                source: modelData.source
-                opacity: 0
-
-                states: State {
-                    name: "visible"
-                    PropertyChanges {
-                        target: wallpaperImage
-                        opacity: 1
-                    }
-                }
-
-                transitions: [
-                    Transition {
-                        from: "*"
-                        to: "*"
-                        NumberAnimation {
-                            properties: "opacity,scale"
-                            duration: 300
-                            easing.type: Easing.InOutSine
-                        }
-                    }
-                ]
-            }
-            onObjectAdded: (idx, obj) => obj.state = "visible"
         }
     }
 
