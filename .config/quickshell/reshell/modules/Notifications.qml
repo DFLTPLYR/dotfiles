@@ -82,7 +82,7 @@ ListView {
             NumberAnimation on width {
                 from: 0
                 to: parent ? parent.width : 0
-                duration: 5000
+                duration: Global.general.notificationTimer
                 running: true
             }
         }
