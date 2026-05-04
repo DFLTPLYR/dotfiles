@@ -5,6 +5,13 @@ import qs.core
 import qs.components
 
 Pane {
+
+    component Spacer: Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 2
+        color: Colors.color.tertiary
+    }
+
     ColumnLayout {
         width: parent.width
         height: contentHeight
@@ -25,18 +32,36 @@ Pane {
             }
         }
 
+        Spacer {}
+
         Label {
-            text: "Notification"
+            text: "Notification Section"
             font.pixelSize: 32
             Layout.fillWidth: true
         }
 
-        SpinBox {
-            Layout.preferredWidth: 200
-            value: Global.general.notificationTimer
-            onValueChanged: {
-                Global.general.notificationTimer = value;
+        Row {
+            Layout.fillWidth: true
+            spacing: 10
+            Label {
+                text: "Timer"
+                font.pixelSize: 14
+            }
+
+            SpinBox {
+                width: 100
+                value: Global.general.notificationTimer
+                onValueChanged: {
+                    Global.general.notificationTimer = value;
+                }
             }
         }
+
+        Label {
+            text: "Ui"
+            font.pixelSize: 24
+        }
+
+        Spacer {}
     }
 }
