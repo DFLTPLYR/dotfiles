@@ -95,13 +95,13 @@ Singleton {
 
         adapter: JsonAdapter {
             id: adapter
-
-            // set it to 0.0 hehe haha moment
-            property real opacity: 0.5
             property bool greeter: false
-            property list<var> widgets: []
             property int notificationTimer: 5000
         }
+    }
+
+    function save() {
+        fileView.writeAdapter();
     }
 
     function bindMargins(item, margin) {
