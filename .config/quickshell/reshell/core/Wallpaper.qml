@@ -31,7 +31,7 @@ Singleton {
 
     FileView {
         id: fileView
-        path: Qt.resolvedUrl("data/wallpaper.json")
+        path: Qt.resolvedUrl("data/background.json")
         watchChanges: true
         preload: true
         onLoaded: {

@@ -96,12 +96,6 @@ Singleton {
         adapter: JsonAdapter {
             id: adapter
 
-            property BorderJson border: BorderJson {
-                color: Colors.color.primary
-                width: 1
-            }
-            property DirectionJson margin: DirectionJson {}
-            property CornerJson rounding: CornerJson {}
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
             property bool greeter: false
@@ -127,16 +121,16 @@ Singleton {
 
     function bindRadii(rect, stateRounding = null) {
         rect.bottomLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomLeft : 0) + adapter.rounding.bottomLeft;
+            return (stateRounding ? stateRounding.bottomLeft : 0) + Components.config.rounding.bottomLeft;
         });
         rect.bottomRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomRight : 0) + adapter.rounding.bottomRight;
+            return (stateRounding ? stateRounding.bottomRight : 0) + Components.config.rounding.bottomRight;
         });
         rect.topLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topLeft : 0) + adapter.rounding.topLeft;
+            return (stateRounding ? stateRounding.topLeft : 0) + Components.config.rounding.topLeft;
         });
         rect.topRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topRight : 0) + adapter.rounding.topRight;
+            return (stateRounding ? stateRounding.topRight : 0) + Components.config.rounding.topRight;
         });
     }
 

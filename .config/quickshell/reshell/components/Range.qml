@@ -20,10 +20,10 @@ RangeSlider {
         width: control.availableWidth
         height: implicitHeight
 
-        bottomLeftRadius: background.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: background.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: background.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: background.state.rounding.topRight + Global.general.rounding.topRight
+        bottomLeftRadius: background.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: background.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: background.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: background.state.rounding.topRight + Components.config.rounding.topRight
 
         Component.onCompleted: {
             Global.bindRadii(background, background.state.rounding);

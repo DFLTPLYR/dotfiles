@@ -23,10 +23,10 @@ SpinBox {
             color: spinbox.state.border.color
         }
 
-        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: spinbox.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: spinbox.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: spinbox.state.rounding.topRight + Global.general.rounding.topRight
+        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: spinbox.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: spinbox.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: spinbox.state.rounding.topRight + Components.config.rounding.topRight
     }
 
     contentItem: TextInput {
@@ -67,10 +67,10 @@ SpinBox {
             color: leftIndicator.state.border.color
         }
 
-        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: leftIndicator.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: leftIndicator.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: leftIndicator.state.rounding.topRight + Global.general.rounding.topRight
+        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: leftIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: leftIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: leftIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         Icon {
             text: "plus"
@@ -106,10 +106,10 @@ SpinBox {
             color: rightIndicator.state.border.color
         }
 
-        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft + Global.general.rounding.bottomLeft
-        bottomRightRadius: rightIndicator.state.rounding.bottomRight + Global.general.rounding.bottomRight
-        topLeftRadius: rightIndicator.state.rounding.topLeft + Global.general.rounding.topLeft
-        topRightRadius: rightIndicator.state.rounding.topRight + Global.general.rounding.topRight
+        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: rightIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: rightIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: rightIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         Icon {
             text: "minus"
