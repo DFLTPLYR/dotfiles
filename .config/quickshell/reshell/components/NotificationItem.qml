@@ -4,15 +4,10 @@ import QtQuick.Layouts
 
 import qs.core
 
-Pane {
+StyledPane {
     default property alias ma: notifMouseArea
     required property var modelData
     clip: true
-
-    background: Rectangle {
-        anchors.fill: parent
-        color: Colors.setOpacity(Colors.color.background, 0.5)
-    }
 
     Rectangle {
         id: progressOutline

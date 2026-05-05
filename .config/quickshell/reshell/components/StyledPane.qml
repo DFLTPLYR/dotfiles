@@ -1,11 +1,16 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+
 import qs.types
+import qs.core
 
 Pane {
     id: pane
+    property alias bg: background
+
     property QtObject style: QtObject {
+        property color color: Colors.setOpacity(Colors.color.background, 0.5)
         property Corner rounding: Corner {}
         property Direction margins: Direction {}
         property Direction padding: Direction {}
@@ -25,7 +30,9 @@ Pane {
     bottomPadding: pane.style.padding.bottom
 
     background: Rectangle {
+        id: background
         anchors.fill: parent
+        color: pane.style.color
 
         // rounding
         bottomRightRadius: pane.style.rounding.bottomRight
@@ -35,10 +42,10 @@ Pane {
 
         // margins
         anchors {
-            leftMargin: pane.style.margin.left
-            rightMargin: pane.style.margin.right
-            bottomMargin: pane.style.margin.bottom
-            topMargin: pane.style.margin.top
+            leftMargin: pane.style.margins.left
+            rightMargin: pane.style.margins.right
+            bottomMargin: pane.style.margins.bottom
+            topMargin: pane.style.margins.top
         }
     }
 }
