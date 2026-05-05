@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
@@ -20,7 +21,7 @@ Rectangle {
         NumberAnimation on width {
             from: 0
             to: parent ? parent.width : 0
-            duration: Global.general.notificationTimer
+            duration: Global.general.notification.duration
             running: true
         }
     }

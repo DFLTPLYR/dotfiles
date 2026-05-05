@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -5,6 +7,9 @@ import qs.core
 import qs.components
 
 Pane {
+    id: pane
+    property var screen
+    property var notification: Global.general.notification
 
     component Spacer: Rectangle {
         Layout.fillWidth: true
@@ -43,6 +48,7 @@ Pane {
         Row {
             Layout.fillWidth: true
             spacing: 10
+
             Label {
                 text: "Timer"
                 font.pixelSize: 14
@@ -50,9 +56,9 @@ Pane {
 
             SpinBox {
                 width: 100
-                value: Global.general.notificationTimer
+                value: pane.notification.duration
                 onValueChanged: {
-                    Global.general.notificationTimer = value;
+                    pane.notification.duration = value;
                 }
             }
         }
@@ -62,6 +68,46 @@ Pane {
             font.pixelSize: 24
         }
 
+        Label {
+            text: "Position"
+            font.pixelSize: 14
+        }
+
+        Row {
+            Layout.fillWidth: true
+            spacing: 10
+
+            Label {
+                text: "Width"
+                font.pixelSize: 14
+            }
+
+            SpinBox {
+                width: 100
+                value: pane.notification.width
+                onValueChanged: {
+                    pane.notification.width = value;
+                }
+            }
+        }
+
+        Row {
+            Layout.fillWidth: true
+            spacing: 10
+
+            Label {
+                text: "Height"
+                font.pixelSize: 14
+            }
+
+            SpinBox {
+                width: 100
+                value: pane.notification.height
+                onValueChanged: {
+                    pane.notification.height = value;
+                }
+            }
+        }
         Spacer {}
     }
 }

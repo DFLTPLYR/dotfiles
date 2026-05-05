@@ -36,6 +36,7 @@ Singleton {
     // global item
     property alias general: adapter
     property list<var> widgets: []
+    property list<var> configs: []
     property list<var> settings: [
         {
             "name": "General",
@@ -96,7 +97,10 @@ Singleton {
         adapter: JsonAdapter {
             id: adapter
             property bool greeter: false
-            property int notificationTimer: 5000
+            property JsonObject notification: JsonObject {
+                property int duration: 5000
+                property int width: 300
+            }
         }
     }
 

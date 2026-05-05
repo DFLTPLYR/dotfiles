@@ -58,7 +58,9 @@ FloatingWindow {
                 Layout.fillHeight: true
 
                 // General Page
-                GeneralPage {}
+                GeneralPage {
+                    screen: settingpanel.screen
+                }
 
                 // ComponentsPage
                 ComponentsPage {}

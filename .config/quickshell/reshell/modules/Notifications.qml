@@ -7,7 +7,7 @@ import qs.components
 
 ListView {
     id: container
-    width: 400
+    width: Global.general.notification.width
     height: panel.height
 
     spacing: 2

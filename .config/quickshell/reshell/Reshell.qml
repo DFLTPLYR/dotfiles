@@ -50,6 +50,10 @@ Variants {
             watchChanges: true
             preload: true
             onLoaded: {
+                Global.configs.push({
+                    "screen": reshell.screen.name,
+                    "config": fileview
+                });
                 content.active = true;
                 reshell.containers.sources = adapter.container;
                 reshell.dock.sources = adapter.docks.map(value => ({
@@ -92,6 +96,11 @@ Variants {
                 id: adapter
                 property list<var> docks: []
                 property list<var> container: []
+                property JsonObject notification: JsonObject {
+                    property bool local: false
+                    property int duration: 5000
+                    property int width: 100
+                }
             }
 
             function save() {
