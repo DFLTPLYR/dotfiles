@@ -5,9 +5,8 @@ import QtQuick.Layouts
 import qs.core
 
 Rectangle {
+    default property alias ma: notifMouseArea
     required property var modelData
-    width: container.width
-    height: 80
     color: Colors.setOpacity(Colors.color.background, 0.5)
     clip: true
 
@@ -27,6 +26,7 @@ Rectangle {
     }
 
     MouseArea {
+        id: notifMouseArea
         anchors.fill: parent
         drag.target: parent
         drag.axis: Drag.XAxis

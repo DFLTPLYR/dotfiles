@@ -21,7 +21,10 @@ ListView {
         values: [...Notifications.popupList]
     }
 
-    delegate: NotificationItem {}
+    delegate: NotificationItem {
+        width: container.width
+        height: Global.general.notification.height
+    }
 
     Behavior on opacity {
         NumberAnimation {

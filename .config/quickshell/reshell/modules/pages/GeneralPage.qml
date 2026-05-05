@@ -45,6 +45,63 @@ Pane {
             Layout.fillWidth: true
         }
 
+        Rectangle {
+            id: exampleNotif
+            property var example: {
+                "notificationId": 12345,
+                "notification": {
+                    "actions": [
+                        {
+                            "identifier": "reply",
+                            "text": "Reply"
+                        }
+                    ],
+                    "appIcon": "thunderbird",
+                    "appName": "Thunderbird",
+                    "body": "New email from user@example.com",
+                    "image": "",
+                    "summary": "New Email",
+                    "time": 1715000000000,
+                    "urgency": 1
+                },
+                "popup": true,
+                "actions": [
+                    {
+                        "identifier": "reply",
+                        "text": "Reply"
+                    }
+                ],
+                "appIcon": "thunderbird",
+                "appName": "Thunderbird",
+                "body": "New email from user@example.com",
+                "image": "",
+                "summary": "New Email",
+                "time": 1715000000000.456,
+                "urgency": "normal"
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: notifContentItem.height
+
+            color: Colors.setOpacity(Colors.color.background, 0.5)
+            radius: 5
+
+            RowLayout {
+                id: notifContentItem
+                width: parent.width
+                Layout.margins: 10
+
+                NotificationItem {
+                    id: exampleNotifItem
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.preferredHeight: pane.notification.height
+                    Layout.preferredWidth: pane.notification.width
+                    modelData: exampleNotif.example
+                    Component.onCompleted: this.ma.enabled = false
+                }
+            }
+        }
+
         Row {
             Layout.fillWidth: true
             spacing: 10
