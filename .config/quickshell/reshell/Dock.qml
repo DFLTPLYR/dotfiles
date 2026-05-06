@@ -635,7 +635,7 @@ Item {
                                 item.property.setProperty(modelData.props);
                             }
                             item.property.position = index;
-
+                            item.screen = dock.screen;
                             item.container = grid;
                             item.slotConfig = config;
                             widgetContainer.currentWidget = item;

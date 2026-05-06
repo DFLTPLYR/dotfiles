@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.WindowManager
 
 import qs.core
 import qs.types
@@ -14,9 +15,12 @@ Wrapper {
     width: wrap.setWidth(list.contentWidth)
     height: wrap.setHeight(list.contentHeight)
 
+    readonly property var sets: wrap.screen ? WindowManager.screenProjection(wrap.screen)?.windowsets : null
+
     ListView {
         id: list
-        property var windows: [...Compositor.workspaces.filter(ws => ws.output === Screen.name)]
+
+        readonly property var windows: wrap.screen ? WindowManager.screenProjection(wrap.screen)?.windowsets : null
 
         width: wrap.slotConfig ? (wrap.slotConfig.side ? wrap.width : list.contentWidth) : (wrap.parent ? wrap.parent.width : 0)
         height: wrap.slotConfig ? (wrap.slotConfig.side ? list.contentHeight : wrap.height) : (wrap.parent ? wrap.parent.height : 0)
@@ -25,7 +29,7 @@ Wrapper {
 
         interactive: false
 
-        model: [...list.windows]
+        model: list.windows
 
         delegate: Rectangle {
             color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.color.primary, 0.2)
@@ -52,9 +56,9 @@ Wrapper {
                 anchors.fill: parent
                 enabled: Global.normal
                 onClicked: {
-                    Quickshell.execDetached({
-                        command: ["niri", "msg", "action", "focus-workspace", "--", index + 1]
-                    });
+                    if (modelData.canActivate) {
+                        modelData.activate();
+                    }
                 }
             }
         }
@@ -63,7 +67,7 @@ Wrapper {
             NumberAnimation {
                 property: "y"
                 to: -200
-                duration: 250
+                duration: 250000
             }
         }
 

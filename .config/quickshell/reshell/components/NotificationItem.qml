@@ -46,10 +46,7 @@ StyledPane {
     }
 
     RowLayout {
-        anchors {
-            fill: parent
-            margins: 2
-        }
+        anchors.fill: parent
 
         // icon
         Item {

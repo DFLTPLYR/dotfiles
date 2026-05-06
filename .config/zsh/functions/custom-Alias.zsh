@@ -1,6 +1,6 @@
 # Aliases
 alias vim="nvim"
-alias music="music-player.zsh"
+alias music="rmpc"
 alias dbee="z /StorageBtw/TuiApp/dbee/src/ && ./dbee"
 alias job="chafa --scale max \
       --symbols=braille \

@@ -9,6 +9,7 @@ Rectangle {
     id: wrapper
     property var container
     property var slotConfig
+    property var screen
     property Property property: Property {}
     property bool swapping: false
     color: "transparent"
