@@ -611,7 +611,6 @@ PopupModal {
 
     component ActiveWidgetsTab: Flickable {
         property var selectedWidget: modal.activeWidgets[0] || null
-
         width: modal.width
         height: modal.height
         contentHeight: container.height
@@ -647,8 +646,11 @@ PopupModal {
 
                 model: ScriptModel {
                     values: {
-                        const data = selectedWidget?.property ? [...selectedWidget.property.keys()].filter(s => s.property !== "position") : [];
-                        return [...data];
+                        const props = selectedWidget?.property;
+                        const keys = props ? props.keys() : null;
+                        if (keys)
+                            return [...keys].filter(s => s.property !== "position");
+                        return [];
                     }
                 }
                 DelegateChooser {
@@ -670,7 +672,7 @@ PopupModal {
                             SpinBox {
                                 Layout.preferredWidth: parent.width / 2
                                 Layout.preferredHeight: parent.height / 2
-                                value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
+                                value: selectedWidget ? selectedWidget.property[modelData.property] : 0
                                 onValueChanged: {
                                     if (selectedWidget)
                                         selectedWidget.property[modelData.property] = value;
@@ -690,14 +692,8 @@ PopupModal {
                                 Layout.preferredWidth: implicitWidth
                                 text: modelData.property
                             }
-                            SpinBox {
-                                Layout.preferredWidth: parent.width / 2
-                                Layout.preferredHeight: parent.height / 2
-                                value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
-                                onValueChanged: {
-                                    if (selectedWidget)
-                                        selectedWidget.property[modelData.property] = value;
-                                }
+                            TextField {
+                                text: modelData.property
                             }
                         }
                     }
