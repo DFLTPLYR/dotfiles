@@ -657,26 +657,61 @@ PopupModal {
 
                     DelegateChoice {
                         roleValue: "number"
-                        SpinBox {
-                            height: 40
 
+                        RowLayout {
+                            height: 50
                             width: parent ? parent.width : 0
-                            value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
-                            onValueChanged: {
-                                if (selectedWidget)
-                                    selectedWidget.property[modelData.property] = value;
+
+                            Text {
+                                color: Colors.color.primary
+                                Layout.preferredWidth: implicitWidth
+                                text: modelData.property
+                            }
+                            SpinBox {
+                                Layout.preferredWidth: parent.width / 2
+                                Layout.preferredHeight: parent.height / 2
+                                value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
+                                onValueChanged: {
+                                    if (selectedWidget)
+                                        selectedWidget.property[modelData.property] = value;
+                                }
                             }
                         }
                     }
 
                     DelegateChoice {
                         roleValue: "string"
-                        SpinBox {
-                            height: 40
-                            width: parent.width
-                            value: selectedWidget.property[modelData.property]
-                            onValueChanged: {
-                                selectedWidget.property[modelData.property] = value;
+                        RowLayout {
+                            height: 50
+                            width: parent ? parent.width : 0
+
+                            Text {
+                                color: Colors.color.primary
+                                Layout.preferredWidth: implicitWidth
+                                text: modelData.property
+                            }
+                            SpinBox {
+                                Layout.preferredWidth: parent.width / 2
+                                Layout.preferredHeight: parent.height / 2
+                                value: selectedWidget ? selectedWidget.property[modelData ? modelData.property : ""] : 0
+                                onValueChanged: {
+                                    if (selectedWidget)
+                                        selectedWidget.property[modelData.property] = value;
+                                }
+                            }
+                        }
+                    }
+
+                    DelegateChoice {
+                        roleValue: "boolean"
+                        RowLayout {
+                            height: 50
+                            width: parent ? parent.width : 0
+
+                            Toggle {
+                                text: modelData.property
+                                checked: selectedWidget.property[modelData.property]
+                                onCheckedChanged: selectedWidget.property[modelData.property] = checked
                             }
                         }
                     }

@@ -30,8 +30,7 @@ QtObject {
         const ks = Object.keys(object);
         for (const k of ks) {
             if (typeof this[k] !== "function") {
-                if (this[k])
-                    this[k] = object[k];
+                this[k] = object[k]; // assign unconditionally
             }
         }
     }

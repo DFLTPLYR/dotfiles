@@ -9,7 +9,7 @@ Rectangle {
     id: wrapper
     property var container
     property var slotConfig
-    property var screen
+    property var screen: Quickshell.screens[0]
     property Property property: Property {}
     property bool swapping: false
     color: "transparent"
