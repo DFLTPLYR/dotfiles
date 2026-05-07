@@ -1,10 +1,15 @@
 [config]
 base16_backend = "wal"
 
-[templates.dots]
+[templates.reshell]
 input_path = "templates/colors.json.template"
 output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 # output_path = "~/.config/quickshell/dots/config/colors.json"
+
+
+[templates.rmpc]
+input_path = "templates/rmpc/long.ron"
+output_path = "~/.config/rmpc/layout/long.ron"
 
 [templates.niri]
 input_path = "templates/niri-colors.kdl"
