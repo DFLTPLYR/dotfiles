@@ -54,16 +54,24 @@ PopupModal {
                 Layout.fillWidth: true
                 text: `Open ${name}`
                 onClicked: {
-                    settingPanel.visible = true;
-                    settingPanel.page = page;
+                    settingLoader.active = true;
+                    settingLoader.page = page;
                     modal.close();
                 }
             }
         }
     }
 
-    SettingPanel {
-        id: settingPanel
-        screen: modal.screen
+    LazyLoader {
+        id: settingLoader
+        property int page: 0
+        active: false
+        SettingPanel {
+            id: settingPanel
+            screen: modal.screen
+            visible: settingLoader.active
+            page: settingLoader.page
+            onClosed: settingLoader.active = false
+        }
     }
 }

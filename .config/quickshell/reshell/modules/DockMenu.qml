@@ -672,7 +672,7 @@ PopupModal {
                             SpinBox {
                                 Layout.preferredWidth: parent.width / 2
                                 Layout.preferredHeight: parent.height / 2
-                                value: selectedWidget ? selectedWidget.property[modelData.property] : 0
+                                value: selectedWidget?.property[modelData.property]
                                 onValueChanged: {
                                     if (selectedWidget)
                                         selectedWidget.property[modelData.property] = value;
@@ -693,6 +693,7 @@ PopupModal {
                                 text: modelData.property
                             }
                             TextField {
+                                Layout.fillWidth: true
                                 text: modelData.property
                             }
                         }
