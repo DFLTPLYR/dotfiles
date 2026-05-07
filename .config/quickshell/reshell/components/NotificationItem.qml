@@ -45,42 +45,31 @@ StyledPane {
         }
     }
 
-    RowLayout {
+    Row {
+        id: contentRow
         anchors.fill: parent
 
-        // icon
         Item {
-            id: iconContainer
-            visible: modelData.image
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            Layout.margins: 2
+            id: imageContainer
+            height: parent.height
+            width: parent.height
 
-            Loader {
+            Image {
                 anchors.fill: parent
-                active: modelData.image !== ""
-                sourceComponent: Image {
-                    fillMode: Image.PreserveAspectCrop
-                    source: modelData.image
-                }
-            }
-
-            Loader {
-                anchors.fill: parent
-                active: modelData.appIcon !== ""
-                sourceComponent: Image {
-                    id: notificationIcon
-                    fillMode: Image.PreserveAspectCrop
-                    source: Quickshell.iconPath(modelData.appIcon, true)
-                }
+                fillMode: Image.PreserveAspectFit
+                source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
             }
         }
 
-        // content
+        // Content
+
         ColumnLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.margins: 2
+            anchors {
+                left: imageContainer.right
+            }
+            height: parent.height
+            width: parent.width - imageContainer.width
+
             spacing: 2
 
             Text {
@@ -109,4 +98,27 @@ StyledPane {
             }
         }
     }
+
+    // RowLayout {
+    //     anchors.fill: parent
+    //
+    //     // icon
+    //     Item {
+    //         id: iconContainer
+    //         visible: modelData.appIcon || modelData.image
+    //         Layout.fillHeight: true
+    //         Layout.preferredWidth: height
+    //         Layout.margins: 2
+    //
+    //         Image {
+    //             anchors.fill: parent
+    //             fillMode: Image.PreserveAspectFit
+    //             sourceSize.height: iconContainer.height
+    //             sourceSize.width: iconContainer.width
+    //             source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
+    //         }
+    //     }
+    //
+    //     // content
+    // }
 }

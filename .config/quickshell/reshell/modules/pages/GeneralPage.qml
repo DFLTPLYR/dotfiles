@@ -58,7 +58,7 @@ Pane {
                 "appIcon": "zen-browser",
                 "appName": "Zen",
                 "body": "This is the text body of the notification. \nPretty cool, huh?",
-                "image": "image://qsimage/6/1",
+                "image": "",
                 "summary": "Notification Example",
                 "time": 1777989368250,
                 "urgency": "1"
