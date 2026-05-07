@@ -31,6 +31,7 @@ spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLA
 spawn-sh-at-startup "quickcli"
 spawn-sh-at-startup "steam"
 spawn-sh-at-startup "mpdris2-rs -n"
+spawn-sh-at-startup "rmpcd"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-sh-at-startup "qs -c reshell"
 

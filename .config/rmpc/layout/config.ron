@@ -6,8 +6,6 @@
     password: None,
     theme: "../theme/default",
     cache_dir: None,
-    on_resize: ["resize-player.zsh"],
-    on_song_change: ["~/.config/rmpc/scripts/onsongchange.sh"],
     lyrics_dir: "/StorageBtw/Music",
     volume_step: 5,
     max_fps: 165,
@@ -120,24 +118,12 @@
             ),
         ),
         (
-            name: "Directories",
-            pane: Pane(Directories),
-        ),
-        (
             name: "Artists",
             pane: Pane(Artists),
         ),
         (
-            name: "Album Artists",
-            pane: Pane(AlbumArtists),
-        ),
-        (
             name: "Albums",
             pane: Pane(Albums),
-        ),
-        (
-            name: "Playlists",
-            pane: Pane(Playlists),
         ),
         (
             name: "Search",

@@ -6,8 +6,6 @@
     password: None,
     theme: "~/.config/rmpc/theme/default",
     cache_dir: None,
-    on_resize: ["resize-player.zsh"],
-    on_song_change: ["~/.config/rmpc/scripts/onsongchange.sh"],
     lyrics_dir: "/StorageBtw/Music",
     volume_step: 5,
     max_fps: 165,
@@ -174,53 +172,16 @@
             ),
         ),
         (
-            name: "Directories",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Directories))],
-            ),
-        ),
-        (
             name: "Artists",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Artists))],
-            ),
-        ),
-        (
-            name: "Album Artists",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(AlbumArtists))],
-            ),
+            pane: Pane(Artists),
         ),
         (
             name: "Albums",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Albums))],
-            ),
-        ),
-        (
-            name: "Playlists",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Playlists))],
-            ),
+            pane: Pane(Albums),
         ),
         (
             name: "Search",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Search))],
-            ),
-        ),
-        (
-            name: "Browser",
-            pane: Split(
-                direction: Horizontal,
-                panes: [(size: "100%", borders: "ALL", pane: Pane(Browser(root_tag: "Artist")))],
-            ),
+            pane: Pane(Search),
         ),
         (
             name: "Lyrics",
