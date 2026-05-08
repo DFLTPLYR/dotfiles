@@ -158,7 +158,16 @@
                                 size: "20%",
                                 borders: "ALL",
                                 borders_style: (bg: "#5f4102", fg:"#5f4102" ),
-                                pane: Pane(Queue),
+                                pane: Split (
+                                direction: Vertical,
+                                panes: [
+                                  (
+                                    size: "100%",
+                                    borders: "NONE",
+                                    pane: Pane(Queue)
+                                  )
+                                ]
+                            ),
                             ),
                         ]
                     ),

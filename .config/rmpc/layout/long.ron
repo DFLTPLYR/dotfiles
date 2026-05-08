@@ -32,7 +32,7 @@
         inactive_style: (),
     ),
     highlighted_item_style: (fg: "#5f4102", modifiers: "Bold"),
-    current_item_style: (fg:"#ede4aa" , bg: "#d0c890", modifiers: "Bold"),
+    current_item_style: (fg:"#5f4102" , bg: "#d0c890", modifiers: "Bold"),
     borders_style: (fg: "#5f4102"),
     highlight_border_style: (fg: "#f0e0cf"),
     symbols: (song: "", dir: "", marker: "", ellipsis: " ... "),

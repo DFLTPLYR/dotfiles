@@ -47,12 +47,13 @@ StyledPane {
 
     Row {
         id: contentRow
+        property bool hasImage: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
         anchors.fill: parent
 
         Item {
             id: imageContainer
-            height: parent.height
-            width: parent.height
+            height: contentRow.hasImage ? parent.height : 0
+            width: contentRow.hasImage ? parent.height : 0
 
             Image {
                 anchors.fill: parent
@@ -62,11 +63,8 @@ StyledPane {
         }
 
         // Content
-
         ColumnLayout {
-            anchors {
-                left: imageContainer.right
-            }
+            anchors.left: imageContainer.right
             height: parent.height
             width: parent.width - imageContainer.width
 
@@ -98,27 +96,4 @@ StyledPane {
             }
         }
     }
-
-    // RowLayout {
-    //     anchors.fill: parent
-    //
-    //     // icon
-    //     Item {
-    //         id: iconContainer
-    //         visible: modelData.appIcon || modelData.image
-    //         Layout.fillHeight: true
-    //         Layout.preferredWidth: height
-    //         Layout.margins: 2
-    //
-    //         Image {
-    //             anchors.fill: parent
-    //             fillMode: Image.PreserveAspectFit
-    //             sourceSize.height: iconContainer.height
-    //             sourceSize.width: iconContainer.width
-    //             source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
-    //         }
-    //     }
-    //
-    //     // content
-    // }
 }

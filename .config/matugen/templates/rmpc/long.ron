@@ -37,7 +37,7 @@
     ),
     highlighted_item_style: (fg: "{{ colors.on_surface.dark.hex }}", modifiers: "Bold"),
     current_item_style: (fg: "{{ colors.on_surface.dark.hex }}", bg: "{{ colors.surface_container_lowest.dark.hex }}", modifiers: "Bold"),
-    borders_style: (fg: "{{ colors.on_secondary_fixed_variant.dark.hex }}"),
+    borders_style: (fg: "{{ colors.on_surface.dark.hex }}"),
     highlight_border_style: (fg: "{{ colors.on_surface.dark.hex }}"),
     symbols: (song: "", dir: "", marker: "", ellipsis: " ... "),
     progress_bar: (
