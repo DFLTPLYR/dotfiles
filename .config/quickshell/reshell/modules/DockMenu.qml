@@ -126,18 +126,19 @@ PopupModal {
                 }
             }
 
-            Label {
-                font.pixelSize: 32
-                text: "Position"
-            }
-
-            Row {
+            RowLayout {
                 Layout.fillWidth: true
-                Repeater {
+                Label {
+                    font.pixelSize: 32
+                    text: "Position"
+                }
+
+                Dropdown {
+                    Layout.fillWidth: true
                     model: ["left", "right", "top", "bottom"]
-                    delegate: Button {
-                        text: modelData
-                        onClicked: modal.specs.position = modelData
+                    currentValue: modal.specs.position
+                    onCurrentValueChanged: {
+                        modal.specs.position = currentValue;
                     }
                 }
             }

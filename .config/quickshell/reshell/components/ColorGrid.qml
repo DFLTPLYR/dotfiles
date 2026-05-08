@@ -8,7 +8,7 @@ GridView {
     interactive: false
     Layout.fillWidth: true
     Layout.preferredHeight: contentHeight
-    cellWidth: colorGrid.width / 4
+    cellWidth: colorGrid.width / 8
     cellHeight: cellWidth
     model: [...Colors.colors]
     delegate: Rectangle {
