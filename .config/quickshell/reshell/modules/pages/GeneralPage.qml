@@ -4,12 +4,12 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.core
+import qs.types
 import qs.components
 
 Pane {
     id: pane
     property var screen
-    property var notification: Components.config.notification
 
     component Spacer: Rectangle {
         Layout.fillWidth: true
@@ -47,6 +47,7 @@ Pane {
 
         Rectangle {
             id: exampleNotif
+            property var config: Components.config.notification
             property var example: {
                 "notificationId": 69,
                 "actions": [
@@ -64,6 +65,17 @@ Pane {
                 "urgency": "1"
             }
 
+            property QtObject style: QtObject {
+                property color color: Colors.setOpacity(Colors.color.background, 0.5)
+                property Direction padding: Direction {}
+                property Direction inset: Direction {}
+
+                property QtObject background: QtObject {
+                    property Corner rounding: Corner {}
+                    property Direction margins: Direction {}
+                }
+            }
+
             Layout.fillWidth: true
             Layout.preferredHeight: exampleNotifItem.height + 100
             color: Colors.setOpacity(Colors.color.background, 0.5)
@@ -71,9 +83,10 @@ Pane {
 
             NotificationItem {
                 id: exampleNotifItem
+                style: exampleNotif.style
                 anchors.centerIn: parent
-                width: pane.notification.height
-                height: pane.notification.width
+                width: exampleNotif.config.height
+                height: exampleNotif.config.width
                 modelData: exampleNotif.example
                 Component.onCompleted: this.ma.enabled = false
             }
@@ -95,7 +108,7 @@ Pane {
 
             SpinBox {
                 width: 100
-                value: pane.notification.width
+                value: exampleNotif.config.width
                 onValueChanged: {
                     exampleNotifItem.width = value;
                 }
@@ -113,7 +126,7 @@ Pane {
 
             SpinBox {
                 width: 100
-                value: pane.notification.height
+                value: exampleNotif.config.height
                 onValueChanged: {
                     exampleNotifItem.height = value;
                 }
@@ -127,7 +140,7 @@ Pane {
 
         RowLayout {
             Column {
-                width: pane.notification.rounding.width / 2
+                width: exampleNotif.config.rounding.width / 2
                 Label {
                     text: "Top Left"
                 }
@@ -137,7 +150,7 @@ Pane {
                 }
             }
             Column {
-                width: pane.notification.rounding.width / 2
+                width: exampleNotif.config.rounding.width / 2
                 Label {
                     text: "Top Right"
                 }
@@ -147,7 +160,7 @@ Pane {
                 }
             }
             Column {
-                width: pane.notification.rounding.width / 2
+                width: exampleNotif.config.rounding.width / 2
                 Label {
                     text: "Bottom Left"
                 }
@@ -157,7 +170,7 @@ Pane {
                 }
             }
             Column {
-                width: pane.notification.rounding.width / 2
+                width: exampleNotif.config.rounding.width / 2
                 Label {
                     text: "Bottom Right"
                 }
@@ -179,9 +192,9 @@ Pane {
 
             SpinBox {
                 width: 100
-                value: pane.notification.duration
+                value: exampleNotif.config.duration
                 onValueChanged: {
-                    pane.notification.duration = value;
+                    exampleNotif.config.duration = value;
                 }
             }
         }

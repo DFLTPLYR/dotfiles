@@ -90,21 +90,18 @@ Singleton {
             property Range range: Range {}
         }
     }
-
     component Notification: JsonObject {
         property int duration: 5000
         property int width: 300
         property int height: 100
-        property color color: Colors.color.background
-        property color text: Colors.color.on_background
-        property BorderJson border: BorderJson {}
-        property DirectionJson margin: DirectionJson {}
-        property CornerJson rounding: CornerJson {}
-        property JsonObject hover: JsonObject {
-            property color color: Colors.setOpacity(Colors.color.primary, 1)
-            property BorderJson border: BorderJson {}
-            property DirectionJson margin: DirectionJson {}
-            property CornerJson rounding: CornerJson {}
+        property JsonObject style: JsonObject {
+            property color color: Colors.setOpacity(Colors.color.background, 0.5)
+            property DirectionJson padding: DirectionJson {}
+            property DirectionJson inset: DirectionJson {}
+            property JsonObject background: JsonObject {
+                property CornerJson rounding: CornerJson {}
+                property DirectionJson margins: DirectionJson {}
+            }
         }
     }
 
