@@ -346,15 +346,6 @@ Item {
 
                 width: parent.width
                 height: parent.height
-                onChildrenChanged: {
-                    const slots = [...children].filter(s => s instanceof Slot);
-                    if (slots.length === panel.slots.count) {
-                        slots.sort((a, b) => (a.position || 0) - (b.position || 0));
-                        children = slots;
-                        slotcontainer.activeFocusOnTabChanged;
-                        panel.dockSlots = slots;
-                    }
-                }
                 flow: config.side ? GridLayout.TopToBottom : GridLayout.LeftToRight
 
                 Instantiator {
@@ -371,6 +362,14 @@ Item {
                         onRemove: idx => {
                             panel.slots.remove(idx, 1);
                         }
+                    }
+
+                    onObjectRemoved: (idx, obj) => {
+                        panel.dockSlots.splice(idx, 1);
+                    }
+
+                    onObjectAdded: (idx, obj) => {
+                        panel.dockSlots.push(obj);
                     }
                 }
             }

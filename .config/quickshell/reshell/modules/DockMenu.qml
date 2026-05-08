@@ -21,78 +21,86 @@ PopupModal {
     height: Math.min(600, screen.height / 2)
 
     // Content
-    ColumnLayout {
-        anchors.fill: parent
+    LazyLoader {
+        active: modal.opened
+        component: ColumnLayout {
+            anchors.fill: parent
 
-        Rectangle {
-            id: tabContainer
-            color: Colors.color.background
+            Rectangle {
+                id: tabContainer
+                color: Colors.color.background
 
-            Layout.preferredHeight: tabbar.height
-            Layout.fillWidth: true
+                Layout.preferredHeight: tabbar.height
+                Layout.fillWidth: true
 
-            TabBar {
-                id: tabbar
-                TabButton {
-                    text: "Properties"
-                }
+                TabBar {
+                    id: tabbar
+                    TabButton {
+                        text: "Properties"
+                    }
 
-                TabButton {
-                    text: "Slots"
-                }
+                    TabButton {
+                        text: "Slots"
+                    }
 
-                TabButton {
-                    text: "Widgets"
-                }
+                    TabButton {
+                        text: "Widgets"
+                    }
 
-                TabButton {
-                    text: "Active Widget"
-                }
-            }
-        }
-
-        StackLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: tabbar.currentIndex
-
-            PropertyTab {
-                id: propertyTab
-            }
-
-            SlotTab {
-                id: slotTab
-            }
-
-            WidgetsTab {
-                id: widgetsTab
-            }
-
-            ActiveWidgetsTab {
-                id: activeWidgetsTab
-            }
-        }
-
-        Rectangle {
-            color: Colors.color.background
-            Layout.fillWidth: true
-            Layout.preferredHeight: footerContainer.height
-
-            Row {
-                id: footerContainer
-                layoutDirection: Qt.RightToLeft
-                spacing: 0
-                width: parent.width
-
-                Button {
-                    text: "Quit and Save"
-                    onClicked: {
-                        modal.save();
-                        Qt.callLater(() => {
-                            modal.close();
-                        });
+                    TabButton {
+                        text: "Active Widget"
                     }
                 }
+            }
+
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabbar.currentIndex
+
+                PropertyTab {
+                    id: propertyTab
+                }
+
+                SlotTab {
+                    id: slotTab
+                }
+
+                WidgetsTab {
+                    id: widgetsTab
+                }
+
+                ActiveWidgetsTab {
+                    id: activeWidgetsTab
+                }
+            }
+
+            Rectangle {
+                color: Colors.color.background
+                Layout.fillWidth: true
+                Layout.preferredHeight: footerContainer.height
+
+                Row {
+                    id: footerContainer
+                    layoutDirection: Qt.RightToLeft
+                    spacing: 0
+                    width: parent.width
+
+                    Button {
+                        text: "Quit and Save"
+                        onClicked: {
+                            modal.save();
+                            Qt.callLater(() => {
+                                modal.close();
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        onItemChanged: {
+            if (item) {
+                modal.contentData.push(item);
             }
         }
     }
