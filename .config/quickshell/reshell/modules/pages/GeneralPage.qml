@@ -9,7 +9,7 @@ import qs.components
 Pane {
     id: pane
     property var screen
-    property var notification: Global.general.notification
+    property var notification: Components.config.notification
 
     component Spacer: Rectangle {
         Layout.fillWidth: true
@@ -126,49 +126,44 @@ Pane {
         }
 
         RowLayout {
-
             Column {
-                width: rounding.width / 2
+                width: pane.notification.rounding.width / 2
                 Label {
                     text: "Top Left"
                 }
                 SpinBox {
                     width: 100
                     height: 20
-                    onValueChanged: rounding.rounding.topLeft = value
                 }
             }
             Column {
-                width: rounding.width / 2
+                width: pane.notification.rounding.width / 2
                 Label {
                     text: "Top Right"
                 }
                 SpinBox {
                     width: 100
                     height: 20
-                    onValueChanged: rounding.rounding.topRight = value
                 }
             }
             Column {
-                width: rounding.width / 2
+                width: pane.notification.rounding.width / 2
                 Label {
                     text: "Bottom Left"
                 }
                 SpinBox {
                     width: 100
                     height: 20
-                    onValueChanged: rounding.rounding.bottomLeft = value
                 }
             }
             Column {
-                width: rounding.width / 2
+                width: pane.notification.rounding.width / 2
                 Label {
                     text: "Bottom Right"
                 }
                 SpinBox {
                     width: 100
                     height: 20
-                    onValueChanged: exampleNotifItem.rounding.bottomRight = value
                 }
             }
         }

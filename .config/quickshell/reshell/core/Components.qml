@@ -80,6 +80,7 @@ Singleton {
 
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
+            property Notification notification: Notification {}
             property ButtonJson button: ButtonJson {}
             property SpinBoxJson spinbox: SpinBoxJson {}
             property SwitchJson toggle: SwitchJson {}
@@ -87,6 +88,23 @@ Singleton {
             property Slider slider: Slider {}
             property Label label: Label {}
             property Range range: Range {}
+        }
+    }
+
+    component Notification: JsonObject {
+        property int duration: 5000
+        property int width: 300
+        property int height: 100
+        property color color: Colors.color.background
+        property color text: Colors.color.on_background
+        property BorderJson border: BorderJson {}
+        property DirectionJson margin: DirectionJson {}
+        property CornerJson rounding: CornerJson {}
+        property JsonObject hover: JsonObject {
+            property color color: Colors.setOpacity(Colors.color.primary, 1)
+            property BorderJson border: BorderJson {}
+            property DirectionJson margin: DirectionJson {}
+            property CornerJson rounding: CornerJson {}
         }
     }
 

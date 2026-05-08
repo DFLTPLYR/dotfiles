@@ -64,7 +64,6 @@ StyledPane {
 
         // Content
         ColumnLayout {
-            anchors.left: imageContainer.right
             height: parent.height
             width: parent.width - imageContainer.width
 

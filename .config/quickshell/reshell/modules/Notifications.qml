@@ -7,7 +7,9 @@ import qs.components
 
 ListView {
     id: container
-    width: Global.general.notification.width
+    property var config: Components.config.notification
+
+    width: container.config.width
     height: panel.height
 
     spacing: 2
@@ -23,7 +25,7 @@ ListView {
 
     delegate: NotificationItem {
         width: container.width
-        height: Global.general.notification.height
+        height: container.config.height
     }
 
     Behavior on opacity {

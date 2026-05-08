@@ -11,10 +11,13 @@ Pane {
 
     property QtObject style: QtObject {
         property color color: Colors.setOpacity(Colors.color.background, 0.5)
-        property Corner rounding: Corner {}
-        property Direction margins: Direction {}
         property Direction padding: Direction {}
         property Direction inset: Direction {}
+
+        property QtObject background: QtObject {
+            property Corner rounding: Corner {}
+            property Direction margins: Direction {}
+        }
     }
 
     // margins
@@ -35,17 +38,17 @@ Pane {
         color: pane.style.color
 
         // rounding
-        bottomRightRadius: pane.style.rounding.bottomRight
-        bottomLeftRadius: pane.style.rounding.bottomLeft
-        topRightRadius: pane.style.rounding.topRight
-        topLeftRadius: pane.style.rounding.topLeft
+        bottomRightRadius: pane.style.background.rounding.bottomRight
+        bottomLeftRadius: pane.style.background.rounding.bottomLeft
+        topRightRadius: pane.style.background.rounding.topRight
+        topLeftRadius: pane.style.background.rounding.topLeft
 
         // margins
         anchors {
-            leftMargin: pane.style.margins.left
-            rightMargin: pane.style.margins.right
-            bottomMargin: pane.style.margins.bottom
-            topMargin: pane.style.margins.top
+            leftMargin: pane.style.background.margins.left
+            rightMargin: pane.style.background.margins.right
+            bottomMargin: pane.style.background.margins.bottom
+            topMargin: pane.style.background.margins.top
         }
     }
 }
