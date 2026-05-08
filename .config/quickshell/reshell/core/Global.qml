@@ -97,11 +97,6 @@ Singleton {
         adapter: JsonAdapter {
             id: adapter
             property bool greeter: false
-            property JsonObject notification: JsonObject {
-                property int duration: 5000
-                property int width: 300
-                property int height: 100
-            }
         }
     }
 

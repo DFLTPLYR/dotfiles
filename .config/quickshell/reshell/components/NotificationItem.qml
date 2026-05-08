@@ -19,7 +19,7 @@ StyledPane {
         NumberAnimation on width {
             from: 0
             to: parent ? parent.width : 0
-            duration: Global.general.notification.duration
+            duration: Components.config.notification.duration
             running: true
         }
     }

@@ -140,7 +140,7 @@ Pane {
 
         RowLayout {
             Column {
-                width: exampleNotif.config.rounding.width / 2
+                width: parent.width / 2
                 Label {
                     text: "Top Left"
                 }
@@ -150,7 +150,7 @@ Pane {
                 }
             }
             Column {
-                width: exampleNotif.config.rounding.width / 2
+                width: parent.width / 2
                 Label {
                     text: "Top Right"
                 }
@@ -160,7 +160,7 @@ Pane {
                 }
             }
             Column {
-                width: exampleNotif.config.rounding.width / 2
+                width: parent.width / 2
                 Label {
                     text: "Bottom Left"
                 }
@@ -170,7 +170,7 @@ Pane {
                 }
             }
             Column {
-                width: exampleNotif.config.rounding.width / 2
+                width: parent.width / 2
                 Label {
                     text: "Bottom Right"
                 }
@@ -186,7 +186,7 @@ Pane {
             spacing: 10
 
             Label {
-                text: "Timer"
+                text: "Duration"
                 font.pixelSize: 14
             }
 
