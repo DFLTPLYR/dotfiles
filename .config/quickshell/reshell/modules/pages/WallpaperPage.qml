@@ -108,6 +108,20 @@ Rectangle {
                     y: 0
                     z: 9999
                     visible: false
+                    onVisibleChanged: {
+                        if (!visible && selectionRect.width !== 0 && selectionRect.height !== 0) {
+                            const container = {
+                                width: selectionRect.width,
+                                height: selectionRect.height,
+                                x: selectionRect.x,
+                                y: selectionRect.y,
+                                z: selectionRect.z,
+                                screens: overlapsAny(selectionRect)
+                            };
+                            Wallpaper.containers.append(container);
+                        }
+                    }
+
                     width: 0
                     height: 0
                     rotation: 0
@@ -144,36 +158,8 @@ Rectangle {
                 // containers
                 Instantiator {
                     model: Wallpaper.containers
-                    delegate: Rectangle {
-                        id: container
-                        property int index
-                        required property var model
-                        onModelChanged: print(model.width, model.height)
+                    delegate: ContainerRect {
                         parent: content
-                        width: model.width
-                        height: model.height
-                        x: model.x
-                        y: model.y
-                        z: 999
-
-                        DragHandler {
-                            id: dragHandler
-                            target: container
-                            onActiveChanged: {
-                                const screens = overlapsAny(container);
-
-                                const obj = {
-                                    x: container.x,
-                                    y: container.y,
-                                    z: container.z,
-                                    screens: screens,
-                                    width: container.width,
-                                    height: container.height
-                                };
-
-                                Wallpaper.containers.set(container.index, obj);
-                            }
-                        }
                     }
                 }
             }
@@ -191,7 +177,6 @@ Rectangle {
                 onPressed: mouse => {
                     if (mouse.button == Qt.LeftButton) {
                         selecting = true;
-                        // startPoint = Qt.point(mouse.x, mouse.y);
                         startPoint = selectionMa.mapToItem(content, mouse.x, mouse.y);
                         selectionRect.x = startPoint.x;
                         selectionRect.y = startPoint.y;
@@ -218,15 +203,6 @@ Rectangle {
 
                 onReleased: {
                     selecting = false;
-                    const container = {
-                        width: selectionRect.width,
-                        height: selectionRect.height,
-                        x: selectionRect.x,
-                        y: selectionRect.y,
-                        z: selectionRect.z,
-                        screens: overlapsAny(selectionRect)
-                    };
-                    Wallpaper.containers.append(container);
                     selectionRect.visible = false;
                 }
             }
@@ -333,29 +309,10 @@ Rectangle {
     component PreviewImage: ResizeableRect {
         id: resizeableRect
 
-        property Timer debounceTimer: Timer {
-            interval: 100
-            onTriggered: {
-                const screens = overlapsAny(resizeableRect);
-
-                const obj = {
-                    x: resizeableRect.x,
-                    y: resizeableRect.y,
-                    z: resizeableRect.z,
-                    screens: screens,
-                    width: resizeableRect.width,
-                    height: resizeableRect.height
-                };
-
-                Wallpaper.list.set(resizeableRect.index, obj);
-            }
-        }
-
         required property var modelData
         required property int index
         property ListModel screens: ListModel {}
         property Image image: draggableImage
-        property var found
 
         pointerVisible: hoverHandler.hovered
         rulersSize: 12 / flick.zoom
@@ -485,11 +442,53 @@ Rectangle {
         }
     }
 
+    component ContainerRect: ResizeableRect {
+        id: containerRect
+        required property var model
+        required property int index
+        property ListModel screens: ListModel {}
+
+        color: Colors.setOpacity(Colors.color.background, 0.5)
+
+        pointerVisible: true
+        rulersSize: 12 / flick.zoom
+
+        width: model.width
+        height: model.height
+
+        x: (model.x || 0)
+        y: (model.y || 0)
+        z: (model.z || 0)
+
+        Text {
+            anchors {
+                left: parent.left
+                top: parent.top
+                margins: 4
+            }
+            text: `z: ${containerRect.z}`
+            color: Colors.color.primary
+            font.pixelSize: 12 / flick.zoom
+        }
+
+        // outline
+        Outline {
+            anchors.fill: parent
+            zoom: flick.zoom
+        }
+    }
+
     component TopLeftControl: Row {
         id: controlContainer
         z: 2
+
         readonly property list<PreviewImage> imageList: content.children.filter(s => s instanceof PreviewImage)
         readonly property list<Monitor> screenList: content.children.filter(s => s instanceof Monitor)
+        readonly property list<ContainerRect> containerList: content.children.filter(s => s instanceof ContainerRect)
+
+        property bool showImages: true
+        property bool showMonitors: true
+        property bool showContainers: false
 
         anchors {
             top: parent.top

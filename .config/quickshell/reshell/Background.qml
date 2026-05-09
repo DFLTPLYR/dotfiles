@@ -52,6 +52,40 @@ PanelWindow {
         }
     }
 
+    component LazyContainer: LazyLoader {
+        id: containerloader
+        required property int index
+        required property var model
+        property var relative: model.screens
+        property var coords
+
+        active: coords || false
+        onRelativeChanged: {
+            if (!relative || !relative.count)
+                return;
+            for (let i = 0; i < relative.count; i++) {
+                const screen = relative.get(i);
+                if (screen.name === panel.screen.name) {
+                    return coords = screen;
+                }
+            }
+        }
+
+        component: Rectangle {
+            parent: layered
+
+            width: containerloader.model.width
+            height: containerloader.model.height
+            visible: containerloader.coords ? true : false
+            x: containerloader.coords ? containerloader.coords.x : 0
+            y: containerloader.coords ? containerloader.coords.y : 0
+            z: containerloader.model.z
+            Component.onCompleted: {
+                print(this, panel.screen.name);
+            }
+        }
+    }
+
     color: "transparent"
     implicitHeight: screen.height
     implicitWidth: screen.width
@@ -68,11 +102,25 @@ PanelWindow {
         delegate: LazyImage {}
     }
 
+    DelegateModel {
+        id: containers
+        model: Wallpaper.containers
+        delegate: LazyContainer {}
+    }
+
     Item {
         id: layered
         anchors.fill: parent
+
         Instantiator {
             model: images
+            onObjectRemoved: (idx, obj) => {
+                obj.destroy();
+            }
+        }
+
+        Instantiator {
+            model: containers
             onObjectRemoved: (idx, obj) => {
                 obj.destroy();
             }
