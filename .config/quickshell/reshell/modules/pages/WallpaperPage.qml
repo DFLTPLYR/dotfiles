@@ -52,6 +52,7 @@ Rectangle {
         }
         Keys.onReleased: {
             flick.interactive = true;
+            selectionMa.enabled = false;
         }
 
         contentWidth: maxX + 2000
@@ -314,7 +315,7 @@ Rectangle {
         property ListModel screens: ListModel {}
         property Image image: draggableImage
 
-        pointerVisible: hoverHandler.hovered
+        pointerVisible: imageControl.hover.hovered
         rulersSize: 12 / flick.zoom
         objectName: modelData.name
 
@@ -331,8 +332,6 @@ Rectangle {
             property bool lock: (modelData.x && modelData.y) ? true : false
             width: resizeableRect.width
             height: resizeableRect.height
-            // onWidthChanged: overlapsAny(resizeableRect)
-            // onHeightChanged: overlapsAny(resizeableRect)
             source: Qt.resolvedUrl(modelData.source) || ""
             objectName: modelData.name
             z: -1
@@ -378,49 +377,24 @@ Rectangle {
                     }
                 }
             }
+        }
 
-            DragHandler {
-                id: dragHandler
-                target: resizeableRect
-                enabled: !draggableImage.lock
-                onActiveChanged: {
-                    const screens = overlapsAny(resizeableRect);
+        ControlHandler {
+            id: imageControl
+            subject: resizeableRect
+            onUpdate: {
+                const screens = overlapsAny(resizeableRect);
 
-                    const obj = {
-                        x: resizeableRect.x,
-                        y: resizeableRect.y,
-                        z: resizeableRect.z,
-                        screens: screens,
-                        width: resizeableRect.width,
-                        height: resizeableRect.height
-                    };
+                const obj = {
+                    x: resizeableRect.x,
+                    y: resizeableRect.y,
+                    z: resizeableRect.z,
+                    screens: screens,
+                    width: resizeableRect.width,
+                    height: resizeableRect.height
+                };
 
-                    Wallpaper.list.set(resizeableRect.index, obj);
-                }
-            }
-
-            HoverHandler {
-                id: hoverHandler
-                target: resizeableRect
-                enabled: !draggableImage.lock
-            }
-
-            WheelHandler {
-                id: wheelHandler
-                enabled: hoverHandler.hovered
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                target: null
-
-                onWheel: event => {
-                    let isShiftWheel = event.modifiers & Qt.ShiftModifier;
-                    if (isShiftWheel && wheelHandler.enabled) {
-                        if (event.angleDelta.y > 0) {
-                            resizeableRect.z++;
-                        } else {
-                            resizeableRect.z--;
-                        }
-                    }
-                }
+                Wallpaper.list.set(resizeableRect.index, obj);
             }
         }
 
@@ -442,6 +416,45 @@ Rectangle {
         }
     }
 
+    component ControlHandler: Item {
+        id: control
+        required property var subject
+        property alias drag: dragHandler
+        property alias hover: hoverHandler
+        signal update
+        anchors.fill: parent
+
+        DragHandler {
+            id: dragHandler
+            target: control.subject
+            onActiveChanged: control.update()
+        }
+
+        HoverHandler {
+            id: hoverHandler
+            target: subject
+        }
+
+        WheelHandler {
+            id: wheelHandler
+            enabled: hoverHandler.hovered
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            target: null
+
+            onWheel: event => {
+                let isShiftWheel = event.modifiers & Qt.ShiftModifier;
+                if (isShiftWheel && wheelHandler.enabled) {
+                    if (event.angleDelta.y > 0) {
+                        subject.z++;
+                    } else {
+                        subject.z--;
+                    }
+                }
+                control.update();
+            }
+        }
+    }
+
     component ContainerRect: ResizeableRect {
         id: containerRect
         required property var model
@@ -451,14 +464,14 @@ Rectangle {
         color: Colors.setOpacity(Colors.color.background, 0.5)
 
         pointerVisible: true
-        rulersSize: 12 / flick.zoom
+        rulersSize: 16 / flick.zoom
 
         width: model.width
         height: model.height
 
-        x: (model.x || 0)
-        y: (model.y || 0)
-        z: (model.z || 0)
+        x: model.x
+        y: model.y
+        z: model.z
 
         Text {
             anchors {
@@ -471,6 +484,24 @@ Rectangle {
             font.pixelSize: 12 / flick.zoom
         }
 
+        ControlHandler {
+            id: imageControl
+            subject: containerRect
+            onUpdate: {
+                const screens = overlapsAny(containerRect);
+
+                const obj = {
+                    x: containerRect.x,
+                    y: containerRect.y,
+                    z: containerRect.z,
+                    screens: screens,
+                    width: containerRect.width,
+                    height: containerRect.height
+                };
+
+                Wallpaper.containers.set(containerRect.index, obj);
+            }
+        }
         // outline
         Outline {
             anchors.fill: parent
