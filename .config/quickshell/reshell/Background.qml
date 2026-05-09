@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQml.Models
 import QtQuick
 import QtQuick.Layouts

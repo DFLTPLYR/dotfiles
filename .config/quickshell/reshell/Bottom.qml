@@ -15,13 +15,10 @@ import qs.components
 PanelWindow {
     id: panel
     property var file
-    property var containers
     property Item area: null
     property bool fileExplorerOpen: false
 
     signal dockUpdate(var data)
-    signal addContainer(var obj)
-    signal removeContainer(int idx)
     signal save
 
     color: "transparent"
@@ -42,19 +39,6 @@ PanelWindow {
         id: controlContainer
         width: parent.width
         height: parent.height
-
-        Instantiator {
-            model: panel.containers
-            delegate: StyledContainer {
-                parent: controlContainer
-                onSave: (idx, obj) => {
-                    panel.save();
-                }
-                onRemove: idx => {
-                    panel.removeContainer(idx);
-                }
-            }
-        }
     }
 
     // MouseArea
@@ -116,7 +100,6 @@ PanelWindow {
                         z: 1,
                         content: []
                     };
-                    panel.addContainer(container);
                 }
             }
 

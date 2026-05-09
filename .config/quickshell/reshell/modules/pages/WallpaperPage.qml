@@ -7,7 +7,7 @@ import qs.core
 import qs.components
 
 Rectangle {
-    id: container
+    id: page
     color: "transparent"
 
     width: parent.width
@@ -40,23 +40,18 @@ Rectangle {
         property int maxX: 0
         property int maxY: 0
 
-        interactive: !selectionMa.selecting
         anchors.fill: parent
-
+        boundsBehavior: Flickable.StopAtBounds
         focus: true
+
         Keys.onPressed: event => {
-            switch (event.key) {
-            case Qt.Key_Up:
-                break;
-            case Qt.Key_Down:
-                break;
-            case Qt.Key_Left:
-                break;
-            case Qt.Key_Right:
-                break;
-            default:
-                break;
+            if (event.key === Qt.Key_Control) {
+                flick.interactive = false;
+                selectionMa.enabled = true;
             }
+        }
+        Keys.onReleased: {
+            flick.interactive = true;
         }
 
         contentWidth: maxX + 2000
@@ -106,6 +101,22 @@ Rectangle {
                 transformOrigin: Item.TopLeft
                 anchors.centerIn: parent
 
+                // selectionRect
+                Rectangle {
+                    id: selectionRect
+                    x: 0
+                    y: 0
+                    z: 9999
+                    visible: false
+                    width: 0
+                    height: 0
+                    rotation: 0
+                    color: Colors.setOpacity(Colors.color.primary, 0.5)
+                    border.width: 1
+                    border.color: Colors.color.tertiary
+                    transformOrigin: Item.TopLeft
+                }
+
                 // screens/monitors
                 Instantiator {
                     model: Quickshell.screens
@@ -129,6 +140,95 @@ Rectangle {
                         parent: content
                     }
                 }
+
+                // containers
+                Instantiator {
+                    model: Wallpaper.containers
+                    delegate: Rectangle {
+                        id: container
+                        property int index
+                        required property var model
+                        onModelChanged: print(model.width, model.height)
+                        parent: content
+                        width: model.width
+                        height: model.height
+                        x: model.x
+                        y: model.y
+                        z: 999
+
+                        DragHandler {
+                            id: dragHandler
+                            target: container
+                            onActiveChanged: {
+                                const screens = overlapsAny(container);
+
+                                const obj = {
+                                    x: container.x,
+                                    y: container.y,
+                                    z: container.z,
+                                    screens: screens,
+                                    width: container.width,
+                                    height: container.height
+                                };
+
+                                Wallpaper.containers.set(container.index, obj);
+                            }
+                        }
+                    }
+                }
+            }
+
+            MouseArea {
+                id: selectionMa
+                anchors.fill: parent
+                anchors.centerIn: parent
+                enabled: false
+                onEnabledChanged: print(enabled)
+                acceptedButtons: Qt.LeftButton
+                property bool selecting
+                property point startPoint
+
+                onPressed: mouse => {
+                    if (mouse.button == Qt.LeftButton) {
+                        selecting = true;
+                        // startPoint = Qt.point(mouse.x, mouse.y);
+                        startPoint = selectionMa.mapToItem(content, mouse.x, mouse.y);
+                        selectionRect.x = startPoint.x;
+                        selectionRect.y = startPoint.y;
+                        selectionRect.width = 0;
+                        selectionRect.height = 0;
+                        selectionRect.visible = true;
+                    }
+                }
+
+                onPositionChanged: mouse => {
+                    if (selecting) {
+                        const toLocal = selectionMa.mapToItem(content, mouse.x, mouse.y);
+                        var minX = Math.min(startPoint.x, toLocal.x);
+                        var minY = Math.min(startPoint.y, toLocal.y);
+                        var maxX = Math.max(startPoint.x, toLocal.x);
+                        var maxY = Math.max(startPoint.y, toLocal.y);
+
+                        selectionRect.x = minX;
+                        selectionRect.y = minY;
+                        selectionRect.width = maxX - minX;
+                        selectionRect.height = maxY - minY;
+                    }
+                }
+
+                onReleased: {
+                    selecting = false;
+                    const container = {
+                        width: selectionRect.width,
+                        height: selectionRect.height,
+                        x: selectionRect.x,
+                        y: selectionRect.y,
+                        z: selectionRect.z,
+                        screens: overlapsAny(selectionRect)
+                    };
+                    Wallpaper.containers.append(container);
+                    selectionRect.visible = false;
+                }
             }
         }
 
@@ -146,69 +246,6 @@ Rectangle {
                 }
             }
         }
-
-        MouseArea {
-            id: selectionMa
-            enabled: false
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton
-            property bool selecting
-            property point startPoint
-
-            onPressed: mouse => {
-                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ControlModifier) {
-                    selecting = true;
-                    startPoint = Qt.point(mouse.x, mouse.y);
-                    selectionRect.x = mouse.x;
-                    selectionRect.y = mouse.y;
-                    selectionRect.width = 0;
-                    selectionRect.height = 0;
-                    selectionRect.visible = true;
-                }
-            }
-
-            onPositionChanged: mouse => {
-                if (selecting) {
-                    var minX = Math.min(startPoint.x, mouse.x);
-                    var minY = Math.min(startPoint.y, mouse.y);
-                    var maxX = Math.max(startPoint.x, mouse.x);
-                    var maxY = Math.max(startPoint.y, mouse.y);
-
-                    selectionRect.x = minX;
-                    selectionRect.y = minY;
-                    selectionRect.width = maxX - minX;
-                    selectionRect.height = maxY - minY;
-                }
-            }
-
-            onReleased: {
-                selecting = false;
-                selectionRect.visible = false;
-                const container = {
-                    w: selectionRect.width,
-                    h: selectionRect.height,
-                    x: selectionRect.x,
-                    y: selectionRect.y,
-                    z: selectionRect.z
-                };
-            }
-        }
-
-        // selectionRect
-        Rectangle {
-            id: selectionRect
-            x: 0
-            y: 0
-            z: 9999
-            visible: false
-            width: 0
-            height: 0
-            rotation: 0
-            color: Colors.setOpacity(Colors.color.primary, 0.5)
-            border.width: 1
-            border.color: Colors.color.tertiary
-            transformOrigin: Item.TopLeft
-        }
     }
 
     function overlapsAny(target) {
@@ -221,32 +258,9 @@ Rectangle {
                 newScreens.push(getRelativePos(target, screen));
             }
         }
-        const obj = {
-            x: target.x,
-            y: target.y,
-            z: target.z,
-            screens: newScreens,
-            width: target.width,
-            height: target.height
-        };
-
-        Wallpaper.list.set(target.index, obj);
-        return false;
+        return newScreens;
     }
 
-    function find(model, criteria) {
-        for (var i = 0; i < model.count; ++i)
-            if (criteria(model.get(i)))
-                return model.get(i);
-        return null;
-    }
-
-    function findIndex(model, criteria) {
-        for (var i = 0; i < model.count; ++i)
-            if (criteria(model.get(i)))
-                return i;
-        return -1;
-    }
     function intersects(a, b) {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
     }
@@ -321,7 +335,20 @@ Rectangle {
 
         property Timer debounceTimer: Timer {
             interval: 100
-            onTriggered: overlapsAny(resizeableRect)
+            onTriggered: {
+                const screens = overlapsAny(resizeableRect);
+
+                const obj = {
+                    x: resizeableRect.x,
+                    y: resizeableRect.y,
+                    z: resizeableRect.z,
+                    screens: screens,
+                    width: resizeableRect.width,
+                    height: resizeableRect.height
+                };
+
+                Wallpaper.list.set(resizeableRect.index, obj);
+            }
         }
 
         required property var modelData
@@ -399,7 +426,20 @@ Rectangle {
                 id: dragHandler
                 target: resizeableRect
                 enabled: !draggableImage.lock
-                onActiveChanged: overlapsAny(resizeableRect)
+                onActiveChanged: {
+                    const screens = overlapsAny(resizeableRect);
+
+                    const obj = {
+                        x: resizeableRect.x,
+                        y: resizeableRect.y,
+                        z: resizeableRect.z,
+                        screens: screens,
+                        width: resizeableRect.width,
+                        height: resizeableRect.height
+                    };
+
+                    Wallpaper.list.set(resizeableRect.index, obj);
+                }
             }
 
             HoverHandler {
@@ -477,7 +517,19 @@ Rectangle {
                     text: "Check"
                     onClicked: {
                         for (const i in imageList) {
-                            overlapsAny(imageList[i]);
+                            const target = imageList[i];
+                            const screens = overlapsAny(imageList[i]);
+
+                            const obj = {
+                                x: target.x,
+                                y: target.y,
+                                z: target.z,
+                                screens: screens,
+                                width: target.width,
+                                height: target.height
+                            };
+
+                            Wallpaper.list.set(target.index, obj);
                         }
                         Wallpaper.list.save();
                     }

@@ -11,13 +11,6 @@ Variants {
         id: reshell
         required property ShellScreen modelData
 
-        property FileModel containers: FileModel {
-            onSaved: list => {
-                adapter.container = [...list];
-                fileview.save();
-            }
-        }
-
         property FileModel dock: FileModel {
             onSaved: list => {
                 adapter.docks = list.map(item => item.name);
@@ -54,7 +47,6 @@ Variants {
                     "config": fileview
                 });
                 content.active = true;
-                reshell.containers.sources = adapter.container;
                 reshell.dock.sources = adapter.docks.map(value => ({
                             name: value
                         }));
@@ -94,7 +86,6 @@ Variants {
             adapter: JsonAdapter {
                 id: adapter
                 property list<var> docks: []
-                property list<var> container: []
                 property JsonObject notification: JsonObject {
                     property bool local: false
                     property int duration: 5000
@@ -142,19 +133,12 @@ Variants {
                 Bottom {
                     file: fileview
                     screen: reshell.screen
-                    containers: reshell.containers
-                    onSave: reshell.containers.save()
-                    onAddContainer: obj => reshell.containers.append(obj)
                     onDockUpdate: dock => {
                         reshell.dock.append({
                             "name": dock.name
                         });
                         reshell.dock.save();
                         fileview.updateQueue.push(dock);
-                    }
-                    onRemoveContainer: idx => {
-                        reshell.containers.remove(idx, 1);
-                        reshell.containers.save();
                     }
                 }
 

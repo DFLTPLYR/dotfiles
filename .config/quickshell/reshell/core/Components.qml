@@ -90,6 +90,7 @@ Singleton {
             property Range range: Range {}
         }
     }
+
     component Notification: JsonObject {
         property int duration: 5000
         property int width: 300
