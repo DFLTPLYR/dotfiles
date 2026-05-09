@@ -423,6 +423,7 @@ Rectangle {
         property alias hover: hoverHandler
         signal update
         anchors.fill: parent
+        z: -1000
 
         DragHandler {
             id: dragHandler
