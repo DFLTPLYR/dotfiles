@@ -631,23 +631,42 @@ Rectangle {
             }
 
             Menu {
+                id: screenMenu
                 title: "Screens"
-                Repeater {
+                Instantiator {
                     model: [...controlContainer.screenList]
-                    delegate: Button {
+                    delegate: Action {
                         required property var modelData
                         text: modelData.objectName
+                        checkable: true
+                        checked: modelData.visible
+                        onCheckedChanged: {
+                            modelData.visible = checked;
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        screenMenu.insertAction(idx, obj);
                     }
                 }
             }
 
             Menu {
+                id: imageMenu
                 title: "Images"
-                Repeater {
+                Instantiator {
                     model: [...controlContainer.imageList]
-                    delegate: Button {
+                    delegate: Action {
                         required property var image
                         text: image.objectName
+
+                        checkable: true
+                        checked: image.visible
+                        onCheckedChanged: {
+                            image.visible = checked;
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        imageMenu.insertAction(idx, obj);
                     }
                 }
             }

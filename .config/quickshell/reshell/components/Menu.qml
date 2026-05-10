@@ -11,7 +11,7 @@ Menu {
 
     delegate: MenuItem {
         id: menuItem
-        implicitWidth: 200
+        implicitWidth: 100
         implicitHeight: 40
 
         arrow: Canvas {
@@ -31,6 +31,7 @@ Menu {
         }
 
         indicator: Item {
+            id: indicator
             implicitWidth: 40
             implicitHeight: 40
             Rectangle {
@@ -52,19 +53,18 @@ Menu {
         }
 
         contentItem: Text {
-            leftPadding: menuItem.indicator.width
-            rightPadding: menuItem.arrow.width
+            leftPadding: menuItem.checkable ? menuItem.indicator.width : 0
+            rightPadding: menuItem.subMenu ? menuItem.arrow.width : 0
             text: menuItem.text
             font: menuItem.font
             opacity: enabled ? 1.0 : 0.3
             color: menuItem.highlighted ? Colors.color.on_background : Colors.color.primary
-            horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
 
         background: Rectangle {
-            implicitWidth: 200
+            implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: menuItem.highlighted ? Colors.color.background : "transparent"
@@ -72,7 +72,7 @@ Menu {
     }
 
     background: Rectangle {
-        implicitWidth: 200
+        implicitWidth: 100
         implicitHeight: 40
         color: Colors.color.background
         border.color: Colors.color.outline
