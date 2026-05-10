@@ -281,27 +281,45 @@ Rectangle {
         id: outline
         property real zoom: 1
         focusPolicy: Qt.NoFocus
+        focus: false
         // border
         Rectangle {
-            width: parent.width
+            anchors {
+                top: parent.top
+                right: parent.right
+                left: parent.left
+            }
             height: 2 / outline.zoom
             color: Colors.color.primary
         }
+
         Rectangle {
-            width: parent.width
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+            }
             height: 2 / outline.zoom
             color: Colors.color.primary
             y: parent.height
         }
 
         Rectangle {
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
             width: 2 / outline.zoom
-            height: parent.height
             color: Colors.color.primary
         }
         Rectangle {
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+            }
             width: 2 / outline.zoom
-            height: parent.height
             color: Colors.color.primary
             x: parent.width
         }
@@ -382,6 +400,7 @@ Rectangle {
         ControlHandler {
             id: imageControl
             subject: resizeableRect
+            drag.enabled: !draggableImage.lock
             onUpdate: {
                 const screens = overlapsAny(resizeableRect);
 
@@ -616,6 +635,7 @@ Rectangle {
                 Repeater {
                     model: [...controlContainer.screenList]
                     delegate: Button {
+                        required property var modelData
                         text: modelData.objectName
                     }
                 }
@@ -626,7 +646,8 @@ Rectangle {
                 Repeater {
                     model: [...controlContainer.imageList]
                     delegate: Button {
-                        text: modelData.objectName
+                        required property var image
+                        text: image.objectName
                     }
                 }
             }
