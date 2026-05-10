@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: "/home/dfltplyr/.config/rmpc/layout/long.ron",
+    theme: "/home/dfltplyr/.config/rmpc/layout/shell.ron",
     cache_dir: None,
     lyrics_dir: "/StorageBtw/Music",
     volume_step: 5,
@@ -109,66 +109,86 @@
         album_display_mode: SplitByDate,
         album_sort_by: Date,
     ),
+    cava: (
+        framerate: 165,
+        autosens: true,
+        sensitivity: 100,
+        lower_cutoff_freq: 50,
+        higher_cutoff_freq: 10000,
+        bar_color: Single("#d0c890"),
+        input: (
+            method: Fifo,
+            source: "/tmp/mpd.fifo",
+            sample_rate: 44100,
+            channels: 2,
+            sample_bits: 16,
+        ),
+        smoothing: (
+            noise_reduction: 77,
+            monstercat: false,
+            waves: false,
+        ),
+        eq: []
+    ),
     tabs: [
         (
             name: "Queue",
             pane: Split(
                 direction: Vertical,
-                panes: [
-                    (
+                panes: [(
                         size: "100%",
                         borders: "NONE",
                         pane: Split(
                         direction: Vertical,
                         panes: [
                             (
-                                size: "80%",
-                                borders: "NONE",
-                                pane: Split(
-                                    direction: Vertical,
-                                    panes: [
-                                        (
-                                            size: "75%",
-                                            borders: "NONE",
-                                            pane: Pane(AlbumArt),
-                                        ),
-                                        (
-                                            size: "25%",
-                                            borders: "ALL",
-                                            pane: Split(
-                                                direction: Vertical,
-                                                panes: [
-                                                (
-                                                    size: "50%",
-                                                    borders: "NONE",
-                                                    pane:Pane(Lyrics)
-                                                ),
-                                                (
-                                                    size: "50%",
-                                                    borders: "NONE",
-                                                    pane:Pane(Cava)
-                                                ),
-                                                ]
-                                            ),
-                                        ),
-                                    ]
-                                ),
-                            ),
-                            (
-                                size: "20%",
-                                borders: "ALL",
-                                borders_style: (bg: "#5f4102", fg:"#5f4102" ),
-                                pane: Split (
-                                direction: Vertical,
-                                panes: [
-                                  (
-                                    size: "100%",
-                                    borders: "NONE",
-                                    pane: Pane(Queue)
-                                  )
-                                ]
-                            ),
-                            ),
+                              size: "80%",
+                              borders: "NONE",
+                              pane: Split(
+                                  direction: Vertical,
+                                  panes: [
+                                      (
+                                          size: "75%",
+                                          borders: "NONE",
+                                          pane: Pane(AlbumArt),
+                                      ),
+                                      (
+                                          size: "25%",
+                                          borders: "ALL",
+                                          pane: Split(
+                                              direction: Vertical,
+                                              panes: [
+                                              (
+                                                  size: "50%",
+                                                  borders: "NONE",
+                                                  pane:Pane(Lyrics)
+                                              ),
+                                              (
+                                                  size: "50%",
+                                                  borders: "NONE",
+                                                  pane:Pane(Cava)
+                                              ),
+                                              ]
+                                          ),
+                                      ),
+                                  ]
+                              ),
+                          ),
+                          (
+                              size: "20%",
+                              borders: "ALL",
+                              borders_style: (bg: "#5f4102", fg:"#5f4102" ),
+                              pane: Split (
+                              direction: Vertical,
+                              panes: [
+                                (
+                                  size: "100%",
+                                  borders: "NONE",
+                                  pane: Pane(Queue)
+                                )
+                              ]
+                          ),
+                          ),
                         ]
                     ),
                 ),
