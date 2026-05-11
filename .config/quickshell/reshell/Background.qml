@@ -71,7 +71,7 @@ PanelWindow {
             }
         }
 
-        component: Rectangle {
+        component: Item {
             parent: layered
 
             width: containerloader.model.width

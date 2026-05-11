@@ -550,22 +550,18 @@ Pane {
 
         MenuBar {
             Menu {
-                leftPadding: 2
-                rightPadding: 2
-
-                width: 150
                 title: 'Layers'
 
-                Button {
-                    text: "Add file"
-                    onClicked: {
+                Action {
+                    text: "Add Image"
+                    onTriggered: {
                         filepicker.active();
                     }
                 }
 
-                Button {
+                Action {
                     text: "Check"
-                    onClicked: {
+                    onTriggered: {
                         for (const i in imageList) {
                             const target = imageList[i];
                             const screens = overlapsAny(imageList[i]);
@@ -585,14 +581,14 @@ Pane {
                     }
                 }
 
-                Button {
+                Action {
                     text: Global.docks ? "Hide Docks" : "Show Docks"
-                    onClicked: Global.docks = !Global.docks
+                    onTriggered: Global.docks = !Global.docks
                 }
 
-                Button {
+                Action {
                     text: "Save preset"
-                    onClicked: {
+                    onTriggered: {
                         var preset = {
                             source: Wallpaper.config.layers,
                             name: Math.random().toString(36).substring(2, 10)
