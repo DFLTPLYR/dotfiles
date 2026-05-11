@@ -15,7 +15,7 @@ Popup {
             Global.bindRadii(background);
         }
     }
-
+    dim: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     focus: true
 }

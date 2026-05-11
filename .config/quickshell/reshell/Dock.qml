@@ -421,12 +421,12 @@ Item {
                     switch (mouse.button) {
                     case Qt.RightButton:
                         if (!modalPopup.opened) {
-                            var globalX = mapToItem(null, mouseX, mouseY).x;
-                            var globalY = mapToItem(null, mouseX, mouseY).y;
-                            var mWidth = modalPopup.width;
-                            var mHeight = modalPopup.height;
-                            modalPopup.x = globalX + mWidth > screen.width ? globalX - mWidth : globalX;
-                            modalPopup.y = globalY + mHeight > screen.height ? globalY - mHeight : globalY;
+                            modalPopup.y = Qt.binding(() => {
+                                return panel.height / 2 - modalPopup.height / 2;
+                            });
+                            modalPopup.x = Qt.binding(() => {
+                                return panel.width / 2 - modalPopup.width / 2;
+                            });
                         }
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
                         return;
