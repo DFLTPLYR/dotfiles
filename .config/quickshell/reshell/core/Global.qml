@@ -121,16 +121,16 @@ Singleton {
 
     function bindRadii(rect, stateRounding = null) {
         rect.bottomLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomLeft : 0) + Components.config.rounding.bottomLeft;
+            return (stateRounding ? stateRounding.bottomLeft : 0);
         });
         rect.bottomRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomRight : 0) + Components.config.rounding.bottomRight;
+            return (stateRounding ? stateRounding.bottomRight : 0);
         });
         rect.topLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topLeft : 0) + Components.config.rounding.topLeft;
+            return (stateRounding ? stateRounding.topLeft : 0);
         });
         rect.topRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topRight : 0) + Components.config.rounding.topRight;
+            return (stateRounding ? stateRounding.topRight : 0);
         });
     }
 

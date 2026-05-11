@@ -5,10 +5,7 @@ import qs.core
 
 Menu {
     id: menu
-
-    topPadding: 2
-    bottomPadding: 2
-
+    padding: 2
     delegate: MenuItem {
         id: menuItem
         implicitWidth: 100
@@ -72,6 +69,7 @@ Menu {
     }
 
     background: Rectangle {
+        clip: true
         implicitWidth: 100
         implicitHeight: 40
         color: Colors.color.background

@@ -6,9 +6,8 @@ import Quickshell
 import qs.core
 import qs.components
 
-Rectangle {
+Pane {
     id: page
-    color: "transparent"
 
     width: parent.width
     height: parent.height
@@ -22,11 +21,6 @@ Rectangle {
             };
             Wallpaper.list.append(item);
         }
-    }
-
-    border {
-        width: 1
-        color: Colors.color.primary
     }
 
     clip: true
@@ -170,7 +164,6 @@ Rectangle {
                 anchors.fill: parent
                 anchors.centerIn: parent
                 enabled: false
-                onEnabledChanged: print(enabled)
                 acceptedButtons: Qt.LeftButton
                 property bool selecting
                 property point startPoint
@@ -211,7 +204,6 @@ Rectangle {
 
         // zoom in/out
         WheelHandler {
-            id: wheelHandler
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             target: null
 
@@ -457,7 +449,7 @@ Rectangle {
 
         WheelHandler {
             id: wheelHandler
-            enabled: hoverHandler.hovered
+            enabled: dragHandler.enabled
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             target: null
 
@@ -522,10 +514,18 @@ Rectangle {
                 Wallpaper.containers.set(containerRect.index, obj);
             }
         }
+
         // outline
         Outline {
             anchors.fill: parent
             zoom: flick.zoom
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                print("test");
+            }
         }
     }
 
@@ -641,7 +641,7 @@ Rectangle {
                         checkable: true
                         checked: modelData.visible
                         onCheckedChanged: {
-                            modelData.visible = checked;
+                            modelData.visible = this.checked;
                         }
                     }
                     onObjectAdded: (idx, obj) => {
@@ -662,7 +662,7 @@ Rectangle {
                         checkable: true
                         checked: image.visible
                         onCheckedChanged: {
-                            image.visible = checked;
+                            image.visible = this.checked;
                         }
                     }
                     onObjectAdded: (idx, obj) => {

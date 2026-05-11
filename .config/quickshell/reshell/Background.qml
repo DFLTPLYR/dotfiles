@@ -80,9 +80,6 @@ PanelWindow {
             x: containerloader.coords ? containerloader.coords.x : 0
             y: containerloader.coords ? containerloader.coords.y : 0
             z: containerloader.model.z
-            Component.onCompleted: {
-                print(this, panel.screen.name);
-            }
         }
     }
 

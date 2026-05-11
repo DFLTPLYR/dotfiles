@@ -190,6 +190,7 @@ Item {
 
             DockMenu {
                 id: modalPopup
+                dim: true
                 specs: file.adapter
                 slots: panel.dockSlots
                 activeWidgets: panel.activeWidgets
@@ -421,12 +422,8 @@ Item {
                     switch (mouse.button) {
                     case Qt.RightButton:
                         if (!modalPopup.opened) {
-                            modalPopup.y = Qt.binding(() => {
-                                return panel.height / 2 - modalPopup.height / 2;
-                            });
-                            modalPopup.x = Qt.binding(() => {
-                                return panel.width / 2 - modalPopup.width / 2;
-                            });
+                            modalPopup.y = panel.height / 2 - modalPopup.height / 2;
+                            modalPopup.x = panel.width / 2 - modalPopup.width / 2;
                         }
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
                         return;
