@@ -467,7 +467,7 @@ Pane {
         required property int index
         property ListModel screens: ListModel {}
 
-        color: Colors.setOpacity(Colors.color.background, 0.5)
+        bg.color: Colors.setOpacity(Colors.color.background, 0.5)
 
         pointerVisible: true
         rulersSize: 16 / flick.zoom

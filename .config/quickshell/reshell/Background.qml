@@ -71,7 +71,7 @@ PanelWindow {
             }
         }
 
-        component: Item {
+        component: Pane {
             parent: layered
 
             width: containerloader.model.width
@@ -111,16 +111,10 @@ PanelWindow {
 
         Instantiator {
             model: images
-            onObjectRemoved: (idx, obj) => {
-                obj.destroy();
-            }
         }
 
         Instantiator {
             model: containers
-            onObjectRemoved: (idx, obj) => {
-                obj.destroy();
-            }
         }
     }
 

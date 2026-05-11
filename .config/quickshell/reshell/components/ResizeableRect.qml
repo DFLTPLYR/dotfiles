@@ -1,17 +1,22 @@
 import QtQuick
 import qs.core
 
-Rectangle {
+Pane {
     id: resizeableRect
+    property alias bg: background
     property int rulersSize: 12
     property bool pointerVisible: true
 
-    border {
-        width: pointerVisible ? 2 : 0
-        color: Colors.color.tertiary
-    }
+    background: Rectangle {
+        id: background
+        anchors.fill: parent
+        border {
+            width: pointerVisible ? 2 : 0
+            color: Colors.color.tertiary
+        }
 
-    color: "transparent"
+        color: "transparent"
+    }
 
     Rectangle {
         width: rulersSize
