@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 
@@ -8,6 +9,8 @@ import qs.components
 
 Pane {
     id: page
+    focus: true
+    clip: true
 
     width: parent.width
     height: parent.height
@@ -22,8 +25,6 @@ Pane {
             Wallpaper.list.append(item);
         }
     }
-
-    clip: true
 
     // Nav
     TopLeftControl {}
@@ -242,13 +243,6 @@ Pane {
         };
         return relative;
     }
-
-    Component.onCompleted: {
-        Global.bindRadii(this);
-        Global.wallpaper = true;
-    }
-
-    Component.onDestruction: Global.wallpaper = false
 
     component Monitor: Rectangle {
         id: monitor
@@ -524,7 +518,34 @@ Pane {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                print("test");
+                menu.opened ? menu.close() : menu.open();
+            }
+        }
+
+        Menu {
+            id: menu
+            width: 200
+            implicitHeight: contentHeight
+            x: (parent.width / 2 - width / 2)
+            y: (parent.height / 2 - height / 2)
+
+            Action {
+                text: "Remove Container"
+                onTriggered: {
+                    Wallpaper.containers.remove(containerRect.index, 1);
+                }
+            }
+            Action {
+                text: "Remove Container"
+                onTriggered: {
+                    Wallpaper.containers.remove(containerRect.index, 1);
+                }
+            }
+            Action {
+                text: "Remove Container"
+                onTriggered: {
+                    Wallpaper.containers.remove(containerRect.index, 1);
+                }
             }
         }
     }

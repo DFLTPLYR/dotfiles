@@ -1,3 +1,5 @@
 import QtQuick.Controls
 
-Action {}
+Action {
+    checkable: false
+}
