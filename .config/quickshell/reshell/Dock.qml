@@ -191,6 +191,8 @@ Item {
             DockMenu {
                 id: modalPopup
                 dim: true
+                width: Math.min(800, panel.screen.width / 2)
+                height: Math.min(1200, panel.screen.height / 2)
                 specs: file.adapter
                 slots: panel.dockSlots
                 activeWidgets: panel.activeWidgets

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQml.Models
@@ -16,9 +17,6 @@ PopupModal {
     signal add(var obj)
     signal remove
     signal save
-
-    width: Math.min(400, screen.width / 2)
-    height: Math.min(600, screen.height / 2)
 
     // Content
     LazyLoader {
@@ -437,6 +435,7 @@ PopupModal {
                 model: [...modal.slots]
                 orientation: ListView.Horizontal
                 delegate: Rectangle {
+                    required property var modelData
                     width: 60
                     height: 40
                     color: modelData.state === "selected" ? Colors.color.primary : Colors.color.background
@@ -480,6 +479,7 @@ PopupModal {
                     Repeater {
                         model: modal.specs.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
                         delegate: Button {
+                            required property var modelData
                             text: modelData.toUpperCase()
                             onClicked: container.selectedSlot.updatePosition(modelData)
                         }
@@ -528,6 +528,7 @@ PopupModal {
 
     component WidgetPlaceholder: Item {
         id: origPlacement
+        required property var modelData
         Layout.fillWidth: true
         Layout.leftMargin: 10
         Layout.rightMargin: 10
@@ -639,6 +640,7 @@ PopupModal {
                     values: [...modal.activeWidgets].filter(s => s !== undefined && s !== null && s.objectName !== null)
                 }
                 delegate: Button {
+                    required property var modelData
                     text: modelData ? modelData.objectName : ""
                     onClicked: {
                         selectedWidget = modelData;
@@ -670,6 +672,7 @@ PopupModal {
                         roleValue: "number"
 
                         RowLayout {
+                            required property var modelData
                             height: 50
                             width: parent ? parent.width : 0
 
@@ -693,6 +696,7 @@ PopupModal {
                     DelegateChoice {
                         roleValue: "string"
                         RowLayout {
+                            required property var modelData
                             height: 50
                             width: parent ? parent.width : 0
 
@@ -711,6 +715,7 @@ PopupModal {
                     DelegateChoice {
                         roleValue: "boolean"
                         RowLayout {
+                            required property var modelData
                             height: 50
                             width: parent ? parent.width : 0
 
