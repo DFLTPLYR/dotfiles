@@ -26,25 +26,30 @@ Pane {
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
         opacity: resizeableRect.pointerVisible ? 1 : 0
+
         Behavior on opacity {
             NumberAnimation {
                 duration: 100
                 easing.type: Easing.InOutQuad
             }
         }
+
         MouseArea {
             anchors.fill: parent
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
             onHoveredChanged: {
-                parent.opacity = 1;
+                if (resizeableRect.pointerVisible) {
+                    parent.opacity = 1;
+                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
+                }
             }
-            propagateComposedEvents: true
             drag {
                 target: parent
                 axis: Drag.XAxis
             }
             onMouseXChanged: {
+                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.width = resizeableRect.width - mouseX;
                     resizeableRect.x = resizeableRect.x + mouseX;
@@ -72,17 +77,20 @@ Pane {
 
         MouseArea {
             anchors.fill: parent
-            propagateComposedEvents: true
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
             onHoveredChanged: {
-                parent.opacity = 1;
+                if (resizeableRect.pointerVisible) {
+                    parent.opacity = 1;
+                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
+                }
             }
             drag {
                 target: parent
                 axis: Drag.XAxis
             }
             onMouseXChanged: {
+                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.width = resizeableRect.width + mouseX;
                     if (resizeableRect.width < 50)
@@ -112,11 +120,13 @@ Pane {
 
         MouseArea {
             anchors.fill: parent
-            propagateComposedEvents: true
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
             onHoveredChanged: {
-                parent.opacity = 1;
+                if (resizeableRect.pointerVisible) {
+                    parent.opacity = 1;
+                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
+                }
             }
             drag {
                 target: parent
@@ -124,6 +134,7 @@ Pane {
             }
 
             onMouseYChanged: {
+                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.height = resizeableRect.height - mouseY;
                     resizeableRect.y = resizeableRect.y + mouseY;
@@ -153,17 +164,20 @@ Pane {
 
         MouseArea {
             anchors.fill: parent
-            propagateComposedEvents: true
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
             onHoveredChanged: {
-                parent.opacity = 1;
+                if (resizeableRect.pointerVisible) {
+                    parent.opacity = 1;
+                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
+                }
             }
             drag {
                 target: parent
                 axis: Drag.YAxis
             }
             onMouseYChanged: {
+                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.height = resizeableRect.height + mouseY;
                     if (resizeableRect.height < 50)

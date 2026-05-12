@@ -320,7 +320,7 @@ Pane {
         property Image image: draggableImage
 
         pointerVisible: imageControl.hover.hovered
-        rulersSize: 12 / flick.zoom
+        rulersSize: 16 / flick.zoom
         objectName: modelData.name
 
         width: (modelData.width || draggableImage.sourceSize.width)
@@ -385,6 +385,7 @@ Pane {
 
         ControlHandler {
             id: imageControl
+            z: -10
             subject: resizeableRect
             drag.enabled: !draggableImage.lock
             onUpdate: {
@@ -439,6 +440,9 @@ Pane {
         HoverHandler {
             id: hoverHandler
             target: subject
+            onHoveredChanged: {
+                control.focus = hovered ? true : false;
+            }
         }
 
         WheelHandler {
