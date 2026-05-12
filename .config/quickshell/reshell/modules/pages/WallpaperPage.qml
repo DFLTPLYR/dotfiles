@@ -624,14 +624,9 @@ Pane {
                             checkable: true
                             checked: modelData === Wallpaper.config.theme
                             text: modelData.replace("scheme-", "")
-                            onToggled: {
-                                Wallpaper.config.theme = modelData;
-                                Wallpaper.list.generate();
-                            }
+                            onToggled: Wallpaper.config.theme = modelData
                         }
-                        onObjectAdded: (obj, idx) => {
-                            colorScheme.insertAction(obj, idx);
-                        }
+                        onObjectAdded: (obj, idx) => colorScheme.insertAction(obj, idx)
                     }
                 }
             }
@@ -650,9 +645,7 @@ Pane {
                             modelData.visible = this.checked;
                         }
                     }
-                    onObjectAdded: (idx, obj) => {
-                        screenMenu.insertAction(idx, obj);
-                    }
+                    onObjectAdded: (idx, obj) => screenMenu.insertAction(idx, obj)
                 }
             }
 
@@ -671,9 +664,7 @@ Pane {
                             image.visible = this.checked;
                         }
                     }
-                    onObjectAdded: (idx, obj) => {
-                        imageMenu.insertAction(idx, obj);
-                    }
+                    onObjectAdded: (idx, obj) => imageMenu.insertAction(idx, obj)
                 }
             }
         }

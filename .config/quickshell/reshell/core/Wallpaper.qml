@@ -61,6 +61,7 @@ Singleton {
                 property list<var> preset: []
                 property list<var> containers: []
                 property string theme: "scheme-content"
+                onThemeChanged: config.list.generate()
             }
         }
     }
