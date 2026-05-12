@@ -7,3 +7,6 @@
 # Generated matugen outputs
 .config/matugen/data/userChrome.css.config/matugen/data/userContent.css
 .config/matugen/data/
+
+# rmpc layouts
+.config/rmpc/layout/long.ron
