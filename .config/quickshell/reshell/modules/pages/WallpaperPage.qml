@@ -427,7 +427,9 @@ Pane {
         required property var subject
         property alias drag: dragHandler
         property alias hover: hoverHandler
+        property alias wheel: wheelHandler
         signal update
+
         anchors.fill: parent
         z: -1000
 

@@ -19,6 +19,7 @@ Pane {
     }
 
     Rectangle {
+        id: leftHandle
         width: rulersSize
         height: rulersSize
         radius: rulersSize
@@ -29,27 +30,47 @@ Pane {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: 100
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        states: [
+            State {
+                name: "hovered"
+                when: leftHandleArea.containsMouse && !leftHandleArea.drag.active
+                PropertyChanges {
+                    target: leftHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: leftHandleArea.drag.active
+                PropertyChanges {
+                    target: leftHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
         MouseArea {
+            id: leftHandleArea
             anchors.fill: parent
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
-            onHoveredChanged: {
-                if (resizeableRect.pointerVisible) {
-                    parent.opacity = 1;
-                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
-                }
-            }
             drag {
                 target: parent
                 axis: Drag.XAxis
             }
             onMouseXChanged: {
-                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.width = resizeableRect.width - mouseX;
                     resizeableRect.x = resizeableRect.x + mouseX;
@@ -61,6 +82,7 @@ Pane {
     }
 
     Rectangle {
+        id: rightHandle
         width: rulersSize
         height: rulersSize
         radius: rulersSize
@@ -68,29 +90,50 @@ Pane {
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
         opacity: resizeableRect.pointerVisible ? 1 : 0
+
         Behavior on opacity {
             NumberAnimation {
-                duration: 100
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        states: [
+            State {
+                name: "hovered"
+                when: rightHandleArea.containsMouse && !rightHandleArea.drag.active
+                PropertyChanges {
+                    target: rightHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: rightHandleArea.drag.active
+                PropertyChanges {
+                    target: rightHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
         MouseArea {
+            id: rightHandleArea
             anchors.fill: parent
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
-            onHoveredChanged: {
-                if (resizeableRect.pointerVisible) {
-                    parent.opacity = 1;
-                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
-                }
-            }
             drag {
                 target: parent
                 axis: Drag.XAxis
             }
             onMouseXChanged: {
-                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.width = resizeableRect.width + mouseX;
                     if (resizeableRect.width < 50)
@@ -101,6 +144,7 @@ Pane {
     }
 
     Rectangle {
+        id: topHandle
         width: rulersSize
         height: rulersSize
         radius: rulersSize
@@ -113,28 +157,47 @@ Pane {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: 100
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        states: [
+            State {
+                name: "hovered"
+                when: topHandleArea.containsMouse && !topHandleArea.drag.active
+                PropertyChanges {
+                    target: topHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: topHandleArea.drag.active
+                PropertyChanges {
+                    target: topHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
         MouseArea {
+            id: topHandleArea
             anchors.fill: parent
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
-            onHoveredChanged: {
-                if (resizeableRect.pointerVisible) {
-                    parent.opacity = 1;
-                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
-                }
-            }
             drag {
                 target: parent
                 axis: Drag.YAxis
             }
-
             onMouseYChanged: {
-                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.height = resizeableRect.height - mouseY;
                     resizeableRect.y = resizeableRect.y + mouseY;
@@ -146,6 +209,7 @@ Pane {
     }
 
     Rectangle {
+        id: bottomHandle
         width: rulersSize
         height: rulersSize
         radius: rulersSize
@@ -155,29 +219,50 @@ Pane {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.bottom
         opacity: resizeableRect.pointerVisible ? 1 : 0
+
         Behavior on opacity {
             NumberAnimation {
-                duration: 100
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        states: [
+            State {
+                name: "hovered"
+                when: bottomHandleArea.containsMouse && !bottomHandleArea.drag.active
+                PropertyChanges {
+                    target: bottomHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: bottomHandleArea.drag.active
+                PropertyChanges {
+                    target: bottomHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
         MouseArea {
+            id: bottomHandleArea
             anchors.fill: parent
             enabled: resizeableRect.pointerVisible
             hoverEnabled: true
-            onHoveredChanged: {
-                if (resizeableRect.pointerVisible) {
-                    parent.opacity = 1;
-                    parent.color = containsMouse ? Colors.color.secondary : Colors.color.primary;
-                }
-            }
             drag {
                 target: parent
                 axis: Drag.YAxis
             }
             onMouseYChanged: {
-                parent.color = drag.active ? Colors.color.secondary : Colors.color.primary;
                 if (drag.active) {
                     resizeableRect.height = resizeableRect.height + mouseY;
                     if (resizeableRect.height < 50)
