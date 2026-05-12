@@ -617,25 +617,21 @@ Pane {
                     title: "Theme Picker"
                     width: 125
 
-                    DelegateModel {
-                        id: themeDM
+                    Instantiator {
                         model: Colors.themes
-                        delegate: CheckBox {
-                            required property string modelData
-                            width: ListView.view.width
-                            text: modelData.replace("scheme-", "")
+                        delegate: Action {
+                            required property var modelData
+                            checkable: true
                             checked: modelData === Wallpaper.config.theme
-                            onClicked: {
+                            text: modelData.replace("scheme-", "")
+                            onToggled: {
                                 Wallpaper.config.theme = modelData;
                                 Wallpaper.list.generate();
                             }
                         }
-                    }
-
-                    ListView {
-                        width: parent.width
-                        height: contentHeight
-                        model: themeDM
+                        onObjectAdded: (obj, idx) => {
+                            colorScheme.insertAction(obj, idx);
+                        }
                     }
                 }
             }
