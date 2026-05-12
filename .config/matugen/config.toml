@@ -8,8 +8,8 @@ output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 
 
 [templates.rmpc]
-input_path = "templates/rmpc/long.ron"
-output_path = "~/.config/rmpc/layout/long.ron"
+input_path = "templates/rmpc/shell.ron"
+output_path = "~/.config/rmpc/layout/shell.ron"
 
 [templates.niri]
 input_path = "templates/niri-colors.kdl"
