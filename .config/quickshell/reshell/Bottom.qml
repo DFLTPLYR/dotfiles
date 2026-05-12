@@ -62,11 +62,9 @@ PanelWindow {
                     selectionRect.height = 0;
                     selectionRect.visible = true;
                 } else if (mouse.button === Qt.RightButton) {
-                    if (!contextMenu.opened) {
-                        contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
-                        contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
-                    }
-                    contextMenu.opened ? contextMenu.close() : contextMenu.open();
+                    contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
+                    contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
+                    contextMenu.open();
                     return;
                 }
             }

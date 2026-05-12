@@ -523,9 +523,8 @@ Pane {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
-                menu.opened ? menu.close() : menu.open();
-            }
+            enabled: menu.closed
+            onClicked: menu.open()
         }
 
         Menu {
@@ -534,19 +533,7 @@ Pane {
             implicitHeight: contentHeight
             x: (parent.width / 2 - width / 2)
             y: (parent.height / 2 - height / 2)
-
-            Action {
-                text: "Remove Container"
-                onTriggered: {
-                    Wallpaper.containers.remove(containerRect.index, 1);
-                }
-            }
-            Action {
-                text: "Remove Container"
-                onTriggered: {
-                    Wallpaper.containers.remove(containerRect.index, 1);
-                }
-            }
+            closePolicy: Popup.CloseOnEscape
             Action {
                 text: "Remove Container"
                 onTriggered: {
