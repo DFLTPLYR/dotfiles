@@ -156,4 +156,61 @@
         album_display_mode: SplitByDate,
         album_sort_by: Date,
     ),
+    header: (
+        rows: [
+            (
+                left: [
+                    (kind: Text("["), style: (fg: "{{ colors.on_tertiary_fixed_variant.dark.hex }}", modifiers: "Bold")),
+                    (kind: Property(Status(State)), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold")),
+                    (kind: Text("]"), style: (fg: "{{ colors.on_tertiary_fixed_variant.dark.hex }}", modifiers: "Bold"))
+                ],
+                center: [
+                    (kind: Property(Song(Artist)), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold"),
+                        default: (kind: Text("Unknown"), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold"))
+                    ),
+                    (kind: Text(" - ")),
+                    (kind: Property(Song(Title)), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold"),
+                        default: (kind: Text("No Song"), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold"))
+                    )
+                ],
+                right: [
+                    (kind: Text("Vol: "), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold")),
+                    (kind: Property(Status(Volume)), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold")),
+                    (kind: Text("% "), style: (fg: "{{ colors.primary.dark.hex }}", modifiers: "Bold"))
+                ]
+            )
+        ],
+    ),
+    layout: Split(
+        direction: Vertical,
+        panes: [
+            (
+                size: "5",
+                borders: "ALL",
+                borders_style: (bg: "{{ colors.on_tertiary_fixed_variant.dark.hex }}", fg:"{{ colors.on_tertiary_fixed_variant.dark.hex }}" ),
+                pane: Split(
+                    direction: Vertical,
+                    panes: [
+                        (
+                            size: "2",
+                            pane: Pane(Header),
+                        ),
+                        (
+                            size: "1",
+                            pane: Pane(Tabs),
+                        ),
+                    ]
+                ),
+            ),
+            (
+                size: "100%",
+                pane: Pane(TabContent),
+            ), 
+            (
+                size: "3",
+                borders: "ALL",
+                pane: Pane(ProgressBar),
+            ),
+        ],
+    ),
 )
