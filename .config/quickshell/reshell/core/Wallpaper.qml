@@ -11,20 +11,12 @@ Singleton {
     property bool enableSetting: false
     property alias config: adapter.config
 
-    property FileModel list: FileModel {
+    property FileModel containers: FileModel {
         signal generate
-        onSaved: arr => {
+        onSaved: list => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
-            theme.source = [...arr];
-            fileView.writeAdapter();
-            generate();
-        }
-    }
-
-    property FileModel containers: FileModel {
-        onSaved: list => {
-            adapter.config.containers = [...list];
+            theme.contents = [...list];
             fileView.writeAdapter();
         }
     }
@@ -38,8 +30,8 @@ Singleton {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
             const sources = theme.source;
-            list.sources = sources;
-            containers.sources = adapter.config.containers;
+            const contents = theme.contents;
+            containers.sources = contents;
             config.ready = true;
         }
         onFileChanged: {
@@ -59,9 +51,8 @@ Singleton {
                 property string mode: "standard"
                 property string current: ""
                 property list<var> preset: []
-                property list<var> containers: []
                 property string theme: "scheme-content"
-                onThemeChanged: config.list.generate()
+                onThemeChanged: config.containers.generate()
             }
         }
     }

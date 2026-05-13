@@ -15,17 +15,6 @@ Pane {
     width: parent.width
     height: parent.height
 
-    FilePicker {
-        id: filepicker
-        onOutput: data => {
-            const item = {
-                name: Math.random().toString(36).substring(2, 10),
-                source: data
-            };
-            Wallpaper.list.append(item);
-        }
-    }
-
     // Nav
     TopLeftControl {}
 
@@ -142,14 +131,6 @@ Pane {
                             flick.maxX = m.x + m.width;
                         if (m.y + m.height > flick.maxY)
                             flick.maxY = m.y + m.height;
-                    }
-                }
-
-                // Images
-                Instantiator {
-                    model: Wallpaper.list
-                    delegate: PreviewImage {
-                        parent: content
                     }
                 }
 
@@ -313,117 +294,6 @@ Pane {
         }
     }
 
-    component PreviewImage: ResizeableRect {
-        id: resizeableRect
-
-        required property var modelData
-        required property int index
-        property ListModel screens: ListModel {}
-        property Image image: draggableImage
-
-        pointerVisible: imageControl.hover.hovered
-        rulersSize: 16 / flick.zoom
-        objectName: modelData.name
-
-        width: (modelData.width || draggableImage.sourceSize.width)
-        height: (modelData.height || draggableImage.sourceSize.height)
-
-        x: (modelData.x || 0)
-        y: (modelData.y || 0)
-        z: (modelData.z || 0)
-
-        // image
-        Image {
-            id: draggableImage
-            property bool lock: (modelData.x && modelData.y) ? true : false
-            width: resizeableRect.width
-            height: resizeableRect.height
-            source: Qt.resolvedUrl(modelData.source) || ""
-            objectName: modelData.name
-            z: -1
-
-            // controls
-            Row {
-                z: 2
-                opacity: 1
-
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
-                }
-
-                Button {
-                    width: 40 / flick.zoom
-                    height: 40 / flick.zoom
-
-                    Icon {
-                        anchors.centerIn: parent
-                        text: draggableImage.lock ? "lock" : "lock-slash"
-                        font.pixelSize: parent.width / 2
-                        color: Colors.color.secondary
-                    }
-
-                    onClicked: {
-                        draggableImage.lock = !draggableImage.lock;
-                    }
-                }
-
-                Button {
-                    width: 40 / flick.zoom
-                    height: 40 / flick.zoom
-                    Icon {
-                        anchors.centerIn: parent
-                        text: "trash"
-                        font.pixelSize: parent.width / 2
-                        color: Colors.color.secondary
-                    }
-                    onClicked: {
-                        Wallpaper.list.remove(resizeableRect.index, 1);
-                        Wallpaper.list.save();
-                    }
-                }
-            }
-        }
-
-        ControlHandler {
-            id: imageControl
-            z: -10
-            subject: resizeableRect
-            drag.enabled: !draggableImage.lock
-            onUpdate: {
-                const screens = overlapsAny(resizeableRect);
-
-                const obj = {
-                    x: resizeableRect.x,
-                    y: resizeableRect.y,
-                    z: resizeableRect.z,
-                    screens: screens,
-                    width: resizeableRect.width,
-                    height: resizeableRect.height
-                };
-
-                Wallpaper.list.set(resizeableRect.index, obj);
-            }
-        }
-
-        Text {
-            anchors {
-                left: parent.left
-                top: parent.top
-                margins: 4
-            }
-            text: `z: ${resizeableRect.z}`
-            color: Colors.color.primary
-            font.pixelSize: 12 / flick.zoom
-        }
-
-        // outline
-        Outline {
-            anchors.fill: parent
-            zoom: flick.zoom
-        }
-    }
-
     component ControlHandler: Item {
         id: control
         required property var subject
@@ -473,8 +343,8 @@ Pane {
         id: containerRect
         required property var model
         required property int index
+        required property var contents
         property ListModel screens: ListModel {}
-        property var contents: model.contents
         onContentsChanged: {
             if (contents.type === "image")
                 contentImage.createObject(containerRect, {
@@ -589,9 +459,8 @@ Pane {
         id: controlContainer
         z: 2
 
-        readonly property list<PreviewImage> imageList: content.children.filter(s => s instanceof PreviewImage)
-        readonly property list<Monitor> screenList: content.children.filter(s => s instanceof Monitor)
-        readonly property list<ContainerRect> containerList: content.children.filter(s => s instanceof ContainerRect)
+        readonly property list<Monitor> screens: content.children.filter(s => s instanceof Monitor)
+        readonly property list<ContainerRect> containers: content.children.filter(s => s instanceof ContainerRect)
 
         property bool showImages: true
         property bool showMonitors: true
@@ -607,35 +476,6 @@ Pane {
         MenuBar {
             Menu {
                 title: 'Layers'
-
-                Action {
-                    text: "Add Image"
-                    onTriggered: {
-                        filepicker.active();
-                    }
-                }
-
-                Action {
-                    text: "Check"
-                    onTriggered: {
-                        for (const i in imageList) {
-                            const target = imageList[i];
-                            const screens = overlapsAny(imageList[i]);
-
-                            const obj = {
-                                x: target.x,
-                                y: target.y,
-                                z: target.z,
-                                screens: screens,
-                                width: target.width,
-                                height: target.height
-                            };
-
-                            Wallpaper.list.set(target.index, obj);
-                        }
-                        Wallpaper.list.save();
-                    }
-                }
 
                 Action {
                     text: Global.docks ? "Hide Docks" : "Show Docks"
@@ -677,7 +517,7 @@ Pane {
                 id: screenMenu
                 title: "Screens"
                 Instantiator {
-                    model: [...controlContainer.screenList]
+                    model: [...controlContainer.screens]
                     delegate: Action {
                         required property var modelData
                         text: modelData.objectName
@@ -693,17 +533,18 @@ Pane {
 
             Menu {
                 id: imageMenu
-                title: "Images"
+                title: "Containers"
                 Instantiator {
-                    model: [...controlContainer.imageList]
+                    model: [...controlContainer.containers]
                     delegate: Action {
-                        required property var image
-                        text: image.objectName
+                        required property var modelData
+                        required property int index
+                        text: index
 
                         checkable: true
-                        checked: image.visible
+                        checked: modelData.visible
                         onCheckedChanged: {
-                            image.visible = this.checked;
+                            modelData.visible = this.checked;
                         }
                     }
                     onObjectAdded: (idx, obj) => imageMenu.insertAction(idx, obj)

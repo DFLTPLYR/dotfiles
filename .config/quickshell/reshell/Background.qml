@@ -26,38 +26,6 @@ PanelWindow {
         }
     }
 
-    component LazyImage: LazyLoader {
-        id: imageloader
-        required property int index
-        required property var model
-        property var relative: model.screens
-        property var coords
-        active: coords
-        onRelativeChanged: {
-            if (!relative || !relative.count)
-                return;
-            for (let i = 0; i < relative.count; i++) {
-                const screen = relative.get(i);
-                if (screen.name === panel.screen.name) {
-                    return coords = screen;
-                }
-            }
-        }
-
-        component: Image {
-            parent: layered
-
-            width: imageloader.model.width
-            height: imageloader.model.height
-            visible: imageloader.coords ? true : false
-            x: imageloader.coords ? imageloader.coords.x : 0
-            y: imageloader.coords ? imageloader.coords.y : 0
-            z: imageloader.model.z
-
-            source: imageloader.model.source
-        }
-    }
-
     component LazyContainer: LazyLoader {
         id: containerloader
         required property int index
@@ -116,12 +84,6 @@ PanelWindow {
     WlrLayershell.layer: WlrLayer.Background
 
     DelegateModel {
-        id: images
-        model: Wallpaper.list
-        delegate: LazyImage {}
-    }
-
-    DelegateModel {
         id: containers
         model: Wallpaper.containers
         delegate: LazyContainer {}
@@ -132,16 +94,12 @@ PanelWindow {
         anchors.fill: parent
 
         Instantiator {
-            model: images
-        }
-
-        Instantiator {
             model: containers
         }
     }
 
     Connections {
-        target: Wallpaper.list
+        target: Wallpaper.containers
         function onGenerate() {
             Qt.callLater(() => {
                 layered.grabToImage(function (result) {
