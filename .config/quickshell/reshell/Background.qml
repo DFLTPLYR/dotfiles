@@ -19,13 +19,19 @@ PanelWindow {
     property bool edit: false
     property bool fileExplorerOpen: false
 
+    Component {
+        id: imageObject
+        Image {
+            anchors.fill: parent
+        }
+    }
+
     component LazyImage: LazyLoader {
         id: imageloader
         required property int index
         required property var model
         property var relative: model.screens
         property var coords
-
         active: coords
         onRelativeChanged: {
             if (!relative || !relative.count)
@@ -58,6 +64,22 @@ PanelWindow {
         required property var model
         property var relative: model.screens
         property var coords
+        property var contents: model.contents
+        onContentsChanged: addContent()
+        onItemChanged: {
+            if (!contents || !item)
+                return;
+            addContent();
+        }
+
+        function addContent() {
+            const type = contents.type;
+            if (type === "image") {
+                imageObject.createObject(item, {
+                    source: contents.source
+                });
+            }
+        }
 
         active: coords || false
         onRelativeChanged: {

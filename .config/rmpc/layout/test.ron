@@ -197,12 +197,12 @@
         ),
         "elapsed_and_bitrate": Pane(Property(
             content: [
-                (kind: Property(Status(Elapsed))), 
-                (kind: Text(" / ")), 
-                (kind: Property(Status(Duration))), 
+                (kind: Property(Status(Elapsed))),
+                (kind: Text(" / ")),
+                (kind: Property(Status(Duration))),
                 (kind: Group([
-                    (kind: Text(" (")), 
-                    (kind: Property(Status(Bitrate))), 
+                    (kind: Text(" (")),
+                    (kind: Property(Status(Bitrate))),
                     (kind: Text(" kbps)")),
                 ])),
             ],
@@ -295,5 +295,22 @@
                 (size: "1", pane: Component("states")),
             ]
         ),
+        "progress_bar": Split(
+            direction: Horizontal,
+            panes: [
+                (
+                    size: "1",
+                    pane: Pane(Empty())
+                ),
+                (
+                    size: "100%",
+                    pane: Pane(ProgressBar)
+                ),
+                (
+                    size: "1",
+                    pane: Pane(Empty())
+                ),
+            ]
+        )
     },
 )

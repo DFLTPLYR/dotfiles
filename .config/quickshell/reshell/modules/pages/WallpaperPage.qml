@@ -112,7 +112,8 @@ Pane {
                                 x: selectionRect.x,
                                 y: selectionRect.y,
                                 z: selectionRect.z,
-                                screens: overlapsAny(selectionRect)
+                                screens: overlapsAny(selectionRect),
+                                contents: {}
                             };
                             Wallpaper.containers.append(container);
                         }
@@ -472,6 +473,7 @@ Pane {
         required property var model
         required property int index
         property ListModel screens: ListModel {}
+        property var contents: {}
 
         bg.color: Colors.setOpacity(Colors.color.background, 0.5)
 
@@ -508,7 +510,8 @@ Pane {
                     z: containerRect.z,
                     screens: screens,
                     width: containerRect.width,
-                    height: containerRect.height
+                    height: containerRect.height,
+                    contents: containerRect.contents
                 };
 
                 Wallpaper.containers.set(containerRect.index, obj);
@@ -534,12 +537,41 @@ Pane {
             x: (parent.width / 2 - width / 2)
             y: (parent.height / 2 - height / 2)
             closePolicy: Popup.CloseOnEscape
+
+            FilePicker {
+                id: imagePicker
+                onOutput: data => {
+                    Wallpaper.containers.setProperty(containerRect.index, "contents", {
+                        type: "image",
+                        source: data
+                    });
+                    contentImage.createObject(containerRect, {
+                        source: data,
+                        z: -1
+                    });
+                }
+            }
+
+            Action {
+                text: "Add Image"
+                onTriggered: {
+                    imagePicker.active();
+                }
+            }
+
             Action {
                 text: "Remove Container"
                 onTriggered: {
                     Wallpaper.containers.remove(containerRect.index, 1);
                 }
             }
+        }
+    }
+
+    Component {
+        id: contentImage
+        Image {
+            anchors.fill: parent
         }
     }
 
