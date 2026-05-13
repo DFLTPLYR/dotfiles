@@ -24,8 +24,8 @@ Singleton {
 
     property FileModel containers: FileModel {
         onSaved: list => {
-            adapter.config.container = [...list];
-            fileview.save();
+            adapter.config.containers = [...list];
+            fileView.writeAdapter();
         }
     }
 
@@ -68,6 +68,5 @@ Singleton {
 
     function save() {
         fileView.writeAdapter();
-        config.generatecolor();
     }
 }

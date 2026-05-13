@@ -20,7 +20,7 @@
     browser_song_sort: [Disc, Track, Artist, Title],
     directories_sort: SortFormat(group_by_type: true, reverse: false),
     background_color: None,
-    text_color: Some("#e9bf8f"),
+    text_color: Some("#cfc890"),
     header_background_color: None,
     modal_background_color: None,
     album_art: (
@@ -32,17 +32,17 @@
     ),
     tab_bar: (
         enabled: true,
-        active_style: (fg: "#5e4202", bg: "#160c04", modifiers: "Bold"),
+        active_style: (fg: "#5e4202", bg: "#130d05", modifiers: "Bold"),
         inactive_style: (),
     ),
-    highlighted_item_style: (fg: "#f6decd", modifiers: "Bold"),
-    current_item_style: (fg: "#f6decd", bg: "#160c04", modifiers: "Bold"),
-    borders_style: (fg: "#f6decd"),
-    highlight_border_style: (fg: "#f6decd"),
+    highlighted_item_style: (fg: "#efe0cf", modifiers: "Bold"),
+    current_item_style: (fg: "#efe0cf", bg: "#130d05", modifiers: "Bold"),
+    borders_style: (fg: "#efe0cf"),
+    highlight_border_style: (fg: "#efe0cf"),
     symbols: (song: "", dir: "", marker: "", ellipsis: " ... "),
     progress_bar: (
             symbols: ["", "󰮯", ""],
-            elapsed_style:(fg: "#f6decd"),
+            elapsed_style:(fg: "#efe0cf"),
             track_style: (fg: "#eac077"),
             thumb_style: (fg: "#ffdea9"),
         ),
@@ -50,7 +50,7 @@
         symbols: ["│", "█", "▲", "▼"],
         track_style: (),
         ends_style: (),
-        thumb_style: (fg: "#f6decd"),
+        thumb_style: (fg: "#efe0cf"),
     ),
     keybinds: (
         global: {
@@ -128,7 +128,7 @@
         sensitivity: 100, // default 100
         lower_cutoff_freq: 50, // not passed to cava if not provided
         higher_cutoff_freq: 10000, // not passed to cava if not provided
-        bar_color: Single("#e9bf8f"),
+        bar_color: Single("#cfc890"),
         input: (
             method: Fifo,
             source: "/tmp/mpd.fifo",
@@ -161,22 +161,22 @@
             (
                 left: [
                     (kind: Text("["), style: (fg: "#5e4202", modifiers: "Bold")),
-                    (kind: Property(Status(State)), style: (fg: "#ffb877", modifiers: "Bold")),
+                    (kind: Property(Status(State)), style: (fg: "#d1bcff", modifiers: "Bold")),
                     (kind: Text("]"), style: (fg: "#5e4202", modifiers: "Bold"))
                 ],
                 center: [
-                    (kind: Property(Song(Artist)), style: (fg: "#ffb877", modifiers: "Bold"),
-                        default: (kind: Text("Unknown"), style: (fg: "#ffb877", modifiers: "Bold"))
+                    (kind: Property(Song(Artist)), style: (fg: "#d1bcff", modifiers: "Bold"),
+                        default: (kind: Text("Unknown"), style: (fg: "#d1bcff", modifiers: "Bold"))
                     ),
                     (kind: Text(" - ")),
-                    (kind: Property(Song(Title)), style: (fg: "#ffb877", modifiers: "Bold"),
-                        default: (kind: Text("No Song"), style: (fg: "#ffb877", modifiers: "Bold"))
+                    (kind: Property(Song(Title)), style: (fg: "#d1bcff", modifiers: "Bold"),
+                        default: (kind: Text("No Song"), style: (fg: "#d1bcff", modifiers: "Bold"))
                     )
                 ],
                 right: [
-                    (kind: Text("Vol: "), style: (fg: "#ffb877", modifiers: "Bold")),
-                    (kind: Property(Status(Volume)), style: (fg: "#ffb877", modifiers: "Bold")),
-                    (kind: Text("% "), style: (fg: "#ffb877", modifiers: "Bold"))
+                    (kind: Text("Vol: "), style: (fg: "#d1bcff", modifiers: "Bold")),
+                    (kind: Property(Status(Volume)), style: (fg: "#d1bcff", modifiers: "Bold")),
+                    (kind: Text("% "), style: (fg: "#d1bcff", modifiers: "Bold"))
                 ]
             )
         ],

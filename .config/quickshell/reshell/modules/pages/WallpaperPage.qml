@@ -116,6 +116,7 @@ Pane {
                                 contents: {}
                             };
                             Wallpaper.containers.append(container);
+                            Wallpaper.containers.save();
                         }
                     }
 
@@ -473,8 +474,14 @@ Pane {
         required property var model
         required property int index
         property ListModel screens: ListModel {}
-        property var contents: {}
-
+        property var contents: model.contents
+        onContentsChanged: {
+            if (contents.type === "image")
+                contentImage.createObject(containerRect, {
+                    source: contents.source,
+                    z: -1
+                });
+        }
         bg.color: Colors.setOpacity(Colors.color.background, 0.5)
 
         pointerVisible: true
@@ -515,6 +522,7 @@ Pane {
                 };
 
                 Wallpaper.containers.set(containerRect.index, obj);
+                Wallpaper.containers.save();
             }
         }
 
@@ -549,6 +557,7 @@ Pane {
                         source: data,
                         z: -1
                     });
+                    Wallpaper.containers.save();
                 }
             }
 
@@ -563,6 +572,7 @@ Pane {
                 text: "Remove Container"
                 onTriggered: {
                     Wallpaper.containers.remove(containerRect.index, 1);
+                    Wallpaper.containers.save();
                 }
             }
         }
