@@ -20,7 +20,7 @@
     browser_song_sort: [Disc, Track, Artist, Title],
     directories_sort: SortFormat(group_by_type: true, reverse: false),
     background_color: None,
-    text_color: Some("#cfc890"),
+    text_color: Some("#ffb3b4"),
     header_background_color: None,
     modal_background_color: None,
     album_art: (
@@ -32,25 +32,25 @@
     ),
     tab_bar: (
         enabled: true,
-        active_style: (fg: "#5e4202", bg: "#130d05", modifiers: "Bold"),
+        active_style: (fg: "#683d00", bg: "#160c04", modifiers: "Bold"),
         inactive_style: (),
     ),
-    highlighted_item_style: (fg: "#efe0cf", modifiers: "Bold"),
-    current_item_style: (fg: "#efe0cf", bg: "#130d05", modifiers: "Bold"),
-    borders_style: (fg: "#efe0cf"),
-    highlight_border_style: (fg: "#efe0cf"),
+    highlighted_item_style: (fg: "#f4dfcc", modifiers: "Bold"),
+    current_item_style: (fg: "#f4dfcc", bg: "#160c04", modifiers: "Bold"),
+    borders_style: (fg: "#f4dfcc"),
+    highlight_border_style: (fg: "#f4dfcc"),
     symbols: (song: "", dir: "", marker: "", ellipsis: " ... "),
     progress_bar: (
             symbols: ["", "󰮯", ""],
-            elapsed_style:(fg: "#efe0cf"),
-            track_style: (fg: "#eac077"),
-            thumb_style: (fg: "#ffdea9"),
+            elapsed_style:(fg: "#f4dfcc"),
+            track_style: (fg: "#fbba73"),
+            thumb_style: (fg: "#ffdcbb"),
         ),
     scrollbar: (
         symbols: ["│", "█", "▲", "▼"],
         track_style: (),
         ends_style: (),
-        thumb_style: (fg: "#efe0cf"),
+        thumb_style: (fg: "#f4dfcc"),
     ),
     keybinds: (
         global: {
@@ -128,7 +128,7 @@
         sensitivity: 100, // default 100
         lower_cutoff_freq: 50, // not passed to cava if not provided
         higher_cutoff_freq: 10000, // not passed to cava if not provided
-        bar_color: Single("#cfc890"),
+        bar_color: Single("#ffb3b4"),
         input: (
             method: Fifo,
             source: "/tmp/mpd.fifo",
@@ -160,23 +160,23 @@
         rows: [
             (
                 left: [
-                    (kind: Text("["), style: (fg: "#5e4202", modifiers: "Bold")),
-                    (kind: Property(Status(State)), style: (fg: "#d1bcff", modifiers: "Bold")),
-                    (kind: Text("]"), style: (fg: "#5e4202", modifiers: "Bold"))
+                    (kind: Text("["), style: (fg: "#683d00", modifiers: "Bold")),
+                    (kind: Property(Status(State)), style: (fg: "#ffb3b4", modifiers: "Bold")),
+                    (kind: Text("]"), style: (fg: "#683d00", modifiers: "Bold"))
                 ],
                 center: [
-                    (kind: Property(Song(Artist)), style: (fg: "#d1bcff", modifiers: "Bold"),
-                        default: (kind: Text("Unknown"), style: (fg: "#d1bcff", modifiers: "Bold"))
+                    (kind: Property(Song(Artist)), style: (fg: "#ffb3b4", modifiers: "Bold"),
+                        default: (kind: Text("Unknown"), style: (fg: "#ffb3b4", modifiers: "Bold"))
                     ),
                     (kind: Text(" - ")),
-                    (kind: Property(Song(Title)), style: (fg: "#d1bcff", modifiers: "Bold"),
-                        default: (kind: Text("No Song"), style: (fg: "#d1bcff", modifiers: "Bold"))
+                    (kind: Property(Song(Title)), style: (fg: "#ffb3b4", modifiers: "Bold"),
+                        default: (kind: Text("No Song"), style: (fg: "#ffb3b4", modifiers: "Bold"))
                     )
                 ],
                 right: [
-                    (kind: Text("Vol: "), style: (fg: "#d1bcff", modifiers: "Bold")),
-                    (kind: Property(Status(Volume)), style: (fg: "#d1bcff", modifiers: "Bold")),
-                    (kind: Text("% "), style: (fg: "#d1bcff", modifiers: "Bold"))
+                    (kind: Text("Vol: "), style: (fg: "#ffb3b4", modifiers: "Bold")),
+                    (kind: Property(Status(Volume)), style: (fg: "#ffb3b4", modifiers: "Bold")),
+                    (kind: Text("% "), style: (fg: "#ffb3b4", modifiers: "Bold"))
                 ]
             )
         ],
@@ -187,7 +187,7 @@
             (
                 size: "5",
                 borders: "ALL",
-                borders_style: (bg: "#5e4202", fg:"#5e4202" ),
+                borders_style: (bg: "#683d00", fg:"#683d00" ),
                 pane: Split(
                     direction: Vertical,
                     panes: [

@@ -19,7 +19,6 @@ Wrapper {
     height: wrap.setHeight(list.contentHeight)
 
     readonly property var sets: wrap.screen ? WindowManager.screenProjection(wrap.screen)?.windowsets : null
-
     ListView {
         id: list
 

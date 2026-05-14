@@ -1,6 +1,5 @@
 pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
 
 import Quickshell
 
@@ -411,9 +410,8 @@ Pane {
         Menu {
             id: menu
             width: 200
-            implicitHeight: contentHeight
-            x: (parent.width / 2 - width / 2)
-            y: (parent.height / 2 - height / 2)
+            x: (containerRect.width - width) / 2
+            y: (containerRect.height - height) / 2
             closePolicy: Popup.CloseOnEscape
 
             FilePicker {

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Quickshell
 
 import QtQuick
@@ -11,11 +12,8 @@ FloatingWindow {
     id: settingpanel
     property int page: 0
 
-    title: "Reshell"
+    title: "Settings"
     color: Colors.setOpacity(Colors.color.background, 0.5)
-
-    minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
-    maximumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
 
     LazyLoader {
         active: settingpanel.visible

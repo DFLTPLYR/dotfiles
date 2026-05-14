@@ -42,4 +42,4 @@ overview {
     }
 }
 
-include "./colors.kdl"
+include optional=true "./colors.kdl"
