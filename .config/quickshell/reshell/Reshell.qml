@@ -49,9 +49,10 @@ Variants {
                     "config": fileview
                 });
                 content.active = true;
-                reshell.dock.sources = adapter.docks.map(value => ({
+                const source = adapter.docks.map(value => ({
                             name: value
                         }));
+                reshell.dock.sources = source;
             }
             property list<var> docklist: []
             property list<var> updateQueue: []

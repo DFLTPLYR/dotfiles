@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 
@@ -13,6 +14,13 @@ Pane {
 
     width: parent.width
     height: parent.height
+
+    Component {
+        id: contentImage
+        Image {
+            anchors.fill: parent
+        }
+    }
 
     // Nav
     TopLeftControl {}
@@ -293,6 +301,86 @@ Pane {
         }
     }
 
+    component WidgetPlaceholder: Item {
+        id: origPlacement
+        required property var modelData
+        Layout.fillWidth: true
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.preferredHeight: 100
+
+        Rectangle {
+            id: container
+            color: "transparent"
+
+            width: origPlacement.width
+            height: origPlacement.height
+            border.color: Colors.color.primary
+            Drag.active: ma.drag.active
+            Drag.keys: [modelData.source]
+
+            LazyLoader {
+                active: container.visible
+                source: modelData.source
+                onItemChanged: {
+                    if (item) {
+                        item.parent = container;
+                        item.width = container.width;
+                        item.height = container.height;
+                    }
+                }
+            }
+
+            Drag.onActiveChanged: {
+                if (Drag.active) {
+                    container.parent = page;
+                }
+            }
+
+            states: [
+                State {
+                    when: ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: page
+                    }
+                },
+                State {
+                    when: !ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: origPlacement
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: ma
+                anchors.fill: parent
+                drag.target: container
+                onReleased: {
+                    container.x = 0;
+                    container.y = 0;
+                    container.Drag.drop();
+                }
+            }
+
+            Behavior on x {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on y {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+    }
+
     component ControlHandler: Item {
         id: control
         required property var subject
@@ -443,13 +531,22 @@ Pane {
                     Wallpaper.containers.save();
                 }
             }
-        }
-    }
 
-    Component {
-        id: contentImage
-        Image {
-            anchors.fill: parent
+            Menu {
+                title: "Widgets"
+                height: 500
+                width: 300
+                ColumnLayout {
+                    width: parent.width
+
+                    Repeater {
+                        model: ScriptModel {
+                            values: [...Global.widgets]
+                        }
+                        delegate: WidgetPlaceholder {}
+                    }
+                }
+            }
         }
     }
 

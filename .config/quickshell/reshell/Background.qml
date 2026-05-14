@@ -26,6 +26,19 @@ PanelWindow {
         }
     }
 
+    Component {
+        id: widgets
+        LazyLoader {
+            property var parent
+            active: source
+            onItemChanged: {
+                if (!item)
+                    return;
+                item.source = parent;
+            }
+        }
+    }
+
     component LazyContainer: LazyLoader {
         id: containerloader
         required property int index
@@ -42,10 +55,13 @@ PanelWindow {
 
         function addContent() {
             const type = contents.type;
-            if (type === "image") {
-                imageObject.createObject(item, {
+            switch (type) {
+            case "image":
+                return imageObject.createObject(item, {
                     source: contents.source
                 });
+            default:
+                return;
             }
         }
 
