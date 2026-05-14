@@ -431,7 +431,6 @@ Pane {
         required property var model
         required property int index
         required property var contents
-        property ListModel screens: ListModel {}
         onContentsChanged: {
             if (contents.type === "image")
                 contentImage.createObject(containerRect, {
@@ -439,9 +438,14 @@ Pane {
                     z: -1
                 });
         }
+
+        property bool enabled: false
+        property bool show: false
+        property ListModel screens: ListModel {}
+
         bg.color: Colors.setOpacity(Colors.color.background, 0.5)
 
-        pointerVisible: true
+        pointerVisible: containerRect.enabled
         rulersSize: 16 / flick.zoom
 
         width: model.width
@@ -451,11 +455,45 @@ Pane {
         y: model.y
         z: model.z
 
-        Text {
+        Row {
             anchors {
                 left: parent.left
                 top: parent.top
                 margins: 4
+            }
+
+            Button {
+                width: 14 / flick.zoom
+                height: 14 / flick.zoom
+
+                Icon {
+                    color: Colors.color.on_background
+                    font.pixelSize: parent.width
+                    text: containerRect.enabled ? "lock-slash" : "lock"
+                }
+
+                onClicked: containerRect.enabled = !containerRect.enabled
+            }
+            Button {
+                width: 14 / flick.zoom
+                height: 14 / flick.zoom
+
+                Icon {
+                    color: Colors.color.on_background
+                    font.pixelSize: parent.width
+                    text: containerRect.enabled ? "eye-slash" : "eye"
+                }
+
+                onClicked: {
+                    print(containerRect.children);
+                }
+            }
+        }
+
+        Text {
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
             }
             text: `z: ${containerRect.z}`
             color: Colors.color.primary
@@ -465,6 +503,7 @@ Pane {
         ControlHandler {
             id: imageControl
             subject: containerRect
+            drag.enabled: containerRect.enabled
             onUpdate: {
                 const screens = overlapsAny(containerRect);
 
@@ -491,8 +530,24 @@ Pane {
 
         MouseArea {
             anchors.fill: parent
+            acceptedButtons: Qt.RightButton
             enabled: menu.closed
             onClicked: menu.open()
+        }
+
+        Loader {
+            active: widgetMenu.opened
+            anchors.fill: parent
+            sourceComponent: DropArea {
+                objectName: "Slot"
+                onDropped: drop => {
+                    const widget = {
+                        type: "widget",
+                        source: drop.keys[0]
+                    };
+                    print(widget);
+                }
+            }
         }
 
         Menu {
@@ -500,7 +555,6 @@ Pane {
             width: 200
             x: (containerRect.width - width) / 2
             y: (containerRect.height - height) / 2
-            closePolicy: Popup.CloseOnEscape
 
             FilePicker {
                 id: imagePicker
@@ -533,12 +587,13 @@ Pane {
             }
 
             Menu {
+                id: widgetMenu
                 title: "Widgets"
                 height: 500
                 width: 300
+
                 ColumnLayout {
                     width: parent.width
-
                     Repeater {
                         model: ScriptModel {
                             values: [...Global.widgets]

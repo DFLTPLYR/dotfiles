@@ -31,6 +31,7 @@ Button {
     contentItem: Text {
         id: content
         width: parent.width
+        height: parent.height
         text: control.text
         font: control.font
 
