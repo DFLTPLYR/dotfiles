@@ -62,7 +62,8 @@ Rectangle {
                 parent.x = 0;
                 parent.y = 0;
             } else {
-                wrapper.remove(property.position);
+                wrapper.property.menu.open();
+                // wrapper.remove(property.position);
             }
         }
     }

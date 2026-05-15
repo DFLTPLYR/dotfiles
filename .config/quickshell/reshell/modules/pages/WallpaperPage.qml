@@ -441,13 +441,13 @@ Pane {
                 return;
             case "widget":
                 const component = Qt.createComponent(contents.source);
-                const incubator = component.incubateObject(containerloader.item, {});
+                const incubator = component.incubateObject(containerRect, {});
                 if (incubator.status !== Component.Ready) {
                     incubator.onStatusChanged = function (status) {
                         if (status === Component.Ready) {
                             const widget = incubator.object;
-                            widget.parent = containerloader.item;
-                            widget.anchors.fill = containerloader.item;
+                            widget.parent = containerRect;
+                            widget.anchors.fill = containerRect;
                         }
                     };
                 }

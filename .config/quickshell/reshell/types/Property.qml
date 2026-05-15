@@ -1,6 +1,20 @@
+pragma ComponentBehavior: Bound
 import QtQuick
+import qs.components
 
 QtObject {
+    property Menu menu: Menu {
+        onOpened: {
+            const config = parent.slotConfig;
+            const side = config.side;
+            if (side) {
+                x = parent.width;
+            } else {
+                y = parent.height;
+            }
+        }
+    }
+
     function keys() {
         const ks = Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
         const result = [];
