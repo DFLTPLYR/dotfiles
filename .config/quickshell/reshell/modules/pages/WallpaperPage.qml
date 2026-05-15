@@ -438,13 +438,13 @@ Pane {
         required property var contents
         onContentsChanged: {
             switch (contents.type) {
-              case "image":
-              contentImage.createObject(containerRect, {
-                source: contents.source,
-                z: -1
-              });
-              return
-              case "widget":
+            case "image":
+                contentImage.createObject(containerRect, {
+                    source: contents.source,
+                    z: -1
+                });
+                return;
+            case "widget":
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
                 if (incubator.status !== Component.Ready) {
@@ -456,7 +456,7 @@ Pane {
                         }
                     };
                 }
-              return
+                return;
             }
         }
 
@@ -580,8 +580,7 @@ Pane {
         Menu {
             id: menu
             width: 200
-            x: (containerRect.width - width) / 2
-            y: (containerRect.height - height) / 2
+            x: containerRect.width
 
             FilePicker {
                 id: imagePicker

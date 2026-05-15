@@ -46,6 +46,7 @@ PanelWindow {
         property var relative: model.screens
         property var coords
         property var contents: model.contents
+        property var currentContent
         onContentsChanged: addContent()
         onItemChanged: {
             if (!contents || !item)
@@ -55,11 +56,17 @@ PanelWindow {
 
         function addContent() {
             const type = contents.type;
+
+            if (containerloader.currentContent) {
+                containerloader.currentContent.destroy();
+            }
             switch (type) {
             case "image":
-                return imageObject.createObject(item, {
+                const image = imageObject.createObject(item, {
                     source: contents.source
                 });
+                containerloader.currentContent = image;
+                return;
             case "widget":
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
@@ -69,6 +76,7 @@ PanelWindow {
                             const widget = incubator.object;
                             widget.parent = containerloader.item;
                             widget.anchors.fill = containerloader.item;
+                            containerloader.currentContent = widget;
                         }
                     };
                 }
