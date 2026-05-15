@@ -3,7 +3,11 @@ import QtQuick
 import qs.components
 
 QtObject {
+    id: property
     property Menu menu: Menu {
+        width: 100
+        height: contentHeight
+        closePolicy: Popup.NoAutoClose
         onOpened: {
             const config = parent.slotConfig;
             const side = config.side;
@@ -12,6 +16,12 @@ QtObject {
             } else {
                 y = parent.height;
             }
+        }
+
+        Button {
+            width: parent.width
+            height: 40
+            onClicked: {}
         }
     }
 

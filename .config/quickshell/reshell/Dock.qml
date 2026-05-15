@@ -179,7 +179,7 @@ Item {
                         y: modalPopup.opened ? modalPopup.y : 0
                     },
                     Region {
-                        item: modal ? modal.parent : null
+                        item: panel.modal ? panel.modal.background : null
                     }
                 ]
             }
