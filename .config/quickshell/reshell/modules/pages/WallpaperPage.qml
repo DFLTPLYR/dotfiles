@@ -22,6 +22,11 @@ Pane {
         }
     }
 
+    Component {
+        id: contentWidget
+        LazyLoader {}
+    }
+
     // Nav
     TopLeftControl {}
 
@@ -432,11 +437,27 @@ Pane {
         required property int index
         required property var contents
         onContentsChanged: {
-            if (contents.type === "image")
-                contentImage.createObject(containerRect, {
-                    source: contents.source,
-                    z: -1
-                });
+            switch (contents.type) {
+              case "image":
+              contentImage.createObject(containerRect, {
+                source: contents.source,
+                z: -1
+              });
+              return
+              case "widget":
+                const component = Qt.createComponent(contents.source);
+                const incubator = component.incubateObject(containerloader.item, {});
+                if (incubator.status !== Component.Ready) {
+                    incubator.onStatusChanged = function (status) {
+                        if (status === Component.Ready) {
+                            const widget = incubator.object;
+                            widget.parent = containerloader.item;
+                            widget.anchors.fill = containerloader.item;
+                        }
+                    };
+                }
+              return
+            }
         }
 
         property bool enabled: false
@@ -545,7 +566,13 @@ Pane {
                         type: "widget",
                         source: drop.keys[0]
                     };
-                    print(widget);
+
+                    Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
+                    contentImage.createObject(containerRect, {
+                        source: data,
+                        z: -1
+                    });
+                    Wallpaper.containers.save();
                 }
             }
         }
