@@ -22,11 +22,6 @@ Pane {
         }
     }
 
-    Component {
-        id: contentWidget
-        LazyLoader {}
-    }
-
     // Nav
     TopLeftControl {}
 

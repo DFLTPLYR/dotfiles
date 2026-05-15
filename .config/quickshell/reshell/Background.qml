@@ -26,19 +26,6 @@ PanelWindow {
         }
     }
 
-    Component {
-        id: widgets
-        LazyLoader {
-            property var parent
-            active: source
-            onItemChanged: {
-                if (!item)
-                    return;
-                item.source = parent;
-            }
-        }
-    }
-
     component LazyContainer: LazyLoader {
         id: containerloader
         required property int index
