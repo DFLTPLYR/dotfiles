@@ -608,7 +608,6 @@ Item {
 
             DelegateModel {
                 id: widgetsModel
-
                 model: slot.widgets
                 delegate: Item {
                     id: widgetContainer

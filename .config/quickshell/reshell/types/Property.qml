@@ -4,10 +4,11 @@ import qs.components
 
 QtObject {
     id: property
+
     property Menu menu: Menu {
+        id: menu
         width: 100
         height: contentHeight
-        closePolicy: Popup.NoAutoClose
         onOpened: {
             const config = parent.slotConfig;
             const side = config.side;
@@ -21,7 +22,9 @@ QtObject {
         Button {
             width: parent.width
             height: 40
-            onClicked: {}
+            onClicked: {
+                print("test");
+            }
         }
     }
 
@@ -52,7 +55,7 @@ QtObject {
         const ks = Object.keys(object);
         for (const k of ks) {
             if (typeof this[k] !== "function") {
-                this[k] = object[k]; // assign unconditionally
+                this[k] = object[k].value;
             }
         }
     }

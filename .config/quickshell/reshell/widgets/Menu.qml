@@ -65,7 +65,7 @@ Wrapper {
                     button.toggled = false;
                 } else {
                     modal.open();
-                    wrap.modal(content);
+                    wrap.modal(modal);
                     button.toggled = true;
                 }
             }

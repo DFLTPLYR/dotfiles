@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Quickshell
 
 import QtQuick
@@ -11,6 +12,7 @@ Rectangle {
     property var slotConfig
     property var screen: Quickshell.screens[0]
     property Property property: Property {}
+    property Menu menu
     property bool swapping: false
     color: "transparent"
 
@@ -62,12 +64,13 @@ Rectangle {
                 parent.x = 0;
                 parent.y = 0;
             } else {
-                wrapper.property.menu.open();
-                wrapper.modal(wrapper.property.menu);
-                // wrapper.remove(property.position);
+                wrapper.menu.open();
+                wrapper.modal(wrapper.menu);
             }
         }
     }
+
+    Component.onCompleted: wrapper.menu = wrapper.property.menu
 
     DropArea {
         z: 1
