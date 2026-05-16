@@ -15,8 +15,9 @@ Rectangle {
     property Menu menu
     onMenuChanged: {
         menu.openedChanged.connect(() => {
-            if (menu.opened)
+            if (menu.opened) {
                 return wrapper.modal(wrapper.menu);
+            }
             return wrapper.modal(null);
         });
     }

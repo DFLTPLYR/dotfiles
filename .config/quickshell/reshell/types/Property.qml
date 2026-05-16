@@ -9,18 +9,24 @@ import qs.components
 
 QtObject {
     id: root
+    signal update
 
     property Menu menu: Menu {
         id: menu
         width: 200
         height: contentHeight
+        leftPadding: 5
+        onClosed: root.update()
+
         onOpened: {
             const config = parent.slotConfig;
             const side = config.side;
             if (side) {
                 x = parent.width;
+                y = (parent.height - menu.height) / 2;
             } else {
                 y = parent.height;
+                x = (parent.width - menu.width) / 2;
             }
         }
 
@@ -33,11 +39,7 @@ QtObject {
 
             model: ScriptModel {
                 values: {
-                    const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
-                    return ks.map(k => ({
-                                property: k,
-                                type: typeof root[k]
-                            }));
+                    return root.getSettings();
                 }
             }
 
@@ -52,7 +54,15 @@ QtObject {
                         height: 50
                         width: parent ? parent.width : 0
                         Label {
-                            text: "test"
+                            text: modelData.property
+                        }
+                        SpinBox {
+                            Layout.preferredWidth: parent.width / 2
+                            Layout.preferredHeight: parent.height / 2
+                            value: root[modelData.property]
+                            onValueChanged: {
+                                root[modelData.property] = value;
+                            }
                         }
                     }
                 }
@@ -85,8 +95,41 @@ QtObject {
         }
     }
 
+    function isKeyValid(k, extraEndings) {
+        if (k === "objectName" || k === "menu" || typeof root[k] === "function")
+            return false;
+        if (k.endsWith("Changed"))
+            return false;
+        if (extraEndings?.length) {
+            for (const e of extraEndings) {
+                if (k.endsWith(e))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    function getSettings() {
+        const ks = Object.keys(root).filter(k => isKeyValid(k, ["Options"]));
+        const keys = ks.map(k => ({
+                    property: k,
+                    type: typeof root[k]
+                }));
+
+        for (const i in keys) {
+            const key = keys[i];
+            const options = this[key.property + "Options"];
+            if (options) {
+                key.options = options;
+                key.type = "dropdown";
+            }
+        }
+
+        return keys;
+    }
+
     function keys() {
-        const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
+        const ks = Object.keys(root).filter(k => isKeyValid(k));
         return ks.map(k => ({
                     property: k,
                     type: typeof root[k]
@@ -94,14 +137,17 @@ QtObject {
     }
 
     function getProperty() {
-        const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
-        return Object.fromEntries(ks.map(k => [k, root[k]]));
+        const ks = Object.keys(root).filter(k => isKeyValid(k));
+        const obj = {};
+        for (const k of ks)
+            obj[k] = root[k];
+        return obj;
     }
 
     function setProperty(object) {
         for (const k of Object.keys(object)) {
-            if (typeof root[k] !== "function") {
-                root[k] = object[k].value;
+            if (isKeyValid(k)) {
+                root[k] = object[k];
             }
         }
     }

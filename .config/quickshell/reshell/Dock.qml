@@ -649,6 +649,9 @@ Item {
                             });
 
                             item.modal.connect(modal => {
+                                if (modal === null) {
+                                    panel.slots.sync();
+                                }
                                 panel.modal = modal;
                             });
                         }
