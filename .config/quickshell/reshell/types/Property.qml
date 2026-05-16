@@ -9,14 +9,12 @@ import qs.components
 
 QtObject {
     id: root
-    signal update
 
     property Menu menu: Menu {
         id: menu
         width: 200
         height: contentHeight
         leftPadding: 5
-        onClosed: root.update()
 
         onOpened: {
             const config = parent.slotConfig;

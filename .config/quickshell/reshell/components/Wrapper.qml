@@ -12,6 +12,7 @@ Rectangle {
     property var slotConfig
     property var screen: Quickshell.screens[0]
     property Property property: Property {}
+    property bool swapping: false
     property Menu menu
     onMenuChanged: {
         menu.openedChanged.connect(() => {
@@ -21,7 +22,6 @@ Rectangle {
             return wrapper.modal(null);
         });
     }
-    property bool swapping: false
     color: "transparent"
 
     signal drop(int mouseX, int mouseY)

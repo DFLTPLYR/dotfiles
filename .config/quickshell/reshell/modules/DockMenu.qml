@@ -12,7 +12,6 @@ PopupModal {
     id: modal
     property var specs
     property list<var> slots
-    property list<var> activeWidgets
 
     signal add(var obj)
     signal remove
@@ -44,10 +43,6 @@ PopupModal {
                     TabButton {
                         text: "Widgets"
                     }
-
-                    TabButton {
-                        text: "Active Widget"
-                    }
                 }
             }
 
@@ -66,10 +61,6 @@ PopupModal {
 
                 WidgetsTab {
                     id: widgetsTab
-                }
-
-                ActiveWidgetsTab {
-                    id: activeWidgetsTab
                 }
             }
 
@@ -615,119 +606,6 @@ PopupModal {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-            }
-        }
-    }
-
-    component ActiveWidgetsTab: Flickable {
-        property var selectedWidget: modal.activeWidgets[0] || null
-        width: modal.width
-        height: modal.height
-        contentHeight: container.height
-        clip: true
-
-        ColumnLayout {
-            id: container
-            width: parent.width
-
-            ListView {
-                id: widgetList
-                Layout.fillWidth: true
-                Layout.preferredHeight: 20
-                orientation: ListView.Horizontal
-
-                model: ScriptModel {
-                    values: [...modal.activeWidgets].filter(s => s !== undefined && s !== null && s.objectName !== null)
-                }
-                delegate: Button {
-                    required property var modelData
-                    text: modelData ? modelData.objectName : ""
-                    onClicked: {
-                        selectedWidget = modelData;
-                    }
-                }
-            }
-
-            ListView {
-                id: properties
-                Layout.topMargin: widgetList.height
-                Layout.fillWidth: true
-                Layout.preferredHeight: contentHeight
-                orientation: ListView.Vertical
-
-                model: ScriptModel {
-                    values: {
-                        const props = selectedWidget?.property;
-                        const keys = props ? props.keys() : null;
-                        if (keys)
-                            return [...keys].filter(s => s.property !== "position");
-                        return [];
-                    }
-                }
-                DelegateChooser {
-                    id: chooser
-                    role: "type"
-
-                    DelegateChoice {
-                        roleValue: "number"
-
-                        RowLayout {
-                            required property var modelData
-                            height: 50
-                            width: parent ? parent.width : 0
-
-                            Text {
-                                color: Colors.color.primary
-                                Layout.preferredWidth: implicitWidth
-                                text: modelData.property
-                            }
-                            SpinBox {
-                                Layout.preferredWidth: parent.width / 2
-                                Layout.preferredHeight: parent.height / 2
-                                value: selectedWidget?.property[modelData.property]
-                                onValueChanged: {
-                                    if (selectedWidget)
-                                        selectedWidget.property[modelData.property] = value;
-                                }
-                            }
-                        }
-                    }
-
-                    DelegateChoice {
-                        roleValue: "string"
-                        RowLayout {
-                            required property var modelData
-                            height: 50
-                            width: parent ? parent.width : 0
-
-                            Text {
-                                color: Colors.color.primary
-                                Layout.preferredWidth: implicitWidth
-                                text: modelData.property
-                            }
-                            TextField {
-                                Layout.fillWidth: true
-                                text: modelData.property
-                            }
-                        }
-                    }
-
-                    DelegateChoice {
-                        roleValue: "boolean"
-                        RowLayout {
-                            required property var modelData
-                            height: 50
-                            width: parent ? parent.width : 0
-
-                            Toggle {
-                                text: modelData.property
-                                checked: selectedWidget.property[modelData.property]
-                                onCheckedChanged: selectedWidget.property[modelData.property] = checked
-                            }
-                        }
-                    }
-                }
-                delegate: chooser
             }
         }
     }

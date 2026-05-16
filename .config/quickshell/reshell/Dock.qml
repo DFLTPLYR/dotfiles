@@ -7,6 +7,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 import qs.core
+import qs.components
 import qs.modules
 import qs.types
 
@@ -195,7 +196,6 @@ Item {
                 height: Math.min(1200, panel.screen.height / 2)
                 specs: file.adapter
                 slots: panel.dockSlots
-                activeWidgets: panel.activeWidgets
                 onSave: timer.restart()
                 onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
@@ -609,51 +609,56 @@ Item {
             DelegateModel {
                 id: widgetsModel
                 model: slot.widgets
-                delegate: Item {
+                delegate: Pane {
                     id: widgetContainer
                     required property var modelData
                     required property int index
                     property ListModel widget: widgetsModel.model
-
-                    property var content: widgetLoader
                     property var currentWidget: null
+                    property string source: modelData.source
+                    onSourceChanged: incubateChild()
+
                     implicitHeight: currentWidget ? currentWidget.height : 0
                     implicitWidth: currentWidget ? currentWidget.width : 0
 
-                    LazyLoader {
-                        id: widgetLoader
-                        active: modelData?.source ? true : ""
-                        source: modelData.source
-                        onItemChanged: {
-                            const slt = slot;
-                            item.parent = widgetContainer;
-                            item.objectName = modelData.name;
-                            if (modelData.props) {
-                                item.property.setProperty(modelData.props);
-                            }
-                            item.screen = dock.screen;
-                            item.container = grid;
-                            item.slotConfig = config;
-                            widgetContainer.currentWidget = item;
-                            panel.activeWidgets = [...panel.activeWidgets, item];
-                            slot.activeWidgets = [...slot.activeWidgets, item];
+                    function incubateChild() {
+                        const component = Qt.createComponent(modelData.source);
+                        const incubator = component.incubateObject(widgetContainer, {
+                            objectName: modelData.name,
+                            screen: dock.screen,
+                            container: grid,
+                            slotConfig: config
+                        });
+                        if (incubator.status !== Component.Ready) {
+                            incubator.onStatusChanged = function (status) {
+                                if (status === Component.Ready) {
+                                    const widget = incubator.object;
 
-                            item.swap.connect((fromIndex, toIndex) => {
-                                widgetsModel.items.move(fromIndex, toIndex);
-                                slot.widgets.move(fromIndex, toIndex, 1);
-                            });
+                                    widgetContainer.currentWidget = widget;
+                                    if (modelData.props) {
+                                        widget.property.setProperty(modelData.props);
+                                    }
+                                    panel.activeWidgets = [...panel.activeWidgets, widget];
+                                    slot.activeWidgets = [...slot.activeWidgets, widget];
 
-                            item.remove.connect(idx => {
-                                widgetsModel.items.remove(idx, 1);
-                                slot.widgets.remove(idx, 1);
-                            });
+                                    widget.swap.connect((fromIndex, toIndex) => {
+                                        widgetsModel.items.move(fromIndex, toIndex);
+                                        slot.widgets.move(fromIndex, toIndex, 1);
+                                    });
 
-                            item.modal.connect(modal => {
-                                if (modal === null) {
-                                    panel.slots.sync();
+                                    widget.remove.connect(idx => {
+                                        widgetsModel.items.remove(idx, 1);
+                                        slot.widgets.remove(idx, 1);
+                                    });
+
+                                    widget.modal.connect(modal => {
+                                        if (modal === null) {
+                                            panel.timer.restart();
+                                        }
+                                        panel.modal = modal;
+                                    });
                                 }
-                                panel.modal = modal;
-                            });
+                            };
                         }
                     }
                 }
