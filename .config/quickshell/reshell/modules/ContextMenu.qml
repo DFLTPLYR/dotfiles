@@ -14,6 +14,40 @@ PopupModal {
     width: popupContent.width + (modal.leftPadding + modal.rightPadding)
     height: popupContent.height + (modal.bottomPadding + modal.topPadding)
 
+    Behavior on y {
+        NumberAnimation {
+            easing.type: Easing.InOutQuad
+            duration: 100
+        }
+    }
+
+    Behavior on x {
+        NumberAnimation {
+            easing.type: Easing.InOutQuad
+            duration: 100
+        }
+    }
+
+    enter: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 0.0
+            to: 1.0
+            easing.type: Easing.InOutQuad
+            duration: 300
+        }
+    }
+
+    exit: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 1.0
+            to: 0.0
+            easing.type: Easing.InOutQuad
+            duration: 300
+        }
+    }
+
     ColumnLayout {
         id: popupContent
         spacing: 0

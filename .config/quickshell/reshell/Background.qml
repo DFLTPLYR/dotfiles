@@ -19,6 +19,10 @@ PanelWindow {
     property bool edit: false
     property bool fileExplorerOpen: false
 
+    mask: Region {
+        item: layered
+    }
+
     Component {
         id: imageObject
         Image {
@@ -116,7 +120,6 @@ PanelWindow {
     Item {
         id: layered
         anchors.fill: parent
-
         Instantiator {
             model: containers
         }

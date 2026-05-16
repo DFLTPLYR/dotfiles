@@ -32,7 +32,7 @@ PanelWindow {
     WlrLayershell.layer: Global.edit ? WlrLayer.Bottom : WlrLayer.Background
 
     mask: Region {
-        item: panel.area
+        item: controlContainer
     }
 
     Item {
@@ -53,17 +53,17 @@ PanelWindow {
             property point startPoint
 
             onPressed: mouse => {
-                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                if (mouse.button == Qt.LeftButton) {
                     selecting = true;
                     startPoint = Qt.point(mouse.x, mouse.y);
                     selectionRect.x = mouse.x;
                     selectionRect.y = mouse.y;
                     selectionRect.width = 0;
                     selectionRect.height = 0;
-                    selectionRect.visible = true;
+                    selectionRect.opacity = 1;
                 } else if (mouse.button === Qt.RightButton) {
-                    contextMenu.x = mouseX + contextMenu.width > screen.width ? mouseX - contextMenu.width : mouseX;
-                    contextMenu.y = mouseY + contextMenu.height > screen.height ? mouseY - contextMenu.height : mouseY;
+                    contextMenu.x = mouseX;
+                    contextMenu.y = mouseY;
                     contextMenu.open();
                     return;
                 }
@@ -84,9 +84,9 @@ PanelWindow {
             }
 
             onReleased: mouse => {
-                if (mouse.button == Qt.LeftButton && mouse.modifiers & Qt.ShiftModifier) {
+                if (mouse.button == Qt.LeftButton) {
                     selecting = false;
-                    selectionRect.visible = false;
+                    selectionRect.opacity = 0;
 
                     if (selectionRect.x == 0 && selectionRect.y == 0)
                         return;
@@ -113,7 +113,7 @@ PanelWindow {
         x: 0
         y: 0
         z: 9999
-        visible: false
+        opacity: 0
         width: 0
         height: 0
         rotation: 0
@@ -121,6 +121,13 @@ PanelWindow {
         border.width: 1
         border.color: Colors.color.tertiary
         transformOrigin: Item.TopLeft
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     // simple desktop popup
