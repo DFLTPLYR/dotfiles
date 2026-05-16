@@ -13,6 +13,13 @@ Rectangle {
     property var screen: Quickshell.screens[0]
     property Property property: Property {}
     property Menu menu
+    onMenuChanged: {
+        menu.openedChanged.connect(() => {
+            if (menu.opened)
+                return wrapper.modal(wrapper.menu);
+            return wrapper.modal(null);
+        });
+    }
     property bool swapping: false
     color: "transparent"
 
@@ -65,12 +72,9 @@ Rectangle {
                 parent.y = 0;
             } else {
                 wrapper.menu.open();
-                wrapper.modal(wrapper.menu);
             }
         }
     }
-
-    Component.onCompleted: wrapper.menu = wrapper.property.menu
 
     DropArea {
         z: 1
@@ -92,5 +96,9 @@ Rectangle {
             anchors.fill: parent
             color: "transparent"
         }
+    }
+
+    Component.onCompleted: {
+        wrapper.menu = wrapper.property.menu;
     }
 }

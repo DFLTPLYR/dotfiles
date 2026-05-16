@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -5,24 +7,24 @@ import qs.core
 
 Label {
     id: control
-    property var state: Components.config.label
 
-    color: control.state.text
+    property QtObject config: QtObject {
+        property QtObject content: QtObject {
+            property color color: Colors.color.on_background
+        }
+        property QtObject background: QtObject {
+            property int height: 2
+            property int width: 200
+            property color color: Colors.color.background
+        }
+    }
+    color: control.config.content.color
 
     background: Rectangle {
         id: background
-        implicitWidth: control.state.background.width
-        implicitHeight: control.state.background.height
+        implicitWidth: control.width
+        implicitHeight: control.height
 
-        color: control.state.background.color
-
-        border {
-            width: control.state.background.border.width
-            color: control.state.background.border.color
-        }
-
-        Component.onCompleted: {
-            Global.bindRadii(background, control.state.background.rounding);
-        }
+        color: control.config.background.color
     }
 }

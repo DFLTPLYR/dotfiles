@@ -1,13 +1,18 @@
 pragma ComponentBehavior: Bound
+import Quickshell
+
 import QtQuick
+import QtQuick.Layouts
+import QtQml.Models
+import qs.core
 import qs.components
 
 QtObject {
-    id: property
+    id: root
 
     property Menu menu: Menu {
         id: menu
-        width: 100
+        width: 200
         height: contentHeight
         onOpened: {
             const config = parent.slotConfig;
@@ -19,43 +24,84 @@ QtObject {
             }
         }
 
-        Button {
-            width: parent.width
-            height: 40
-            onClicked: {
-                print("test");
+        ListView {
+            id: properties
+            width: menu.width
+            height: 100
+            clip: true
+            orientation: ListView.Vertical
+
+            model: ScriptModel {
+                values: {
+                    const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
+                    return ks.map(k => ({
+                                property: k,
+                                type: typeof root[k]
+                            }));
+                }
             }
+
+            DelegateChooser {
+                id: chooser
+                role: "type"
+
+                DelegateChoice {
+                    roleValue: "number"
+                    RowLayout {
+                        required property var modelData
+                        height: 50
+                        width: parent ? parent.width : 0
+                        Label {
+                            text: "test"
+                        }
+                    }
+                }
+
+                DelegateChoice {
+                    roleValue: "string"
+                    RowLayout {
+                        required property var modelData
+                        height: 50
+                        width: parent ? parent.width : 0
+                        Label {
+                            text: "test"
+                        }
+                    }
+                }
+
+                DelegateChoice {
+                    roleValue: "boolean"
+                    RowLayout {
+                        required property var modelData
+                        height: 50
+                        width: parent ? parent.width : 0
+                        Label {
+                            text: "test"
+                        }
+                    }
+                }
+            }
+            delegate: chooser
         }
     }
 
     function keys() {
-        const ks = Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
-        const result = [];
-        for (const k of ks) {
-            const keys = {
-                property: k,
-                type: typeof this[k]
-            };
-            result.push(keys);
-        }
-
-        return result;
+        const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
+        return ks.map(k => ({
+                    property: k,
+                    type: typeof root[k]
+                }));
     }
 
     function getProperty() {
-        const ks = Object.keys(this).filter(k => !k.endsWith("Changed") && k !== "objectName" && typeof this[k] !== "function");
-        const result = {};
-        for (const k of ks) {
-            result[k] = this[k];
-        }
-        return result;
+        const ks = Object.keys(root).filter(k => !k.endsWith("Changed") && k !== "objectName" && k !== "menu" && typeof root[k] !== "function");
+        return Object.fromEntries(ks.map(k => [k, root[k]]));
     }
 
     function setProperty(object) {
-        const ks = Object.keys(object);
-        for (const k of ks) {
-            if (typeof this[k] !== "function") {
-                this[k] = object[k].value;
+        for (const k of Object.keys(object)) {
+            if (typeof root[k] !== "function") {
+                root[k] = object[k].value;
             }
         }
     }
