@@ -21,12 +21,15 @@ Rectangle {
             }
             return wrapper.modal(null);
         });
+        menu.remove.connect(() => {
+            wrapper.remove();
+        });
     }
     color: "transparent"
 
     signal drop(int mouseX, int mouseY)
     signal swap(int item1, int item2)
-    signal remove(int idx)
+    signal remove
     signal modal(var modal)
 
     function setSize() {

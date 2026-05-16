@@ -643,12 +643,12 @@ Item {
 
                                     widget.swap.connect((fromIndex, toIndex) => {
                                         widgetsModel.items.move(fromIndex, toIndex);
-                                        slot.widgets.move(fromIndex, toIndex, 1);
+                                        panel.timer.restart();
                                     });
 
-                                    widget.remove.connect(idx => {
-                                        widgetsModel.items.remove(idx, 1);
-                                        slot.widgets.remove(idx, 1);
+                                    widget.remove.connect(() => {
+                                        widgetsModel.items.remove(widgetContainer.index, 1);
+                                        panel.timer.restart();
                                     });
 
                                     widget.modal.connect(modal => {

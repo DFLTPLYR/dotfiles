@@ -12,6 +12,8 @@ QtObject {
 
     property Menu menu: Menu {
         id: menu
+
+        signal remove
         width: 200
         height: contentHeight
         leftPadding: 5
@@ -90,6 +92,13 @@ QtObject {
                 }
             }
             delegate: chooser
+        }
+
+        Action {
+            text: "remove"
+            onTriggered: {
+                menu.remove();
+            }
         }
     }
 
