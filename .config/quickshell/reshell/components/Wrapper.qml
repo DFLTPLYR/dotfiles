@@ -14,17 +14,20 @@ Rectangle {
     property Property property: Property {}
     property bool swapping: false
     property Menu menu
+
     onMenuChanged: {
-        menu.openedChanged.connect(() => {
-            if (menu.opened) {
-                return wrapper.modal(wrapper.menu);
-            }
+        menu.onOpened.connect(() => {
+            return wrapper.modal(wrapper.menu);
+        });
+
+        menu.onClosed.connect(() => {
             return wrapper.modal(null);
         });
         menu.remove.connect(() => {
             wrapper.remove();
         });
     }
+
     color: "transparent"
 
     signal drop(int mouseX, int mouseY)

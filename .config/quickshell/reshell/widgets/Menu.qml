@@ -79,16 +79,15 @@ Wrapper {
         y: wrap.slotConfig && wrap.slotConfig.side ? wrap.height / 2 - modal.height / 2 : wrap.height
         x: wrap.slotConfig && wrap.slotConfig.side ? wrap.width : wrap.width / 2 - modal.width / 2
 
-        ColumnLayout {
+        Column {
             id: content
-            spacing: 0
             width: wrap.property.width
-            height: menulist.height
+            spacing: 0
 
             ListView {
                 id: menulist
                 width: 100
-                height: contentHeight
+                height: contentHeight  // implicitHeight also works
                 model: ["suspend", "poweroff", "hibernate", "reboot"]
                 delegate: Button {
                     text: modelData

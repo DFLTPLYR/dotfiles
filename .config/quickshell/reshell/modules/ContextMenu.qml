@@ -10,7 +10,7 @@ PopupModal {
     id: modal
     property ShellScreen screen
     signal action(string action)
-    closePolicy: Popup.CloseOnEscape
+
     width: popupContent.width + (modal.leftPadding + modal.rightPadding)
     height: popupContent.height + (modal.bottomPadding + modal.topPadding)
 

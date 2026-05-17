@@ -133,24 +133,19 @@ Variants {
                     onObjectRemoved: (_idx, object) => object.destroy()
                 }
 
-                Bottom {
-                    file: fileview
-                    screen: reshell.screen
-                    onDockUpdate: dock => {
-                        reshell.dock.append({
-                            "name": dock.name
-                        });
-                        reshell.dock.save();
-                        fileview.updateQueue.push(dock);
-                    }
-                }
-
                 // background
                 LazyLoader {
                     active: Wallpaper.ready
                     component: Background {
                         screen: reshell.screen
                         file: fileview
+                        onDockUpdate: dock => {
+                            reshell.dock.append({
+                                "name": dock.name
+                            });
+                            reshell.dock.save();
+                            fileview.updateQueue.push(dock);
+                        }
                     }
                 }
             }
