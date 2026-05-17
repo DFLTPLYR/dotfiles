@@ -9,10 +9,9 @@ import qs.core
 
 Variants {
     model: Quickshell.screens
-    delegate: PanelWindow {
+    delegate: Item {
         id: reshell
         required property ShellScreen modelData
-
         property FileModel dock: FileModel {
             onSaved: list => {
                 adapter.docks = list.map(item => item.name);
@@ -20,32 +19,20 @@ Variants {
             }
         }
 
-        implicitWidth: screen.width
-        implicitHeight: screen.height
-
-        WlrLayershell.layer: WlrLayer.Top
-        WlrLayershell.namespace: `Reshell-${screen.name}`
-
-        screen: modelData
-        color: "transparent"
-
-        mask: Region {
-            regions: [
-                Region {
-                    item: content.item
-                }
-            ]
-        }
+        implicitWidth: modelData.width
+        implicitHeight: modelData.height
+        x: modelData.x
+        y: modelData.y
 
         // config
         FileView {
             id: fileview
-            path: Qt.resolvedUrl(`./core/data/${screen.name}.json`)
+            path: Qt.resolvedUrl(`./core/data/${modelData.name}.json`)
             watchChanges: true
             preload: true
             onLoaded: {
                 Global.configs.push({
-                    "screen": reshell.screen.name,
+                    "screen": reshell.modelData.name,
                     "config": fileview
                 });
                 content.active = true;
@@ -107,9 +94,10 @@ Variants {
             component: Item {
                 id: display
 
+                property var screen: reshell.modelData
                 // overlay
                 Overlay {
-                    screen: reshell.screen
+                    screen: display.screen
                 }
 
                 // docks
@@ -117,7 +105,7 @@ Variants {
                     id: dockInstantiator
                     model: reshell.dock
                     delegate: Dock {
-                        screen: reshell.screen
+                        screen: display.screen
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
                         onRemoveDock: idx => {
                             const model = reshell.dock;
@@ -137,7 +125,7 @@ Variants {
                 LazyLoader {
                     active: Wallpaper.ready
                     component: Background {
-                        screen: reshell.screen
+                        screen: display.screen
                         file: fileview
                         onDockUpdate: dock => {
                             reshell.dock.append({

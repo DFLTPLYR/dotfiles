@@ -19,7 +19,6 @@ Item {
     property Item area: null
     property var file
     property bool edit: false
-
     signal dockUpdate(var data)
     signal save
 
@@ -31,11 +30,15 @@ Item {
         property var coords
         property var contents: model.contents
         property var currentContent
-        onContentsChanged: addContent()
+        onContentsChanged: {
+            if (!contents || !item)
+                return;
+            return addContent();
+        }
         onItemChanged: {
             if (!contents || !item)
                 return;
-            addContent();
+            return addContent();
         }
 
         function addContent() {
@@ -46,12 +49,16 @@ Item {
             }
             switch (type) {
             case "image":
+                item.parent = layered;
                 const image = imageObject.createObject(item, {
                     source: contents.source
                 });
                 containerloader.currentContent = image;
                 return;
             case "widget":
+                item.parent = Qt.binding(() => {
+                    return Global.widget ? controlArea : layered;
+                });
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
                 if (incubator.status !== Component.Ready) {
@@ -61,6 +68,10 @@ Item {
                             widget.parent = containerloader.item;
                             widget.anchors.fill = containerloader.item;
                             containerloader.currentContent = widget;
+
+                            widget.modal.connect(modal => {
+                                print(modal);
+                            });
                         }
                     };
                 }
@@ -83,7 +94,6 @@ Item {
         }
 
         component: Pane {
-            parent: layered
             width: containerloader.model.width
             height: containerloader.model.height
             visible: containerloader.coords ? true : false
@@ -117,7 +127,6 @@ Item {
         mask: Region {
             item: layered
         }
-
         color: "transparent"
         implicitHeight: screen.height
         implicitWidth: screen.width
@@ -164,18 +173,17 @@ Item {
         WlrLayershell.layer: WlrLayer.Bottom
 
         mask: Region {
-            item: controlContainer
+            item: controlArea
         }
 
         Item {
-            id: controlContainer
+            id: controlArea
             width: parent.width
             height: parent.height
 
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-
                 property bool selecting
                 property point startPoint
 

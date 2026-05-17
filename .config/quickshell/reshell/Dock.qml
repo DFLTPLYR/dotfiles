@@ -614,12 +614,8 @@ Item {
                     required property var modelData
                     required property int index
                     property ListModel widget: widgetsModel.model
-                    property var currentWidget: null
                     property string source: modelData.source
                     onSourceChanged: incubateChild()
-
-                    implicitHeight: currentWidget ? currentWidget.height : 0
-                    implicitWidth: currentWidget ? currentWidget.width : 0
 
                     function incubateChild() {
                         const component = Qt.createComponent(modelData.source);
@@ -633,8 +629,14 @@ Item {
                             incubator.onStatusChanged = function (status) {
                                 if (status === Component.Ready) {
                                     const widget = incubator.object;
-
-                                    widgetContainer.currentWidget = widget;
+                                    if (!widget)
+                                        return;
+                                    widgetContainer.width = Qt.binding(() => {
+                                        return widget.width;
+                                    });
+                                    widgetContainer.height = Qt.binding(() => {
+                                        return widget.height;
+                                    });
                                     if (modelData.props) {
                                         widget.property.setProperty(modelData.props);
                                     }
