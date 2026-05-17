@@ -186,7 +186,6 @@ Item {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 property bool selecting
                 property point startPoint
-
                 onPressed: mouse => {
                     if (mouse.button == Qt.LeftButton) {
                         if (contextMenu.opened)

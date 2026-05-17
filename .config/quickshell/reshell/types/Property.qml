@@ -153,7 +153,8 @@ QtObject {
 
     function setProperty(object) {
         for (const k of Object.keys(object)) {
-            if (!isKeyValid(k)) continue;
+            if (!isKeyValid(k))
+                continue;
             let val = object[k];
             if (val !== null && typeof val === "object" && val.value !== undefined)
                 val = val.value;

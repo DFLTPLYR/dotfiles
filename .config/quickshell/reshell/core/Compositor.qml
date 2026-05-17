@@ -8,9 +8,7 @@ import Quickshell.Io
 Singleton {
     id: config
 
-    property list<QtObject> workspaces: []
-    property list<QtObject> windows: []
-
+    property var toplevels: ToplevelManager.toplevels
     property var focusedWorkspace: null
     property var focusedMonitor: Quickshell.screens[0].name
     property var focusedWindow: null
