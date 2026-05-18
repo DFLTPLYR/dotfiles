@@ -12,21 +12,58 @@ QtObject {
 
     property Menu menu: Menu {
         id: menu
-
         signal remove
         width: 200
         height: contentHeight
         leftPadding: 5
 
+        background: Rectangle {
+            id: bg
+            property var config
+
+            anchors.fill: parent
+            color: Colors.color.background
+            border.color: Colors.color.outline
+            state: bg.config?.position || "none"
+
+            states: [
+                State {
+                    name: "left"
+                    PropertyChanges {
+                        target: menu
+                        leftMargin: parent.width
+                        y: (parent.height - height) / 2
+                    }
+                },
+                State {
+                    name: "right"
+                    PropertyChanges {
+                        target: menu
+                        rightMargin: parent.width
+                        y: (parent.height - height) / 2
+                    }
+                },
+                State {
+                    name: "top"
+                    PropertyChanges {
+                        target: menu
+                        topMargin: parent.height
+                        x: (parent.width - width) / 2
+                    }
+                },
+                State {
+                    name: "bottom"
+                    PropertyChanges {
+                        target: menu
+                        bottomMargin: parent.height
+                        x: (parent.width - width) / 2
+                    }
+                }
+            ]
+        }
+
         onOpened: {
-            var side = parent.slotConfig?.side;
-            if (side) {
-                x = parent.width;
-                y = (parent.height - menu.height) / 2;
-            } else {
-                y = parent.height;
-                x = (parent.width - menu.width) / 2;
-            }
+            bg.config = parent.slotConfig;
         }
 
         ListView {

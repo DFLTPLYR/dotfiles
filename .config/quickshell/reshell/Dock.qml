@@ -161,7 +161,9 @@ Item {
             exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Ignore
             onExclusionModeChanged: {
                 if (ExclusionMode.Normal === exclusionMode) {
-                    this.exclusiveZone = config.side ? config.width : config.height;
+                    this.exclusiveZone = Qt.binding(() => {
+                        return config.side ? config.width : config.height;
+                    });
                 }
             }
 
