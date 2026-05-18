@@ -19,8 +19,7 @@ QtObject {
         leftPadding: 5
 
         onOpened: {
-            const config = parent.slotConfig;
-            const side = config.side;
+            var side = parent.slotConfig?.side;
             if (side) {
                 x = parent.width;
                 y = (parent.height - menu.height) / 2;
@@ -106,6 +105,8 @@ QtObject {
         if (k === "objectName" || k === "menu" || typeof root[k] === "function")
             return false;
         if (k.endsWith("Changed"))
+            return false;
+        if (typeof root[k] === "undefined")
             return false;
         if (extraEndings?.length) {
             for (const e of extraEndings) {

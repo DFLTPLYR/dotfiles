@@ -10,3 +10,4 @@
 
 # rmpc layouts
 .config/rmpc/layout/long.ron
+.config/rmpc/layout/shell.ron

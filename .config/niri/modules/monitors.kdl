@@ -39,6 +39,11 @@ layer-rule {
   place-within-backdrop true
 }
 
+layer-rule {
+  match layer="bottom"
+  place-within-backdrop true
+}
+
 output "DP-2" {
     mode "1920x1080@165.002"
     scale 1

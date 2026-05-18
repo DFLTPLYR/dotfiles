@@ -611,11 +611,12 @@ Item {
                 model: slot.widgets
                 delegate: Pane {
                     id: widgetContainer
+                    bg.color: "transparent"
                     required property var modelData
                     required property int index
                     property ListModel widget: widgetsModel.model
                     property string source: modelData.source
-                    onSourceChanged: incubateChild()
+                    onSourceChanged: widgetContainer.incubateChild()
 
                     function incubateChild() {
                         const component = Qt.createComponent(modelData.source);
@@ -629,7 +630,7 @@ Item {
                             incubator.onStatusChanged = function (status) {
                                 if (status === Component.Ready) {
                                     const widget = incubator.object;
-                                    if (!widget)
+                                    if (!widget || !widgetContainer)
                                         return;
                                     widgetContainer.width = Qt.binding(() => {
                                         return widget.width;
