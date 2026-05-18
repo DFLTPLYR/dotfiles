@@ -107,6 +107,7 @@ Item {
         }
 
         component: Pane {
+            bg.color: "transparent"
             width: containerloader.model.width
             height: containerloader.model.height
             visible: containerloader.coords ? true : false

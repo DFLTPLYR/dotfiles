@@ -98,7 +98,7 @@ Pane {
                     id: selectionRect
                     x: 0
                     y: 0
-                    z: 9999
+                    z: 0
                     visible: false
                     onVisibleChanged: {
                         if (!visible && selectionRect.width !== 0 && selectionRect.height !== 0) {
@@ -534,8 +534,14 @@ Pane {
                 };
 
                 Wallpaper.containers.set(containerRect.index, obj);
-                Wallpaper.containers.save();
+                updateTimer.restart();
             }
+        }
+
+        Timer {
+            id: updateTimer
+            interval: 5000
+            onTriggered: Wallpaper.containers.save()
         }
 
         // outline
