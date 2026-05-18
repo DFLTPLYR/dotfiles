@@ -69,7 +69,7 @@ Item {
                             widget.anchors.fill = containerloader.item;
                             containerloader.currentContent = widget;
                             if (contents.props) {
-                                print(contents.props);
+                                widget.property.setProperty(contents.props);
                             }
                             widget.modal.connect((modal, hasChanges) => {
                                 if (modal) {
@@ -78,7 +78,10 @@ Item {
                                 }
                                 if (hasChanges) {
                                     const props = widget.property.getProperty();
-                                    Wallpaper.containers.setProperty(containerloader.index, "props", props);
+                                    const conf = Wallpaper.containers.get(containerloader.index);
+                                    const withProps = conf.contents;
+                                    withProps.props = props;
+                                    Wallpaper.containers.setProperty(containerloader.index, "contents", withProps);
                                     Wallpaper.containers.save();
                                 }
                             });
