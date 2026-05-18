@@ -656,10 +656,9 @@ Item {
                                         panel.timer.restart();
                                     });
 
-                                    widget.modal.connect(modal => {
-                                        if (modal === null) {
+                                    widget.modal.connect((modal, hasChanges) => {
+                                        if (hasChanges)
                                             panel.timer.restart();
-                                        }
                                         panel.modal = modal;
                                     });
                                 }

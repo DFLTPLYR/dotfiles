@@ -12,6 +12,10 @@ QtObject {
 
     property Menu menu: Menu {
         id: menu
+        property var originalValues: []
+        property bool hasChanges: false
+        signal entered
+        signal exited(bool hasChanges)
         signal remove
         width: 200
         height: contentHeight
@@ -64,6 +68,34 @@ QtObject {
 
         onOpened: {
             bg.config = parent.slotConfig;
+            const old = root.keys();
+            const _orig = [];
+            for (const i in old) {
+                const val = {
+                    prop: old[i].property,
+                    val: root[old[i].property]
+                };
+                _orig.push(val);
+            }
+            menu.originalValues = _orig;
+            menu.entered();
+        }
+
+        function updateHasChanges() {
+            const current = root.keys();
+            for (const i in current) {
+                const prop = current[i].property;
+                const orig = menu.originalValues.find(v => v.prop === prop);
+                if (!orig || root[prop] !== orig.val) {
+                    menu.hasChanges = true;
+                    return;
+                }
+            }
+            menu.hasChanges = false;
+        }
+
+        onClosed: {
+            menu.exited(menu.hasChanges);
         }
 
         ListView {
@@ -95,9 +127,12 @@ QtObject {
                         SpinBox {
                             Layout.preferredWidth: parent.width / 2
                             Layout.preferredHeight: parent.height / 2
-                            value: root[modelData.property]
+                            value: root[modelData.property] ?? 0
                             onValueChanged: {
-                                root[modelData.property] = value;
+                                if (root[modelData.property] !== value) {
+                                    root[modelData.property] = value;
+                                    menu.updateHasChanges();
+                                }
                             }
                         }
                     }
@@ -194,11 +229,14 @@ QtObject {
             if (!isKeyValid(k))
                 continue;
             let val = object[k];
-            if (val !== null && typeof val === "object" && val.value !== undefined)
-                val = val.value;
-            if (val !== null && typeof val === "object")
+            if (val === undefined || val === null)
                 continue;
-            root[k] = val;
+            if (typeof val === "object" && val.value !== undefined)
+                val = val.value;
+            if (val === null || typeof val === "object")
+                continue;
+            if (root[k] !== val)
+                root[k] = val;
         }
     }
 }

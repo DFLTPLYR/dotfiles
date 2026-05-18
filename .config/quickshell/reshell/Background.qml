@@ -68,9 +68,19 @@ Item {
                             widget.parent = containerloader.item;
                             widget.anchors.fill = containerloader.item;
                             containerloader.currentContent = widget;
-
-                            widget.modal.connect(modal => {
-                                print(modal);
+                            if (contents.props) {
+                                print(contents.props);
+                            }
+                            widget.modal.connect((modal, hasChanges) => {
+                                if (modal) {
+                                    modal.y = item.height;
+                                    modal.x = (item.width - modal.width) / 2;
+                                }
+                                if (hasChanges) {
+                                    const props = widget.property.getProperty();
+                                    Wallpaper.containers.setProperty(containerloader.index, "props", props);
+                                    Wallpaper.containers.save();
+                                }
                             });
                         }
                     };

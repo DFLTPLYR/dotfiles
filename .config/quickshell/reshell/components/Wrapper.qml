@@ -6,7 +6,7 @@ import QtQuick
 import qs.core
 import qs.types
 
-Rectangle {
+Item {
     id: wrapper
     property var container
     property var slotConfig
@@ -15,25 +15,23 @@ Rectangle {
     property bool swapping: false
     property Menu menu
 
+    signal drop(int mouseX, int mouseY)
+    signal swap(int item1, int item2)
+    signal remove
+    signal modal(var modal, bool hasChanges)
+
     onMenuChanged: {
-        menu.onOpened.connect(() => {
-            return wrapper.modal(wrapper.menu);
+        menu.entered.connect(() => {
+            return wrapper.modal(wrapper.menu, false);
         });
 
-        menu.onClosed.connect(() => {
-            return wrapper.modal(null);
+        menu.exited.connect(hasChanges => {
+            return wrapper.modal(null, hasChanges);
         });
         menu.remove.connect(() => {
             wrapper.remove();
         });
     }
-
-    color: "transparent"
-
-    signal drop(int mouseX, int mouseY)
-    signal swap(int item1, int item2)
-    signal remove
-    signal modal(var modal)
 
     function setSize() {
         if (wrapper.container && wrapper.slotConfig) {
