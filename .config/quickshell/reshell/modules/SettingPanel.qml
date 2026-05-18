@@ -61,8 +61,8 @@ FloatingWindow {
                 // ComponentsPage
                 ComponentsPage {}
 
-                // WallpaperPage
-                WallpaperPage {}
+                // BackgroundPage
+                BackgroundPage {}
             }
             Component.onCompleted: settingpanel.data.push(this)
         }

@@ -431,12 +431,22 @@ Pane {
         required property var model
         required property int index
         required property var contents
+
+        property bool enabled: false
+        property bool show: true
+        property ListModel screens: ListModel {}
         onContentsChanged: {
             switch (contents.type) {
             case "image":
-                contentImage.createObject(containerRect, {
+                const image = contentImage.createObject(containerRect, {
                     source: contents.source,
-                    z: -1
+                    z: -1,
+                    visible: Qt.binding(() => {
+                        return !containerRect.hide;
+                    })
+                });
+                image.visible = Qt.binding(() => {
+                    return containerRect.show;
                 });
                 return;
             case "widget":
@@ -448,16 +458,18 @@ Pane {
                             const widget = incubator.object;
                             widget.parent = containerRect;
                             widget.anchors.fill = containerRect;
+                            if (contents.props) {
+                                widget.property.setProperty(contents.props);
+                            }
+                            widget.visible = Qt.binding(() => {
+                                return containerRect.show;
+                            });
                         }
                     };
                 }
                 return;
             }
         }
-
-        property bool enabled: false
-        property bool show: false
-        property ListModel screens: ListModel {}
 
         bg.color: Colors.setOpacity(Colors.color.background, 0.5)
 
@@ -497,11 +509,11 @@ Pane {
                 Icon {
                     color: Colors.color.on_background
                     font.pixelSize: parent.width
-                    text: containerRect.enabled ? "eye-slash" : "eye"
+                    text: containerRect.show ? "eye-slash" : "eye"
                 }
 
                 onClicked: {
-                    print(containerRect.children);
+                    containerRect.show = !containerRect.show;
                 }
             }
         }
@@ -569,10 +581,6 @@ Pane {
                     };
 
                     Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
-                    contentImage.createObject(containerRect, {
-                        source: data,
-                        z: -1
-                    });
                     Wallpaper.containers.save();
                 }
             }
@@ -592,7 +600,10 @@ Pane {
                     });
                     contentImage.createObject(containerRect, {
                         source: data,
-                        z: -1
+                        z: -1,
+                        visible: Qt.binding(() => {
+                            return containerRect.show;
+                        })
                     });
                     Wallpaper.containers.save();
                 }
