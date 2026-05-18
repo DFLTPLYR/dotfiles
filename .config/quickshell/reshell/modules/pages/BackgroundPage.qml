@@ -588,6 +588,12 @@ Pane {
 
         Menu {
             id: menu
+            property bool hasContent: containerRect.contents || false
+            onHasContentChanged: {
+                if (!hasContent)
+                    return;
+            }
+
             width: 200
             x: containerRect.width
 
@@ -616,14 +622,6 @@ Pane {
                 }
             }
 
-            Action {
-                text: "Remove Container"
-                onTriggered: {
-                    Wallpaper.containers.remove(containerRect.index, 1);
-                    Wallpaper.containers.save();
-                }
-            }
-
             Menu {
                 id: widgetMenu
                 title: "Widgets"
@@ -638,6 +636,16 @@ Pane {
                         }
                         delegate: WidgetPlaceholder {}
                     }
+                }
+            }
+
+            MenuSeparator {}
+
+            Action {
+                text: "Remove Container"
+                onTriggered: {
+                    Wallpaper.containers.remove(containerRect.index, 1);
+                    Wallpaper.containers.save();
                 }
             }
         }
