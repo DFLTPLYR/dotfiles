@@ -1,11 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-
 import qs.config
 
 Wrapper {
     id: wrap
+
     property string icon: "clock-nine"
     property int widgetHeight: 100
     property int widgetWidth: 100
@@ -16,6 +16,7 @@ Wrapper {
         left: 0
         right: 0
     }
+
     GridLayout {
         columns: Navbar.config.side ? 1 : 2
         rows: Navbar.config.side ? 2 : 1
@@ -23,8 +24,10 @@ Wrapper {
 
         SystemClock {
             id: clock
+
             precision: SystemClock.Seconds
         }
+
         Text {
             text: Qt.formatDateTime(clock.date, Navbar.config.side ? "HH \nMM\nAP" : "hh:mm AP")
             Layout.fillWidth: true
@@ -35,5 +38,7 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
     }
+
 }

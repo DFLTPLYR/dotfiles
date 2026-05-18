@@ -1,5 +1,5 @@
-import Quickshell.Io
 import QtQuick
+import Quickshell.Io
 
 JsonObject {
     property int width: 0

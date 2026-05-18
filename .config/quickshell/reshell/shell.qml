@@ -1,8 +1,8 @@
 //@ pragma Env QSG_RENDER_LOOP=threaded
 //@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 
-import Quickshell
 import QtQuick
+import Quickshell
 import qs.core
 
 ShellRoot {
@@ -10,7 +10,13 @@ ShellRoot {
 
     LazyLoader {
         active: Global.general.greeter && Wallpaper.ready
-        component: Greeter {}
+
+        component: Greeter {
+        }
+
     }
-    Reshell {}
+
+    Reshell {
+    }
+
 }

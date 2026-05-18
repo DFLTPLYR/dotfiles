@@ -1,13 +1,15 @@
 import QtQuick
 import QtQuick.Controls.Basic
-
 import qs.core
 
 Menu {
     id: menu
+
     padding: 2
+
     delegate: MenuItem {
         id: menuItem
+
         implicitWidth: 100
         implicitHeight: 40
 
@@ -29,8 +31,10 @@ Menu {
 
         indicator: Item {
             id: indicator
+
             implicitWidth: 40
             implicitHeight: 40
+
             Rectangle {
                 width: 26
                 height: 26
@@ -38,6 +42,7 @@ Menu {
                 visible: menuItem.checkable
                 border.color: Colors.color.outline
                 radius: 3
+
                 Rectangle {
                     width: 14
                     height: 14
@@ -46,7 +51,9 @@ Menu {
                     color: Colors.color.primary
                     radius: 2
                 }
+
             }
+
         }
 
         contentItem: Text {
@@ -54,7 +61,7 @@ Menu {
             rightPadding: menuItem.subMenu ? menuItem.arrow.width : 0
             text: menuItem.text
             font: menuItem.font
-            opacity: enabled ? 1.0 : 0.3
+            opacity: enabled ? 1 : 0.3
             color: menuItem.highlighted ? Colors.color.on_background : Colors.color.primary
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -66,6 +73,7 @@ Menu {
             opacity: enabled ? 1 : 0.3
             color: menuItem.highlighted ? Colors.color.background : "transparent"
         }
+
     }
 
     background: Rectangle {
@@ -76,4 +84,5 @@ Menu {
         border.color: Colors.color.outline
         radius: 2
     }
+
 }

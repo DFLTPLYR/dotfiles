@@ -1,16 +1,17 @@
-import Quickshell
 import QtQuick
 import QtQuick.Layouts
-
+import Quickshell
 import qs.core
 
 StyledPane {
     default property alias ma: notifMouseArea
     required property var modelData
+
     clip: true
 
     Rectangle {
         id: progressOutline
+
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         height: 2
@@ -22,36 +23,39 @@ StyledPane {
             duration: Components.config.notification.duration
             running: true
         }
+
     }
 
     MouseArea {
         id: notifMouseArea
+
         anchors.fill: parent
         drag.target: parent
         drag.axis: Drag.XAxis
         drag.minimumX: -width
         drag.maximumX: 0
         drag.threshold: 0
-
         onClicked: {
             Notifications.discardNotification(modelData.notificationId);
         }
         onReleased: {
-            if (parent.x < -30) {
+            if (parent.x < -30)
                 Notifications.discardNotification(modelData.notificationId);
-            } else {
+            else
                 parent.x = 0;
-            }
         }
     }
 
     Row {
         id: contentRow
+
         property bool hasImage: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
+
         anchors.fill: parent
 
         Item {
             id: imageContainer
+
             height: contentRow.hasImage ? parent.height : 0
             width: contentRow.hasImage ? parent.height : 0
 
@@ -60,13 +64,13 @@ StyledPane {
                 fillMode: Image.PreserveAspectFit
                 source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
             }
+
         }
 
         // Content
         ColumnLayout {
             height: parent.height
             width: parent.width - imageContainer.width
-
             spacing: 2
 
             Text {
@@ -93,6 +97,9 @@ StyledPane {
                 color: Colors.color.secondary
                 elide: Text.ElideRight
             }
+
         }
+
     }
+
 }

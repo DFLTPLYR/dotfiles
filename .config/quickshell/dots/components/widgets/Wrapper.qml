@@ -1,48 +1,49 @@
 import QtQuick
-
-import qs.utils
 import qs.config
+import qs.utils
 
 Item {
     id: wrap
+
     default property alias content: contentItem.data
     property alias background: background
-
     // generics for handling reparent
     property string handler
     property bool isSlotted: false
     property bool enableActions: true
     property int position
-
     // size
     property real wrapWidth
     property real wrapHeight
-
     // margin (outside the rectangle)
-    property Spacing margin: Spacing {}
-
+    property Spacing margin
     // padding (inside the rectangle)
-    property Spacing padding: Spacing {}
-
+    property Spacing padding
     property int rouding: 0
-
     // expose the usable content area so children can size fonts relative to it
     readonly property real contentWidth: contentItem.width
     readonly property real contentHeight: contentItem.height
 
+    width: {
+        if (wrapWidth !== 0 && !Navbar.config.side)
+            return wrapWidth;
+
+        return parent ? parent.width : 0;
+    }
+    height: {
+        if (wrapHeight !== 0 && Navbar.config.side)
+            return wrapHeight;
+
+        return parent ? parent.height : 0;
+    }
+
     Rectangle {
         id: background
+
         color: "transparent"
         // border.color: Colors.color.primary
         radius: wrap.rouding + Config.general.appearance.rounding
         clip: true
-
-        Behavior on color {
-            ColorAnimation {
-                duration: 300
-                easing.type: Easing.InOutQuad
-            }
-        }
 
         anchors {
             fill: parent
@@ -55,7 +56,9 @@ Item {
         // content area with padding applied
         BorderImage {
             id: contentItem
+
             clip: true
+
             anchors {
                 fill: parent
                 leftMargin: wrap.padding.left + Config.general.appearance.padding
@@ -63,20 +66,23 @@ Item {
                 topMargin: wrap.padding.top + Config.general.appearance.padding
                 bottomMargin: wrap.padding.bottom + Config.general.appearance.padding
             }
+
         }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+
+        }
+
     }
 
-    width: {
-        if (wrapWidth !== 0 && !Navbar.config.side) {
-            return wrapWidth;
-        }
-        return parent ? parent.width : 0;
+    margin: Spacing {
     }
 
-    height: {
-        if (wrapHeight !== 0 && Navbar.config.side) {
-            return wrapHeight;
-        }
-        return parent ? parent.height : 0;
+    padding: Spacing {
     }
+
 }

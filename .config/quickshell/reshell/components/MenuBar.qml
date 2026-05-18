@@ -11,7 +11,7 @@ MenuBar {
         contentItem: Text {
             text: menuBarItem.text
             font: menuBarItem.font
-            opacity: enabled ? 1.0 : 0.3
+            opacity: enabled ? 1 : 0.3
             color: menuBarItem.highlighted ? Colors.color.primary : Colors.color.primary
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -22,7 +22,9 @@ MenuBar {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+
             }
+
         }
 
         background: Rectangle {
@@ -36,14 +38,17 @@ MenuBar {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+
             }
+
         }
+
     }
 
     background: Rectangle {
         implicitWidth: 40
         implicitHeight: 40
-
         color: Colors.color.background
     }
+
 }

@@ -1,34 +1,49 @@
 import QtQuick
 import QtQuick.Layouts
-
 import Quickshell
-
-import qs.config
 import qs.components
+import qs.config
 import qs.modules.settings.pages
 
 Scope {
+    function getIcon(name) {
+        switch (name) {
+        case "general":
+            return "gear";
+        case "navbar":
+            return `bar-${Navbar.config.position}`;
+        case "wallpaper":
+            return "hexagon-image";
+        default:
+            return "?";
+        }
+    }
+
     Connections {
-        target: Config
         function onOpenSettingsPanelChanged() {
             settingsLoader.active = !settingsLoader.active;
         }
+
+        target: Config
     }
 
     LazyLoader {
         id: settingsLoader
+
         component: FloatingWindow {
             id: root
-            title: "SettingsPanel"
-            screen: selectedScreen
+
             property int page: 0
-            property ShellScreen selectedScreen: Quickshell.screens.find(w => w.name === Config.focusedMonitor)
+            property ShellScreen selectedScreen: Quickshell.screens.find((w) => {
+                return w.name === Config.focusedMonitor;
+            })
             readonly property bool isPortrait: screen.height > screen.width
             readonly property size panelSize: isPortrait ? Qt.size(screen.width * 0.8, screen.height * 0.6) : Qt.size(screen.width * 0.6, screen.height * 0.8)
 
+            title: "SettingsPanel"
+            screen: selectedScreen
             minimumSize: panelSize
             maximumSize: panelSize
-
             color: Colors.color.background
 
             GridLayout {
@@ -44,6 +59,7 @@ Scope {
                         anchors.fill: parent
                         spacing: 1
                         model: ["general", "navbar", "wallpaper"]
+
                         delegate: Item {
                             width: 40
                             height: 40
@@ -64,7 +80,9 @@ Scope {
                                             duration: 350
                                             easing.type: Easing.InOutQuad
                                         }
+
                                     }
+
                                 }
 
                                 Behavior on radius {
@@ -72,6 +90,7 @@ Scope {
                                         duration: 350
                                         easing.type: Easing.InOutQuad
                                     }
+
                                 }
 
                                 Behavior on color {
@@ -79,19 +98,25 @@ Scope {
                                         duration: 350
                                         easing.type: Easing.InOutQuad
                                     }
+
                                 }
+
                             }
 
                             MouseArea {
                                 id: ma
+
                                 hoverEnabled: true
                                 anchors.fill: parent
                                 onClicked: {
                                     page = index;
                                 }
                             }
+
                         }
+
                     }
+
                 }
 
                 // content
@@ -101,27 +126,22 @@ Scope {
                     currentIndex: root.page
                     Layout.rightMargin: 0
 
-                    General {}
+                    General {
+                    }
 
-                    Navbar {}
+                    Navbar {
+                    }
 
                     // Wallpaper
-                    Wallpaper {}
+                    Wallpaper {
+                    }
+
                 }
+
             }
+
         }
+
     }
 
-    function getIcon(name) {
-        switch (name) {
-        case "general":
-            return "gear";
-        case "navbar":
-            return `bar-${Navbar.config.position}`;
-        case "wallpaper":
-            return "hexagon-image";
-        default:
-            return "?";
-        }
-    }
 }

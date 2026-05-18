@@ -1,11 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
-
-import qs.config
 import qs.components
+import qs.config
 
 Wrapper {
     id: gpu
+
     property string icon: "gaming-pad-alt"
     property int widgetHeight: 100
     property int widgetWidth: 100
@@ -35,5 +35,7 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
     }
+
 }

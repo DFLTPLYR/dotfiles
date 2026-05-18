@@ -1,29 +1,30 @@
 import QtQuick
 import QtQuick.Layouts
-
-import qs.config
 import qs.components
+import qs.config
 
 Wrapper {
     id: mem
+
     property string icon: "device-ram-memory"
     property int widgetHeight: 200
     property int widgetWidth: 200
+
+    function formatBytes(bytes, point = 2) {
+        if (bytes === 0)
+            return "0 B";
+
+        const k = 1024;
+        const sizes = ["B", "KB", "MB", "GB", "TB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(point)) + " " + sizes[i];
+    }
 
     margin {
         top: 0
         bottom: 0
         left: 0
         right: 0
-    }
-
-    function formatBytes(bytes, point = 2) {
-        if (bytes === 0)
-            return "0 B";
-        const k = 1024;
-        const sizes = ["B", "KB", "MB", "GB", "TB"];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(point)) + " " + sizes[i];
     }
 
     GridLayout {
@@ -80,5 +81,7 @@ Wrapper {
             font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight) / 2
             text: `${mem.formatBytes(Hardware.memory.total, 0)}`
         }
+
     }
+
 }

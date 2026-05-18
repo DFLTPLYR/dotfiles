@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Controls.Basic
-
 import qs.core
 
 SwitchDelegate {
     id: toggle
+
     property var state: Components.config.toggle
 
     text: qsTr("SwitchDelegate")
@@ -14,7 +14,7 @@ SwitchDelegate {
         rightPadding: toggle.indicator.width + toggle.spacing
         text: toggle.text
         font: toggle.font
-        opacity: enabled ? 1.0 : 0.3
+        opacity: enabled ? 1 : 0.3
         color: toggle.state.content.color
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
@@ -23,12 +23,9 @@ SwitchDelegate {
     indicator: Rectangle {
         implicitWidth: toggle.state.indicator.width
         implicitHeight: toggle.state.indicator.height
-
         radius: toggle.state.indicator.radius
-
         x: toggle.width - width - toggle.rightPadding
         y: parent.height / 2 - height / 2
-
         color: toggle.checked ? toggle.state.indicator.up : toggle.state.indicator.down
         border.color: innerRect.border.color
 
@@ -38,23 +35,13 @@ SwitchDelegate {
             verticalCenter: parent.verticalCenter
         }
 
-        Behavior on color {
-            ColorAnimation {
-                duration: 300
-                easing.type: Easing.InOutQuad
-            }
-        }
-
         Rectangle {
             id: innerRect
 
             x: toggle.checked ? parent.width - width : 0
-
             width: toggle.state.indicator.inner.width
             height: toggle.state.indicator.inner.height
-
             radius: toggle.state.indicator.radius
-
             color: toggle.down ? toggle.state.indicator.inner.down : toggle.state.indicator.inner.up
             border.color: toggle.checked ? (toggle.down ? toggle.state.indicator.inner.down : Qt.darker(toggle.state.indicator.inner.down, 1.2)) : toggle.state.indicator.inner.up
 
@@ -67,6 +54,7 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+
             }
 
             Behavior on color {
@@ -74,6 +62,7 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+
             }
 
             Behavior on x {
@@ -81,9 +70,22 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
+
             }
+
         }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+
+        }
+
     }
 
-    background: Item {}
+    background: Item {
+    }
+
 }

@@ -4,6 +4,7 @@ import qs.config
 
 Switch {
     id: root
+
     property string label: ""
     property color labelColor: Colors.color.secondary
     property int labelSize: 24
@@ -12,6 +13,7 @@ Switch {
 
     indicator: Item {
         id: indicator
+
         height: parent.height
         width: height
 
@@ -21,6 +23,7 @@ Switch {
             color: Colors.color.secondary
             text: root.checked ? "circle-check" : "xmark-circle"
         }
+
     }
 
     contentItem: Label {
@@ -29,4 +32,5 @@ Switch {
         color: root.labelColor
         font.pixelSize: root.labelSize
     }
+
 }

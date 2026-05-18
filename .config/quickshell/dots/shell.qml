@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-
+import qs.components
 // imports
 import qs.modules.app
 import qs.modules.navbar
@@ -8,39 +8,49 @@ import qs.modules.notification
 import qs.modules.sessionmenu
 import qs.modules.settings
 import qs.modules.wallpaper
-import qs.components
 
 ShellRoot {
     id: root
 
     // App Launcher
-    AppMenu {}
+    AppMenu {
+    }
 
     // Navbar
-    Bar {}
+    Bar {
+    }
 
     // Notifications
-    Notifications {}
+    Notifications {
+    }
 
     // WallpaperBackground
-    WallpaperBackground {}
+    WallpaperBackground {
+    }
 
     // Volume OSD
-    VolumeOsd {}
+    VolumeOsd {
+    }
 
     // Settings Panel
-    SettingPanel {}
+    SettingPanel {
+    }
 
     //Session Menu Overlay
-    SessionOverlay {}
+    SessionOverlay {
+    }
 
     // Cutout Square
     Variants {
+        // Put items in container:
+        // container.content: [ ... ]
+
         model: Quickshell.screens
+
         delegate: Cutout {
             screen: modelData
-            // Put items in container:
-            // container.content: [ ... ]
         }
+
     }
+
 }

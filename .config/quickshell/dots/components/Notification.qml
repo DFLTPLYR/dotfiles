@@ -6,7 +6,8 @@ StyledRect {
     id: notification
 
     required property var modelData
-    signal action
+
+    signal action()
 
     color: Qt.rgba(0, 0, 0, 0.8)
     width: parent ? parent.width : 0
@@ -23,13 +24,16 @@ StyledRect {
             Layout.margins: 2
             color: "transparent"
             clip: true
+
             Image {
                 id: notificationIcon
+
                 height: parent.height
                 width: height
                 fillMode: Image.PreserveAspectCrop
                 source: Qt.resolvedUrl(modelData.image || modelData.appIcon)
             }
+
         }
 
         // content
@@ -38,6 +42,7 @@ StyledRect {
             Layout.fillHeight: true
             Layout.margins: 2
             spacing: 2
+
             Text {
                 Layout.fillWidth: true
                 text: modelData.appName
@@ -46,6 +51,7 @@ StyledRect {
                 color: "white"
                 elide: Text.ElideRight
             }
+
             Text {
                 Layout.fillWidth: true
                 text: modelData.summary
@@ -53,6 +59,7 @@ StyledRect {
                 color: "white"
                 elide: Text.ElideRight
             }
+
             Text {
                 Layout.fillWidth: true
                 text: modelData.body
@@ -60,7 +67,9 @@ StyledRect {
                 color: "lightgray"
                 elide: Text.ElideRight
             }
+
         }
+
     }
 
     MouseArea {
@@ -69,4 +78,5 @@ StyledRect {
             notification.action();
         }
     }
+
 }

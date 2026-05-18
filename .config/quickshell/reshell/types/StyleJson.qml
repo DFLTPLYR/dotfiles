@@ -1,12 +1,24 @@
-import Quickshell.Io
 import QtQuick
+import Quickshell.Io
 
 JsonObject {
     property color color: "transparent"
-    property real opacity: 1.0
-    property BorderImageJson borderImage: BorderImageJson {}
-    property BorderJson border: BorderJson {}
+    property real opacity: 1
+    property BorderImageJson borderImage
+    property BorderJson border
+    property DirectionJson margin
+    property CornerJson rounding
 
-    property DirectionJson margin: DirectionJson {}
-    property CornerJson rounding: CornerJson {}
+    borderImage: BorderImageJson {
+    }
+
+    border: BorderJson {
+    }
+
+    margin: DirectionJson {
+    }
+
+    rounding: CornerJson {
+    }
+
 }

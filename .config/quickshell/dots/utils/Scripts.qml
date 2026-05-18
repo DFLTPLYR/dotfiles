@@ -1,8 +1,8 @@
-// Helpers.qml
-pragma Singleton
+import "./ntc.js" as NTC
 import QtQuick
 import qs.config
-import "./ntc.js" as NTC
+// Helpers.qml
+pragma Singleton
 
 QtObject {
     function setOpacity(color, alpha) {
@@ -22,10 +22,10 @@ QtObject {
     function rectBounds(item) {
         let p = item.mapToItem(null, 0, 0);
         return {
-            x: p.x,
-            y: p.y,
-            width: item.width,
-            height: item.height
+            "x": p.x,
+            "y": p.y,
+            "width": item.width,
+            "height": item.height
         };
     }
 
@@ -36,4 +36,5 @@ QtObject {
     function getRandomInt(max) {
         return Math.floor(Math.random() * max) + 1;
     }
+
 }

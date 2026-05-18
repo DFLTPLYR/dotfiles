@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Controls
-
-import qs.config
 import qs.components
+import qs.config
 import qs.utils
 
 SpinBox {
     id: root
+
     editable: true
     wheelEnabled: true
     width: 100
@@ -14,6 +14,7 @@ SpinBox {
 
     background: Rectangle {
         id: background
+
         anchors.fill: parent
         color: Scripts.setOpacity(Colors.color.background, 0.5)
         radius: height / 2
@@ -31,13 +32,15 @@ SpinBox {
 
     up.indicator: Rectangle {
         id: leftIndicator
+
         height: parent.height
-        anchors {
-            left: parent.left
-        }
         radius: height / 2
         implicitWidth: height
         color: root.down.pressed ? Colors.color.primary : Colors.color.secondary
+
+        anchors {
+            left: parent.left
+        }
 
         FontIcon {
             text: "plus"
@@ -50,21 +53,22 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+
         }
+
     }
 
     down.indicator: Rectangle {
         id: rightIndicator
+
         height: parent.height
+        implicitWidth: height
+        color: root.down.pressed ? Colors.color.primary : Colors.color.secondary
+        radius: height / 2
 
         anchors {
             right: parent.right
         }
-
-        implicitWidth: height
-        color: root.down.pressed ? Colors.color.primary : Colors.color.secondary
-
-        radius: height / 2
 
         FontIcon {
             text: "minus"
@@ -77,6 +81,9 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+
         }
+
     }
+
 }

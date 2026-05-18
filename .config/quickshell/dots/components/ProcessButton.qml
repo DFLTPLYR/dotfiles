@@ -3,12 +3,13 @@ import Quickshell.Io
 
 QtObject {
     id: button
+
     required property string command
     required property string text
     required property FontIcon icon
     property var keybind: null
-
-    readonly property var process: Process {
+    readonly property var
+    process: Process {
         command: ["sh", "-c", button.command]
     }
 
@@ -16,4 +17,5 @@ QtObject {
         process.startDetached();
         Qt.quit();
     }
+
 }

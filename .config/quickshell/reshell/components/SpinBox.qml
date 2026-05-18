@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-
 import qs.core
 
 SpinBox {
@@ -10,27 +9,32 @@ SpinBox {
 
     editable: true
     wheelEnabled: true
-
-    from: -999999999
-    to: 999999999
+    from: -1e+09
+    to: 1e+09
 
     background: Rectangle {
         id: background
+
         anchors.fill: parent
         color: spinbox.state.color
+        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: spinbox.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: spinbox.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: spinbox.state.rounding.topRight + Components.config.rounding.topRight
+
         border {
             width: spinbox.state.border.width
             color: spinbox.state.border.color
         }
 
-        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
-        bottomRightRadius: spinbox.state.rounding.bottomRight + Components.config.rounding.bottomRight
-        topLeftRadius: spinbox.state.rounding.topLeft + Components.config.rounding.topLeft
-        topRightRadius: spinbox.state.rounding.topRight + Components.config.rounding.topRight
     }
 
     contentItem: TextInput {
         text: value
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: 16
+        color: spinbox.state.text
 
         anchors {
             left: parent.left
@@ -39,23 +43,21 @@ SpinBox {
             rightMargin: leftIndicator.width + 4
         }
 
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-
-        font.pixelSize: 16
-
-        color: spinbox.state.text
     }
 
     up.indicator: Rectangle {
         id: leftIndicator
+
         property var state: spinbox.up.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
 
         height: parent.height - 4
         width: height
         y: 2
-
         color: leftIndicator.state.color
+        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: leftIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: leftIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: leftIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         anchors {
             right: parent.right
@@ -66,11 +68,6 @@ SpinBox {
             width: leftIndicator.state.border.width
             color: leftIndicator.state.border.color
         }
-
-        bottomLeftRadius: leftIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
-        bottomRightRadius: leftIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
-        topLeftRadius: leftIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
-        topRightRadius: leftIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         Icon {
             text: "plus"
@@ -83,18 +80,24 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+
         }
+
     }
 
     down.indicator: Rectangle {
         id: rightIndicator
+
         property var state: spinbox.down.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
 
         height: parent.height - 4
         width: height
         y: 2
-
         color: rightIndicator.state.color
+        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: rightIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: rightIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: rightIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         anchors {
             left: parent.left
@@ -105,11 +108,6 @@ SpinBox {
             width: rightIndicator.state.border.width
             color: rightIndicator.state.border.color
         }
-
-        bottomLeftRadius: rightIndicator.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
-        bottomRightRadius: rightIndicator.state.rounding.bottomRight + Components.config.rounding.bottomRight
-        topLeftRadius: rightIndicator.state.rounding.topLeft + Components.config.rounding.topLeft
-        topRightRadius: rightIndicator.state.rounding.topRight + Components.config.rounding.topRight
 
         Icon {
             text: "minus"
@@ -122,6 +120,9 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+
         }
+
     }
+
 }

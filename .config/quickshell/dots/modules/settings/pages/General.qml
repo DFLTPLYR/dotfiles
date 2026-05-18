@@ -1,24 +1,26 @@
+import QtCore
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Dialogs
-import QtCore
-
+import QtQuick.Layouts
 import Quickshell
-
-import qs.config
 import qs.components
+import qs.config
 
 // General
 PageWrapper {
     PageHeader {
         title: "General"
     }
-    Spacer {}
+
+    Spacer {
+    }
 
     FileDialog {
         id: fileDialog
+
         property Item targetItem
+
         currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
         onAccepted: {
             targetItem.source = selectedFile;
@@ -33,60 +35,77 @@ PageWrapper {
 
         Row {
             Layout.fillWidth: true
+
             Text {
                 color: Colors.color.primary
                 text: "Margin: "
                 width: 100
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
+
             }
+
             StyledSpinBox {
                 value: Config.general.appearance.margin
                 onValueChanged: {
                     Config.general.appearance.margin = value;
                 }
             }
+
         }
 
         Row {
             Layout.fillWidth: true
+
             Text {
                 color: Colors.color.primary
                 text: "Padding: "
                 width: 100
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
+
             }
+
             StyledSpinBox {
                 value: Config.general.appearance.padding
                 onValueChanged: {
                     Config.general.appearance.padding = value;
                 }
             }
+
         }
 
         Row {
             Layout.fillWidth: true
+
             Text {
                 color: Colors.color.primary
                 text: "Rounding: "
                 width: 100
+
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
+
             }
+
             StyledSpinBox {
                 value: Config.general.appearance.rounding
                 onValueChanged: {
                     Config.general.appearance.rounding = value;
                 }
             }
+
         }
+
     }
 
-    Spacer {}
+    Spacer {
+    }
 
     StyledSwitch {
         label: qsTr("Show Preset Creator Grid")
@@ -96,6 +115,7 @@ PageWrapper {
     // preset creator
     GridLayout {
         id: presetGrid
+
         visible: false
         Layout.fillWidth: true
         Layout.preferredHeight: 600
@@ -104,6 +124,7 @@ PageWrapper {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             Column {
                 spacing: 10
 
@@ -123,42 +144,49 @@ PageWrapper {
                     height: 20
                     color: Qt.rgba(1, 1, 1, 0.1)
                     clip: true
+
                     TextInput {
                         id: inputField
+
                         anchors.fill: parent
                         color: "white"
                         font.pixelSize: parent.height
                     }
+
                 }
 
                 Button {
                     text: "save"
                     enabled: inputField.text.length > 0
                     onClicked: {
-                        const preset = {};
+                        const preset = {
+                        };
                         preset.name = inputField.text;
-
                         preset.padding = {
-                            left: acceptButtonBg.border.left,
-                            top: acceptButtonBg.border.top,
-                            right: acceptButtonBg.border.right,
-                            bottom: acceptButtonBg.border.bottom
+                            "left": acceptButtonBg.border.left,
+                            "top": acceptButtonBg.border.top,
+                            "right": acceptButtonBg.border.right,
+                            "bottom": acceptButtonBg.border.bottom
                         };
                         preset.source = acceptButtonBg.source;
-                        const target = Config.general.presets.find(p => p.name === preset.name);
-
+                        const target = Config.general.presets.find((p) => {
+                            return p.name === preset.name;
+                        });
                         if (!target && preset.source) {
                             Config.general.presets.push(preset);
                             Config.saveSettings();
                         }
                     }
                 }
+
             }
+
         }
 
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             Column {
                 anchors {
                     bottom: parent.bottom
@@ -171,7 +199,9 @@ PageWrapper {
                         acceptButtonBg.border.top = value;
                     }
                 }
+
             }
+
         }
 
         Item {
@@ -195,46 +225,59 @@ PageWrapper {
                         acceptButtonBg.border.left = value;
                     }
                 }
+
             }
+
         }
 
         Rectangle {
             color: "transparent"
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             Button {
                 id: testAcceptButton
+
                 text: "change panel"
+                anchors.fill: parent
+                onClicked: {
+                    fileDialog.targetItem = acceptButtonBg;
+                    fileDialog.open();
+                }
+
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
                 }
-                anchors.fill: parent
+
                 background: BorderImage {
                     id: acceptButtonBg
+
+                    horizontalTileMode: BorderImage.Stretch
+                    verticalTileMode: BorderImage.Stretch
+
                     anchors {
                         fill: parent
                         margins: 1
                     }
+
                     border {
                         left: 1
                         top: 1
                         right: 1
                         bottom: 1
                     }
-                    horizontalTileMode: BorderImage.Stretch
-                    verticalTileMode: BorderImage.Stretch
+
                 }
-                onClicked: {
-                    fileDialog.targetItem = acceptButtonBg;
-                    fileDialog.open();
-                }
+
             }
+
         }
 
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             Column {
                 anchors {
                     left: parent.left
@@ -247,7 +290,9 @@ PageWrapper {
                         acceptButtonBg.border.right = value;
                     }
                 }
+
             }
+
         }
 
         Item {
@@ -259,6 +304,7 @@ PageWrapper {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+
             Column {
                 anchors {
                     top: parent.top
@@ -271,7 +317,9 @@ PageWrapper {
                         acceptButtonBg.border.bottom = value;
                     }
                 }
+
             }
+
         }
 
         Item {
@@ -283,22 +331,25 @@ PageWrapper {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
+
     }
 
     GridLayout {
         id: presetGridContainer
+
         Layout.fillWidth: true
         Layout.minimumHeight: 1
-
         columns: 3
 
         Instantiator {
             id: presetInstantiator
+
             model: ScriptModel {
                 values: {
                     return Config.general.presets;
                 }
             }
+
             delegate: StyledRect {
                 parent: presetGridContainer
                 usePanel: true
@@ -318,6 +369,7 @@ PageWrapper {
                         text: modelData ? modelData.name : ""
                         color: Colors.color.primary
                     }
+
                     StyledButton {
                         text: "remove"
                         onClicked: {
@@ -325,12 +377,17 @@ PageWrapper {
                             Config.saveSettings();
                         }
                     }
+
                 }
+
             }
+
         }
+
     }
 
-    Spacer {}
+    Spacer {
+    }
 
     PageFooter {
         onSave: {
@@ -350,4 +407,5 @@ PageWrapper {
             });
         }
     }
+
 }

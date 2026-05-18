@@ -9,68 +9,16 @@ Popup {
     leftMargin: 0
     bottomMargin: 0
     topMargin: 0
-
     // padding
     topPadding: 2
     bottomPadding: 2
     rightPadding: 2
     leftPadding: 2
-
-    background: Rectangle {
-        id: background
-        anchors.fill: parent
-        color: Colors.setOpacity(Colors.color.background, 1)
-
-        border {
-            width: 2
-            color: Colors.color.outline
-        }
-
-        clip: true
-    }
-
     transformOrigin: Item.Center
-
-    enter: Transition {
-        NumberAnimation {
-            target: background
-            property: "opacity"
-            from: 0.0
-            to: 1.0
-            duration: 100
-            easing.type: Easing.InOutQuad
-        }
-        PropertyAnimation {
-            target: modalPopup.contentItem
-            property: "visible"
-            from: false
-            to: true
-            duration: 0
-        }
-    }
-
-    exit: Transition {
-        NumberAnimation {
-            target: background
-            property: "opacity"
-            from: 1.0
-            to: 0.0
-            duration: 100
-            easing.type: Easing.InQuad
-        }
-        PropertyAnimation {
-            target: modalPopup.contentItem
-            property: "visible"
-            from: true
-            to: false
-            duration: 0
-        }
-    }
-
     onOpenedChanged: {
         if (!opened) {
             Global.modal = null;
-            return;
+            return ;
         }
         if (Global.modal)
             Global.modal.close();
@@ -79,11 +27,67 @@ Popup {
     }
 
     Connections {
-        target: Global
         function onEditChanged() {
-            if (modalPopup.opened) {
+            if (modalPopup.opened)
                 modalPopup.close();
-            }
+
         }
+
+        target: Global
     }
+
+    background: Rectangle {
+        id: background
+
+        anchors.fill: parent
+        color: Colors.setOpacity(Colors.color.background, 1)
+        clip: true
+
+        border {
+            width: 2
+            color: Colors.color.outline
+        }
+
+    }
+
+    enter: Transition {
+        NumberAnimation {
+            target: background
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 100
+            easing.type: Easing.InOutQuad
+        }
+
+        PropertyAnimation {
+            target: modalPopup.contentItem
+            property: "visible"
+            from: false
+            to: true
+            duration: 0
+        }
+
+    }
+
+    exit: Transition {
+        NumberAnimation {
+            target: background
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 100
+            easing.type: Easing.InQuad
+        }
+
+        PropertyAnimation {
+            target: modalPopup.contentItem
+            property: "visible"
+            from: true
+            to: false
+            duration: 0
+        }
+
+    }
+
 }

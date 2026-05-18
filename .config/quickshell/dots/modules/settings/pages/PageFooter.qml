@@ -1,22 +1,24 @@
 import QtQuick
 import QtQuick.Layouts
-
-import qs.config
 import qs.components
+import qs.config
 
 Item {
     id: footer
-    signal save
-    signal saveAndExit
-    signal exit
 
     property alias footerLayout: footerLayout.data
+
+    signal save()
+    signal saveAndExit()
+    signal exit()
+
     Layout.fillWidth: true
     Layout.preferredHeight: 40
     Layout.bottomMargin: 40
 
     RowLayout {
         id: footerLayout
+
         width: parent.width
 
         Text {
@@ -31,7 +33,6 @@ Item {
 
             StyledButton {
                 text: "Cancel"
-
                 onClicked: {
                     footer.exit();
                 }
@@ -39,7 +40,6 @@ Item {
 
             StyledButton {
                 text: "Save"
-
                 onClicked: {
                     Config.general.previewWallpaper = [];
                     Config.saveSettings();
@@ -49,13 +49,15 @@ Item {
 
             StyledButton {
                 text: "Save and Exit"
-
                 onClicked: {
                     Config.general.previewWallpaper = [];
                     Config.saveSettings();
                     footer.saveAndExit();
                 }
             }
+
         }
+
     }
+
 }
