@@ -599,7 +599,7 @@ Pane {
             }
 
             Action {
-                text: "Add Image"
+                text: containerRect.contents?.type === "image" ? "Change Image" : "Add Image"
                 onTriggered: {
                     imagePicker.active();
                 }

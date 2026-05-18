@@ -196,6 +196,7 @@ Item {
             height: parent.height
 
             MouseArea {
+                z: -999999
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 property bool selecting
