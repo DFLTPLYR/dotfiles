@@ -9,10 +9,10 @@ end
 
 hl.config({
 	general = {
-		gaps_in = 8,
+		gaps_in = 5,
 		gaps_out = 20,
 
-		border_size = 4,
+		border_size = 2,
 
 		col = {
 			active_border = color.background,
@@ -49,11 +49,15 @@ hl.config({
 		},
 	},
 
+	misc = {
+		force_default_wallpaper = 0,
+	},
+
 	decoration = {
-		active_opacity = 0.95,
+		active_opacity = 1,
 		inactive_opacity = 0.95,
 
-		rounding = 1,
+		rounding = 4,
 		rounding_power = 4,
 
 		dim_inactive = true,
@@ -63,21 +67,10 @@ hl.config({
 
 		blur = {
 			enabled = true,
-			size = 2,
+			size = 1,
 			passes = 0,
 			vibrancy = 0.1696,
 			xray = true,
-		},
-
-		shadow = {
-			enabled = true,
-			range = 1,
-			render_power = 4,
-			color = color.background,
-			color_inactive = color.background,
-			sharp = true,
-			offset = "8 8",
-			scale = 1,
 		},
 	},
 
@@ -106,7 +99,7 @@ hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQu
 hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
 hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
 hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "almostLinear", style = "slidevert" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "almostLinear", style = "fade" })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 3, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.21, bezier = "almostLinear", style = "slide" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "slidefade" })
+hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.21, bezier = "almostLinear", style = "fade" })
+hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
