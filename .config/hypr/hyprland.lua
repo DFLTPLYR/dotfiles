@@ -1,7 +1,7 @@
 require(".config.autostart")
+require(".config.theme")
 require(".config.monitors")
 require(".config.programs")
 require(".config.keybinds")
 require(".config.rules")
-require(".config.theme")
 require(".config.workspaces")

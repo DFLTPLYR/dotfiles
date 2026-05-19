@@ -22,7 +22,11 @@ hl.config({
 		resize_on_border = false,
 		layout = "scrolling",
 	},
-
+	scrolling = {
+		column_width = 0.8,
+		focus_fit_method = 0,
+		fullscreen_on_one_column = false,
+	},
 	group = {
 		auto_group = false,
 
