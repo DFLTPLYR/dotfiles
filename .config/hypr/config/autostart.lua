@@ -1,12 +1,9 @@
 hl.on("hyprland.start", function()
 	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-	hl.exec_cmd("qs")
 	hl.exec_cmd("wl-paste --watch cliphist store")
-	hl.exec_cmd("hyprsunset")
 	hl.exec_cmd("systemctl --user start xdg-desktop-portal-hyprland.service")
 	hl.exec_cmd("systemctl --user restart xdg-desktop-portal.service")
 	hl.exec_cmd("quickcli")
+	hl.exec_cmd("steam")
 	hl.exec_cmd("qs -c reshell")
 end)
-
--- gamescope -f -W 1920 -H 1080 --force-grab-cursor -- %command%
