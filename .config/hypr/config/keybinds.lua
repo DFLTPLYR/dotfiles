@@ -51,6 +51,8 @@ for i = 1, 9 do
 	hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.exec_cmd("lua " .. ws_switch .. " " .. i .. " movetoworkspace"))
 end
 
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window
 	hl.dispatch(hl.dsp.window.bring_to_top()) -- Bring it to the top
