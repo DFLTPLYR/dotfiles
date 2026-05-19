@@ -8,3 +8,5 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("quickcli")
 	hl.exec_cmd("qs -c reshell")
 end)
+
+-- gamescope -f -W 1920 -H 1080 --force-grab-cursor -- %command%

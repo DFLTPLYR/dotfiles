@@ -95,12 +95,6 @@ Item {
             background.border.width = containsDrag ? 1 : 0;
             background.border.color = containsDrag ? Colors.color.tertiary : "transparent";
         }
-
-        Rectangle {
-            id: background
-            anchors.fill: parent
-            color: "transparent"
-        }
     }
 
     Component.onCompleted: {

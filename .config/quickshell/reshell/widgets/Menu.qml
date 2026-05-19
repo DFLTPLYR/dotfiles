@@ -35,9 +35,7 @@ Wrapper {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
 
         MouseArea {
@@ -51,11 +49,11 @@ Wrapper {
             onClicked: {
                 if (modal.opened) {
                     modal.close();
-                    wrap.modal(null);
+                    wrap.modal(null, false);
                     button.toggled = false;
                 } else {
                     modal.open();
-                    wrap.modal(modal);
+                    wrap.modal(modal, false);
                     button.toggled = true;
                 }
             }
@@ -66,9 +64,7 @@ Wrapper {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     PopupModal {
@@ -101,16 +97,12 @@ Wrapper {
                         });
                     }
                 }
-
             }
-
         }
-
     }
 
     property: Property {
         property int icon: 12
         property int width: 100
     }
-
 }

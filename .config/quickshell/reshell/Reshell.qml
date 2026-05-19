@@ -109,7 +109,7 @@ Variants {
                         onAddDock: item => fileview.docklist = fileview.docklist.concat([item])
                         onRemoveDock: idx => {
                             const model = reshell.dock;
-                            const screen = reshell.screen.name;
+                            const screen = reshell.modelData.name;
                             const obj = model.get(idx);
                             const fileUrl = Qt.resolvedUrl(`./core/data/docks/${screen}+${obj.name}.json`);
                             const filePath = fileUrl.toString().replace('file://', '');

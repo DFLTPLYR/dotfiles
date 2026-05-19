@@ -11,10 +11,8 @@ local direction = is_portrait and "down" or "right"
 hl.config({
 	scrolling = {
 		fullscreen_on_one_column = false,
-		column_width = 0.9,
+		column_width = 0.5,
 		direction = direction,
 		focus_fit_method = 0,
 	},
 })
-
-

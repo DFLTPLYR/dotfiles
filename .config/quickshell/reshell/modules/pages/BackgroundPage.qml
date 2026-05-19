@@ -569,23 +569,6 @@ Pane {
             onClicked: menu.open()
         }
 
-        Loader {
-            active: widgetMenu.opened
-            anchors.fill: parent
-            sourceComponent: DropArea {
-                objectName: "Slot"
-                onDropped: drop => {
-                    const widget = {
-                        type: "widget",
-                        source: drop.keys[0]
-                    };
-
-                    Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
-                    Wallpaper.containers.save();
-                }
-            }
-        }
-
         Menu {
             id: menu
             property bool hasContent: containerRect.contents || false
@@ -645,6 +628,23 @@ Pane {
                 text: "Remove Container"
                 onTriggered: {
                     Wallpaper.containers.remove(containerRect.index, 1);
+                    Wallpaper.containers.save();
+                }
+            }
+        }
+
+        Loader {
+            active: widgetMenu.opened
+            anchors.fill: parent
+            sourceComponent: DropArea {
+                objectName: "Slot"
+                onDropped: drop => {
+                    const widget = {
+                        type: "widget",
+                        source: drop.keys[0]
+                    };
+
+                    Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
                     Wallpaper.containers.save();
                 }
             }
