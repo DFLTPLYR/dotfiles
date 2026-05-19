@@ -19,8 +19,8 @@ use std::{
 
 // local imports
 use quickcli::{
-    Commands, DesktopEnvironment, Request,
-    modules::{compositor, hardware, rules, shell, wallpaper, weather},
+    Commands, Request,
+    modules::{hardware, shell, wallpaper, weather},
 };
 
 #[derive(Parser)]
@@ -132,25 +132,9 @@ fn handle_request(mut stream: UnixStream, _running: Arc<AtomicBool>) {
                 Request::HardwareInfo => {
                     hardware::get_hardware_info(stream, _running);
                 }
-                Request::CompositorData => match DesktopEnvironment::from_env() {
-                    DesktopEnvironment::Niri => compositor::niri_ipc_listener(stream, _running),
-                    DesktopEnvironment::Hyprland => {
-                        compositor::hyprland_ipc_listener(stream, _running)
-                    }
-                    DesktopEnvironment::Unknown => {
-                        let _ = writeln!(stream, "unknown compositor");
-                    }
-                },
                 Request::GeneratePalette { type_, paths } => {
                     wallpaper::generate_color_palette(type_, paths, stream);
                 }
-                Request::WindowManagerRules => match DesktopEnvironment::from_env() {
-                    DesktopEnvironment::Niri => rules::get_rules(stream),
-                    DesktopEnvironment::Hyprland => {}
-                    DesktopEnvironment::Unknown => {
-                        let _ = writeln!(stream, "unknown compositor");
-                    }
-                },
                 Request::Weather { use_curl } => {
                     let use_curl = use_curl.unwrap_or(true);
                     weather::get_weather_info(stream, use_curl, _running);
