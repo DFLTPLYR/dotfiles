@@ -112,7 +112,6 @@ Pane {
                                 contents: {}
                             };
                             Wallpaper.containers.append(container);
-                            Wallpaper.containers.save();
                         }
                     }
 
@@ -435,6 +434,7 @@ Pane {
         property bool enabled: false
         property bool show: true
         property ListModel screens: ListModel {}
+
         onContentsChanged: {
             switch (contents.type) {
             case "image":
@@ -546,14 +546,7 @@ Pane {
                 };
 
                 Wallpaper.containers.set(containerRect.index, obj);
-                updateTimer.restart();
             }
-        }
-
-        Timer {
-            id: updateTimer
-            interval: 5000
-            onTriggered: Wallpaper.containers.save()
         }
 
         // outline
@@ -594,7 +587,6 @@ Pane {
                             return containerRect.show;
                         })
                     });
-                    Wallpaper.containers.save();
                 }
             }
 
@@ -628,7 +620,6 @@ Pane {
                 text: "Remove Container"
                 onTriggered: {
                     Wallpaper.containers.remove(containerRect.index, 1);
-                    Wallpaper.containers.save();
                 }
             }
         }
@@ -645,7 +636,6 @@ Pane {
                     };
 
                     Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
-                    Wallpaper.containers.save();
                 }
             }
         }
@@ -748,4 +738,6 @@ Pane {
             }
         }
     }
+
+    Component.onDestruction: Wallpaper.containers.save()
 }
