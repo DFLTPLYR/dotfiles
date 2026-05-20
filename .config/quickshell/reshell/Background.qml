@@ -72,6 +72,7 @@ Item {
                                 widget.property.setProperty(contents.props);
                             }
                             widget.modal.connect((modal, hasChanges) => {
+                                bottom.hasMenu = modal ? true : false;
                                 if (modal) {
                                     modal.y = item.height;
                                     modal.x = (item.width - modal.width) / 2;
@@ -174,15 +175,21 @@ Item {
     // bottom
     PanelWindow {
         id: bottom
+        property bool hasMenu: false
         screen: panel.screen
 
         color: "transparent"
-        implicitHeight: screen.height
-        implicitWidth: screen.width
+
+        anchors {
+            top: true
+            bottom: true
+            left: true
+            right: true
+        }
 
         exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: bottom.hasMenu ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         WlrLayershell.namespace: `Bottom-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 

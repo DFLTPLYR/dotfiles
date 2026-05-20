@@ -131,7 +131,7 @@ QtObject {
                             onValueChanged: {
                                 if (root[modelData.property] !== value) {
                                     root[modelData.property] = value;
-                                    menu.updateHasChanges();
+                                    updateLoop.restart();
                                 }
                             }
                         }
@@ -145,19 +145,15 @@ QtObject {
                         height: 50
                         width: parent ? parent.width : 0
                         Label {
-                            text: "test"
+                            text: modelData.property
                         }
-                    }
-                }
 
-                DelegateChoice {
-                    roleValue: "boolean"
-                    RowLayout {
-                        required property var modelData
-                        height: 50
-                        width: parent ? parent.width : 0
-                        Label {
-                            text: "test"
+                        TextField {
+                            placeholderText: root[modelData.property]
+                            onTextChanged: {
+                                root[modelData.property] = text;
+                                updateLoop.restart();
+                            }
                         }
                     }
                 }
@@ -170,6 +166,12 @@ QtObject {
             onTriggered: {
                 menu.remove();
             }
+        }
+
+        Timer {
+            id: updateLoop
+            interval: 1000
+            onTriggered: menu.updateHasChanges()
         }
     }
 
