@@ -56,7 +56,7 @@ Scope {
                         Layout.fillWidth: true
 
                         Text {
-                            text: agent.flow.messagle ?? ""
+                            text: agent.flow?.message || ""
                             wrapMode: Text.Wrap
                             verticalAlignment: Text.AlignVCenter
                             color: Colors.color.on_background
@@ -68,7 +68,7 @@ Scope {
                     // Text Input
                     TextField {
                         id: textInput
-                        placeholderText: agent.flow.inputPrompt
+                        placeholderText: agent.flow?.inputPrompt || ""
                         focus: true
                         echoMode: TextInput.Password
                         Layout.fillWidth: true
