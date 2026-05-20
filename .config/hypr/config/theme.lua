@@ -23,7 +23,7 @@ hl.config({
 		layout = "scrolling",
 	},
 	scrolling = {
-		column_width = 0.8,
+		column_width = 0.7,
 		focus_fit_method = 0,
 		fullscreen_on_one_column = false,
 	},
@@ -57,6 +57,7 @@ hl.config({
 		force_default_wallpaper = 0,
 		disable_hyprland_logo = true,
 		disable_splash_rendering = true,
+		vrr = 3,
 	},
 
 	decoration = {

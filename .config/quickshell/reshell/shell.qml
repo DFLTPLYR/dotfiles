@@ -15,4 +15,6 @@ ShellRoot {
     }
 
     Reshell {}
+
+    Polkit {}
 }

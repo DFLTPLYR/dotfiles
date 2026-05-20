@@ -22,3 +22,14 @@ rule({
 	},
 	monitor = "DP-2",
 })
+
+rule({
+	name = "Deadlock",
+	match = {
+		class = "steam_app_1422450",
+	},
+	monitor = "DP-1",
+	fullscreen = true,
+	content = "game",
+	maximize = true,
+})
