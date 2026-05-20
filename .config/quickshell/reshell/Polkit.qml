@@ -43,9 +43,82 @@ Scope {
             }
 
             Pane {
-                anchors.centerIn: parent
-                height: 100
+                id: pane
+                property real originX: x
+                x: (parent.width - width) / 2
+                y: (parent.height - height) / 2
+
+                height: 120
                 width: 300
+
+                states: [
+                    State {
+                        name: "shake"
+                        PropertyChanges {
+                            target: pane
+                        }
+                    }
+                ]
+
+                transitions: Transition {
+                    from: "*"
+                    to: "shake"
+
+                    SequentialAnimation {
+                        ColorAnimation {
+                            target: pane.bg
+                            property: "border.color"
+                            to: Colors.color.error_container
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: pane
+                            property: "x"
+                            to: pane.originX - 10
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: pane
+                            property: "x"
+                            to: pane.originX + 10
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: pane
+                            property: "x"
+                            to: pane.originX - 10
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: pane
+                            property: "x"
+                            to: pane.originX + 10
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: pane
+                            property: "x"
+                            to: pane.originX
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        ColorAnimation {
+                            target: pane.bg
+                            property: "border.color"
+                            to: Colors.color.outline
+                            duration: 100
+                            easing.type: Easing.InOutQuad
+                        }
+                        ScriptAction {
+                            script: pane.state = ""
+                        }
+                    }
+                }
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -68,6 +141,7 @@ Scope {
                     // Text Input
                     TextField {
                         id: textInput
+                        enabled: agent.flow.isResponseRequired
                         placeholderText: agent.flow?.inputPrompt || ""
                         focus: true
                         echoMode: TextInput.Password
@@ -83,10 +157,11 @@ Scope {
                         Connections {
                             target: agent.flow
 
-                            // function onFailedChanged() {
-                            //     if (agent.flow.failed) {
-                            //     }
-                            // }
+                            function onFailedChanged() {
+                                if (agent.flow.failed) {
+                                    pane.state = "shake";
+                                }
+                            }
 
                             function onIsResponseRequiredChanged() {
                                 if (agent.flow.isResponseRequired) {
@@ -100,18 +175,16 @@ Scope {
                     // Buttons
                     RowLayout {
                         Layout.fillWidth: true
-
+                        Layout.alignment: Qt.AlignRight
                         // cancel
                         Button {
-                            Layout.preferredWidth: height
-                            Layout.fillHeight: true
+                            text: "Cancel"
 
                             onClicked: agent.flow.cancelAuthenticationRequest()
                         }
                         // submit
                         Button {
-                            Layout.preferredWidth: height
-                            Layout.fillHeight: true
+                            text: "Submit"
 
                             onClicked: agent.flow.submit(textInput.text)
                         }
