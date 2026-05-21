@@ -17,6 +17,7 @@ QtObject {
         signal entered
         signal exited(bool hasChanges)
         signal remove
+
         width: 200
         height: contentHeight
         leftPadding: 5

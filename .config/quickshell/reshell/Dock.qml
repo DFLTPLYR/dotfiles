@@ -91,8 +91,8 @@ Item {
         active: false
         component: PanelWindow {
             id: panel
+            property bool hasFocus: false
             property JsonAdapter config: file.adapter
-            property var modal: null
             property int size: config.side ? config.width : config.height
             property list<var> dockSlots: []
             property list<var> activeWidgets: []
@@ -167,6 +167,7 @@ Item {
                 }
             }
 
+            WlrLayershell.keyboardFocus: panel.hasFocus ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
             WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${panel.name}`
 
@@ -180,6 +181,7 @@ Item {
 
             DockMenu {
                 id: modalPopup
+                property Region mask: null
                 dim: true
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
@@ -188,13 +190,13 @@ Item {
                 onSave: timer.restart()
                 onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
-
+                onOpened: {
+                    mask.item = modalPopup.opened ? modalPopup.background : null;
+                }
                 Component.onCompleted: {
                     const reg = Components.createRegion();
-                    reg.item = Qt.binding(() => {
-                        return modalPopup.opened ? modalPopup.background : null;
-                    });
                     panel.mask.regions.push(reg);
+                    modalPopup.mask = reg;
                 }
             }
 
@@ -450,6 +452,7 @@ Item {
 
         signal update(var slot)
         signal remove(int idx)
+        property Region region
         property string position: "left"
         property int spacing: 2
         property ListModel widgets
@@ -659,9 +662,17 @@ Item {
                                     });
 
                                     widget.modal.connect((modal, hasChanges) => {
-                                        if (hasChanges)
+                                        if (hasChanges) {
                                             panel.timer.restart();
-                                        panel.modal.item = modal ? modal.background : null;
+                                        }
+                                        const container = modal?.background ?? null;
+                                        if (container) {
+                                            slot.region.item = container;
+                                            panel.hasFocus = true;
+                                        } else {
+                                            slot.region.item = null;
+                                            panel.hasFocus = false;
+                                        }
                                     });
                                 }
                             };
@@ -674,7 +685,7 @@ Item {
         Component.onCompleted: {
             Global.bindRadii(this, config.style.rounding);
             const reg = Components.createRegion();
-            panel.modal = reg;
+            slot.region = reg;
             panel.mask.regions.push(reg);
         }
     }
