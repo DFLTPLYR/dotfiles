@@ -26,7 +26,8 @@ PanelWindow {
         id: notification
         Component.onCompleted: {
             const reg = Components.createRegion();
-            panel.mask.regions.push(reg);
+            reg.item = notification;
+            panel.mask.regions = [...panel.mask.regions, reg];
         }
     }
 
@@ -34,7 +35,8 @@ PanelWindow {
         id: volumeSlider
         Component.onCompleted: {
             const reg = Components.createRegion();
-            panel.mask.regions.push(reg);
+            reg.item = volumeSlider;
+            panel.mask.regions = [...panel.mask.regions, reg];
         }
     }
 }
