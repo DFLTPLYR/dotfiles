@@ -86,11 +86,13 @@ Item {
         }
     }
 
+    // Panel
     LazyLoader {
         id: panelLoader
         active: false
         component: PanelWindow {
             id: panel
+            property list<Region> regions: []
             property bool hasFocus: false
             property JsonAdapter config: file.adapter
             property int size: config.side ? config.width : config.height
@@ -172,7 +174,7 @@ Item {
             WlrLayershell.namespace: `Dock-${dock.name}`
 
             mask: Region {
-                regions: []
+                regions: panel.regions
             }
 
             DockContainer {
@@ -181,7 +183,7 @@ Item {
                 Component.onCompleted: {
                     const reg = Components.createRegion();
                     reg.item = this;
-                    panel.mask.regions = [...panel.mask.regions, reg];
+                    panel.regions.push(reg);
                 }
             }
 
@@ -200,11 +202,11 @@ Item {
                     const reg = Components.createRegion();
                     reg.item = modalPopup.background;
                     modalPopup.mask = reg;
-                    panel.mask.regions = [...panel.mask.regions, reg];
+                    panel.regions.push(reg);
                     return;
                 }
                 onClosed: {
-                    panel.mask.regions = panel.mask.regions.filter(s => s !== modalPopup.mask);
+                    panel.regions = panel.mask.regions.filter(s => s !== modalPopup.mask);
                     modalPopup.mask = null;
                 }
             }
@@ -449,7 +451,7 @@ Item {
                 Component.onCompleted: {
                     const reg = Components.createRegion();
                     reg.item = this;
-                    panel.mask.regions = [...panel.mask.regions, reg];
+                    panel.regions.push(reg);
                 }
             }
         }
@@ -695,7 +697,7 @@ Item {
 
             const reg = Components.createRegion();
             slot.region = reg;
-            panel.mask.regions = [...panel.mask.regions, reg];
+            panel.regions.push(reg);
         }
     }
 }

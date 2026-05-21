@@ -9,6 +9,7 @@ import qs.modules
 
 PanelWindow {
     id: panel
+    property list<Region> regions: []
     color: "transparent"
 
     implicitHeight: screen.height
@@ -19,15 +20,15 @@ PanelWindow {
     WlrLayershell.namespace: `Overlay-${screen.name}`
 
     mask: Region {
-        regions: []
+        regions: panel.regions
     }
 
     Notifications {
         id: notification
         Component.onCompleted: {
             const reg = Components.createRegion();
-            reg.item = notification;
-            panel.mask.regions = [...panel.mask.regions, reg];
+            reg.item = notification.contentItem;
+            panel.regions.push(reg);
         }
     }
 
@@ -36,7 +37,7 @@ PanelWindow {
         Component.onCompleted: {
             const reg = Components.createRegion();
             reg.item = volumeSlider;
-            panel.mask.regions = [...panel.mask.regions, reg];
+            panel.regions.push(reg);
         }
     }
 }
