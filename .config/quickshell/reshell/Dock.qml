@@ -169,7 +169,7 @@ Item {
 
             WlrLayershell.keyboardFocus: panel.hasFocus ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
             WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
-            WlrLayershell.namespace: `Dock-${panel.name}`
+            WlrLayershell.namespace: `Dock-${dock.name}`
 
             mask: Region {
                 regions: []
@@ -181,7 +181,7 @@ Item {
                 Component.onCompleted: {
                     const reg = Components.createRegion();
                     reg.item = this;
-                    panel.mask.regions.push(reg);
+                    panel.mask.regions = [...panel.mask.regions, reg];
                 }
             }
 
@@ -197,12 +197,15 @@ Item {
                 onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
                 onOpened: {
-                    mask.item = modalPopup.opened ? modalPopup.background : null;
-                }
-                Component.onCompleted: {
                     const reg = Components.createRegion();
-                    panel.mask.regions.push(reg);
+                    reg.item = modalPopup.background;
                     modalPopup.mask = reg;
+                    panel.mask.regions = [...panel.mask.regions, reg];
+                    return;
+                }
+                onClosed: {
+                    panel.mask.regions = panel.mask.regions.filter(s => s !== modalPopup.mask);
+                    modalPopup.mask = null;
                 }
             }
 
@@ -446,8 +449,7 @@ Item {
                 Component.onCompleted: {
                     const reg = Components.createRegion();
                     reg.item = this;
-                    panel.mask.regions.push(reg);
-                    // print(panel.mask.regions);
+                    panel.mask.regions = [...panel.mask.regions, reg];
                 }
             }
         }
@@ -690,9 +692,10 @@ Item {
 
         Component.onCompleted: {
             Global.bindRadii(this, config.style.rounding);
+
             const reg = Components.createRegion();
             slot.region = reg;
-            panel.mask.regions.push(reg);
+            panel.mask.regions = [...panel.mask.regions, reg];
         }
     }
 }
