@@ -19,21 +19,22 @@ PanelWindow {
     WlrLayershell.namespace: `Overlay-${screen.name}`
 
     mask: Region {
-        regions: [
-            Region {
-                item: volumeSlider
-            },
-            Region {
-                item: notification.contentItem
-            }
-        ]
+        regions: []
     }
 
     Notifications {
         id: notification
+        Component.onCompleted: {
+            const reg = Global.createRegion(this);
+            panel.mask.regions.push(reg);
+        }
     }
 
     VolumeSlider {
         id: volumeSlider
+        Component.onCompleted: {
+            const reg = Global.createRegion(this);
+            panel.mask.regions.push(reg);
+        }
     }
 }
