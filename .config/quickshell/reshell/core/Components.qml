@@ -9,6 +9,18 @@ import qs.types
 
 Singleton {
     id: config
+
+    // Region
+    Component {
+        id: region
+        Region {}
+    }
+
+    function createRegion() {
+        const reg = region.createObject(null, {});
+        return reg;
+    }
+
     property alias config: adapter
     property alias icon: customIconFont.font
 

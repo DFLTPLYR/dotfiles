@@ -64,6 +64,15 @@ QtObject {
                     }
                 }
             ]
+
+            Connections {
+                target: Global
+                function onStateChanged() {
+                    if (menu.opened && Global.state !== 3) {
+                        menu.close();
+                    }
+                }
+            }
         }
 
         onOpened: {

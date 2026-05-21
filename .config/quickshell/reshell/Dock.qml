@@ -171,11 +171,7 @@ Item {
             WlrLayershell.namespace: `Dock-${panel.name}`
 
             mask: Region {
-                regions: [
-                    Region {
-                        item: panel.modal ? panel.modal.background : null
-                    }
-                ]
+                regions: []
             }
 
             DockContainer {
@@ -184,7 +180,6 @@ Item {
 
             DockMenu {
                 id: modalPopup
-                property Region mask: null
                 dim: true
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
@@ -193,13 +188,13 @@ Item {
                 onSave: timer.restart()
                 onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
-                onOpenedChanged: {
-                    if (opened && !modalPopup.mask) {
-                        const reg = Global.createRegion();
-                        reg.item = modalPopup.background;
-                        modalPopup.mask = reg;
-                        panel.mask.regions.push(reg);
-                    }
+
+                Component.onCompleted: {
+                    const reg = Components.createRegion();
+                    reg.item = Qt.binding(() => {
+                        return modalPopup.opened ? modalPopup.background : null;
+                    });
+                    panel.mask.regions.push(reg);
                 }
             }
 
@@ -441,9 +436,10 @@ Item {
                 }
 
                 Component.onCompleted: {
-                    const reg = Global.createRegion();
+                    const reg = Components.createRegion();
                     reg.item = this;
                     panel.mask.regions.push(reg);
+                    // print(panel.mask.regions);
                 }
             }
         }
@@ -665,7 +661,7 @@ Item {
                                     widget.modal.connect((modal, hasChanges) => {
                                         if (hasChanges)
                                             panel.timer.restart();
-                                        panel.modal = modal;
+                                        panel.modal.item = modal ? modal.background : null;
                                     });
                                 }
                             };
@@ -677,6 +673,9 @@ Item {
 
         Component.onCompleted: {
             Global.bindRadii(this, config.style.rounding);
+            const reg = Components.createRegion();
+            panel.modal = reg;
+            panel.mask.regions.push(reg);
         }
     }
 }
