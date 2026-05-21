@@ -19,7 +19,7 @@ use std::{
 
 // local imports
 use quickcli::{
-    Commands, Request,
+    Commands, Request, is_qs_running,
     modules::{hardware, shell, wallpaper, weather},
 };
 
@@ -82,11 +82,11 @@ fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
 fn run_daemon() -> Result<(), Box<dyn Error>> {
     let runtime_dir = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set");
     let socket_path = format!("{}/quickcli.sock", runtime_dir);
-
-    if let Err(e) = fs::remove_file(&socket_path) {
-        if e.kind() != std::io::ErrorKind::NotFound {
-            return Err(e.into());
-        }
+    if !is_qs_running() {
+        std::process::Command::new("qs")
+            .arg("-c")
+            .arg("reshell")
+            .status()?;
     }
 
     let listener = UnixListener::bind(&socket_path)?;

@@ -56,9 +56,10 @@ Item {
                 containerloader.currentContent = image;
                 return;
             case "widget":
-                item.parent = Qt.binding(() => {
-                    return Global.widget ? controlArea : layered;
-                });
+                item.parent = controlArea;
+                // item.parent = Qt.binding(() => {
+                //     return Global.widget ? controlArea : layered;
+                // });
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
                 if (incubator.status !== Component.Ready) {

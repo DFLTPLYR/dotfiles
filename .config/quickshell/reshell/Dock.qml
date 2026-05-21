@@ -177,6 +177,12 @@ Item {
 
             DockContainer {
                 id: container
+
+                Component.onCompleted: {
+                    const reg = Components.createRegion();
+                    reg.item = this;
+                    panel.mask.regions.push(reg);
+                }
             }
 
             DockMenu {

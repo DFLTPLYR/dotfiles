@@ -5,7 +5,7 @@ use clap::Subcommand;
 pub mod modules;
 
 // Check if 'qs' process is running
-fn is_qs_running() -> bool {
+pub fn is_qs_running() -> bool {
     Command::new("pgrep")
         .arg("-x")
         .arg("qs")
