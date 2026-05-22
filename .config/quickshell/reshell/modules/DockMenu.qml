@@ -510,7 +510,7 @@ PopupModal {
 
             Repeater {
                 model: ScriptModel {
-                    values: [...Global.widgets]
+                    values: [...Global.widgets.filter(s => s.type === "dock")]
                 }
                 delegate: WidgetPlaceholder {}
             }
