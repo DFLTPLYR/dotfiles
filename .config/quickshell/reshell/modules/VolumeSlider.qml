@@ -7,10 +7,16 @@ import Quickshell.Services.Pipewire
 import qs.core
 import qs.components
 
-Item {
+Pane {
     id: scope
     property bool shouldShowOsd: false
     property real volume: Pipewire.defaultAudioSink?.audio.volume ?? 0
+
+    bg.color: "transparent"
+    x: screen.width / 2 - width / 2
+
+    height: contentHeight
+    width: contentWidth
 
     PwObjectTracker {
         objects: [Pipewire.defaultAudioSink]
@@ -38,11 +44,10 @@ Item {
         }
     }
 
-    LazyLoader {
+    Loader {
         id: volumeSliderLoader
         active: scope.shouldShowOsd
-        component: Slider {
-            parent: scope
+        sourceComponent: Slider {
             visible: scope.shouldShowOsd && Compositor.focusedMonitor === screen.name
             opacity: scope.shouldShowOsd ? 1 : 0
             width: 300
@@ -50,7 +55,6 @@ Item {
             to: 1
             value: Pipewire.defaultAudioSink?.audio.volume ?? 0
             stepSize: 0.01
-            x: screen.width / 2 - width / 2
 
             hoverEnabled: true
 

@@ -13,14 +13,6 @@ Scope {
 
     PolkitAgent {
         id: agent
-
-        onIsRegisteredChanged: console.info("Polkit Agent Started")
-
-        onIsActiveChanged: {
-            if (isActive && isRegistered) {
-                console.info("Polkit Agent Request Received");
-            }
-        }
     }
 
     LazyLoader {

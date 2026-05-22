@@ -34,9 +34,17 @@ PanelWindow {
 
     VolumeSlider {
         id: volumeSlider
+        property Region region: null
+        onShouldShowOsdChanged: {
+            if (volumeSlider.shouldShowOsd) {
+                volumeSlider.region.item = volumeSlider;
+                return;
+            }
+            return volumeSlider.region.item = null;
+        }
         Component.onCompleted: {
             const reg = Components.createRegion();
-            reg.item = volumeSlider;
+            volumeSlider.region = reg;
             panel.regions.push(reg);
         }
     }

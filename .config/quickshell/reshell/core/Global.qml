@@ -153,6 +153,12 @@ Singleton {
                         name: name,
                         source: path
                     };
+                    if (fileName.includes(".dock")) {
+                        widget.type = "dock";
+                    }
+                    if (fileName.includes(".desktop")) {
+                        widget.type = "desktop";
+                    }
                     config.widgets = [...config.widgets, widget];
                 }
             }
