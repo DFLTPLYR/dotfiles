@@ -599,6 +599,7 @@ Pane {
             FilePicker {
                 id: imagePicker
                 onOutput: data => {
+                    print(menu.imageType(data));
                     Wallpaper.containers.setProperty(containerRect.index, "contents", {
                         type: "image",
                         source: data
@@ -612,7 +613,20 @@ Pane {
                     });
                 }
             }
-
+            function imageType(path) {
+                var types = {
+                    static: ["png", "jpg", "jpeg", "bmp", "svg", "ico", "webp"],
+                    animated: ["gif", "apng"]
+                };
+                if (!path)
+                    return "";
+                var ext = String(path).toLowerCase().replace(/^.*\./, "");
+                for (var t in types) {
+                    if (types[t].indexOf(ext) !== -1)
+                        return t;
+                }
+                return "";
+            }
             Action {
                 text: containerRect.contents?.type === "image" ? "Change Image" : "Add Image"
                 onTriggered: {
