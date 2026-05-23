@@ -388,11 +388,34 @@ Pane {
         property alias wheel: wheelHandler
         signal update
 
+        Keys.onPressed: event => {
+            switch (event.key) {
+            case Qt.Key_Control:
+                return dragHandler.enabled = true;
+            case Qt.Key_Shift:
+                return wheelHandler.enabled = true;
+            default:
+                return;
+            }
+        }
+
+        Keys.onReleased: event => {
+            switch (event.key) {
+            case Qt.Key_Control:
+                return dragHandler.enabled = false;
+            case Qt.Key_Shift:
+                return wheelHandler.enabled = false;
+            default:
+                return;
+            }
+        }
+
         anchors.fill: parent
         z: -1000
 
         DragHandler {
             id: dragHandler
+            enabled: false
             target: control.subject
             onActiveChanged: control.update()
         }

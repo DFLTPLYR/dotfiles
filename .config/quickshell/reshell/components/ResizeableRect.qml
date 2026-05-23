@@ -27,7 +27,6 @@ Pane {
                     target: leftHandle
                     color: Colors.color.secondary
                 }
-
             },
             State {
                 name: "dragging"
@@ -37,7 +36,6 @@ Pane {
                     target: leftHandle
                     color: Colors.color.tertiary
                 }
-
             }
         ]
 
@@ -53,7 +51,6 @@ Pane {
                     resizeableRect.x = resizeableRect.x + mouseX;
                     if (resizeableRect.width < 30)
                         resizeableRect.width = 30;
-
                 }
             }
 
@@ -61,7 +58,6 @@ Pane {
                 target: parent
                 axis: Drag.XAxis
             }
-
         }
 
         Behavior on opacity {
@@ -69,7 +65,6 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on color {
@@ -77,9 +72,7 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     Rectangle {
@@ -101,7 +94,6 @@ Pane {
                     target: rightHandle
                     color: Colors.color.secondary
                 }
-
             },
             State {
                 name: "dragging"
@@ -111,7 +103,6 @@ Pane {
                     target: rightHandle
                     color: Colors.color.tertiary
                 }
-
             }
         ]
 
@@ -126,7 +117,6 @@ Pane {
                     resizeableRect.width = resizeableRect.width + mouseX;
                     if (resizeableRect.width < 50)
                         resizeableRect.width = 50;
-
                 }
             }
 
@@ -134,7 +124,6 @@ Pane {
                 target: parent
                 axis: Drag.XAxis
             }
-
         }
 
         Behavior on opacity {
@@ -142,7 +131,6 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on color {
@@ -150,9 +138,7 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     Rectangle {
@@ -176,7 +162,6 @@ Pane {
                     target: topHandle
                     color: Colors.color.secondary
                 }
-
             },
             State {
                 name: "dragging"
@@ -186,7 +171,6 @@ Pane {
                     target: topHandle
                     color: Colors.color.tertiary
                 }
-
             }
         ]
 
@@ -202,7 +186,6 @@ Pane {
                     resizeableRect.y = resizeableRect.y + mouseY;
                     if (resizeableRect.height < 50)
                         resizeableRect.height = 50;
-
                 }
             }
 
@@ -210,7 +193,6 @@ Pane {
                 target: parent
                 axis: Drag.YAxis
             }
-
         }
 
         Behavior on opacity {
@@ -218,7 +200,6 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on color {
@@ -226,9 +207,7 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     Rectangle {
@@ -252,7 +231,6 @@ Pane {
                     target: bottomHandle
                     color: Colors.color.secondary
                 }
-
             },
             State {
                 name: "dragging"
@@ -262,7 +240,6 @@ Pane {
                     target: bottomHandle
                     color: Colors.color.tertiary
                 }
-
             }
         ]
 
@@ -277,7 +254,6 @@ Pane {
                     resizeableRect.height = resizeableRect.height + mouseY;
                     if (resizeableRect.height < 50)
                         resizeableRect.height = 50;
-
                 }
             }
 
@@ -285,7 +261,6 @@ Pane {
                 target: parent
                 axis: Drag.YAxis
             }
-
         }
 
         Behavior on opacity {
@@ -293,7 +268,6 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on color {
@@ -301,9 +275,152 @@ Pane {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+        }
+    }
 
+    // Corners
+    Rectangle {
+        id: bottomRightHandle
+
+        width: rulersSize
+        height: rulersSize
+        radius: rulersSize
+        color: Colors.color.primary
+
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        opacity: resizeableRect.pointerVisible ? 1 : 0
+        states: [
+            State {
+                name: "hovered"
+                when: bottomRightHandleArea.containsMouse && !bottomRightHandleArea.drag.active
+
+                PropertyChanges {
+                    target: bottomRightHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: bottomRightHandleArea.drag.active
+
+                PropertyChanges {
+                    target: bottomRightHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
+        MouseArea {
+            id: bottomRightHandleArea
+
+            anchors.fill: parent
+            enabled: resizeableRect.pointerVisible
+            hoverEnabled: true
+            onMouseYChanged: {
+                if (drag.active) {
+                    resizeableRect.height = resizeableRect.height + mouseY;
+                    resizeableRect.width = resizeableRect.width + mouseX;
+                    if (resizeableRect.height < 50)
+                        resizeableRect.height = 50;
+
+                    if (resizeableRect.width < 50)
+                        resizeableRect.width = 50;
+                }
+            }
+
+            drag {
+                target: parent
+                axis: Drag.YAxis | Drag.XAxis
+            }
         }
 
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
+
+    Rectangle {
+        id: bottomLeftHandle
+
+        width: rulersSize
+        height: rulersSize
+        radius: rulersSize
+        color: Colors.color.primary
+
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        opacity: resizeableRect.pointerVisible ? 1 : 0
+        states: [
+            State {
+                name: "hovered"
+                when: bottomLeftHandleArea.containsMouse && !bottomLeftHandleArea.drag.active
+
+                PropertyChanges {
+                    target: bottomLeftHandle
+                    color: Colors.color.secondary
+                }
+            },
+            State {
+                name: "dragging"
+                when: bottomLeftHandleArea.drag.active
+
+                PropertyChanges {
+                    target: bottomLeftHandle
+                    color: Colors.color.tertiary
+                }
+            }
+        ]
+
+        MouseArea {
+            id: bottomLeftHandleArea
+
+            anchors.fill: parent
+            enabled: resizeableRect.pointerVisible
+            hoverEnabled: true
+            onMouseYChanged: {
+                if (drag.active) {
+                    resizeableRect.height = resizeableRect.height + mouseY;
+                    resizeableRect.width = resizeableRect.width + mouseX;
+                    if (resizeableRect.height < 50)
+                        resizeableRect.height = 50;
+
+                    if (resizeableRect.width < 50)
+                        resizeableRect.width = 50;
+                }
+            }
+
+            drag {
+                target: parent
+                axis: Drag.YAxis | Drag.XAxis
+            }
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     background: Rectangle {
@@ -316,7 +433,5 @@ Pane {
             width: pointerVisible ? 2 : 0
             color: Colors.color.tertiary
         }
-
     }
-
 }
