@@ -15,13 +15,6 @@ Pane {
     width: parent.width
     height: parent.height
 
-    Component {
-        id: contentImage
-        Image {
-            anchors.fill: parent
-        }
-    }
-
     // Nav
     TopLeftControl {}
 
@@ -461,16 +454,15 @@ Pane {
         onContentsChanged: {
             switch (contents.type) {
             case "image":
-                const image = contentImage.createObject(containerRect, {
-                    source: contents.source,
-                    z: -1,
-                    visible: Qt.binding(() => {
-                        return !containerRect.hide;
-                    })
-                });
-                image.visible = Qt.binding(() => {
-                    return containerRect.show;
-                });
+                const type = contents.kind;
+                const source = contents.source;
+                const img = Components.createImage(source, type, containerRect);
+                if (img) {
+                    img.visible = Qt.binding(() => {
+                        return containerRect.show;
+                    });
+                    img.z = -1;
+                }
                 return;
             case "widget":
                 const component = Qt.createComponent(contents.source);
@@ -615,6 +607,7 @@ Pane {
                     });
                 }
             }
+
             Action {
                 text: containerRect.contents?.type === "image" ? "Change Image" : "Add Image"
                 onTriggered: {

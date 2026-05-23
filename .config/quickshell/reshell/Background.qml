@@ -49,11 +49,8 @@ Item {
             }
             switch (type) {
             case "image":
-                item.parent = layered;
-                const image = imageObject.createObject(item, {
-                    source: contents.source
-                });
-                containerloader.currentContent = image;
+                const img = Components.createImage(contents.source, contents.kind, layered);
+                containerloader.currentContent = img;
                 return;
             case "widget":
                 item.parent = controlArea;

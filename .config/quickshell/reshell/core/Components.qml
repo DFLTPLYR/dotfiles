@@ -16,6 +16,34 @@ Singleton {
         Region {}
     }
 
+    // Image
+    Component {
+        id: staticImage
+        Image {
+            anchors.fill: parent
+        }
+    }
+
+    Component {
+        id: animatedImage
+        AnimatedImage {
+            anchors.fill: parent
+        }
+    }
+
+    function createImage(source, type, parent = null) {
+        switch (type) {
+        case "animated":
+            return animatedImage.createObject(parent, {
+                source: source
+            });
+        case "static":
+            return staticImage.createObject(parent, {
+                source: source
+            });
+        }
+    }
+
     function createRegion() {
         const reg = region.createObject(null, {});
         return reg;
