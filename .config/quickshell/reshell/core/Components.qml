@@ -21,6 +21,9 @@ Singleton {
         id: staticImage
         Image {
             anchors.fill: parent
+            onParentChanged: {
+                anchors.fill = parent;
+            }
         }
     }
 

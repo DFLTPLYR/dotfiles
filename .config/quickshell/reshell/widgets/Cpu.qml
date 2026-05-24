@@ -36,7 +36,6 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-
     }
 
     property: Property {
@@ -44,5 +43,4 @@ Wrapper {
         property int icon: 10
         property int text: 10
     }
-
 }

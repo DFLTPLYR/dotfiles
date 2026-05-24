@@ -49,14 +49,12 @@ Item {
             }
             switch (type) {
             case "image":
-                const img = Components.createImage(contents.source, contents.kind, layered);
+                item.parent = layered;
+                const img = Components.createImage(contents.source, contents.kind, item);
                 containerloader.currentContent = img;
                 return;
             case "widget":
                 item.parent = controlArea;
-                // item.parent = Qt.binding(() => {
-                //     return Global.widget ? controlArea : layered;
-                // });
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
                 if (incubator.status !== Component.Ready) {
@@ -120,13 +118,6 @@ Item {
         id: containers
         model: Wallpaper.containers
         delegate: LazyContainer {}
-    }
-
-    Component {
-        id: imageObject
-        Image {
-            anchors.fill: parent
-        }
     }
 
     Instantiator {
