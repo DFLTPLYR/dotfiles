@@ -25,44 +25,33 @@ Wrapper {
             return Colors.palette[`${wrap.property.palette}60`];
         if (level === 3)
             return Colors.palette[`${wrap.property.palette}50`];
+        if (level === 4)
+            return Colors.palette[`${wrap.property.palette}40`];
         return Colors.palette[`${wrap.property.palette}80`];
     }
 
-    GridLayout {
+    FlexboxLayout {
+        id: layout
         anchors.fill: parent
-        rows: 7
-        columns: 40
-        rowSpacing: 2
-        columnSpacing: 2
+        direction: FlexboxLayout.Column
+        wrap: FlexboxLayout.Wrap
+        clip: true
+        gap: 5
+        Repeater {
+            model: contribs
+            delegate: Rectangle {
+                required property int index
+                required property var modelData
 
-        RowLayout {
-            spacing: 2
+                Layout.preferredWidth: wrap.property.cell
+                Layout.preferredHeight: wrap.property.cell
+                opacity: modelData?.level || 0
+                color: contributionColor(modelData?.level || 0)
 
-            Repeater {
-                model: 40  // weeks
-                delegate: ColumnLayout {
-                    spacing: 2
-
-                    // Manually pass the week index
-                    property int weekIndex: index
-
-                    Repeater {
-                        model: 7  // days
-                        delegate: Rectangle {
-                            width: wrap.property.cell
-                            height: wrap.property.cell
-                            radius: 2
-
-                            property int realIndex: weekIndex * 7 + index
-                            color: contributionColor(contribs[realIndex]?.level || 0)
-
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: 200
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-                        }
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
                     }
                 }
             }
