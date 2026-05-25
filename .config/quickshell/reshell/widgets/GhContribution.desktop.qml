@@ -15,6 +15,7 @@ Wrapper {
     }
 
     property var contribs: Services.contributions !== undefined ? Services.contributions : []
+    property string today: new Date().toISOString().slice(0, 10)
 
     function contributionColor(level) {
         if (level === 0)
@@ -42,11 +43,14 @@ Wrapper {
             delegate: Rectangle {
                 required property int index
                 required property var modelData
+                readonly property bool isToday: modelData?.date === wrap.today
 
                 Layout.preferredWidth: wrap.property.cell
                 Layout.preferredHeight: wrap.property.cell
                 opacity: modelData?.level || 0
                 color: contributionColor(modelData?.level || 0)
+                border.color: isToday ? Colors.color.tertiary : "transparent"
+                border.width: isToday ? 2 : 0
 
                 Behavior on color {
                     ColorAnimation {
