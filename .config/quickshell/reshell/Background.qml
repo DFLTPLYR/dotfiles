@@ -54,7 +54,9 @@ Item {
                 containerloader.currentContent = img;
                 return;
             case "widget":
-                item.parent = controlArea;
+                item.parent = Qt.binding(() => {
+                    return Global.widget ? controlArea : layered;
+                });
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
                 if (incubator.status !== Component.Ready) {
@@ -69,13 +71,11 @@ Item {
                             }
                             widget.modal.connect((modal, hasChanges) => {
                                 bottom.hasMenu = modal ? true : false;
-                                print(hasChanges);
                                 if (modal) {
                                     modal.y = item.height;
                                     modal.x = (item.width - modal.width) / 2;
                                 }
                                 if (hasChanges) {
-                                    print(hasChanges);
                                     const props = widget.property.getProperty();
                                     const conf = Wallpaper.containers.get(containerloader.index);
                                     const withProps = conf.contents;
