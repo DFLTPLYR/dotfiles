@@ -598,12 +598,10 @@ Pane {
                         kind: data.type,
                         source: data.url
                     });
-                    contentImage.createObject(containerRect, {
-                        source: data,
-                        z: -1,
-                        visible: Qt.binding(() => {
-                            return containerRect.show;
-                        })
+
+                    const img = Components.createImage(data.url, data.type, containerRect);
+                    img.visible = Qt.binding(() => {
+                        return containerRect.show;
                     });
                 }
             }

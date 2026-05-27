@@ -18,7 +18,7 @@ Process {
             if (path.length > 0) {
                 const file = {
                     url: path,
-                    type: process.fileType()
+                    type: process.fileType(path)
                 };
                 process.output(file);
             }
