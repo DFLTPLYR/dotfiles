@@ -31,6 +31,7 @@ Singleton {
         id: animatedImage
         AnimatedImage {
             anchors.fill: parent
+            playing: Compositor.animate
         }
     }
 
