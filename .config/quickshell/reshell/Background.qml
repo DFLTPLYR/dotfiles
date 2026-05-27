@@ -69,11 +69,13 @@ Item {
                             }
                             widget.modal.connect((modal, hasChanges) => {
                                 bottom.hasMenu = modal ? true : false;
+                                print(hasChanges);
                                 if (modal) {
                                     modal.y = item.height;
                                     modal.x = (item.width - modal.width) / 2;
                                 }
                                 if (hasChanges) {
+                                    print(hasChanges);
                                     const props = widget.property.getProperty();
                                     const conf = Wallpaper.containers.get(containerloader.index);
                                     const withProps = conf.contents;

@@ -1,8 +1,10 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "\"$(randomize-image.zsh)\"",
-    "height": 23,
+    "source": "~/.config/fastfetch/ascii.txt",
+    "color": {
+      "1": "white"
+    }
   },
   "display": {
     "separator": "",
@@ -11,6 +13,45 @@
     {
       "type": "title",
       "format": "{#1}╭───────────── {#}{user-name-colored}"
+    },
+    // Desktop Environment
+    {
+      "type": "custom",
+      "format": "{#1}│ {#}Desktop Environment"
+    },
+    {
+      "type": "os",
+      "key": "{#separator}│  󰣇 OS ",
+      "format": "{2}",
+      "keyColor": "red",
+    },
+    {
+      "type": "kernel",
+      "key": "{#separator}│   Kernel ",
+      "format": "{2}",
+      "keyColor": "red",
+    },
+    {
+      "type": "wm",
+      "key": "{#separator}│  󱗃 WM ",
+      "format": "{2}",
+      "keyColor": "yellow",
+    },
+    {
+      "type": "packages",
+      "key": "{#separator}│  󰏗 Packages ",
+      "keyColor": "green",
+      "format": "{all}"
+    },
+    {
+      "type": "terminal",
+      "key": "{#separator}│   Terminal ",
+      "keyColor": "yellow",
+    },
+    {
+      "type": "uptime",
+      "key": "{#separator}│  󱫐 Uptime ",
+      "keyColor": "red",
     },
     // Hardware Information
     {
@@ -58,45 +99,6 @@
       "keyColor": "red",
       "format": "{days} days",
     },
-    // Desktop Environment
-    {
-      "type": "custom",
-      "format": "{#1}│ {#}Desktop Environment"
-    },
-    {
-      "type": "os",
-      "key": "{#separator}│  󰣇 OS ",
-      "format": "{2}",
-      "keyColor": "red",
-    },
-    {
-      "type": "kernel",
-      "key": "{#separator}│   Kernel ",
-      "format": "{2}",
-      "keyColor": "red",
-    },
-    {
-      "type": "wm",
-      "key": "{#separator}│  󱗃 WM ",
-      "format": "{2}",
-      "keyColor": "yellow",
-    },
-    {
-      "type": "packages",
-      "key": "{#separator}│  󰏗 Packages ",
-      "keyColor": "green",
-      "format": "{all}"
-    },
-    {
-      "type": "terminal",
-      "key": "{#separator}│   Terminal ",
-      "keyColor": "yellow",
-    },
-    {
-      "type": "uptime",
-      "key": "{#separator}│  󱫐 Uptime ",
-      "keyColor": "red",
-    },
     {
       "type": "colors",
       "paddingLeft": 2,
@@ -105,7 +107,7 @@
     },
     {
       "type": "custom",
-      "format": "╰────────────────────────────────────────────────────╯",
+      "format": "╰────────────────────────────────────╯",
     },
     "break",
   ],

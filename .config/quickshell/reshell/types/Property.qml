@@ -105,6 +105,7 @@ QtObject {
         }
 
         onClosed: {
+            menu.updateHasChanges();
             menu.exited(menu.hasChanges);
         }
 

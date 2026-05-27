@@ -11,6 +11,12 @@ Wrapper {
     width: wrap.setWidth(property.size)
     height: wrap.setHeight(property.size)
 
+    property: Property {
+        property int size: 40
+        property int fontSize: 10
+        property string format: "hh:mm AP"
+    }
+
     GridLayout {
         anchors.fill: parent
 
@@ -21,7 +27,7 @@ Wrapper {
         }
 
         Text {
-            text: Qt.formatDateTime(clock.date, "hh:mm AP")
+            text: Qt.formatDateTime(clock.date, wrap.property.format)
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
@@ -32,14 +38,6 @@ Wrapper {
             font {
                 pixelSize: property.fontSize
             }
-
         }
-
     }
-
-    property: Property {
-        property int size: 40
-        property int fontSize: 10
-    }
-
 }
