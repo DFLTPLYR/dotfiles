@@ -26,24 +26,30 @@ local function is_horizontal()
 	return mon and mon.name == "DP-1"
 end
 
-local function nav(vert_ws, vert_dir)
+local function nav(ws, dir)
 	return function()
 		if is_horizontal() then
-			hl.dispatch(hl.dsp.focus(vert_ws))
+			hl.dispatch(hl.dsp.focus(ws))
 		else
-			hl.dispatch(hl.dsp.focus(vert_dir))
+			local before = hl.get_active_window()
+			local addr = before and before.address
+			hl.dispatch(hl.dsp.focus({ direction = dir }))
+			local after = hl.get_active_window()
+			if (not before and not after) or (addr and after and after.address == addr) then
+				hl.dispatch(hl.dsp.focus(ws))
+			end
 		end
 	end
 end
 
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up", nav({ workspace = "m-1" }, { direction = "up" }))
-hl.bind(mainMod .. " + down", nav({ workspace = "m+1" }, { direction = "down" }))
+hl.bind(mainMod .. " + up", nav({ workspace = "m-1" }, "up"))
+hl.bind(mainMod .. " + down", nav({ workspace = "+1" }, "down"))
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + K", nav({ workspace = "m-1" }, { direction = "up" }))
-hl.bind(mainMod .. " + J", nav({ workspace = "m+1" }, { direction = "down" }))
+hl.bind(mainMod .. " + K", nav({ workspace = "m-1" }, "up"))
+hl.bind(mainMod .. " + J", nav({ workspace = "+1" }, "down"))
 
 -- Move focus to monitor with mainMod + direction keys
 -- hl.bind(mainMod .. " + left", hl.dsp.focus({ monitor = "left" }))
@@ -75,7 +81,7 @@ local function ws_switch(n, action)
 
 	local mon = hl.get_active_monitor()
 	if mon and mon.name == "DP-2" then
-		n = n + 10
+		n = n + 100
 	end
 
 	if action == "focus" then
@@ -94,7 +100,13 @@ for i = 1, 9 do
 	end)
 end
 
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_down", function()
+	if is_horizontal() then
+		hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+	else
+		hl.dispatch(hl.dsp.focus({ workspace = "e+1" }))
+	end
+end)
 hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window

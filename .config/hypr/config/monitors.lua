@@ -14,15 +14,18 @@ hl.monitor({
 })
 
 local wr = hl.workspace_rule
+local winr = hl.window_rule
 
 for i = 1, 9 do
 	local wsh = tostring(i)
-	local wsv = tostring(i + 10)
+	local wsv = tostring(i + 100)
 
 	wr({ workspace = wsh, default_name = "H" .. tostring(i), monitor = "DP-1", default = (i == 1) })
 	wr({ workspace = wsv, default_name = "V" .. tostring(i), monitor = "DP-2", default = (i == 1) })
 end
 
-wr({ workspace = "r[11-19]", layout_opts = { direction = "down" } })
+wr({ workspace = "m[DP-1]", layout_opts = { direction = "right" } })
+winr({ match = { workspace = "m[DP-1]" }, scrolling_width = 0.8 })
 
-hl.window_rule({ match = { workspace = "r[11-19]" }, scrolling_width = 0.33333 })
+wr({ workspace = "m[DP-2]", layout_opts = { direction = "down" } })
+winr({ match = { workspace = "m[DP-2]" }, scrolling_width = 0.33333 })
