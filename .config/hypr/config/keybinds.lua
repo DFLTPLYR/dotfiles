@@ -35,7 +35,7 @@ local function nav(ws, dir)
 			local addr = before and before.address
 			hl.dispatch(hl.dsp.focus({ direction = dir }))
 			local after = hl.get_active_window()
-			if (not before and not after) or (addr and after and after.address == addr) then
+			if not after or (addr and after and after.address == addr) then
 				hl.dispatch(hl.dsp.focus(ws))
 			end
 		end
@@ -100,14 +100,8 @@ for i = 1, 9 do
 	end)
 end
 
-hl.bind(mainMod .. " + mouse_down", function()
-	if is_horizontal() then
-		hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-	else
-		hl.dispatch(hl.dsp.focus({ workspace = "e+1" }))
-	end
-end)
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse_up", nav({ workspace = "m+1" }, "down"))
+hl.bind(mainMod .. " + mouse_down", nav({ workspace = "m-1" }, "up"))
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window
 	hl.dispatch(hl.dsp.window.bring_to_top()) -- Bring it to the top
