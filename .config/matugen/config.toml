@@ -11,14 +11,14 @@ output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 input_path = "templates/rmpc/shell.ron"
 output_path = "~/.config/rmpc/layout/shell.ron"
 
-# [templates.hypr]
-# input_path = "templates/hypr/colors.lua"
-# output_path = "~/.config/hypr/config/colors.lua"
+[templates.hypr]
+input_path = "templates/hypr/colors.lua"
+output_path = "~/.config/hypr/config/colors.lua"
 
-[templates.niri]
-input_path = "templates/niri-colors.kdl"
-output_path = "~/.config/niri/modules/colors.kdl"
-post_hook = 'niri msg action load-config-file'
+# [templates.niri]
+# input_path = "templates/niri-colors.kdl"
+# output_path = "~/.config/niri/modules/colors.kdl"
+# post_hook = 'niri msg action load-config-file'
 
 [templates.qt5ct]
 input_path = "templates/qtct.conf"

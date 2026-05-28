@@ -27,9 +27,12 @@ rule({
 	name = "Deadlock",
 	match = {
 		class = "steam_app_1422450",
+		fullscreen_state_internal = 3,
+		fullscreen_state_client = 3,
 	},
 	monitor = "DP-1",
-	fullscreen = true,
 	content = "game",
+	fullscreen = true,
 	maximize = true,
+	fullscreen_state = 3,
 })
