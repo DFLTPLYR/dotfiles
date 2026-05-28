@@ -18,15 +18,32 @@ hl.bind(mainMod .. "+ DELETE", hl.dsp.exec_cmd("pkill -x qs"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
--- Move focus to window with mainMod + direction keys
+-- Move focus/workspace with mainMod + direction keys
+-- On horizontal-scrolling monitors (DP-1), up/down switches workspace
+-- left/right always focuses direction (Hyprland falls through to next monitor at edge)
+local function is_horizontal()
+	local mon = hl.get_active_monitor()
+	return mon and mon.name == "DP-1"
+end
+
+local function nav(vert_ws, vert_dir)
+	return function()
+		if is_horizontal() then
+			hl.dispatch(hl.dsp.focus(vert_ws))
+		else
+			hl.dispatch(hl.dsp.focus(vert_dir))
+		end
+	end
+end
+
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + up", nav({ workspace = "m-1" }, { direction = "up" }))
+hl.bind(mainMod .. " + down", nav({ workspace = "m+1" }, { direction = "down" }))
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + K", nav({ workspace = "m-1" }, { direction = "up" }))
+hl.bind(mainMod .. " + J", nav({ workspace = "m+1" }, { direction = "down" }))
 
 -- Move focus to monitor with mainMod + direction keys
 -- hl.bind(mainMod .. " + left", hl.dsp.focus({ monitor = "left" }))
@@ -47,10 +64,34 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Workspace switching: 1-9 -> N on current monitor (N+10 on DP-2)
-local ws_switch = os.getenv("HOME") .. "/.config/hypr/Scripts/workspace_switch.lua"
+local function ws_switch(n, action)
+	if not n then
+		return
+	end
+	n = tonumber(n)
+	if not n then
+		return
+	end
+
+	local mon = hl.get_active_monitor()
+	if mon and mon.name == "DP-2" then
+		n = n + 10
+	end
+
+	if action == "focus" then
+		hl.dispatch(hl.dsp.focus({ workspace = tostring(n) }))
+	else
+		hl.dispatch(hl.dsp.window.move({ workspace = tostring(n) }))
+	end
+end
+
 for i = 1, 9 do
-	hl.bind(mainMod .. " + " .. i, hl.dsp.exec_cmd("lua " .. ws_switch .. " " .. i))
-	hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.exec_cmd("lua " .. ws_switch .. " " .. i .. " movetoworkspace"))
+	hl.bind(mainMod .. " + " .. i, function()
+		ws_switch(i, "focus")
+	end)
+	hl.bind(mainMod .. " + SHIFT + " .. i, function()
+		ws_switch(i, "movetoworkspace")
+	end)
 end
 
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
