@@ -10,6 +10,11 @@ import Qt.labs.folderlistmodel
 Singleton {
     id: config
 
+    property SystemClock clock: SystemClock {
+        id: clock
+        precision: SystemClock.Seconds
+    }
+
     // signal
     signal colorUpdate
 

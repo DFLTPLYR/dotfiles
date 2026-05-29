@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import qs.components
 import qs.core
 import qs.types
@@ -20,14 +19,8 @@ Wrapper {
     GridLayout {
         anchors.fill: parent
 
-        SystemClock {
-            id: clock
-
-            precision: SystemClock.Seconds
-        }
-
         Text {
-            text: Qt.formatDateTime(clock.date, wrap.property.format)
+            text: Qt.formatDateTime(Global.clock.date, wrap.property.format)
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.color.primary
