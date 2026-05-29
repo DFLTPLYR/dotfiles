@@ -51,15 +51,13 @@ hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + K", nav({ workspace = "m-1" }, "up"))
 hl.bind(mainMod .. " + J", nav({ workspace = "+1" }, "down"))
 
--- Move focus to monitor with mainMod + direction keys
--- hl.bind(mainMod .. " + left", hl.dsp.focus({ monitor = "left" }))
--- hl.bind(mainMod .. " + right", hl.dsp.focus({ monitor = "right" }))
--- hl.bind(mainMod .. " + up", hl.dsp.focus({ monitor = "up" }))
--- hl.bind(mainMod .. " + down", hl.dsp.focus({ monitor = "down" }))
+-- focus next workspace
+hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1" }))
+
+-- Move focus to monitor
 hl.bind(mainMod .. "+ SHIFT + H", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mainMod .. "+ SHIFT + L", hl.dsp.focus({ monitor = "r" }))
-hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ monitor = "u" }))
-hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ monitor = "d" }))
 
 -- Toggle fullscreen
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
