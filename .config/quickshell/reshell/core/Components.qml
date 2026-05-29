@@ -109,12 +109,6 @@ Singleton {
                 label.text = Colors.color.primary;
                 label.background.color = Colors.color.background;
 
-                range.background.color = Colors.color.primary;
-                range.background.indicator.color = Colors.color.tertiary;
-                range.first.color = Colors.color.primary;
-                range.first.border.color = Colors.color.outline;
-                range.second.color = Colors.color.primary;
-                range.second.border.color = Colors.color.outline;
                 fileView.writeAdapter();
             }
 
@@ -131,7 +125,6 @@ Singleton {
             property PageIndicator pageIndicator: PageIndicator {}
             property Slider slider: Slider {}
             property Label label: Label {}
-            property Range range: Range {}
         }
     }
 
@@ -247,53 +240,5 @@ Singleton {
     component Label: JsonObject {
         property color text: Colors.color.primary
         property RectangleJson background: RectangleJson {}
-    }
-
-    component Range: JsonObject {
-        property RectangleJson background: RectangleJson {
-            width: 200
-            height: 4
-
-            rounding {
-                topLeft: 0
-                topRight: 0
-                bottomRight: 0
-                bottomLeft: 0
-            }
-            color: Colors.color.primary
-            property RectangleJson indicator: RectangleJson {
-                color: Colors.color.tertiary
-            }
-        }
-        property RectangleJson first: RectangleJson {
-            height: 26
-            width: 26
-            color: Colors.color.primary
-            border {
-                width: 1
-                color: Colors.color.outline
-            }
-            rounding {
-                topLeft: 13
-                topRight: 13
-                bottomRight: 13
-                bottomLeft: 13
-            }
-        }
-        property RectangleJson second: RectangleJson {
-            height: 26
-            width: 26
-            color: Colors.color.primary
-            border {
-                width: 1
-                color: Colors.color.outline
-            }
-            rounding {
-                topLeft: 13
-                topRight: 13
-                bottomRight: 13
-                bottomLeft: 13
-            }
-        }
     }
 }

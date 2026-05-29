@@ -30,6 +30,7 @@ rule({
 		fullscreen_state_internal = 3,
 		fullscreen_state_client = 3,
 	},
+	size = { "(monitor_w*1)", "(monitor_h*1)" },
 	monitor = "DP-1",
 	content = "game",
 	fullscreen = true,

@@ -1,11 +1,32 @@
 import QtQuick
 import QtQuick.Controls
+
 import qs.core
+import qs.types
 
 SpinBox {
     id: spinbox
 
-    property var state: Components.config.spinbox
+    property QtObject state: QtObject {
+        property color color: Colors.color.background
+        property color text: Colors.color.on_background
+        property Border border: Border {}
+        property Direction margin: Direction {}
+        property Corner rounding: Corner {}
+        property QtObject hover: QtObject {
+            property color color: Colors.setOpacity(Colors.color.primary, 1)
+            property Border border: Border {}
+            property Direction margin: Direction {}
+            property Corner rounding: Corner {}
+        }
+        property QtObject unhover: QtObject {
+            property real opacity: 0.5
+            property color color: Colors.setOpacity(Colors.color.primary, 0.7)
+            property Border border: Border {}
+            property Direction margin: Direction {}
+            property Corner rounding: Corner {}
+        }
+    }
 
     editable: true
     wheelEnabled: true
@@ -26,7 +47,6 @@ SpinBox {
             width: spinbox.state.border.width
             color: spinbox.state.border.color
         }
-
     }
 
     contentItem: TextInput {
@@ -42,7 +62,6 @@ SpinBox {
             leftMargin: rightIndicator.width + 4
             rightMargin: leftIndicator.width + 4
         }
-
     }
 
     up.indicator: Rectangle {
@@ -80,9 +99,7 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     down.indicator: Rectangle {
@@ -120,9 +137,6 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
-
 }

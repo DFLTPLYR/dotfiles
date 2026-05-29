@@ -1,11 +1,34 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls.Basic
+
 import qs.core
+import qs.types
 
 SwitchDelegate {
     id: toggle
 
-    property var state: Components.config.toggle
+    property QtObject state: QtObject {
+        property QtObject content: QtObject {
+            property color color: Colors.color.primary
+            property int radius: 13
+        }
+
+        property QtObject indicator: QtObject {
+            property color down: Colors.color.surface_dim
+            property color up: Colors.color.surface_bright
+            property int radius: 13
+            property int width: 48
+            property int height: 26
+            property QtObject inner: QtObject {
+                property color down: Colors.color.primary
+                property color up: Colors.color.secondary
+                property int radius: 13
+                property int width: 26
+                property int height: 26
+            }
+        }
+    }
 
     text: qsTr("SwitchDelegate")
     checked: true
@@ -54,7 +77,6 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
 
             Behavior on color {
@@ -62,7 +84,6 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
 
             Behavior on x {
@@ -70,9 +91,7 @@ SwitchDelegate {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
 
         Behavior on color {
@@ -80,12 +99,8 @@ SwitchDelegate {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
-    background: Item {
-    }
-
+    background: Item {}
 }
