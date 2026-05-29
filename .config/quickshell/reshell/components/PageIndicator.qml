@@ -5,8 +5,12 @@ import qs.core
 PageIndicator {
     id: control
 
-    property var state: Components.config.pageIndicator
-
+    property QtObject state: QtObject {
+        property int width: 8
+        property int height: 8
+        property real radius: 4
+        property color color: Colors.color.primary
+    }
     delegate: Rectangle {
         required property int index
 
@@ -20,9 +24,6 @@ PageIndicator {
             OpacityAnimator {
                 duration: 100
             }
-
         }
-
     }
-
 }

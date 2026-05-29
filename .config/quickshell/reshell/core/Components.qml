@@ -94,18 +94,6 @@ Singleton {
                 spinbox.hover.color = Colors.color.primary;
                 spinbox.unhover.color = Colors.setOpacity(Colors.color.primary, 0.7);
 
-                toggle.content.color = Colors.color.primary;
-                toggle.indicator.down = Colors.color.surface_dim;
-                toggle.indicator.up = Colors.color.surface_bright;
-                toggle.indicator.inner.down = Colors.color.primary;
-                toggle.indicator.inner.up = Colors.color.secondary;
-
-                pageIndicator.color = Colors.color.primary;
-
-                slider.background.color = Colors.color.background;
-                slider.background.progress.color = Colors.color.primary;
-                slider.handle.color = Colors.color.primary;
-
                 label.text = Colors.color.primary;
                 label.background.color = Colors.color.background;
 
@@ -121,9 +109,6 @@ Singleton {
             property Notification notification: Notification {}
             property ButtonJson button: ButtonJson {}
             property SpinBoxJson spinbox: SpinBoxJson {}
-            property SwitchJson toggle: SwitchJson {}
-            property PageIndicator pageIndicator: PageIndicator {}
-            property Slider slider: Slider {}
             property Label label: Label {}
         }
     }
@@ -190,49 +175,6 @@ Singleton {
                 property int radius: 13
                 property int width: 26
                 property int height: 26
-            }
-        }
-    }
-
-    component PageIndicator: JsonObject {
-        property int width: 8
-        property int height: 8
-        property real radius: 4
-        property color color: Colors.color.primary
-    }
-
-    component Slider: JsonObject {
-        property RectangleJson background: RectangleJson {
-            height: 4
-            width: 200
-            color: Colors.color.background
-            rounding {
-                topLeft: 100
-                topRight: 100
-                bottomLeft: 100
-                bottomRight: 100
-            }
-            property RectangleJson progress: RectangleJson {
-                height: 4
-                width: 26
-                color: Colors.color.primary
-                rounding {
-                    topLeft: 100
-                    topRight: 100
-                    bottomLeft: 100
-                    bottomRight: 100
-                }
-            }
-        }
-        property RectangleJson handle: RectangleJson {
-            color: Colors.color.primary
-            height: 26
-            width: 26
-            rounding {
-                topLeft: 13
-                topRight: 13
-                bottomLeft: 13
-                bottomRight: 13
             }
         }
     }
