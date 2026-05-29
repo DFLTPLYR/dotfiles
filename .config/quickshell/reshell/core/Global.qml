@@ -7,8 +7,6 @@ import Quickshell
 import Quickshell.Io
 import Qt.labs.folderlistmodel
 
-import qs.types
-
 Singleton {
     id: config
 

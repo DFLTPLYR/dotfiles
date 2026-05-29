@@ -7,7 +7,7 @@ import qs.types
 SpinBox {
     id: spinbox
 
-    property QtObject state: QtObject {
+    property QtObject config: QtObject {
         property color color: Colors.color.background
         property color text: Colors.color.on_background
         property Border border: Border {}
@@ -37,15 +37,15 @@ SpinBox {
         id: background
 
         anchors.fill: parent
-        color: spinbox.state.color
-        bottomLeftRadius: spinbox.state.rounding.bottomLeft + Components.config.rounding.bottomLeft
-        bottomRightRadius: spinbox.state.rounding.bottomRight + Components.config.rounding.bottomRight
-        topLeftRadius: spinbox.state.rounding.topLeft + Components.config.rounding.topLeft
-        topRightRadius: spinbox.state.rounding.topRight + Components.config.rounding.topRight
+        color: spinbox.config.color
+        bottomLeftRadius: spinbox.config.rounding.bottomLeft + Components.config.rounding.bottomLeft
+        bottomRightRadius: spinbox.config.rounding.bottomRight + Components.config.rounding.bottomRight
+        topLeftRadius: spinbox.config.rounding.topLeft + Components.config.rounding.topLeft
+        topRightRadius: spinbox.config.rounding.topRight + Components.config.rounding.topRight
 
         border {
-            width: spinbox.state.border.width
-            color: spinbox.state.border.color
+            width: spinbox.config.border.width
+            color: spinbox.config.border.color
         }
     }
 
@@ -54,7 +54,7 @@ SpinBox {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 16
-        color: spinbox.state.text
+        color: spinbox.config.text
 
         anchors {
             left: parent.left
@@ -67,7 +67,7 @@ SpinBox {
     up.indicator: Rectangle {
         id: leftIndicator
 
-        property var state: spinbox.up.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
+        property var state: spinbox.up.pressed ? spinbox.config.hover : spinbox.config.unhover
 
         height: parent.height - 4
         width: height
@@ -105,7 +105,7 @@ SpinBox {
     down.indicator: Rectangle {
         id: rightIndicator
 
-        property var state: spinbox.down.pressed ? Components.config.spinbox.hover : Components.config.spinbox.unhover
+        property var state: spinbox.down.pressed ? spinbox.config.hover : spinbox.config.unhover
 
         height: parent.height - 4
         width: height
