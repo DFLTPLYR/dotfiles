@@ -32,12 +32,6 @@
       "keyColor": "red",
     },
     {
-      "type": "wm",
-      "key": "{#separator}│  󱗃 WM ",
-      "format": "{2}",
-      "keyColor": "yellow",
-    },
-    {
       "type": "packages",
       "key": "{#separator}│  󰏗 Packages ",
       "keyColor": "green",
@@ -48,26 +42,10 @@
       "key": "{#separator}│   Terminal ",
       "keyColor": "yellow",
     },
-    {
-      "type": "uptime",
-      "key": "{#separator}│  󱫐 Uptime ",
-      "keyColor": "red",
-    },
     // Hardware Information
     {
       "type": "custom",
       "format": "{#1}│ {#}Hardware Information"
-    },
-    {
-      "type": "chassis",
-      "key": "{#separator}│  󰇺 Chassis ",
-      "format": "{1} {2} {3}",
-    },
-    {
-      "type": "display",
-      "key": "{#separator}│  󰍹 Display ",
-      "format": "{1}x{2} @ {3}Hz [{7}]",
-      "keyColor": "green",
     },
     {
       "type": "cpu",
@@ -80,12 +58,6 @@
       "format": "{1} {2}",
       "key": "{#separator}│  󰊴 GPU ",
       "keyColor": "blue",
-    },
-    {
-      "type": "gpu",
-      "format": "{3}",
-      "key": "{#separator}│   GPU Driver ",
-      "keyColor": "magenta",
     },
     {
       "type": "memory",
