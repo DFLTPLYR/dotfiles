@@ -1,6 +1,5 @@
 # Local Netlify folder
 .netlify
-
 # Generated colors file
 .config/niri/modules/colors.kdl
 
@@ -11,3 +10,5 @@
 # rmpc layouts
 .config/rmpc/layout/long.ron
 .config/rmpc/layout/shell.ron
+packages
+
