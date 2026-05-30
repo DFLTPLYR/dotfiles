@@ -53,6 +53,12 @@ hl.config({
 		},
 	},
 
+	binds = {
+		workspace_back_and_forth = false,
+		allow_workspace_cycles = false,
+		movefocus_cycles_fullscreen = false,
+		workspace_center_on = 1,
+	},
 	misc = {
 		force_default_wallpaper = 0,
 		disable_hyprland_logo = true,

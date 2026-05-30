@@ -15,7 +15,7 @@ Label {
         property QtObject background: QtObject {
             property int height: 2
             property int width: 200
-            property color color: Colors.color.background
+            property color color: "transparent"
         }
     }
     color: control.config.content.color
