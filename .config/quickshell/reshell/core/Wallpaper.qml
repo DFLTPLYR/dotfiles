@@ -29,9 +29,10 @@ Singleton {
         onLoaded: {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
-            const sources = theme.source;
-            const contents = theme.contents;
-            containers.sources = contents;
+            const contents = theme?.contents;
+            if(contents) {
+                containers.sources = contents;
+            }
             config.ready = true;
         }
         onFileChanged: {

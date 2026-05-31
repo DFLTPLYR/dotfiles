@@ -19,3 +19,4 @@ alias mkdir='mkdir -p'
 alias docker='podman'
 alias vc='code'
 alias docker=podman
+alias c='clear'
