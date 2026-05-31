@@ -18,3 +18,4 @@ Personal dotfiles for managing user-level config files and executable scripts us
 
 
 just stow my location sir
+i use nixos Btw
