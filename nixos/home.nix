@@ -12,6 +12,12 @@
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
+  home.pointerCursor = {
+    package = pkgs.kdePackages.breeze;
+    name = "Breeze";
+    size = 24;
+  };
+
   home.packages = with pkgs; [
     stow
     discord
@@ -51,6 +57,27 @@
     opencode
     mpc
   ];
+
+  gtk = {
+    enable = true;
+    cursorTheme = {
+      package = pkgs.kdePackages.breeze;
+      name = "Breeze";
+      size = 24;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  qt = {
+    enable = true;
+    style.name = "breeze-dark";
+    platformTheme = "qtct";
+  };
 
   programs.rofi = {
     enable = true;

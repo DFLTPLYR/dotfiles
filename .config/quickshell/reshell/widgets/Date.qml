@@ -24,7 +24,7 @@ Wrapper {
         QtObject {
             id: date
 
-            property var locale: Qt.locale()
+            property var locale: Qt.locale("en_US")
             property date currentDate: new Date()
         }
 
