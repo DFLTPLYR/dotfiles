@@ -13,7 +13,7 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(mode))
-hl.bind(mainMod .. "+ DELETE", hl.dsp.exec_cmd("pkill -x qs"))
+hl.bind(mainMod .. "+ DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())

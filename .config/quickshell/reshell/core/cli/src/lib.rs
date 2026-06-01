@@ -7,8 +7,8 @@ pub mod modules;
 // Check if 'qs' process is running
 pub fn is_qs_running() -> bool {
     Command::new("pgrep")
-        .arg("-x")
-        .arg("qs")
+        .arg("-f")
+        .arg("quickshell")
         .output()
         .map(|output| output.status.success())
         .unwrap_or(false)
