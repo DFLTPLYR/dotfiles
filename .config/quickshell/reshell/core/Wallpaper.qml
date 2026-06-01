@@ -50,8 +50,8 @@ Singleton {
             id: adapter
             property JsonObject config: JsonObject {
                 property string mode: "standard"
-                property string current: ""
-                property list<var> preset: []
+                property string current: "default"
+                property list<var> preset: [{name: "default"}]
                 property string theme: "scheme-content"
                 onThemeChanged: config.containers.generate()
             }
