@@ -13,17 +13,40 @@
     "$HOME/.local/bin"
   ];
   home.pointerCursor = {
-    package = pkgs.kdePackages.breeze;
-    name = "Breeze";
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
     size = 24;
   };
 
   home.packages = with pkgs; [
+    # System / dotfiles
     stow
-    discord
+    wayland
+    pkg-config
+
+    # Shell / CLI
+    starship
+    oh-my-zsh
+    ripgrep
+    fd
+    fzf
+    lazygit
+    direnv
+    libnotify
+    mpc
+
+    # Development
     nodejs
+    opencode
+
+    # Apps
+    discord
     telegram-desktop
     thunderbird
+    nemo
+    yazi
+    pavucontrol
+    btop-rocm
     inputs.matugen.packages.${system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -38,31 +61,19 @@
           "-DI3_IPC=OFF"
         ];
     }))
-    starship
-    ripgrep
-    fd
-    oh-my-zsh
-    lazygit
-    direnv
-    nixfmt
-    fzf
-    nemo
-    yazi
-    pavucontrol
-    btop-rocm
-    libnotify
-    zed-editor
-    pkg-config
-    wayland
-    opencode
-    mpc
+
+    # Screenshots / clipboard
+    grim
+    slurp
+    cliphist
+    wl-clipboard
   ];
 
   gtk = {
     enable = true;
     cursorTheme = {
-      package = pkgs.kdePackages.breeze;
-      name = "Breeze";
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Ice";
       size = 24;
     };
     gtk3.extraConfig = {
