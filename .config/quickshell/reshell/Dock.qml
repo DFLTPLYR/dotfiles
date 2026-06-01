@@ -179,17 +179,18 @@ Item {
 
             DockContainer {
                 id: container
-
-                Component.onCompleted: {
-                    const reg = Components.createRegion();
-                    reg.item = this;
-                    panel.regions.push(reg);
+                property Region mask: Region {
+                    item: container
+                    Component.onCompleted: panel.regions.push(this)
                 }
             }
 
             DockMenu {
                 id: modalPopup
-                property Region mask: null
+                property Region mask: Region {
+                    item: modalPopup.opened ? modalPopup.background : null
+                    Component.onCompleted: panel.regions.push(this)
+                }
                 dim: true
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
@@ -198,17 +199,6 @@ Item {
                 onSave: timer.restart()
                 onAdd: obj => slotModel.append(obj)
                 onRemove: dock.removeDock(index)
-                onOpened: {
-                    const reg = Components.createRegion();
-                    reg.item = modalPopup.background;
-                    modalPopup.mask = reg;
-                    panel.regions.push(reg);
-                    return;
-                }
-                onClosed: {
-                    panel.regions = panel.mask.regions.filter(s => s !== modalPopup.mask);
-                    modalPopup.mask = null;
-                }
             }
 
             Background {}
