@@ -14,8 +14,8 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "v4l2loopback" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = ["v4l2loopback"];
+  boot.extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
   boot.extraModprobeConfig = ''
     options v4l2loopback exclusive_caps=1 video_nr=7 card_label="DroidCam"
   '';
@@ -45,10 +45,9 @@
   };
   programs.gamemode.enable = true;
 
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_PH.UTF-8";
-  
+
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_PH.UTF-8";
     LC_IDENTIFICATION = "en_PH.UTF-8";
@@ -60,15 +59,30 @@
     LC_TELEPHONE = "en_PH.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-  
+
   environment.variables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
-  
+
   services.xserver.xkb = {
     layout = "us";
     variant = "";
+  };
+  # Enable sound.
+  services.mpd = {
+    enable = true;
+    musicDirectory = "/home/dfltplyr/Music";
+    network.listenAddress = "127.0.0.1";
+  };
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true; # Manages audio routing policies
   };
 
   users.users.dfltplyr = {
@@ -105,21 +119,11 @@
     curl
     pciutils
     mpd
-    mpdris2
+    mpdris2-rs
     gcc
     fastfetch
     firefoxpwa
   ];
-
-  # Enable sound with pipewire.
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-    wireplumber.enable = true; # Manages audio routing policies
-  };
 
   fonts.packages = with pkgs; [
     noto-fonts

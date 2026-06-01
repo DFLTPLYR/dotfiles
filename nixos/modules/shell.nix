@@ -8,6 +8,7 @@
     enable = true;
     enableZshIntegration = true;
   };
+
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -23,7 +24,7 @@
 
   programs.zsh = {
     enable = true;
-    autosuggestion.enable = true; # Fixed the deprecation warning layout
+    autosuggestion.enable = true;
     enableCompletion = true;
 
     oh-my-zsh = {
@@ -31,10 +32,14 @@
       plugins = ["git" "direnv"];
       theme = "robbyrussell";
     };
-
+    shellAliases = {
+      vi = "nvim";
+      vim = "nvim";
+    };
     syntaxHighlighting.enable = true;
     initContent = ''
       export PATH="$HOME/.local/bin:$PATH"
+      eval "$(fzf --zsh)"
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         exec start-hyprland
       fi

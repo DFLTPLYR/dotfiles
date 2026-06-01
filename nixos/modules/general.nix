@@ -28,7 +28,7 @@
     discord
     telegram-desktop
     thunderbird
-    nemo
+    pcmanfm-qt
     yazi
     pavucontrol
     btop-rocm
