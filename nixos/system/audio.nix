@@ -2,7 +2,7 @@
   inputs,
   pkgs,
   ...
-}: { 
+}: {
   # Enable sound.
   services.mpd = {
     enable = true;

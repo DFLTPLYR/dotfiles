@@ -24,17 +24,14 @@
     options v4l2loopback exclusive_caps=1 video_nr=7 card_label="DroidCam"
   '';
 
-
   # Enable networking
   networking.hostName = "nixosBtw"; # Define your hostname.
   networking.networkmanager.enable = true;
-
 
   environment.variables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
-
 
   users.users.dfltplyr = {
     isNormalUser = true;

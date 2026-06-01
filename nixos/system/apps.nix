@@ -2,7 +2,7 @@
   inputs,
   pkgs,
   ...
-}: { 
+}: {
   environment.systemPackages = with pkgs; [
     vim
     neovim
@@ -20,7 +20,6 @@
     fastfetch
     firefoxpwa
   ];
-
 
   programs.dconf.enable = true;
   programs.zsh.enable = true;

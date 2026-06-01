@@ -4,7 +4,7 @@
   inputs,
   ...
 }: {
-  imports = [ ./modules/general.nix ./modules/programs.nix ./modules/nvchad.nix ./modules/shell.nix];
+  imports = [./modules/general.nix ./modules/programs.nix ./modules/nvchad.nix ./modules/shell.nix];
   home.username = "dfltplyr";
   home.homeDirectory = "/home/dfltplyr";
   home.stateVersion = "26.05";
