@@ -17,7 +17,11 @@
       rust-analyzer
       vue-language-server
     ];
-    extraConfig = builtins.readFile ./nvchad.lua;
+    extraConfig = ''
+      ${builtins.readFile ./nvim/lsp.lua}
+      ${builtins.readFile ./nvim/keybinds.lua}
+      ${builtins.readFile ./nvim/formatters.lua}
+    '';
   };
   home.packages = with pkgs; [
     qt6.qtdeclarative

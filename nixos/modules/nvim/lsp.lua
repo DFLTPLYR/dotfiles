@@ -24,17 +24,3 @@ vim.lsp.config.qmlls = {
 	capabilities = nvlsp.capabilities,
 }
 vim.lsp.enable("qmlls")
-
--- formatters
-require("conform").formatters.qmlformat = {
-	command = "qmlformat",
-	args = { "-i" },
-	stdin = false,
-}
-require("conform").formatters.by_ft = require("conform").formatters.by_ft or {}
-require("conform").formatters.by_ft.qml = { "qmlformat" }
-
--- keybinds
-vim.keymap.set("i", "jj", "<ESC>", { desc = "exit insert mode" })
-vim.keymap.set("v", "<A-l>", ">gv", { desc = "Indent right" })
-vim.keymap.set("v", "<A-h>", "<gv", { desc = "Indent left" })
