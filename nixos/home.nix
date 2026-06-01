@@ -27,6 +27,10 @@
       name = "Bibata-Modern-Ice";
       size = 24;
     };
+    theme = {
+      package = pkgs.adw-gtk3;
+      name = "adw-gtk3-dark";
+    };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };

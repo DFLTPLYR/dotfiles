@@ -28,7 +28,6 @@
     discord
     telegram-desktop
     thunderbird
-    pcmanfm-qt
     yazi
     pavucontrol
     btop-rocm
@@ -36,6 +35,7 @@
     droidcam
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
+    adw-gtk3
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     (pkgs.quickshell.overrideAttrs (old: {
       cmakeFlags =

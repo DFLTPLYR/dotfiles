@@ -28,6 +28,7 @@
   # Set your time zone.
   time.timeZone = "Asia/Manila";
   services.getty.autologinUser = "dfltplyr";
+  programs.dconf.enable = true;
   programs.zsh.enable = true;
   programs.firefox = {
     enable = true;
@@ -72,8 +73,17 @@
   # Enable sound.
   services.mpd = {
     enable = true;
-    musicDirectory = "/home/dfltplyr/Music";
+    musicDirectory = "/storageBtw/Music";
     network.listenAddress = "127.0.0.1";
+    settings = {
+      audio_output = [
+        {
+          type = "fifo";
+          name = "Visualizer";
+          path = "/tmp/mpd.fifo";
+        }
+      ];
+    };
   };
 
   services.pipewire = {
@@ -88,7 +98,7 @@
   users.users.dfltplyr = {
     isNormalUser = true;
     description = "dfltplyr";
-    extraGroups = ["networkmanager" "wheel" "audio"];
+    extraGroups = ["networkmanager" "wheel" "audio" "mpd"];
     packages = with pkgs; [
       tree
     ];

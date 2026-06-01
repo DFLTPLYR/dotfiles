@@ -6,7 +6,7 @@
     password: None,
     theme: "/home/dfltplyr/.config/rmpc/layout/shell.ron",
     cache_dir: None,
-    lyrics_dir: "/StorageBtw/Music",
+    lyrics_dir: "/storageBtw/Music",
     volume_step: 5,
     max_fps: 165,
     scrolloff: 0,

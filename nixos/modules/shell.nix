@@ -46,6 +46,7 @@
       for f in ~/.config/zsh/functions/*.zsh; do
         [ -r "$f" ] && source "$f"
       done
+      fastfetch
     '';
   };
 
