@@ -8,9 +8,9 @@ Item {
 
     property alias footerLayout: footerLayout.data
 
-    signal save()
-    signal saveAndExit()
-    signal exit()
+    signal save
+    signal saveAndExit
+    signal exit
 
     Layout.fillWidth: true
     Layout.preferredHeight: 40
@@ -55,9 +55,6 @@ Item {
                     footer.saveAndExit();
                 }
             }
-
         }
-
     }
-
 }

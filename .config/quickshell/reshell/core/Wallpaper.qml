@@ -30,7 +30,7 @@ Singleton {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);
             const contents = theme?.contents;
-            if(contents) {
+            if (contents) {
                 containers.sources = contents;
             }
             config.ready = true;
@@ -51,7 +51,11 @@ Singleton {
             property JsonObject config: JsonObject {
                 property string mode: "standard"
                 property string current: "default"
-                property list<var> preset: [{name: "default"}]
+                property list<var> preset: [
+                    {
+                        name: "default"
+                    }
+                ]
                 property string theme: "scheme-content"
                 onThemeChanged: config.containers.generate()
             }

@@ -34,7 +34,7 @@ Scope {
             id: root
 
             property int page: 0
-            property ShellScreen selectedScreen: Quickshell.screens.find((w) => {
+            property ShellScreen selectedScreen: Quickshell.screens.find(w => {
                 return w.name === Config.focusedMonitor;
             })
             readonly property bool isPortrait: screen.height > screen.width
@@ -80,9 +80,7 @@ Scope {
                                             duration: 350
                                             easing.type: Easing.InOutQuad
                                         }
-
                                     }
-
                                 }
 
                                 Behavior on radius {
@@ -90,7 +88,6 @@ Scope {
                                         duration: 350
                                         easing.type: Easing.InOutQuad
                                     }
-
                                 }
 
                                 Behavior on color {
@@ -98,9 +95,7 @@ Scope {
                                         duration: 350
                                         easing.type: Easing.InOutQuad
                                     }
-
                                 }
-
                             }
 
                             MouseArea {
@@ -112,11 +107,8 @@ Scope {
                                     page = index;
                                 }
                             }
-
                         }
-
                     }
-
                 }
 
                 // content
@@ -126,22 +118,14 @@ Scope {
                     currentIndex: root.page
                     Layout.rightMargin: 0
 
-                    General {
-                    }
+                    General {}
 
-                    Navbar {
-                    }
+                    Navbar {}
 
                     // Wallpaper
-                    Wallpaper {
-                    }
-
+                    Wallpaper {}
                 }
-
             }
-
         }
-
     }
-
 }

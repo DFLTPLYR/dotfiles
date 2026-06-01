@@ -8,7 +8,7 @@ PopupWindow {
     property bool isPortrait: screen.height > screen.width
     property real animProgress: 0
 
-    signal hide()
+    signal hide
 
     onShouldBeVisibleChanged: {
         const target = shouldBeVisible ? 1 : 0;
@@ -34,5 +34,4 @@ PopupWindow {
         duration: 300
         easing.type: Easing.InOutQuad
     }
-
 }

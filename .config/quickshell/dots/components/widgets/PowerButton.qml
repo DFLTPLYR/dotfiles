@@ -43,9 +43,6 @@ Wrapper {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
-
 }

@@ -23,7 +23,6 @@ StyledPane {
             duration: Components.config.notification.duration
             running: true
         }
-
     }
 
     MouseArea {
@@ -64,7 +63,6 @@ StyledPane {
                 fillMode: Image.PreserveAspectFit
                 source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
             }
-
         }
 
         // Content
@@ -97,9 +95,6 @@ StyledPane {
                 color: Colors.color.secondary
                 elide: Text.ElideRight
             }
-
         }
-
     }
-
 }

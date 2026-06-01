@@ -18,9 +18,7 @@ TabButton {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
 
         Behavior on color {
@@ -28,9 +26,7 @@ TabButton {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     contentItem: Label {
@@ -46,9 +42,6 @@ TabButton {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
-
 }

@@ -113,17 +113,17 @@
     jack.enable = true;
     wireplumber.enable = true; # Manages audio routing policies
   };
-fonts.packages = with pkgs; [
-  noto-fonts
-  noto-fonts-cjk-sans
-  noto-fonts-color-emoji
-  liberation_ttf
-  fira-code
-  fira-code-symbols
-  mplus-outline-fonts.githubRelease
-  dina-font
-  proggyfonts
-];
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+  ];
   nix.settings.experimental-features = ["nix-command" "flakes"];
   system.stateVersion = "26.05"; # Did you read the comment?
 }

@@ -18,7 +18,7 @@ Popup {
     onOpenedChanged: {
         if (!opened) {
             Global.modal = null;
-            return ;
+            return;
         }
         if (Global.modal)
             Global.modal.close();
@@ -30,7 +30,6 @@ Popup {
         function onEditChanged() {
             if (modalPopup.opened)
                 modalPopup.close();
-
         }
 
         target: Global
@@ -47,7 +46,6 @@ Popup {
             width: 2
             color: Colors.color.outline
         }
-
     }
 
     enter: Transition {
@@ -67,7 +65,6 @@ Popup {
             to: true
             duration: 0
         }
-
     }
 
     exit: Transition {
@@ -87,7 +84,5 @@ Popup {
             to: false
             duration: 0
         }
-
     }
-
 }

@@ -14,5 +14,4 @@ Item {
         anchors.fill: parent
         flow: styledLayoutRoot.isPortrait ? GridLayout.TopToBottom : GridLayout.LeftToRight
     }
-
 }

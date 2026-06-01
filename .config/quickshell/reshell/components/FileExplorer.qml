@@ -32,7 +32,6 @@ FloatingWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-
     }
 
     folder: FolderListModel {
@@ -59,18 +58,14 @@ FloatingWindow {
             text: folderModel.folder
             elide: Text.ElideMiddle
         }
-
     }
 
     component Content: RowLayout {
         // Sidebar
-        Sidebar {
-        }
+        Sidebar {}
 
         // Files
-        Files {
-        }
-
+        Files {}
     }
 
     component Sidebar: ColumnLayout {
@@ -103,7 +98,6 @@ FloatingWindow {
                 onClicked: {
                     if (isDir)
                         folderModel.folder = model.fileUrl;
-
                 }
 
                 background: Rectangle {
@@ -115,9 +109,7 @@ FloatingWindow {
                             duration: 100
                             easing.type: Easing.InOutQuad
                         }
-
                     }
-
                 }
 
                 contentItem: Text {
@@ -126,11 +118,8 @@ FloatingWindow {
                     color: Colors.color.primary
                     elide: Text.ElideMiddle
                 }
-
             }
-
         }
-
     }
 
     component Files: ListView {
@@ -144,8 +133,7 @@ FloatingWindow {
 
             width: ListView.view.width
             hoverEnabled: true
-            onClicked: {
-            }
+            onClicked: {}
 
             // Decor
             background: Rectangle {
@@ -157,9 +145,7 @@ FloatingWindow {
                         duration: 100
                         easing.type: Easing.InOutQuad
                     }
-
                 }
-
             }
 
             // Text
@@ -169,9 +155,6 @@ FloatingWindow {
                 color: Colors.color.primary
                 elide: Text.ElideMiddle
             }
-
         }
-
     }
-
 }

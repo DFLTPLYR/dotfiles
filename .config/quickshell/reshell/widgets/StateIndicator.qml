@@ -29,9 +29,7 @@ Wrapper {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
 
         MouseArea {
@@ -59,9 +57,7 @@ Wrapper {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     PopupModal {
@@ -90,24 +86,19 @@ Wrapper {
                     text: modelData
                     width: ListView.view.width
                     onClicked: {
-                        const idx = Global.stateNames.findIndex((s) => {
+                        const idx = Global.stateNames.findIndex(s => {
                             return s === modelData;
                         });
                         if (idx !== -1)
                             Global.state = idx;
-
                     }
                 }
-
             }
-
         }
-
     }
 
     property: Property {
         property int size: 12
         property int width: 100
     }
-
 }

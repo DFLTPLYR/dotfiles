@@ -20,3 +20,5 @@ alias docker='podman'
 alias vc='code'
 alias docker=podman
 alias c='clear'
+alias updateBtw='sudo nixos-rebuild switch --flake ~/dotfiles/nixos#nixosBtw'
+alias cleanupBtw='sudo nix-collect-garbage -d'

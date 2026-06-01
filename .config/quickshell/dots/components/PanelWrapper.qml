@@ -10,9 +10,9 @@ PanelWindow {
     property real animProgress: 0
 
     // Signals for custom behavior
-    signal hidden()
+    signal hidden
 
-    screen: Quickshell.screens.find((s) => {
+    screen: Quickshell.screens.find(s => {
         return s.name === Config.focusedMonitor;
     })
     color: 'transparent'
@@ -38,7 +38,7 @@ PanelWindow {
         anim.stop();
         animProgress = target === 1 ? 0 : 1;
         anim.to = target;
-        Qt.callLater(function() {
+        Qt.callLater(function () {
             anim.restart();
         });
     }
@@ -50,5 +50,4 @@ PanelWindow {
         duration: 300
         easing.type: Easing.InOutQuad
     }
-
 }

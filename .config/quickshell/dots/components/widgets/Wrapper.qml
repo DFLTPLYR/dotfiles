@@ -66,7 +66,6 @@ Item {
                 topMargin: wrap.padding.top + Config.general.appearance.padding
                 bottomMargin: wrap.padding.bottom + Config.general.appearance.padding
             }
-
         }
 
         Behavior on color {
@@ -74,15 +73,10 @@ Item {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
-    margin: Spacing {
-    }
+    margin: Spacing {}
 
-    padding: Spacing {
-    }
-
+    padding: Spacing {}
 }

@@ -20,7 +20,7 @@ Button {
 
         anchors.fill: parent
         enabled: parent.enabled
-        onPressed: (mouse) => {
+        onPressed: mouse => {
             return mouse.accepted = false;
         }
         cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.WaitCursor
@@ -40,7 +40,6 @@ Button {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on border.width {
@@ -48,7 +47,6 @@ Button {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
 
         Behavior on border.color {
@@ -56,9 +54,6 @@ Button {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
-
 }

@@ -53,9 +53,7 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     down.indicator: Rectangle {
@@ -81,9 +79,6 @@ SpinBox {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
-
 }

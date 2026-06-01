@@ -81,7 +81,5 @@ Wrapper {
             font.pixelSize: Math.min(mem.contentWidth, mem.contentHeight) / 2
             text: `${mem.formatBytes(Hardware.memory.total, 0)}`
         }
-
     }
-
 }

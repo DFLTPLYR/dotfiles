@@ -7,7 +7,7 @@ StyledRect {
 
     required property var modelData
 
-    signal action()
+    signal action
 
     color: Qt.rgba(0, 0, 0, 0.8)
     width: parent ? parent.width : 0
@@ -33,7 +33,6 @@ StyledRect {
                 fillMode: Image.PreserveAspectCrop
                 source: Qt.resolvedUrl(modelData.image || modelData.appIcon)
             }
-
         }
 
         // content
@@ -67,9 +66,7 @@ StyledRect {
                 color: "lightgray"
                 elide: Text.ElideRight
             }
-
         }
-
     }
 
     MouseArea {
@@ -78,5 +75,4 @@ StyledRect {
             notification.action();
         }
     }
-
 }

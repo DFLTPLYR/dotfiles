@@ -9,16 +9,11 @@ JsonObject {
     property DirectionJson margin
     property CornerJson rounding
 
-    borderImage: BorderImageJson {
-    }
+    borderImage: BorderImageJson {}
 
-    border: BorderJson {
-    }
+    border: BorderJson {}
 
-    margin: DirectionJson {
-    }
+    margin: DirectionJson {}
 
-    rounding: CornerJson {
-    }
-
+    rounding: CornerJson {}
 }

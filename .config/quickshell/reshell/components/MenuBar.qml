@@ -22,9 +22,7 @@ MenuBar {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
 
         background: Rectangle {
@@ -38,11 +36,8 @@ MenuBar {
                     duration: 300
                     easing.type: Easing.InOutQuad
                 }
-
             }
-
         }
-
     }
 
     background: Rectangle {
@@ -50,5 +45,4 @@ MenuBar {
         implicitHeight: 40
         color: Colors.color.background
     }
-
 }

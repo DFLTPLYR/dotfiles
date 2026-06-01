@@ -13,32 +13,25 @@ ShellRoot {
     id: root
 
     // App Launcher
-    AppMenu {
-    }
+    AppMenu {}
 
     // Navbar
-    Bar {
-    }
+    Bar {}
 
     // Notifications
-    Notifications {
-    }
+    Notifications {}
 
     // WallpaperBackground
-    WallpaperBackground {
-    }
+    WallpaperBackground {}
 
     // Volume OSD
-    VolumeOsd {
-    }
+    VolumeOsd {}
 
     // Settings Panel
-    SettingPanel {
-    }
+    SettingPanel {}
 
     //Session Menu Overlay
-    SessionOverlay {
-    }
+    SessionOverlay {}
 
     // Cutout Square
     Variants {
@@ -50,7 +43,5 @@ ShellRoot {
         delegate: Cutout {
             screen: modelData
         }
-
     }
-
 }

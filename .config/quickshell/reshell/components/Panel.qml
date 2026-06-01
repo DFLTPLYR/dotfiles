@@ -23,7 +23,6 @@ Rectangle {
                 target: panel
                 opacity: 0
             }
-
         },
         State {
             name: "show"
@@ -32,7 +31,6 @@ Rectangle {
                 target: panel
                 opacity: 1
             }
-
         }
     ]
     transitions: [
@@ -52,9 +50,7 @@ Rectangle {
                         panel.shouldShow = false;
                     }
                 }
-
             }
-
         },
         Transition {
             from: "*"
@@ -65,7 +61,6 @@ Rectangle {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-
         }
     ]
 
@@ -80,5 +75,4 @@ Rectangle {
             panel.shouldShow = false;
         }
     }
-
 }

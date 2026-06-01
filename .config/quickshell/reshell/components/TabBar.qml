@@ -8,5 +8,4 @@ TabBar {
     background: Rectangle {
         color: Colors.color.background
     }
-
 }

@@ -7,7 +7,7 @@ Rectangle {
     property color hoveredColor: Qt.rgba(1, 1, 1, 0.2)
     property int duration: 200
 
-    signal action()
+    signal action
 
     color: menuBtnArea.containsMouse ? hoveredColor : unHoveredColor
 
@@ -25,7 +25,5 @@ Rectangle {
         ColorAnimation {
             duration: duration
         }
-
     }
-
 }

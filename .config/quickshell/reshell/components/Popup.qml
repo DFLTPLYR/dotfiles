@@ -17,5 +17,4 @@ Popup {
             Global.bindRadii(background);
         }
     }
-
 }

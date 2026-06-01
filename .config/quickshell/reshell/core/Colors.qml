@@ -17,12 +17,12 @@ Singleton {
         watchChanges: true
         onFileChanged: reload()
         onLoadFailed: error => {
-                  if (error === FileViewError.FileNotFound) {
-                      this.setText("{}");
-                      this.writeAdapter();
-                  }
-              }
-              adapter: JsonAdapter {
+            if (error === FileViewError.FileNotFound) {
+                this.setText("{}");
+                this.writeAdapter();
+            }
+        }
+        adapter: JsonAdapter {
             id: jsonAdapter
 
             readonly property Color color: Color {}

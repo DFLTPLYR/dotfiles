@@ -6,7 +6,5 @@ JsonObject {
     property string source: ""
     property DirectionJson border
 
-    border: DirectionJson {
-    }
-
+    border: DirectionJson {}
 }

@@ -37,9 +37,7 @@ Item {
                 duration: 250
                 easing.type: Easing.InOutQuad
             }
-
         }
-
     }
 
     BorderImage {
@@ -60,7 +58,6 @@ Item {
             right: root.border.right
             bottom: root.border.bottom
         }
-
     }
 
     Rectangle {
@@ -75,13 +72,9 @@ Item {
             leftMargin: root.border.left / 2
             rightMargin: root.border.right / 2
         }
-
     }
 
-    border: Spacing {
-    }
+    border: Spacing {}
 
-    margin: Spacing {
-    }
-
+    margin: Spacing {}
 }

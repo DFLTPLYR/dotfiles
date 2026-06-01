@@ -26,7 +26,6 @@ CheckBox {
             color: control.down ? Qt.darker(Colors.color.primary, 1.15) : Colors.color.primary
             visible: control.checked
         }
-
     }
 
     contentItem: Text {
@@ -37,5 +36,4 @@ CheckBox {
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.indicator.width + control.spacing
     }
-
 }

@@ -40,7 +40,6 @@ MouseArea {
                     x: ma.posx
                     y: ma.posy
                 }
-
             }
 
             Rectangle {
@@ -59,7 +58,6 @@ MouseArea {
                             scale: 0.9
                             y: -500
                         }
-
                     },
                     State {
                         name: "show"
@@ -69,7 +67,6 @@ MouseArea {
                             scale: 1
                             y: 0
                         }
-
                     }
                 ]
                 transitions: [
@@ -81,7 +78,6 @@ MouseArea {
                             duration: 300
                             easing.type: Easing.InOutQuad
                         }
-
                     },
                     Transition {
                         to: "hidden"
@@ -96,15 +92,10 @@ MouseArea {
                             ScriptAction {
                                 script: load.active = false
                             }
-
                         }
-
                     }
                 ]
             }
-
         }
-
     }
-
 }

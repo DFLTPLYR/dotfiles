@@ -13,8 +13,7 @@ PageWrapper {
         title: "General"
     }
 
-    Spacer {
-    }
+    Spacer {}
 
     FileDialog {
         id: fileDialog
@@ -44,7 +43,6 @@ PageWrapper {
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
-
             }
 
             StyledSpinBox {
@@ -53,7 +51,6 @@ PageWrapper {
                     Config.general.appearance.margin = value;
                 }
             }
-
         }
 
         Row {
@@ -67,7 +64,6 @@ PageWrapper {
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
-
             }
 
             StyledSpinBox {
@@ -76,7 +72,6 @@ PageWrapper {
                     Config.general.appearance.padding = value;
                 }
             }
-
         }
 
         Row {
@@ -90,7 +85,6 @@ PageWrapper {
                 anchors {
                     verticalCenter: parent.verticalCenter
                 }
-
             }
 
             StyledSpinBox {
@@ -99,13 +93,10 @@ PageWrapper {
                     Config.general.appearance.rounding = value;
                 }
             }
-
         }
-
     }
 
-    Spacer {
-    }
+    Spacer {}
 
     StyledSwitch {
         label: qsTr("Show Preset Creator Grid")
@@ -152,15 +143,13 @@ PageWrapper {
                         color: "white"
                         font.pixelSize: parent.height
                     }
-
                 }
 
                 Button {
                     text: "save"
                     enabled: inputField.text.length > 0
                     onClicked: {
-                        const preset = {
-                        };
+                        const preset = {};
                         preset.name = inputField.text;
                         preset.padding = {
                             "left": acceptButtonBg.border.left,
@@ -169,7 +158,7 @@ PageWrapper {
                             "bottom": acceptButtonBg.border.bottom
                         };
                         preset.source = acceptButtonBg.source;
-                        const target = Config.general.presets.find((p) => {
+                        const target = Config.general.presets.find(p => {
                             return p.name === preset.name;
                         });
                         if (!target && preset.source) {
@@ -178,9 +167,7 @@ PageWrapper {
                         }
                     }
                 }
-
             }
-
         }
 
         Item {
@@ -199,9 +186,7 @@ PageWrapper {
                         acceptButtonBg.border.top = value;
                     }
                 }
-
             }
-
         }
 
         Item {
@@ -225,9 +210,7 @@ PageWrapper {
                         acceptButtonBg.border.left = value;
                     }
                 }
-
             }
-
         }
 
         Rectangle {
@@ -267,11 +250,8 @@ PageWrapper {
                         right: 1
                         bottom: 1
                     }
-
                 }
-
             }
-
         }
 
         Item {
@@ -290,9 +270,7 @@ PageWrapper {
                         acceptButtonBg.border.right = value;
                     }
                 }
-
             }
-
         }
 
         Item {
@@ -317,9 +295,7 @@ PageWrapper {
                         acceptButtonBg.border.bottom = value;
                     }
                 }
-
             }
-
         }
 
         Item {
@@ -331,7 +307,6 @@ PageWrapper {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-
     }
 
     GridLayout {
@@ -377,17 +352,12 @@ PageWrapper {
                             Config.saveSettings();
                         }
                     }
-
                 }
-
             }
-
         }
-
     }
 
-    Spacer {
-    }
+    Spacer {}
 
     PageFooter {
         onSave: {
@@ -407,5 +377,4 @@ PageWrapper {
             });
         }
     }
-
 }

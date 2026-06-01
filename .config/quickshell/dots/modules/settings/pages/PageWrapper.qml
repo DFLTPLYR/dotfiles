@@ -17,7 +17,5 @@ ScrollView {
             fill: parent
             rightMargin: 8
         }
-
     }
-
 }

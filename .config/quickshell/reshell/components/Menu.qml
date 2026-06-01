@@ -51,9 +51,7 @@ Menu {
                     color: Colors.color.primary
                     radius: 2
                 }
-
             }
-
         }
 
         contentItem: Text {
@@ -73,7 +71,6 @@ Menu {
             opacity: enabled ? 1 : 0.3
             color: menuItem.highlighted ? Colors.color.background : "transparent"
         }
-
     }
 
     background: Rectangle {
@@ -84,5 +81,4 @@ Menu {
         border.color: Colors.color.outline
         radius: 2
     }
-
 }

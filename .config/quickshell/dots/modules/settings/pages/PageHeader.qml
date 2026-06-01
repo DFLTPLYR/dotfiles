@@ -14,5 +14,4 @@ Item {
         anchors.centerIn: parent
         color: Colors.color.primary
     }
-
 }

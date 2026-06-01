@@ -1,8 +1,8 @@
+// Helpers.qml
+pragma Singleton
 import "./ntc.js" as NTC
 import QtQuick
 import qs.config
-// Helpers.qml
-pragma Singleton
 
 QtObject {
     function setOpacity(color, alpha) {
@@ -36,5 +36,4 @@ QtObject {
     function getRandomInt(max) {
         return Math.floor(Math.random() * max) + 1;
     }
-
 }

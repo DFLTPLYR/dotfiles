@@ -23,7 +23,6 @@ Switch {
             color: Colors.color.secondary
             text: root.checked ? "circle-check" : "xmark-circle"
         }
-
     }
 
     contentItem: Label {
@@ -32,5 +31,4 @@ Switch {
         color: root.labelColor
         font.pixelSize: root.labelSize
     }
-
 }

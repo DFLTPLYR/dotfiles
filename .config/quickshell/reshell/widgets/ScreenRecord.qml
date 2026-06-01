@@ -26,7 +26,6 @@ Wrapper {
             styleName: Components.icon.styleName
             pixelSize: parent ? Math.min(parent.width, parent.height) / 3 : 0
         }
-
     }
 
     Process {
@@ -37,5 +36,4 @@ Wrapper {
             print(command);
         }
     }
-
 }

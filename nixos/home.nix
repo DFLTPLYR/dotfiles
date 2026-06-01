@@ -60,9 +60,9 @@
 
   programs.git = {
     enable = true;
-     settings = {
-        user.name = "DFLTPLYR";
-        user.email = "gonzales.johncris01@gmail.com";
-     };
+    settings = {
+      user.name = "DFLTPLYR";
+      user.email = "gonzales.johncris01@gmail.com";
+    };
   };
 }

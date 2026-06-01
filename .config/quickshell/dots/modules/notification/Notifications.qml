@@ -14,7 +14,7 @@ Scope {
         property bool isPortrait: screen.height > screen.width
 
         WlrLayershell.namespace: "notifications"
-        screen: Quickshell.screens.find((s) => {
+        screen: Quickshell.screens.find(s => {
             return s.name === Config.focusedMonitor;
         }) || null
         implicitWidth: isPortrait ? Math.round(screen.width / 2.5) : Math.round(screen.width / 5)
@@ -44,8 +44,7 @@ Scope {
             leftMargin: 20
             rightMargin: 20
 
-            delegate: Notification {
-            }
+            delegate: Notification {}
 
             add: Transition {
                 NumberAnimation {
@@ -61,7 +60,6 @@ Scope {
                     to: 0
                     duration: 250
                 }
-
             }
 
             remove: Transition {
@@ -86,7 +84,6 @@ Scope {
                     to: 200
                     duration: 250
                 }
-
             }
 
             displaced: Transition {
@@ -94,9 +91,7 @@ Scope {
                     properties: "x,y"
                     duration: 250
                 }
-
             }
-
         }
 
         Connections {
@@ -133,10 +128,7 @@ Scope {
         mask: Region {
             item: listview.contentItem
         }
-
     }
 
-    notificationListModel: ListModel {
-    }
-
+    notificationListModel: ListModel {}
 }
