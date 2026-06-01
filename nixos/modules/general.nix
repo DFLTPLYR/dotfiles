@@ -32,6 +32,8 @@
     yazi
     pavucontrol
     btop-rocm
+    obs-studio
+    droidcam
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default

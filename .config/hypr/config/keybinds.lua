@@ -5,11 +5,11 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + P", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
-hl.bind(mainMod .. "+ SHIFT + P", hl.dsp.exec_cmd([[grim -g "$(slurp -o)" - | wl-copy]]))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(selectshot))
+hl.bind(mainMod .. "+ SHIFT + P", hl.dsp.exec_cmd(screenshot))
 -- hl.bind(mainMod .. " + F", hl.dsp.window.focus({ fullscreen = true }))
 
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(filemanager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(mode))
