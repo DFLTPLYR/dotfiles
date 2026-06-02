@@ -5,11 +5,6 @@
 }: {
   environment.systemPackages = with pkgs; [
     vim
-    neovim
-    just
-    rustup
-    kitty
-
     wget
     git
     curl
@@ -17,7 +12,6 @@
     mpd
     mpdris2-rs
     gcc
-    fastfetch
     firefoxpwa
   ];
 

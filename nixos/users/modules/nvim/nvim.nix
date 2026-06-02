@@ -4,7 +4,8 @@
   ...
 }: {
   imports = [inputs.nix4nvchad.homeManagerModules.default];
-  programs.nvchad = {
+ 
+ programs.nvchad = {
     enable = true;
     extraPackages = with pkgs; [
       ripgrep
@@ -18,9 +19,9 @@
       vue-language-server
     ];
     extraConfig = ''
-      ${builtins.readFile ./nvim/lsp.lua}
-      ${builtins.readFile ./nvim/keybinds.lua}
-      ${builtins.readFile ./nvim/formatters.lua}
+      ${builtins.readFile ./lsp.lua}
+      ${builtins.readFile ./keybinds.lua}
+      ${builtins.readFile ./formatters.lua}
     '';
   };
   home.packages = with pkgs; [

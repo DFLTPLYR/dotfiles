@@ -23,6 +23,7 @@
     # Development
     nodejs
     opencode
+    rustup
 
     # Apps
     discord
@@ -30,6 +31,7 @@
     thunderbird
     yazi
     pavucontrol
+    speedtest-rs
     btop-rocm
     obs-studio
     droidcam
@@ -48,7 +50,11 @@
           "-DI3_IPC=OFF"
         ];
     }))
-
+    neovim
+    just
+    kitty
+    fastfetch
+   
     # Screenshots / clipboard
     grim
     slurp

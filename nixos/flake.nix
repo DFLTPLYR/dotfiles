@@ -50,7 +50,7 @@
             # 👇 THIS EXACT LINE PLACED RIGHT HERE FIXES THE ERROR 👇
             extraSpecialArgs = {inherit inputs;};
 
-            users.dfltplyr = import ./home.nix;
+            users.dfltplyr = import ./users/home.nix;
             backupFileExtension = "backup";
           };
         }
