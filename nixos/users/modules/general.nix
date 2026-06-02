@@ -24,6 +24,7 @@
     yazi
     speedtest-rs
     btop-rocm
+    trash-cli
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
 
