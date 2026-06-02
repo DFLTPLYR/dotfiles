@@ -55,6 +55,7 @@
         ];
     }))
     kitty
+    obsidian
 
     # Screenshots / clipboard
     grim

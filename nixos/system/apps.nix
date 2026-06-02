@@ -3,6 +3,8 @@
   pkgs,
   ...
 }: {
+  nixpkgs.overlays = [inputs.millennium.overlays.default];
+
   environment.systemPackages = with pkgs; [
     vim
     wget
@@ -24,12 +26,18 @@
   };
   programs.steam = {
     enable = true;
+    package = pkgs.millennium-steam;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   };
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
   programs.gamemode.enable = true;
 }

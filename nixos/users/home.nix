@@ -18,6 +18,12 @@
     "$HOME/.local/bin"
   ];
 
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+ 
   # ui
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
