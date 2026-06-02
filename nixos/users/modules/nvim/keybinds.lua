@@ -17,8 +17,10 @@ vim.schedule(function()
 	nomap({ "n", "t" }, "<A-h>")
 	nomap({ "n", "t" }, "<A-v>")
 
+  -- Buffer Keybinds
   if require("nvconfig").ui.tabufline.enabled then
-    map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
+    map("n", "<leader>bx", "<cmd>bufdo! bd<CR>", { desc = "buffer close all" })
+    map("n", "<leader>bn", "<cmd>enew<CR>", { desc = "buffer new" })
 
     map("n", "<A-l>", function()
       require("nvchad.tabufline").next()
