@@ -4,8 +4,8 @@
   ...
 }: {
   imports = [inputs.nix4nvchad.homeManagerModules.default];
- 
- programs.nvchad = {
+
+  programs.nvchad = {
     enable = true;
     extraPackages = with pkgs; [
       ripgrep
