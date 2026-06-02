@@ -3,11 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    matugen.url = "github:InioX/Matugen";
+    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    matugen.url = "github:InioX/Matugen";
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,10 +26,8 @@
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
   };
 
-  # Make sure '@inputs' is present right here 👇
   outputs = {
     self,
     nixpkgs,
@@ -37,12 +37,13 @@
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
+    # devshells
     devShells.${system}.quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
 
+    # system config
     nixosConfigurations.nixosBtw = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      # This passes inputs to configuration.nix
       specialArgs = {inherit inputs;};
 
       modules = [
@@ -52,10 +53,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-
-            # 👇 THIS EXACT LINE PLACED RIGHT HERE FIXES THE ERROR 👇
             extraSpecialArgs = {inherit inputs;};
-
             users.dfltplyr = import ./users/home.nix;
             backupFileExtension = "backup";
           };

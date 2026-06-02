@@ -14,6 +14,7 @@
     mpd
     mpdris2-rs
     gcc
+    zip
   ];
 
   programs.dconf.enable = true;
