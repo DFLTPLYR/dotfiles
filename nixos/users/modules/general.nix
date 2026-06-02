@@ -10,33 +10,36 @@
     pkg-config
 
     # Shell / CLI
+    cava
     starship
     oh-my-zsh
     ripgrep
     fd
     fzf
+    fastfetch
     lazygit
     direnv
     libnotify
     mpc
+    yazi
+    speedtest-rs
+    btop-rocm
+    inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # Development
     nodejs
     opencode
     rustup
+    just
 
     # Apps
     discord
     telegram-desktop
     thunderbird
-    yazi
     pavucontrol
-    speedtest-rs
-    btop-rocm
     obs-studio
     droidcam
-    inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
-    inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     adw-gtk3
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     (pkgs.quickshell.overrideAttrs (old: {
@@ -50,11 +53,8 @@
           "-DI3_IPC=OFF"
         ];
     }))
-    neovim
-    just
     kitty
-    fastfetch
-   
+
     # Screenshots / clipboard
     grim
     slurp
