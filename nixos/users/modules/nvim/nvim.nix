@@ -22,6 +22,7 @@
       ${builtins.readFile ./lsp.lua}
       ${builtins.readFile ./keybinds.lua}
       ${builtins.readFile ./formatters.lua}
+      ${builtins.readFile ./options.lua}
     '';
   };
   home.packages = with pkgs; [
