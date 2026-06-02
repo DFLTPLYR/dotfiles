@@ -23,7 +23,7 @@
       color-scheme = "prefer-dark";
     };
   };
- 
+
   # ui
   home.pointerCursor = {
     package = pkgs.bibata-cursors;

@@ -14,22 +14,23 @@
     mpd
     mpdris2-rs
     gcc
-    firefoxpwa
   ];
 
   programs.dconf.enable = true;
   programs.zsh.enable = true;
+
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
-    nativeMessagingHosts.packages = [pkgs.firefoxpwa];
   };
+
   programs.steam = {
     enable = true;
     package = pkgs.millennium-steam;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   };
+
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -37,7 +38,8 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
+
   programs.gamemode.enable = true;
 }
