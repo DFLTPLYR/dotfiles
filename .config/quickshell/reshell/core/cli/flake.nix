@@ -14,7 +14,7 @@
       inherit system;
     };
   in {
-    devShells.${system}.default = pkgs.mkShell {
+    devShells.${system}.quickcli = pkgs.mkShell {
       nativeBuildInputs = with pkgs; [
         pkg-config
       ];

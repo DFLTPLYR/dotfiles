@@ -33,7 +33,12 @@
     nixpkgs,
     home-manager,
     ...
-  } @ inputs: {
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
+    devShells.${system}.quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
+
     nixosConfigurations.nixosBtw = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
