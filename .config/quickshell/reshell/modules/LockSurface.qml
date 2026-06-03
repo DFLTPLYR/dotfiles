@@ -89,10 +89,7 @@ Rectangle {
             }
         }
 
-        active: {
-          print(coords, root.monitor)
-return (coords && root.monitor) || false
-        }
+        active: (coords && root.monitor) || false
 
         component: Pane {
           parent: layered
@@ -136,7 +133,7 @@ return (coords && root.monitor) || false
         // The native font renderer tends to look nicer at large sizes.
         renderType: Text.NativeRendering
         font.pointSize: 80
-
+color: Colors.color.primary
         // updates the clock every second
         Timer {
             running: true
@@ -155,6 +152,40 @@ return (coords && root.monitor) || false
     }
 
     ColumnLayout {
+        id: background
+        state: Window.active ? "show" : "hide"
+        states: [
+            State {
+                name: "hide"
+                PropertyChanges {
+                    target: background
+                    opacity: 0
+                }
+            },
+            State {
+                name: "show"
+                PropertyChanges {
+                    target: background
+                    opacity: 1
+                }
+            }
+          ]
+
+        transitions: [
+            Transition {
+                from: "*"
+                to: "*"
+                NumberAnimation {
+                    properties: "opacity"
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        ]
         visible: Window.active
 
         anchors {
@@ -168,7 +199,14 @@ return (coords && root.monitor) || false
 
                 implicitWidth: 400
                 padding: 10
-
+                background: Rectangle {
+                  anchors.fill: parent
+                  border {
+                    width: 2
+                    color: Colors.color.outline
+                  }
+                  color: Colors.color.on_background
+                }
                 focus: true
                 enabled: !root.context.unlockInProgress
                 echoMode: TextInput.Password
