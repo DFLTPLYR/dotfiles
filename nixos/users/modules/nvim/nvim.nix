@@ -18,6 +18,7 @@
       rust-analyzer
       vue-language-server
     ];
+    extraPlugins = builtins.readFile ./ufo.lua;
     extraConfig = ''
       ${builtins.readFile ./lsp.lua}
       ${builtins.readFile ./keybinds.lua}
