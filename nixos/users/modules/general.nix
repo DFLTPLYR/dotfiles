@@ -8,6 +8,18 @@
     stow
     wayland
     pkg-config
+    ((pkgs.quickshell.override { stdenv = pkgs.clangStdenv; }).overrideAttrs (old: {
+      cmakeFlags =
+        (old.cmakeFlags or [])
+        ++ [
+          "-DX11=OFF"
+          "-DHYPRLAND=OFF"
+          "-DHYPRLAND_GLOBAL_SHORTCUTS=OFF"
+          "-DHYPRLAND_FOCUS_GRAB=OFF"
+          "-DI3=OFF"
+          "-DI3_IPC=OFF"
+        ];
+    }))
 
     # Shell / CLI
     cava
@@ -27,7 +39,7 @@
     trash-cli
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
-    firefoxpwa
+    (pkgs.firefoxpwa-unwrapped.override { firefoxRuntime = pkgs.firefox-unwrapped; })
 
     # Development
     nodejs
@@ -44,17 +56,6 @@
     droidcam
     adw-gtk3
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    (pkgs.quickshell.overrideAttrs (old: {
-      cmakeFlags =
-        (old.cmakeFlags or [])
-        ++ [
-          "-DHYPRLAND=OFF"
-          "-DHYPRLAND_GLOBAL_SHORTCUTS=OFF"
-          "-DHYPRLAND_FOCUS_GRAB=OFF"
-          "-DI3=OFF"
-          "-DI3_IPC=OFF"
-        ];
-    }))
     kitty
     obsidian
 
