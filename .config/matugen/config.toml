@@ -6,6 +6,9 @@ input_path = "templates/colors.json.template"
 output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 # output_path = "~/.config/quickshell/dots/config/colors.json"
 
+[templates.opencode]
+input_path = '~/.config/matugen/templates/open-code.json'
+output_path = '~/.config/opencode/themes/matugen.json'
 
 [templates.rmpc]
 input_path = "templates/rmpc/shell.ron"

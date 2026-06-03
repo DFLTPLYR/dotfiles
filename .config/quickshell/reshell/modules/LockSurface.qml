@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Wayland
 
 import qs.core
+import qs.modules
 import qs.components
 
 Rectangle {
@@ -12,48 +13,103 @@ Rectangle {
     required property LockContext context
     readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
     required property ShellScreen monitor
-
     color: colors.window
 
-    component LazyImage: LazyLoader {
-        id: imageloader
+    component LazyContainer: LazyLoader {
+        id: containerloader
         required property int index
         required property var model
         property var relative: model.screens
-        property ShellScreen monitor: root.monitor
-        property var coords
-
-        onMonitorChanged: {
-            if (!relative || !relative.count)
-                return;
+        property var coords: {
+            if (!root.monitor || !relative || !relative.count) return undefined;
             for (let i = 0; i < relative.count; i++) {
                 const screen = relative.get(i);
-                print(screen.name, root.monitor);
-                if (screen.name === root.monitor.name) {
-                    imageloader.active = true;
-                    return coords = screen;
+                if (screen.name === root.monitor.name) return screen;
+            }
+            return undefined;
+        }
+        property var contents: model.contents
+        property var currentContent
+        onContentsChanged: {
+            if (!contents || !item || !root.monitor)
+                return;
+            return addContent();
+        }
+        onItemChanged: {
+            if (!contents || !item || !root.monitor)
+                return;
+            return addContent();
+        }
+
+        function addContent() {
+            const type = contents.type;
+
+            if (containerloader.currentContent) {
+                containerloader.currentContent.destroy();
+            }
+            switch (type) {
+            case "image":
+                const img = Components.createImage(contents.source, contents.kind, item);
+                containerloader.currentContent = img;
+                return;
+            case "widget":
+                const component = Qt.createComponent(contents.source);
+                const incubator = component.incubateObject(containerloader.item, {});
+                if (incubator.status !== Component.Ready) {
+                    incubator.onStatusChanged = function (status) {
+                        if (status === Component.Ready) {
+                            const widget = incubator.object;
+                            widget.parent = containerloader.item;
+                            widget.anchors.fill = containerloader.item;
+                            containerloader.currentContent = widget;
+                            if (contents.props) {
+                                widget.property.setProperty(contents.props);
+                            }
+                            widget.modal.connect((modal, hasChanges) => {
+                                bottom.hasMenu = modal ? true : false;
+                                if (modal) {
+                                    modal.y = item.height;
+                                    modal.x = (item.width - modal.width) / 2;
+                                }
+                                if (hasChanges) {
+                                    const props = widget.property.getProperty();
+                                    const conf = Wallpaper.containers.get(containerloader.index);
+                                    const withProps = conf.contents;
+                                    withProps.props = props;
+                                    Wallpaper.containers.setProperty(containerloader.index, "contents", withProps);
+                                    Wallpaper.containers.save();
+                                }
+                            });
+                        }
+                    };
                 }
+                return;
+            default:
+                return;
             }
         }
 
-        component: Image {
-            parent: layered
+        active: {
+          print(coords, root.monitor)
+return (coords && root.monitor) || false
+        }
 
-            width: imageloader.model.width
-            height: imageloader.model.height
-            visible: imageloader.coords ? true : false
-            x: imageloader.coords ? imageloader.coords.x : 0
-            y: imageloader.coords ? imageloader.coords.y : 0
-            z: imageloader.model.z
-
-            source: imageloader.model.source
+        component: Pane {
+          parent: layered
+            bg.color: "transparent"
+            width: containerloader.model.width
+            height: containerloader.model.height
+            visible: containerloader.coords ? true : false
+            x: containerloader.coords ? containerloader.coords.x : 0
+            y: containerloader.coords ? containerloader.coords.y : 0
+            z: containerloader.model.z
         }
     }
 
     DelegateModel {
         id: images
-        model: Wallpaper.list
-        delegate: LazyImage {}
+        model: Wallpaper.containers
+        delegate: LazyContainer {}
     }
 
     Item {
