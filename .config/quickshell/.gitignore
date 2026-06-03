@@ -2,3 +2,4 @@
 **/*.json
 matugen/data/userContent.css
 .qmlls.ini
+.qmllint.ini
