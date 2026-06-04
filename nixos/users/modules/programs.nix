@@ -3,21 +3,6 @@
   pkgs,
   ...
 }: {
-  programs.vesktop = {
-    enable = true;
-
-    vencord.settings = {
-      autoUpdate = true;
-      autoUpdateNotification = true;
-      notifyAboutUpdates = true;
-
-      plugins = {
-        ClearURLs.enabled = true;
-        FixYoutubeEmbeds.enabled = true;
-      };
-    };
-  };
-
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
@@ -32,4 +17,14 @@
     };
   };
   programs.direnv.enable = true;
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {};
+  };
 }

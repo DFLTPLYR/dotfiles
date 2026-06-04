@@ -5,11 +5,14 @@
   ...
 }: {
   imports = [
-    ./modules/shell.nix
     ./modules/programs.nix
     ./modules/general.nix
     ./modules/nvim/nvim.nix
+    ./modules/vesktop/vesktop.nix
+    ./modules/shell/bash.nix
+    ./modules/shell/zsh.nix
   ];
+
   home.username = "dfltplyr";
   home.homeDirectory = "/home/dfltplyr";
   home.stateVersion = "26.05";
