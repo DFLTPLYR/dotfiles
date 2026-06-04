@@ -2,7 +2,8 @@ local home = os.getenv("HOME")
 
 terminal = "kitty"
 filemanager = "kitty -e yazi"
-menu = "rofi -show drun -p 'Launch App'"
+menu = "pkill rofi || rofi -show drun -p 'Launch App'"
+clipboard = [[pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy]]
 browser = "zen"
 editor = "nvim"
 mode = "quickcli launch cycleState"

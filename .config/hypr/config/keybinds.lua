@@ -6,16 +6,17 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(selectshot))
-hl.bind(mainMod .. "+ SHIFT + P", hl.dsp.exec_cmd(screenshot))
+hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(screenshot))
 -- hl.bind(mainMod .. " + F", hl.dsp.window.focus({ fullscreen = true }))
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(filemanager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(mode))
-hl.bind(mainMod .. "+ DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(clipboard))
+hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
 -- Move focus/workspace with mainMod + direction keys
