@@ -9,20 +9,18 @@
 ---@type Config
 local config = {
 	-- Point rmpcd to your mpd server
-	address = "127.0.0.1:6600",
+    address = "127.0.0.1:6600",
 }
 
 -- Enable mpris support
 config.mpris = true
 
--- Automatically increment play count on song change
 rmpcd.install("#builtin.playcount")
 
 rmpcd.install("plugins.lyrics")
 
--- Install notification on song change builtin
 rmpcd.install("plugins.notify"):setup({
-	debounce_delay = 0,
+	debounce_delay = 100,
 })
 
 return config

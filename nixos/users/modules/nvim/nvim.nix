@@ -17,13 +17,17 @@
       pyright
       rust-analyzer
       vue-language-server
+      tree-sitter
     ];
-    extraPlugins = builtins.readFile ./ufo.lua;
+    extraPlugins = builtins.readFile ./plugins/ufo.lua;
     extraConfig = ''
-      ${builtins.readFile ./lsp.lua}
-      ${builtins.readFile ./keybinds.lua}
-      ${builtins.readFile ./formatters.lua}
-      ${builtins.readFile ./options.lua}
+           -- Options
+           ${builtins.readFile ./options/keybinds.lua}
+           ${builtins.readFile ./options/options.lua}
+           
+           -- Plugins
+           ${builtins.readFile ./plugins/lsp.lua}
+           ${builtins.readFile ./plugins/formatters.lua}
     '';
   };
   home.packages = with pkgs; [

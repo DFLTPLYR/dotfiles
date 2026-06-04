@@ -6,6 +6,10 @@ input_path = "templates/colors.json.template"
 output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 # output_path = "~/.config/quickshell/dots/config/colors.json"
 
+[templates.vesktop]
+input_path = 'templates/vesktop.css'
+output_path = '~/.config/vesktop/themes/vesktop.css'
+
 [templates.opencode]
 input_path = '~/.config/matugen/templates/open-code.json'
 output_path = '~/.config/opencode/themes/matugen.json'
@@ -42,7 +46,7 @@ output_path = '~/.config/gtk-4.0/colors.css'
 
 [templates.kitty]
 input_path = 'templates/kitty-colors.conf'
-output_path = '~/.config/kitty/themes/Matugen.conf'
+output_path = '~/.config/kitty/current-theme.conf'
 post_hook = "kitty +kitten themes --reload-in=all Matugen"
 
 [templates.neovim]

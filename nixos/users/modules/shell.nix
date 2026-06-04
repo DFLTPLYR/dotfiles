@@ -4,6 +4,21 @@
   inputs,
   ...
 }: {
+  programs.vesktop = {
+    enable = true;
+
+    vencord.settings = {
+      autoUpdate = true;
+      autoUpdateNotification = true;
+      notifyAboutUpdates = true;
+
+      plugins = {
+        ClearURLs.enabled = true;
+        FixYoutubeEmbeds.enabled = true;
+      };
+    };
+  };
+
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
@@ -39,7 +54,7 @@
     };
     syntaxHighlighting.enable = true;
     initContent = ''
-      export PATH="$HOME/.local/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
       eval "$(fzf --zsh)"
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         exec start-hyprland
