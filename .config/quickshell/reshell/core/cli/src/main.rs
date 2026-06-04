@@ -1,8 +1,6 @@
-// cargo imports
 use clap::Parser;
 use rfd::FileDialog;
 use std::{
-    env,
     error::Error,
     fs::{self, Permissions},
     io::{BufRead, BufReader, Write},
@@ -46,10 +44,9 @@ fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
     if let Commands::Launch { target } = &command {
         return Ok(shell::shell_query(target));
     }
-    let runtime_dir = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set");
-    let socket_path = format!("{}/quickcli.sock", runtime_dir);
+    let socket_path = "/tmp/quickcli.sock";
 
-    let mut stream = UnixStream::connect(&socket_path)?;
+    let mut stream = UnixStream::connect(socket_path)?;
     let request = command.to_request_string();
 
     writeln!(stream, "{}", request)?;
@@ -80,8 +77,7 @@ fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
 }
 
 fn run_daemon() -> Result<(), Box<dyn Error>> {
-    let runtime_dir = env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set");
-    let socket_path = format!("{}/quickcli.sock", runtime_dir);
+    let socket_path = "/tmp/quickcli.sock";
 
     let _ = fs::remove_file(&socket_path);
     let listener = UnixListener::bind(&socket_path)?;

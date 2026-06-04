@@ -8,7 +8,7 @@ Singleton {
 
     id: root
 
-    readonly property string daemonSocket: `${Quickshell.env("XDG_RUNTIME_DIR")}/quickcli.sock`
+    readonly property string daemonSocket: "/tmp/quickcli.sock"
     property bool ready: false
     property string lastError: ""
     property string os
