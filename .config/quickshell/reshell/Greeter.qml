@@ -3,7 +3,6 @@ import QtQuick
 
 import Quickshell.Wayland
 import qs.core
-import qs.components
 import qs.modules
 
 Item {
