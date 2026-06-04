@@ -13,10 +13,10 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(filemanager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(mode))
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(clipboard))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(clipboard))
 hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
 -- Move focus/workspace with mainMod + direction keys
