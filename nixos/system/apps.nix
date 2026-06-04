@@ -12,7 +12,6 @@
     curl
     pciutils
     mpd
-    mpdris2-rs
     gcc
     zip
   ];
