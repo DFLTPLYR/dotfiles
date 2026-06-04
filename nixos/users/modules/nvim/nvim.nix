@@ -21,13 +21,13 @@
     ];
     extraPlugins = builtins.readFile ./plugins/ufo.lua;
     extraConfig = ''
-           -- Options
-           ${builtins.readFile ./options/keybinds.lua}
-           ${builtins.readFile ./options/options.lua}
-           
-           -- Plugins
-           ${builtins.readFile ./plugins/lsp.lua}
-           ${builtins.readFile ./plugins/formatters.lua}
+      -- Options
+      ${builtins.readFile ./options/keybinds.lua}
+      ${builtins.readFile ./options/options.lua}
+
+      -- Plugins
+      ${builtins.readFile ./plugins/lsp.lua}
+      ${builtins.readFile ./plugins/formatters.lua}
     '';
   };
   home.packages = with pkgs; [
