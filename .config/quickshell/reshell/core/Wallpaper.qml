@@ -57,7 +57,9 @@ Singleton {
                     }
                 ]
                 property string theme: "scheme-content"
-                onThemeChanged: config.containers.generate()
+                onThemeChanged: {
+                    config.containers.generate();
+                }
             }
         }
     }
