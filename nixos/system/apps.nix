@@ -15,7 +15,7 @@
     gcc
     zip
   ];
-
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   programs.dconf.enable = true;
   programs.zsh.enable = true;
 

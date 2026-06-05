@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   pkgs,
   ...
@@ -19,6 +18,7 @@
       rust-analyzer
       vue-language-server
       tree-sitter
+      nixd
     ];
     extraPlugins = builtins.readFile ./plugins/ufo.lua;
     extraConfig = ''

@@ -32,11 +32,16 @@ local function nav(ws, dir)
 		if is_horizontal() then
 			hl.dispatch(hl.dsp.focus(ws))
 		else
+			local mon = hl.get_active_monitor()
+			local mon_name = mon and mon.name
 			local before = hl.get_active_window()
 			local addr = before and before.address
 			hl.dispatch(hl.dsp.focus({ direction = dir }))
 			local after = hl.get_active_window()
 			if not after or (addr and after and after.address == addr) then
+				hl.dispatch(hl.dsp.no_op())
+				hl.dispatch(hl.dsp.focus(ws))
+			elseif after and after.monitor and after.monitor.name ~= mon_name then
 				hl.dispatch(hl.dsp.focus(ws))
 			end
 		end

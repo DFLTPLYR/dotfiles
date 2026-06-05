@@ -24,3 +24,29 @@ vim.lsp.config.qmlls = {
 	capabilities = nvlsp.capabilities,
 }
 vim.lsp.enable("qmlls")
+
+local nvim_lsp = vim.lsp
+nvim_lsp.config("nixd", {
+	cmd = { "nixd" },
+	filetypes = { "nix" },
+	root_markers = { "flake.nix", ".git" },
+	settings = {
+		nixd = {
+			nixpkgs = {
+				expr = "import (builtins.getFlake (toString ./.)).inputs.nixpkgs { }",
+			},
+			formatting = {
+				command = { "alejandra" },
+			},
+			options = {
+				nixos = {
+					expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixosBtw.options",
+				},
+				home_manager = {
+					expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixosBtw.options.home-manager.users.dfltplyr",
+				},
+			},
+		},
+	},
+})
+nvim_lsp.enable("nixd")
