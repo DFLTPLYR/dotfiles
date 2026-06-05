@@ -19,31 +19,42 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
--- Move focus/workspace with mainMod + direction keys
--- On horizontal-scrolling monitors (DP-1), up/down switches workspace
--- left/right always focuses direction (Hyprland falls through to next monitor at edge)
 local function is_horizontal()
 	local mon = hl.get_active_monitor()
-	return mon and mon.name == "DP-1"
+	return mon and (mon.transform == 0 or mon.transform == 2)
 end
 
 local function nav(ws, dir)
 	return function()
 		if is_horizontal() then
 			hl.dispatch(hl.dsp.focus(ws))
-		else
-			local mon = hl.get_active_monitor()
-			local mon_name = mon and mon.name
-			local before = hl.get_active_window()
-			local addr = before and before.address
-			hl.dispatch(hl.dsp.focus({ direction = dir }))
-			local after = hl.get_active_window()
-			if not after or (addr and after and after.address == addr) then
-				hl.dispatch(hl.dsp.no_op())
-				hl.dispatch(hl.dsp.focus(ws))
-			elseif after and after.monitor and after.monitor.name ~= mon_name then
-				hl.dispatch(hl.dsp.focus(ws))
-			end
+			return
+		end
+
+		local current_mon = hl.get_active_monitor()
+		local current_mon_name = current_mon and current_mon.name
+
+		local window_before = hl.get_active_window()
+		local addr_before = window_before and window_before.address
+
+		hl.dispatch(hl.dsp.focus({ direction = dir }))
+
+		local window_after = hl.get_active_window()
+		if not window_after then
+			hl.dispatch(hl.dsp.no_op())
+			hl.dispatch(hl.dsp.focus(ws))
+			return
+		end
+
+		if addr_before and window_after.address == addr_before then
+			hl.dispatch(hl.dsp.no_op())
+			hl.dispatch(hl.dsp.focus(ws))
+			return
+		end
+
+		if window_after.monitor and window_after.monitor.name ~= current_mon_name then
+			hl.dispatch(hl.dsp.focus(ws))
+			return
 		end
 	end
 end
