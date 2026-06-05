@@ -2,7 +2,7 @@ local rule = hl.window_rule
 rule({
 	name = "Discord",
 	match = {
-		class = "discord",
+		class = "vesktop",
 	},
 	monitor = "DP-2",
 })

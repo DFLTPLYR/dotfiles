@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   ...
@@ -30,7 +31,4 @@
       ${builtins.readFile ./plugins/formatters.lua}
     '';
   };
-  home.packages = with pkgs; [
-    qt6.qtdeclarative
-  ];
 }

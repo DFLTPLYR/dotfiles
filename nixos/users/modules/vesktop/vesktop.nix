@@ -11,7 +11,9 @@
       autoUpdateNotification = true;
       notifyAboutUpdates = true;
       useQuickCss = true;
-      enabledThemes = "~/.config/vesktop/themes/vesktop.css";
+      frameless = true;
+      transparent = true;
+      enabledThemes = ["vesktop.css"];
       plugins = {
         ClearURLs.enabled = true;
         FixYoutubeEmbeds.enabled = true;

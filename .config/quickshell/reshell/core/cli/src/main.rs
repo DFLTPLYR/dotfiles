@@ -44,6 +44,13 @@ fn handle_command(command: Commands) -> Result<(), Box<dyn Error>> {
     if let Commands::Launch { target } = &command {
         return Ok(shell::shell_query(target));
     }
+    if let Commands::FilePicker = &command {
+        match FileDialog::new().pick_file() {
+            Some(file) => println!("{}", file.display()),
+            None => println!("error"),
+        }
+        return Ok(());
+    }
     let socket_path = "/tmp/quickcli.sock";
 
     let mut stream = UnixStream::connect(socket_path)?;
