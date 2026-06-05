@@ -1,15 +1,24 @@
-local options = {
-  formatters_by_ft = {
-    lua = { "stylua" },
-    -- css = { "prettier" },
-    -- html = { "prettier" },
-  },
+-- formatters
 
-  -- format_on_save = {
-  --   -- These options will be passed to conform.format()
-  --   timeout_ms = 500,
-  --   lsp_fallback = true,
-  -- },
+local options = {
+	formatters_by_ft = {
+		lua = { "stylua" },
+		qml = { "qmlformat" },
+		nix = { "alejandra" },
+	},
+
+	format_on_save = {
+		timeout_ms = 500,
+		lsp_fallback = true,
+	},
+
+	formatters = {
+		qmlformat = {
+			command = "qmlformat",
+			args = { "-i" },
+			stdin = false,
+		},
+	},
 }
 
 return options

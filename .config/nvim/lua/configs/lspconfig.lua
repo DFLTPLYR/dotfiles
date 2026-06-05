@@ -1,30 +1,28 @@
 local nvlsp = require("nvchad.configs.lspconfig")
+local flake = "(builtins.getFlake (toString ./.))"
 
+-- PHP
 vim.g.lazyvim_php_lsp = "intelephense"
+
+-- Filetype detection
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	pattern = "*.vue",
 	command = "setfiletype vue",
 })
 
-local servers = { "html", "cssls", "ts_ls", "pyright", "rust_analyzer" }
-
-for _, lsp in ipairs(servers) do
-	vim.lsp.config(lsp, {
-		on_attach = nvlsp.on_attach,
-		on_init = nvlsp.on_init,
-		capabilities = nvlsp.capabilities,
-	})
-	vim.lsp.enable(lsp)
-end
-
-vim.lsp.config("qmlls", {
-	cmd = { "qmlls" },
+-- Global defaults
+vim.lsp.config("*", {
 	on_attach = nvlsp.on_attach,
 	on_init = nvlsp.on_init,
 	capabilities = nvlsp.capabilities,
 })
-vim.lsp.enable("qmlls")
 
+-- Simple LSP servers
+for _, lsp in ipairs({ "html", "cssls", "ts_ls", "pyright", "rust_analyzer", "qmlls" }) do
+	vim.lsp.enable(lsp)
+end
+
+-- nixd
 vim.lsp.config("nixd", {
 	cmd = { "nixd" },
 	filetypes = { "nix" },
@@ -32,17 +30,17 @@ vim.lsp.config("nixd", {
 	settings = {
 		nixd = {
 			nixpkgs = {
-				expr = "import (builtins.getFlake (toString ./.)).inputs.nixpkgs { }",
+				expr = ("import %s.inputs.nixpkgs { }"):format(flake),
 			},
 			formatting = {
 				command = { "alejandra" },
 			},
 			options = {
 				nixos = {
-					expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixosBtw.options",
+					expr = ("%s.nixosConfigurations.nixosBtw.options"):format(flake),
 				},
 				home_manager = {
-					expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixosBtw.options.home-manager.users.dfltplyr",
+					expr = ("%s.nixosConfigurations.nixosBtw.options.home-manager.users.dfltplyr"):format(flake),
 				},
 			},
 		},
