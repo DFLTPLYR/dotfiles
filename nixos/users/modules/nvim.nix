@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   ...
@@ -20,15 +21,6 @@
       tree-sitter
       nixd
     ];
-    extraPlugins = builtins.readFile ./plugins/ufo.lua;
-    extraConfig = ''
-      -- Options
-      ${builtins.readFile ./options/keybinds.lua}
-      ${builtins.readFile ./options/options.lua}
-
-      -- Plugins
-      ${builtins.readFile ./plugins/lsp.lua}
-      ${builtins.readFile ./plugins/formatters.lua}
-    '';
   };
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/nvim";
 }

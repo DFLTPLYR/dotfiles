@@ -1,5 +1,4 @@
 local nvlsp = require("nvchad.configs.lspconfig")
-local servers = { "ts_ls", "pyright", "rust_analyzer" }
 
 vim.g.lazyvim_php_lsp = "intelephense"
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
@@ -7,26 +6,26 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	command = "setfiletype vue",
 })
 
+local servers = { "html", "cssls", "ts_ls", "pyright", "rust_analyzer" }
+
 for _, lsp in ipairs(servers) do
-	vim.lsp.config[lsp] = {
+	vim.lsp.config(lsp, {
 		on_attach = nvlsp.on_attach,
 		on_init = nvlsp.on_init,
 		capabilities = nvlsp.capabilities,
-	}
+	})
 	vim.lsp.enable(lsp)
 end
 
--- qmlls needs explicit cmd
-vim.lsp.config.qmlls = {
+vim.lsp.config("qmlls", {
 	cmd = { "qmlls" },
 	on_attach = nvlsp.on_attach,
 	on_init = nvlsp.on_init,
 	capabilities = nvlsp.capabilities,
-}
+})
 vim.lsp.enable("qmlls")
 
-local nvim_lsp = vim.lsp
-nvim_lsp.config("nixd", {
+vim.lsp.config("nixd", {
 	cmd = { "nixd" },
 	filetypes = { "nix" },
 	root_markers = { "flake.nix", ".git" },
@@ -49,4 +48,4 @@ nvim_lsp.config("nixd", {
 		},
 	},
 })
-nvim_lsp.enable("nixd")
+vim.lsp.enable("nixd")
