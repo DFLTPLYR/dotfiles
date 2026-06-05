@@ -15,7 +15,6 @@ local options = {
 	formatters = {
 		qmlformat = {
 			command = "qmlformat",
-			args = { "-i" },
 			stdin = false,
 		},
 	},
