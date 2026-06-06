@@ -21,10 +21,12 @@ Rectangle {
         required property var model
         property var relative: model.screens
         property var coords: {
-            if (!root.monitor || !relative || !relative.count) return undefined;
+            if (!root.monitor || !relative || !relative.count)
+                return undefined;
             for (let i = 0; i < relative.count; i++) {
                 const screen = relative.get(i);
-                if (screen.name === root.monitor.name) return screen;
+                if (screen.name === root.monitor.name)
+                    return screen;
             }
             return undefined;
         }
@@ -92,7 +94,7 @@ Rectangle {
         active: (coords && root.monitor) || false
 
         component: Pane {
-          parent: layered
+            parent: layered
             bg.color: "transparent"
             width: containerloader.model.width
             height: containerloader.model.height
@@ -133,7 +135,7 @@ Rectangle {
         // The native font renderer tends to look nicer at large sizes.
         renderType: Text.NativeRendering
         font.pointSize: 80
-color: Colors.color.primary
+        color: Colors.color.primary
         // updates the clock every second
         Timer {
             running: true
@@ -169,7 +171,7 @@ color: Colors.color.primary
                     opacity: 1
                 }
             }
-          ]
+        ]
 
         transitions: [
             Transition {
@@ -200,12 +202,12 @@ color: Colors.color.primary
                 implicitWidth: 400
                 padding: 10
                 background: Rectangle {
-                  anchors.fill: parent
-                  border {
-                    width: 2
-                    color: Colors.color.outline
-                  }
-                  color: Colors.color.on_background
+                    anchors.fill: parent
+                    border {
+                        width: 2
+                        color: Colors.color.outline
+                    }
+                    color: Colors.color.on_background
                 }
                 focus: true
                 enabled: !root.context.unlockInProgress

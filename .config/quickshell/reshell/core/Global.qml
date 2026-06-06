@@ -100,6 +100,7 @@ Singleton {
         adapter: JsonAdapter {
             id: adapter
             property bool greeter: false
+            property bool darkmode: true
         }
     }
 

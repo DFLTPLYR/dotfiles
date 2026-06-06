@@ -27,11 +27,13 @@ Singleton {
         watchChanges: true
         preload: true
         onLoaded: {
-            const current = adapter.config.current;
-            const theme = adapter.config.preset.find(s => s.name === current);
-            const contents = theme?.contents;
-            if (contents) {
-                containers.sources = contents;
+            if (containers.count === 0) {
+                const current = adapter.config.current;
+                const theme = adapter.config.preset.find(s => s.name === current);
+                const contents = theme?.contents;
+                if (contents) {
+                    containers.sources = contents;
+                }
             }
             config.ready = true;
         }
