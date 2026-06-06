@@ -11,13 +11,13 @@ Button {
 
     property QtObject config: QtObject {
         property QtObject content: QtObject {
-            property color color: Colors.color.on_background
+            property color color: Colors.theme.on_surface
         }
         property QtObject background: QtObject {
             property int height: 2
             property int width: 200
 
-            property color color: Colors.color.background
+            property color color: Colors.theme.surface
 
             property Border border: Border {}
             property Direction margin: Direction {}

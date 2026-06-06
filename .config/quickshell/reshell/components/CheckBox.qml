@@ -14,7 +14,7 @@ CheckBox {
         x: control.leftPadding
         y: parent.height / 2 - height / 2
         radius: 3
-        color: Colors.color.background
+        color: Colors.theme.surface
         border.color: control.down ? Qt.darker(Colors.color.outline, 1.15) : Colors.color.outline
 
         Rectangle {

@@ -53,10 +53,10 @@ input_path = 'templates/kitty-colors.conf'
 output_path = '~/.config/kitty/current-theme.conf'
 post_hook = "kitty +kitten themes --reload-in=all Matugen"
 
-[templates.neovim]
-input_path = 'templates/nvim-colors.lua'
-output_path = '~/.config/nvim/generated.lua'
-post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
+# [templates.neovim]
+# input_path = 'templates/nvim-colors.lua'
+# output_path = '~/.config/nvim/generated.lua'
+# post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
 
 [templates.zenChrome]
 input_path = 'templates/userChrome.css.tpl'
