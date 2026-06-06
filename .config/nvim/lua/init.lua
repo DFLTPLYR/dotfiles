@@ -1,6 +1,3 @@
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.wrap = false
 vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 vim.g.mapleader = " "
 -- bootstrap lazy and all plugins

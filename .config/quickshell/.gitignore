@@ -1,5 +1,6 @@
 *.json
 **/*.json
-matugen/data/userContent.css
+!reshell/core/data/emoji.json
+!reshell/core/data/themes/*
 .qmlls.ini
 .qmllint.ini

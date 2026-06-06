@@ -188,4 +188,99 @@ Singleton {
         property color tertiary99: "#f5e0dc"
         property color tertiary100: "#f5e0dc"
     }
+
+    component MaterialPalette: JsonObject {
+        property JsonObject dark: JsonObject {
+            property string primary: "{{ colors.primary.dark.hex }}"
+            property string on_primary: "{{ colors.on_primary.dark.hex }}"
+            property string secondary: "{{ colors.secondary.dark.hex }}"
+            property string on_secondary: "{{ colors.on_secondary.dark.hex }}"
+            property string tertiary: "{{ colors.tertiary.dark.hex }}"
+            property string on_tertiary: "{{ colors.on_tertiary.dark.hex }}"
+            property string error: "{{ colors.error.dark.hex }}"
+            property string on_error: "{{ colors.on_error.dark.hex }}"
+            property string surface: "{{ colors.surface.dark.hex }}"
+            property string on_surface: "{{ colors.on_surface.dark.hex }}"
+            property string surface_variant: "{{ colors.surface_variant.dark.hex }}"
+            property string on_surface_variant: "{{ colors.on_surface_variant.dark.hex }}"
+            property string outline: "{{ colors.outline.dark.hex }}"
+            property string shadow: "{{ colors.shadow.dark.hex }}"
+            property string hover: "{{ colors.tertiary.dark.hex }}"
+            property string on_hover: "{{ colors.on_tertiary.dark.hex }}"
+            property JsonObject terminal: JsonObject {
+                property JsonObject normal: JsonObject {
+                    property string black: "{{ palettes.neutral._20.hex }}"
+                    property string red: "{{ colors.error.dark.hex }}"
+                    property string green: "{{ colors.secondary.dark.hex }}"
+                    property string yellow: "{{ colors.tertiary.dark.hex }}"
+                    property string blue: "{{ colors.primary.dark.hex }}"
+                    property string magenta: "{{ palettes.tertiary._60.hex }}"
+                    property string cyan: "{{ palettes.tertiary._70.hex }}"
+                    property string white: "{{ palettes.neutral._90.hex }}"
+                }
+                property JsonObject bright: JsonObject {
+                    property string black: "{{ palettes.neutral._40.hex }}"
+                    property string red: "{{ palettes.error._50.hex }}"
+                    property string green: "{{ palettes.secondary._60.hex }}"
+                    property string yellow: "{{ palettes.tertiary._50.hex }}"
+                    property string blue: "{{ palettes.primary._60.hex }}"
+                    property string magenta: "{{ palettes.tertiary._70.hex }}"
+                    property string cyan: "{{ palettes.tertiary._80.hex }}"
+                    property string white: "{{ palettes.neutral._99.hex }}"
+                }
+                property string foreground: "{{ colors.on_surface.dark.hex }}"
+                property string background: "{{ colors.surface.dark.hex }}"
+                property string selectionFg: "{{ colors.surface.dark.hex }}"
+                property string selectionBg: "{{ colors.primary.dark.hex }}"
+                property string cursorText: "{{ colors.surface.dark.hex }}"
+                property string cursor: "{{ colors.primary.dark.hex }}"
+            }
+        }
+        property JsonObject light: JsonObject {
+            property string primary: "{{ colors.primary.light.hex }}"
+            property string on_primary: "{{ colors.on_primary.light.hex }}"
+            property string secondary: "{{ colors.secondary.light.hex }}"
+            property string on_secondary: "{{ colors.on_secondary.light.hex }}"
+            property string tertiary: "{{ colors.tertiary.light.hex }}"
+            property string on_tertiary: "{{ colors.on_tertiary.light.hex }}"
+            property string error: "{{ colors.error.light.hex }}"
+            property string on_error: "{{ colors.on_error.light.hex }}"
+            property string surface: "{{ colors.surface.light.hex }}"
+            property string on_surface: "{{ colors.on_surface.light.hex }}"
+            property string surface_variant: "{{ colors.surface_variant.light.hex }}"
+            property string on_surface_variant: "{{ colors.on_surface_variant.light.hex }}"
+            property string outline: "{{ colors.outline.light.hex }}"
+            property string shadow: "{{ colors.shadow.light.hex }}"
+            property string hover: "{{ colors.tertiary.light.hex }}"
+            property string on_hover: "{{ colors.on_tertiary.light.hex }}"
+            property JsonObject terminal: JsonObject {
+                property JsonObject normal: JsonObject {
+                    property string black: "{{ palettes.neutral._10.hex }}"
+                    property string red: "{{ colors.error.light.hex }}"
+                    property string green: "{{ colors.secondary.light.hex }}"
+                    property string yellow: "{{ colors.tertiary.light.hex }}"
+                    property string blue: "{{ colors.primary.light.hex }}"
+                    property string magenta: "{{ palettes.tertiary._50.hex }}"
+                    property string cyan: "{{ palettes.tertiary._60.hex }}"
+                    property string white: "{{ palettes.neutral._80.hex }}"
+                }
+                property JsonObject bright: JsonObject {
+                    property string black: "{{ palettes.neutral._30.hex }}"
+                    property string red: "{{ palettes.error._40.hex }}"
+                    property string green: "{{ palettes.secondary._50.hex }}"
+                    property string yellow: "{{ palettes.tertiary._40.hex }}"
+                    property string blue: "{{ palettes.primary._50.hex }}"
+                    property string magenta: "{{ palettes.tertiary._60.hex }}"
+                    property string cyan: "{{ palettes.tertiary._70.hex }}"
+                    property string white: "{{ palettes.neutral._99.hex }}"
+                }
+                property string foreground: "{{ colors.on_surface.light.hex }}"
+                property string background: "{{ colors.surface.light.hex }}"
+                property string selectionFg: "{{ colors.surface.light.hex }}"
+                property string selectionBg: "{{ colors.primary.light.hex }}"
+                property string cursorText: "{{ colors.surface.light.hex }}"
+                property string cursor: "{{ colors.primary.light.hex }}"
+            }
+        }
+    }
 }

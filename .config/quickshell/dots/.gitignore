@@ -1,3 +1,0 @@
-*.json
-**/*.json
-!./config/templates/colors.json

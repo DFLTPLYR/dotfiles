@@ -1,0 +1,94 @@
+{
+  "dark": {
+    "Primary": "{{ colors.primary.dark.hex }}",
+    "OnPrimary": "{{ colors.on_primary.dark.hex }}",
+    "Secondary": "{{ colors.secondary.dark.hex }}",
+    "OnSecondary": "{{ colors.on_secondary.dark.hex }}",
+    "Tertiary": "{{ colors.tertiary.dark.hex }}",
+    "OnTertiary": "{{ colors.on_tertiary.dark.hex }}",
+    "Error": "{{ colors.error.dark.hex }}",
+    "OnError": "{{ colors.on_error.dark.hex }}",
+    "Surface": "{{ colors.surface.dark.hex }}",
+    "OnSurface": "{{ colors.on_surface.dark.hex }}",
+    "SurfaceVariant": "{{ colors.surface_variant.dark.hex }}",
+    "OnSurfaceVariant": "{{ colors.on_surface_variant.dark.hex }}",
+    "Outline": "{{ colors.outline.dark.hex }}",
+    "Shadow": "{{ colors.shadow.dark.hex }}",
+    "Hover": "{{ colors.tertiary.dark.hex }}",
+    "OnHover": "{{ colors.on_tertiary.dark.hex }}",
+    "terminal": {
+      "normal": {
+        "black": "{{ palettes.neutral._20.hex }}",
+        "red": "{{ colors.error.dark.hex }}",
+        "green": "{{ colors.secondary.dark.hex }}",
+        "yellow": "{{ colors.tertiary.dark.hex }}",
+        "blue": "{{ colors.primary.dark.hex }}",
+        "magenta": "{{ palettes.tertiary._60.hex }}",
+        "cyan": "{{ palettes.tertiary._70.hex }}",
+        "white": "{{ palettes.neutral._90.hex }}"
+      },
+      "bright": {
+        "black": "{{ palettes.neutral._40.hex }}",
+        "red": "{{ palettes.error._50.hex }}",
+        "green": "{{ palettes.secondary._60.hex }}",
+        "yellow": "{{ palettes.tertiary._50.hex }}",
+        "blue": "{{ palettes.primary._60.hex }}",
+        "magenta": "{{ palettes.tertiary._70.hex }}",
+        "cyan": "{{ palettes.tertiary._80.hex }}",
+        "white": "{{ palettes.neutral._99.hex }}"
+      },
+      "foreground": "{{ colors.on_surface.dark.hex }}",
+      "background": "{{ colors.surface.dark.hex }}",
+      "selectionFg": "{{ colors.surface.dark.hex }}",
+      "selectionBg": "{{ colors.primary.dark.hex }}",
+      "cursorText": "{{ colors.surface.dark.hex }}",
+      "cursor": "{{ colors.primary.dark.hex }}"
+    }
+  },
+  "light": {
+    "Primary": "{{ colors.primary.light.hex }}",
+    "OnPrimary": "{{ colors.on_primary.light.hex }}",
+    "Secondary": "{{ colors.secondary.light.hex }}",
+    "OnSecondary": "{{ colors.on_secondary.light.hex }}",
+    "Tertiary": "{{ colors.tertiary.light.hex }}",
+    "OnTertiary": "{{ colors.on_tertiary.light.hex }}",
+    "Error": "{{ colors.error.light.hex }}",
+    "OnError": "{{ colors.on_error.light.hex }}",
+    "Surface": "{{ colors.surface.light.hex }}",
+    "OnSurface": "{{ colors.on_surface.light.hex }}",
+    "SurfaceVariant": "{{ colors.surface_variant.light.hex }}",
+    "OnSurfaceVariant": "{{ colors.on_surface_variant.light.hex }}",
+    "Outline": "{{ colors.outline.light.hex }}",
+    "Shadow": "{{ colors.shadow.light.hex }}",
+    "Hover": "{{ colors.tertiary.light.hex }}",
+    "OnHover": "{{ colors.on_tertiary.light.hex }}",
+    "terminal": {
+      "normal": {
+        "black": "{{ palettes.neutral._10.hex }}",
+        "red": "{{ colors.error.light.hex }}",
+        "green": "{{ colors.secondary.light.hex }}",
+        "yellow": "{{ colors.tertiary.light.hex }}",
+        "blue": "{{ colors.primary.light.hex }}",
+        "magenta": "{{ palettes.tertiary._50.hex }}",
+        "cyan": "{{ palettes.tertiary._60.hex }}",
+        "white": "{{ palettes.neutral._80.hex }}"
+      },
+      "bright": {
+        "black": "{{ palettes.neutral._30.hex }}",
+        "red": "{{ palettes.error._40.hex }}",
+        "green": "{{ palettes.secondary._50.hex }}",
+        "yellow": "{{ palettes.tertiary._40.hex }}",
+        "blue": "{{ palettes.primary._50.hex }}",
+        "magenta": "{{ palettes.tertiary._60.hex }}",
+        "cyan": "{{ palettes.tertiary._70.hex }}",
+        "white": "{{ palettes.neutral._99.hex }}"
+      },
+      "foreground": "{{ colors.on_surface.light.hex }}",
+      "background": "{{ colors.surface.light.hex }}",
+      "selectionFg": "{{ colors.surface.light.hex }}",
+      "selectionBg": "{{ colors.primary.light.hex }}",
+      "cursorText": "{{ colors.surface.light.hex }}",
+      "cursor": "{{ colors.primary.light.hex }}"
+    }
+  }
+}

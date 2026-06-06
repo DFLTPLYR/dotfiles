@@ -6,6 +6,10 @@ input_path = "templates/colors.json.template"
 output_path = "~/.config/quickshell/reshell/core/data/colors.json"
 # output_path = "~/.config/quickshell/dots/config/colors.json"
 
+[templates.reshell.material]
+input_path = "templates/material.json.template"
+output_path = "~/.config/quickshell/reshell/core/data/themes/material.json"
+
 [templates.vesktop]
 input_path = 'templates/vesktop.css'
 output_path = '~/.config/vesktop/themes/vesktop.css'

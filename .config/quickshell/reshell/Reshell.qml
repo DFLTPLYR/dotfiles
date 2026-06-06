@@ -26,7 +26,7 @@ Variants {
         // config
         FileView {
             id: fileview
-            path: Qt.resolvedUrl(`./core/data/${modelData.name}.json`)
+            path: Qt.resolvedUrl(`./core/data/monitor/${modelData.name}.json`)
             watchChanges: true
             preload: true
             onLoaded: {
