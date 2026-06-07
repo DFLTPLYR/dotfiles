@@ -41,6 +41,23 @@ Pane {
             Spacer {}
 
             Label {
+                text: "Color Scheme"
+                font.pixelSize: 32
+                Layout.fillWidth: true
+            }
+
+            Toggle {
+                text: "Dark mode"
+                checkable: true
+                checked: Global.general.darkmode
+                onCheckedChanged: {
+                    Global.general.darkmode = checked;
+                }
+            }
+
+            Spacer {}
+
+            Label {
                 text: "Notification Section"
                 font.pixelSize: 32
                 Layout.fillWidth: true
