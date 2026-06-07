@@ -39,6 +39,8 @@ Singleton {
         command: ["curl", `https://github-contributions-api.jogruber.de/v4/${root.author}`]
         stdout: StdioCollector {
             onStreamFinished: {
+                if (!text)
+                    return;
                 const json = JSON.parse(text);
                 const year = root.currentDate.getFullYear();
                 // Calculate total contributions in the last 365 days
