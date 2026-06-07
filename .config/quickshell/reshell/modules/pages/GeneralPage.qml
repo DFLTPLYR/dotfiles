@@ -74,8 +74,8 @@ Pane {
                             "text": "Activate"
                         }
                     ],
-                    "appIcon": "zen-browser",
-                    "appName": "Zen",
+                    "appIcon": "firefox",
+                    "appName": "firefox",
                     "body": "This is the text body of the notification. \nPretty cool, huh?",
                     "image": "",
                     "summary": "Notification Example",
@@ -84,7 +84,7 @@ Pane {
                 }
 
                 property QtObject style: QtObject {
-                    property color color: Colors.setOpacity(Colors.color.background, 0.5)
+                    property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
                     property Direction padding: Direction {}
                     property Direction inset: Direction {}
 
@@ -96,7 +96,7 @@ Pane {
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: exampleNotifItem.height + 100
-                color: Colors.setOpacity(Colors.color.background, 0.5)
+                color: Colors.theme.on_surface
                 radius: 5
 
                 NotificationItem {
@@ -220,9 +220,10 @@ Pane {
             Spacer {}
         }
     }
+
     component Spacer: Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 2
-        color: Colors.color.tertiary
+        color: Colors.theme.tertiary
     }
 }

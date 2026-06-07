@@ -54,7 +54,7 @@ Pane {
                 var ctx = getContext("2d");
                 var gridSize = 10;
 
-                ctx.strokeStyle = Colors.setOpacity(Colors.color.tertiary, 0.5);
+                ctx.strokeStyle = Colors.setOpacity(Colors.theme.tertiary, 0.5);
                 ctx.lineWidth = 1;
 
                 for (var x = 0; x <= width; x += gridSize) {
@@ -111,9 +111,9 @@ Pane {
                     width: 0
                     height: 0
                     rotation: 0
-                    color: Colors.setOpacity(Colors.color.primary, 0.5)
+                    color: Colors.setOpacity(Colors.theme.primary, 0.5)
                     border.width: 1
-                    border.color: Colors.color.tertiary
+                    border.color: Colors.theme.tertiary
                     transformOrigin: Item.TopLeft
                 }
 
@@ -238,7 +238,7 @@ Pane {
 
         width: modelData.width
         height: modelData.height
-        color: Colors.setOpacity(Colors.color.background, 0.5)
+        color: Colors.setOpacity(Colors.theme.surface, 0.5)
         objectName: modelData.name
         x: modelData.x
         y: modelData.y
@@ -258,7 +258,7 @@ Pane {
                 left: parent.left
             }
             height: 2 / outline.zoom
-            color: Colors.color.primary
+            color: Colors.theme.primary
         }
 
         Rectangle {
@@ -268,7 +268,7 @@ Pane {
                 left: parent.left
             }
             height: 2 / outline.zoom
-            color: Colors.color.primary
+            color: Colors.theme.primary
             y: parent.height
         }
 
@@ -279,7 +279,7 @@ Pane {
                 left: parent.left
             }
             width: 2 / outline.zoom
-            color: Colors.color.primary
+            color: Colors.theme.primary
         }
         Rectangle {
             anchors {
@@ -288,7 +288,7 @@ Pane {
                 right: parent.right
             }
             width: 2 / outline.zoom
-            color: Colors.color.primary
+            color: Colors.theme.primary
             x: parent.width
         }
     }
@@ -307,7 +307,7 @@ Pane {
 
             width: origPlacement.width
             height: origPlacement.height
-            border.color: Colors.color.primary
+            border.color: Colors.theme.primary
             Drag.active: ma.drag.active
             Drag.keys: [modelData.source]
 
@@ -486,7 +486,7 @@ Pane {
             }
         }
 
-        bg.color: Colors.setOpacity(Colors.color.background, 0.5)
+        bg.color: Colors.setOpacity(Colors.theme.surface, 0.5)
 
         pointerVisible: containerRect.enabled
         rulersSize: 16 / flick.zoom
@@ -510,7 +510,7 @@ Pane {
                 height: 14 / flick.zoom
 
                 Icon {
-                    color: Colors.color.on_background
+                    color: Colors.theme.on_surface
                     font.pixelSize: parent.width
                     text: containerRect.enabled ? "lock-slash" : "lock"
                 }
@@ -522,7 +522,7 @@ Pane {
                 height: 14 / flick.zoom
 
                 Icon {
-                    color: Colors.color.on_background
+                    color: Colors.theme.on_surface
                     font.pixelSize: parent.width
                     text: containerRect.show ? "eye-slash" : "eye"
                 }
@@ -539,7 +539,7 @@ Pane {
                 bottom: parent.bottom
             }
             text: `z: ${containerRect.z}`
-            color: Colors.color.primary
+            color: Colors.theme.primary
             font.pixelSize: 12 / flick.zoom
         }
 

@@ -13,7 +13,14 @@ FloatingWindow {
     property int page: 0
 
     title: "Settings"
-    color: Colors.setOpacity(Colors.color.background, 0.5)
+    color: Colors.theme.surface
+
+    Behavior on color {
+        ColorAnimation {
+            duration: 300
+            easing: Easing.InOutQuad
+        }
+    }
 
     LazyLoader {
         active: settingpanel.visible
@@ -31,19 +38,23 @@ FloatingWindow {
                     delegate: Pane {
                         required property string name
                         required property int page
+                        clip: true
                         width: ListView.view.width
                         height: 40
-                        bg.color: navma.containsMouse ? Qt.darker(Colors.theme.hover, 1.5) : Colors.theme.hover
+                        bg.color: Colors.setOpacity(navma.containsMouse ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
 
                         Behavior on bg.color {
                             ColorAnimation {
                                 duration: 300
+                                easing: Easing.InOutQuad
                             }
                         }
 
                         Text {
                             text: name
+                            leftPadding: 10
                             height: parent.height
+                            color: Colors.theme.on_surface
                             horizontalAlignment: Text.AlignVCenter
                             verticalAlignment: Text.AlignVCenter
                         }

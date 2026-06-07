@@ -10,7 +10,7 @@ Label {
 
     property QtObject config: QtObject {
         property QtObject content: QtObject {
-            property color color: Colors.color.on_background
+            property color color: Colors.theme.on_surface
         }
         property QtObject background: QtObject {
             property int height: 2
