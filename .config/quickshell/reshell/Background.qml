@@ -265,9 +265,9 @@ Item {
             width: 0
             height: 0
             rotation: 0
-            color: Colors.setOpacity(Colors.color.primary, 0.5)
+            color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
-            border.color: Colors.color.tertiary
+            border.color: Colors.theme.outline
             transformOrigin: Item.TopLeft
 
             Behavior on opacity {

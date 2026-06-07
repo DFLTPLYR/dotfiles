@@ -174,9 +174,15 @@ Singleton {
         onCountChanged: {
             for (let i = 0; i < count; i++) {
                 const fileName = get(i, "fileName");
-                const theme = loader.createObject(this, {
+                const file = loader.createObject(this, {
                     path: Qt.resolvedUrl(`data/themes/${fileName}`)
                 });
+
+                const theme = {
+                    name: fileName,
+                    light: file.adapter.light,
+                    dark: file.adapter.dark
+                };
             }
         }
     }
@@ -184,6 +190,11 @@ Singleton {
     Component {
         id: loader
         FileView {
+            id: file
+            watchChanges: true
+            preload: true
+            blockLoading: true
+            onFileChanged: reload()
             adapter: JsonAdapter {
                 property JsonObject dark: JsonObject {
                     property color primary: "#b8bb26"
