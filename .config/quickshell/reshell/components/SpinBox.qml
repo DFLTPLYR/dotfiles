@@ -8,20 +8,20 @@ SpinBox {
     id: spinbox
 
     property QtObject config: QtObject {
-        property color color: Colors.color.background
-        property color text: Colors.color.on_background
+        property color color: Colors.theme.surface
+        property color text: Colors.theme.on_surface
         property Border border: Border {}
         property Direction margin: Direction {}
         property Corner rounding: Corner {}
         property QtObject hover: QtObject {
-            property color color: Colors.setOpacity(Colors.color.primary, 1)
+            property color color: Colors.setOpacity(Colors.theme.primary, 1)
             property Border border: Border {}
             property Direction margin: Direction {}
             property Corner rounding: Corner {}
         }
         property QtObject unhover: QtObject {
             property real opacity: 0.5
-            property color color: Colors.setOpacity(Colors.color.primary, 0.7)
+            property color color: Colors.setOpacity(Colors.theme.primary, 0.7)
             property Border border: Border {}
             property Direction margin: Direction {}
             property Corner rounding: Corner {}

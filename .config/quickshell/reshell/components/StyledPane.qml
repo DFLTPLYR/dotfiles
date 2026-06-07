@@ -10,7 +10,7 @@ Pane {
     property alias bg: background
 
     property QtObject style: QtObject {
-        property color color: Colors.setOpacity(Colors.color.background, 0.5)
+        property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
         property Direction padding: Direction {}
         property Direction inset: Direction {}
 

@@ -39,12 +39,12 @@ Popup {
         id: background
 
         anchors.fill: parent
-        color: Colors.setOpacity(Colors.color.background, 1)
+        color: Colors.setOpacity(Colors.theme.surface, 1)
         clip: true
 
         border {
             width: 2
-            color: Colors.color.outline
+            color: Colors.theme.outline
         }
     }
 

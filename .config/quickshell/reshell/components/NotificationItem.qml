@@ -15,7 +15,7 @@ StyledPane {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         height: 2
-        color: Colors.color.primary
+        color: Colors.theme.primary
 
         NumberAnimation on width {
             from: 0
@@ -76,7 +76,7 @@ StyledPane {
                 text: modelData.appName
                 font.bold: true
                 font.pointSize: 12
-                color: Colors.color.primary
+                color: Colors.theme.primary
                 elide: Text.ElideRight
             }
 
@@ -84,7 +84,7 @@ StyledPane {
                 Layout.fillWidth: true
                 text: modelData.summary
                 font.pointSize: 10
-                color: Colors.color.on_background
+                color: Colors.theme.on_surface
                 elide: Text.ElideRight
             }
 
@@ -92,7 +92,7 @@ StyledPane {
                 Layout.fillWidth: true
                 text: modelData.body
                 font.pointSize: 9
-                color: Colors.color.secondary
+                color: Colors.theme.secondary
                 elide: Text.ElideRight
             }
         }

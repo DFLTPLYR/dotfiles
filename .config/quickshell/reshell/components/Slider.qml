@@ -10,7 +10,7 @@ Slider {
         property QtObject background: QtObject {
             property int height: 4
             property int width: 200
-            property color color: Colors.color.background
+            property color color: Colors.theme.surface
             property Corner rounding: Corner {
                 topLeft: 100
                 topRight: 100
@@ -22,7 +22,7 @@ Slider {
             property QtObject progress: QtObject {
                 property int height: 4
                 property int width: 26
-                property color color: Colors.color.primary
+                property color color: Colors.theme.primary
                 property Corner rounding: Corner {
                     topLeft: 100
                     topRight: 100
@@ -34,7 +34,7 @@ Slider {
             }
         }
         property QtObject handle: QtObject {
-            property color color: Colors.color.primary
+            property color color: Colors.theme.primary
             property int height: 26
             property int width: 26
             property Corner rounding: Corner {

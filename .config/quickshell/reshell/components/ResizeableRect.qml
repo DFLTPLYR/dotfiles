@@ -14,7 +14,7 @@ Pane {
         width: rulersSize
         height: rulersSize
         radius: rulersSize
-        color: Colors.color.primary
+        color: Colors.theme.primary
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
         opacity: resizeableRect.pointerVisible ? 1 : 0
@@ -25,7 +25,7 @@ Pane {
 
                 PropertyChanges {
                     target: leftHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -34,7 +34,7 @@ Pane {
 
                 PropertyChanges {
                     target: leftHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -81,7 +81,7 @@ Pane {
         width: rulersSize
         height: rulersSize
         radius: rulersSize
-        color: Colors.color.primary
+        color: Colors.theme.primary
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
         opacity: resizeableRect.pointerVisible ? 1 : 0
@@ -92,7 +92,7 @@ Pane {
 
                 PropertyChanges {
                     target: rightHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -101,7 +101,7 @@ Pane {
 
                 PropertyChanges {
                     target: rightHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -149,7 +149,7 @@ Pane {
         radius: rulersSize
         x: parent.x / 2
         y: 0
-        color: Colors.color.primary
+        color: Colors.theme.primary
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.top
         opacity: resizeableRect.pointerVisible ? 1 : 0
@@ -160,7 +160,7 @@ Pane {
 
                 PropertyChanges {
                     target: topHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -169,7 +169,7 @@ Pane {
 
                 PropertyChanges {
                     target: topHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -218,7 +218,7 @@ Pane {
         radius: rulersSize
         x: parent.x / 2
         y: parent.y
-        color: Colors.color.primary
+        color: Colors.theme.primary
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.bottom
         opacity: resizeableRect.pointerVisible ? 1 : 0
@@ -229,7 +229,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -238,7 +238,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -285,7 +285,7 @@ Pane {
         width: rulersSize
         height: rulersSize
         radius: rulersSize
-        color: Colors.color.primary
+        color: Colors.theme.primary
 
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -298,7 +298,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomRightHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -307,7 +307,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomRightHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -357,7 +357,7 @@ Pane {
         width: rulersSize
         height: rulersSize
         radius: rulersSize
-        color: Colors.color.primary
+        color: Colors.theme.primary
 
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -370,7 +370,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomLeftHandle
-                    color: Colors.color.secondary
+                    color: Colors.theme.secondary
                 }
             },
             State {
@@ -379,7 +379,7 @@ Pane {
 
                 PropertyChanges {
                     target: bottomLeftHandle
-                    color: Colors.color.tertiary
+                    color: Colors.theme.tertiary
                 }
             }
         ]
@@ -431,7 +431,7 @@ Pane {
 
         border {
             width: pointerVisible ? 2 : 0
-            color: Colors.color.tertiary
+            color: Colors.theme.tertiary
         }
     }
 }

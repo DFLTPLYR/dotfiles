@@ -17,14 +17,14 @@ ComboBox {
         width: control.width
         contentItem: Text {
             text: delegate.model[control.textRole]
-            color: Colors.color.on_primary
+            color: Colors.theme.on_surface
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
         background: Rectangle {
             anchors.fill: parent
-            color: delegate.highlighted ? Colors.color.primary : Colors.color.background
+            color: delegate.highlighted ? Colors.theme.surface_variant : Colors.theme.surface
 
             Behavior on color {
                 ColorAnimation {
@@ -57,7 +57,7 @@ ComboBox {
             context.lineTo(width, 0);
             context.lineTo(width / 2, height);
             context.closePath();
-            context.fillStyle = control.pressed ? Colors.color.background : Colors.color.background;
+            context.fillStyle = control.pressed ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface;
             context.fill();
         }
     }
@@ -75,7 +75,7 @@ ComboBox {
 
     background: Rectangle {
         implicitWidth: 120
-        implicitHeight: 40
+        implicitHeight: control.contentItem
         color: Colors.color.primary
         border.width: control.visualFocus ? 2 : 1
         radius: 2
@@ -84,7 +84,7 @@ ComboBox {
     popup: Popup {
         y: control.height - 1
         width: control.width
-        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
+        // height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         padding: 1
 
         contentItem: ListView {

@@ -9,7 +9,7 @@ PageIndicator {
         property int width: 8
         property int height: 8
         property real radius: 4
-        property color color: Colors.color.primary
+        property color color: Colors.theme.primary
     }
     delegate: Rectangle {
         required property int index

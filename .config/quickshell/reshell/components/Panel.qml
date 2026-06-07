@@ -6,7 +6,7 @@ Rectangle {
 
     property bool shouldShow: false
 
-    color: Colors.setOpacity(Colors.color.background, 1)
+    color: Colors.setOpacity(Colors.theme.surface, 1)
     width: screen.width / 2
     height: screen.height / 2
     x: screen.width / 2 - width / 2
@@ -66,7 +66,7 @@ Rectangle {
 
     border {
         width: 2
-        color: Colors.color.primary
+        color: Colors.theme.primary
     }
 
     MouseArea {

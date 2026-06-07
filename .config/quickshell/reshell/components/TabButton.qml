@@ -7,11 +7,11 @@ TabButton {
 
     background: Rectangle {
         anchors.fill: parent
-        color: tabButton.checked ? Colors.color.background : Colors.color.on_background
+        color: tabButton.checked ? Colors.theme.surface : Colors.theme.on_surface
 
         border {
             width: 1
-            color: Colors.color.outline
+            color: Colors.theme.outline
 
             Behavior on color {
                 ColorAnimation {
@@ -35,7 +35,7 @@ TabButton {
         text: tabButton.text
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
-        color: tabButton.checked ? Colors.color.on_background : Colors.color.background
+        color: tabButton.checked ? Colors.theme.on_surface : Colors.theme.surface
 
         Behavior on color {
             ColorAnimation {

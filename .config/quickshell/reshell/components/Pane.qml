@@ -14,6 +14,6 @@ Pane {
         id: background
 
         anchors.fill: parent
-        color: Colors.setOpacity(Colors.color.background, 0.5)
+        color: Colors.setOpacity(Colors.theme.surface, 0.5)
     }
 }

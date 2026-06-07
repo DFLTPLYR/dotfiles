@@ -48,7 +48,7 @@ MouseArea {
                 implicitWidth: 100
                 implicitHeight: 100
                 state: "hidden"
-                color: Colors.color.background
+                color: Colors.theme.surface
                 states: [
                     State {
                         name: "hidden"

@@ -20,7 +20,7 @@ Menu {
             visible: menuItem.subMenu
             onPaint: {
                 var ctx = getContext("2d");
-                ctx.fillStyle = menuItem.highlighted ? Colors.color.background : Colors.color.primary;
+                ctx.fillStyle = menuItem.highlighted ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface;
                 ctx.moveTo(15, 15);
                 ctx.lineTo(width - 15, height / 2);
                 ctx.lineTo(15, height - 15);
@@ -40,7 +40,7 @@ Menu {
                 height: 26
                 anchors.centerIn: parent
                 visible: menuItem.checkable
-                border.color: Colors.color.outline
+                border.color: Colors.theme.outline
                 radius: 3
 
                 Rectangle {
@@ -48,7 +48,7 @@ Menu {
                     height: 14
                     anchors.centerIn: parent
                     visible: menuItem.checked
-                    color: Colors.color.primary
+                    color: Colors.theme.primary
                     radius: 2
                 }
             }
@@ -60,7 +60,7 @@ Menu {
             text: menuItem.text
             font: menuItem.font
             opacity: enabled ? 1 : 0.3
-            color: menuItem.highlighted ? Colors.color.on_background : Colors.color.primary
+            color: menuItem.highlighted ? Colors.theme.on_surface : Colors.theme.primary
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
@@ -69,7 +69,7 @@ Menu {
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: menuItem.highlighted ? Colors.color.background : "transparent"
+            color: menuItem.highlighted ? Colors.theme.surface : "transparent"
         }
     }
 
@@ -77,8 +77,8 @@ Menu {
         clip: true
         implicitWidth: 100
         implicitHeight: 40
-        color: Colors.color.background
-        border.color: Colors.color.outline
+        color: Colors.theme.surface
+        border.color: Colors.theme.outline
         radius: 2
     }
 }

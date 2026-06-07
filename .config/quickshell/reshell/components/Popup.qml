@@ -11,7 +11,7 @@ Popup {
     background: Rectangle {
         id: background
 
-        color: Colors.setOpacity(Colors.color.background, 0.6)
+        color: Colors.setOpacity(Colors.theme.surface, 0.6)
         border.color: Colors.color.outline
         Component.onCompleted: {
             Global.bindRadii(background);

@@ -10,6 +10,6 @@ MenuSeparator {
     contentItem: Rectangle {
         implicitWidth: 200
         implicitHeight: 1
-        color: Colors.color.on_background
+        color: Colors.theme.on_surface
     }
 }

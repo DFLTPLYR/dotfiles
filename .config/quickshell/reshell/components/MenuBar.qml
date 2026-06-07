@@ -12,7 +12,7 @@ MenuBar {
             text: menuBarItem.text
             font: menuBarItem.font
             opacity: enabled ? 1 : 0.3
-            color: menuBarItem.highlighted ? Colors.color.primary : Colors.color.primary
+            color: menuBarItem.highlighted ? Colors.theme.primary : Colors.theme.primary
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -29,7 +29,7 @@ MenuBar {
             implicitWidth: 40
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: menuBarItem.highlighted ? Qt.darker(Colors.color.background, 1.5) : "transparent"
+            color: menuBarItem.highlighted ? Qt.darker(Colors.theme.surface, 1.5) : "transparent"
 
             Behavior on color {
                 ColorAnimation {
@@ -43,6 +43,6 @@ MenuBar {
     background: Rectangle {
         implicitWidth: 40
         implicitHeight: 40
-        color: Colors.color.background
+        color: Colors.theme.surface
     }
 }

@@ -6,6 +6,6 @@ TabBar {
     id: control
 
     background: Rectangle {
-        color: Colors.color.background
+        color: Colors.theme.surface
     }
 }
