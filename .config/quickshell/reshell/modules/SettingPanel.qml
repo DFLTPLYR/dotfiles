@@ -24,18 +24,38 @@ FloatingWindow {
             Pane {
                 Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
                 Layout.fillHeight: true
-                // color: Colors.setOpacity(Colors.color.background, 0.5)
 
                 DelegateModel {
                     id: navModel
                     model: Global.settings
-                    delegate: Button {
+                    delegate: Pane {
                         required property string name
                         required property int page
                         width: ListView.view.width
-                        text: name
-                        onClicked: {
-                            contentContainer.currentIndex = page;
+                        height: 40
+                        bg.color: navma.containsMouse ? Qt.darker(Colors.theme.hover, 1.5) : Colors.theme.hover
+
+                        Behavior on bg.color {
+                            ColorAnimation {
+                                duration: 300
+                            }
+                        }
+
+                        Text {
+                            text: name
+                            height: parent.height
+                            horizontalAlignment: Text.AlignVCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        MouseArea {
+                            id: navma
+                            hoverEnabled: true
+                            anchors.fill: parent
+
+                            onClicked: {
+                                contentContainer.currentIndex = page;
+                            }
                         }
                     }
                 }
