@@ -101,6 +101,7 @@ Singleton {
             id: adapter
             property bool greeter: false
             property bool darkmode: true
+            property string theme: "gruvbox"
         }
     }
 

@@ -39,9 +39,9 @@
       },
       "foreground": "#cdd6f4",
       "background": "#1e1e2e",
-      "selectionFg": "#cdd6f4",
-      "selectionBg": "#585b70",
-      "cursorText": "#1e1e2e",
+      "selectionfg": "#cdd6f4",
+      "selectionbg": "#585b70",
+      "cursortext": "#1e1e2e",
       "cursor": "#f5e0dc"
     }
   },
@@ -85,9 +85,9 @@
       },
       "foreground": "#c6d0f5",
       "background": "#303446",
-      "selectionFg": "#c6d0f5",
-      "selectionBg": "#626880",
-      "cursorText": "#303446",
+      "selectionfg": "#c6d0f5",
+      "selectionbg": "#626880",
+      "cursortext": "#303446",
       "cursor": "#f2d5cf"
     }
   }

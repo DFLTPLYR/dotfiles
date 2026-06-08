@@ -11,6 +11,7 @@ import "./ntc.js" as NTC
 
 Singleton {
     id: config
+    property var testing: themes.find(s => Global.general.theme === s.name)
     property var theme: jsonAdapter.theme[Global.general.darkmode ? "dark" : "light"]
     property alias color: jsonAdapter.color
     property alias palette: jsonAdapter.palette
@@ -47,27 +48,26 @@ Singleton {
         id: loader
         FileView {
             id: file
-            onPathChanged: reload()
             watchChanges: true
             onFileChanged: reload()
             adapter: JsonAdapter {
                 property JsonObject dark: JsonObject {
                     property color primary: "#b8bb26"
-                    property color on_primary: "#282828"
+                    property color onprimary: "#282828"
                     property color secondary: "#fabd2f"
-                    property color on_secondary: "#282828"
+                    property color onsecondary: "#282828"
                     property color tertiary: "#83a598"
-                    property color on_tertiary: "#282828"
+                    property color ontertiary: "#282828"
                     property color error: "#fb4934"
-                    property color on_error: "#282828"
+                    property color onerror: "#282828"
                     property color surface: "#282828"
-                    property color on_surface: "#fbf1c7"
-                    property color surface_variant: "#3c3836"
-                    property color on_surface_variant: "#ebdbb2"
+                    property color onsurface: "#fbf1c7"
+                    property color surfacevariant: "#3c3836"
+                    property color onsurface_variant: "#ebdbb2"
                     property color outline: "#57514e"
                     property color shadow: "#282828"
                     property color hover: "#83a598"
-                    property color on_hover: "#282828"
+                    property color onhover: "#282828"
                     property JsonObject terminal: JsonObject {
                         property JsonObject normal: JsonObject {
                             property color black: "#282828"
@@ -99,21 +99,21 @@ Singleton {
                 }
                 property JsonObject light: JsonObject {
                     property color primary: "#98971a"
-                    property color on_primary: "#fbf1c7"
+                    property color onprimary: "#fbf1c7"
                     property color secondary: "#d79921"
-                    property color on_secondary: "#fbf1c7"
+                    property color onsecondary: "#fbf1c7"
                     property color tertiary: "#458588"
-                    property color on_tertiary: "#fbf1c7"
+                    property color ontertiary: "#fbf1c7"
                     property color error: "#cc241d"
-                    property color on_error: "#fbf1c7"
+                    property color onerror: "#fbf1c7"
                     property color surface: "#fbf1c7"
-                    property color on_surface: "#3c3836"
-                    property color surface_variant: "#ebdbb2"
-                    property color on_surface_variant: "#7c6f64"
+                    property color onsurface: "#3c3836"
+                    property color surfacevariant: "#ebdbb2"
+                    property color onsurface_variant: "#7c6f64"
                     property color outline: "#bdae93"
                     property color shadow: "#d5c4a1"
                     property color hover: "#458588"
-                    property color on_hover: "#fbf1c7"
+                    property color onhover: "#fbf1c7"
                     property JsonObject terminal: JsonObject {
                         property JsonObject normal: JsonObject {
                             property color black: "#fbf1c7"
