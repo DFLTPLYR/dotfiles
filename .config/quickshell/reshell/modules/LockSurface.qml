@@ -207,7 +207,7 @@ Rectangle {
                         width: 2
                         color: Colors.theme.outline
                     }
-                    color: Colors.color.on_background
+                    color: Colors.theme.on_surface
                 }
                 focus: true
                 enabled: !root.context.unlockInProgress

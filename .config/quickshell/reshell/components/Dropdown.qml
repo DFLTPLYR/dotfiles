@@ -97,7 +97,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: Colors.color.background
+            color: Colors.theme.surface
             border.color: Colors.theme.outline
             radius: 2
         }

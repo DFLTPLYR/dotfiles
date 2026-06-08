@@ -60,7 +60,7 @@ Scope {
                         ColorAnimation {
                             target: pane.bg
                             property: "border.color"
-                            to: Colors.color.error_container
+                            to: Colors.theme.error
                             duration: 100
                             easing.type: Easing.InOutQuad
                         }
@@ -124,7 +124,7 @@ Scope {
                             text: agent.flow?.message || ""
                             wrapMode: Text.Wrap
                             verticalAlignment: Text.AlignVCenter
-                            color: Colors.color.on_background
+                            color: Colors.theme.on_surface
                             Layout.fillWidth: true
                             Layout.maximumWidth: 300
                         }

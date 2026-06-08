@@ -44,7 +44,7 @@ Wrapper {
                         height: wrap.property.size
                         color: {
                             const p = digit.modelData === ':' ? 10 : Number(digit.modelData);
-                            return row.pattern[p][modelData] === 1 ? Colors.color[wrap.property.color] : 'transparent';
+                            return row.pattern[p][modelData] === 1 ? Colors.theme[wrap.property.color] : 'transparent';
                         }
                     }
                 }

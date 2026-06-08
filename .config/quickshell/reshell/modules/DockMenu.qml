@@ -25,7 +25,7 @@ PopupModal {
 
             Rectangle {
                 id: tabContainer
-                color: Colors.color.background
+                color: Colors.theme.surface
 
                 Layout.preferredHeight: tabbar.height
                 Layout.fillWidth: true
@@ -65,7 +65,7 @@ PopupModal {
             }
 
             Rectangle {
-                color: Colors.color.background
+                color: Colors.theme.surface
                 Layout.fillWidth: true
                 Layout.preferredHeight: footerContainer.height
 
@@ -429,10 +429,10 @@ PopupModal {
                     required property var modelData
                     width: 60
                     height: 40
-                    color: modelData.state === "selected" ? Colors.theme.primary : Colors.color.background
+                    color: modelData.state === "selected" ? Colors.theme.primary : Colors.theme.surface
 
                     Text {
-                        color: modelData.state === "selected" ? Colors.theme.on_primary : Colors.color.on_background
+                        color: modelData.state === "selected" ? Colors.theme.on_primary : Colors.theme.on_surface
                         anchors.centerIn: parent
                         text: modelData.objectName
                     }

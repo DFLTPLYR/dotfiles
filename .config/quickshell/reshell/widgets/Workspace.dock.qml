@@ -37,7 +37,7 @@ Wrapper {
 
         delegate: Rectangle {
             id: windowSet
-            color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.theme.primary, 0.2)
+            color: ma.hoveredChanged ? Colors.theme.surface : Colors.setOpacity(Colors.theme.primary, 0.2)
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
 

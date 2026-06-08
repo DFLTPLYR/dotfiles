@@ -12,8 +12,6 @@ import "./ntc.js" as NTC
 Singleton {
     id: config
     property var theme: themes.find(s => Global.general.theme === s.name)[Global.general.darkmode ? "dark" : "light"]
-    property alias color: jsonAdapter.color
-    property alias palette: jsonAdapter.palette
     property list<var> themes: []
     property list<string> colorscheme: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
     property list<string> colors: ["background", "error", "error_container", "inverse_on_surface", "inverse_primary", "inverse_surface", "on_background", "on_error", "on_error_container", "on_primary", "on_primary_container", "on_primary_fixed", "on_primary_fixed_variant", "on_secondary", "on_secondary_container", "on_secondary_fixed", "on_secondary_fixed_variant", "on_surface", "on_surface_variant", "on_tertiary", "on_tertiary_container", "on_tertiary_fixed", "on_tertiary_fixed_variant", "outline", "outline_variant", "primary", "primary_container", "primary_fixed", "primary_fixed_dim", "scrim", "secondary", "secondary_container", "secondary_fixed", "secondary_fixed_dim", "shadow", "surface", "surface_bright", "surface_container", "surface_container_high", "surface_container_highest", "surface_container_low", "surface_container_lowest", "surface_dim", "surface_tint", "surface_variant", "tertiary", "tertiary_container", "tertiary_fixed", "tertiary_fixed_dim"]

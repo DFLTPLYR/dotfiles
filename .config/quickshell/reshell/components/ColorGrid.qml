@@ -14,7 +14,7 @@ GridView {
     delegate: Rectangle {
         width: colorGrid.cellWidth
         height: colorGrid.cellHeight
-        color: Colors.color[modelData]
+        color: Colors.theme[modelData]
 
         MouseArea {
             anchors.fill: parent

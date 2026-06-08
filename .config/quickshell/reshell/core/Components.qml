@@ -102,7 +102,7 @@ Singleton {
         property int width: 300
         property int height: 100
         property JsonObject style: JsonObject {
-            property color color: Colors.setOpacity(Colors.color.background, 0.5)
+            property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
             property DirectionJson padding: DirectionJson {}
             property DirectionJson inset: DirectionJson {}
             property JsonObject background: JsonObject {

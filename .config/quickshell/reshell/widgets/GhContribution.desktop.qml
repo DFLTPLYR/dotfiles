@@ -19,30 +19,30 @@ Wrapper {
     function contributionColor(level) {
         switch (level) {
         case 0:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1);
         case 1:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1.2);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1.2);
         case 2:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1.4);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1.4);
         case 3:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1.6);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1.6);
         case 4:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1.8);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1.8);
         default:
-            return Qt.darker(Colors.color[`${wrap.property.palette}`], 1);
+            return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1);
         }
 
         // if (level === 0)
-        //     return Colors.palette[`${wrap.property.palette}80`];
+        //     return Colors.theme[`${wrap.property.palette}80`];
         // if (level === 1)
-        //     return Colors.palette[`${wrap.property.palette}70`];
+        //     return Colors.theme[`${wrap.property.palette}70`];
         // if (level === 2)
-        //     return Colors.palette[`${wrap.property.palette}60`];
+        //     return Colors.theme[`${wrap.property.palette}60`];
         // if (level === 3)
-        //     return Colors.palette[`${wrap.property.palette}50`];
+        //     return Colors.theme[`${wrap.property.palette}50`];
         // if (level === 4)
-        //     return Colors.palette[`${wrap.property.palette}40`];
-        // return Colors.palette[`${wrap.property.palette}80`];
+        //     return Colors.theme[`${wrap.property.palette}40`];
+        // return Colors.theme[`${wrap.property.palette}80`];
     }
 
     FlexboxLayout {

@@ -15,7 +15,7 @@ FloatingWindow {
     signal selected(var file)
 
     title: "Reshell"
-    color: Colors.setOpacity(Colors.color.background, 0.5)
+    color: Colors.setOpacity(Colors.theme.surface, 0.5)
     minimumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
     maximumSize: Qt.size(screen.width / 1.5, screen.height / 1.5)
 
@@ -102,7 +102,7 @@ FloatingWindow {
 
                 background: Rectangle {
                     anchors.fill: parent
-                    color: dir.hovered ? Colors.setOpacity(Colors.color.background, 0.5) : Colors.setOpacity(Colors.color.background, 0.9)
+                    color: dir.hovered ? Colors.setOpacity(Colors.theme.surface, 0.5) : Colors.setOpacity(Colors.theme.surface, 0.9)
 
                     Behavior on color {
                         ColorAnimation {
@@ -138,7 +138,7 @@ FloatingWindow {
             // Decor
             background: Rectangle {
                 anchors.fill: parent
-                color: file.hovered ? Colors.setOpacity(Colors.color.background, 0.5) : Colors.setOpacity(Colors.color.background, 0.9)
+                color: file.hovered ? Colors.setOpacity(Colors.theme.surface, 0.5) : Colors.setOpacity(Colors.theme.surface, 0.9)
 
                 Behavior on color {
                     ColorAnimation {
