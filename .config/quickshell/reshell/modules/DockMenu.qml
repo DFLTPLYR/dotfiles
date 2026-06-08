@@ -429,10 +429,10 @@ PopupModal {
                     required property var modelData
                     width: 60
                     height: 40
-                    color: modelData.state === "selected" ? Colors.color.primary : Colors.color.background
+                    color: modelData.state === "selected" ? Colors.theme.primary : Colors.color.background
 
                     Text {
-                        color: modelData.state === "selected" ? Colors.color.on_primary : Colors.color.on_background
+                        color: modelData.state === "selected" ? Colors.theme.on_primary : Colors.color.on_background
                         anchors.centerIn: parent
                         text: modelData.objectName
                     }
@@ -531,7 +531,7 @@ PopupModal {
 
             width: origPlacement.width
             height: origPlacement.height
-            border.color: Colors.color.primary
+            border.color: Colors.theme.primary
             Drag.active: ma.drag.active
             Drag.keys: [modelData.source]
             Drag.hotSpot: {

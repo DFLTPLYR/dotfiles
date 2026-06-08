@@ -23,7 +23,7 @@ Wrapper {
             text: Qt.formatDateTime(Global.clock.date, wrap.property.format)
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Colors.color.primary
+            color: Colors.theme.primary
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

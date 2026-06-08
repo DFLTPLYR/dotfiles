@@ -63,7 +63,7 @@ Wrapper {
                 Layout.preferredHeight: wrap.property.cell
                 opacity: modelData?.level || 0
                 color: contributionColor(modelData?.level || 0)
-                border.color: isToday ? Colors.color.tertiary : "transparent"
+                border.color: isToday ? Colors.theme.tertiary : "transparent"
                 border.width: isToday ? 2 : 0
 
                 Behavior on color {

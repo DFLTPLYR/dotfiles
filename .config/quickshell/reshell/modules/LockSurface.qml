@@ -135,7 +135,7 @@ Rectangle {
         // The native font renderer tends to look nicer at large sizes.
         renderType: Text.NativeRendering
         font.pointSize: 80
-        color: Colors.color.primary
+        color: Colors.theme.primary
         // updates the clock every second
         Timer {
             running: true
@@ -205,7 +205,7 @@ Rectangle {
                     anchors.fill: parent
                     border {
                         width: 2
-                        color: Colors.color.outline
+                        color: Colors.theme.outline
                     }
                     color: Colors.color.on_background
                 }

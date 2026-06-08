@@ -37,7 +37,7 @@ Wrapper {
 
         delegate: Rectangle {
             id: windowSet
-            color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.color.primary, 0.2)
+            color: ma.hoveredChanged ? Colors.color.background : Colors.setOpacity(Colors.theme.primary, 0.2)
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
 
@@ -57,7 +57,7 @@ Wrapper {
                     parent: windowSet
                     anchors.centerIn: parent
                     text: index + 1
-                    color: Colors.color.primary
+                    color: Colors.theme.primary
                 }
             }
 
@@ -71,7 +71,7 @@ Wrapper {
                     radius: width / 2
                     x: (parent.width - width) / 2
                     y: (parent.height - height) / 2
-                    color: modelData?.active ? Colors.color.primary : Colors.color.tertiary
+                    color: modelData?.active ? Colors.theme.primary : Colors.theme.tertiary
 
                     Behavior on color {
                         ColorAnimation {

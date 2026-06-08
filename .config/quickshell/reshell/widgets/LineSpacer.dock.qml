@@ -17,6 +17,6 @@ Wrapper {
 
     property: Property {
         property int thickness: 2
-        property color color: Colors.color.primary
+        property color color: Colors.theme.primary
     }
 }

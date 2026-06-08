@@ -28,7 +28,7 @@ QtObject {
 
             anchors.fill: parent
             color: Colors.color.background
-            border.color: Colors.color.outline
+            border.color: Colors.theme.outline
             state: bg.config?.position || "none"
 
             states: [

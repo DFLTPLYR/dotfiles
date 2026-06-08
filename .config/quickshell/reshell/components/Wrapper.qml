@@ -93,7 +93,7 @@ Item {
         }
         onContainsDragChanged: {
             background.border.width = containsDrag ? 1 : 0;
-            background.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+            background.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
         }
     }
 

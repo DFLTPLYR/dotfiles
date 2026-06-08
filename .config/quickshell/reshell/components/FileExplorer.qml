@@ -54,7 +54,7 @@ FloatingWindow {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: Colors.color.primary
+            color: Colors.theme.primary
             text: folderModel.folder
             elide: Text.ElideMiddle
         }
@@ -115,7 +115,7 @@ FloatingWindow {
                 contentItem: Text {
                     text: model.fileName
                     verticalAlignment: Text.AlignVCenter
-                    color: Colors.color.primary
+                    color: Colors.theme.primary
                     elide: Text.ElideMiddle
                 }
             }
@@ -152,7 +152,7 @@ FloatingWindow {
             contentItem: Text {
                 text: model.fileName
                 verticalAlignment: Text.AlignVCenter
-                color: Colors.color.primary
+                color: Colors.theme.primary
                 elide: Text.ElideMiddle
             }
         }

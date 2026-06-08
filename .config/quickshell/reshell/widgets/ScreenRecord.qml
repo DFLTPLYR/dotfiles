@@ -17,7 +17,7 @@ Wrapper {
         enabled: Global.normal
         text: "camcorder"
         anchors.fill: parent
-        content.color: Colors.color.primary
+        content.color: Colors.theme.primary
         onClicked: proc.running = true
 
         font {

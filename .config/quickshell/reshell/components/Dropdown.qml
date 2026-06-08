@@ -68,7 +68,7 @@ ComboBox {
 
         text: control.displayText
         font: control.font
-        color: control.pressed ? Qt.darker(Colors.color.on_primary, 1.5) : Colors.color.on_primary
+        color: control.pressed ? Qt.darker(Colors.theme.on_primary, 1.5) : Colors.theme.on_primary
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
@@ -76,7 +76,7 @@ ComboBox {
     background: Rectangle {
         implicitWidth: 120
         implicitHeight: control.contentItem
-        color: Colors.color.primary
+        color: Colors.theme.primary
         border.width: control.visualFocus ? 2 : 1
         radius: 2
     }
@@ -98,7 +98,7 @@ ComboBox {
 
         background: Rectangle {
             color: Colors.color.background
-            border.color: Colors.color.outline
+            border.color: Colors.theme.outline
             radius: 2
         }
     }

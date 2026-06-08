@@ -19,7 +19,7 @@ Wrapper {
             text: "gaming-pad-alt"
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Colors.color.primary
+            color: Colors.theme.primary
             font.pixelSize: property.icon
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -30,7 +30,7 @@ Wrapper {
             text: `${Hardware.gpuUsagePercent.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Colors.color.primary
+            color: Colors.theme.primary
             font.pixelSize: property.text
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter

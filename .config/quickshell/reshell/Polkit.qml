@@ -102,7 +102,7 @@ Scope {
                         ColorAnimation {
                             target: pane.bg
                             property: "border.color"
-                            to: Colors.color.outline
+                            to: Colors.theme.outline
                             duration: 100
                             easing.type: Easing.InOutQuad
                         }

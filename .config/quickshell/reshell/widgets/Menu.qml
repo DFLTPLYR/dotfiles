@@ -13,7 +13,7 @@ Wrapper {
 
     Rectangle {
         anchors.fill: parent
-        color: button.containsMouse || button.toggled ? Colors.setOpacity(Colors.color.primary, 0.2) : "transparent"
+        color: button.containsMouse || button.toggled ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
         radius: width / 2
 
         Text {
@@ -21,7 +21,7 @@ Wrapper {
             text: "power-off"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: button.toggled ? Colors.color.tertiary : Colors.color.primary
+            color: button.toggled ? Colors.theme.tertiary : Colors.theme.primary
 
             font {
                 family: Components.icon.family
