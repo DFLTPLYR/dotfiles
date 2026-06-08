@@ -3,7 +3,7 @@ base16_backend = "wal"
 
 [templates.reshell]
 input_path = "templates/material.json.template"
-output_path = "~/.config/quickshell/reshell/core/data/themes/material.json"
+output_path = "~/.config/quickshell/reshell/core/data/themes/content.json"
 
 [templates.vesktop]
 input_path = 'templates/vesktop.css'

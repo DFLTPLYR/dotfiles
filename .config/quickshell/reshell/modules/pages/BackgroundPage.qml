@@ -702,7 +702,7 @@ Pane {
                     width: 125
 
                     Instantiator {
-                        model: Colors.themes
+                        model: Colors.colorscheme
                         delegate: Action {
                             required property var modelData
                             checkable: true
