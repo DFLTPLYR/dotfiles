@@ -47,11 +47,72 @@ Pane {
             }
 
             Toggle {
+                id: darkmodeToggle
                 text: "Dark mode"
                 checkable: true
                 checked: Global.general.darkmode
                 onCheckedChanged: {
                     Global.general.darkmode = checked;
+                }
+            }
+
+            ListView {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 120
+                clip: true
+                model: Colors.themes
+                orientation: ListView.Horizontal
+                spacing: 10
+                delegate: Pane {
+                    id: theme
+                    required property var model
+                    property var dark: model.dark
+                    property var light: model.light
+
+                    bg.color: Colors.setOpacity(Colors.theme.on_surface, 1)
+                    bg.radius: 12
+                    height: ListView.view.height
+                    width: height
+
+                    ColumnLayout {
+                        anchors.fill: parent
+
+                        Label {
+                            id: label
+                            Layout.fillWidth: true
+                            text: model.name
+                            color: Colors.theme.surface
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        Grid {
+                            id: grid
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            columns: 2
+                            spacing: 0
+                            Repeater {
+                                model: ["primary", "secondary", "tertiary", "surface"]
+                                delegate: Item {
+                                    required property string modelData
+                                    width: grid.width / 2
+                                    height: grid.height / 2
+
+                                    Pane {
+                                        anchors.centerIn: parent
+                                        width: Math.min(parent.width, parent.height) * 0.8
+                                        height: width
+                                        bg.radius: height / 2
+                                        bg.color: darkmodeToggle.checked ? theme.dark[modelData] : theme.light[modelData]
+                                    }
+                                    Component.onCompleted: {
+                                        print(theme, modelData);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
