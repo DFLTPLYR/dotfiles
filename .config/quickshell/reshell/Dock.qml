@@ -53,7 +53,7 @@ Item {
             property string position: "top"
             readonly property bool side: position === "left" || position === "right"
             property StyleJson style: StyleJson {
-                color: Colors.color.background
+                color: Colors.theme.surface
                 opacity: 0.5
             }
             property list<var> slots: []
@@ -80,7 +80,7 @@ Item {
             }
 
             function updateColor() {
-                config.style.color = Colors.setOpacity(Colors.color.background, config.style.opacity);
+                config.style.color = Colors.setOpacity(Colors.theme.surface, config.style.opacity);
                 file.writeAdapter();
             }
         }
@@ -243,7 +243,7 @@ Item {
                 PropertyChanges {
                     target: background
                     opacity: 1
-                    border.color: Colors.color.tertiary
+                    border.color: Colors.theme.tertiary
                 }
             }
         ]
@@ -382,7 +382,7 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 height: 2
-                color: Colors.color.primary
+                color: Colors.theme.primary
                 z: 100
 
                 NumberAnimation on width {
@@ -494,7 +494,7 @@ Item {
                 PropertyChanges {
                     target: slot
                     border.width: 2
-                    border.color: Colors.color.secondary
+                    border.color: Colors.theme.secondary
                 }
             },
             State {
@@ -502,7 +502,7 @@ Item {
                 PropertyChanges {
                     target: slot
                     border.width: 2
-                    border.color: Colors.color.tertiary
+                    border.color: Colors.theme.tertiary
                 }
             }
         ]
@@ -551,7 +551,7 @@ Item {
                 objectName: "Slot"
                 onContainsDragChanged: {
                     slot.border.width = containsDrag ? 1 : 0;
-                    slot.border.color = containsDrag ? Colors.color.tertiary : "transparent";
+                    slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
                 }
                 onDropped: drop => {
                     switch (Global.state) {

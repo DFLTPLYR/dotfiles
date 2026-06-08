@@ -11,8 +11,7 @@ import "./ntc.js" as NTC
 
 Singleton {
     id: config
-    property var testing: themes.find(s => Global.general.theme === s.name)
-    property var theme: jsonAdapter.theme[Global.general.darkmode ? "dark" : "light"]
+    property var theme: themes.find(s => Global.general.theme === s.name)[Global.general.darkmode ? "dark" : "light"]
     property alias color: jsonAdapter.color
     property alias palette: jsonAdapter.palette
     property list<var> themes: []
