@@ -40,7 +40,7 @@ Singleton {
     property alias general: adapter
     property list<var> widgets: []
     property list<var> configs: []
-    property list<var> settings: [
+    readonly property var settings: [
         {
             "name": "General",
             "page": 0
