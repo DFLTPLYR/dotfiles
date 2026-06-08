@@ -341,27 +341,6 @@ PopupModal {
                     modal.specs.style.opacity = value.toFixed(2);
                 }
             }
-
-            // Colors
-            Label {
-                font.pixelSize: 32
-                text: "Colors"
-            }
-            ColorGrid {
-                onSetColor: color => {
-                    modal.specs.style.color = color;
-                }
-            }
-            // Palette
-            Label {
-                font.pixelSize: 32
-                text: "Palette"
-            }
-            PaletteGrid {
-                onSetColor: color => {
-                    modal.specs.style.color = color;
-                }
-            }
         }
     }
 
