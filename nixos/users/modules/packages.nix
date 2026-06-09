@@ -21,6 +21,9 @@
           "-DI3_IPC=OFF"
         ];
     }))
+    neovim
+    unzip
+    tree-sitter
 
     # Shell / CLI
     cava
