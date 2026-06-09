@@ -10,5 +10,9 @@
 # rmpc layouts
 .config/rmpc/layout/long.ron
 .config/rmpc/layout/shell.ron
+
+# Generated theme files
+.config/nvim/theme.lua
+.config/quickshell/reshell/core/data/themes/content.json
 packages
 

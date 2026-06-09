@@ -65,8 +65,8 @@ local map = function(lhs, desc, ...)
 end
 
 -- Adjust LHS and description to your liking
-map("<Leader>ft", "Select recent (cwd)", false, 1)
-map("<Leader>fT", "Select recent (all)", true, 1)
+map("<Leader>fr", "Select recent (cwd)", false, 1)
+map("<Leader>fR", "Select recent (all)", true, 1)
 map("<Leader>fa", "Select frecent (cwd)", false, 0.5)
 map("<Leader>fA", "Select frecent (all)", true, 0.5)
 map("<Leader>vf", "Select frequent (all)", true, 0)
