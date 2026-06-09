@@ -14,12 +14,13 @@
     dina-font
     proggyfonts
     nerd-fonts.jetbrains-mono
+    nerd-fonts.iosevka
   ];
 
   fonts.fontconfig.defaultFonts = {
     serif = ["Noto Serif" "Liberation Serif"];
     sansSerif = ["Noto Sans" "Liberation Sans"];
-    monospace = ["Fira Code" "Noto Sans Mono"];
+    monospace = ["Iosevka NFM" "Fira Code" "Noto Sans Mono"];
     emoji = ["Noto Color Emoji"];
   };
 }
