@@ -49,3 +49,25 @@ keymap("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>")
 
 keymap("n", "<leader>gs", "<cmd>Git<CR>", opts)
 keymap("n", "<leader>gp", "<cmd>Git push<CR>", opts)
+
+local make_select_path = function(select_global, recency_weight)
+	local visits = require("mini.visits")
+	local sort = visits.gen_sort.default({ recency_weight = recency_weight })
+	local select_opts = { sort = sort }
+	return function()
+		local cwd = select_global and "" or vim.fn.getcwd()
+		visits.select_path(cwd, select_opts)
+	end
+end
+
+local map = function(lhs, desc, ...)
+	vim.keymap.set("n", lhs, make_select_path(...), { desc = desc })
+end
+
+-- Adjust LHS and description to your liking
+map("<Leader>ft", "Select recent (cwd)", false, 1)
+map("<Leader>fT", "Select recent (all)", true, 1)
+map("<Leader>fa", "Select frecent (cwd)", false, 0.5)
+map("<Leader>fA", "Select frecent (all)", true, 0.5)
+map("<Leader>vf", "Select frequent (all)", true, 0)
+map("<Leader>vF", "Select frequent (cwd)", false, 0)
