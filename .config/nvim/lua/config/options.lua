@@ -32,5 +32,3 @@ vim.g.netrw_liststyle = 1
 vim.g.netrw_sort_by = "size"
 
 vim.cmd.filetype("plugin indent on")
-
-pcall(require, "theme")

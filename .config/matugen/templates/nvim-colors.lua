@@ -378,10 +378,11 @@ local function set_minipick_highlights()
 	})
 
 	set_hl_mutliple({
-		"MiniPickItem",
+		"MiniPickMatchCurrent",
 	}, {
 		fg = "{{colors.on_surface.default.hex}}",
-		bg = "NONE",
+		bg = "{{colors.outline_variant.default.hex}}",
+		bold = true,
 	})
 end
 

@@ -47,7 +47,9 @@ Singleton {
         FileView {
             id: file
             watchChanges: true
-            onFileChanged: reload()
+            onFileChanged: {
+                reload();
+            }
             adapter: JsonAdapter {
                 property DarkTheme dark: DarkTheme {}
                 property LightTheme light: LightTheme {}

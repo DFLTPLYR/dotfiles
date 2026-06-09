@@ -1,6 +1,7 @@
 require("mini.animate").setup()
 require("mini.ai").setup()
 require("mini.completion").setup()
+require("mini.files").setup()
 require("mini.icons").setup()
 require("mini.indentscope").setup()
 require("mini.statusline").setup()
