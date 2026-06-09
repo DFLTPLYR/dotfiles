@@ -160,7 +160,7 @@ Item {
             implicitWidth: screen.width
             implicitHeight: screen.height
 
-            exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Ignore
+            exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Auto
             onExclusionModeChanged: {
                 if (ExclusionMode.Normal === exclusionMode) {
                     this.exclusiveZone = Qt.binding(() => {

@@ -545,6 +545,7 @@ Pane {
 
         ControlHandler {
             id: imageControl
+            visible: containerRect.enabled
             subject: containerRect
             drag.enabled: containerRect.enabled
             onUpdate: {
