@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./modules/programs.nix
-    ./modules/general.nix
+    ./modules/packages.nix
     ./modules/nvim/nvim.nix
     ./modules/vesktop/vesktop.nix
     ./modules/shell/bash.nix
