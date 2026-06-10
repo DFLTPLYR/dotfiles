@@ -2,7 +2,7 @@ local opt = vim.opt
 
 opt.guicursor = "i:ver25"
 opt.colorcolumn = "0"
-opt.signcolumn = "yes:2"
+opt.signcolumn = "yes:1"
 opt.termguicolors = true
 opt.ignorecase = true
 opt.swapfile = false
@@ -27,7 +27,11 @@ opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 opt.completeopt = { "menuone", "popup", "noinsert" }
 opt.winborder = "rounded"
-opt.hlsearch = false
+opt.smartcase = true
+opt.hlsearch = true
+opt.incsearch = true
+
+vim.g.autoformat = true
 vim.g.netrw_banner = false
 vim.g.netrw_liststyle = 1
 vim.g.netrw_sort_by = "size"

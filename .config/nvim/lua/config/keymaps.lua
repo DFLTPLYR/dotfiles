@@ -4,6 +4,7 @@ local s = { silent = true }
 vim.g.mapleader = " "
 
 keymap("n", "<space>", "<Nop>")
+keymap("n", "s", "/")
 
 keymap("n", "j", function()
 	return tonumber(vim.api.nvim_get_vvar("count")) > 0 and "j" or "gj"
@@ -15,6 +16,12 @@ end, { expr = true, silent = true })
 keymap("n", "<C-d>", "<C-d>zz")
 keymap("n", "<C-u>", "<C-u>zz")
 
+keymap("n", "bd", function()
+	require("mini.bufremove").delete()
+	if #vim.api.nvim_list_bufs() == 0 then
+		require("mini.starter").open()
+	end
+end, s)
 keymap("n", "<Leader>w", "<cmd>w!<CR>", s)
 keymap("n", "<Leader>q", "<cmd>q<CR>", s)
 
@@ -44,6 +51,7 @@ local opts = { noremap = true, silent = true }
 keymap("n", "grd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
 
 keymap("n", "<leader>ee", "<cmd>Pick files<CR>", { desc = "Pick file in current directory" })
+keymap("n", "<leader>fe", "<cmd>Pick buffers<CR>", { desc = "Pick available buffers" })
 keymap("n", "<leader>ff", "<cmd>FzfLua files<CR>")
 keymap("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>")
 

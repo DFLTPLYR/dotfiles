@@ -71,6 +71,10 @@
     "vim-moonfly-colors": {
       "rev": "261664f92ed51cf0c077555b2d4b2530307eac17",
       "src": "https://github.com/bluz71/vim-moonfly-colors"
+    },
+    "vim-startuptime": {
+      "rev": "5f33e50f1e2e2a80370c9094e4c303ea54cd2aea",
+      "src": "https://github.com/dstein64/vim-startuptime"
     }
   }
 }

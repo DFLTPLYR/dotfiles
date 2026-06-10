@@ -2,6 +2,8 @@ require("mini.animate").setup()
 require("mini.ai").setup()
 require("mini.completion").setup()
 require("mini.diff").setup()
+require("mini.splitjoin").setup()
+require("mini.bufremove").setup()
 require("mini.files").setup({
 	windows = {
 		preview = true,
@@ -87,7 +89,9 @@ require("mini.sessions").setup({
 	},
 	verbose = { read = false, write = true, delete = true },
 })
-require("mini.pick").setup({
+
+local MiniPick = require("mini.pick")
+MiniPick.setup({
 	options = { show_icons = true },
 	window = {
 		config = function()
@@ -103,3 +107,18 @@ require("mini.pick").setup({
 		end,
 	},
 })
+
+-- Add dd mapping to close buffers in :Pick buffers
+local wipeout_cur = function()
+	local item = MiniPick.get_picker_matches().current
+	if item then
+		vim.api.nvim_buf_delete(item.bufnr, { force = false, unload = true })
+		MiniPick.get_picker_matches().picker:close()
+	end
+end
+local buffer_mappings = { delete = { char = "dd", func = wipeout_cur } }
+
+local original = MiniPick.registry.buffers
+MiniPick.registry.buffers = function(local_opts)
+	return MiniPick.builtin.buffers(local_opts, { mappings = buffer_mappings })
+end
