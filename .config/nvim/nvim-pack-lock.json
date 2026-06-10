@@ -36,6 +36,10 @@
       "rev": "23e5128eb5f629c29532c24a1e733cbe019f05bb",
       "src": "https://github.com/RRethy/nvim-base16"
     },
+    "nvim-colorizer.lua": {
+      "rev": "664c0b7cea1de71f8b65dfe951b7996fc3e6ccde",
+      "src": "https://github.com/catgoose/nvim-colorizer.lua"
+    },
     "nvim-lspconfig": {
       "rev": "229b79051b380377664edc4cbd534930154921a1",
       "src": "https://github.com/neovim/nvim-lspconfig"

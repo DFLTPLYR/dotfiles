@@ -1,0 +1,82 @@
+[config]
+base16_backend = "wal"
+
+[templates.reshell]
+input_path = "templates/material.json.template"
+output_path = "~/.config/quickshell/reshell/core/data/themes/content.json"
+
+[templates.vesktop]
+input_path = 'templates/vesktop.css'
+output_path = '~/.config/vesktop/themes/vesktop.css'
+
+[templates.opencode]
+input_path = '~/.config/matugen/templates/open-code.json'
+output_path = '~/.config/opencode/themes/matugen.json'
+
+[templates.rmpc]
+input_path = "templates/rmpc/shell.ron"
+output_path = "~/.config/rmpc/layout/shell.ron"
+
+[templates.hypr]
+input_path = "templates/hypr/colors.lua"
+output_path = "~/.config/hypr/config/colors.lua"
+
+# [templates.niri]
+# input_path = "templates/niri-colors.kdl"
+# output_path = "~/.config/niri/modules/colors.kdl"
+# post_hook = 'niri msg action load-config-file'
+
+[templates.qt5ct]
+input_path = "templates/qtct.conf"
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = "templates/qtct.conf"
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.gtk3]
+input_path = "templates/gtk3-colors.css"
+output_path = '~/.config/gtk-3.0/colors.css'
+post_hook = 'if command -v gsettings >/dev/null 2>&1; then gsettings set org.gnome.desktop.interface gtk-theme "" && gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}; fi'
+
+[templates.gtk4]
+input_path = "templates/gtk-colors.css"
+output_path = '~/.config/gtk-4.0/colors.css'
+
+[templates.kitty]
+input_path = 'templates/kitty-colors.conf'
+output_path = '~/.config/kitty/current-theme.conf'
+# post_hook = "kitty +kitten themes --reload-in=all Matugen"
+
+[templates.neovim]
+input_path = 'templates/nvim-colors.lua'
+output_path = '~/.config/nvim/theme.lua'
+post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
+
+[templates.zenChrome]
+input_path = 'templates/userChrome.css.tpl'
+output_path = '~/dotfiles/.config/matugen/data/userChrome.css'
+pre_hook = '''
+for dir in ~/.config/zen ~/.zen; do
+  PROFILE_DIR=$(find "$dir" -maxdepth 1 -type d -name "*.Default*" 2>/dev/null | head -n 1)
+  [ -n "$PROFILE_DIR" ] && break
+done
+if [ -n "$PROFILE_DIR" ]; then
+  mkdir -p "$PROFILE_DIR/chrome"
+  [ -L "$PROFILE_DIR/chrome/userChrome.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userChrome.css "$PROFILE_DIR/chrome/userChrome.css"
+fi
+'''
+
+[templates.zenContent]
+input_path = 'templates/userContent.css.tpl'
+output_path = '~/dotfiles/.config/matugen/data/userContent.css'
+pre_hook = '''
+for dir in ~/.config/zen ~/.zen; do
+  PROFILE_DIR=$(find "$dir" -maxdepth 1 -type d -name "*.Default*" 2>/dev/null | head -n 1)
+  [ -n "$PROFILE_DIR" ] && break
+done
+if [ -n "$PROFILE_DIR" ]; then
+  mkdir -p "$PROFILE_DIR/chrome"
+  [ -L "$PROFILE_DIR/chrome/userContent.css" ] || ln -sf ~/dotfiles/.config/matugen/data/userContent.css "$PROFILE_DIR/chrome/userContent.css"
+fi
+'''
