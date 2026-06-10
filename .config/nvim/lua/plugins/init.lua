@@ -13,4 +13,5 @@ vim.pack.add({
 	{ src = "https://github.com/kevinhwang91/promise-async" },
 	{ src = "https://github.com/kevinhwang91/nvim-ufo" },
 	{ src = "https://github.com/catgoose/nvim-colorizer.lua" },
+	{ src = "https://github.com/akinsho/bufferline.nvim" },
 })
