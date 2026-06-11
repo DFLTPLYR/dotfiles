@@ -94,8 +94,8 @@ keymap("v", "<Leader>p", '"_dP')
 keymap("n", "<Leader>q", "<cmd>q<CR>", s)
 
 -- <leader>v - Visits (mini.visits)
-map("<Leader>vf", "Select frequent (all)", true, 0)
-map("<Leader>vF", "Select frequent (cwd)", false, 0)
+map("<Leader>vf", "Select frequent (cwd)", false, 0)
+map("<Leader>vF", "Select frequent (all)", true, 0)
 
 -- <leader>w - Write
 keymap("n", "<Leader>w", "<cmd>w!<CR>", s)
