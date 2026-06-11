@@ -19,9 +19,30 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
+local function log(msg)
+	local f = io.open(os.getenv("HOME") .. "/console.txt", "a")
+	if f then
+		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
+		f:close()
+	end
+end
+
 local function is_horizontal()
 	local mon = hl.get_active_monitor()
 	return mon and (mon.transform == 0 or mon.transform == 2)
+end
+
+local function monitor_index(name)
+	local monitors = hl.get_monitors()
+	table.sort(monitors, function(a, b)
+		return a.id < b.id
+	end)
+	for i, mon in ipairs(monitors) do
+		if mon.name == name then
+			return i
+		end
+	end
+	return 1
 end
 
 local function nav(ws, dir)
@@ -31,8 +52,10 @@ local function nav(ws, dir)
 			return
 		end
 
-		local current_mon = hl.get_active_monitor()
-		local current_mon_name = current_mon and current_mon.name
+		local mon = hl.get_active_monitor()
+		if not mon then
+			return
+		end
 
 		local window_before = hl.get_active_window()
 		local addr_before = window_before and window_before.address
@@ -42,19 +65,51 @@ local function nav(ws, dir)
 		local window_after = hl.get_active_window()
 		if not window_after then
 			hl.dispatch(hl.dsp.no_op())
-			hl.dispatch(hl.dsp.focus(ws))
-			return
-		end
-
-		if addr_before and window_after.address == addr_before then
+		elseif addr_before and window_after.address == addr_before then
 			hl.dispatch(hl.dsp.no_op())
-			hl.dispatch(hl.dsp.focus(ws))
+		elseif window_after.monitor and window_after.monitor.name ~= mon.name then
+			hl.dispatch(hl.dsp.no_op())
+		else
 			return
 		end
 
-		if window_after.monitor and window_after.monitor.name ~= current_mon_name then
-			hl.dispatch(hl.dsp.focus(ws))
+		-- edge reached — navigate workspaces
+		local wsz = hl.get_workspaces()
+		local mon_wsz = {}
+		for _, w in ipairs(wsz) do
+			if w.monitor == mon then
+				table.insert(mon_wsz, w)
+			end
+		end
+		table.sort(mon_wsz, function(a, b)
+			return a.id < b.id
+		end)
+
+		local cur_ws = hl.get_active_workspace()
+		local cur_idx
+		for i, w in ipairs(mon_wsz) do
+			if w == cur_ws then
+				cur_idx = i
+				break
+			end
+		end
+		if not cur_idx then
 			return
+		end
+
+		if dir == "up" then
+			if cur_idx == 1 then
+				hl.dispatch(hl.dsp.no_op())
+			else
+				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id) }))
+			end
+		elseif dir == "down" then
+			if cur_idx == #mon_wsz then
+				local new_id = (monitor_index(mon.name) - 1) * 100 + #mon_wsz + 1
+				hl.dispatch(hl.dsp.focus({ workspace = tostring(new_id) }))
+			else
+				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx + 1].id) }))
+			end
 		end
 	end
 end
@@ -84,7 +139,6 @@ hl.bind(mainMod .. "+ SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized",
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
--- Workspace switching: 1-9 -> N on current monitor (N+10 on DP-2)
 local function ws_switch(n, action)
 	if not n then
 		return
@@ -95,14 +149,16 @@ local function ws_switch(n, action)
 	end
 
 	local mon = hl.get_active_monitor()
-	if mon and mon.name == "DP-2" then
-		n = n + 100
+	if not mon then
+		return
 	end
 
+	local ws_id = n + (monitor_index(mon.name) - 1) * 100
+
 	if action == "focus" then
-		hl.dispatch(hl.dsp.focus({ workspace = tostring(n) }))
+		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id) }))
 	else
-		hl.dispatch(hl.dsp.window.move({ workspace = tostring(n) }))
+		hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
 	end
 end
 

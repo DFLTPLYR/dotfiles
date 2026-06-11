@@ -79,7 +79,7 @@ map("<Leader>fR", "Select recent (all)", true, 1)
 map("<Leader>fa", "Select frecent (cwd)", false, 0.5)
 map("<Leader>fA", "Select frecent (all)", true, 0.5)
 
-keymap("n", "<leader>fM", function()
+keymap("n", "<leader>fm", function()
 	require("mini.files").open(vim.uv.cwd(), true)
 end, { desc = "Open mini.files (cwd)" })
 

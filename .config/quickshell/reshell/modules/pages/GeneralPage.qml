@@ -344,4 +344,6 @@ Pane {
             }
         }
     }
+
+    Component.onDestruction: Global.save()
 }
