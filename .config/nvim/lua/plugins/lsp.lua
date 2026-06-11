@@ -18,12 +18,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	command = "setfiletype vue",
 })
 
-vim.lsp.config("*", {
-	on_attach = vim.lsp.on_attach,
-	on_init = vim.lsp.on_init,
-	capabilities = vim.lsp.capabilities,
-})
-
 for _, lsp in ipairs({ "html", "cssls", "ts_ls", "pyright", "rust_analyzer", "qmlls" }) do
 	vim.lsp.enable(lsp)
 end
