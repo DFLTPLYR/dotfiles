@@ -1,9 +1,22 @@
 local ok, color = pcall(require, ".config.colors")
 if not ok then
 	color = {
-		background = "0xff0a1519",
-		primary = "0xff58d5ff",
-		on_surface = "0xffd9e4ea",
+		primary = "#76946a",
+		on_primary = "#1f1f28",
+		secondary = "#c0a36e",
+		on_secondary = "#1f1f28",
+		tertiary = "#7e9cd8",
+		on_tertiary = "#1f1f28",
+		error = "#c34043",
+		on_error = "#1f1f28",
+		surface = "#1f1f28",
+		on_surface = "#c8c093",
+		surface_variant = "#2a2a37",
+		on_surface_variant = "#717c7c",
+		outline = "#363646",
+		shadow = "#1f1f28",
+		hover = "#7e9cd8",
+		on_hover = "#1f1f28",
 	}
 end
 
@@ -15,8 +28,8 @@ hl.config({
 		border_size = 2,
 
 		col = {
-			active_border = color.background,
-			inactive_border = color.background,
+			active_border = color.outline,
+			inactive_border = color.shadow,
 		},
 
 		resize_on_border = false,
@@ -31,8 +44,8 @@ hl.config({
 		auto_group = false,
 
 		col = {
-			border_active = color.background,
-			border_inactive = color.background,
+			border_active = color.outline,
+			border_inactive = color.shadow,
 		},
 
 		groupbar = {
@@ -44,8 +57,8 @@ hl.config({
 			gaps_out = 2,
 
 			col = {
-				active = color.primary,
-				inactive = color.background,
+				active = color.outline,
+				inactive = color.shadow,
 			},
 			text_color = color.on_surface,
 			height = 12,

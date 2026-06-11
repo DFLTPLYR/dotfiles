@@ -1,6 +1,0 @@
-[config]
-base16_backend = "wal"
-
-[templates.reshell]
-input_path = "templates/test.json"
-output_path = "~/test.json"

@@ -1,4 +1,6 @@
-require("mini.animate").setup()
+require("mini.animate").setup({
+	scroll = { enable = false },
+})
 require("mini.ai").setup()
 require("mini.completion").setup()
 require("mini.diff").setup()

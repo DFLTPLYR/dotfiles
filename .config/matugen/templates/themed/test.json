@@ -1,0 +1,20 @@
+{
+    "test": [
+        "{{ colors.primary }}",
+        "{{ colors.on_primary }}",
+        "{{ colors.secondary }}",
+        "{{ colors.on_secondary }}",
+        "{{ colors.tertiary }}",
+        "{{ colors.on_tertiary }}",
+        "{{ colors.error }}",
+        "{{ colors.on_error }}",
+        "{{ colors.surface }}",
+        "{{ colors.on_surface }}",
+        "{{ colors.surface_variant }}",
+        "{{ colors.on_surface_variant }}",
+        "{{ colors.outline }}",
+        "{{ colors.shadow }}",
+        "{{ colors.hover }}",
+        "{{ colors.on_hover }}"
+    ]
+}

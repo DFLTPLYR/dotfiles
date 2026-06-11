@@ -331,6 +331,14 @@ Pane {
                 hoverEnabled: true
                 onClicked: {
                     Global.general.theme = theme.model.name;
+                    const colorscheme = Colors.themes.find(s => s.name === theme.model.name);
+                    if (!colorscheme)
+                        return;
+                    const text = colorscheme.file.text();
+                    const json = JSON.parse(text);
+                    if (!Global.matugen.running) {
+                        Global.matugen.color = darkmodeToggle.checked ? json.dark : json.light;
+                    }
                 }
             }
         }
