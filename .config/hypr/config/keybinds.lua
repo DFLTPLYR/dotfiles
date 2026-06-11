@@ -1,6 +1,7 @@
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
+local debug = false
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
@@ -20,6 +21,9 @@ hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
 local function log(msg)
+	if not debug then
+		return
+	end
 	local f = io.open(os.getenv("HOME") .. "/console.txt", "a")
 	if f then
 		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
@@ -74,6 +78,7 @@ local function nav(ws, dir)
 		end
 
 		-- edge reached — navigate workspaces
+		log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
 		local wsz = hl.get_workspaces()
 		local mon_wsz = {}
 		for _, w in ipairs(wsz) do
@@ -99,15 +104,19 @@ local function nav(ws, dir)
 
 		if dir == "up" then
 			if cur_idx == 1 then
+				log("nav at first workspace — no_op")
 				hl.dispatch(hl.dsp.no_op())
 			else
+				log("nav to ws " .. mon_wsz[cur_idx - 1].name)
 				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id) }))
 			end
 		elseif dir == "down" then
 			if cur_idx == #mon_wsz then
 				local new_id = (monitor_index(mon.name) - 1) * 100 + #mon_wsz + 1
+				log("nav creating ws " .. new_id)
 				hl.dispatch(hl.dsp.focus({ workspace = tostring(new_id) }))
 			else
+				log("nav to ws " .. mon_wsz[cur_idx + 1].name)
 				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx + 1].id) }))
 			end
 		end
@@ -173,6 +182,11 @@ end
 
 hl.bind(mainMod .. " + mouse_up", nav({ workspace = "m+1" }, "down"))
 hl.bind(mainMod .. " + mouse_down", nav({ workspace = "m-1" }, "up"))
+hl.bind("ALT + D", function()
+	debug = not debug
+	log("debug: " .. tostring(debug))
+end)
+
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window
 	hl.dispatch(hl.dsp.window.bring_to_top()) -- Bring it to the top
