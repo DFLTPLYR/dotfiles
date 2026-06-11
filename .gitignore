@@ -11,6 +11,9 @@
 .config/rmpc/layout/long.ron
 .config/rmpc/layout/shell.ron
 
+# Vim session files
+*.vim
+
 # Generated theme files
 .config/nvim/theme.lua
 .config/quickshell/reshell/core/data/themes/content.json

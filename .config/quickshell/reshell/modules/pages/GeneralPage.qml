@@ -336,8 +336,9 @@ Pane {
                         return;
                     const text = colorscheme.file.text();
                     const json = JSON.parse(text);
-                    if (!Global.matugen.running) {
-                        Global.matugen.color = darkmodeToggle.checked ? json.dark : json.light;
+                    const cTheme = darkmodeToggle.checked ? json.dark : json.light;
+                    if (Global.matugen.color !== cTheme) {
+                        Global.matugen.color = cTheme;
                     }
                 }
             }
