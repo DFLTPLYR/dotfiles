@@ -162,7 +162,23 @@ local function ws_switch(n, action)
 		return
 	end
 
-	local ws_id = n + (monitor_index(mon.name) - 1) * 100
+	local wsz = hl.get_workspaces()
+	local mon_wsz = {}
+	for _, w in ipairs(wsz) do
+		if w.monitor == mon then
+			table.insert(mon_wsz, w)
+		end
+	end
+	table.sort(mon_wsz, function(a, b)
+		return a.id < b.id
+	end)
+
+	local ws_id
+	if n <= #mon_wsz then
+		ws_id = mon_wsz[n].id
+	else
+		ws_id = n + (monitor_index(mon.name) - 1) * 100
+	end
 
 	if action == "focus" then
 		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id) }))
