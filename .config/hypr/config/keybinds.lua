@@ -71,11 +71,6 @@ end
 
 local function nav(ws, dir)
 	return function()
-		if is_horizontal() then
-			hl.dispatch(hl.dsp.focus(ws))
-			return
-		end
-
 		local mon = hl.get_active_monitor()
 		if not mon then
 			return
@@ -84,10 +79,6 @@ local function nav(ws, dir)
 		local ws_before = hl.get_active_workspace()
 		local window_before = hl.get_active_window()
 		local addr_before = window_before and window_before.address
-
-		-- if dir == "left" or dir == "right" then
-		-- end
-		hl.dispatch(hl.dsp.focus({ direction = dir }))
 
 		local window_after = hl.get_active_window()
 		if not window_after then
@@ -100,6 +91,13 @@ local function nav(ws, dir)
 		else
 			return
 		end
+
+		-- if is_horizontal() then
+		--
+		-- 	return
+		-- end
+
+		hl.dispatch(hl.dsp.focus({ direction = dir }))
 		-- edge reached — navigate workspaces
 		log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
 		local wsz = hl.get_workspaces()
@@ -187,6 +185,7 @@ local function ws_switch(n, action)
 
 	local wsz = hl.get_workspaces()
 	local mon_wsz = {}
+
 	for _, w in ipairs(wsz) do
 		if w.monitor == mon then
 			table.insert(mon_wsz, w)
