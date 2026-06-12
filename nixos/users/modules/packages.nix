@@ -50,6 +50,7 @@
     opencode
     rustup
     just
+    lmstudio
 
     # Apps
     telegram-desktop
@@ -61,6 +62,7 @@
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     kitty
     obsidian
+    mpdris2-rs
 
     # Screenshots / clipboard
     grim
