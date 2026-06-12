@@ -1,8 +1,39 @@
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
-local debug = false
+
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local logfile = "/tmp/hypr/tmp.log"
+
+local function log(msg)
+	local f = io.open(logfile, "a")
+	if f then
+		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
+		f:close()
+	end
+end
+
+hl.bind(mainMod .. " + SHIFT + D", function()
+	local f = io.open(logfile, "r")
+	if f then
+		f:close()
+		os.remove(logfile)
+		log("debug: off")
+		hl.dsp.exec_cmd("notify-send 'Debug' 'off'")
+	else
+		io.open(logfile, "w"):close()
+		log("debug: on")
+		hl.dsp.exec_cmd("notify-send 'Debug' 'on'")
+	end
+end)
+
+local function log(msg)
+	local f = io.open(logfile, "a")
+	if f then
+		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
+		f:close()
+	end
+end
 
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
@@ -19,17 +50,6 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-
-local function log(msg)
-	if not debug then
-		return
-	end
-	local f = io.open(os.getenv("HOME") .. "/console.txt", "a")
-	if f then
-		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
-		f:close()
-	end
-end
 
 local function is_horizontal()
 	local mon = hl.get_active_monitor()
@@ -61,9 +81,12 @@ local function nav(ws, dir)
 			return
 		end
 
+		local ws_before = hl.get_active_workspace()
 		local window_before = hl.get_active_window()
 		local addr_before = window_before and window_before.address
 
+		-- if dir == "left" or dir == "right" then
+		-- end
 		hl.dispatch(hl.dsp.focus({ direction = dir }))
 
 		local window_after = hl.get_active_window()
@@ -72,11 +95,11 @@ local function nav(ws, dir)
 		elseif addr_before and window_after.address == addr_before then
 			hl.dispatch(hl.dsp.no_op())
 		elseif window_after.monitor and window_after.monitor.name ~= mon.name then
+			hl.dispatch(hl.dsp.focus({ workspace = ws_before.name }))
 			hl.dispatch(hl.dsp.no_op())
 		else
 			return
 		end
-
 		-- edge reached — navigate workspaces
 		log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
 		local wsz = hl.get_workspaces()
@@ -198,10 +221,6 @@ end
 
 hl.bind(mainMod .. " + mouse_up", nav({ workspace = "m+1" }, "down"))
 hl.bind(mainMod .. " + mouse_down", nav({ workspace = "m-1" }, "up"))
-hl.bind("ALT + D", function()
-	debug = not debug
-	log("debug: " .. tostring(debug))
-end)
 
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window

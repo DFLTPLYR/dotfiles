@@ -11,7 +11,7 @@ import qs.components
 import qs.modules
 import qs.types
 
-Item {
+Scope {
     id: dock
 
     required property string name
@@ -157,10 +157,10 @@ Item {
                 right: config.position === "right"
             }
 
-            implicitWidth: screen.width
-            implicitHeight: screen.height
+            implicitWidth: dock.screen.width
+            implicitHeight: dock.screen.height
 
-            exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Auto
+            exclusionMode: config.exclusiveZone ? ExclusionMode.Normal : ExclusionMode.Ignore
             onExclusionModeChanged: {
                 if (ExclusionMode.Normal === exclusionMode) {
                     this.exclusiveZone = Qt.binding(() => {
@@ -194,6 +194,8 @@ Item {
                 dim: true
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
+                y: panel.height / 2 - modalPopup.height / 2
+                x: panel.width / 2 - modalPopup.width / 2
                 specs: file.adapter
                 slots: panel.dockSlots
                 onSave: timer.restart()
@@ -423,10 +425,7 @@ Item {
                 onClicked: mouse => {
                     switch (mouse.button) {
                     case Qt.RightButton:
-                        if (!modalPopup.opened) {
-                            modalPopup.y = panel.height / 2 - modalPopup.height / 2;
-                            modalPopup.x = panel.width / 2 - modalPopup.width / 2;
-                        }
+                        if (!modalPopup.opened) {}
                         modalPopup.opened ? modalPopup.close() : modalPopup.open();
                         return;
                     case Qt.LeftButton:
