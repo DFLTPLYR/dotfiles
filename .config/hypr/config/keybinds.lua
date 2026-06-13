@@ -51,9 +51,9 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
-local function is_horizontal()
+local function is_vertical()
 	local mon = hl.get_active_monitor()
-	return mon and (mon.transform == 0 or mon.transform == 2)
+	return mon and (mon.transform == 3 or mon.transform == 4)
 end
 
 local function monitor_index(name)
@@ -72,13 +72,54 @@ end
 local function nav(ws, dir)
 	return function()
 		local mon = hl.get_active_monitor()
+		local vertical = is_vertical()
 		if not mon then
 			return
 		end
 		local ws_before = hl.get_active_workspace()
 		local window_before = hl.get_active_window()
 		local addr_before = window_before and window_before.address
-		log(mon.transform .. tostring(addr_before) .. tostring(ws_before) .. tostring(window_before))
+
+		if vertical then
+			local ws = hl.get_active_workspace()
+			local clients = hl.get_workspace_windows(ws.name)
+			local cur = hl.get_active_window()
+			if not cur or not clients or #clients == 0 then
+				return
+			end
+			local sorted = {}
+			for _, c in ipairs(clients) do
+				table.insert(sorted, c)
+			end
+			table.sort(sorted, function(a, b)
+				return a.at.y < b.at.y
+			end)
+			if cur.address == sorted[1].address and dir == "up" then
+				local wsz = hl.get_workspaces()
+				local mon_wsz = {}
+				for _, w in ipairs(wsz) do
+					if w.monitor == mon then
+						table.insert(mon_wsz, w)
+					end
+				end
+				table.sort(mon_wsz, function(a, b)
+					return a.id < b.id
+				end)
+				if ws.id == mon_wsz[1].id then
+					return hl.dispatch(hl.dsp.no_op())
+				end
+			end
+			hl.dispatch(hl.dsp.focus({ direction = dir }))
+		else -- horizontal
+			if dir ~= "up" and dir ~= "down" then
+				hl.dispatch(hl.dsp.focus({ direction = dir }))
+			end
+			return
+		end
+
+		if true then
+			return
+		end
 
 		local window_after = hl.get_active_window()
 		if not window_after then
@@ -86,20 +127,15 @@ local function nav(ws, dir)
 		elseif addr_before and window_after.address == addr_before then
 			hl.dispatch(hl.dsp.no_op())
 		elseif window_after.monitor and window_after.monitor.name ~= mon.name then
-			hl.dispatch(hl.dsp.focus({ workspace = ws_before.name }))
+			-- hl.dispatch(hl.dsp.focus({ workspace = ws_before.name, on_current_monitor = true }))
 			hl.dispatch(hl.dsp.no_op())
 		else
 			return
 		end
 
-		-- if is_horizontal() then
-		--
-		-- 	return
-		-- end
-
-		hl.dispatch(hl.dsp.focus({ direction = dir }))
+		-- hl.dispatch(hl.dsp.focus({ direction = dir }))
 		-- edge reached — navigate workspaces
-		log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
+		-- log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
 		local wsz = hl.get_workspaces()
 		local mon_wsz = {}
 		for _, w in ipairs(wsz) do
@@ -124,20 +160,14 @@ local function nav(ws, dir)
 		end
 
 		if dir == "up" then
-			if cur_idx == 1 then
-				log("nav at first workspace — no_op")
-				hl.dispatch(hl.dsp.no_op())
-			else
-				log("nav to ws " .. mon_wsz[cur_idx - 1].name)
-				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id) }))
-			end
+			hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id), on_current_monitor = true }))
+			return
 		elseif dir == "down" then
 			if cur_idx == #mon_wsz then
 				local new_id = (monitor_index(mon.name) - 1) * 100 + #mon_wsz + 1
-				log("nav creating ws " .. new_id)
 				hl.dispatch(hl.dsp.focus({ workspace = tostring(new_id) }))
 			else
-				log("nav to ws " .. mon_wsz[cur_idx + 1].name)
+				-- log("nav to ws " .. mon_wsz[cur_idx + 1].name)
 				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx + 1].id) }))
 			end
 		end
@@ -154,8 +184,8 @@ hl.bind(mainMod .. " + K", nav({ workspace = "m-1" }, "up"))
 hl.bind(mainMod .. " + J", nav({ workspace = "+1" }, "down"))
 
 -- focus next workspace
-hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1" }))
-hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1" }))
+hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
+hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1", on_current_monitor = true }))
 
 -- Move focus to monitor
 hl.bind(mainMod .. "+ SHIFT + H", hl.dsp.focus({ monitor = "l" }))
@@ -191,10 +221,10 @@ local function ws_switch(n, action)
 			table.insert(mon_wsz, w)
 		end
 	end
+
 	table.sort(mon_wsz, function(a, b)
 		return a.id < b.id
 	end)
-
 	local ws_id
 	if n <= #mon_wsz then
 		ws_id = mon_wsz[n].id
@@ -203,9 +233,10 @@ local function ws_switch(n, action)
 	end
 
 	if action == "focus" then
-		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id) }))
+		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 	else
-		hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
+		log(ws_id)
+		-- hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id), on_current_monitor = true }))
 	end
 end
 
