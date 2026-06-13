@@ -1,6 +1,14 @@
 [config]
 base16_backend = "wal"
 
+[catalog.steam]
+name = "Steam"
+category = "misc"
+
+[templates.millennium]
+input_path = '/matugen/template/path/here'
+output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matugen.css'
+
 [templates.themed_reshell]
 input_path = "templates/themed/material.json"
 output_path = "~/.config/quickshell/reshell/core/data/themes/content.json"
@@ -41,7 +49,7 @@ output_path = "~/.config/kitty/current-theme.conf"
 [templates.themed_neovim]
 input_path = "templates/themed/nvim-colors.lua"
 output_path = "~/.config/nvim/theme.lua"
-post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
+post_hook = 'echo "[$(date "+%Y-%m-%d %H:%M:%S")] matugen ran - themed_neovim" >> ~/nvim-log.txt; pkill -SIGUSR1 nvim 2>/dev/null || true'
 
 [templates.themed_rofi]
 input_path = "templates/themed/rofi-colors.rasi"

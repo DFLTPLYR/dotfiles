@@ -31,4 +31,6 @@ rule({
 	monitor = "DP-1",
 	content = "game",
 	fullscreen = true,
+	maximize = true,
+	fullscreen_state = 3,
 })

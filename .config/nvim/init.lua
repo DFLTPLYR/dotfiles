@@ -34,9 +34,11 @@ end
 source_matugen()
 
 local function auxiliary_function()
-	source_matugen()
-	dofile(vim.fn.stdpath("config") .. "/lua/plugins/lualine.lua")
-	vim.api.nvim_set_hl(0, "Comment", { italic = true })
+	vim.defer_fn(function()
+		source_matugen()
+		dofile(vim.fn.stdpath("config") .. "/lua/plugins/lualine.lua")
+		vim.api.nvim_set_hl(0, "Comment", { italic = true })
+	end, 100)
 end
 
 vim.api.nvim_create_autocmd("Signal", {

@@ -75,10 +75,10 @@ local function nav(ws, dir)
 		if not mon then
 			return
 		end
-
 		local ws_before = hl.get_active_workspace()
 		local window_before = hl.get_active_window()
 		local addr_before = window_before and window_before.address
+		log(mon.transform .. tostring(addr_before) .. tostring(ws_before) .. tostring(window_before))
 
 		local window_after = hl.get_active_window()
 		if not window_after then
