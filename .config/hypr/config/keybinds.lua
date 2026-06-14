@@ -146,7 +146,11 @@ hl.bind(mainMod .. "+ SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized",
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-local function ws_switch(n, action)
+hl.on("workspace.active", function(ws)
+	log(ws.name)
+end)
+
+local function go_to_ws(n, action)
 	if not n then
 		return
 	end
@@ -156,11 +160,13 @@ local function ws_switch(n, action)
 	end
 
 	local mon = hl.get_active_monitor()
-	if not mon then
+	local wsz = hl.get_workspaces()
+	local cur = hl.get_active_window()
+
+	if not mon or not wsz or not cur then
 		return
 	end
 
-	local wsz = hl.get_workspaces()
 	local mon_wsz = {}
 
 	for _, w in ipairs(wsz) do
@@ -185,7 +191,7 @@ end
 
 for i = 1, 9 do
 	hl.bind(mainMod .. " + " .. i, function()
-		ws_switch(i, "focus")
+		go_to_ws(i, "focus")
 	end)
 end
 
@@ -196,6 +202,7 @@ hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window
 	hl.dispatch(hl.dsp.window.bring_to_top()) -- Bring it to the top
 end)
+
 hl.bind(mainMod .. "+ equal", hl.dsp.layout("colresize +0.2"))
 hl.bind(mainMod .. "+ minus", hl.dsp.layout("colresize -0.2"))
 hl.bind(mainMod .. "+ SHIFT + comma", hl.dsp.layout("consume_or_expel prev"))
