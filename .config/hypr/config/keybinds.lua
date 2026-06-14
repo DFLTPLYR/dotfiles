@@ -76,24 +76,23 @@ local function nav(ws, dir)
 		if not mon then
 			return
 		end
-		local ws_before = hl.get_active_workspace()
-		local window_before = hl.get_active_window()
-		local addr_before = window_before and window_before.address
+		local ws = hl.get_active_workspace()
+
+		local clients = hl.get_workspace_windows(ws.name)
+		local cur = hl.get_active_window()
+		if not cur or not clients or #clients == 0 then
+			return
+		end
+
+		local sorted = {}
+		for _, c in ipairs(clients) do
+			table.insert(sorted, c)
+		end
+		table.sort(sorted, function(a, b)
+			return a.at.y < b.at.y
+		end)
 
 		if vertical then
-			local ws = hl.get_active_workspace()
-			local clients = hl.get_workspace_windows(ws.name)
-			local cur = hl.get_active_window()
-			if not cur or not clients or #clients == 0 then
-				return
-			end
-			local sorted = {}
-			for _, c in ipairs(clients) do
-				table.insert(sorted, c)
-			end
-			table.sort(sorted, function(a, b)
-				return a.at.y < b.at.y
-			end)
 			if cur.address == sorted[1].address and dir == "up" then
 				local wsz = hl.get_workspaces()
 				local mon_wsz = {}
@@ -115,7 +114,7 @@ local function nav(ws, dir)
 				hl.dispatch(hl.dsp.focus({ direction = dir }))
 			else
 				log(tostring(ws) .. " testing ")
-				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id), on_current_monitor = true }))
+				-- hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id), on_current_monitor = true }))
 			end
 			return
 		end
