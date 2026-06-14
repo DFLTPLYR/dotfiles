@@ -113,63 +113,11 @@ local function nav(ws, dir)
 		else -- horizontal
 			if dir ~= "up" and dir ~= "down" then
 				hl.dispatch(hl.dsp.focus({ direction = dir }))
-			end
-			return
-		end
-
-		if true then
-			return
-		end
-
-		local window_after = hl.get_active_window()
-		if not window_after then
-			hl.dispatch(hl.dsp.no_op())
-		elseif addr_before and window_after.address == addr_before then
-			hl.dispatch(hl.dsp.no_op())
-		elseif window_after.monitor and window_after.monitor.name ~= mon.name then
-			-- hl.dispatch(hl.dsp.focus({ workspace = ws_before.name, on_current_monitor = true }))
-			hl.dispatch(hl.dsp.no_op())
-		else
-			return
-		end
-
-		-- hl.dispatch(hl.dsp.focus({ direction = dir }))
-		-- edge reached — navigate workspaces
-		-- log("nav edge dir=" .. dir .. " ws=" .. tostring(hl.get_active_workspace().name))
-		local wsz = hl.get_workspaces()
-		local mon_wsz = {}
-		for _, w in ipairs(wsz) do
-			if w.monitor == mon then
-				table.insert(mon_wsz, w)
-			end
-		end
-		table.sort(mon_wsz, function(a, b)
-			return a.id < b.id
-		end)
-
-		local cur_ws = hl.get_active_workspace()
-		local cur_idx
-		for i, w in ipairs(mon_wsz) do
-			if w == cur_ws then
-				cur_idx = i
-				break
-			end
-		end
-		if not cur_idx then
-			return
-		end
-
-		if dir == "up" then
-			hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id), on_current_monitor = true }))
-			return
-		elseif dir == "down" then
-			if cur_idx == #mon_wsz then
-				local new_id = (monitor_index(mon.name) - 1) * 100 + #mon_wsz + 1
-				hl.dispatch(hl.dsp.focus({ workspace = tostring(new_id) }))
 			else
-				-- log("nav to ws " .. mon_wsz[cur_idx + 1].name)
-				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx + 1].id) }))
+				log(tostring(ws) .. " testing ")
+				hl.dispatch(hl.dsp.focus({ workspace = tostring(mon_wsz[cur_idx - 1].id), on_current_monitor = true }))
 			end
+			return
 		end
 	end
 end
@@ -225,17 +173,19 @@ local function ws_switch(n, action)
 	table.sort(mon_wsz, function(a, b)
 		return a.id < b.id
 	end)
+
 	local ws_id
 	if n <= #mon_wsz then
 		ws_id = mon_wsz[n].id
 	else
 		ws_id = n + (monitor_index(mon.name) - 1) * 100
+
+		log(ws_id)
 	end
 
 	if action == "focus" then
 		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 	else
-		log(ws_id)
 		-- hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id), on_current_monitor = true }))
 	end
 end
