@@ -178,23 +178,14 @@ local function ws_switch(n, action)
 		ws_id = mon_wsz[n].id
 	else
 		ws_id = n + (monitor_index(mon.name) - 1) * 100
-
-		log(ws_id)
 	end
 
-	if action == "focus" then
-		hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
-	else
-		-- hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id), on_current_monitor = true }))
-	end
+	hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 end
 
 for i = 1, 9 do
 	hl.bind(mainMod .. " + " .. i, function()
 		ws_switch(i, "focus")
-	end)
-	hl.bind(mainMod .. " + SHIFT + " .. i, function()
-		ws_switch(i, "movetoworkspace")
 	end)
 end
 
