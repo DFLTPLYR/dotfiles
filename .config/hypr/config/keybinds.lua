@@ -105,34 +105,46 @@ local function nav(ws, dir)
 
 		if vertical then
 			if firstws then
-				if dir == "up" then
-					if firstwindow then
-						return
-					end
-					return hl.dispatch(hl.dsp.focus({ direction = dir }))
-				elseif dir == "down" then
-					if lastwindow then
-						return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-					end
-					return hl.dispatch(hl.dsp.focus({ direction = dir }))
+				if dir == "up" and firstwindow then
+					return hl.dispatch(hl.dsp.no_op())
+				elseif dir == "down" and lastwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 				end
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			elseif lastws then
-				if dir == "up" then
-					if firstwindow then
-						return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-					end
+				if dir == "up" and firstwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+				elseif dir == "down" and lastwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				end
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
+			else
+				if dir == "up" and firstwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+				elseif dir == "down" and lastwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 				end
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
 		else -- horizontal
-			if
-				(cur.address == sorted[1].address and dir == "up")
-				or (cur.address == sorted[#sorted].address and dir == "down")
-			then
-				if dir == "up" and ws.id == mon_wsz[1].id then
+			if firstws then
+				if dir == "up" then
 					return hl.dispatch(hl.dsp.no_op())
-				elseif dir == "down" and ws.id == mon_wsz[#mon_wsz].id then
+				elseif dir == "down" and lastwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+				end
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
+			elseif lastws then
+				if dir == "up" then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+				elseif dir == "down" then
 					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				end
+			else
+				if dir == "up" then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+				elseif dir == "down" then
+					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 				end
 			end
 		end
