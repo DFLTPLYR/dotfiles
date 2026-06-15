@@ -56,19 +56,6 @@ local function is_vertical()
 	return mon and (mon.transform == 3 or mon.transform == 4)
 end
 
-local function monitor_index(name)
-	local monitors = hl.get_monitors()
-	table.sort(monitors, function(a, b)
-		return a.id < b.id
-	end)
-	for i, mon in ipairs(monitors) do
-		if mon.name == name then
-			return i
-		end
-	end
-	return 1
-end
-
 local function nav(ws, dir)
 	return function()
 		local mon = hl.get_active_monitor()
@@ -90,36 +77,53 @@ local function nav(ws, dir)
 		end
 
 		local sorted = {}
+
 		for _, c in ipairs(clients) do
 			table.insert(sorted, c)
 		end
+
 		table.sort(sorted, function(a, b)
 			return a.at.y < b.at.y
 		end)
-
 		local wsz = hl.get_workspaces()
 		local mon_wsz = {}
+
 		for _, w in ipairs(wsz) do
 			if w.monitor == mon then
 				table.insert(mon_wsz, w)
 			end
 		end
+
 		table.sort(mon_wsz, function(a, b)
 			return a.id < b.id
 		end)
 
+		local firstws = mon_wsz[1].id == ws.id
+		local lastws = mon_wsz[#mon_wsz].id == ws.id
+		local firstwindow = cur.address == sorted[1].address
+		local lastwindow = cur.address == sorted[#sorted].address
+
 		if vertical then
-			if
-				(cur.address == sorted[1].address and dir == "up")
-				or (cur.address == sorted[#sorted].address and dir == "down")
-			then
-				if dir == "up" and ws.id == mon_wsz[1].id then
-					return hl.dispatch(hl.dsp.no_op())
-				elseif dir == "down" and ws.id == mon_wsz[#mon_wsz].id then
-					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+			if firstws then
+				if dir == "up" then
+					if firstwindow then
+						return
+					end
+					return hl.dispatch(hl.dsp.focus({ direction = dir }))
+				elseif dir == "down" then
+					if lastwindow then
+						return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+					end
+					return hl.dispatch(hl.dsp.focus({ direction = dir }))
 				end
+			elseif lastws then
+				if dir == "up" then
+					if firstwindow then
+						return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+					end
+				end
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
-			hl.dispatch(hl.dsp.focus({ direction = dir }))
 		else -- horizontal
 			if
 				(cur.address == sorted[1].address and dir == "up")
@@ -161,7 +165,7 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 hl.on("workspace.active", function(ws)
-	log(ws.name)
+	-- log(ws.name)
 end)
 
 local function go_to_ws(n, action)
@@ -175,9 +179,8 @@ local function go_to_ws(n, action)
 
 	local mon = hl.get_active_monitor()
 	local wsz = hl.get_workspaces()
-	local cur = hl.get_active_window()
 
-	if not mon or not wsz or not cur then
+	if not mon or not wsz then
 		return
 	end
 
@@ -197,9 +200,12 @@ local function go_to_ws(n, action)
 	if n <= #mon_wsz then
 		ws_id = mon_wsz[n].id
 	else
-		ws_id = n + (monitor_index(mon.name) - 1) * 100
+		local cur = hl.get_active_window()
+		if not cur then
+			return hl.dispatch(hl.dsp.no_op())
+		end
+		ws_id = mon_wsz[#mon_wsz].id + 1
 	end
-
 	hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 end
 
