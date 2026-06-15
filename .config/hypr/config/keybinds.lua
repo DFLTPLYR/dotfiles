@@ -51,8 +51,7 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
-local function is_vertical()
-	local mon = hl.get_active_monitor()
+local function is_vertical(mon)
 	return mon and (mon.transform == 3 or mon.transform == 4)
 end
 
@@ -119,14 +118,17 @@ local function nav(dir)
 		end
 
 		local closemonitor = get_closest_monitor(dir, mon)
-		local vertical = is_vertical()
+		local vertical = is_vertical(mon)
 		local clients = hl.get_workspace_windows(ws.name)
 
 		if not clients or #clients == 0 then
 			if dir == "down" then
 				return hl.dispatch(hl.dsp.no_op())
+			elseif dir == "up" then
+				return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+			else
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
-			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
 		end
 
 		local sorted = get_sorted_workspace(clients)
@@ -252,6 +254,40 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 hl.on("workspace.active", function(ws)
 	-- log(ws.name)
 end)
+
+-- hl.on("workspace.removed", function()
+-- 	local wsz = hl.get_workspaces()
+-- 	if not wsz then
+-- 		return
+-- 	end
+--
+-- 	local mon_wsz = {}
+-- 	for _, w in ipairs(wsz) do
+-- 		local mon = w.monitor
+-- 		if mon then
+-- 			if not mon_wsz[mon] then
+-- 				mon_wsz[mon] = {}
+-- 			end
+-- 			table.insert(mon_wsz[mon], w)
+-- 		end
+-- 	end
+--
+-- 	for _, workspaces in pairs(mon_wsz) do
+-- 		table.sort(workspaces, function(a, b)
+-- 			return a.id < b.id
+-- 		end)
+--
+-- 		local min_id = workspaces[1].id
+-- 		local base = math.floor(min_id / 100) * 100
+--
+-- 		for i, w in ipairs(workspaces) do
+-- 			local expected = base + i
+-- 			if w.id ~= expected then
+-- 				hl.dispatch("renameworkspace " .. w.id .. " " .. expected)
+-- 			end
+-- 		end
+-- 	end
+-- end)
 
 local function go_to_ws(n, action)
 	if not n then
