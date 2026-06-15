@@ -6,7 +6,7 @@ name = "Steam"
 category = "misc"
 
 [templates.millennium]
-input_path = '/matugen/template/path/here'
+input_path = 'templates/themed/steam.css'
 output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matugen.css'
 
 [templates.themed_reshell]

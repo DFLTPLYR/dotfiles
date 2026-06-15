@@ -106,7 +106,6 @@ Singleton {
 
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound) {
-                fileView.setText("{}");
                 fileView.writeAdapter();
             }
         }
