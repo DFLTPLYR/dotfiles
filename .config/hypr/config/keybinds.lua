@@ -56,67 +56,80 @@ local function is_vertical()
 	return mon and (mon.transform == 3 or mon.transform == 4)
 end
 
+local function get_closest_monitor(dir, mon)
+	local monitors = hl.get_monitors()
+	local closest
+
+	if dir == "left" then
+		for _, m in ipairs(monitors) do
+			if m.x + m.width == mon.x then
+				closest = m
+				break
+			end
+		end
+	elseif dir == "right" then
+		for _, m in ipairs(monitors) do
+			if m.x == mon.x + mon.width then
+				closest = m
+				break
+			end
+		end
+	elseif dir == "up" then
+		for _, m in ipairs(monitors) do
+			if m.y + m.height == mon.y then
+				closest = m
+				break
+			end
+		end
+	elseif dir == "down" then
+		for _, m in ipairs(monitors) do
+			if m.y == mon.y + mon.height then
+				closest = m
+				break
+			end
+		end
+	end
+	return closest
+end
+
+local function get_sorted_workspace(clients)
+	local sorted = {}
+
+	for _, c in ipairs(clients) do
+		if not c.floating then
+			table.insert(sorted, c)
+		end
+	end
+
+	table.sort(sorted, function(a, b)
+		return a.at.y < b.at.y
+	end)
+
+	return sorted
+end
+
 local function nav(dir)
 	return function()
 		local mon = hl.get_active_monitor()
 		local ws = hl.get_active_workspace()
 		local cur = hl.get_active_window()
 
-		if not mon or not ws or not cur then
+		if not mon or not ws then
+			return hl.dispatch(hl.dsp.no_op())
+		end
+
+		local closemonitor = get_closest_monitor(dir, mon)
+		local vertical = is_vertical()
+		local clients = hl.get_workspace_windows(ws.name)
+
+		if not clients or #clients == 0 then
 			if dir == "down" then
 				return hl.dispatch(hl.dsp.no_op())
 			end
 			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
 		end
 
-		local closemonitor
-		local monitors = hl.get_monitors()
-		if dir == "left" then
-			for _, m in ipairs(monitors) do
-				if m.x + m.width == mon.x then
-					closemonitor = m
-					break
-				end
-			end
-		elseif dir == "right" then
-			for _, m in ipairs(monitors) do
-				if m.x == mon.x + mon.width then
-					closemonitor = m
-					break
-				end
-			end
-		elseif dir == "up" then
-			for _, m in ipairs(monitors) do
-				if m.y + m.height == mon.y then
-					closemonitor = m
-					break
-				end
-			end
-		elseif dir == "down" then
-			for _, m in ipairs(monitors) do
-				if m.y == mon.y + mon.height then
-					closemonitor = m
-					break
-				end
-			end
-		end
-
-		local vertical = is_vertical()
-		local clients = hl.get_workspace_windows(ws.name)
-
-		if not clients or #clients == 0 then
-			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
-		end
-
-		local sorted = {}
-
-		for _, c in ipairs(clients) do
-			table.insert(sorted, c)
-		end
-
-		table.sort(sorted, function(a, b)
-			return a.at.y < b.at.y
-		end)
+		local sorted = get_sorted_workspace(clients)
 
 		local wsz = hl.get_workspaces()
 		local mon_wsz = {}
@@ -133,8 +146,8 @@ local function nav(dir)
 
 		local firstws = mon_wsz[1].id == ws.id
 		local lastws = mon_wsz[#mon_wsz].id == ws.id
-		local firstwindow = cur.address == sorted[1].address
-		local lastwindow = cur.address == sorted[#sorted].address
+		local isfirstwindow = cur.address == sorted[1].address
+		local islastwindow = cur.address == sorted[#sorted].address
 
 		if vertical then
 			if dir == "left" or dir == "right" then
@@ -144,37 +157,54 @@ local function nav(dir)
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
 
+			if cur.floating then
+				if dir == "up" then
+					return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
+				elseif dir == "down" then
+					return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
+				end
+			end
+
 			if firstws then
-				if dir == "up" and firstwindow then
+				if dir == "up" and isfirstwindow then
 					return hl.dispatch(hl.dsp.no_op())
-				elseif dir == "down" and lastwindow then
-					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+				elseif dir == "down" and islastwindow then
+					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 				end
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			elseif lastws then
-				if dir == "up" and firstwindow then
+				if dir == "up" and isfirstwindow then
 					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-				elseif dir == "down" and lastwindow then
+				elseif dir == "down" and islastwindow then
 					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 				end
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			else
-				if dir == "up" and firstwindow then
+				if dir == "up" and isfirstwindow then
 					return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-				elseif dir == "down" and lastwindow then
+				elseif dir == "down" and islastwindow then
 					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 				end
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
 		else -- horizontal
-			if dir == "left" or dir == "right" and (lastwindow or firstwindow) then
+			if dir == "left" or dir == "right" and (islastwindow or isfirstwindow) then
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			end
+
+			if cur.floating then
+				if dir == "left" then
+					return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
+				elseif dir == "right" then
+					return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
+				end
+			end
+
 			if firstws then
 				if dir == "up" then
 					return hl.dispatch(hl.dsp.no_op())
 				elseif dir == "down" then
-					return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 				end
 				return hl.dispatch(hl.dsp.focus({ direction = dir }))
 			elseif lastws then
@@ -270,8 +300,8 @@ for i = 1, 9 do
 	end)
 end
 
-hl.bind(mainMod .. " + mouse_up", nav({ workspace = "m+1" }, "down"))
-hl.bind(mainMod .. " + mouse_down", nav({ workspace = "m-1" }, "up"))
+hl.bind(mainMod .. " + mouse_up", nav("down"))
+hl.bind(mainMod .. " + mouse_down", nav("up"))
 
 hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.cycle_next()) -- Change focus to another window
