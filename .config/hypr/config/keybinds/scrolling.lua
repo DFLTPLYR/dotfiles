@@ -214,7 +214,7 @@ local function horizontal(cur, dir, clients, mon, ws, closemonitor)
 		end
 	end
 
-	local sorted = get_sorted_windows(clients)
+	local sorted = get_sorted_windows(clients, true)
 	local mon_wsz = get_available_workspace(mon)
 	local firstws, lastws = get_workspace_position(mon_wsz, ws)
 	local isfirstwindow, islastwindow = get_window_position(cur, sorted)
@@ -355,13 +355,83 @@ local function swap(dir)
 		return hl.dispatch(hl.dsp.no_op())
 	end
 
-	hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+	local mon_wsz = get_available_workspace(mon)
+	local closemonitor = get_closest_monitor(dir, mon)
+	local firstws, lastws = get_workspace_position(mon_wsz, ws)
+
+	if is_vertical(mon) then
+		local sorted = get_sorted_windows(clients)
+		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
+		if dir == "up" then
+			if isfirstwindow then
+				if closemonitor then
+					return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+				elseif not firstws then
+					return hl.dispatch(hl.dsp.window.move({ workspace = "m-1" }))
+				end
+			else
+				return hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+			end
+		elseif dir == "down" then
+			if islastwindow then
+				if closemonitor then
+					return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+				elseif not lastws then
+					return hl.dispatch(hl.dsp.window.move({ workspace = "m+1" }))
+				elseif lastws and #sorted ~= 1 then
+					return hl.dispatch(hl.dsp.window.move({ workspace = "+1" }))
+				end
+			else
+				return hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+			end
+		elseif dir == "left" then
+			if closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			end
+		elseif dir == "right" then
+			if closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			end
+		end
+	else
+		local sorted = get_sorted_windows(clients, true)
+		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
+		if dir == "up" then
+			if closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			elseif not firstws then
+				return hl.dispatch(hl.dsp.window.move({ workspace = "m-1" }))
+			end
+		elseif dir == "down" then
+			if closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			elseif lastws and #mon_wsz == 1 then
+				return hl.dispatch(hl.dsp.window.move({ workspace = "+1" }))
+			else
+				return hl.dispatch(hl.dsp.window.move({ workspace = "m+1" }))
+			end
+		elseif dir == "left" then
+			if isfirstwindow and closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			end
+			return hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+		elseif dir == "right" then
+			if islastwindow and closemonitor then
+				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
+			end
+			return hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+		end
+	end
+
+	return hl.dispatch(hl.dsp.no_op())
 end
 
 hl.bind(mainMod .. " + CTRL + L", scroll(swap, "right"))
-hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.swap({ direction = "l" }))
-hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.swap({ direction = "u" }))
-hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.swap({ direction = "d" }))
+hl.bind(mainMod .. " + CTRL + H", scroll(swap, "left"))
+hl.bind(mainMod .. " + CTRL + K", scroll(swap, "up"))
+hl.bind(mainMod .. " + CTRL + J", scroll(swap, "down"))
 
 local function go_to_ws(n, action)
 	if not n then
@@ -403,7 +473,5 @@ local function go_to_ws(n, action)
 end
 
 for i = 1, 9 do
-	hl.bind(mainMod .. " + " .. i, function()
-		go_to_ws(i, "focus")
-	end)
+	hl.bind(mainMod .. " + " .. i, scroll(go_to_ws, i, "focus"))
 end
