@@ -142,25 +142,30 @@ local function nav(dir)
 
 	if not mon or not ws then
 		return hl.dispatch(hl.dsp.no_op())
-	elseif not cur then
-		return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 	end
 
 	local vertical = is_vertical(mon)
 	local closemonitor = get_closest_monitor(dir, mon)
 	local clients = hl.get_workspace_windows(ws.name)
 
-	if not clients or #clients == 0 then
-		if dir == "down" then
-			return hl.dispatch(hl.dsp.focus({ last = true }))
-		elseif dir == "up" then
-			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
-		else
+	if vertical then
+		if not cur then
+			if dir == "up" or dir == "down" then
+				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+			end
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-	end
 
-	if vertical then
+		if not clients or #clients == 0 then
+			if dir == "down" then
+				return hl.dispatch(hl.dsp.focus({ last = true }))
+			elseif dir == "up" then
+				return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+			else
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
+			end
+		end
+
 		local sorted = get_sorted_windows(clients)
 		local mon_wsz = get_available_workspace(mon)
 		local firstws, lastws = get_workspace_position(mon_wsz, ws)
@@ -207,6 +212,23 @@ local function nav(dir)
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
 	else -- horizontal
+		if not cur then
+			if dir == "up" or dir == "down" then
+				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+			end
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
+		end
+
+		if not clients or #clients == 0 then
+			if dir == "down" then
+				return hl.dispatch(hl.dsp.no_op())
+			elseif dir == "up" then
+				return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+			else
+				return hl.dispatch(hl.dsp.focus({ direction = dir }))
+			end
+		end
+
 		local sorted = get_sorted_windows(clients)
 		local mon_wsz = get_available_workspace(mon)
 		local firstws, lastws = get_workspace_position(mon_wsz, ws)
@@ -266,6 +288,14 @@ hl.bind(mainMod .. " + mouse_up", scroll(nav, "down"))
 hl.bind(mainMod .. " + mouse_down", scroll(nav, "up"))
 hl.bind(mainMod .. " + SHIFT + mouse_up", scroll(nav, -1))
 hl.bind(mainMod .. " + SHIFT + mouse_down", scroll(nav, 1))
+
+-- focus next workspace
+hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
+hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1", on_current_monitor = true }))
+
+-- Move focus to monitor
+hl.bind(mainMod .. "+ SHIFT + H", hl.dsp.focus({ monitor = "l" }))
+hl.bind(mainMod .. "+ SHIFT + L", hl.dsp.focus({ monitor = "r" }))
 
 -- swapping
 local function swap(dir)

@@ -40,14 +40,6 @@ hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 
--- focus next workspace
-hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
-hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1", on_current_monitor = true }))
-
--- Move focus to monitor
-hl.bind(mainMod .. "+ SHIFT + H", hl.dsp.focus({ monitor = "l" }))
-hl.bind(mainMod .. "+ SHIFT + L", hl.dsp.focus({ monitor = "r" }))
-
 -- Toggle fullscreen
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mainMod .. "+ SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
