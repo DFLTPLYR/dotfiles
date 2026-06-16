@@ -362,3 +362,48 @@ hl.bind(mainMod .. " + CTRL + L", scroll(swap, "right"))
 hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.swap({ direction = "l" }))
 hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.swap({ direction = "u" }))
 hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.swap({ direction = "d" }))
+
+local function go_to_ws(n, action)
+	if not n then
+		return
+	end
+	n = tonumber(n)
+	if not n then
+		return
+	end
+	local mon, ws, cur = get_props()
+	local wsz = hl.get_workspaces()
+
+	if not mon or not wsz then
+		return
+	end
+
+	local mon_wsz = {}
+
+	for _, w in ipairs(wsz) do
+		if w.monitor == mon then
+			table.insert(mon_wsz, w)
+		end
+	end
+
+	table.sort(mon_wsz, function(a, b)
+		return a.id < b.id
+	end)
+
+	local ws_id
+	if n <= #mon_wsz then
+		ws_id = mon_wsz[n].id
+	else
+		if not cur then
+			return hl.dispatch(hl.dsp.no_op())
+		end
+		ws_id = mon_wsz[#mon_wsz].id + 1
+	end
+	hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
+end
+
+for i = 1, 9 do
+	hl.bind(mainMod .. " + " .. i, function()
+		go_to_ws(i, "focus")
+	end)
+end
