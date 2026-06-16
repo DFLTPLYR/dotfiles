@@ -6,6 +6,7 @@ require("mini.completion").setup()
 require("mini.diff").setup()
 require("mini.splitjoin").setup()
 require("mini.bufremove").setup()
+require("mini.cursorword").setup()
 require("mini.files").setup({
 	windows = {
 		preview = true,
@@ -79,10 +80,13 @@ require("mini.tabline").setup()
 require("mini.visits").setup()
 require("mini.pairs").setup()
 
+local session_dir = vim.fn.stdpath("cache") .. "/sessions"
+local session_file = session_dir .. "/Session.vim"
+
 require("mini.sessions").setup({
-	autoread = false,
+	autoread = vim.fn.filereadable(session_file) == 1,
 	autowrite = true,
-	directory = vim.fn.stdpath("cache") .. "/sessions",
+	directory = session_dir,
 	file = "Session.vim",
 	force = { read = false, write = true, delete = false },
 	hooks = {
