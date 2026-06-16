@@ -2,7 +2,7 @@
 ----  SCROLLING  ----
 ---------------------
 
-local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local mainMod = "SUPER"
 local logfile = "/tmp/hypr/tmp.log"
 
 hl.bind(mainMod .. " + SHIFT + D", function()
@@ -22,23 +22,37 @@ local function log(msg)
 		f:close()
 	end
 end
--- moving between
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.swap({ direction = "r" }))
-hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.swap({ direction = "l" }))
-hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.swap({ direction = "u" }))
-hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.swap({ direction = "d" }))
-
--- navigation
-
-local function is_vertical(mon)
-	return mon and (mon.transform == 3 or mon.transform == 4)
-end
 
 local function scroll(func, ...)
 	local args = { ... }
 	return function()
 		return func(table.unpack(args))
 	end
+end
+
+local function is_vertical(mon)
+	return mon and (mon.transform == 3 or mon.transform == 4)
+end
+
+local function get_props()
+	local mon = hl.get_active_monitor()
+	local ws = hl.get_active_workspace()
+	local cur = hl.get_active_window()
+	return mon, ws, cur
+end
+
+local function get_workspace_position(mon_wsz, ws)
+	if not mon_wsz or not ws then
+		return false, false
+	end
+	return mon_wsz[1].id == ws.id, mon_wsz[#mon_wsz].id == ws.id
+end
+
+local function get_window_position(cur, sorted)
+	if not cur or not sorted then
+		return false, false
+	end
+	return cur.address == sorted[1].address, cur.address == sorted[#sorted].address
 end
 
 local function get_closest_monitor(dir, mon)
@@ -93,7 +107,7 @@ local function get_available_workspace(mon)
 	return available
 end
 
-local function get_sorted_windows(clients)
+local function get_sorted_windows(clients, sort_by_x)
 	local sorted = {}
 
 	for _, c in ipairs(clients) do
@@ -103,19 +117,33 @@ local function get_sorted_windows(clients)
 	end
 
 	table.sort(sorted, function(a, b)
-		return a.at.y < b.at.y
+		if sort_by_x then
+			return a.at.x < b.at.x
+		else
+			return a.at.y < b.at.y
+		end
 	end)
 
 	return sorted
 end
 
+-- navigation
+
 local function nav(dir)
-	local mon = hl.get_active_monitor()
-	local ws = hl.get_active_workspace()
-	local cur = hl.get_active_window()
+	if type(dir) == "number" then
+		if dir == -1 then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		elseif dir == 1 then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		end
+	end
+
+	local mon, ws, cur = get_props()
 
 	if not mon or not ws then
 		return hl.dispatch(hl.dsp.no_op())
+	elseif not cur then
+		return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 	end
 
 	local vertical = is_vertical(mon)
@@ -124,7 +152,7 @@ local function nav(dir)
 
 	if not clients or #clients == 0 then
 		if dir == "down" then
-			return hl.dispatch(hl.dsp.no_op())
+			return hl.dispatch(hl.dsp.focus({ last = true }))
 		elseif dir == "up" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
 		else
@@ -132,15 +160,12 @@ local function nav(dir)
 		end
 	end
 
-	local sorted = get_sorted_windows(clients)
-	local mon_wsz = get_available_workspace(mon)
-
-	local firstws = mon_wsz[1].id == ws.id
-	local lastws = mon_wsz[#mon_wsz].id == ws.id
-	local isfirstwindow = cur.address == sorted[1].address
-	local islastwindow = cur.address == sorted[#sorted].address
-
 	if vertical then
+		local sorted = get_sorted_windows(clients)
+		local mon_wsz = get_available_workspace(mon)
+		local firstws, lastws = get_workspace_position(mon_wsz, ws)
+		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
 		if dir == "left" or dir == "right" then
 			if not closemonitor then
 				return hl.dispatch(hl.dsp.no_op())
@@ -160,7 +185,10 @@ local function nav(dir)
 			if dir == "up" and isfirstwindow then
 				return hl.dispatch(hl.dsp.no_op())
 			elseif dir == "down" and islastwindow then
-				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				if #mon_wsz == 1 then
+					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				end
+				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 			end
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		elseif lastws then
@@ -179,6 +207,11 @@ local function nav(dir)
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
 	else -- horizontal
+		local sorted = get_sorted_windows(clients)
+		local mon_wsz = get_available_workspace(mon)
+		local firstws, lastws = get_workspace_position(mon_wsz, ws)
+		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
 		if dir == "left" or dir == "right" and (islastwindow or isfirstwindow) then
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
@@ -195,7 +228,10 @@ local function nav(dir)
 			if dir == "up" then
 				return hl.dispatch(hl.dsp.no_op())
 			elseif dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				if #mon_wsz == 1 then
+					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+				end
+				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
 			end
 			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		elseif lastws then
@@ -215,6 +251,8 @@ local function nav(dir)
 	end
 end
 
+local function vertical() end
+
 hl.bind(mainMod .. " + left", scroll(nav, "left"))
 hl.bind(mainMod .. " + right", scroll(nav, "right"))
 hl.bind(mainMod .. " + up", scroll(nav, "up"))
@@ -226,3 +264,29 @@ hl.bind(mainMod .. " + J", scroll(nav, "down"))
 
 hl.bind(mainMod .. " + mouse_up", scroll(nav, "down"))
 hl.bind(mainMod .. " + mouse_down", scroll(nav, "up"))
+hl.bind(mainMod .. " + SHIFT + mouse_up", scroll(nav, -1))
+hl.bind(mainMod .. " + SHIFT + mouse_down", scroll(nav, 1))
+
+-- swapping
+local function swap(dir)
+	local mon, ws, cur = get_props()
+
+	if not mon or not ws or not cur then
+		return hl.dispatch(hl.dsp.no_op())
+	end
+
+	local vertical = is_vertical(mon)
+	local monitor = get_closest_monitor(dir, mon)
+	local clients = hl.get_workspace_windows(ws.name)
+
+	if not clients or #clients == 0 then
+		return hl.dispatch(hl.dsp.no_op())
+	end
+
+	hl.dispatch(hl.dsp.window.swap({ direction = dir }))
+end
+
+hl.bind(mainMod .. " + CTRL + L", scroll(swap, "right"))
+hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.swap({ direction = "l" }))
+hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.swap({ direction = "u" }))
+hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.swap({ direction = "d" }))

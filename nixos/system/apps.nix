@@ -14,6 +14,7 @@
     mpd
     gcc
     zip
+    bc
   ];
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   programs.nix-ld.enable = true;

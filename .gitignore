@@ -19,3 +19,7 @@
 .config/quickshell/reshell/core/data/themes/content.json
 packages
 
+# Generated color config
+.config/hypr/config/colors.lua
+.config/matugen/test.json
+
