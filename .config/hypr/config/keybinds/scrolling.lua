@@ -77,6 +77,22 @@ local function get_closest_monitor(dir, mon)
 	return closest
 end
 
+local function get_available_workspace(mon)
+	local wsz = hl.get_workspaces()
+	local available = {}
+
+	for _, w in ipairs(wsz) do
+		if w.monitor == mon then
+			table.insert(available, w)
+		end
+	end
+
+	table.sort(available, function(a, b)
+		return a.id < b.id
+	end)
+	return available
+end
+
 local function get_sorted_windows(clients)
 	local sorted = {}
 
@@ -102,8 +118,8 @@ local function nav(dir)
 		return hl.dispatch(hl.dsp.no_op())
 	end
 
-	local closemonitor = get_closest_monitor(dir, mon)
 	local vertical = is_vertical(mon)
+	local closemonitor = get_closest_monitor(dir, mon)
 	local clients = hl.get_workspace_windows(ws.name)
 
 	if not clients or #clients == 0 then
@@ -117,19 +133,7 @@ local function nav(dir)
 	end
 
 	local sorted = get_sorted_windows(clients)
-
-	local wsz = hl.get_workspaces()
-	local mon_wsz = {}
-
-	for _, w in ipairs(wsz) do
-		if w.monitor == mon then
-			table.insert(mon_wsz, w)
-		end
-	end
-
-	table.sort(mon_wsz, function(a, b)
-		return a.id < b.id
-	end)
+	local mon_wsz = get_available_workspace(mon)
 
 	local firstws = mon_wsz[1].id == ws.id
 	local lastws = mon_wsz[#mon_wsz].id == ws.id
