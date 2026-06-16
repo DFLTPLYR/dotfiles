@@ -129,6 +129,134 @@ end
 
 -- navigation
 
+local function vertical(cur, dir, clients, mon, ws, closemonitor)
+	if not cur then
+		if dir == "up" or dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+
+	if not clients or #clients == 0 then
+		if dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ last = true }))
+		elseif dir == "up" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
+		end
+	end
+
+	local sorted = get_sorted_windows(clients)
+	local mon_wsz = get_available_workspace(mon)
+	local firstws, lastws = get_workspace_position(mon_wsz, ws)
+	local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
+	if dir == "left" or dir == "right" then
+		if not closemonitor then
+			return hl.dispatch(hl.dsp.no_op())
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+
+	if cur.floating then
+		if dir == "up" then
+			return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
+		elseif dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
+		end
+	end
+
+	if firstws then
+		if dir == "up" and isfirstwindow then
+			return hl.dispatch(hl.dsp.no_op())
+		elseif dir == "down" and islastwindow then
+			if #mon_wsz == 1 then
+				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+			end
+			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		end
+
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	elseif lastws then
+		if dir == "up" and isfirstwindow then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		elseif dir == "down" and islastwindow then
+			return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+		end
+
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	else
+		if dir == "up" and isfirstwindow then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		elseif dir == "down" and islastwindow then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+end
+
+local function horizontal(cur, dir, clients, mon, ws, closemonitor)
+	if not cur then
+		if dir == "up" or dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+
+	if not clients or #clients == 0 then
+		if dir == "down" then
+			return hl.dispatch(hl.dsp.no_op())
+		elseif dir == "up" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
+		end
+	end
+
+	local sorted = get_sorted_windows(clients)
+	local mon_wsz = get_available_workspace(mon)
+	local firstws, lastws = get_workspace_position(mon_wsz, ws)
+	local isfirstwindow, islastwindow = get_window_position(cur, sorted)
+
+	if (dir == "left" or dir == "right") and (islastwindow or isfirstwindow) then
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+
+	if cur.floating then
+		if dir == "left" then
+			return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
+		elseif dir == "right" then
+			return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
+		end
+	end
+
+	if firstws then
+		if dir == "up" then
+			return hl.dispatch(hl.dsp.no_op())
+		elseif dir == "down" then
+			if #mon_wsz == 1 then
+				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+			end
+			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	elseif lastws then
+		if dir == "up" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		elseif dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+		end
+	else
+		if dir == "up" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
+		elseif dir == "down" then
+			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
+	end
+end
+
 local function nav(dir)
 	if type(dir) == "number" then
 		if dir == -1 then
@@ -144,136 +272,15 @@ local function nav(dir)
 		return hl.dispatch(hl.dsp.no_op())
 	end
 
-	local vertical = is_vertical(mon)
 	local closemonitor = get_closest_monitor(dir, mon)
 	local clients = hl.get_workspace_windows(ws.name)
 
-	if vertical then
-		if not cur then
-			if dir == "up" or dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
-
-		if not clients or #clients == 0 then
-			if dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ last = true }))
-			elseif dir == "up" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
-			else
-				return hl.dispatch(hl.dsp.focus({ direction = dir }))
-			end
-		end
-
-		local sorted = get_sorted_windows(clients)
-		local mon_wsz = get_available_workspace(mon)
-		local firstws, lastws = get_workspace_position(mon_wsz, ws)
-		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
-
-		if dir == "left" or dir == "right" then
-			if not closemonitor then
-				return hl.dispatch(hl.dsp.no_op())
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
-
-		if cur.floating then
-			if dir == "up" then
-				return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
-			elseif dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
-			end
-		end
-
-		if firstws then
-			if dir == "up" and isfirstwindow then
-				return hl.dispatch(hl.dsp.no_op())
-			elseif dir == "down" and islastwindow then
-				if #mon_wsz == 1 then
-					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-				end
-				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		elseif lastws then
-			if dir == "up" and isfirstwindow then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			elseif dir == "down" and islastwindow then
-				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		else
-			if dir == "up" and isfirstwindow then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			elseif dir == "down" and islastwindow then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
+	if is_vertical(mon) then
+		return vertical(cur, dir, clients, mon, ws, closemonitor)
 	else -- horizontal
-		if not cur then
-			if dir == "up" or dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
-
-		if not clients or #clients == 0 then
-			if dir == "down" then
-				return hl.dispatch(hl.dsp.no_op())
-			elseif dir == "up" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
-			else
-				return hl.dispatch(hl.dsp.focus({ direction = dir }))
-			end
-		end
-
-		local sorted = get_sorted_windows(clients)
-		local mon_wsz = get_available_workspace(mon)
-		local firstws, lastws = get_workspace_position(mon_wsz, ws)
-		local isfirstwindow, islastwindow = get_window_position(cur, sorted)
-
-		if dir == "left" or dir == "right" and (islastwindow or isfirstwindow) then
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
-
-		if cur.floating then
-			if dir == "left" then
-				return hl.dispatch(hl.dsp.focus({ window = sorted[1] }))
-			elseif dir == "right" then
-				return hl.dispatch(hl.dsp.focus({ window = sorted[#sorted] }))
-			end
-		end
-
-		if firstws then
-			if dir == "up" then
-				return hl.dispatch(hl.dsp.no_op())
-			elseif dir == "down" then
-				if #mon_wsz == 1 then
-					return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-				end
-				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		elseif lastws then
-			if dir == "up" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			elseif dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-			end
-		else
-			if dir == "up" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
-			elseif dir == "down" then
-				return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
-			end
-			return hl.dispatch(hl.dsp.focus({ direction = dir }))
-		end
+		return horizontal(cur, dir, clients, mon, ws, closemonitor)
 	end
 end
-
-local function vertical() end
 
 hl.bind(mainMod .. " + left", scroll(nav, "left"))
 hl.bind(mainMod .. " + right", scroll(nav, "right"))
@@ -289,9 +296,44 @@ hl.bind(mainMod .. " + mouse_down", scroll(nav, "up"))
 hl.bind(mainMod .. " + SHIFT + mouse_up", scroll(nav, -1))
 hl.bind(mainMod .. " + SHIFT + mouse_down", scroll(nav, 1))
 
+local function workspace_jump(dir)
+	local mon, ws, cur = get_props()
+
+	if not mon or not ws then
+		return hl.dispatch(hl.dsp.no_op())
+	end
+
+	local mon_wsz = get_available_workspace(mon)
+	local firstws, lastws = get_workspace_position(mon_wsz, ws)
+
+	-- if is_vertical(mon) then
+	if dir == "left" or dir == "right" then
+		return hl.dispatch(hl.dsp.no_op())
+	end
+	if dir == "up" then
+		if firstws then
+			return hl.dispatch(hl.dsp.no_op())
+		end
+		return hl.dispatch(hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
+	elseif dir == "down" then
+		if lastws then
+			if cur then
+				return hl.dispatch(hl.dsp.focus({ workspace = "+1", on_current_monitor = true }))
+			end
+			return hl.dispatch(hl.dsp.no_op())
+		end
+		return hl.dispatch(hl.dsp.focus({ workspace = "m+1", on_current_monitor = true }))
+	end
+	-- else -- horizontal
+	-- 	if dir == "left" or dir == "right" then
+	-- 		return
+	-- 	end
+	-- end
+end
+
 -- focus next workspace
-hl.bind(mainMod .. "+ SHIFT + K", hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
-hl.bind(mainMod .. "+ SHIFT + J", hl.dsp.focus({ workspace = "+1", on_current_monitor = true }))
+hl.bind(mainMod .. "+ SHIFT + K", scroll(workspace_jump, "up"))
+hl.bind(mainMod .. "+ SHIFT + J", scroll(workspace_jump, "down"))
 
 -- Move focus to monitor
 hl.bind(mainMod .. "+ SHIFT + H", hl.dsp.focus({ monitor = "l" }))
