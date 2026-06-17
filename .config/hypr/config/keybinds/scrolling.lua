@@ -247,6 +247,7 @@ local function horizontal(cur, dir, clients, mon, ws, closemonitor)
 		elseif dir == "down" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 		end
+		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	else
 		if dir == "up" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
@@ -274,7 +275,6 @@ local function nav(dir)
 
 	local closemonitor = get_closest_monitor(dir, mon)
 	local clients = hl.get_workspace_windows(ws.name)
-
 	if is_vertical(mon) then
 		return vertical(cur, dir, clients, mon, ws, closemonitor)
 	else -- horizontal
@@ -324,11 +324,6 @@ local function workspace_jump(dir)
 		end
 		return hl.dispatch(hl.dsp.focus({ workspace = "m+1", on_current_monitor = true }))
 	end
-	-- else -- horizontal
-	-- 	if dir == "left" or dir == "right" then
-	-- 		return
-	-- 	end
-	-- end
 end
 
 -- focus next workspace
@@ -454,7 +449,11 @@ local function go_to_ws(n, action)
 	local sorted
 
 	if clients then
-		sorted = get_sorted_windows(clients)
+		if is_vertical(mon) then
+			sorted = get_sorted_windows(clients)
+		else
+			sorted = get_sorted_windows(clients, true)
+		end
 	end
 
 	local mon_wsz = get_available_workspace(mon)
@@ -471,18 +470,28 @@ local function go_to_ws(n, action)
 	elseif action == "move" then
 		-- if nothing to move
 
-		if n <= #mon_wsz then
-			ws_id = mon_wsz[n].id
-		else
-			ws_id = mon_wsz[#mon_wsz].id
-		end
-
 		if not cur then
 			return hl.dispatch(hl.dsp.no_op())
 		end
+
+		if n <= #mon_wsz then
+			ws_id = mon_wsz[n].id
+		else
+			if (lastws and #mon_wsz == 1) or #sorted > 1 then
+				ws_id = mon_wsz[#mon_wsz].id + 1
+				return
+			else
+				ws_id = mon_wsz[#mon_wsz].id
+			end
+		end
+
 		if firstws and #sorted == 1 then
 			return hl.dispatch(hl.dsp.no_op())
 		elseif lastws and n < current_ws then
+			if #sorted ~= 1 then
+				return hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id + 1) }))
+			end
+
 			return hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
 		else
 			return hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
