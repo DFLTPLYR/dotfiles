@@ -175,24 +175,25 @@ local function vertical(cur, dir, clients, mon, ws, closemonitor)
 				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 			end
 			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	elseif lastws then
 		if dir == "up" and isfirstwindow then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		elseif dir == "down" and islastwindow then
 			return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	else
 		if dir == "up" and isfirstwindow then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		elseif dir == "down" and islastwindow then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	end
 end
 
@@ -239,22 +240,25 @@ local function horizontal(cur, dir, clients, mon, ws, closemonitor)
 				return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
 			end
 			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	elseif lastws then
 		if dir == "up" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		elseif dir == "down" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	else
 		if dir == "up" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		elseif dir == "down" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+		else
+			return hl.dispatch(hl.dsp.focus({ direction = dir }))
 		end
-		return hl.dispatch(hl.dsp.focus({ direction = dir }))
 	end
 end
 
