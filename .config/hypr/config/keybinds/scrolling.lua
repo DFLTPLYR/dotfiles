@@ -459,18 +459,23 @@ local function go_to_ws(n, action)
 
 	local mon_wsz = get_available_workspace(mon)
 	local firstws, lastws = get_workspace_position(mon_wsz, ws)
-
 	local ws_id
-	if n <= #mon_wsz then
-		ws_id = mon_wsz[n].id
-	else
-		ws_id = mon_wsz[#mon_wsz].id + 1
-	end
 
 	if action == "focus" then
+		if n <= #mon_wsz then
+			ws_id = mon_wsz[n].id
+		else
+			ws_id = mon_wsz[#mon_wsz].id + 1
+		end
 		return hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 	elseif action == "move" then
 		-- if nothing to move
+
+		if n <= #mon_wsz then
+			ws_id = mon_wsz[n].id
+		else
+			ws_id = mon_wsz[#mon_wsz].id
+		end
 
 		if not cur then
 			return hl.dispatch(hl.dsp.no_op())
