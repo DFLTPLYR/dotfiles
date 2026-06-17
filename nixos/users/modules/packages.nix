@@ -30,6 +30,7 @@
     starship
     oh-my-zsh
     ripgrep
+    jq
     fd
     fzf
     fastfetch

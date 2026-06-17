@@ -26,7 +26,7 @@ Scope {
 
     FileView {
         id: file
-        path: Qt.resolvedUrl(`./core/data/docks/${screen.name}+${dock.name}.json`)
+        path: Qt.resolvedUrl(`${Quickshell.shellDir}/core/data/docks/${screen.name}+${dock.name}.json`)
         watchChanges: true
         preload: true
         blockLoading: true
@@ -269,7 +269,6 @@ Scope {
     }
 
     component DockContainer: Item {
-
         state: config.position
 
         states: [

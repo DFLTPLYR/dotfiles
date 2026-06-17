@@ -11,7 +11,7 @@ local wr = hl.workspace_rule
 local winr = hl.window_rule
 
 for i, mon in ipairs(monitors) do
-	local offset = (i - 1) * 100
+	local offset = (i - 1) * 1000
 	for j = 1, 9 do
 		wr({ workspace = tostring(j + offset), monitor = mon.output, default = (j == 1) })
 	end

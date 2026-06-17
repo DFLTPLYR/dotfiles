@@ -355,6 +355,10 @@ local function swap(dir)
 		return hl.dispatch(hl.dsp.no_op())
 	end
 
+	if cur and cur.floating then
+		return hl.dispatch(hl.dsp.no_op())
+	end
+
 	local mon_wsz = get_available_workspace(mon)
 	local closemonitor = get_closest_monitor(dir, mon)
 	local firstws, lastws = get_workspace_position(mon_wsz, ws)
@@ -407,7 +411,7 @@ local function swap(dir)
 		elseif dir == "down" then
 			if closemonitor then
 				return hl.dispatch(hl.dsp.window.move({ direction = dir }))
-			elseif lastws and #mon_wsz == 1 then
+			elseif lastws and #mon_wsz == 1 and #sorted ~= 1 then
 				return hl.dispatch(hl.dsp.window.move({ workspace = "+1" }))
 			else
 				return hl.dispatch(hl.dsp.window.move({ workspace = "m+1" }))

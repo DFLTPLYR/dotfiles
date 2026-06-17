@@ -4,6 +4,7 @@
 import QtQuick
 import Quickshell
 import qs.core
+import qs.modules.overlay
 
 ShellRoot {
     id: root
@@ -14,7 +15,7 @@ ShellRoot {
         component: Greeter {}
     }
 
-    Reshell {}
-
     Polkit {}
+
+    Reshell {}
 }

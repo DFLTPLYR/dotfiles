@@ -5,6 +5,9 @@ import Quickshell
 import Quickshell.Io
 
 import qs.core
+import qs.modules.dock
+import qs.modules.background
+import qs.modules.overlay
 
 Variants {
     model: Quickshell.screens
