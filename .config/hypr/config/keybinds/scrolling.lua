@@ -442,40 +442,52 @@ local function go_to_ws(n, action)
 		return
 	end
 	n = tonumber(n)
-	if not n then
-		return
-	end
+
 	local mon, ws, cur = get_props()
-	local wsz = hl.get_workspaces()
 
-	if not mon or not wsz then
-		return
+	if not mon or not ws then
+		return hl.dispatch(hl.dsp.no_op())
 	end
 
-	local mon_wsz = {}
+	local clients = hl.get_workspace_windows(ws.name)
+	local current_ws = tonumber(ws.id)
+	local sorted
 
-	for _, w in ipairs(wsz) do
-		if w.monitor == mon then
-			table.insert(mon_wsz, w)
-		end
+	if clients then
+		sorted = get_sorted_windows(clients)
 	end
 
-	table.sort(mon_wsz, function(a, b)
-		return a.id < b.id
-	end)
+	local mon_wsz = get_available_workspace(mon)
+	local firstws, lastws = get_workspace_position(mon_wsz, ws)
 
 	local ws_id
 	if n <= #mon_wsz then
 		ws_id = mon_wsz[n].id
 	else
+		ws_id = mon_wsz[#mon_wsz].id + 1
+	end
+
+	if action == "focus" then
+		return hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
+	elseif action == "move" then
+		-- if nothing to move
+
 		if not cur then
 			return hl.dispatch(hl.dsp.no_op())
 		end
-		ws_id = mon_wsz[#mon_wsz].id + 1
+		if firstws and #sorted == 1 then
+			return hl.dispatch(hl.dsp.no_op())
+		elseif lastws and n < current_ws then
+			return hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
+		else
+			return hl.dispatch(hl.dsp.window.move({ workspace = tostring(ws_id) }))
+		end
+	else
+		return hl.dispatch(hl.dsp.no_op())
 	end
-	hl.dispatch(hl.dsp.focus({ workspace = tostring(ws_id), on_current_monitor = true }))
 end
 
 for i = 1, 9 do
 	hl.bind(mainMod .. " + " .. i, scroll(go_to_ws, i, "focus"))
+	hl.bind(mainMod .. " + SHIFT +" .. i, scroll(go_to_ws, i, "move"))
 end
