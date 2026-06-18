@@ -18,3 +18,10 @@ autocmd("BufWritePost", {
 		end
 	end,
 })
+
+autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = "*.ron",
+	callback = function()
+		vim.bo.filetype = "ron"
+	end,
+})

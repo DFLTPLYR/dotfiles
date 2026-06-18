@@ -1,7 +1,5 @@
 vim.cmd.packadd("nvim-treesitter")
 
-require("nvim-treesitter").setup()
-
 local parsers = {
 	"bash",
 	"css",
@@ -18,6 +16,13 @@ local parsers = {
 	"typescript",
 	"qmljs",
 }
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = parsers,
+	callback = function()
+		pcall(vim.treesitter.start)
+	end,
+})
 
 local installed = require("nvim-treesitter.config").get_installed()
 local to_install = vim.iter(parsers)

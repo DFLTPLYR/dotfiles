@@ -6,6 +6,7 @@ require("config.autocmds")
 -- plugins
 require("plugins.colorizer")
 require("plugins.mason")
+require("plugins.mason-lspconfig")
 require("plugins.fzf")
 require("plugins.gitsigns")
 require("plugins.mini")
