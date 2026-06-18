@@ -64,6 +64,7 @@
     kitty
     obsidian
     mpdris2-rs
+    onlyoffice-desktopeditors
 
     # Screenshots / clipboard
     grim

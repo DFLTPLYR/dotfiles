@@ -9,9 +9,9 @@ category = "misc"
 input_path = 'templates/themed/steam.css'
 output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matugen.css'
 
-[templates.themed_reshell]
-input_path = "templates/themed/material.json"
-output_path = "~/.config/quickshell/reshell/core/data/themes/content.json"
+[templates.themed_office]
+input_path = "templates/themed/onlyoffice.json.template"
+output_path = "~/.config/onlyoffice/matugen.json"
 
 [templates.themed_vesktop]
 input_path = "templates/themed/vesktop.css"

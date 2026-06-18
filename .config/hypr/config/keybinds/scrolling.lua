@@ -130,7 +130,7 @@ end
 -- navigation
 
 local function vertical(cur, dir, clients, mon, ws, closemonitor)
-	if not cur then
+	if not cur or cur.floating then
 		if dir == "up" or dir == "down" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		end
@@ -452,14 +452,13 @@ local function go_to_ws(n, action)
 	local current_ws = tonumber(ws.id)
 	local sorted
 
-	if clients then
+	if #clients ~= 0 then
 		if is_vertical(mon) then
 			sorted = get_sorted_windows(clients)
 		else
 			sorted = get_sorted_windows(clients, true)
 		end
 	end
-
 	local mon_wsz = get_available_workspace(mon)
 	local firstws, lastws = get_workspace_position(mon_wsz, ws)
 	local ws_id
@@ -474,7 +473,7 @@ local function go_to_ws(n, action)
 	elseif action == "move" then
 		-- if nothing to move
 
-		if not cur then
+		if not cur or #clients == 0 then
 			return hl.dispatch(hl.dsp.no_op())
 		end
 
