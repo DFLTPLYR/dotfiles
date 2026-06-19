@@ -6,6 +6,7 @@ pkgs.mkShell {
     wayland-protocols
     libxkbcommon
     libdrm
+    openssl
   ];
 
   shellHook = ''

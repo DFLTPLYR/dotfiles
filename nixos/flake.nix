@@ -1,5 +1,5 @@
 {
-  description = "Hyprland on Nixos";
+  description = "I Use NixosBtw";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
