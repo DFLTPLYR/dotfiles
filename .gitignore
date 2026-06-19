@@ -1,11 +1,5 @@
 # Local Netlify folder
 .netlify
-# Generated colors file
-.config/niri/modules/colors.kdl
-
-# Generated matugen outputs
-.config/matugen/data/userChrome.css.config/matugen/data/userContent.css
-.config/matugen/data/
 
 # rmpc layouts
 .config/rmpc/layout/long.ron
@@ -13,6 +7,9 @@
 
 # Vim session files
 *.vim
+
+# Secrets :D
+.config/zsh/.secrets.zsh
 
 # Generated theme files
 .config/nvim/theme.lua
@@ -22,4 +19,6 @@ packages
 # Generated color config
 .config/hypr/config/colors.lua
 .config/matugen/test.json
-
+.config/niri/modules/colors.kdl
+.config/matugen/data/userChrome.css.config/matugen/data/userContent.css
+.config/matugen/data/
