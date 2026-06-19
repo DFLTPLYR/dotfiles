@@ -13,6 +13,6 @@ if [[ -f $HOME/.p10k.zsh ]]; then
    source $HOME/.p10k.zsh
 fi
 
-if [[ -f ~/.secrets ]]; then
-    source ~/.secrets
+if [[ -f ~/.secrets.zsh ]]; then
+    source ~/.secrets.zsh
 fi

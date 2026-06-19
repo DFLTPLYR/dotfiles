@@ -65,6 +65,7 @@
     obsidian
     mpdris2-rs
     onlyoffice-desktopeditors
+    vial
 
     # Screenshots / clipboard
     grim
