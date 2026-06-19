@@ -34,9 +34,12 @@ require("conform").setup({
 			stdin = false,
 		},
 		ronfmt = {
-			command = "ronfmt",
-			stdin = false,
-			args = { "$FILENAME" },
+			command = "bash",
+			stdin = true,
+			args = {
+				"-c",
+				[[tmp=$(mktemp /tmp/ronfmt-XXXXXX.ron); cat > "$tmp"; ronfmt "$tmp" 2>/dev/null; cat "$tmp"; rm -f "$tmp"]],
+			},
 		},
 	},
 })

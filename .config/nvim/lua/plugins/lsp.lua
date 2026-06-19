@@ -6,6 +6,7 @@ vim.lsp.enable({
 	"ts_ls",
 	"rust-analyzer",
 	"helm_ls",
+	"vue-language-server",
 })
 
 vim.diagnostic.config({ virtual_text = true })
