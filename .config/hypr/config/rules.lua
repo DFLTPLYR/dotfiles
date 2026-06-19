@@ -16,6 +16,14 @@ rule({
 })
 
 rule({
+	name = "Youtube",
+	match = {
+		class = "FFPWA-01KT3AH4H1SAQJW0Z0GS9K6ZWS",
+	},
+	opacity = "1 override 1 override 1 override",
+})
+
+rule({
 	name = "Steam",
 	match = {
 		class = "steam",
