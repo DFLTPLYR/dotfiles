@@ -10,12 +10,12 @@ SwitchDelegate {
 
     property QtObject state: QtObject {
         property QtObject content: QtObject {
-            property color color: Colors.theme.primary
+            property color color: Colors.theme.on_surface
             property int radius: 13
         }
 
         property QtObject indicator: QtObject {
-            property color down: Colors.theme.surface
+            property color down: Colors.theme.on_surface
             property color up: Colors.theme.surface
             property int radius: 13
             property int width: 48

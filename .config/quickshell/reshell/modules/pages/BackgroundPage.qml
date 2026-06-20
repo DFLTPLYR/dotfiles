@@ -102,7 +102,7 @@ Pane {
                     contextType: "2d"
                     z: 100
 
-                    property var strokes: []  // array of arrays of points
+                    property var strokes: []
 
                     function startStroke(x, y) {
                         strokes.push([Qt.point(x, y)]);
@@ -113,7 +113,12 @@ Pane {
                         if (strokes.length === 0)
                             return;
                         var stroke = strokes[strokes.length - 1];
-                        stroke.push(Qt.point(x, y));
+                        var last = stroke[stroke.length - 1];
+                        var rx = Math.round(x * 100) / 100;
+                        var ry = Math.round(y * 100) / 100;
+                        if (last.x === rx && last.y === ry)
+                            return;
+                        stroke.push(Qt.point(rx, ry));
                         requestPaint();
                     }
 

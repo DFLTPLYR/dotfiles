@@ -69,6 +69,16 @@ Pane {
             Rectangle {
                 id: exampleNotif
                 property var config: Components.config.notification
+                property QtObject style: QtObject {
+                    property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
+                    property Direction padding: Direction {}
+                    property Direction inset: Direction {}
+
+                    property QtObject background: QtObject {
+                        property Corner rounding: Corner {}
+                        property Direction margins: Direction {}
+                    }
+                }
                 property var example: {
                     "notificationId": 69,
                     "actions": [
@@ -84,17 +94,6 @@ Pane {
                     "summary": "Notification Example",
                     "time": 1777989368250,
                     "urgency": "1"
-                }
-
-                property QtObject style: QtObject {
-                    property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
-                    property Direction padding: Direction {}
-                    property Direction inset: Direction {}
-
-                    property QtObject background: QtObject {
-                        property Corner rounding: Corner {}
-                        property Direction margins: Direction {}
-                    }
                 }
 
                 Layout.fillWidth: true
