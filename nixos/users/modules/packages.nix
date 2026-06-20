@@ -24,6 +24,9 @@
     neovim
     unzip
     tree-sitter
+    viu
+    chafa
+    ueberzugpp
 
     # Shell / CLI
     cava

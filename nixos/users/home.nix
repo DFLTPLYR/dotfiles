@@ -2,7 +2,6 @@
   imports = [
     ./modules/programs.nix
     ./modules/packages.nix
-    # ./modules/nvim/nvim.nix
     ./modules/vesktop/vesktop.nix
     ./modules/shell/bash.nix
     ./modules/shell/zsh.nix
