@@ -90,7 +90,7 @@ Singleton {
             const jsonStr = JSON.stringify({
                 "colors": matugenProc.color
             });
-            return ["sh", "-c", `matugen color hex '${matugenProc.color.primary}' --config '${configPath}' --import-json-string '${jsonStr}'`];
+            return ["sh", "-c", `matugen color hex '${matugenProc?.color?.primary}' --config '${configPath}' --import-json-string '${jsonStr}'`];
         }
     }
 
@@ -109,9 +109,6 @@ Singleton {
                 fileView.writeAdapter();
             }
         }
-
-        onSaveFailed: error => console.log(error)
-
         adapter: JsonAdapter {
             id: adapter
             property bool greeter: false

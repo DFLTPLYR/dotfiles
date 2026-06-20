@@ -45,6 +45,17 @@ keymap("n", "fd", function()
 		require("mini.starter").open()
 	end
 end, s)
+keymap("n", "<leader>fD", function()
+	local delete = require("mini.bufremove").delete
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.bo[buf].buflisted then
+			delete(buf)
+		end
+	end
+	if #vim.api.nvim_list_bufs() == 0 then
+		require("mini.starter").open()
+	end
+end, { desc = "Delete all buffers" })
 
 -- [[ <leader> prefix ]]
 
