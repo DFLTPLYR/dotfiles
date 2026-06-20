@@ -33,12 +33,21 @@ Pane {
                 flick.interactive = false;
                 selectionMa.enabled = true;
             }
+            if (event.key === Qt.Key_Shift) {
+                flick.interactive = false;
+                drawMa.enabled = true;
+            }
         }
-        Keys.onReleased: {
-            flick.interactive = true;
-            selectionMa.enabled = false;
+        Keys.onReleased: event => {
+            if (event.key === Qt.Key_Control) {
+                flick.interactive = true;
+                selectionMa.enabled = false;
+            }
+            if (event.key === Qt.Key_Shift) {
+                flick.interactive = true;
+                drawMa.enabled = false;
+            }
         }
-
         contentWidth: maxX + 2000
         contentHeight: maxY + 2000
 
@@ -85,6 +94,56 @@ Pane {
                 scale: flick.zoom
                 transformOrigin: Item.TopLeft
                 anchors.centerIn: parent
+
+                Canvas {
+                    id: drawCanvas
+                    width: overview.width
+                    height: overview.height
+                    contextType: "2d"
+                    z: 100
+
+                    property var strokes: []  // array of arrays of points
+
+                    function startStroke(x, y) {
+                        strokes.push([Qt.point(x, y)]);
+                        requestPaint();
+                    }
+
+                    function addPoint(x, y) {
+                        if (strokes.length === 0)
+                            return;
+                        var stroke = strokes[strokes.length - 1];
+                        stroke.push(Qt.point(x, y));
+                        requestPaint();
+                    }
+
+                    onPaint: {
+                        var ctx = context;
+                        ctx.reset();
+                        ctx.strokeStyle = "white";
+                        ctx.lineWidth = 3;
+                        ctx.lineCap = "round";
+                        ctx.lineJoin = "round";
+
+                        for (var s = 0; s < strokes.length; s++) {
+                            var pts = strokes[s];
+                            if (pts.length < 2)
+                                continue;
+                            ctx.beginPath();
+                            for (var i = 0; i < pts.length; i++) {
+                                if (i === 0) {
+                                    ctx.moveTo(pts[i].x, pts[i].y);
+                                } else {
+                                    var prev = pts[i - 1];
+                                    var midX = (prev.x + pts[i].x) / 2;
+                                    var midY = (prev.y + pts[i].y) / 2;
+                                    ctx.quadraticCurveTo(prev.x, prev.y, midX, midY);
+                                }
+                            }
+                            ctx.stroke();
+                        }
+                    }
+                }
 
                 // selectionRect
                 Rectangle {
@@ -181,6 +240,26 @@ Pane {
                 onReleased: {
                     selecting = false;
                     selectionRect.visible = false;
+                }
+            }
+
+            MouseArea {
+                id: drawMa
+                anchors.fill: parent
+                anchors.centerIn: parent
+                enabled: false        // enabled only while your draw key is held
+                acceptedButtons: Qt.LeftButton
+
+                onPressed: mouse => {
+                    var pt = drawMa.mapToItem(drawCanvas, mouse.x, mouse.y);
+                    drawCanvas.startStroke(pt.x, pt.y);
+                }
+
+                onPositionChanged: mouse => {
+                    if (pressed) {
+                        var pt = drawMa.mapToItem(drawCanvas, mouse.x, mouse.y);
+                        drawCanvas.addPoint(pt.x, pt.y);
+                    }
                 }
             }
         }

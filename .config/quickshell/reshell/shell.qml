@@ -11,7 +11,6 @@ ShellRoot {
 
     LazyLoader {
         active: Global.general.greeter && Wallpaper.ready
-
         component: Greeter {}
     }
 
