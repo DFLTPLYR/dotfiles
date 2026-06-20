@@ -29,6 +29,10 @@ opt.winborder = "rounded"
 opt.smartcase = true
 opt.hlsearch = true
 opt.incsearch = true
+opt.foldcolumn = "1"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldenable = true
 
 vim.g.autoformat = true
 vim.g.netrw_banner = false
