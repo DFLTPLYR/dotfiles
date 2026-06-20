@@ -180,4 +180,24 @@ Singleton {
             }
         }
     }
+
+    Process {
+        id: checkCli
+        command: ["pgrep", "-f", "quickcli"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const quickcli = this.text;
+                if (quickcli != "") {
+                    return;
+                } else {
+                    Quickshell.execDetached(["quickcli"]);
+                    checkCli.running = true;
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        checkCli.running = true;
+    }
 }
