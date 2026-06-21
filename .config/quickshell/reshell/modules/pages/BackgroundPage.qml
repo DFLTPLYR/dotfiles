@@ -114,10 +114,20 @@ Pane {
                             return;
                         var stroke = strokes[strokes.length - 1];
                         var last = stroke[stroke.length - 1];
-                        var rx = Math.round(x * 100) / 100;
-                        var ry = Math.round(y * 100) / 100;
+                        var rx = x.toFixed(0);
+                        var ry = y.toFixed(0);
                         if (last.x === rx && last.y === ry)
                             return;
+                        if (stroke.length >= 2) {
+                            var prev = stroke[stroke.length - 2];
+                            var sameVert = last.x === prev.x && last.x === rx;
+                            var sameHoriz = last.y === prev.y && last.y === ry;
+                            if (sameVert || sameHoriz) {
+                                stroke[stroke.length - 1] = Qt.point(rx, ry);
+                                requestPaint();
+                                return;
+                            }
+                        }
                         stroke.push(Qt.point(rx, ry));
                         requestPaint();
                     }

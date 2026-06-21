@@ -22,6 +22,7 @@
         ];
     }))
     neovim
+    helix
     unzip
     tree-sitter
     viu

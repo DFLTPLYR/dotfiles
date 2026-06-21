@@ -13,6 +13,10 @@ output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matug
 input_path = "templates/themed/onlyoffice.json.template"
 output_path = "~/.config/onlyoffice/matugen.json"
 
+[templates.themed_helix]
+input_path = "templates/themed/helix.toml"
+output_path = "~/.config/helix/themes/themed.toml"
+
 [templates.themed_vesktop]
 input_path = "templates/themed/vesktop.css"
 output_path = "~/.config/vesktop/themes/vesktop.css"
