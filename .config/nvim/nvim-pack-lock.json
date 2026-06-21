@@ -116,6 +116,10 @@
       "rev": "119e8961014c9bfaf1487bf3c2a393d254f337e2",
       "src": "https://github.com/kevinhwang91/promise-async"
     },
+    "speedtyper.nvim": {
+      "rev": "231bec830463bf8157ee1cfb42a4d7ce12334354",
+      "src": "https://github.com/NStefan002/speedtyper.nvim"
+    },
     "techbase.nvim": {
       "rev": "90c5589e22a5723b535e48df1d4c675ae096341e",
       "src": "https://github.com/mcauley-penney/techbase.nvim"

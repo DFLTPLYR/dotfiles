@@ -267,15 +267,18 @@ Pane {
 
                 onPressed: mouse => {
                     var pt = drawMa.mapToItem(drawCanvas, mouse.x, mouse.y);
-                    drawCanvas.startStroke(pt.x, pt.y);
+                    if (drawCanvas.strokes.length === 0) {
+                        return drawCanvas.startStroke(pt.x, pt.y);
+                    }
+                    drawCanvas.addPoint(pt.x, pt.y);
                 }
 
-                onPositionChanged: mouse => {
-                    if (pressed) {
-                        var pt = drawMa.mapToItem(drawCanvas, mouse.x, mouse.y);
-                        drawCanvas.addPoint(pt.x, pt.y);
-                    }
-                }
+                // onPositionChanged: mouse => {
+                //     if (pressed) {
+                //         var pt = drawMa.mapToItem(drawCanvas, mouse.x, mouse.y);
+                //         drawCanvas.addPoint(pt.x, pt.y);
+                //     }
+                // }
             }
         }
 
