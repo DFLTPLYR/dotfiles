@@ -1,10 +1,14 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-local ok, cmp_caps = pcall(require, "cmp_nvim_lsp")
-if ok then
-	capabilities = cmp_caps.default_capabilities()
-end
+-- require("lspconfig")
 
-vim.lsp.config("*", { capabilities = capabilities })
+vim.lsp.config("*", {})
+
+vim.lsp.config("qmlls", {
+	cmd = { "/etc/profiles/per-user/dfltplyr/bin/qmlls" },
+	filetypes = { "qml" },
+	root_markers = { "shell.qml", ".qmlls.ini", ".git" },
+})
+
+vim.lsp.enable("qmlls")
 
 vim.lsp.enable({
 	"bashls",
@@ -12,9 +16,13 @@ vim.lsp.enable({
 	"lua_ls",
 	"texlab",
 	"ts_ls",
-	"rust-analyzer",
 	"helm_ls",
-	"vue-language-server",
+	"html",
+	"cssls",
+	"pyright",
+	"rust_analyzer",
+	"vue_ls",
+	"qmlls",
 })
 
 vim.diagnostic.config({ virtual_text = true })
@@ -26,10 +34,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	pattern = "*.vue",
 	command = "setfiletype vue",
 })
-
-for _, lsp in ipairs({ "html", "cssls", "ts_ls", "pyright", "rust_analyzer", "qmlls" }) do
-	vim.lsp.enable(lsp)
-end
 
 vim.lsp.config("nixd", {
 	cmd = { "nixd" },

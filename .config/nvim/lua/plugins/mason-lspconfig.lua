@@ -9,7 +9,6 @@ require("mason-lspconfig").setup({
 		"html",
 		"cssls",
 		"pyright",
-		"qmlls",
 	},
 	automatic_installation = true,
 })

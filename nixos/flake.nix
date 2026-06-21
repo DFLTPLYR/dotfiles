@@ -37,7 +37,7 @@
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-    # devshells
+    # dev shells
     devShells.${system}.quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
 
     # system config
