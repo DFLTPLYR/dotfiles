@@ -3,26 +3,7 @@ require("mini.animate").setup({
 })
 require("mini.ai").setup()
 
-local gen_loader = require("mini.snippets").gen_loader
-require("mini.snippets").setup({
-	snippets = {
-		gen_loader.from_file("~/.config/nvim/snippets/global.json"),
-		gen_loader.from_lang(),
-	},
-	mappings = {
-		expand = "<C-j>",
-		jump_next = "<C-l>",
-		jump_prev = "<C-h>",
-		stop = "<C-c>",
-	},
-	expand = {
-		prepare = nil,
-		match = nil,
-		select = nil,
-		insert = nil,
-	},
-})
-require("mini.completion").setup()
+-- cmp + luasnip handle completion and snippets instead
 require("mini.diff").setup()
 require("mini.splitjoin").setup()
 require("mini.bufremove").setup()

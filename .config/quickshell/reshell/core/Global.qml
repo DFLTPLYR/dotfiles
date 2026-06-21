@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtCore
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 import Quickshell.Io
 import Qt.labs.folderlistmodel
 
@@ -197,6 +198,14 @@ Singleton {
         }
     }
 
+    Connections {
+        target: ToplevelManager
+        function onActiveToplevelChanged() {
+            if (ToplevelManager?.activeToplevel?.activated) {
+                print("test");
+            }
+        }
+    }
     Component.onCompleted: {
         checkCli.running = true;
     }

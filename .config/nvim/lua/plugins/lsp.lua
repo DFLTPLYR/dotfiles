@@ -1,3 +1,11 @@
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+local ok, cmp_caps = pcall(require, "cmp_nvim_lsp")
+if ok then
+	capabilities = cmp_caps.default_capabilities()
+end
+
+vim.lsp.config("*", { capabilities = capabilities })
+
 vim.lsp.enable({
 	"bashls",
 	"gopls",
