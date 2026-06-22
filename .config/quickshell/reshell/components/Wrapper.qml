@@ -77,6 +77,8 @@ Item {
                 parent.y = 0;
             } else {
                 wrapper.menu.open();
+                wrapper.menu.x = mouseX;
+                wrapper.menu.y = mouseY;
             }
         }
     }

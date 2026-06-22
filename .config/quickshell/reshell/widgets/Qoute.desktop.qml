@@ -17,8 +17,6 @@ Wrapper {
     }
 
     property: Property {
-        property int size: 20
-        property string color: "primary"
         property string word: ""
         onWordChanged: {
             if (wrap.word === undefined) {
@@ -53,10 +51,9 @@ Wrapper {
 
     ColumnLayout {
         id: column
-
+        clip: true
         Label {
             Layout.fillWidth: true
-            Layout.fillHeight: true
             text: wrap.word ? wrap.word.word : ""
             font.pixelSize: 32
             font.capitalization: Font.AllUppercase
@@ -153,4 +150,3 @@ Wrapper {
         }
     }
 }
-

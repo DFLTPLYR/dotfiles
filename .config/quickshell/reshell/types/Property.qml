@@ -128,10 +128,10 @@ QtObject {
 
                 DelegateChoice {
                     roleValue: "number"
-                    RowLayout {
+                    ColumnLayout {
                         required property var modelData
                         height: 50
-                        width: parent ? parent.width : 0
+                        width: ListView.view.width
                         Label {
                             text: modelData.property
                         }
@@ -151,15 +151,17 @@ QtObject {
 
                 DelegateChoice {
                     roleValue: "string"
-                    RowLayout {
+                    ColumnLayout {
                         required property var modelData
                         height: 50
-                        width: parent ? parent.width : 0
+                        width: ListView.view.width
+
                         Label {
                             text: modelData.property
                         }
 
                         TextField {
+                            Layout.fillWidth: true
                             placeholderText: root[modelData.property]
                             onTextChanged: {
                                 root[modelData.property] = text;
