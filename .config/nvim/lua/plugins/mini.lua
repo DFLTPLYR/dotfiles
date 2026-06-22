@@ -1,3 +1,13 @@
+local header_art = [[
+ ╭╮╭┬─╮╭─╮┬  ┬┬╭┬╮  ╭──╮╭───╮┬    ┬
+ │││├┤ │ │╰┐┌╯││││  ├──╯  │  ╰┐╭╮┌╯
+ ╯╰╯╰─╯╰─╯ ╰╯ ┴┴ ┴  ╰──╯  ┴   ╰╯╰╯
+]]
+
+require("mini.starter").setup({
+	header = header_art,
+})
+
 require("mini.animate").setup({
 	scroll = { enable = false },
 })
@@ -76,7 +86,6 @@ vim.api.nvim_create_autocmd("User", {
 require("mini.icons").setup()
 require("mini.indentscope").setup()
 require("mini.statusline").setup()
-require("mini.starter").setup()
 require("mini.tabline").setup()
 require("mini.visits").setup()
 require("mini.pairs").setup()
