@@ -1,11 +1,12 @@
 local header_art = [[
- ╭╮╭┬─╮╭─╮┬  ┬┬╭┬╮┐ ╭───╮┬    ┬
- │││├┤ │ │╰┐┌╯││││├──╮│  ╰┐╭╮┌╯
- ╯╰╯╰─╯╰─╯ ╰╯ ┴┴ ┴╰──╯┴   ╰╯╰╯
+        ╭╮╭┬─╮╭─╮┬  ┬┬╭┬╮┐ ╭───╮┬    ┬
+        │││├┤ │ │╰┐┌╯││││├──╮│  ╰┐╭╮┌╯
+        ╯╰╯╰─╯╰─╯ ╰╯ ┴┴ ┴╰──╯┴   ╰╯╰╯
 ]]
 
 require("mini.starter").setup({
 	header = header_art,
+	footer = header_art,
 })
 
 require("mini.animate").setup({
