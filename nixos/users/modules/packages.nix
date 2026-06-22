@@ -43,7 +43,7 @@
     libnotify
     mpc
     yazi
-    speedtest-rs
+    python314Packages.speedtest-cli
     btop-rocm
     trash-cli
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default

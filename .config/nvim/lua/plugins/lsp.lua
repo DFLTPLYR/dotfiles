@@ -1,5 +1,3 @@
--- require("lspconfig")
-
 vim.lsp.config("*", {})
 
 vim.lsp.config("qmlls", {

@@ -58,7 +58,7 @@ Item {
                 });
                 const component = Qt.createComponent(contents.source);
                 const incubator = component.incubateObject(containerloader.item, {});
-                if (incubator.status !== Component.Ready) {
+                if (incubator && incubator.status !== Component.Ready) {
                     incubator.onStatusChanged = function (status) {
                         if (status === Component.Ready) {
                             const widget = incubator.object;

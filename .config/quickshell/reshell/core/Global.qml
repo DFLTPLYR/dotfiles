@@ -201,9 +201,7 @@ Singleton {
     Connections {
         target: ToplevelManager
         function onActiveToplevelChanged() {
-            if (ToplevelManager?.activeToplevel?.activated) {
-                print("test");
-            }
+            if (ToplevelManager?.activeToplevel?.activated) {}
         }
     }
     Component.onCompleted: {

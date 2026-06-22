@@ -12,7 +12,6 @@
     shellAliases = {
       vi = "nvim";
       vim = "nvim";
-      speedtest = "speedtest-rs";
     };
     syntaxHighlighting.enable = true;
     initContent = ''

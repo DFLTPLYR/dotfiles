@@ -31,18 +31,6 @@ Wrapper {
         default:
             return Qt.darker(Colors.theme[`${wrap.property.palette}`], 1);
         }
-
-        // if (level === 0)
-        //     return Colors.theme[`${wrap.property.palette}80`];
-        // if (level === 1)
-        //     return Colors.theme[`${wrap.property.palette}70`];
-        // if (level === 2)
-        //     return Colors.theme[`${wrap.property.palette}60`];
-        // if (level === 3)
-        //     return Colors.theme[`${wrap.property.palette}50`];
-        // if (level === 4)
-        //     return Colors.theme[`${wrap.property.palette}40`];
-        // return Colors.theme[`${wrap.property.palette}80`];
     }
 
     FlexboxLayout {

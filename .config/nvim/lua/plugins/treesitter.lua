@@ -17,8 +17,11 @@ local parsers = {
 	"qmljs",
 }
 
+local filetypes = vim.list_extend({}, parsers)
+table.insert(filetypes, "qml")
+
 vim.api.nvim_create_autocmd("FileType", {
-	pattern = parsers,
+	pattern = filetypes,
 	callback = function()
 		pcall(vim.treesitter.start)
 	end,
