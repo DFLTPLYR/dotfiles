@@ -32,6 +32,10 @@ local function set_hl(groups, value)
 	end
 end
 
+set_hl({ "MiniFilesBorder", "MiniFilesNormal", "MiniFilesTitle" }, {
+	fg = "{{ colors.on_surface }}",
+})
+
 set_hl({ "Type", "TSType", "@type" }, {
 	fg = "{{ colors.tertiary }}",
 })
