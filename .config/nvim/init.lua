@@ -2,7 +2,6 @@ require("plugins")
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
-require("config.theme")
 
 -- plugins
 require("plugins.colorizer")
@@ -18,3 +17,6 @@ require("plugins.cmp")
 require("plugins.treesitter")
 require("plugins.ufo")
 require("plugins.lsp")
+
+-- theme
+require("config.theme")

@@ -67,8 +67,14 @@ local function set_bufferline_highlights()
 			highlights = {
 				fill = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 				background = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
-				buffer_visible = { bg = "{{colors.surface_container_low.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
-				separator = { bg = "{{colors.surface_container_low.default.hex}}", fg = "{{colors.outline_variant.default.hex}}" },
+				buffer_visible = {
+					bg = "{{colors.surface_container_low.default.hex}}",
+					fg = "{{colors.on_surface.default.hex}}",
+				},
+				separator = {
+					bg = "{{colors.surface_container_low.default.hex}}",
+					fg = "{{colors.outline_variant.default.hex}}",
+				},
 				buffer_selected = {
 					bg = "{{colors.surface_container_lowest.default.hex}}",
 					fg = "{{colors.tertiary.default.hex}}",
@@ -397,27 +403,47 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 -- Lualine theme
 local lualine_theme = {
 	normal = {
-		a = { bg = "{{colors.primary_container.default.hex}}", fg = "{{colors.on_primary_container.default.hex}}", gui = "bold" },
+		a = {
+			bg = "{{colors.primary_container.default.hex}}",
+			fg = "{{colors.on_primary_container.default.hex}}",
+			gui = "bold",
+		},
 		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 		c = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 	},
 	insert = {
-		a = { bg = "{{colors.secondary_container.default.hex}}", fg = "{{colors.on_secondary_container.default.hex}}", gui = "bold" },
+		a = {
+			bg = "{{colors.secondary_container.default.hex}}",
+			fg = "{{colors.on_secondary_container.default.hex}}",
+			gui = "bold",
+		},
 		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 		c = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 	},
 	visual = {
-		a = { bg = "{{colors.tertiary_container.default.hex}}", fg = "{{colors.on_tertiary_container.default.hex}}", gui = "bold" },
+		a = {
+			bg = "{{colors.tertiary_container.default.hex}}",
+			fg = "{{colors.on_tertiary_container.default.hex}}",
+			gui = "bold",
+		},
 		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 		c = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 	},
 	replace = {
-		a = { bg = "{{colors.error_container.default.hex}}", fg = "{{colors.on_error_container.default.hex}}", gui = "bold" },
+		a = {
+			bg = "{{colors.error_container.default.hex}}",
+			fg = "{{colors.on_error_container.default.hex}}",
+			gui = "bold",
+		},
 		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 		c = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 	},
 	command = {
-		a = { bg = "{{colors.surface_variant.default.hex}}", fg = "{{colors.on_surface_variant.default.hex}}", gui = "bold" },
+		a = {
+			bg = "{{colors.surface_variant.default.hex}}",
+			fg = "{{colors.on_surface_variant.default.hex}}",
+			gui = "bold",
+		},
 		b = { bg = "{{colors.surface_container.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 		c = { bg = "{{colors.background.default.hex}}", fg = "{{colors.on_surface.default.hex}}" },
 	},

@@ -141,3 +141,78 @@ local lualine_theme = {
 require("lualine").setup({
 	options = { theme = lualine_theme },
 })
+
+vim.api.nvim_set_hl(0, "MiniStarterAccent", { fg = "{{ colors.primary }}" })
+vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "{{ colors.secondary }}" })
+
+local splits = {
+	{ "        ╭╮╭┬─╮╭─╮", "┬  ┬┬╭┬╮", "┐ ╭─┬─╮   ┬ " },
+	{ "        │││├┤ │ │", "╰┐┌╯││││", "├──╮│ │ ┬ │" },
+	{ "        ╯╰╯╰─╯╰─╯", " ╰╯ ┴┴ ┴", "╰──╯┴ ╰─┴─╯" },
+}
+
+local art = [[
+        ╭╮╭┬─╮╭─╮┬  ┬┬╭┬╮┐ ╭─┬─╮   ┬ 
+        │││├┤ │ │╰┐┌╯││││├──╮│ │ ┬ │
+        ╯╰╯╰─╯╰─╯ ╰╯ ┴┴ ┴╰──╯┴ ╰─┴─╯
+]]
+
+local starter = require("mini.starter")
+starter.setup({
+	evaluate_single = true,
+	header = art,
+	footer = art,
+	items = {
+		starter.sections.pick(),
+		starter.sections.recent_files(3, true, false),
+		-- Use this if you set up 'mini.sessions'
+		starter.sections.sessions(5, true),
+	},
+	content_hooks = {
+		starter.gen_hook.adding_bullet(),
+		starter.gen_hook.indexing("all", { "Builtin actions" }),
+		starter.gen_hook.aligning("center", "center"),
+		function(content)
+			local h_idx, f_idx = 0, #splits + 1
+			for _, line in ipairs(content) do
+				local new = {}
+				for _, unit in ipairs(line) do
+					if unit.type == "header" then
+						h_idx = h_idx + 1
+						local sp = splits[h_idx]
+						if sp and unit.string == table.concat(sp) then
+							vim.list_extend(new, {
+								{ string = sp[1], type = "header", hl = "MiniStarterHeader" },
+								{ string = sp[2], type = "header", hl = "MiniStarterAccent" },
+								{ string = sp[3], type = "header", hl = "MiniStarterHeader" },
+							})
+						else
+							table.insert(new, unit)
+						end
+					elseif unit.type == "footer" then
+						f_idx = f_idx - 1
+						local sp = splits[f_idx]
+						if sp and unit.string == table.concat(sp) then
+							vim.list_extend(new, {
+								{ string = sp[1], type = "footer", hl = "MiniStarterFooter" },
+								{ string = sp[2], type = "footer", hl = "MiniStarterAccent" },
+								{ string = sp[3], type = "footer", hl = "MiniStarterFooter" },
+							})
+						else
+							table.insert(new, unit)
+						end
+					else
+						table.insert(new, unit)
+					end
+				end
+				for i = #line, 1, -1 do
+					line[i] = nil
+				end
+				for _, u in ipairs(new) do
+					table.insert(line, u)
+				end
+			end
+			return content
+		end,
+	},
+})
