@@ -30,6 +30,8 @@
     ueberzugpp
 
     # Shell / CLI
+
+    ani-cli
     cava
     starship
     oh-my-zsh
@@ -70,6 +72,7 @@
     mpdris2-rs
     onlyoffice-desktopeditors
     vial
+    vlc
 
     # Screenshots / clipboard
     grim

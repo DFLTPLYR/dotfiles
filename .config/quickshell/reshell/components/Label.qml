@@ -20,6 +20,7 @@ Label {
     }
     color: control.config.content.color
 
+    font.capitalization: Font.Capitalize
     background: Rectangle {
         id: background
         implicitWidth: control.width

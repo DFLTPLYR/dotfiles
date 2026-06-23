@@ -151,21 +151,27 @@ QtObject {
 
                 DelegateChoice {
                     roleValue: "string"
+
                     ColumnLayout {
                         required property var modelData
-                        height: 50
+                        implicitHeight: 50
                         width: ListView.view.width
 
                         Label {
                             text: modelData.property
                         }
 
-                        TextField {
+                        Item {
                             Layout.fillWidth: true
-                            placeholderText: root[modelData.property]
-                            onTextChanged: {
-                                root[modelData.property] = text;
-                                updateLoop.restart();
+                            Layout.rightMargin: 10
+
+                            TextField {
+                                width: parent.width
+                                placeholderText: root[modelData.property]
+                                onTextChanged: {
+                                    root[modelData.property] = text;
+                                    updateLoop.restart();
+                                }
                             }
                         }
                     }
