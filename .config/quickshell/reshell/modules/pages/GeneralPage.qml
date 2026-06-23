@@ -41,6 +41,34 @@ Pane {
             Spacer {}
 
             Label {
+                text: "Screen Temp"
+                font.pixelSize: 32
+                Layout.fillWidth: true
+            }
+
+            Toggle {
+                id: gammaToggle
+                property bool gamma: false
+                text: gamma ? "Per Monitor" : "All"
+                checked: gamma
+                onCheckedChanged: {
+                    gamma = checked;
+                }
+            }
+
+            Repeater {
+                enabled: false
+                model: Gamma.monitors
+                delegate: CheckBox {
+                    required property var modelData
+                    text: modelData
+                    visible: gammaToggle.checked
+                }
+            }
+
+            Spacer {}
+
+            Label {
                 text: "Color Scheme"
                 font.pixelSize: 32
                 Layout.fillWidth: true

@@ -7,11 +7,11 @@ CheckBox {
 
     property QtObject state: QtObject {
         property QtObject content: QtObject {
-            property color color: Colors.theme.primary
+            property color color: Colors.theme.on_surface
         }
 
         property QtObject indicator: QtObject {
-            property color color: Colors.theme.primary
+            property color color: Colors.theme.surface
             property color border: Colors.theme.outline
         }
     }
@@ -31,9 +31,10 @@ CheckBox {
         Rectangle {
             width: parent.width / 2
             height: parent.height / 2
-            anchors.centerIn: parent
+            y: height / 2
+            x: width / 2
             radius: 2
-            color: control.down ? Qt.darker(Colors.theme.primary, 1.15) : Colors.theme.primary
+            color: control.down ? Qt.darker(Colors.theme.on_surface, 1.15) : Colors.theme.on_surface
             visible: control.checked
         }
     }

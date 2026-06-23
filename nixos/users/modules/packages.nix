@@ -30,7 +30,7 @@
     ueberzugpp
 
     # Shell / CLI
-
+    wl-gammarelay-rs
     ani-cli
     cava
     starship
