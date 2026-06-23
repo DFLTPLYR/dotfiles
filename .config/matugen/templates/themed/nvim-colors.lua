@@ -32,7 +32,21 @@ local function set_hl(groups, value)
 	end
 end
 
-set_hl({ "MiniFilesBorder", "MiniFilesNormal", "MiniFilesTitle" }, {
+set_hl({
+	"MiniFilesBorder",
+	"MiniFilesNormal",
+	"MiniFilesTitle",
+	"MiniPickBorder",
+	"MiniPickBorderBusy",
+	"MiniPickBorderText",
+	"MiniPickHeader",
+	"MiniPickPrompt",
+	"MiniPickPromptCaret",
+	"MiniPickPromptCaret",
+	"MiniPickPreviewRegion",
+	"MiniPickNormal",
+	"MiniPickPromptPrefix",
+}, {
 	fg = "{{ colors.on_surface }}",
 })
 
@@ -163,10 +177,11 @@ starter.setup({
 	header = art,
 	footer = art,
 	items = {
-		starter.sections.pick(),
-		starter.sections.recent_files(3, true, false),
+		starter.sections.recent_files(5, true, false),
+		-- starter.sections.pick(),
+		starter.sections.builtin_actions(),
 		-- Use this if you set up 'mini.sessions'
-		starter.sections.sessions(5, true),
+		starter.sections.sessions(1, true),
 	},
 	content_hooks = {
 		starter.gen_hook.adding_bullet(),

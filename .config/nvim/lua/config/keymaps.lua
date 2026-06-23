@@ -67,8 +67,12 @@ keymap("n", "<leader>ee", "<cmd>Pick files<CR>", { desc = "Pick file in current 
 
 -- <leader>f - File operations
 keymap("n", "<leader>fe", "<cmd>Pick buffers<CR>", { desc = "Pick available buffers" })
-keymap("n", "<leader>ff", "<cmd>FzfLua files<CR>")
-keymap("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>")
+keymap("n", "<leader>ff", function()
+	require("mini.pick").builtin.files()
+end, { desc = "Find files" })
+keymap("n", "<leader>fg", function()
+	require("mini.pick").builtin.grep_live()
+end, { desc = "Live grep" })
 keymap("n", "<leader>fo", ":lua vim.lsp.buf.format()<CR>", s)
 
 local make_select_path = function(select_global, recency_weight)
