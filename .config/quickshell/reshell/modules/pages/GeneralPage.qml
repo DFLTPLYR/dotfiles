@@ -104,7 +104,6 @@ Pane {
             Rectangle {
                 id: exampleNotif
                 property var config: Components.config.notification
-
                 property QtObject style: QtObject {
                     property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
                     property Direction padding: Direction {}
@@ -157,45 +156,65 @@ Pane {
 
                     modelData: exampleNotif.example
                 }
-            }
 
-            Label {
-                text: "Ui"
-                font.pixelSize: 24
-            }
+                Row {
+                    anchors {
+                        rightMargin: 5
+                        bottomMargin: 5
+                        bottom: parent.bottom
+                        right: parent.right
+                    }
 
-            Row {
-                Layout.fillWidth: true
-                spacing: 10
+                    Button {
+                        text: "Cancel"
+                    }
 
-                Label {
-                    text: "Width"
-                    font.pixelSize: 14
-                }
-
-                SpinBox {
-                    width: 100
-                    value: exampleNotif.config.width
-                    onValueChanged: {
-                        exampleNotifItem.width = value;
+                    Button {
+                        text: "Save"
                     }
                 }
             }
 
-            Row {
-                Layout.fillWidth: true
-                spacing: 10
+            Label {
+                text: "Notification Dimensions"
+                font.pixelSize: 24
+            }
 
-                Label {
-                    text: "Height"
-                    font.pixelSize: 14
+            ColumnLayout {
+                Layout.fillWidth: true
+
+                Row {
+                    spacing: 10
+
+                    Label {
+                        text: "Width"
+                        font.pixelSize: 14
+                    }
+
+                    SpinBox {
+                        width: 100
+                        value: exampleNotif.config.width
+                        onValueChanged: {
+                            exampleNotifItem.width = value;
+                        }
+                    }
                 }
 
-                SpinBox {
-                    width: 100
-                    value: exampleNotif.config.height
-                    onValueChanged: {
-                        exampleNotifItem.height = value;
+                Row {
+                    Layout.fillWidth: true
+                    spacing: 10
+
+                    Label {
+                        text: "Height"
+                        font.pixelSize: 14
+                    }
+
+                    SpinBox {
+                        width: 100
+                        value: exampleNotif.config.height
+                        onValueChanged: {
+                            exampleNotifItem.height = value;
+                        }
                     }
                 }
             }
@@ -238,8 +257,8 @@ Pane {
                         SpinBox {
                             width: 100
                             height: 20
-                            value: exampleNotif.config.background.rounding[radii.modelData.prop]
-                            onValueChanged: exampleNotif.config.background.rounding[radii.modelData.prop] = value
+                            value: exampleNotif.style.background.rounding[radii.modelData.prop]
+                            onValueChanged: exampleNotif.style.background.rounding[radii.modelData.prop] = value
                         }
                     }
                 }
