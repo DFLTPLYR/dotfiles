@@ -1,5 +1,5 @@
-vim.cmd.packadd("promise-async")
-vim.cmd.packadd("nvim-ufo")
+require("async")
+require("ufo")
 
 vim.keymap.set("n", "zR", require("ufo").openAllFolds)
 vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
