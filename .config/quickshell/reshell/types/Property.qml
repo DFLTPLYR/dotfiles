@@ -152,26 +152,48 @@ QtObject {
                 DelegateChoice {
                     roleValue: "string"
 
-                    ColumnLayout {
+                    Item {
+                        id: string
+
                         required property var modelData
-                        implicitHeight: 50
+                        height: 50
                         width: ListView.view.width
 
-                        Label {
-                            text: modelData.property
-                        }
+                        Row {
+                            anchors.fill: parent
 
-                        Item {
-                            Layout.fillWidth: true
-                            Layout.rightMargin: 10
+                            Label {
+                                height: parent.height
+                                text: string.modelData.property
+                            }
 
                             TextField {
                                 width: parent.width
-                                placeholderText: root[modelData.property]
+                                placeholderText: root[string.modelData.property]
                                 onTextChanged: {
-                                    root[modelData.property] = text;
+                                    root[string.modelData.property] = text;
                                     updateLoop.restart();
                                 }
+                            }
+                        }
+                    }
+                }
+
+                DelegateChoice {
+                    roleValue: "font"
+
+                    Item {
+                        id: font
+
+                        required property var modelData
+                        height: 50
+                        width: ListView.view.width
+
+                        Row {
+                            anchors.fill: parent
+                            Label {
+                                height: parent.height
+                                text: font.modelData.property
                             }
                         }
                     }
@@ -223,6 +245,9 @@ QtObject {
             if (options) {
                 key.options = options;
                 key.type = "dropdown";
+            }
+            if (key.property.includes("Font")) {
+                key.type = "font";
             }
         }
 

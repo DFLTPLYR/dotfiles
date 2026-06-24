@@ -18,6 +18,10 @@ Wrapper {
 
     property: Property {
         property string word: ""
+        property string wordFont: ""
+        onWordFontChanged: {
+            mainWord.font = wordFont;
+        }
         onWordChanged: {
             if (wrap.word === undefined) {
                 getDefinition.update();
@@ -52,7 +56,9 @@ Wrapper {
     ColumnLayout {
         id: column
         clip: true
+
         Label {
+            id: mainWord
             Layout.fillWidth: true
             text: wrap.word ? wrap.word.word : ""
             font.pixelSize: 32
