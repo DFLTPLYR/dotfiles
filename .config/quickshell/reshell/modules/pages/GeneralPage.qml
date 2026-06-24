@@ -22,6 +22,13 @@ Pane {
             id: column
             width: pane.width
 
+            Behavior on height {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
             Label {
                 text: "Greeter"
                 font.pixelSize: 32
@@ -97,6 +104,7 @@ Pane {
             Rectangle {
                 id: exampleNotif
                 property var config: Components.config.notification
+
                 property QtObject style: QtObject {
                     property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
                     property Direction padding: Direction {}
@@ -131,12 +139,23 @@ Pane {
 
                 NotificationItem {
                     id: exampleNotifItem
-                    style: exampleNotif.style
+                    ma.enabled: false
+                    property var style: exampleNotif.style
                     anchors.centerIn: parent
                     width: exampleNotif.config.height
                     height: exampleNotif.config.width
+
+                    // Notification Bg
+                    bg {
+                        color: style.color
+
+                        bottomRightRadius: style.background.rounding.bottomRight
+                        bottomLeftRadius: style.background.rounding.bottomLeft
+                        topRightRadius: style.background.rounding.topRight
+                        topLeftRadius: style.background.rounding.topLeft
+                    }
+
                     modelData: exampleNotif.example
-                    Component.onCompleted: this.ma.enabled = false
                 }
             }
 
@@ -187,44 +206,41 @@ Pane {
             }
 
             RowLayout {
-                Column {
-                    width: parent.width / 2
-                    Label {
-                        text: "Top Left"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                    }
-                }
-                Column {
-                    width: parent.width / 2
-                    Label {
-                        text: "Top Right"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                    }
-                }
-                Column {
-                    width: parent.width / 2
-                    Label {
-                        text: "Bottom Left"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
-                    }
-                }
-                Column {
-                    width: parent.width / 2
-                    Label {
-                        text: "Bottom Right"
-                    }
-                    SpinBox {
-                        width: 100
-                        height: 20
+                // Radius
+                Repeater {
+                    model: [
+                        {
+                            label: "Top Left",
+                            prop: "topLeft"
+                        },
+                        {
+                            label: "Top Right",
+                            prop: "topRight"
+                        },
+                        {
+                            label: "Bottom Left",
+                            prop: "bottomLeft"
+                        },
+                        {
+                            label: "Bottom Right",
+                            prop: "bottomRight"
+                        },
+                    ]
+                    delegate: Column {
+                        id: radii
+                        required property var modelData
+                        width: parent.width / 2
+
+                        Label {
+                            text: radii.modelData.label
+                        }
+
+                        SpinBox {
+                            width: 100
+                            height: 20
+                            value: exampleNotif.config.background.rounding[radii.modelData.prop]
+                            onValueChanged: exampleNotif.config.background.rounding[radii.modelData.prop] = value
+                        }
                     }
                 }
             }

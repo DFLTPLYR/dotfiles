@@ -4,6 +4,7 @@ import Quickshell
 import qs.core
 
 StyledPane {
+    id: notif
     default property alias ma: notifMouseArea
     required property var modelData
 
@@ -19,7 +20,7 @@ StyledPane {
 
         NumberAnimation on width {
             from: 0
-            to: parent ? parent.width : 0
+            to: notif.width
             duration: Components.config.notification.duration
             running: true
         }
@@ -35,11 +36,11 @@ StyledPane {
         drag.maximumX: 0
         drag.threshold: 0
         onClicked: {
-            Notifications.discardNotification(modelData.notificationId);
+            Notifications.discardNotification(notif.modelData.notificationId);
         }
         onReleased: {
             if (parent.x < -30)
-                Notifications.discardNotification(modelData.notificationId);
+                Notifications.discardNotification(notif.modelData.notificationId);
             else
                 parent.x = 0;
         }
@@ -48,7 +49,7 @@ StyledPane {
     Row {
         id: contentRow
 
-        property bool hasImage: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
+        property bool hasImage: Quickshell.iconPath(notif.modelData.appIcon, true) || notif.modelData.image
 
         anchors.fill: parent
 
@@ -61,7 +62,7 @@ StyledPane {
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
-                source: Quickshell.iconPath(modelData.appIcon, true) || modelData.image
+                source: Quickshell.iconPath(notif.modelData.appIcon, true) || notif.modelData.image
             }
         }
 
@@ -73,7 +74,7 @@ StyledPane {
 
             Text {
                 Layout.fillWidth: true
-                text: modelData.appName
+                text: notif.modelData.appName
                 font.bold: true
                 font.pointSize: 12
                 color: Colors.theme.primary
@@ -82,7 +83,7 @@ StyledPane {
 
             Text {
                 Layout.fillWidth: true
-                text: modelData.summary
+                text: notif.modelData.summary
                 font.pointSize: 10
                 color: Colors.theme.on_surface
                 elide: Text.ElideRight
@@ -90,7 +91,7 @@ StyledPane {
 
             Text {
                 Layout.fillWidth: true
-                text: modelData.body
+                text: notif.modelData.body
                 font.pointSize: 9
                 color: Colors.theme.secondary
                 elide: Text.ElideRight
