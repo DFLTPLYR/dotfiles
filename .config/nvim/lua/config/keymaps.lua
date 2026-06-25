@@ -40,9 +40,13 @@ keymap("n", "<S-t>", "<cmd>tabnew<CR>", s)
 keymap("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
--- [[ g prefix ]]
+-- [[ g prefix - LSP goto ]]
 local opts = { noremap = true, silent = true }
-keymap("n", "grd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+keymap("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Goto Definition" }))
+keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Goto Declaration" }))
+keymap("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "References", nowait = true }))
+keymap("n", "gI", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Goto Implementation" }))
+keymap("n", "gy", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Goto Type Definition" }))
 
 -- [[ f prefix ]]
 keymap("n", "fd", function()

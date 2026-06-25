@@ -57,3 +57,6 @@ vim.lsp.config("nixd", {
 	},
 })
 vim.lsp.enable("nixd")
+
+vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled())
+vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())

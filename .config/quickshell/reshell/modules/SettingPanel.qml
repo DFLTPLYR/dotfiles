@@ -13,6 +13,7 @@ FloatingWindow {
     property int page: 0
 
     title: "Settings"
+    minimumSize: Qt.size(settingpanel.screen.width / 2, settingpanel.screen.height / 2)
     color: Colors.theme.surface
 
     Behavior on color {
