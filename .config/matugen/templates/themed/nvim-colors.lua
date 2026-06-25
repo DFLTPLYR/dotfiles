@@ -177,11 +177,11 @@ starter.setup({
 	header = art,
 	footer = art,
 	items = {
-		starter.sections.recent_files(5, true, false),
-		-- starter.sections.pick(),
-		starter.sections.builtin_actions(),
 		-- Use this if you set up 'mini.sessions'
 		starter.sections.sessions(1, true),
+		-- starter.sections.pick(),
+		starter.sections.recent_files(5, true, false),
+		starter.sections.builtin_actions(),
 	},
 	content_hooks = {
 		starter.gen_hook.adding_bullet(),

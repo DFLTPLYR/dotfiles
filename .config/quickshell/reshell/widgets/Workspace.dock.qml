@@ -30,14 +30,13 @@ Wrapper {
         orientation: wrap.slotConfig ? (wrap.slotConfig.side ? ListView.Vertical : ListView.Horizontal) : ListView.Horizontal
 
         interactive: false
-
         model: ScriptModel {
             values: [...list.windows]
         }
 
         delegate: Rectangle {
             id: windowSet
-            color: ma.hoveredChanged ? Colors.theme.surface : Colors.setOpacity(Colors.theme.primary, 0.2)
+            color: ma.containsMouse ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
 
@@ -45,7 +44,7 @@ Wrapper {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 200
+                    duration: 600
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -66,8 +65,8 @@ Wrapper {
                 active: !wrap.property.showText
                 component: Rectangle {
                     parent: windowSet
-                    width: parent.width / 2
-                    height: parent.height / 2
+                    width: parent.width * 0.6
+                    height: parent.height * 0.6
                     radius: width / 2
                     x: (parent.width - width) / 2
                     y: (parent.height - height) / 2
@@ -81,6 +80,7 @@ Wrapper {
                     }
                 }
             }
+
             MouseArea {
                 id: ma
                 hoverEnabled: true

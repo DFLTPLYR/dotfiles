@@ -17,6 +17,12 @@ keymap("n", "k", function()
 	return tonumber(vim.api.nvim_get_vvar("count")) > 0 and "k" or "gk"
 end, { expr = true, silent = true })
 
+-- [[ Esc ]]
+keymap({ "i", "n", "s" }, "<esc>", function()
+	vim.cmd("noh")
+	return "<esc>"
+end, { expr = true, desc = "Escape and Clear hlsearch" })
+
 -- [[ Ctrl ]]
 keymap("n", "<C-d>", "<C-d>zz")
 keymap("n", "<C-u>", "<C-u>zz")
