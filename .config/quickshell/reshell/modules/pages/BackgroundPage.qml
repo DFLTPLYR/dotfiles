@@ -696,11 +696,6 @@ Pane {
                         kind: data.type,
                         source: data.url
                     });
-
-                    const img = Components.createImage(data.url, data.type, containerRect);
-                    img.visible = Qt.binding(() => {
-                        return containerRect.show;
-                    });
                 }
             }
 

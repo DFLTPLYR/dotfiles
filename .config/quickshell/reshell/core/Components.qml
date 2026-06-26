@@ -21,11 +21,9 @@ Singleton {
         id: staticImage
         Image {
             anchors.fill: parent
-            onParentChanged: {
-                anchors.fill = parent;
-            }
             mipmap: true
             smooth: true
+            z: -1
         }
     }
 
