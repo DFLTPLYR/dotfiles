@@ -73,7 +73,7 @@
     onlyoffice-desktopeditors
     vial
     vlc
-
+    zmk-studio
     # Screenshots / clipboard
     grim
     slurp

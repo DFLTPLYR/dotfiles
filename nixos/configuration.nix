@@ -18,6 +18,7 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = ["acpi=force"];
   boot.kernelModules = ["v4l2loopback"];
   boot.extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
   boot.extraModprobeConfig = ''
@@ -40,7 +41,7 @@
   users.users.dfltplyr = {
     isNormalUser = true;
     description = "dfltplyr";
-    extraGroups = ["networkmanager" "wheel" "audio" "mpd"];
+    extraGroups = ["networkmanager" "wheel" "audio" "mpd" "dialout"];
     packages = with pkgs; [
       tree
     ];

@@ -24,6 +24,8 @@ Singleton {
             onParentChanged: {
                 anchors.fill = parent;
             }
+            mipmap: true
+            smooth: true
         }
     }
 
