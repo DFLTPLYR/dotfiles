@@ -23,7 +23,6 @@ Singleton {
             anchors.fill: parent
             mipmap: true
             smooth: true
-            z: -1
         }
     }
 

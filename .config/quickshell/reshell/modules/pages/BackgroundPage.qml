@@ -586,7 +586,7 @@ Pane {
         bg.color: Colors.setOpacity(Colors.theme.surface, 0.5)
 
         pointerVisible: containerRect.enabled
-        rulersSize: 16 / flick.zoom
+        rulersSize: 12 / flick.zoom
 
         width: model.width
         height: model.height
