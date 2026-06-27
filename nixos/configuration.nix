@@ -18,13 +18,11 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = ["acpi=force"];
   boot.kernelModules = ["v4l2loopback"];
   boot.extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
   boot.extraModprobeConfig = ''
     options v4l2loopback exclusive_caps=1 video_nr=7 card_label="DroidCam"
   '';
-
   # Enable networking
   networking.hostName = "nixosBtw"; # Define your hostname.
   networking.networkmanager.enable = true;
