@@ -63,7 +63,6 @@
     telegram-desktop
     thunderbird
     pavucontrol
-    obs-studio
     droidcam
     adw-gtk3
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -74,6 +73,8 @@
     vial
     vlc
     zmk-studio
+    localsend
+
     # Screenshots / clipboard
     grim
     slurp
