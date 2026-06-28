@@ -1,5 +1,8 @@
 ^/moondrop hub
 ^/README.md
+^/nixos
+\.config/herdr/.*\.(sock|log)$
+\.config/herdr/session\.json
 \.git
 \.gitignore
 

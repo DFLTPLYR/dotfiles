@@ -11,6 +11,11 @@
 # Secrets :D
 .config/zsh/.secrets.zsh
 
+# herdr runtime files
+.config/herdr/*.sock
+.config/herdr/*.log
+.config/herdr/session.json
+
 # Generated theme files
 .config/nvim/theme.lua
 .config/quickshell/reshell/core/data/themes/content.json
