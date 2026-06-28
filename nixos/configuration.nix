@@ -23,6 +23,7 @@
   boot.extraModprobeConfig = ''
     options v4l2loopback exclusive_caps=1 video_nr=7 card_label="DroidCam"
   '';
+
   # Enable networking
   networking.hostName = "nixosBtw"; # Define your hostname.
   networking.networkmanager.enable = true;
@@ -50,7 +51,7 @@
     enable = true;
     enable32Bit = true; # Crucial for Steam / 32-bit games
     extraPackages = with pkgs; [
-      rocmPackages.clr # Enables OpenCL support for the 5700XT (Blender, Davinci Resolve)
+      rocmPackages.clr
       libva-vdpau-driver
       libvdpau-va-gl
     ];
@@ -58,5 +59,5 @@
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = ["nix-command" "flakes"];
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.11";
 }
