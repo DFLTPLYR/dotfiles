@@ -60,5 +60,5 @@ hl.bind(mainMod .. "+ SHIFT + period", hl.dsp.layout("consume_or_expel next"))
 hl.bind(mainMod .. "+ comma", hl.dsp.layout("swapcol l"))
 hl.bind(mainMod .. "+ period", hl.dsp.layout("swapcol r"))
 
-hl.bind("SUPER + F11", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"))
-hl.bind("SUPER + F12", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"))
+hl.bind("SUPER + F11", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"))
+hl.bind("SUPER + F12", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"))

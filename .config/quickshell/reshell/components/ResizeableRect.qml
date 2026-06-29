@@ -2,7 +2,7 @@ import QtQuick
 import qs.core
 
 Pane {
-    id: resizeableRect
+    id: container
     clip: false
     property alias bg: background
     property int rulersSize: 12
@@ -11,13 +11,13 @@ Pane {
     Rectangle {
         id: leftHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -43,14 +43,14 @@ Pane {
             id: leftHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseXChanged: {
                 if (drag.active) {
-                    resizeableRect.width = resizeableRect.width - mouseX;
-                    resizeableRect.x = resizeableRect.x + mouseX;
-                    if (resizeableRect.width < 30)
-                        resizeableRect.width = 30;
+                    container.width = container.width - mouseX;
+                    container.x = container.x + mouseX;
+                    if (container.width < 30)
+                        container.width = 30;
                 }
             }
 
@@ -78,13 +78,13 @@ Pane {
     Rectangle {
         id: rightHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -110,13 +110,13 @@ Pane {
             id: rightHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseXChanged: {
                 if (drag.active) {
-                    resizeableRect.width = resizeableRect.width + mouseX;
-                    if (resizeableRect.width < 50)
-                        resizeableRect.width = 50;
+                    container.width = container.width + mouseX;
+                    if (container.width < 50)
+                        container.width = 50;
                 }
             }
 
@@ -144,15 +144,15 @@ Pane {
     Rectangle {
         id: topHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         x: parent.x / 2
         y: 0
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.top
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -178,14 +178,14 @@ Pane {
             id: topHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height - mouseY;
-                    resizeableRect.y = resizeableRect.y + mouseY;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
+                    container.height = container.height - mouseY;
+                    container.y = container.y + mouseY;
+                    if (container.height < 50)
+                        container.height = 50;
                 }
             }
 
@@ -213,15 +213,15 @@ Pane {
     Rectangle {
         id: bottomHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         x: parent.x / 2
         y: parent.y
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.bottom
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -247,13 +247,13 @@ Pane {
             id: bottomHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height + mouseY;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
+                    container.height = container.height + mouseY;
+                    if (container.height < 50)
+                        container.height = 50;
                 }
             }
 
@@ -282,14 +282,14 @@ Pane {
     Rectangle {
         id: topRightHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.top
 
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -315,18 +315,18 @@ Pane {
             id: topRightHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height - mouseY;
-                    resizeableRect.y = resizeableRect.y + mouseY;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
+                    container.height = container.height - mouseY;
+                    container.y = container.y + mouseY;
+                    if (container.height < 50)
+                        container.height = 50;
 
-                    resizeableRect.width = resizeableRect.width + mouseX;
-                    if (resizeableRect.width < 50)
-                        resizeableRect.width = 50;
+                    container.width = container.width + mouseX;
+                    if (container.width < 50)
+                        container.width = 50;
                 }
             }
 
@@ -354,14 +354,14 @@ Pane {
     Rectangle {
         id: topLeftHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.top
 
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -387,19 +387,19 @@ Pane {
             id: topLeftHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height - mouseY;
-                    resizeableRect.y = resizeableRect.y + mouseY;
+                    container.height = container.height - mouseY;
+                    container.y = container.y + mouseY;
 
-                    resizeableRect.width = resizeableRect.width - mouseX;
-                    resizeableRect.x = resizeableRect.x + mouseX;
-                    if (resizeableRect.width < 50)
-                        resizeableRect.width = 50;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
+                    container.width = container.width - mouseX;
+                    container.x = container.x + mouseX;
+                    if (container.width < 50)
+                        container.width = 50;
+                    if (container.height < 50)
+                        container.height = 50;
                 }
             }
 
@@ -427,14 +427,14 @@ Pane {
     Rectangle {
         id: bottomRightHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.bottom
 
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -460,17 +460,17 @@ Pane {
             id: bottomRightHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height + mouseY;
-                    resizeableRect.width = resizeableRect.width + mouseX;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
+                    container.height = container.height + mouseY;
+                    container.width = container.width + mouseX;
+                    if (container.height < 50)
+                        container.height = 50;
 
-                    if (resizeableRect.width < 50)
-                        resizeableRect.width = 50;
+                    if (container.width < 50)
+                        container.width = 50;
                 }
             }
 
@@ -498,14 +498,14 @@ Pane {
     Rectangle {
         id: bottomLeftHandle
 
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
+        width: container.rulersSize
+        height: container.rulersSize
+        radius: container.rulersSize
         color: Colors.theme.primary
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.bottom
 
-        opacity: resizeableRect.pointerVisible ? 1 : 0
+        opacity: container.pointerVisible ? 1 : 0
         states: [
             State {
                 name: "hovered"
@@ -531,17 +531,17 @@ Pane {
             id: bottomLeftHandleArea
 
             anchors.fill: parent
-            enabled: resizeableRect.pointerVisible
+            enabled: container.pointerVisible
             hoverEnabled: true
             onMouseYChanged: {
                 if (drag.active) {
-                    resizeableRect.height = resizeableRect.height + mouseY;
-                    resizeableRect.width = resizeableRect.width - mouseX;
-                    resizeableRect.x = resizeableRect.x + mouseX;
-                    if (resizeableRect.height < 50)
-                        resizeableRect.height = 50;
-                    if (resizeableRect.width < 50)
-                        resizeableRect.width = 50;
+                    container.height = container.height + mouseY;
+                    container.width = container.width - mouseX;
+                    container.x = container.x + mouseX;
+                    if (container.height < 50)
+                        container.height = 50;
+                    if (container.width < 50)
+                        container.width = 50;
                 }
             }
 

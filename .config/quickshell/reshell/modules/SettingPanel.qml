@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 import qs.core
 import qs.components
-import qs.modules.pages
+import qs.modules.settings
 
 FloatingWindow {
     id: settingpanel

@@ -73,7 +73,6 @@
     onlyoffice-desktopeditors
     vial
     vlc
-    zmk-studio
     localsend
 
     # Screenshots / clipboard

@@ -57,13 +57,14 @@ Pane {
         Canvas {
             id: canvas
             clip: false
+            // anchors.fill: parent
             width: flick.contentWidth
             height: flick.contentHeight
             onPaint: {
                 var ctx = getContext("2d");
                 var gridSize = 10;
 
-                ctx.strokeStyle = Colors.setOpacity(Colors.theme.tertiary, 0.5);
+                ctx.strokeStyle = Colors.setOpacity(Colors.theme.on_surface, 0.5);
                 ctx.lineWidth = 1;
 
                 for (var x = 0; x <= width; x += gridSize) {
