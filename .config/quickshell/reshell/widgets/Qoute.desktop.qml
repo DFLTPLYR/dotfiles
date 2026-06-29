@@ -53,9 +53,12 @@ Wrapper {
         }
     }
 
-    ColumnLayout {
+    FlexboxLayout {
         id: column
         clip: true
+        width: wrap.width
+        height: wrap.height
+        direction: FlexboxLayout.Column
 
         Label {
             id: mainWord

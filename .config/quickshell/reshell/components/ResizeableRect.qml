@@ -4,6 +4,7 @@ import qs.core
 Pane {
     id: container
     clip: false
+    signal resized
     property alias bg: background
     property int rulersSize: 12
     property bool pointerVisible: true
@@ -52,6 +53,10 @@ Pane {
                     if (container.width < 30)
                         container.width = 30;
                 }
+            }
+
+            onReleased: mouse => {
+                container.resized();
             }
 
             drag {
@@ -118,6 +123,10 @@ Pane {
                     if (container.width < 50)
                         container.width = 50;
                 }
+            }
+
+            onReleased: mouse => {
+                container.resized();
             }
 
             drag {
@@ -189,6 +198,10 @@ Pane {
                 }
             }
 
+            onReleased: mouse => {
+                container.resized();
+            }
+
             drag {
                 target: parent
                 axis: Drag.YAxis
@@ -255,6 +268,10 @@ Pane {
                     if (container.height < 50)
                         container.height = 50;
                 }
+            }
+
+            onReleased: mouse => {
+                container.resized();
             }
 
             drag {
@@ -330,6 +347,10 @@ Pane {
                 }
             }
 
+            onReleased: mouse => {
+                container.resized();
+            }
+
             drag {
                 target: parent
                 axis: Drag.YAxis | Drag.XAxis
@@ -403,6 +424,10 @@ Pane {
                 }
             }
 
+            onReleased: mouse => {
+                container.resized();
+            }
+
             drag {
                 target: parent
                 axis: Drag.YAxis | Drag.XAxis
@@ -472,6 +497,10 @@ Pane {
                     if (container.width < 50)
                         container.width = 50;
                 }
+            }
+
+            onReleased: mouse => {
+                container.resized();
             }
 
             drag {
@@ -545,6 +574,10 @@ Pane {
                 }
             }
 
+            onReleased: mouse => {
+                container.resized();
+            }
+
             drag {
                 target: parent
                 axis: Drag.YAxis | Drag.XAxis
@@ -573,7 +606,7 @@ Pane {
         color: "transparent"
 
         border {
-            width: pointerVisible ? 2 : 0
+            width: container.pointerVisible ? 2 : 0
             color: Colors.theme.tertiary
         }
     }

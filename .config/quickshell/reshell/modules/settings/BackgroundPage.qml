@@ -548,6 +548,21 @@ Pane {
         property bool enabled: false
         property bool show: true
         property ListModel screens: ListModel {}
+        onResized: {
+            const screens = overlapsAny(containerRect);
+
+            const obj = {
+                x: containerRect.x,
+                y: containerRect.y,
+                z: containerRect.z,
+                screens: screens,
+                width: containerRect.width,
+                height: containerRect.height,
+                contents: containerRect.contents
+            };
+
+            Wallpaper.containers.set(containerRect.index, obj);
+        }
 
         onContentsChanged: {
             switch (contents.type) {
