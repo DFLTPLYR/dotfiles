@@ -3,7 +3,14 @@
   pkgs,
   ...
 }: {
-  nixpkgs.overlays = [inputs.millennium.overlays.default];
+  nixpkgs.overlays = [
+    inputs.millennium.overlays.default
+    (final: prev: {
+      vesktop = prev.vesktop.override {
+        pnpm_10_29_2 = final.pnpm_10;
+      };
+    })
+  ];
 
   environment.systemPackages = with pkgs; [
     vim

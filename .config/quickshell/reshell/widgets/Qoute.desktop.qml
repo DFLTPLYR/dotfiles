@@ -17,6 +17,7 @@ Wrapper {
     }
 
     property: Property {
+        id: prop
         property string word: ""
         property string wordFont: ""
         onWordFontChanged: {
@@ -29,7 +30,7 @@ Wrapper {
         }
     }
 
-    property string url: `https://api.dictionaryapi.dev/api/v2/entries/en/${wrap.property.word}`
+    property string url: `https://api.dictionaryapi.dev/api/v2/entries/en/${prop.word}`
     property var word
 
     Process {
@@ -48,7 +49,7 @@ Wrapper {
         }
 
         function update() {
-            wrap.url = `https://api.dictionaryapi.dev/api/v2/entries/en/${wrap.property.word}`;
+            wrap.url = `https://api.dictionaryapi.dev/api/v2/entries/en/${prop.word}`;
             getDefinition.running = true;
         }
     }
