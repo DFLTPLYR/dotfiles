@@ -41,32 +41,32 @@ keymap("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
 -- [[ g prefix - LSP goto ]]
-local opts = { noremap = true, silent = true }
-local goto_file = function()
-	local word
-	if vim.fn.mode() == "n" then
-		word = vim.fn.expand("<cword>")
-	else
-		local start = vim.api.nvim_buf_get_mark(0, "<")
-		local end_ = vim.api.nvim_buf_get_mark(0, ">")
-		local lines = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2] - 1, end_[1] - 1, end_[2], {})
-		word = table.concat(lines, " ")
-	end
-	if word == "" then
-		return
-	end
-	local files = vim.fn.glob("**/" .. word .. ".*", false, true)
-	if #files == 1 then
-		vim.cmd("edit " .. vim.fn.fnameescape(files[1]))
-	elseif #files > 1 then
-		require("mini.pick").start({ source = { items = files, name = "Files" } })
-	end
-end
-keymap({ "n", "x" }, "gd", goto_file, vim.tbl_extend("force", opts, { desc = "Find file under cursor" }))
-keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Goto Declaration" }))
-keymap("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "References", nowait = true }))
-keymap("n", "gI", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Goto Implementation" }))
-keymap("n", "gy", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Goto Type Definition" }))
+-- local opts = { noremap = true, silent = true }
+-- local goto_file = function()
+-- 	local word
+-- 	if vim.fn.mode() == "n" then
+-- 		word = vim.fn.expand("<cword>")
+-- 	else
+-- 		local start = vim.api.nvim_buf_get_mark(0, "<")
+-- 		local end_ = vim.api.nvim_buf_get_mark(0, ">")
+-- 		local lines = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2] - 1, end_[1] - 1, end_[2], {})
+-- 		word = table.concat(lines, " ")
+-- 	end
+-- 	if word == "" then
+-- 		return
+-- 	end
+-- 	local files = vim.fn.glob("**/" .. word .. ".*", false, true)
+-- 	if #files == 1 then
+-- 		vim.cmd("edit " .. vim.fn.fnameescape(files[1]))
+-- 	elseif #files > 1 then
+-- 		require("mini.pick").start({ source = { items = files, name = "Files" } })
+-- 	end
+-- end
+-- keymap({ "n", "x" }, "gd", goto_file, vim.tbl_extend("force", opts, { desc = "Find file under cursor" }))
+-- keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Goto Declaration" }))
+-- keymap("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "References", nowait = true }))
+-- keymap("n", "gI", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Goto Implementation" }))
+-- keymap("n", "gy", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Goto Type Definition" }))
 
 -- [[ f prefix ]]
 keymap("n", "fd", function()

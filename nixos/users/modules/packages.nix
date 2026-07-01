@@ -71,9 +71,9 @@
     obsidian
     mpdris2-rs
     onlyoffice-desktopeditors
-    vial
     vlc
     localsend
+    aseprite
 
     # Screenshots / clipboard
     grim
