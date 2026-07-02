@@ -33,6 +33,19 @@ local function set_hl(groups, value)
 end
 
 set_hl({
+	"Normal",
+	"NormalNC",
+	"SignColumn",
+	"LineNr",
+	"EndOfBuffer",
+	"StatusLine",
+	"StatusLineNC",
+	"lualine",
+}, {
+	bg = "{{ colors.surface }}",
+})
+
+set_hl({
 	"MiniFilesBorder",
 	"MiniFilesNormal",
 	"MiniFilesTitle",
@@ -50,21 +63,13 @@ set_hl({
 	fg = "{{ colors.on_surface }}",
 })
 
-set_hl({ "Type", "TSType", "@type" }, {
-	fg = "{{ colors.tertiary }}",
-})
-
-set_hl({ "String", "TSString" }, {
+set_hl({ "Type", "TSType", "@type", "String", "TSString", "TSMethod", "Method" }, {
 	fg = "{{ colors.tertiary }}",
 })
 
 set_hl({ "TSComment", "Comment" }, {
 	fg = "{{ colors.outline }}",
 	italic = true,
-})
-
-set_hl({ "TSMethod", "Method" }, {
-	fg = "{{ colors.tertiary }}",
 })
 
 set_hl({ "TSFunction", "Function" }, {
@@ -74,23 +79,6 @@ set_hl({ "TSFunction", "Function" }, {
 set_hl({ "Keyword", "TSKeyword", "TSKeywordFunction", "TSRepeat" }, {
 	fg = "{{ colors.primary }}",
 })
-
-local function set_bg(groups, bg)
-	for _, group in pairs(groups) do
-		vim.api.nvim_set_hl(0, group, { bg = bg })
-	end
-end
-
-set_bg({
-	"Normal",
-	"NormalNC",
-	"SignColumn",
-	"LineNr",
-	"EndOfBuffer",
-	"StatusLine",
-	"StatusLineNC",
-	"lualine",
-}, "{{ colors.surface }}")
 
 -- Bufferline
 local function set_bufferline_highlights()
