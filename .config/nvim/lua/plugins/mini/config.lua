@@ -5,7 +5,6 @@ require("mini.animate").setup({
 	scroll = { enable = false },
 })
 require("mini.ai").setup()
-
 -- cmp + luasnip handle completion and snippets instead
 require("mini.diff").setup()
 require("mini.splitjoin").setup()

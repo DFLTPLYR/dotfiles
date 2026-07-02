@@ -86,10 +86,10 @@ local function set_bufferline_highlights()
 	if ok then
 		bufferline.setup({
 			highlights = {
-				fill = { bg = "{{ colors.surface }}", fg = "{{ colors.on_surface }}" },
-				background = { bg = "{{ colors.surface }}", fg = "{{ colors.on_surface }}" },
-				buffer_visible = { bg = "{{ colors.surface_variant }}", fg = "{{ colors.on_surface }}" },
-				separator = { bg = "{{ colors.surface_variant }}", fg = "{{ colors.outline }}" },
+				-- fill = { bg = "{{ colors.surface }}", fg = "{{ colors.on_surface }}" },
+				-- background = { bg = "{{ colors.surface }}", fg = "{{ colors.on_surface }}" },
+				-- buffer_visible = { bg = "{{ colors.surface_variant }}", fg = "{{ colors.on_surface }}" },
+				-- separator = { bg = "{{ colors.surface_variant }}", fg = "{{ colors.outline }}" },
 				buffer_selected = {
 					bg = "{{ colors.surface }}",
 					fg = "{{ colors.tertiary }}",
