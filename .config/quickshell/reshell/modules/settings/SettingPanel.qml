@@ -100,4 +100,6 @@ FloatingWindow {
             Component.onCompleted: settingpanel.data.push(this)
         }
     }
+
+    Component.onDestruction: Global.save()
 }
