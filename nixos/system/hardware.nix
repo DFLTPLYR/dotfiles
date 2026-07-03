@@ -42,10 +42,21 @@
     fsType = "ext4";
     options = ["defaults" "nofail"];
   };
+
   swapDevices = [
     {device = "/dev/disk/by-uuid/0c21e6c4-1ac5-47dd-aa8d-4b1f1e4ba376";}
   ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true; # Crucial for Steam / 32-bit games
+    extraPackages = with pkgs; [
+      rocmPackages.clr
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
+  };
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }

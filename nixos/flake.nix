@@ -25,7 +25,7 @@
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     # nix4nvchad = {
     #   url = "github:nix-community/nix4nvchad";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +51,7 @@
       specialArgs = {inherit inputs;};
 
       modules = [
-        ./configuration.nix
+        ./system/init.nix
         home-manager.nixosModules.home-manager
         {
           home-manager = {
