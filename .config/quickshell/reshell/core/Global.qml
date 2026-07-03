@@ -44,14 +44,18 @@ Singleton {
     property list<var> configs: []
     readonly property var settings: [
         {
+            "type": "button",
             "name": "General",
             "page": 0
         },
         {
+            "type": "menu",
             "name": "Components",
-            "page": 1
+            "page": 1,
+            "items": ["notification", "polkit", "volume"]
         },
         {
+            "type": "button",
             "name": "Wallpaper",
             "page": 2
         }

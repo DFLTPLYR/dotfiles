@@ -93,15 +93,7 @@ Pane {
             Themes {}
 
             Spacer {}
-
-            Spacer {}
         }
-    }
-
-    component Spacer: Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 2
-        color: Colors.theme.tertiary
     }
 
     component Themes: ListView {

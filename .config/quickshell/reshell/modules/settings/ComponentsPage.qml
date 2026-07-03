@@ -14,6 +14,7 @@ Pane {
     ColumnLayout {
         width: pane.width
 
+        Spacer {}
         Label {
             text: "Notification Section"
             font.pixelSize: 32
@@ -200,5 +201,7 @@ Pane {
                 }
             }
         }
+
+        Spacer {}
     }
 }

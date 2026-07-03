@@ -9,12 +9,11 @@ import qs.components
 import qs.modules.settings
 
 FloatingWindow {
-    id: settingpanel
+    id: floatingwindow
     property int page: 0
-
     title: "Settings"
-    minimumSize: Qt.size(settingpanel.screen.width / 2, settingpanel.screen.height / 2)
-    maximumSize: Qt.size(settingpanel.screen.width, settingpanel.screen.height)
+    minimumSize: Qt.size(floatingwindow.screen.width / 2, floatingwindow.screen.height / 2)
+    maximumSize: Qt.size(floatingwindow.screen.width, floatingwindow.screen.height)
     color: Colors.theme.surface
 
     Behavior on color {
@@ -25,13 +24,13 @@ FloatingWindow {
     }
 
     LazyLoader {
-        active: settingpanel.visible
+        active: floatingwindow.visible
         component: RowLayout {
             anchors.fill: parent
             spacing: 0
 
             Pane {
-                Layout.preferredWidth: Math.min(0.20 * settingpanel.width, 120)
+                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 120)
                 Layout.fillHeight: true
 
                 DelegateModel {
@@ -82,13 +81,13 @@ FloatingWindow {
 
             StackLayout {
                 id: contentContainer
-                currentIndex: settingpanel.page
+                currentIndex: floatingwindow.page
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
                 // General Page
                 GeneralPage {
-                    screen: settingpanel.screen
+                    screen: floatingwindow.screen
                 }
 
                 // ComponentsPage
@@ -97,7 +96,7 @@ FloatingWindow {
                 // BackgroundPage
                 BackgroundPage {}
             }
-            Component.onCompleted: settingpanel.data.push(this)
+            Component.onCompleted: floatingwindow.data.push(this)
         }
     }
 

@@ -17,8 +17,7 @@ Scope {
 
     LazyLoader {
         active: agent.isActive
-
-        PanelWindow {
+        component: PanelWindow {
             id: panel
             visible: true
             color: "transparent"
