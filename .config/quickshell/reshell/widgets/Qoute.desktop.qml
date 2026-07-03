@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell.Io
+import Quickshell.Networking
 
 import qs.components
 import qs.core
@@ -32,6 +33,15 @@ Wrapper {
 
     property string url: `https://api.dictionaryapi.dev/api/v2/entries/en/${prop.word}`
     property var word
+
+    Connections {
+        target: Networking
+        function onConnectivityChanged() {
+            if ((Networking.connectivity === NetworkConnectivity.Full || Networking.connectivity === NetworkConnectivity.Limited) && wrap.word === undefined) {
+                getDefinition.update();
+            }
+        }
+    }
 
     Process {
         id: getDefinition
