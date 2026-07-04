@@ -74,6 +74,7 @@
     vlc
     localsend
     aseprite
+    vial
 
     # Screenshots / clipboard
     grim

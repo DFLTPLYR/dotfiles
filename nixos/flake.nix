@@ -42,7 +42,10 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     # dev shells
-    devShells.${system}.quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
+    devShells.${system} = {
+      quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
+      rmk = import ./devshell/rmk.nix {inherit pkgs;};
+    };
 
     # system config
     nixosConfigurations.nixosBtw = nixpkgs.lib.nixosSystem {
