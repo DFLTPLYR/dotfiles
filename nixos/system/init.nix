@@ -10,6 +10,7 @@
     ./env.nix
     ./fonts.nix
     ./hardware.nix
+    ./kernel.nix
     ./internationalization.nix
     ./networking.nix
     ./services.nix
