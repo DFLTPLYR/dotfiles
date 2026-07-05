@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtCore
 import QtQuick
 import Quickshell
+import Quickshell.Networking
 import Quickshell.Wayland
 import Quickshell.Io
 import Qt.labs.folderlistmodel
@@ -38,6 +39,9 @@ Singleton {
     property bool docks: true
 
     // global item
+
+    property bool hasConnection: false
+
     property alias general: adapter
     property alias matugen: matugenProc
     property list<var> widgets: []
@@ -208,6 +212,16 @@ Singleton {
             if (ToplevelManager?.activeToplevel?.activated) {}
         }
     }
+
+    Connections {
+        target: Networking
+        function onConnectivityChanged() {
+            if (Networking.connectivity === NetworkConnectivity.Full || Networking.connectivity === NetworkConnectivity.Limited) {
+                config.hasConnection = true;
+            }
+        }
+    }
+
     Component.onCompleted: {
         checkCli.running = true;
     }
