@@ -2,6 +2,7 @@
   description = "I Use NixosBtw";
 
   inputs = {
+    fetch.url = "github:areofyl/fetch";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     matugen.url = "github:InioX/Matugen";
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
@@ -25,7 +26,6 @@
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     # nix4nvchad = {
     #   url = "github:nix-community/nix4nvchad";
     #   inputs.nixpkgs.follows = "nixpkgs";
