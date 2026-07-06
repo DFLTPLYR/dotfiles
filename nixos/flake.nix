@@ -4,6 +4,7 @@
   inputs = {
     fetch.url = "github:areofyl/fetch";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
     matugen.url = "github:InioX/Matugen";
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     herdr = {
@@ -45,6 +46,7 @@
     devShells.${system} = {
       quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
       rmk = import ./devshell/rmk.nix {inherit pkgs;};
+      rusty-qt = import ./devshell/rusty-qt.nix {inherit pkgs;};
     };
 
     # system config

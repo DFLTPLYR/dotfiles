@@ -31,7 +31,7 @@ Wrapper {
     }
 
     Connections {
-        target: Global.hasConnection
+        target: Global
         function onHasConnectionChanged() {
             if (wrap.word === undefined && Global.hasConnection) {
                 getDefinition.update();
