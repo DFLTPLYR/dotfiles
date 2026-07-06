@@ -39,6 +39,12 @@ Wrapper {
         }
     }
 
+    Component.onCompleted: {
+        if (wrap.word === undefined && Global.hasConnection) {
+            getDefinition.update();
+        }
+    }
+
     property string url: `https://api.dictionaryapi.dev/api/v2/entries/en/${prop.word}`
     property var word
 
@@ -99,6 +105,7 @@ Wrapper {
 
             delegate: ColumnLayout {
                 spacing: 4
+                Layout.fillWidth: true
 
                 Label {
                     Layout.fillWidth: true

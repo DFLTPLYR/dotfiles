@@ -41,7 +41,6 @@ Singleton {
     // global item
 
     property bool hasConnection: false
-
     property alias general: adapter
     property alias matugen: matugenProc
     property list<var> widgets: []
