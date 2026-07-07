@@ -19,6 +19,7 @@ Wrapper {
     height: wrap.setHeight(list.contentHeight)
 
     readonly property var sets: wrap.screen ? WindowManager.screenProjection(wrap.screen)?.windowsets : null
+
     ListView {
         id: list
 
@@ -28,7 +29,6 @@ Wrapper {
         height: wrap.slotConfig ? (wrap.slotConfig.side ? list.contentHeight : wrap.height) : (wrap.parent ? wrap.parent.height : 0)
 
         orientation: wrap.slotConfig ? (wrap.slotConfig.side ? ListView.Vertical : ListView.Horizontal) : ListView.Horizontal
-
         interactive: false
         model: ScriptModel {
             values: [...list.windows]
@@ -39,12 +39,18 @@ Wrapper {
             color: ma.containsMouse ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
-
+            opacity: list.windows.length > 1 ? 1 : 0
             radius: wrap.property.radius
 
             Behavior on color {
                 ColorAnimation {
                     duration: 600
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
                     easing.type: Easing.InOutQuad
                 }
             }
