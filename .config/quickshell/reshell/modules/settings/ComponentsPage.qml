@@ -15,6 +15,16 @@ Pane {
         width: pane.width
 
         Spacer {}
+
+        NotificationSection {}
+
+        Spacer {}
+
+        PolkitAuthSection {}
+    }
+
+    component NotificationSection: ColumnLayout {
+
         Label {
             text: "Notification Section"
             font.pixelSize: 32
@@ -201,7 +211,13 @@ Pane {
                 }
             }
         }
+    }
 
-        Spacer {}
+    component PolkitAuthSection: ColumnLayout {
+        Label {
+            text: "Polkit Auth Section"
+            font.pixelSize: 32
+            Layout.fillWidth: true
+        }
     }
 }

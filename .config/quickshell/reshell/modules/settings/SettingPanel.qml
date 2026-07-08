@@ -24,8 +24,8 @@ FloatingWindow {
     }
 
     LazyLoader {
-        active: floatingwindow.visible
-        component: RowLayout {
+        id: paneLoader
+        RowLayout {
             anchors.fill: parent
             spacing: 0
 
@@ -100,5 +100,6 @@ FloatingWindow {
         }
     }
 
+    onWindowConnected: paneLoader.active = true
     Component.onDestruction: Global.save()
 }

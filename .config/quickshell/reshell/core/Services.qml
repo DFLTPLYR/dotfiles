@@ -59,4 +59,13 @@ Singleton {
             }
         }
     }
+
+    Connections {
+        target: Global
+        function onHasConnectionChanged() {
+            if (Global.hasConnection) {
+                getContributions.running = true;
+            }
+        }
+    }
 }
