@@ -29,77 +29,83 @@ FloatingWindow {
             anchors.fill: parent
             spacing: 0
 
-            Pane {
+            SideBar {
                 Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 120)
                 Layout.fillHeight: true
-
-                DelegateModel {
-                    id: navModel
-                    model: Global.settings
-                    delegate: Pane {
-                        required property string name
-                        required property int page
-                        clip: true
-                        width: ListView.view.width
-                        height: 40
-                        bg.color: Colors.setOpacity(navma.containsMouse ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
-
-                        Behavior on bg.color {
-                            ColorAnimation {
-                                duration: 300
-                                easing: Easing.InOutQuad
-                            }
-                        }
-
-                        Text {
-                            text: name
-                            leftPadding: 10
-                            height: parent.height
-                            color: Colors.theme.on_surface
-                            horizontalAlignment: Text.AlignVCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        MouseArea {
-                            id: navma
-                            hoverEnabled: true
-                            anchors.fill: parent
-
-                            onClicked: {
-                                contentContainer.currentIndex = page;
-                            }
-                        }
-                    }
-                }
-
-                ListView {
-                    width: parent.width
-                    height: contentHeight
-                    model: navModel
-                }
             }
 
-            StackLayout {
-                id: contentContainer
-                currentIndex: floatingwindow.page
+            Content {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                // General Page
-                GeneralPage {
-                    screen: floatingwindow.screen
-                }
-
-                // ComponentsPage
-                ComponentsPage {}
-
-                // BackgroundPage
-                BackgroundPage {}
             }
+
             Component.onCompleted: floatingwindow.data.push(this)
         }
     }
 
+    component SideBar: Pane {
+        DelegateModel {
+            id: navModel
+            model: Global.settings
+            delegate: Pane {
+                required property string name
+                required property int page
+                clip: true
+                width: ListView.view.width
+                height: 40
+                bg.color: Colors.setOpacity(navma.containsMouse ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
+
+                Behavior on bg.color {
+                    ColorAnimation {
+                        duration: 300
+                        easing: Easing.InOutQuad
+                    }
+                }
+
+                Text {
+                    text: name
+                    leftPadding: 10
+                    height: parent.height
+                    color: Colors.theme.on_surface
+                    horizontalAlignment: Text.AlignVCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                    id: navma
+                    hoverEnabled: true
+                    anchors.fill: parent
+
+                    onClicked: {
+                        contentContainer.currentIndex = page;
+                    }
+                }
+            }
+        }
+
+        ListView {
+            width: parent.width
+            height: contentHeight
+            model: navModel
+        }
+    }
+
+    component Content: StackLayout {
+        id: contentContainer
+        currentIndex: floatingwindow.page
+
+        // General Page
+        GeneralPage {
+            screen: floatingwindow.screen
+        }
+
+        // ComponentsPage
+        ComponentsPage {}
+
+        // BackgroundPage
+        BackgroundPage {}
+    }
+
     onWindowConnected: paneLoader.active = true
-    Component.onDestruction: Global.save()
+    onClosed: Global.save()
 }

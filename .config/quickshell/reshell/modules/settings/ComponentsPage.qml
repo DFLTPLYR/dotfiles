@@ -14,7 +14,7 @@ Pane {
     ColumnLayout {
         width: pane.width
 
-        Spacer {}
+        // Spacer {}
 
         NotificationSection {}
 

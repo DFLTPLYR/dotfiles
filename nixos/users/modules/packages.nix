@@ -8,6 +8,7 @@
     stow
     wayland
     pkg-config
+    qt6.qtbase
     qt6.qtdeclarative
     ((pkgs.quickshell.override {stdenv = pkgs.clangStdenv;}).overrideAttrs (old: {
       cmakeFlags =

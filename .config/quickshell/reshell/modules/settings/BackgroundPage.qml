@@ -3,7 +3,6 @@ import QtQuick
 import QtQuick.Layouts
 
 import Quickshell
-
 import qs.core
 import qs.components
 
@@ -27,6 +26,7 @@ Pane {
         anchors.fill: parent
         boundsBehavior: Flickable.StopAtBounds
         focus: true
+        acceptedButtons: Qt.MiddleButton | Qt.LeftButton
 
         Keys.onPressed: event => {
             if (event.key === Qt.Key_Control) {
@@ -38,6 +38,7 @@ Pane {
                 drawMa.enabled = true;
             }
         }
+
         Keys.onReleased: event => {
             if (event.key === Qt.Key_Control) {
                 flick.interactive = true;
@@ -136,7 +137,7 @@ Pane {
                     onPaint: {
                         var ctx = context;
                         ctx.reset();
-                        ctx.strokeStyle = "white";
+                        ctx.strokeStyle = Colors.theme.primary;
                         ctx.lineWidth = 3;
                         ctx.lineCap = "round";
                         ctx.lineJoin = "round";

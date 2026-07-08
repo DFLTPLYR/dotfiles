@@ -18,9 +18,6 @@ Singleton {
         property DarkTheme dark: DarkTheme {}
         property LightTheme light: LightTheme {}
     }
-    function tintColor(color, val = 1) {
-        return Global.general.darkmode ? Qt.darker(color, val) : Qt.lighter(color, val);
-    }
 
     FolderListModel {
         folder: Qt.resolvedUrl("data/themes")
