@@ -17,7 +17,9 @@
     gcc
     zip
     bc
+    bun
   ];
+
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   programs.nix-ld.enable = true;
   programs.dconf.enable = true;

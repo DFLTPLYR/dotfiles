@@ -198,7 +198,7 @@ local function vertical(cur, dir, clients, mon, ws, closemonitor)
 end
 
 local function horizontal(cur, dir, clients, mon, ws, closemonitor)
-	if not cur then
+	if not cur or cur.floating then
 		if dir == "up" or dir == "down" then
 			return hl.dispatch(hl.dsp.focus({ workspace = "m-1" }))
 		end

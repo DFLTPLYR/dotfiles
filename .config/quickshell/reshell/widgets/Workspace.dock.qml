@@ -48,6 +48,7 @@ Wrapper {
                     easing.type: Easing.InOutQuad
                 }
             }
+
             Behavior on opacity {
                 NumberAnimation {
                     duration: 200
