@@ -18,6 +18,7 @@
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
+  home.sessionVariables.QML2_IMPORT_PATH = lib.mkAfter "$HOME/.local/share/qt6/qml";
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
@@ -27,6 +28,7 @@
 
   # ui
   home.pointerCursor = {
+    enable = true;
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
     size = 24;

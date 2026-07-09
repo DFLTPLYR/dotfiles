@@ -11,7 +11,8 @@ output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matug
 
 [templates.themed_office]
 input_path = "templates/themed/onlyoffice.json.template"
-output_path = "~/.config/onlyoffice/matugen.json"
+# output_path = "~/.config/onlyoffice/matugen.json"
+output_path = "~/.local/share/onlyoffice/desktopeditors/uithemes/matugen.json"
 
 [templates.themed_helix]
 input_path = "templates/themed/helix.toml"

@@ -32,9 +32,13 @@ FloatingWindow {
             SideBar {
                 Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 120)
                 Layout.fillHeight: true
+                onChangePage: page => {
+                    content.currentIndex = page;
+                }
             }
 
             Content {
+                id: content
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
@@ -44,6 +48,8 @@ FloatingWindow {
     }
 
     component SideBar: Pane {
+        id: sidebar
+        signal changePage(int i)
         DelegateModel {
             id: navModel
             model: Global.settings
@@ -77,7 +83,7 @@ FloatingWindow {
                     anchors.fill: parent
 
                     onClicked: {
-                        contentContainer.currentIndex = page;
+                        sidebar.changePage(page);
                     }
                 }
             }
