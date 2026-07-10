@@ -6,7 +6,7 @@ import qs.components
 import qs.types
 import qs.core
 
-Pane {
+Item {
     id: pane
     Layout.fillWidth: true
     Layout.fillHeight: true

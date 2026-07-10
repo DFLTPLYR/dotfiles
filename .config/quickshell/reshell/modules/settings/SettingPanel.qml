@@ -25,15 +25,15 @@ FloatingWindow {
 
     LazyLoader {
         id: paneLoader
-        RowLayout {
+        component: RowLayout {
             anchors.fill: parent
             spacing: 0
 
             SideBar {
-                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 120)
+                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 200)
                 Layout.fillHeight: true
                 onChangePage: page => {
-                    content.currentIndex = page;
+                    floatingwindow.page = page;
                 }
             }
 
@@ -41,27 +41,39 @@ FloatingWindow {
                 id: content
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                currentIndex: floatingwindow.page
             }
 
             Component.onCompleted: floatingwindow.data.push(this)
         }
     }
 
-    component SideBar: Pane {
+    component SideBar: Item {
         id: sidebar
         signal changePage(int i)
+
         DelegateModel {
             id: navModel
             model: Global.settings
-            delegate: Pane {
+            delegate: Rectangle {
+                id: model
                 required property string name
                 required property int page
+                readonly property bool isActive: floatingwindow.page === model.page
                 clip: true
                 width: ListView.view.width
                 height: 40
-                bg.color: Colors.setOpacity(navma.containsMouse ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
+                color: Colors.setOpacity((navma.containsMouse || model.page === floatingwindow.page) ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
+                radius: (model.isActive || navma.containsMouse) ? 10 : 0
 
-                Behavior on bg.color {
+                Behavior on radius {
+                    NumberAnimation {
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                Behavior on color {
                     ColorAnimation {
                         duration: 300
                         easing: Easing.InOutQuad
@@ -90,8 +102,10 @@ FloatingWindow {
         }
 
         ListView {
-            width: parent.width
-            height: contentHeight
+            anchors {
+                fill: parent
+                margins: 10
+            }
             model: navModel
         }
     }

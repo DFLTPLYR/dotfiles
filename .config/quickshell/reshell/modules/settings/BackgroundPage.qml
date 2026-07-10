@@ -6,7 +6,7 @@ import Quickshell
 import qs.core
 import qs.components
 
-Pane {
+Item {
     id: page
     focus: true
     clip: true

@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import qs.core
 import qs.components
 
-Pane {
+Item {
     id: pane
     property var screen
 
