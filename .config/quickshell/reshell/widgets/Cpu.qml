@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import qs.components
 import qs.core
 import qs.types
+import System
 
 Wrapper {
     id: wrap
@@ -27,7 +28,7 @@ Wrapper {
         }
 
         Text {
-            text: `${Hardware.cpuUsagePercent.toFixed(0)} %`
+            text: `${Hardware.cpuUsage.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary

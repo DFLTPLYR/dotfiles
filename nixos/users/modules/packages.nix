@@ -61,6 +61,7 @@
     rustup
     just
     lmstudio
+    qtcreator
 
     # Apps
     telegram-desktop

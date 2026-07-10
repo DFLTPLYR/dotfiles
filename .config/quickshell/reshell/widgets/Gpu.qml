@@ -4,6 +4,8 @@ import qs.components
 import qs.core
 import qs.types
 
+import System
+
 Wrapper {
     id: wrap
 
@@ -27,7 +29,7 @@ Wrapper {
         }
 
         Text {
-            text: `${Hardware.gpuUsagePercent.toFixed(0)} %`
+            text: `${Hardware.gpuUsedVram.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary
@@ -42,5 +44,9 @@ Wrapper {
         property int size: 120
         property int icon: 10
         property int text: 10
+    }
+
+    Component.onCompleted: {
+        print(Hardware.gpuUsedVram.toFixed(0));
     }
 }

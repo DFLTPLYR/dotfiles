@@ -7,9 +7,6 @@ import Quickshell.Io
 
 Singleton {
     id: root
-    property var compositor: Compositor
-    property var hardware: Hardware
-    property var colors: Colors
     property var locale: Qt.locale()
     property date currentDate: new Date()
 
