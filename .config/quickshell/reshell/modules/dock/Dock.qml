@@ -10,6 +10,7 @@ import qs.core
 import qs.components
 import qs.modules
 import qs.types
+import System
 
 Scope {
     id: dock
@@ -78,11 +79,14 @@ Scope {
                 }
                 file.writeAdapter();
             }
+        }
+    }
 
-            function updateColor() {
-                config.style.color = Colors.setOpacity(Colors.theme.surface, config.style.opacity);
-                file.writeAdapter();
-            }
+    Connections {
+        target: Colorscheme
+        function onGenerated(result) {
+            file.adapter.style.color = Colors.setOpacity(Colors.theme.surface, file.adapter.style.opacity);
+            file.writeAdapter();
         }
     }
 

@@ -151,11 +151,9 @@ Item {
             target: Wallpaper.containers
             function onGenerate() {
                 Qt.callLater(() => {
-                    layered.grabToImage(function (result) {
+                    const screen = layered.grabToImage(function (result) {
                         result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-                        Qt.callLater(() => {
-                            Global.updateColor();
-                        });
+                        Global.readyBg = [...Global.readyBg, panel.screen.name];
                     }, Qt.size(background.screen.width, background.screen.height));
                 });
             }

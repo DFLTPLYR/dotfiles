@@ -140,15 +140,5 @@ Variants {
                 }
             }
         }
-
-        Connections {
-            target: Global
-            function onColorUpdate() {
-                const docks = fileview.docklist;
-                for (const i in docks) {
-                    docks[i].config.updateColor();
-                }
-            }
-        }
     }
 }

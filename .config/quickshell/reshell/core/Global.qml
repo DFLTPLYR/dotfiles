@@ -8,6 +8,7 @@ import Quickshell.Networking
 import Quickshell.Wayland
 import Quickshell.Io
 import Qt.labs.folderlistmodel
+import System
 
 Singleton {
     id: config
@@ -74,17 +75,18 @@ Singleton {
         }
     }
 
-    function updateColor() {
-        const paths = [];
+    property var readyBg: []
+    onReadyBgChanged: {
+        if (readyBg.length >= Quickshell.screens.length) {
+            const paths = [];
 
-        for (var i in Quickshell.screens) {
-            var target = Quickshell.screens[i];
-            paths.push(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${target.name}.jpg`);
+            for (var i in Quickshell.screens) {
+                var target = Quickshell.screens[i];
+                paths.push(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${target.name}.jpg`);
+            }
+            Colorscheme.generate(paths, Wallpaper.config.theme);
+            readyBg = [];
         }
-        Quickshell.execDetached({
-            command: ["quickcli", "generate-palette", "--type", Wallpaper.config.theme, ...paths]
-        });
-        config.colorUpdate();
     }
 
     Process {
