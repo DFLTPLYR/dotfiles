@@ -6,100 +6,79 @@ import QtQuick.Layouts
 import qs.core
 import qs.components
 
-Item {
-    id: pane
+Page {
     property var screen
 
-    Flickable {
-        anchors.fill: parent
-        interactive: true
-        contentWidth: column.width
-        contentHeight: column.implicitHeight
-        boundsBehavior: Flickable.StopAtBounds
+    GroupContainer {
+        Label {
+            text: "Greeter"
+            font.pixelSize: 32
+            color: Colors.theme.primary
+            Layout.fillWidth: true
+        }
 
-        ColumnLayout {
-            id: column
-            width: pane.width
-
-            Behavior on height {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
+        Toggle {
+            property bool greeter: Global.general.greeter
+            text: greeter ? "Enable" : "Disable"
+            checked: greeter
+            onCheckedChanged: {
+                Global.general.greeter = checked;
+                Global.save();
             }
+        }
+    }
 
-            GroupContainer {
-                Label {
-                    text: "Greeter"
-                    font.pixelSize: 32
-                    color: Colors.theme.primary
-                    Layout.fillWidth: true
-                }
+    GroupContainer {
+        Label {
+            text: "Screen Temp"
+            font.pixelSize: 32
+            Layout.fillWidth: true
+        }
 
-                Toggle {
-                    property bool greeter: Global.general.greeter
-                    text: greeter ? "Enable" : "Disable"
-                    checked: greeter
-                    onCheckedChanged: {
-                        Global.general.greeter = checked;
-                        Global.save();
-                    }
-                }
+        Toggle {
+            id: gammaToggle
+            property bool gamma: false
+            text: gamma ? "Per Monitor" : "All"
+            checked: gamma
+            onCheckedChanged: {
+                gamma = checked;
             }
+        }
 
-            GroupContainer {
-                Label {
-                    text: "Screen Temp"
-                    font.pixelSize: 32
-                    Layout.fillWidth: true
-                }
-
-                Toggle {
-                    id: gammaToggle
-                    property bool gamma: false
-                    text: gamma ? "Per Monitor" : "All"
-                    checked: gamma
-                    onCheckedChanged: {
-                        gamma = checked;
-                    }
-                }
-
-                Repeater {
-                    enabled: false
-                    model: Gamma.monitors
-                    delegate: CheckBox {
-                        required property var modelData
-                        text: modelData
-                        visible: gammaToggle.checked
-                    }
-                }
+        Repeater {
+            enabled: false
+            model: Gamma.monitors
+            delegate: CheckBox {
+                required property var modelData
+                text: modelData
+                visible: gammaToggle.checked
             }
+        }
+    }
 
-            GroupContainer {
-                Label {
-                    text: "Color Scheme"
-                    font.pixelSize: 32
-                    Layout.fillWidth: true
-                }
+    GroupContainer {
+        Label {
+            text: "Color Scheme"
+            font.pixelSize: 32
+            Layout.fillWidth: true
+        }
 
-                Toggle {
-                    id: darkmodeToggle
-                    text: "Dark mode"
-                    checkable: true
-                    checked: Global.general.darkmode
-                    onCheckedChanged: {
-                        Global.general.darkmode = checked;
-                    }
-                }
-
-                Themes {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-                    height: 150
-                }
+        Toggle {
+            id: darkmodeToggle
+            text: "Dark mode"
+            checkable: true
+            checked: Global.general.darkmode
+            onCheckedChanged: {
+                Global.general.darkmode = checked;
             }
+        }
+
+        Themes {
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            height: 150
         }
     }
 
