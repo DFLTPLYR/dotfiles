@@ -116,9 +116,7 @@ FloatingWindow {
         currentIndex: floatingwindow.page
 
         // General Page
-        GeneralPage {
-            screen: floatingwindow.screen
-        }
+        GeneralPage {}
 
         // ComponentsPage
         ComponentsPage {}

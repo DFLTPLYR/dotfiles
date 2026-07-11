@@ -8,6 +8,7 @@ import qs.core
 Rectangle {
     id: group
     default property alias container: col.data
+    property alias padding: col.padding
     Layout.fillWidth: true
     Layout.preferredHeight: col.implicitHeight
     Layout.margins: 10

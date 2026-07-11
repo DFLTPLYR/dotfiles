@@ -6,33 +6,23 @@ import qs.components
 import qs.types
 import qs.core
 
-Item {
-    id: pane
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-
-    ColumnLayout {
-        width: pane.width
-
-        GroupContainer {
-            NotificationSection {}
-        }
-
-        GroupContainer {
-            PolkitAuthSection {}
-        }
-    }
-
-    component NotificationSection: ColumnLayout {
+Page {
+    GroupContainer {
 
         Label {
             text: "Notification Section"
             font.pixelSize: 32
-            Layout.fillWidth: true
         }
 
         Rectangle {
             id: exampleNotif
+            anchors {
+                left: parent.left
+                leftMargin: parent.padding
+                right: parent.right
+                rightMargin: parent.padding
+            }
+            height: 120
             property var config: Components.config.notification
             property QtObject style: QtObject {
                 property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
@@ -61,8 +51,6 @@ Item {
                 "urgency": "1"
             }
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: exampleNotifItem.height + 100
             color: Colors.theme.on_surface
             radius: 5
 
@@ -213,11 +201,5 @@ Item {
         }
     }
 
-    component PolkitAuthSection: ColumnLayout {
-        Label {
-            text: "Polkit Auth Section"
-            font.pixelSize: 32
-            Layout.fillWidth: true
-        }
-    }
+    GroupContainer {}
 }
