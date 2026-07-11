@@ -28,77 +28,82 @@ Item {
                 }
             }
 
-            Label {
-                text: "Greeter"
-                font.pixelSize: 32
-                Layout.fillWidth: true
-            }
+            GroupContainer {
+                Label {
+                    text: "Greeter"
+                    font.pixelSize: 32
+                    color: Colors.theme.primary
+                    Layout.fillWidth: true
+                }
 
-            Toggle {
-                property bool greeter: Global.general.greeter
-                text: greeter ? "Enable" : "Disable"
-                checked: greeter
-                onCheckedChanged: {
-                    Global.general.greeter = checked;
-                    Global.save();
+                Toggle {
+                    property bool greeter: Global.general.greeter
+                    text: greeter ? "Enable" : "Disable"
+                    checked: greeter
+                    onCheckedChanged: {
+                        Global.general.greeter = checked;
+                        Global.save();
+                    }
                 }
             }
 
-            Spacer {}
+            GroupContainer {
+                Label {
+                    text: "Screen Temp"
+                    font.pixelSize: 32
+                    Layout.fillWidth: true
+                }
 
-            Label {
-                text: "Screen Temp"
-                font.pixelSize: 32
-                Layout.fillWidth: true
-            }
+                Toggle {
+                    id: gammaToggle
+                    property bool gamma: false
+                    text: gamma ? "Per Monitor" : "All"
+                    checked: gamma
+                    onCheckedChanged: {
+                        gamma = checked;
+                    }
+                }
 
-            Toggle {
-                id: gammaToggle
-                property bool gamma: false
-                text: gamma ? "Per Monitor" : "All"
-                checked: gamma
-                onCheckedChanged: {
-                    gamma = checked;
+                Repeater {
+                    enabled: false
+                    model: Gamma.monitors
+                    delegate: CheckBox {
+                        required property var modelData
+                        text: modelData
+                        visible: gammaToggle.checked
+                    }
                 }
             }
 
-            Repeater {
-                enabled: false
-                model: Gamma.monitors
-                delegate: CheckBox {
-                    required property var modelData
-                    text: modelData
-                    visible: gammaToggle.checked
+            GroupContainer {
+                Label {
+                    text: "Color Scheme"
+                    font.pixelSize: 32
+                    Layout.fillWidth: true
+                }
+
+                Toggle {
+                    id: darkmodeToggle
+                    text: "Dark mode"
+                    checkable: true
+                    checked: Global.general.darkmode
+                    onCheckedChanged: {
+                        Global.general.darkmode = checked;
+                    }
+                }
+
+                Themes {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+                    height: 150
                 }
             }
-
-            Spacer {}
-
-            Label {
-                text: "Color Scheme"
-                font.pixelSize: 32
-                Layout.fillWidth: true
-            }
-
-            Toggle {
-                id: darkmodeToggle
-                text: "Dark mode"
-                checkable: true
-                checked: Global.general.darkmode
-                onCheckedChanged: {
-                    Global.general.darkmode = checked;
-                }
-            }
-
-            Themes {}
-
-            Spacer {}
         }
     }
 
     component Themes: ListView {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 120
         clip: true
         spacing: 10
         orientation: ListView.Horizontal

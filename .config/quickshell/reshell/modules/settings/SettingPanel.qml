@@ -27,10 +27,10 @@ FloatingWindow {
         id: paneLoader
         component: RowLayout {
             anchors.fill: parent
-            spacing: 0
+            spacing: 5
 
             SideBar {
-                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 200)
+                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 150)
                 Layout.fillHeight: true
                 onChangePage: page => {
                     floatingwindow.page = page;
@@ -81,7 +81,7 @@ FloatingWindow {
                 }
 
                 Text {
-                    text: name
+                    text: model.name
                     leftPadding: 10
                     height: parent.height
                     color: Colors.theme.on_surface
@@ -104,8 +104,9 @@ FloatingWindow {
         ListView {
             anchors {
                 fill: parent
-                margins: 10
+                margins: 5
             }
+            spacing: 2
             model: navModel
         }
     }
