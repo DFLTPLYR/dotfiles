@@ -14,13 +14,13 @@ Item {
     ColumnLayout {
         width: pane.width
 
-        // Spacer {}
+        GroupContainer {
+            NotificationSection {}
+        }
 
-        NotificationSection {}
-
-        Spacer {}
-
-        PolkitAuthSection {}
+        GroupContainer {
+            PolkitAuthSection {}
+        }
     }
 
     component NotificationSection: ColumnLayout {
