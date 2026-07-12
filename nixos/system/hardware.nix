@@ -43,9 +43,10 @@
     options = ["defaults" "nofail"];
   };
 
-  swapDevices = [
-    {device = "/dev/disk/by-uuid/0c21e6c4-1ac5-47dd-aa8d-4b1f1e4ba376";}
-  ];
+  swapDevices = [{
+    device = "/swapfile";
+    size = 4096;
+  }];
 
   hardware.graphics = {
     enable = true;
