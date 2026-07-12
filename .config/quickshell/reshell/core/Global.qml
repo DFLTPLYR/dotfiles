@@ -191,22 +191,6 @@ Singleton {
         }
     }
 
-    Process {
-        id: checkCli
-        command: ["pgrep", "-f", "quickcli"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const quickcli = this.text;
-                if (quickcli != "") {
-                    return;
-                } else {
-                    Quickshell.execDetached(["quickcli"]);
-                    checkCli.running = true;
-                }
-            }
-        }
-    }
-
     Connections {
         target: ToplevelManager
         function onActiveToplevelChanged() {
@@ -221,9 +205,5 @@ Singleton {
                 config.hasConnection = true;
             }
         }
-    }
-
-    Component.onCompleted: {
-        checkCli.running = true;
     }
 }
