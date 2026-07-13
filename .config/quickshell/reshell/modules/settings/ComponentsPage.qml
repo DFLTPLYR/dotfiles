@@ -102,6 +102,8 @@ Page {
             font.pixelSize: 24
         }
 
+        GroupSpacer {}
+
         ColumnLayout {
             Layout.fillWidth: true
 
@@ -145,6 +147,8 @@ Page {
             text: "Rounding"
             font.pixelSize: 24
         }
+
+        GroupSpacer {}
 
         RowLayout {
             // Radius
