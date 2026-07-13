@@ -7,8 +7,12 @@ import qs.types
 import qs.core
 
 Page {
-    GroupContainer {
 
+    NotificationSection {}
+
+    GroupContainer {}
+
+    component NotificationSection: GroupContainer {
         Label {
             text: "Notification Section"
             font.pixelSize: 32
@@ -200,6 +204,4 @@ Page {
             }
         }
     }
-
-    GroupContainer {}
 }
