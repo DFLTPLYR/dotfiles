@@ -95,7 +95,7 @@ FloatingWindow {
                     anchors.fill: parent
 
                     onClicked: {
-                        sidebar.changePage(page);
+                        sidebar.changePage(model.page);
                     }
                 }
             }

@@ -11,8 +11,9 @@ Item {
     focus: true
     clip: true
 
-    width: parent.width
-    height: parent.height
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.margins: 10
 
     // Nav
     TopLeftControl {}
