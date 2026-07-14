@@ -8,11 +8,7 @@ import qs.core
 
 Page {
 
-    NotificationSection {}
-
-    GroupContainer {}
-
-    component NotificationSection: GroupContainer {
+    GroupContainer {
         Label {
             text: "Notification Section"
             font.pixelSize: 32
@@ -26,7 +22,7 @@ Page {
                 right: parent.right
                 rightMargin: parent.padding
             }
-            height: 120
+            height: exampleNotifItem.height + parent.padding
             property var config: Components.config.notification
             property QtObject style: QtObject {
                 property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
@@ -63,8 +59,8 @@ Page {
                 ma.enabled: false
                 property var style: exampleNotif.style
                 anchors.centerIn: parent
-                width: exampleNotif.config.height
-                height: exampleNotif.config.width
+                width: exampleNotif.config.width
+                height: exampleNotif.config.height
 
                 // Notification Bg
                 bg {
@@ -96,7 +92,9 @@ Page {
                 }
             }
         }
+    }
 
+    GroupContainer {
         Label {
             text: "Notification Dimensions"
             font.pixelSize: 24
@@ -107,7 +105,7 @@ Page {
         ColumnLayout {
             Layout.fillWidth: true
 
-            Row {
+            Column {
                 spacing: 10
 
                 Label {
@@ -124,8 +122,7 @@ Page {
                 }
             }
 
-            Row {
-                Layout.fillWidth: true
+            Column {
                 spacing: 10
 
                 Label {
@@ -142,7 +139,9 @@ Page {
                 }
             }
         }
+    }
 
+    GroupContainer {
         Label {
             text: "Rounding"
             font.pixelSize: 24
@@ -150,7 +149,8 @@ Page {
 
         GroupSpacer {}
 
-        RowLayout {
+        GridLayout {
+            columns: 2
             // Radius
             Repeater {
                 model: [
@@ -182,29 +182,28 @@ Page {
 
                     SpinBox {
                         width: 100
-                        height: 20
                         value: exampleNotif.style.background.rounding[radii.modelData.prop]
                         onValueChanged: exampleNotif.style.background.rounding[radii.modelData.prop] = value
                     }
                 }
             }
         }
+    }
 
-        Row {
-            Layout.fillWidth: true
-            spacing: 10
+    GroupContainer {
 
-            Label {
-                text: "Duration"
-                font.pixelSize: 14
-            }
+        Label {
+            text: "Duration"
+            font.pixelSize: 24
+        }
 
-            SpinBox {
-                width: 100
-                value: exampleNotif.config.duration
-                onValueChanged: {
-                    exampleNotif.config.duration = value;
-                }
+        GroupSpacer {}
+
+        SpinBox {
+            width: 100
+            value: exampleNotif.config.duration
+            onValueChanged: {
+                exampleNotif.config.duration = value;
             }
         }
     }

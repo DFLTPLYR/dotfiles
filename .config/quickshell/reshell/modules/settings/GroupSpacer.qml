@@ -14,7 +14,7 @@ Item {
     Rectangle {
         width: parent.width
         height: 2
-        color: Colors.theme.on_surface
+        color: Qt.darker(Colors.theme.surface, 1.2)
         anchors {
             centerIn: parent
         }
