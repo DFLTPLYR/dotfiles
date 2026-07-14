@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import Quickshell
-import Quickshell.Io
 
 import QtQuick
 import QtQuick.Layouts
@@ -44,31 +43,17 @@ Page {
             Layout.fillWidth: true
         }
 
-        Process {
-            id: screenTemp
-            command: []
-            running: false
-            stdout: StdioCollector {
-                onStreamFinished: console.log(`stdout: ${this.text}`)
-            }
-            stderr: StdioCollector {
-                onStreamFinished: console.log(`stderr: ${this.text}`)
-            }
-        }
-
         Button {
             text: "Increase"
             onClicked: {
-                screenTemp.command = ["/run/current-system/sw/bin/busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"];
-                screenTemp.running = true;
+                Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
             }
         }
 
         Button {
             text: "Decrease"
             onClicked: {
-                screenTemp.command = ["/run/current-system/sw/bin/busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"];
-                screenTemp.running = true;
+                Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
             }
         }
     }
