@@ -1,5 +1,8 @@
 pragma ComponentBehavior: Bound
 
+import Quickshell
+import Quickshell.Io
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -41,23 +44,31 @@ Page {
             Layout.fillWidth: true
         }
 
-        Toggle {
-            id: gammaToggle
-            property bool gamma: false
-            text: gamma ? "Per Monitor" : "All"
-            checked: gamma
-            onCheckedChanged: {
-                gamma = checked;
+        Process {
+            id: screenTemp
+            command: []
+            running: false
+            stdout: StdioCollector {
+                onStreamFinished: console.log(`stdout: ${this.text}`)
+            }
+            stderr: StdioCollector {
+                onStreamFinished: console.log(`stderr: ${this.text}`)
             }
         }
 
-        Repeater {
-            enabled: false
-            model: Gamma.monitors
-            delegate: CheckBox {
-                required property var modelData
-                text: modelData
-                visible: gammaToggle.checked
+        Button {
+            text: "Increase"
+            onClicked: {
+                screenTemp.command = ["/run/current-system/sw/bin/busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"];
+                screenTemp.running = true;
+            }
+        }
+
+        Button {
+            text: "Decrease"
+            onClicked: {
+                screenTemp.command = ["/run/current-system/sw/bin/busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"];
+                screenTemp.running = true;
             }
         }
     }
