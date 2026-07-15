@@ -23,7 +23,39 @@ Page {
                 rightMargin: parent.padding
             }
             height: exampleNotifItem.height + parent.padding
+
+            function applyStyle() {
+                const target = Components.config.notification;
+                const source = exampleNotif.style;
+                target.color = source.color;
+                // padding
+                target.padding.top = source.padding.top;
+                target.padding.bottom = source.padding.bottom;
+                target.padding.left = source.padding.left;
+                target.padding.right = source.padding.right;
+                // inset
+                target.inset.top = source.inset.top;
+                target.inset.bottom = source.inset.bottom;
+                target.inset.left = source.inset.left;
+                target.inset.right = source.inset.right;
+
+                // Bg
+                const bg = target.background;
+                bg.rounding.topLeft = source.background.rounding.topLeft;
+                bg.rounding.topRight = source.background.rounding.topRight;
+                bg.rounding.bottomLeft = source.background.rounding.bottomLeft;
+                bg.rounding.bottomRight = source.background.rounding.bottomRight;
+
+                bg.margins.top = source.background.margins.top;
+                bg.margins.bottom = source.background.margins.bottom;
+                bg.margins.left = source.background.margins.left;
+                bg.margins.right = source.background.margins.right;
+
+                Components.update();
+            }
+
             property var config: Components.config.notification
+
             property QtObject style: QtObject {
                 property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
                 property Direction padding: Direction {}
@@ -34,6 +66,7 @@ Page {
                     property Direction margins: Direction {}
                 }
             }
+
             property var example: {
                 "notificationId": 69,
                 "actions": [
@@ -89,6 +122,7 @@ Page {
 
                 Button {
                     text: "Save"
+                    onClicked: exampleNotif.applyStyle()
                 }
             }
         }

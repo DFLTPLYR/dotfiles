@@ -82,10 +82,6 @@ Singleton {
         adapter: JsonAdapter {
             id: adapter
 
-            function updateColors() {
-                fileView.writeAdapter();
-            }
-
             property BorderJson border: BorderJson {}
             property DirectionJson margin: DirectionJson {}
             property CornerJson rounding: CornerJson {}
@@ -94,6 +90,10 @@ Singleton {
             property real opacity: 0.5
             property Notification notification: Notification {}
         }
+    }
+
+    function update() {
+        fileView.writeAdapter();
     }
 
     component Notification: JsonObject {

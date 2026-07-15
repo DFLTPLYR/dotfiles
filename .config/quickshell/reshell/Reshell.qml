@@ -79,7 +79,6 @@ Variants {
                 id: adapter
                 property list<var> docks: []
                 property JsonObject notification: JsonObject {
-                    property bool local: false
                     property int duration: 5000
                     property int width: 100
                 }
