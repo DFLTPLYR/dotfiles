@@ -25,7 +25,7 @@ Page {
             height: exampleNotifItem.height + parent.padding
 
             function applyStyle() {
-                const target = Components.config.notification;
+                const target = Components.config.notification.style;
                 const source = exampleNotif.style;
                 target.color = source.color;
                 // padding

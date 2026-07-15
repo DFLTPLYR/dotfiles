@@ -7,7 +7,7 @@ StyledPane {
     id: notif
     default property alias ma: notifMouseArea
     required property var modelData
-
+    style: Components.config.notification.style
     clip: true
 
     Rectangle {
