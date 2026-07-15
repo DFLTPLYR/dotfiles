@@ -9,17 +9,7 @@ Pane {
     id: pane
     property alias bg: background
 
-    property QtObject style: QtObject {
-        property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
-        property Direction padding: Direction {}
-        property Direction inset: Direction {}
-
-        property QtObject background: QtObject {
-            property Corner rounding: Corner {}
-            property Direction margins: Direction {}
-        }
-    }
-
+    property QtObject style: Style {}
     // margins
     leftInset: pane.style.inset.left
     rightInset: pane.style.inset.right

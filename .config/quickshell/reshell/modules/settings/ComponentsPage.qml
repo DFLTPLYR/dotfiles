@@ -56,16 +56,7 @@ Page {
 
             property var config: Components.config.notification
 
-            property QtObject style: QtObject {
-                property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
-                property Direction padding: Direction {}
-                property Direction inset: Direction {}
-
-                property QtObject background: QtObject {
-                    property Corner rounding: Corner {}
-                    property Direction margins: Direction {}
-                }
-            }
+            property QtObject style: Style {}
 
             property var example: {
                 "notificationId": 69,
