@@ -25,22 +25,25 @@ Page {
             height: exampleNotifItem.height + parent.padding
 
             function applyStyle() {
-                const target = Components.config.notification.style;
+                const notif = Components.config.notification;
+                const style = notif.style;
                 const source = exampleNotif.style;
-                target.color = source.color;
+                notif.width = exampleNotifItem.width;
+                notif.height = exampleNotifItem.height;
+                style.color = source.color;
                 // padding
-                target.padding.top = source.padding.top;
-                target.padding.bottom = source.padding.bottom;
-                target.padding.left = source.padding.left;
-                target.padding.right = source.padding.right;
+                style.padding.top = source.padding.top;
+                style.padding.bottom = source.padding.bottom;
+                style.padding.left = source.padding.left;
+                style.padding.right = source.padding.right;
                 // inset
-                target.inset.top = source.inset.top;
-                target.inset.bottom = source.inset.bottom;
-                target.inset.left = source.inset.left;
-                target.inset.right = source.inset.right;
+                style.inset.top = source.inset.top;
+                style.inset.bottom = source.inset.bottom;
+                style.inset.left = source.inset.left;
+                style.inset.right = source.inset.right;
 
                 // Bg
-                const bg = target.background;
+                const bg = style.background;
                 bg.rounding.topLeft = source.background.rounding.topLeft;
                 bg.rounding.topRight = source.background.rounding.topRight;
                 bg.rounding.bottomLeft = source.background.rounding.bottomLeft;
