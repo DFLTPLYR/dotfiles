@@ -111,7 +111,8 @@ Page {
                 }
 
                 Button {
-                    text: "Cancel"
+                    text: "Replay Anim"
+                    onClicked: exampleNotifItem.runAnim()
                 }
 
                 Button {

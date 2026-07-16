@@ -10,6 +10,11 @@ StyledPane {
     style: Components.config.notification.style
     clip: true
 
+    function runAnim() {
+        progressOutline.width = 0;
+        anim.restart();
+    }
+
     Rectangle {
         id: progressOutline
 
@@ -19,6 +24,7 @@ StyledPane {
         color: Colors.theme.primary
 
         NumberAnimation on width {
+            id: anim
             from: 0
             to: notif.width
             duration: Components.config.notification.duration
