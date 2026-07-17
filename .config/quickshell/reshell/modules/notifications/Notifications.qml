@@ -10,7 +10,7 @@ ListView {
 
     width: container.config.width
     height: panel.height
-
+    verticalLayoutDirection: Components.config.notification.reverse ? ListView.BottomToTop : ListView.TopToBottom
     spacing: 2
 
     x: (panel.width * 1) - width

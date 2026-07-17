@@ -124,9 +124,7 @@ Page {
             }
         }
     }
-
     GroupContainer {
-
         Label {
             text: "Direction"
             font.pixelSize: 24
@@ -135,10 +133,14 @@ Page {
         Toggle {
             text: !checked ? qsTr("Bottom To Top") : qsTr("Top To Bottom")
             checked: Components.config.notification.reverse
-            onClicked: Components.config.notification.reverse = checked
+            onClicked: {
+                Components.config.notification.reverse = checked;
+                Components.update();
+            }
         }
+    }
 
-        GroupSpacer {}
+    GroupContainer {
 
         Label {
             text: "Size"
