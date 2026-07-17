@@ -126,8 +126,22 @@ Page {
     }
 
     GroupContainer {
+
         Label {
-            text: "Notification Dimensions"
+            text: "Direction"
+            font.pixelSize: 24
+        }
+
+        Toggle {
+            text: !checked ? qsTr("Bottom To Top") : qsTr("Top To Bottom")
+            checked: Components.config.notification.reverse
+            onClicked: Components.config.notification.reverse = checked
+        }
+
+        GroupSpacer {}
+
+        Label {
+            text: "Size"
             font.pixelSize: 24
         }
 
