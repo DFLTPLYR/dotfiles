@@ -6,6 +6,7 @@ import Quickshell.Wayland
 
 import qs.core
 import qs.modules
+import qs.modules.notifications
 
 PanelWindow {
     id: panel
