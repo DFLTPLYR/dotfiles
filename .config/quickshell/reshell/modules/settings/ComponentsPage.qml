@@ -2,13 +2,15 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 
-import qs.components
-import qs.types
 import qs.core
+import qs.types
+import qs.components
+import qs.modules.notifications
 
 Page {
 
     GroupContainer {
+
         Label {
             text: "Notification Section"
             font.pixelSize: 32
