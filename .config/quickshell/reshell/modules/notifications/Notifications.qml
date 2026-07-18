@@ -9,11 +9,22 @@ ListView {
     property var config: Components.config.notification
 
     width: container.config.width
-    height: panel.height
+    height: parent.height
     verticalLayoutDirection: Components.config.notification.reverse ? ListView.BottomToTop : ListView.TopToBottom
     spacing: 2
 
-    x: (panel.width * 1) - width
+    x: {
+        switch (Components.config.notification.position) {
+        case "left":
+            return 0;
+        case "middle":
+            return (parent.width / 2) - (width / 2);
+        case "right":
+            return parent.width - width;
+        default:
+            return parent.width - width;
+        }
+    }
 
     visible: Compositor.focusedMonitor === screen.name
     opacity: Compositor.focusedMonitor === screen.name ? 1 : 0
