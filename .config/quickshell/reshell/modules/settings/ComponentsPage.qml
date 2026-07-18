@@ -61,7 +61,28 @@ Page {
 
             property var config: Components.config.notification
 
-            property QtObject style: Style {}
+            property QtObject style: Style {
+                Component.onCompleted: {
+                    const s = Components.config.notification.style;
+                    color = s.color;
+                    padding.top = s.padding.top;
+                    padding.bottom = s.padding.bottom;
+                    padding.left = s.padding.left;
+                    padding.right = s.padding.right;
+                    inset.top = s.inset.top;
+                    inset.bottom = s.inset.bottom;
+                    inset.left = s.inset.left;
+                    inset.right = s.inset.right;
+                    background.rounding.topLeft = s.background.rounding.topLeft;
+                    background.rounding.topRight = s.background.rounding.topRight;
+                    background.rounding.bottomLeft = s.background.rounding.bottomLeft;
+                    background.rounding.bottomRight = s.background.rounding.bottomRight;
+                    background.margins.top = s.background.margins.top;
+                    background.margins.bottom = s.background.margins.bottom;
+                    background.margins.left = s.background.margins.left;
+                    background.margins.right = s.background.margins.right;
+                }
+            }
 
             property var example: {
                 "notificationId": 69,
