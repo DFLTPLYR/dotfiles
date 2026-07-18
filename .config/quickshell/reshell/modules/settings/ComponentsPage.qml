@@ -10,7 +10,6 @@ import qs.modules.notifications
 Page {
 
     GroupContainer {
-
         Label {
             text: "Notification Section"
             font.pixelSize: 32
@@ -145,6 +144,36 @@ Page {
             }
         }
     }
+
+    GroupContainer {
+        Label {
+            text: "Position"
+            font.pixelSize: 24
+        }
+
+        ListView {
+            orientation: ListView.Horizontal
+            boundsBehavior: ListView.StopAtBounds
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            height: 50
+
+            model: ["left", "middle", "right"]
+            delegate: RadioDelegate {
+                required property var modelData
+                text: modelData
+                checked: Components.config.notification.position === modelData
+                onCheckedChanged: {
+                    if (checked) {
+                        Components.config.notification.position = modelData;
+                    }
+                }
+            }
+        }
+    }
+
     GroupContainer {
         Label {
             text: "Direction"
@@ -162,7 +191,6 @@ Page {
     }
 
     GroupContainer {
-
         Label {
             text: "Size"
             font.pixelSize: 24

@@ -100,6 +100,7 @@ Singleton {
         property int duration: 5000
         property int width: 300
         property int height: 100
+        property string position: "right"
         property bool reverse: true
         property JsonObject style: JsonObject {
             property color color: Colors.setOpacity(Colors.theme.surface, 0.5)

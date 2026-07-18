@@ -1,0 +1,59 @@
+import QtQuick
+import QtQuick.Controls.Basic
+import qs.core
+
+RadioDelegate {
+    id: control
+
+    property QtObject state: QtObject {
+        property QtObject content: QtObject {
+            property color color: Colors.theme.on_surface
+        }
+
+        property QtObject indicator: QtObject {
+            property color color: Colors.theme.surface
+            property color border: Colors.theme.outline
+            property color dot: Colors.theme.primary
+        }
+    }
+
+    text: qsTr("RadioDelegate")
+    checked: true
+
+    contentItem: Text {
+        rightPadding: control.indicator.width + control.spacing
+        text: control.text
+        font: control.font
+        opacity: enabled ? 1.0 : 0.3
+        color: control.down ? Qt.darker(control.state.content.color, 1.15) : control.state.content.color
+        elide: Text.ElideRight
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    indicator: Rectangle {
+        implicitWidth: 26
+        implicitHeight: 26
+        x: control.width - width - control.rightPadding
+        y: parent.height / 2 - height / 2
+        radius: 13
+        color: control.state.indicator.color
+        border.color: control.down ? Qt.darker(control.state.indicator.border, 1.15) : control.state.indicator.border
+
+        Rectangle {
+            width: 14
+            height: 14
+            x: 6
+            y: 6
+            radius: 7
+            color: control.down ? Qt.darker(control.state.indicator.dot, 1.15) : control.state.indicator.dot
+            visible: control.checked
+        }
+    }
+
+    background: Rectangle {
+        implicitWidth: 100
+        implicitHeight: 40
+        visible: control.down || control.highlighted
+        color: control.down ? Qt.darker(Colors.theme.surface_variant, 1.15) : Colors.theme.surface_variant
+    }
+}
