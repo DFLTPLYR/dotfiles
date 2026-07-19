@@ -78,6 +78,7 @@
     localsend
     aseprite
     vial
+    protonplus
 
     # Screenshots / clipboard
     grim
