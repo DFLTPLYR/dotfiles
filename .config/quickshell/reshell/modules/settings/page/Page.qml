@@ -6,6 +6,7 @@ import QtQuick.Layouts
 Item {
     id: pane
     default property alias content: container.data
+    visible: ListView.isCurrentItem
 
     Flickable {
         anchors.fill: parent
