@@ -8,7 +8,6 @@ import qs.components
 import qs.modules.notifications
 
 Page {
-
     GroupContainer {
         Label {
             text: "Notification Section"

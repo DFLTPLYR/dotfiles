@@ -56,15 +56,15 @@ FloatingWindow {
             id: navModel
             model: Global.settings
             delegate: Rectangle {
-                id: model
+                id: delegateRoot
                 required property string name
                 required property int page
                 readonly property bool isActive: ListView.isCurrentItem
                 clip: true
                 width: ListView.view.width
                 height: 40
-                color: Colors.setOpacity((navma.containsMouse || model.page === floatingwindow.page) ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
-                radius: (model.isActive || navma.containsMouse) ? 10 : 0
+                color: Colors.setOpacity((navma.containsMouse || delegateRoot.isActive) ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
+                radius: (delegateRoot.isActive || navma.containsMouse) ? 10 : 0
                 Behavior on radius {
                     NumberAnimation {
                         duration: 500
@@ -80,7 +80,7 @@ FloatingWindow {
                 }
 
                 Text {
-                    text: model.name
+                    text: delegateRoot.name
                     leftPadding: 10
                     height: parent.height
                     color: Colors.theme.on_surface
@@ -94,19 +94,21 @@ FloatingWindow {
                     anchors.fill: parent
 
                     onClicked: {
-                        sidebar.changePage(model.page);
+                        sidebar.changePage(delegateRoot.page);
                     }
                 }
             }
         }
 
         ListView {
+            id: navList
             anchors {
                 fill: parent
                 margins: 5
             }
             spacing: 2
             model: navModel
+            currentIndex: floatingwindow.page
         }
     }
 
