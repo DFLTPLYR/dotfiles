@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
@@ -183,7 +184,30 @@ Page {
     GroupContainer {
         label: "Size"
 
+        ListView {
+            orientation: ListView.Horizontal
+            boundsBehavior: ListView.StopAtBounds
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            height: 50
+
+            model: ["small", "medium", "large", "custom"]
+            delegate: RadioDelegate {
+                required property var modelData
+                text: modelData
+                checked: Components.config.notification.sizing === modelData
+                onCheckedChanged: {
+                    if (checked) {
+                        Components.config.notification.sizing = modelData;
+                    }
+                }
+            }
+        }
+
         ColumnLayout {
+            visible: Components.config.notification.sizing === "custom"
             Layout.fillWidth: true
 
             Column {

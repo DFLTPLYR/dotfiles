@@ -9,7 +9,6 @@ import qs.types
 
 Singleton {
     id: config
-
     // Region
     Component {
         id: region
@@ -100,6 +99,7 @@ Singleton {
         property int duration: 5000
         property int width: 300
         property int height: 100
+        property string sizing: "custom" // small, medium, large, custom
         property string position: "right"
         property bool reverse: true
         property JsonObject style: JsonObject {

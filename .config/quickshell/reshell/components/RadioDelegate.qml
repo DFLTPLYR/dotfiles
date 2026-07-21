@@ -19,13 +19,14 @@ RadioDelegate {
 
     text: qsTr("RadioDelegate")
     checked: true
+    font.capitalization: Font.Capitalize
 
     contentItem: Text {
         rightPadding: control.indicator.width + control.spacing
         text: control.text
         font: control.font
         opacity: enabled ? 1.0 : 0.3
-        color: control.down ? Qt.darker(control.config.content.color, 1.15) : control.config.content.color
+        color: control.config.content.color
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
     }
@@ -54,6 +55,6 @@ RadioDelegate {
         implicitWidth: 100
         implicitHeight: 40
         visible: control.down || control.highlighted
-        color: control.down ? Qt.darker(Colors.theme.surface_variant, 1.15) : Colors.theme.surface_variant
+        color: "transparent"
     }
 }

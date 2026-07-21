@@ -34,8 +34,19 @@ ListView {
     }
 
     delegate: NotificationItem {
-        width: container.width
+        readonly property var style: container.config.style
+        width: container.config.width
         height: container.config.height
+
+        // Notification Bg
+        bg {
+            color: style.color
+
+            bottomRightRadius: style.background.rounding.bottomRight
+            bottomLeftRadius: style.background.rounding.bottomLeft
+            topRightRadius: style.background.rounding.topRight
+            topLeftRadius: style.background.rounding.topLeft
+        }
     }
 
     Behavior on opacity {
