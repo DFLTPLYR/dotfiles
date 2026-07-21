@@ -19,12 +19,7 @@ Page {
     ColorSchemeSection {}
 
     component GreeterSection: GroupContainer {
-        Label {
-            text: "Greeter"
-            font.pixelSize: 32
-            color: Colors.theme.primary
-            Layout.fillWidth: true
-        }
+        label: "Greeter"
 
         Toggle {
             property bool greeter: Global.general.greeter
@@ -38,11 +33,7 @@ Page {
     }
 
     component DisplayTemp: GroupContainer {
-        Label {
-            text: "Screen Temp"
-            font.pixelSize: 32
-            Layout.fillWidth: true
-        }
+        label: "Screen Temp"
 
         Button {
             text: "Increase"
@@ -60,11 +51,7 @@ Page {
     }
 
     component ColorSchemeSection: GroupContainer {
-        Label {
-            text: "Color Scheme"
-            font.pixelSize: 32
-            Layout.fillWidth: true
-        }
+        label: "Color Scheme"
 
         Toggle {
             id: darkmodeToggle

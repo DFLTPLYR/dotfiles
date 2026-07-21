@@ -9,10 +9,7 @@ import qs.modules.notifications
 
 Page {
     GroupContainer {
-        Label {
-            text: "Notification Section"
-            font.pixelSize: 32
-        }
+        label: "Notification Section"
 
         Rectangle {
             id: exampleNotif
@@ -145,10 +142,7 @@ Page {
     }
 
     GroupContainer {
-        Label {
-            text: "Position"
-            font.pixelSize: 24
-        }
+        label: "Position"
 
         ListView {
             orientation: ListView.Horizontal
@@ -174,10 +168,7 @@ Page {
     }
 
     GroupContainer {
-        Label {
-            text: "Direction"
-            font.pixelSize: 24
-        }
+        label: "Direction"
 
         Toggle {
             text: !checked ? qsTr("Bottom To Top") : qsTr("Top To Bottom")
@@ -190,12 +181,7 @@ Page {
     }
 
     GroupContainer {
-        Label {
-            text: "Size"
-            font.pixelSize: 24
-        }
-
-        GroupSpacer {}
+        label: "Size"
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -237,12 +223,7 @@ Page {
     }
 
     GroupContainer {
-        Label {
-            text: "Rounding"
-            font.pixelSize: 24
-        }
-
-        GroupSpacer {}
+        label: "Rounding"
 
         GridLayout {
             columns: 2
@@ -286,13 +267,7 @@ Page {
     }
 
     GroupContainer {
-
-        Label {
-            text: "Duration"
-            font.pixelSize: 24
-        }
-
-        GroupSpacer {}
+        label: "Duration"
 
         SpinBox {
             width: 100
