@@ -143,17 +143,52 @@ Variants {
         property int duration: 5000
         property int width: 300
         property int height: 100
-        property string sizing: "custom" // small, medium, large, custom
+        property string sizing: "custom"
         property string position: "right"
         property bool reverse: true
-        property JsonObject style: JsonObject {
+        readonly property JsonObject style: JsonObject {
             property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
             property DirectionJson padding: DirectionJson {}
             property DirectionJson inset: DirectionJson {}
             property JsonObject background: JsonObject {
                 property CornerJson rounding: CornerJson {}
                 property DirectionJson margins: DirectionJson {}
+
+                function apply(data) {
+                    if (data.rounding !== undefined)
+                        rounding.apply(data.rounding);
+                    if (data.margins !== undefined)
+                        margins.apply(data.margins);
+                }
             }
+
+            function apply(data) {
+                if (data.color !== undefined)
+                    color = data.color;
+                if (data.padding !== undefined)
+                    padding.apply(data.padding);
+                if (data.inset !== undefined)
+                    inset.apply(data.inset);
+                if (data.background !== undefined)
+                    background.apply(data.background);
+            }
+        }
+
+        function apply(data) {
+            if (data.duration !== undefined)
+                duration = data.duration;
+            if (data.width !== undefined)
+                width = data.width;
+            if (data.height !== undefined)
+                height = data.height;
+            if (data.sizing !== undefined)
+                sizing = data.sizing;
+            if (data.position !== undefined)
+                position = data.position;
+            if (data.reverse !== undefined)
+                reverse = data.reverse;
+            if (data.style !== undefined)
+                style.apply(data.style);
         }
     }
 }
