@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 
 import qs.core
+import qs.types
 import qs.modules.dock
 import qs.modules.background
 import qs.modules.overlay
@@ -34,7 +35,7 @@ Variants {
             preload: true
             onLoaded: {
                 Global.configs.push({
-                    "screen": reshell.modelData.name,
+                    "screen": reshell.modelData,
                     "config": fileview
                 });
                 content.active = true;
@@ -78,10 +79,7 @@ Variants {
             adapter: JsonAdapter {
                 id: adapter
                 property list<var> docks: []
-                property JsonObject notification: JsonObject {
-                    property int duration: 5000
-                    property int width: 100
-                }
+                property Notification notification: Notification {}
             }
 
             function save() {
@@ -94,8 +92,8 @@ Variants {
             id: content
             component: Item {
                 id: display
-
                 property var screen: reshell.modelData
+
                 // overlay
                 Overlay {
                     screen: display.screen
@@ -137,6 +135,24 @@ Variants {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component Notification: JsonObject {
+        property int duration: 5000
+        property int width: 300
+        property int height: 100
+        property string sizing: "custom" // small, medium, large, custom
+        property string position: "right"
+        property bool reverse: true
+        property JsonObject style: JsonObject {
+            property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
+            property DirectionJson padding: DirectionJson {}
+            property DirectionJson inset: DirectionJson {}
+            property JsonObject background: JsonObject {
+                property CornerJson rounding: CornerJson {}
+                property DirectionJson margins: DirectionJson {}
             }
         }
     }

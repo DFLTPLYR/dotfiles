@@ -131,6 +131,14 @@ Singleton {
         fileView.writeAdapter();
     }
 
+    function getConfig(monitor) {
+        for (var i = 0; i < configs.length; i++) {
+            if (configs[i].screen === monitor)
+                return configs[i].config;
+        }
+        return null;
+    }
+
     function bindMargins(item, margin) {
         item.anchors.topMargin = Qt.binding(function () {
             return margin.top;

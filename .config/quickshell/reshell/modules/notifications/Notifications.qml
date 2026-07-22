@@ -34,18 +34,19 @@ ListView {
     }
 
     delegate: NotificationItem {
-        readonly property var style: container.config.style
+        id: notif
+        readonly property var config: container.config.style
         width: container.config.width
         height: container.config.height
 
         // Notification Bg
         bg {
-            color: style.color
+            color: config.color
 
-            bottomRightRadius: style.background.rounding.bottomRight
-            bottomLeftRadius: style.background.rounding.bottomLeft
-            topRightRadius: style.background.rounding.topRight
-            topLeftRadius: style.background.rounding.topLeft
+            bottomRightRadius: config.background.rounding.bottomRight
+            bottomLeftRadius: config.background.rounding.bottomLeft
+            topRightRadius: config.background.rounding.topRight
+            topLeftRadius: config.background.rounding.topLeft
         }
     }
 

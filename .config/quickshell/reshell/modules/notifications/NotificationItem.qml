@@ -84,6 +84,7 @@ StyledPane {
                 text: notif.modelData.appName
                 font.bold: true
                 font.pointSize: 12
+                wrapMode: Text.Wrap
                 color: Colors.theme.primary
                 elide: Text.ElideRight
             }
@@ -94,6 +95,7 @@ StyledPane {
                 font.pointSize: 10
                 color: Colors.theme.on_surface
                 elide: Text.ElideRight
+                wrapMode: Text.Wrap
             }
 
             Text {
@@ -102,6 +104,7 @@ StyledPane {
                 font.pointSize: 9
                 color: Colors.theme.secondary
                 elide: Text.ElideRight
+                wrapMode: Text.Wrap
             }
         }
     }

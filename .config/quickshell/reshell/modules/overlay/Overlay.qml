@@ -11,6 +11,7 @@ import qs.modules.notifications
 PanelWindow {
     id: panel
     property list<Region> regions: []
+    property var config: Global.getConfig(panel.screen)
     color: "transparent"
 
     implicitHeight: screen.height
