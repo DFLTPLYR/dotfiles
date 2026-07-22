@@ -11,7 +11,7 @@ import qs.modules.notifications
 PanelWindow {
     id: panel
     property list<Region> regions: []
-    property var config: Global.getConfig(panel.screen)
+    property var config: Global.getConfig(panel.screen).adapter
     color: "transparent"
 
     implicitHeight: screen.height
@@ -28,6 +28,7 @@ PanelWindow {
 
     Notifications {
         id: notification
+        config: panel.config.notification
         Component.onCompleted: {
             const reg = Components.createRegion();
             reg.item = notification.contentItem;

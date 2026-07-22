@@ -6,7 +6,7 @@ import qs.core
 
 ListView {
     id: container
-    property var config: Components.config.notification
+    required property var config
 
     width: container.config.width
     height: parent.height
