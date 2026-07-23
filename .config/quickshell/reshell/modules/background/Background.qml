@@ -150,12 +150,12 @@ Item {
         Connections {
             target: Wallpaper.containers
             function onGenerate() {
-                Qt.callLater(() => {
-                    const screen = layered.grabToImage(function (result) {
-                        result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-                        Global.readyBg = [...Global.readyBg, panel.screen.name];
-                    }, Qt.size(background.screen.width, background.screen.height));
-                });
+                const screen = layered.grabToImage(function (result) {
+                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+
+                    const exist = Global.readyBg.find(panel.screen.name);
+                    Global.readyBg = [...Global.readyBg, panel.screen.name];
+                }, Qt.size(background.screen.width, background.screen.height));
             }
         }
     }
