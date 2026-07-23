@@ -1,7 +1,9 @@
 pragma ComponentBehavior: Bound
 
+import QtCore
 import Quickshell
-import Quickshell.Io
+import Qt.labs.folderlistmodel
+import System
 
 import QtQuick
 import QtQuick.Layouts
@@ -174,9 +176,12 @@ Page {
                         const text = colorscheme.file.text();
                         const json = JSON.parse(text);
                         const cTheme = darkmodeToggle.checked ? json.dark : json.light;
-                        if (Global.matugen.color !== cTheme) {
-                            Global.matugen.color = cTheme;
-                        }
+
+                        const configPath = String(StandardPaths.writableLocation(StandardPaths.ConfigLocation)).replace("file://", "") + "/matugen/themed.toml";
+                        const jsonStr = JSON.stringify({
+                            "colors": cTheme
+                        });
+                        Colorscheme.apply(cTheme.primary, configPath, jsonStr);
                     }
                 }
             }

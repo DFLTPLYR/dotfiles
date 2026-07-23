@@ -43,7 +43,6 @@ Singleton {
 
     property bool hasConnection: false
     property alias general: adapter
-    property alias matugen: matugenProc
     property list<var> widgets: []
     property list<var> configs: []
     readonly property var settings: [
@@ -86,21 +85,6 @@ Singleton {
             }
             Colorscheme.generate(paths, Wallpaper.config.theme);
             readyBg = [];
-        }
-    }
-
-    Process {
-        id: matugenProc
-        property var color
-        onColorChanged: {
-            matugenProc.running = true;
-        }
-        command: {
-            const configPath = String(StandardPaths.writableLocation(StandardPaths.ConfigLocation)).replace("file://", "") + "/matugen/themed.toml";
-            const jsonStr = JSON.stringify({
-                "colors": matugenProc.color
-            });
-            return ["sh", "-c", `matugen color hex '${matugenProc?.color?.primary}' --config '${configPath}' --import-json-string '${jsonStr}'`];
         }
     }
 
