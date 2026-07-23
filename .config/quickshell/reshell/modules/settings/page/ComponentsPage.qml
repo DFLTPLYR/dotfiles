@@ -9,6 +9,7 @@ import qs.components
 import qs.modules.notifications
 
 Page {
+    property bool perMonitor: false
     GroupContainer {
         label: "Notification Section"
 

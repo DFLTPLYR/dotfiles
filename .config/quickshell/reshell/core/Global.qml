@@ -133,8 +133,11 @@ Singleton {
 
     function getConfig(monitor) {
         for (var i = 0; i < configs.length; i++) {
-            if (configs[i].screen === monitor)
+            if (monitor && configs[i].screen === monitor) {
                 return configs[i].config;
+            } else {
+                return configs[0].config;
+            }
         }
         return null;
     }
