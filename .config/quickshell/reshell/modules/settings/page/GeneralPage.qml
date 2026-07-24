@@ -169,7 +169,6 @@ Page {
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked: {
-                        Global.general.theme = theme.model.name;
                         const colorscheme = Colors.themes.find(s => s.name === theme.model.name);
                         if (!colorscheme)
                             return;
@@ -181,7 +180,9 @@ Page {
                         const jsonStr = JSON.stringify({
                             "colors": cTheme
                         });
+
                         Colorscheme.apply(cTheme.primary, configPath, jsonStr);
+                        Global.general.theme = theme.model.name;
                     }
                 }
             }
