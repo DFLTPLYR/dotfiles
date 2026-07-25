@@ -54,11 +54,11 @@ Wrapper {
         command: ["curl", wrap.url]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (!text)
-                    return;
-                const word = JSON.parse(text)[0];
-                if (word) {
+                try {
+                    const word = JSON.parse(text)[0];
                     return wrap.word = word;
+                } catch (e) {
+                    return wrap.word = "";
                 }
             }
         }
