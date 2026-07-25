@@ -295,8 +295,8 @@ hl.bind(mainMod .. " + L", scroll(nav, "right"))
 hl.bind(mainMod .. " + K", scroll(nav, "up"))
 hl.bind(mainMod .. " + J", scroll(nav, "down"))
 
-hl.bind(mainMod .. " + mouse_up", scroll(nav, "down"))
-hl.bind(mainMod .. " + mouse_down", scroll(nav, "up"))
+hl.bind(mainMod .. " + mouse_up", scroll(nav, "up"))
+hl.bind(mainMod .. " + mouse_down", scroll(nav, "down"))
 hl.bind(mainMod .. " + SHIFT + mouse_up", scroll(nav, -1))
 hl.bind(mainMod .. " + SHIFT + mouse_down", scroll(nav, 1))
 
