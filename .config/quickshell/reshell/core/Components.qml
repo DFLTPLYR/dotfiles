@@ -87,29 +87,10 @@ Singleton {
 
             // set it to 0.0 hehe haha moment
             property real opacity: 0.5
-            property Notification notification: Notification {}
         }
     }
 
     function update() {
         fileView.writeAdapter();
-    }
-
-    component Notification: JsonObject {
-        property int duration: 5000
-        property int width: 300
-        property int height: 100
-        property string sizing: "custom" // small, medium, large, custom
-        property string position: "right"
-        property bool reverse: true
-        property JsonObject style: JsonObject {
-            property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
-            property DirectionJson padding: DirectionJson {}
-            property DirectionJson inset: DirectionJson {}
-            property JsonObject background: JsonObject {
-                property CornerJson rounding: CornerJson {}
-                property DirectionJson margins: DirectionJson {}
-            }
-        }
     }
 }

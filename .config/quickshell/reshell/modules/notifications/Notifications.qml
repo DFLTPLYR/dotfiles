@@ -10,11 +10,11 @@ ListView {
 
     width: container.config.width
     height: parent.height
-    verticalLayoutDirection: Components.config.notification.reverse ? ListView.BottomToTop : ListView.TopToBottom
+    verticalLayoutDirection: container.config ? ListView.BottomToTop : ListView.TopToBottom
     spacing: 2
 
     x: {
-        switch (Components.config.notification.position) {
+        switch (container.config.position) {
         case "left":
             return 0;
         case "middle":
@@ -35,19 +35,10 @@ ListView {
 
     delegate: NotificationItem {
         id: notif
-        readonly property var config: container.config.style
+        style: container.config.style
         width: container.config.width
         height: container.config.height
-
-        // Notification Bg
-        bg {
-            color: config.color
-
-            bottomRightRadius: config.background.rounding.bottomRight
-            bottomLeftRadius: config.background.rounding.bottomLeft
-            topRightRadius: config.background.rounding.topRight
-            topLeftRadius: config.background.rounding.topLeft
-        }
+        duration: container.config.duration
     }
 
     Behavior on opacity {

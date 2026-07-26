@@ -7,8 +7,9 @@ import qs.components
 StyledPane {
     id: notif
     default property alias ma: notifMouseArea
+    property alias duration: anim.duration
     required property var modelData
-    style: Components.config.notification.style
+
     clip: true
 
     function runAnim() {
@@ -28,7 +29,6 @@ StyledPane {
             id: anim
             from: 0
             to: notif.width
-            duration: Components.config.notification.duration
             running: true
         }
     }
