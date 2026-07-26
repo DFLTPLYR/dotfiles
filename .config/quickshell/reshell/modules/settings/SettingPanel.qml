@@ -5,7 +5,6 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.core
-import qs.components
 import qs.modules.settings.page
 
 FloatingWindow {
@@ -59,12 +58,14 @@ FloatingWindow {
                 id: delegateRoot
                 required property string name
                 required property int page
-                readonly property bool isActive: ListView.isCurrentItem
+                readonly property bool isActive: ListView.isCurrentItem || navma.containsMouse
+
                 clip: true
                 width: ListView.view.width
                 height: 40
-                color: Colors.setOpacity((navma.containsMouse || delegateRoot.isActive) ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
-                radius: (delegateRoot.isActive || navma.containsMouse) ? 10 : 0
+                color: Colors.setOpacity(delegateRoot.isActive ? Qt.darker(Colors.theme.surface, 1.5) : Colors.theme.surface, 0.5)
+                radius: delegateRoot.isActive ? 10 : 0
+
                 Behavior on radius {
                     NumberAnimation {
                         duration: 500
