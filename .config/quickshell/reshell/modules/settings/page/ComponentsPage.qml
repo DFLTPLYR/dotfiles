@@ -15,7 +15,10 @@ Page {
 
     grid.data: [
         Button {
-            text: "Save"
+            text: "Set"
+        },
+        Button {
+            text: "Apply"
         }
     ]
 

@@ -12,7 +12,7 @@ Item {
     Layout.fillHeight: true
     visible: ListView.isCurrentItem
 
-    Column {
+    Grid {
         id: gridContainer
         z: 10
         anchors {

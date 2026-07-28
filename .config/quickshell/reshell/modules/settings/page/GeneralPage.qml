@@ -164,9 +164,11 @@ Page {
                         }
                     }
                 }
+
                 MouseArea {
                     id: ma
                     anchors.fill: parent
+                    enabled: theme.current || !Colorscheme.isRunning
                     hoverEnabled: true
                     onClicked: {
                         const colorscheme = Colors.themes.find(s => s.name === theme.model.name);
