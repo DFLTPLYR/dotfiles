@@ -1,4 +1,3 @@
-pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 
@@ -10,7 +9,7 @@ ListView {
 
     width: container.config.width
     height: parent.height
-    verticalLayoutDirection: container.config ? ListView.BottomToTop : ListView.TopToBottom
+    verticalLayoutDirection: container.config.reverse ? ListView.BottomToTop : ListView.TopToBottom
     spacing: 2
 
     x: {

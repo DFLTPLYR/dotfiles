@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -37,7 +38,7 @@ StyledPane {
         id: notifMouseArea
 
         anchors.fill: parent
-        drag.target: parent
+        drag.target: notif
         drag.axis: Drag.XAxis
         drag.minimumX: -width
         drag.maximumX: 0
@@ -46,10 +47,10 @@ StyledPane {
             Notifications.discardNotification(notif.modelData.notificationId);
         }
         onReleased: {
-            if (parent.x < -30)
+            if (notif.x < -30)
                 Notifications.discardNotification(notif.modelData.notificationId);
             else
-                parent.x = 0;
+                notif.x = 0;
         }
     }
 
