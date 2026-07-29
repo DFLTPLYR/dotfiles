@@ -5,13 +5,15 @@ import qs.core
 
 ListView {
     id: container
+    signal addNotif(NotificationItem notif)
+    signal removeNotif(NotificationItem notif)
+
     required property var config
 
     width: container.config.width
     height: parent.height
-    verticalLayoutDirection: container.config.reverse ? ListView.BottomToTop : ListView.TopToBottom
+    verticalLayoutDirection: ListView.BottomToTop
     spacing: 2
-
     x: {
         switch (container.config.position) {
         case "left":
@@ -38,6 +40,12 @@ ListView {
         width: container.config.width
         height: container.config.height
         duration: container.config.duration
+        Component.onCompleted: {
+            container.addNotif(this);
+        }
+        Component.onDestruction: {
+            container.removeNotif(this);
+        }
     }
 
     Behavior on opacity {

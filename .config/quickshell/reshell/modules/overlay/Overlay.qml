@@ -29,10 +29,18 @@ PanelWindow {
     Notifications {
         id: notification
         config: panel.config.notification
-        Component.onCompleted: {
+        onAddNotif: notif => {
             const reg = Components.createRegion();
-            reg.item = notification.contentItem;
+            reg.item = notif;
             panel.regions.push(reg);
+        }
+        onRemoveNotif: notif => {
+            for (let i of panel.regions) {
+                if (i.item === notif) {
+                    panel.regions = [...panel.regions.filter(n => n.item !== notif)];
+                    return;
+                }
+            }
         }
     }
 

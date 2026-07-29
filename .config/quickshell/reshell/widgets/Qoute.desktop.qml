@@ -9,7 +9,7 @@ import qs.types
 
 Wrapper {
     id: wrap
-
+    visible: Global.hasConnection
     onModal: (_modal, hasChanges) => {
         if (hasChanges) {
             getDefinition.update();
