@@ -27,9 +27,6 @@ ListView {
         }
     }
 
-    visible: Compositor.focusedMonitor === screen.name
-    opacity: Compositor.focusedMonitor === screen.name ? 1 : 0
-
     model: ScriptModel {
         values: [...Notifications.popupList]
     }

@@ -19,7 +19,7 @@ PanelWindow {
 
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Overlay-${screen.name}`
 
     mask: Region {
@@ -28,6 +28,9 @@ PanelWindow {
 
     Notifications {
         id: notification
+        visible: Compositor.focusedMonitor === panel.screen.name
+        opacity: Compositor.focusedMonitor === panel.screen.name ? 1 : 0
+
         config: panel.config.notification
         onAddNotif: notif => {
             const reg = Components.createRegion();
