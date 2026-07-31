@@ -4,12 +4,9 @@ import QtQml.Models
 import QtQuick
 
 import Quickshell
-import Quickshell.Io
 import Quickshell.Wayland
-import QtCore
 
 import qs.core
-import qs.modules
 import qs.components
 
 Item {

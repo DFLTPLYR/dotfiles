@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import qs.core
 import qs.types
 import qs.components
-import qs.modules.notifications
+import qs.modules.overlay.notifications
 
 Page {
     id: page

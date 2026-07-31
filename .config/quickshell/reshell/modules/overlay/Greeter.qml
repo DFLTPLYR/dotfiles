@@ -3,7 +3,7 @@ import QtQuick
 
 import Quickshell.Wayland
 import qs.core
-import qs.modules
+import qs.modules.overlay.greeter
 
 Item {
     LockContext {

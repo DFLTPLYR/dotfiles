@@ -5,8 +5,8 @@ import Quickshell
 import Quickshell.Wayland
 
 import qs.core
-import qs.modules
-import qs.modules.notifications
+import qs.modules.overlay.notifications
+import qs.modules.overlay.osd
 
 PanelWindow {
     id: panel

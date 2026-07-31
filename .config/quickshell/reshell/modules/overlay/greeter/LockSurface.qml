@@ -2,10 +2,9 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 
 import qs.core
-import qs.modules
+import qs.modules.overlay.greeter
 import qs.components
 
 Rectangle {
