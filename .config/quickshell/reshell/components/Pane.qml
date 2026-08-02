@@ -15,5 +15,12 @@ Pane {
 
         anchors.fill: parent
         color: Colors.setOpacity(Colors.theme.surface, 0.5)
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 }

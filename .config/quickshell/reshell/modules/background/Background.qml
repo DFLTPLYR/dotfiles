@@ -103,6 +103,8 @@ Item {
 
         component: Pane {
             bg.color: "transparent"
+            bg.border.color: Global.widget ? Colors.theme.primary : "transparent"
+            bg.border.width: Global.widget ? 2 : 0
             width: containerloader.model.width
             height: containerloader.model.height
             visible: containerloader.coords ? true : false

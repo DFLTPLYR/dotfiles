@@ -111,6 +111,19 @@ Singleton {
         }
     }
 
+    function apply(target, data) {
+        for (const key of Object.keys(data)) {
+            if (data[key] === undefined || data[key] === null || target[key] === undefined || target[key] === null)
+                continue;
+            if (typeof target[key] === "function")
+                continue;
+            if (typeof target[key] === "object" && typeof data[key] === "object")
+                apply(target[key], data[key]);
+            else
+                target[key] = data[key];
+        }
+    }
+
     function save() {
         fileView.writeAdapter();
     }

@@ -155,40 +155,17 @@ Variants {
                 property DirectionJson margins: DirectionJson {}
 
                 function apply(data) {
-                    if (data.rounding !== undefined)
-                        rounding.apply(data.rounding);
-                    if (data.margins !== undefined)
-                        margins.apply(data.margins);
+                    Global.apply(this, data);
                 }
             }
 
             function apply(data) {
-                if (data.color !== undefined)
-                    color = data.color;
-                if (data.padding !== undefined)
-                    padding.apply(data.padding);
-                if (data.inset !== undefined)
-                    inset.apply(data.inset);
-                if (data.background !== undefined)
-                    background.apply(data.background);
+                Global.apply(this, data);
             }
         }
 
         function apply(data) {
-            if (data.duration !== undefined)
-                duration = data.duration;
-            if (data.width !== undefined)
-                width = data.width;
-            if (data.height !== undefined)
-                height = data.height;
-            if (data.sizing !== undefined)
-                sizing = data.sizing;
-            if (data.position !== undefined)
-                position = data.position;
-            if (data.reverse !== undefined)
-                reverse = data.reverse;
-            if (data.style !== undefined)
-                style.apply(data.style);
+            Global.apply(this, data);
         }
     }
 }

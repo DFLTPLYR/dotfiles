@@ -16,11 +16,26 @@ Page {
     grid.data: [
         Button {
             text: "Set"
+            visible: Quickshell.screens.length >= 1
+            onClicked: popup.opened ? popup.close() : popup.open()
         },
         Button {
             text: "Apply"
         }
     ]
+
+    // to be added
+    // PopupModal {
+    //     id: popup
+    //     width: page.width / 8
+    //     height: page.height / 8
+    //     x: (page.width / 2) - (width / 2)
+    //     y: (page.height / 2) - (height / 2)
+    //
+    //     Toggle {
+    //         text: "Screen 1"
+    //     }
+    // }
 
     GroupContainer {
         label: "Notification Section"
@@ -149,7 +164,6 @@ Page {
             checked: page.config.reverse
             onClicked: {
                 page.config.reverse = checked;
-                Components.update();
             }
         }
     }

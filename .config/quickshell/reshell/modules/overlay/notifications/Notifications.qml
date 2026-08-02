@@ -12,7 +12,7 @@ ListView {
 
     width: container.config.width
     height: parent.height
-    verticalLayoutDirection: ListView.BottomToTop
+    verticalLayoutDirection: container.config.reverse ? ListView.BottomToTop : ListView.TopToBottom
     spacing: 2
     x: {
         switch (container.config.position) {
