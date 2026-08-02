@@ -45,6 +45,10 @@
       package = pkgs.adw-gtk3;
       name = "adw-gtk3-dark";
     };
+    iconTheme = {
+      package = pkgs.papirus-icon-theme;
+      name = "Papirus-Dark";
+    };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };

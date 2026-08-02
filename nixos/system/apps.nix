@@ -18,6 +18,7 @@
     zip
     bc
     bun
+    papirus-icon-theme
   ];
 
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
