@@ -13,6 +13,23 @@ import System
 Singleton {
     id: config
 
+    property Item canvas: Item {
+        width: {
+            let total = 0;
+            for (let mon of Quickshell.screens) {
+                total += mon.width;
+            }
+            return total;
+        }
+        height: {
+            let total = 0;
+            for (let mon of Quickshell.screens) {
+                total = Math.max(total, mon.height);
+            }
+            return total;
+        }
+    }
+
     property SystemClock clock: SystemClock {
         id: clock
         precision: SystemClock.Seconds

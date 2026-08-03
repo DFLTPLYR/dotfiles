@@ -124,41 +124,6 @@ Item {
         model: containers
     }
 
-    // background
-    PanelWindow {
-        id: background
-        screen: panel.screen
-        mask: Region {
-            item: layered
-        }
-        color: "transparent"
-        implicitHeight: screen.height
-        implicitWidth: screen.width
-
-        exclusionMode: ExclusionMode.Ignore
-
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-        WlrLayershell.namespace: `Background-${screen.name}`
-        WlrLayershell.layer: WlrLayer.Background
-
-        Item {
-            id: layered
-            anchors.fill: parent
-        }
-
-        Connections {
-            target: Wallpaper.containers
-            function onGenerate() {
-                const screen = layered.grabToImage(function (result) {
-                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-
-                    const exist = Global.readyBg.find(panel.screen.name);
-                    Global.readyBg = [...Global.readyBg, panel.screen.name];
-                }, Qt.size(background.screen.width, background.screen.height));
-            }
-        }
-    }
-
     // bottom
     PanelWindow {
         id: bottom
@@ -177,11 +142,16 @@ Item {
         exclusionMode: ExclusionMode.Ignore
 
         WlrLayershell.keyboardFocus: bottom.hasMenu ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-        WlrLayershell.namespace: `Bottom-${screen.name}`
+        WlrLayershell.namespace: `Background-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 
         mask: Region {
             item: controlArea
+        }
+
+        Item {
+            id: layered
+            anchors.fill: parent
         }
 
         Item {
@@ -281,6 +251,19 @@ Item {
             screen: panel.screen
             x: (screen.width - width) / 2
             y: (screen.height - height) / 2
+        }
+
+        // Contents
+        Connections {
+            target: Wallpaper.containers
+            function onGenerate() {
+                const screen = layered.grabToImage(function (result) {
+                    result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
+
+                    const exist = Global.readyBg.find(panel.screen.name);
+                    Global.readyBg = [...Global.readyBg, panel.screen.name];
+                }, Qt.size(background.screen.width, background.screen.height));
+            }
         }
     }
 }
