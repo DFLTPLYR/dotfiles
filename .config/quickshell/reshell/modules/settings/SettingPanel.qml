@@ -2,48 +2,37 @@ pragma ComponentBehavior: Bound
 import Quickshell
 
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
+import Qt.labs.StyleKit
 import qs.core
+import qs.core.theme
 import qs.modules.settings.page
 
-FloatingWindow {
+ApplicationWindow {
     id: floatingwindow
     property int page: 0
     title: "Settings"
-    minimumSize: Qt.size(floatingwindow.screen.width / 2, floatingwindow.screen.height / 2)
-    maximumSize: Qt.size(floatingwindow.screen.width, floatingwindow.screen.height)
-    color: Colors.theme.surface
 
-    Behavior on color {
-        ColorAnimation {
-            duration: 300
-            easing: Easing.InOutQuad
+    StyleKit.style: DefaultTheme {}
+    background: Item {}
+    RowLayout {
+        anchors.fill: parent
+        spacing: 5
+
+        SideBar {
+            Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 150)
+            Layout.fillHeight: true
+            onChangePage: page => {
+                floatingwindow.page = page;
+            }
         }
-    }
-
-    LazyLoader {
-        id: paneLoader
-        component: RowLayout {
-            anchors.fill: parent
-            spacing: 5
-
-            SideBar {
-                Layout.preferredWidth: Math.min(0.20 * floatingwindow.width, 150)
-                Layout.fillHeight: true
-                onChangePage: page => {
-                    floatingwindow.page = page;
-                }
-            }
-
-            Content {
-                id: content
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                currentIndex: floatingwindow.page
-            }
-
-            Component.onCompleted: floatingwindow.data.push(this)
+        Content {
+            id: content
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: floatingwindow.page
         }
     }
 
@@ -127,6 +116,6 @@ FloatingWindow {
         BackgroundPage {}
     }
 
-    onWindowConnected: paneLoader.active = true
-    onClosed: Global.save()
+    // onWindowConnected: paneLoader.active = true
+    // onClosed: Global.save()
 }

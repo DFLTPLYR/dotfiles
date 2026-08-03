@@ -174,6 +174,9 @@ Page {
                         const colorscheme = Colors.themes.find(s => s.name === theme.model.name);
                         if (!colorscheme)
                             return;
+                        Global.general.theme = theme.model.name;
+                        if (!colorscheme.file)
+                            return;
                         const text = colorscheme.file.text();
                         const json = JSON.parse(text);
                         const cTheme = darkmodeToggle.checked ? json.dark : json.light;
@@ -184,7 +187,6 @@ Page {
                         });
 
                         Colorscheme.apply(cTheme.primary, configPath, jsonStr);
-                        Global.general.theme = theme.model.name;
                     }
                 }
             }
