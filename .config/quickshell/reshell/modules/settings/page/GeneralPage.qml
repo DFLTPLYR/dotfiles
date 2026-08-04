@@ -10,6 +10,7 @@ import QtQuick.Layouts
 
 import qs.core
 import qs.components
+import qs.modules.settings
 
 Page {
     property var screen

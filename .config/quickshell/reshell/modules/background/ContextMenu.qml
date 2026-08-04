@@ -104,7 +104,6 @@ PopupModal {
         active: false
         SettingPanel {
             id: settingPanel
-            // screen: modal.screen
             visible: settingLoader.active
             page: settingLoader.page
             onClosing: {

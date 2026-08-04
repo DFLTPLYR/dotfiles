@@ -1,13 +1,10 @@
 pragma ComponentBehavior: Bound
-import Quickshell
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
 import Qt.labs.StyleKit
 import qs.core
-import qs.core.theme
 import qs.modules.settings.page
 
 ApplicationWindow {
@@ -15,8 +12,6 @@ ApplicationWindow {
     property int page: 0
     title: "Settings"
 
-    StyleKit.style: DefaultTheme {}
-    background: Item {}
     RowLayout {
         anchors.fill: parent
         spacing: 5
@@ -109,13 +104,10 @@ ApplicationWindow {
         // General Page
         GeneralPage {}
 
-        // ComponentsPage
-        ComponentsPage {}
+        // NotificationPage
+        NotificationPage {}
 
         // BackgroundPage
         BackgroundPage {}
     }
-
-    // onWindowConnected: paneLoader.active = true
-    // onClosed: Global.save()
 }
