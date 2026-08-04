@@ -54,28 +54,19 @@ Style {
     CustomTheme {
         name: "Default"
         theme: Theme {
-            control {
-                text.color: "black"
-                text.bold: true
-                background.color: Colors.theme.surface
-                background.border.color: "black"
-                background.border.width: 3
-                background.shadow.visible: false
-                hovered.background.border.width: 5
-            }
             applicationWindow.background.color: Colors.theme.surface
-            itemDelegate.hovered.text.color: "white"
-            itemDelegate.hovered.background.color: "black"
-            itemDelegate.background.border.width: 0
-            button.hovered.background.color: "black"
-            button.hovered.text.color: "white"
-            radioButton.indicator.foreground.color: "white"
-            radioButton.checked.indicator.foreground.color: "black"
-            switchControl.indicator.foreground.color: "white"
-            switchControl.handle.color: "white"
-            switchControl.handle.border.color: "black"
-            switchControl.handle.border.width: 2
-            switchControl.checked.handle.color: "black"
+
+            // Button
+            button {
+                background {
+                    implicitWidth: 120
+                    implicitHeight: 40
+                    color: Colors.theme.primary
+                }
+                text.color: Colors.theme.on_primary
+                hovered.background.color: Colors.theme.primary
+                pressed.background.scale: 0.95
+            }
         }
     }
 }
