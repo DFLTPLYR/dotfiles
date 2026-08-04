@@ -1,7 +1,11 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Qt.labs.StyleKit
+import qs.core
 
 Style {
+    themeName: "Default"
+
     control {
         padding: 6
         background {
@@ -47,38 +51,31 @@ Style {
         indicator.radius: 3
     }
 
-    light: Theme {
-        applicationWindow {
-            background.color: "whitesmoke"
-        }
-        control {
-            text.color: "black"
-            background.color: "#e8e8e8"
-            background.border.color: "#c0c0c0"
-            hovered.background.color: "#d0d0d0"
-        }
-        button {
-            text.color: "white"
-            background.color: "cornflowerblue"
-            background.shadow.color: "gray"
-            hovered.background.color: "royalblue"
-        }
-    }
-
-    dark: Theme {
-        applicationWindow {
-            background.color: Qt.darker("gray", 2.0)
-        }
-        control {
-            text.color: "white"
-            background.color: "#3a3a3a"
-            background.border.color: "#555555"
-            hovered.background.color: "#4a4a4a"
-        }
-        button {
-            background.color: "sandybrown"
-            background.shadow.color: "black"
-            hovered.background.color: Qt.darker("sandybrown", 1.2)
+    CustomTheme {
+        name: "Default"
+        theme: Theme {
+            control {
+                text.color: "black"
+                text.bold: true
+                background.color: Colors.theme.surface
+                background.border.color: "black"
+                background.border.width: 3
+                background.shadow.visible: false
+                hovered.background.border.width: 5
+            }
+            applicationWindow.background.color: Colors.theme.surface
+            itemDelegate.hovered.text.color: "white"
+            itemDelegate.hovered.background.color: "black"
+            itemDelegate.background.border.width: 0
+            button.hovered.background.color: "black"
+            button.hovered.text.color: "white"
+            radioButton.indicator.foreground.color: "white"
+            radioButton.checked.indicator.foreground.color: "black"
+            switchControl.indicator.foreground.color: "white"
+            switchControl.handle.color: "white"
+            switchControl.handle.border.color: "black"
+            switchControl.handle.border.width: 2
+            switchControl.checked.handle.color: "black"
         }
     }
 }
