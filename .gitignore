@@ -19,6 +19,7 @@
 # Generated theme files
 .config/nvim/theme.lua
 .config/quickshell/reshell/core/data/themes/content.json
+.config/quickshell/reshell/shell.qml
 packages
 
 # Generated color config
