@@ -1,12 +1,16 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
-import qs.core.theme
-import Qt.labs.StyleKit
-
-Page {
+Item {
     id: page
 
-    StyleKit.style: DefaultTheme {}
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.margins: 10
+
+    Button {
+        text: "test"
+    }
 }

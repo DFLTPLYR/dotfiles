@@ -10,9 +10,9 @@ import qs.modules.settings.page
 
 ApplicationWindow {
     id: floatingwindow
-    property int page: 0
+
     title: "Settings"
-    StyleKit.style: DefaultTheme {}
+    property int page: 0
 
     RowLayout {
         anchors.fill: parent
