@@ -108,6 +108,7 @@ PopupModal {
             page: settingLoader.page
             onClosing: {
                 settingLoader.active = false;
+                Global.save();
             }
         }
     }

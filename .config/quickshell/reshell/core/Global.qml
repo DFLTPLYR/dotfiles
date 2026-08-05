@@ -13,23 +13,6 @@ import System
 Singleton {
     id: config
 
-    property Item canvas: Item {
-        width: {
-            let total = 0;
-            for (let mon of Quickshell.screens) {
-                total += mon.width;
-            }
-            return total;
-        }
-        height: {
-            let total = 0;
-            for (let mon of Quickshell.screens) {
-                total = Math.max(total, mon.height);
-            }
-            return total;
-        }
-    }
-
     property SystemClock clock: SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -78,6 +61,11 @@ Singleton {
             "type": "button",
             "name": "Wallpaper",
             "page": 2
+        },
+        {
+            "type": "button",
+            "name": "Test",
+            "page": 3
         }
     ]
 

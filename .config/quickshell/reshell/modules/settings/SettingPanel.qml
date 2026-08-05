@@ -13,6 +13,7 @@ ApplicationWindow {
     property int page: 0
     title: "Settings"
     StyleKit.style: DefaultTheme {}
+
     RowLayout {
         anchors.fill: parent
         spacing: 5
@@ -110,5 +111,8 @@ ApplicationWindow {
 
         // BackgroundPage
         BackgroundPage {}
+
+        // TestPage
+        TestPage {}
     }
 }
