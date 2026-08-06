@@ -3,15 +3,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import Qt.labs.StyleKit
 import qs.core
-import qs.core.theme
 import qs.modules.settings.page
 
 ApplicationWindow {
     id: floatingwindow
 
     title: "Settings"
+    background: Rectangle {
+        anchors.fill: parent
+        color: Colors.theme.surface
+    }
+
     property int page: 0
 
     RowLayout {
@@ -111,8 +114,5 @@ ApplicationWindow {
 
         // BackgroundPage
         BackgroundPage {}
-
-        // TestPage
-        TestPage {}
     }
 }

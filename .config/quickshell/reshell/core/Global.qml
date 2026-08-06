@@ -61,11 +61,6 @@ Singleton {
             "type": "button",
             "name": "Wallpaper",
             "page": 2
-        },
-        {
-            "type": "button",
-            "name": "Test",
-            "page": 3
         }
     ]
 
