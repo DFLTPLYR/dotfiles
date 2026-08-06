@@ -8,7 +8,6 @@ import qs.components
 
 Item {
     id: page
-    focus: true
     clip: true
 
     Layout.fillWidth: true
