@@ -26,11 +26,11 @@ Item {
         property var coords
         property var contents: model.contents
         property var currentContent
-        onContentsChanged: {
-            if (!contents || !item)
-                return;
-            return addContent();
-        }
+        // onContentsChanged: {
+        //     if (!contents || !item)
+        //         return;
+        //     return addContent();
+        // }
         onItemChanged: {
             if (!contents || !item)
                 return;
@@ -40,6 +40,7 @@ Item {
         function addContent() {
             const type = contents.type;
 
+            print(contents);
             if (containerloader.currentContent) {
                 containerloader.currentContent.destroy();
             }
@@ -112,14 +113,11 @@ Item {
         }
     }
 
-    DelegateModel {
-        id: containers
-        model: Wallpaper.containers
-        delegate: LazyContainer {}
-    }
-
     Instantiator {
-        model: containers
+        model: DelegateModel {
+            model: Wallpaper.containers
+            delegate: LazyContainer {}
+        }
     }
 
     // bottom
@@ -169,11 +167,23 @@ Item {
                             contextMenu.close();
                         selecting = true;
                         startPoint = Qt.point(mouse.x, mouse.y);
-                        selectionRect.x = mouse.x;
-                        selectionRect.y = mouse.y;
-                        selectionRect.width = 0;
-                        selectionRect.height = 0;
-                        selectionRect.opacity = 1;
+                        // selectionRect.x = mouse.x;
+                        // selectionRect.y = mouse.y;
+                        // selectionRect.width = 0;
+                        // selectionRect.height = 0;
+                        // selectionRect.opacity = 1;
+                        const obj = {
+                            x: mouse.x,
+                            y: mouse.y,
+                            z: 999999,
+                            screens: [panel.screen.name],
+                            width: 0,
+                            height: 0,
+                            contents: {
+                                type: "selection"
+                            }
+                        };
+                        Wallpaper.containers.append(obj);
                     } else if (mouse.button === Qt.RightButton) {
                         contextMenu.x = mouseX;
                         contextMenu.y = mouseY;
@@ -188,11 +198,12 @@ Item {
                         var minY = Math.min(startPoint.y, mouse.y);
                         var maxX = Math.max(startPoint.x, mouse.x);
                         var maxY = Math.max(startPoint.y, mouse.y);
-
                         selectionRect.x = minX;
                         selectionRect.y = minY;
                         selectionRect.width = maxX - minX;
                         selectionRect.height = maxY - minY;
+
+                        Wallpaper.contextArea.width = maxX - minX;
                     }
                 }
 
@@ -203,14 +214,6 @@ Item {
 
                         if (selectionRect.x == 0 && selectionRect.y == 0)
                             return;
-                        const container = {
-                            w: selectionRect.width,
-                            h: selectionRect.height,
-                            x: selectionRect.x,
-                            y: selectionRect.y,
-                            z: 1,
-                            content: []
-                        };
                     }
                 }
 
@@ -234,7 +237,9 @@ Item {
             border.width: 1
             border.color: Colors.theme.outline
             transformOrigin: Item.TopLeft
-
+            onOpacityChanged: {
+                // Wallpaper.containers.set(containerRect.index, obj);
+            }
             Behavior on opacity {
                 NumberAnimation {
                     duration: 300
@@ -263,5 +268,46 @@ Item {
                 }, Qt.size(background.screen.width, background.screen.height));
             }
         }
+    }
+
+    function overlapsAny(target) {
+        const screens = Quickshell.screens;
+        const newScreens = [];
+        const origin = target.mapToGlobal(0, 0);
+
+        const globalRect = {
+            x: origin.x,
+            y: origin.y,
+            width: target.width,
+            height: target.height
+        };
+
+        for (let i = 0; i < screens.length; i++) {
+            const screen = screens[i];
+
+            if (intersects(globalRect, screen)) {
+                newScreens.push(getRelativePos(globalRect, screen));
+            }
+        }
+        return newScreens;
+    }
+
+    function intersects(a, b) {
+        return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
+    function getRelativePos(target, screen) {
+        const x = Math.max(target.x, screen.x);
+        const y = Math.max(target.y, screen.y);
+        const right = Math.min(target.x + target.width, screen.x + screen.width);
+        const bottom = Math.min(target.y + target.height, screen.y + screen.height);
+
+        return {
+            x: x - screen.x,
+            y: y - screen.y,
+            width: right - x,
+            height: bottom - y,
+            name: screen.objectName
+        };
     }
 }
