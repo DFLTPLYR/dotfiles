@@ -79,6 +79,7 @@
     aseprite
     vial
     protonplus
+    prismlauncher
 
     # Screenshots / clipboard
     grim
