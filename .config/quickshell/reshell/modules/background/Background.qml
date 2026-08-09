@@ -26,11 +26,6 @@ Item {
         property var coords
         property var contents: model.contents
         property var currentContent
-        // onContentsChanged: {
-        //     if (!contents || !item)
-        //         return;
-        //     return addContent();
-        // }
         onItemChanged: {
             if (!contents || !item)
                 return;
@@ -39,8 +34,6 @@ Item {
 
         function addContent() {
             const type = contents.type;
-
-            print(contents);
             if (containerloader.currentContent) {
                 containerloader.currentContent.destroy();
             }
