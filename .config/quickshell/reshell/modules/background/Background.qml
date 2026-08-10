@@ -155,59 +155,63 @@ Item {
                 property bool selecting
                 property point startPoint
                 onPressed: mouse => {
-                    if (mouse.button == Qt.LeftButton) {
-                        if (contextMenu.opened)
-                            contextMenu.close();
-                        selecting = true;
-                        startPoint = Qt.point(mouse.x, mouse.y);
-                        // selectionRect.x = mouse.x;
-                        // selectionRect.y = mouse.y;
-                        // selectionRect.width = 0;
-                        // selectionRect.height = 0;
-                        // selectionRect.opacity = 1;
-                        const obj = {
-                            x: mouse.x,
-                            y: mouse.y,
-                            z: 999999,
-                            screens: [panel.screen.name],
-                            width: 0,
-                            height: 0,
-                            contents: {
-                                type: "selection"
-                            }
-                        };
-                        Wallpaper.containers.append(obj);
-                    } else if (mouse.button === Qt.RightButton) {
-                        contextMenu.x = mouseX;
-                        contextMenu.y = mouseY;
-                        contextMenu.open();
+                    if (mouse.button !== Qt.LeftButton)
                         return;
-                    }
+                    if (contextMenu.opened)
+                        contextMenu.close();
+                    selecting = true;
+                    startPoint = mapToGlobal(mouse.x, mouse.y);
+                    const obj = {
+                        x: mouse.x,
+                        y: mouse.y,
+                        z: 999999,
+                        screens: [],
+                        width: 0,
+                        height: 0,
+                        contents: {
+                            type: "selection"
+                        }
+                    };
+                    Wallpaper.containers.append(obj);
+                    Wallpaper.contextIdx = Wallpaper.containers.count - 1;
                 }
 
                 onPositionChanged: mouse => {
-                    if (selecting) {
-                        var minX = Math.min(startPoint.x, mouse.x);
-                        var minY = Math.min(startPoint.y, mouse.y);
-                        var maxX = Math.max(startPoint.x, mouse.x);
-                        var maxY = Math.max(startPoint.y, mouse.y);
-                        selectionRect.x = minX;
-                        selectionRect.y = minY;
-                        selectionRect.width = maxX - minX;
-                        selectionRect.height = maxY - minY;
+                    if (!selecting)
+                        return;
+                    const idx = Wallpaper.contextIdx;
+                    if (idx < 0)
+                        return;
 
-                        Wallpaper.contextArea.width = maxX - minX;
-                    }
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    var minX = Math.min(startPoint.x, gp.x);
+                    var minY = Math.min(startPoint.y, gp.y);
+                    var maxX = Math.max(startPoint.x, gp.x);
+                    var maxY = Math.max(startPoint.y, gp.y);
+
+                    const rect = {
+                        x: minX,
+                        y: minY,
+                        width: maxX - minX,
+                        height: maxY - minY
+                    };
+
+                    const screens = overlapsAny(rect);
+                    const c = Wallpaper.containers;
+                    c.setProperty(idx, "x", minX);
+                    c.setProperty(idx, "y", minY);
+                    c.setProperty(idx, "width", maxX - minX);
+                    c.setProperty(idx, "height", maxY - minY);
+                    c.setProperty(idx, "screens", screens);
                 }
 
                 onReleased: mouse => {
-                    if (mouse.button == Qt.LeftButton) {
-                        selecting = false;
-                        selectionRect.opacity = 0;
-
-                        if (selectionRect.x == 0 && selectionRect.y == 0)
-                            return;
-                    }
+                    if (mouse.button !== Qt.LeftButton)
+                        return;
+                    selecting = false;
+                    Wallpaper.containers.remove(Wallpaper.contextIdx, 1);
+                    Wallpaper.contextArea = null;
+                    Wallpaper.contextIdx = -1;
                 }
 
                 Component.onCompleted: {
@@ -222,17 +226,15 @@ Item {
             x: 0
             y: 0
             z: 9999
-            opacity: 0
-            width: 0
-            height: 0
+            opacity: Wallpaper.contextArea ? 1 : 0
+            // width: Wallpaper.contextArea.width
+            // height: Wallpaper.contextArea.height
             rotation: 0
             color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
             border.color: Colors.theme.outline
             transformOrigin: Item.TopLeft
-            onOpacityChanged: {
-                // Wallpaper.containers.set(containerRect.index, obj);
-            }
+
             Behavior on opacity {
                 NumberAnimation {
                     duration: 300
@@ -266,20 +268,11 @@ Item {
     function overlapsAny(target) {
         const screens = Quickshell.screens;
         const newScreens = [];
-        const origin = target.mapToGlobal(0, 0);
-
-        const globalRect = {
-            x: origin.x,
-            y: origin.y,
-            width: target.width,
-            height: target.height
-        };
-
         for (let i = 0; i < screens.length; i++) {
             const screen = screens[i];
 
-            if (intersects(globalRect, screen)) {
-                newScreens.push(getRelativePos(globalRect, screen));
+            if (intersects(target, screen)) {
+                newScreens.push(getRelativePos(target, screen));
             }
         }
         return newScreens;
@@ -290,17 +283,11 @@ Item {
     }
 
     function getRelativePos(target, screen) {
-        const x = Math.max(target.x, screen.x);
-        const y = Math.max(target.y, screen.y);
-        const right = Math.min(target.x + target.width, screen.x + screen.width);
-        const bottom = Math.min(target.y + target.height, screen.y + screen.height);
-
-        return {
-            x: x - screen.x,
-            y: y - screen.y,
-            width: right - x,
-            height: bottom - y,
+        var relative = {
+            x: target.x - screen.x,
+            y: target.y - screen.y,
             name: screen.objectName
         };
+        return relative;
     }
 }

@@ -11,15 +11,17 @@ Singleton {
     property bool enableSetting: false
     property alias config: adapter.config
     property QtObject contextArea: null
+    property int contextIdx: -1
 
     property FileModel containers: FileModel {
         signal generate
         onCountChanged: {
-            if (contextArea)
+            if (contextArea || count === 0)
                 return;
             const obj = get(count - 1);
             if (obj?.contents?.type === "selection") {
                 config.contextArea = obj;
+                config.contextIdx = count - 1;
             }
         }
         onSaved: list => {
