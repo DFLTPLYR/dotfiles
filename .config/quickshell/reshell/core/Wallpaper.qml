@@ -10,20 +10,10 @@ Singleton {
     property bool ready: false
     property bool enableSetting: false
     property alias config: adapter.config
-    property QtObject contextArea: null
-    property int contextIdx: -1
+    property var contextArea: ({})
 
     property FileModel containers: FileModel {
         signal generate
-        onCountChanged: {
-            if (contextArea || count === 0)
-                return;
-            const obj = get(count - 1);
-            if (obj?.contents?.type === "selection") {
-                config.contextArea = obj;
-                config.contextIdx = count - 1;
-            }
-        }
         onSaved: list => {
             const current = adapter.config.current;
             const theme = adapter.config.preset.find(s => s.name === current);

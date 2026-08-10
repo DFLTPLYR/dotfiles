@@ -167,13 +167,9 @@ Item {
                         z: 999999,
                         screens: [],
                         width: 0,
-                        height: 0,
-                        contents: {
-                            type: "selection"
-                        }
+                        height: 0
                     };
-                    Wallpaper.containers.append(obj);
-                    Wallpaper.contextIdx = Wallpaper.containers.count - 1;
+                    Wallpaper.contextArea = obj;
                 }
 
                 onPositionChanged: mouse => {
@@ -197,21 +193,15 @@ Item {
                     };
 
                     const screens = overlapsAny(rect);
-                    const c = Wallpaper.containers;
-                    c.setProperty(idx, "x", minX);
-                    c.setProperty(idx, "y", minY);
-                    c.setProperty(idx, "width", maxX - minX);
-                    c.setProperty(idx, "height", maxY - minY);
-                    c.setProperty(idx, "screens", screens);
+                    const c = Wallpaper.contextArea;
+                    rect.screens = screens;
+                    Wallpaper.contextArea = rect;
                 }
 
                 onReleased: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
                     selecting = false;
-                    Wallpaper.containers.remove(Wallpaper.contextIdx, 1);
-                    Wallpaper.contextArea = null;
-                    Wallpaper.contextIdx = -1;
                 }
 
                 Component.onCompleted: {
@@ -223,24 +213,22 @@ Item {
         // selectionRect
         Rectangle {
             id: selectionRect
-            x: 0
-            y: 0
+            readonly property var relPos: {
+                if (!Wallpaper.contextArea)
+                    return null;
+                print(Wallpaper.contextArea.screens);
+                return Wallpaper.contextArea?.screens.filter(s => s.name === panel.screen.name);
+            }
+            onRelPosChanged: print(relPos.width)
+            width: relPos ? relPos.width : 0
+            height: relPos ? relPos.height : 0
             z: 9999
             opacity: Wallpaper.contextArea ? 1 : 0
-            // width: Wallpaper.contextArea.width
-            // height: Wallpaper.contextArea.height
             rotation: 0
             color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
             border.color: Colors.theme.outline
             transformOrigin: Item.TopLeft
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
         }
 
         // simple desktop popup
@@ -286,7 +274,7 @@ Item {
         var relative = {
             x: target.x - screen.x,
             y: target.y - screen.y,
-            name: screen.objectName
+            name: screen.name
         };
         return relative;
     }
