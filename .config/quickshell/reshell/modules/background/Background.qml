@@ -18,6 +18,14 @@ Item {
     signal dockUpdate(var data)
     signal save
 
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Control) {}
+    }
+
+    Keys.onReleased: event => {
+        if (event.key === Qt.Key_Control) {}
+    }
+
     component LazyContainer: LazyLoader {
         id: containerloader
         required property int index
@@ -65,11 +73,11 @@ Item {
                                 }
                                 if (hasChanges) {
                                     const props = widget.property.getProperty();
-                                    const conf = Wallpaper.containers.get(containerloader.index);
+                                    const conf = Background.containers.get(containerloader.index);
                                     const withProps = conf.contents;
                                     withProps.props = props;
-                                    Wallpaper.containers.setProperty(containerloader.index, "contents", withProps);
-                                    Wallpaper.containers.save();
+                                    Background.containers.setProperty(containerloader.index, "contents", withProps);
+                                    Background.containers.save();
                                 }
                             });
                         }
@@ -108,7 +116,7 @@ Item {
 
     Instantiator {
         model: DelegateModel {
-            model: Wallpaper.containers
+            model: Background.containers
             delegate: LazyContainer {}
         }
     }
@@ -157,33 +165,33 @@ Item {
                         return;
                     if (contextMenu.opened)
                         contextMenu.close();
-                    Wallpaper.contextArea.selecting = true;
-                    Wallpaper.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
-                    Wallpaper.contextArea.x = Wallpaper.contextArea.startPoint.x;
-                    Wallpaper.contextArea.y = Wallpaper.contextArea.startPoint.y;
+                    Background.contextArea.selecting = true;
+                    Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
+                    Background.contextArea.x = Background.contextArea.startPoint.x;
+                    Background.contextArea.y = Background.contextArea.startPoint.y;
                 }
 
                 onPositionChanged: mouse => {
-                    const idx = Wallpaper.contextIdx;
+                    const idx = Background.contextIdx;
                     if (idx < 0)
                         return;
-                    const sp = Wallpaper.contextArea.startPoint;
+                    const sp = Background.contextArea.startPoint;
                     const gp = mapToGlobal(mouse.x, mouse.y);
                     var minX = Math.min(sp.x, gp.x);
                     var minY = Math.min(sp.y, gp.y);
                     var maxX = Math.max(sp.x, gp.x);
                     var maxY = Math.max(sp.y, gp.y);
 
-                    Wallpaper.contextArea.x = minX;
-                    Wallpaper.contextArea.y = minY;
-                    Wallpaper.contextArea.width = maxX - minX;
-                    Wallpaper.contextArea.height = maxY - minY;
+                    Background.contextArea.x = minX;
+                    Background.contextArea.y = minY;
+                    Background.contextArea.width = maxX - minX;
+                    Background.contextArea.height = maxY - minY;
                 }
 
                 onReleased: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
-                    Wallpaper.contextArea.selecting = false;
+                    Background.contextArea.selecting = false;
                 }
 
                 Component.onCompleted: {
@@ -195,13 +203,13 @@ Item {
         // selectionRect
         Rectangle {
             id: selectionRect
-            property bool intersect: Wallpaper.contextArea.width > 0 && Wallpaper.contextArea.height > 0 && intersects(Wallpaper.contextArea, panel.screen)
+            property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && intersects(Background.contextArea, panel.screen)
 
-            opacity: Wallpaper.contextArea.selecting && intersect ? 1 : 0
-            width: Math.min(Wallpaper.contextArea.x + Wallpaper.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Wallpaper.contextArea.x, panel.screen.x)
-            height: Math.min(Wallpaper.contextArea.y + Wallpaper.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Wallpaper.contextArea.y, panel.screen.y)
-            x: Math.max(Wallpaper.contextArea.x, panel.screen.x) - panel.screen.x
-            y: Math.max(Wallpaper.contextArea.y, panel.screen.y) - panel.screen.y
+            opacity: Background.contextArea.selecting && intersect ? 1 : 0
+            width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
+            height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
+            x: Math.max(Background.contextArea.x, panel.screen.x) - panel.screen.x
+            y: Math.max(Background.contextArea.y, panel.screen.y) - panel.screen.y
             z: 9999
             color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
@@ -224,7 +232,7 @@ Item {
 
         // Contents
         Connections {
-            target: Wallpaper.containers
+            target: Background.containers
             function onGenerate() {
                 const screen = layered.grabToImage(function (result) {
                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);

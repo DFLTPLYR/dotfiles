@@ -122,7 +122,7 @@ Variants {
 
                 // background
                 LazyLoader {
-                    active: Wallpaper.ready
+                    active: Background.ready
                     component: Background {
                         screen: display.screen
                         file: fileview

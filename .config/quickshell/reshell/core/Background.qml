@@ -1,5 +1,5 @@
-pragma Singleton
 pragma ComponentBehavior: Bound
+pragma Singleton
 
 import QtQuick
 import Quickshell
@@ -26,6 +26,7 @@ Singleton {
         property int x: 0
         property int y: 0
     }
+
     property FileModel containers: FileModel {
         signal generate
         onSaved: list => {

@@ -74,11 +74,11 @@ Rectangle {
                                 }
                                 if (hasChanges) {
                                     const props = widget.property.getProperty();
-                                    const conf = Wallpaper.containers.get(containerloader.index);
+                                    const conf = Background.containers.get(containerloader.index);
                                     const withProps = conf.contents;
                                     withProps.props = props;
-                                    Wallpaper.containers.setProperty(containerloader.index, "contents", withProps);
-                                    Wallpaper.containers.save();
+                                    Background.containers.setProperty(containerloader.index, "contents", withProps);
+                                    Background.containers.save();
                                 }
                             });
                         }
@@ -106,7 +106,7 @@ Rectangle {
 
     DelegateModel {
         id: images
-        model: Wallpaper.containers
+        model: Background.containers
         delegate: LazyContainer {}
     }
 

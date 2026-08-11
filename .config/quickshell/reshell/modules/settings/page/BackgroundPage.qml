@@ -180,7 +180,7 @@ Item {
                                 screens: overlapsAny(selectionRect),
                                 contents: {}
                             };
-                            Wallpaper.containers.append(container);
+                            Background.containers.append(container);
                         }
                     }
 
@@ -211,7 +211,7 @@ Item {
 
                 // containers
                 Instantiator {
-                    model: Wallpaper.containers
+                    model: Background.containers
                     delegate: ContainerRect {
                         parent: content
                     }
@@ -562,7 +562,7 @@ Item {
                 contents: containerRect.contents
             };
 
-            Wallpaper.containers.set(containerRect.index, obj);
+            Background.containers.set(containerRect.index, obj);
         }
 
         onContentsChanged: {
@@ -675,7 +675,7 @@ Item {
                     contents: containerRect.contents
                 };
 
-                Wallpaper.containers.set(containerRect.index, obj);
+                Background.containers.set(containerRect.index, obj);
             }
         }
 
@@ -708,7 +708,7 @@ Item {
                 onOutput: data => {
                     if (!data)
                         return;
-                    Wallpaper.containers.setProperty(containerRect.index, "contents", {
+                    Background.containers.setProperty(containerRect.index, "contents", {
                         type: "image",
                         kind: data.type,
                         source: data.url
@@ -745,7 +745,7 @@ Item {
             Action {
                 text: "Remove Container"
                 onTriggered: {
-                    Wallpaper.containers.remove(containerRect.index, 1);
+                    Background.containers.remove(containerRect.index, 1);
                 }
             }
         }
@@ -761,7 +761,7 @@ Item {
                         source: drop.keys[0]
                     };
 
-                    Wallpaper.containers.setProperty(containerRect.index, "contents", widget);
+                    Background.containers.setProperty(containerRect.index, "contents", widget);
                 }
             }
         }
@@ -798,11 +798,11 @@ Item {
                     text: "Save preset"
                     onTriggered: {
                         var preset = {
-                            source: Wallpaper.config.layers,
+                            source: Background.config.layers,
                             name: Math.random().toString(36).substring(2, 10)
                         };
-                        Wallpaper.config.preset.push(preset);
-                        Wallpaper.config.layers = [];
+                        Background.config.preset.push(preset);
+                        Background.config.layers = [];
                     }
                 }
 
@@ -816,9 +816,9 @@ Item {
                         delegate: Action {
                             required property var modelData
                             checkable: true
-                            checked: modelData === Wallpaper.config.theme
+                            checked: modelData === Background.config.theme
                             text: modelData.replace("scheme-", "")
-                            onToggled: Wallpaper.config.theme = modelData
+                            onToggled: Background.config.theme = modelData
                         }
                         onObjectAdded: (obj, idx) => colorScheme.insertAction(obj, idx)
                     }
@@ -865,5 +865,5 @@ Item {
         }
     }
 
-    Component.onDestruction: Wallpaper.containers.save()
+    Component.onDestruction: Background.containers.save()
 }
