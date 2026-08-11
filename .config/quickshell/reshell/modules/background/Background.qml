@@ -152,56 +152,38 @@ Item {
                 z: -999999
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-                property bool selecting
-                property point startPoint
                 onPressed: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
                     if (contextMenu.opened)
                         contextMenu.close();
-                    selecting = true;
-                    startPoint = mapToGlobal(mouse.x, mouse.y);
-                    const obj = {
-                        x: mouse.x,
-                        y: mouse.y,
-                        z: 999999,
-                        screens: [],
-                        width: 0,
-                        height: 0
-                    };
-                    Wallpaper.contextArea = obj;
+                    Wallpaper.contextArea.selecting = true;
+                    Wallpaper.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
+                    Wallpaper.contextArea.x = Wallpaper.contextArea.startPoint.x;
+                    Wallpaper.contextArea.y = Wallpaper.contextArea.startPoint.y;
                 }
 
                 onPositionChanged: mouse => {
-                    if (!selecting)
-                        return;
                     const idx = Wallpaper.contextIdx;
                     if (idx < 0)
                         return;
-
+                    const sp = Wallpaper.contextArea.startPoint;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    var minX = Math.min(startPoint.x, gp.x);
-                    var minY = Math.min(startPoint.y, gp.y);
-                    var maxX = Math.max(startPoint.x, gp.x);
-                    var maxY = Math.max(startPoint.y, gp.y);
+                    var minX = Math.min(sp.x, gp.x);
+                    var minY = Math.min(sp.y, gp.y);
+                    var maxX = Math.max(sp.x, gp.x);
+                    var maxY = Math.max(sp.y, gp.y);
 
-                    const rect = {
-                        x: minX,
-                        y: minY,
-                        width: maxX - minX,
-                        height: maxY - minY
-                    };
-
-                    const screens = overlapsAny(rect);
-                    const c = Wallpaper.contextArea;
-                    rect.screens = screens;
-                    Wallpaper.contextArea = rect;
+                    Wallpaper.contextArea.x = minX;
+                    Wallpaper.contextArea.y = minY;
+                    Wallpaper.contextArea.width = maxX - minX;
+                    Wallpaper.contextArea.height = maxY - minY;
                 }
 
                 onReleased: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
-                    selecting = false;
+                    Wallpaper.contextArea.selecting = false;
                 }
 
                 Component.onCompleted: {
@@ -213,24 +195,25 @@ Item {
         // selectionRect
         Rectangle {
             id: selectionRect
-            readonly property var relPos: {
-                if (!Wallpaper.contextArea)
-                    return null;
-                print(Wallpaper.contextArea.screens);
-                return Wallpaper.contextArea?.screens.filter(s => s.name === panel.screen.name);
-            }
-            onRelPosChanged: print(relPos.width)
-            width: relPos ? relPos.width : 0
-            height: relPos ? relPos.height : 0
+            property bool vis: Wallpaper.contextArea.selecting && Wallpaper.contextArea.width > 0 && Wallpaper.contextArea.height > 0 && intersects(Wallpaper.contextArea, panel.screen)
+
+            opacity: vis ? 1 : 0
+            width: Math.min(Wallpaper.contextArea.x + Wallpaper.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Wallpaper.contextArea.x, panel.screen.x)
+            height: Math.min(Wallpaper.contextArea.y + Wallpaper.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Wallpaper.contextArea.y, panel.screen.y)
+            x: Math.max(Wallpaper.contextArea.x, panel.screen.x) - panel.screen.x
+            y: Math.max(Wallpaper.contextArea.y, panel.screen.y) - panel.screen.y
             z: 9999
-            opacity: Wallpaper.contextArea ? 1 : 0
-            rotation: 0
             color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
             border.color: Colors.theme.outline
-            transformOrigin: Item.TopLeft
-        }
 
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
         // simple desktop popup
         ContextMenu {
             id: contextMenu

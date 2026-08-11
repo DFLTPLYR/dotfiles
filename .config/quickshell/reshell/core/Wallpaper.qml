@@ -10,8 +10,22 @@ Singleton {
     property bool ready: false
     property bool enableSetting: false
     property alias config: adapter.config
-    property var contextArea: ({})
-
+    property QtObject contextArea: QtObject {
+        property point startPoint
+        property bool selecting: false
+        onSelectingChanged: {
+            if (selecting)
+                return;
+            width = 0;
+            height = 0;
+            x = 0;
+            y = 0;
+        }
+        property int width: 0
+        property int height: 0
+        property int x: 0
+        property int y: 0
+    }
     property FileModel containers: FileModel {
         signal generate
         onSaved: list => {
