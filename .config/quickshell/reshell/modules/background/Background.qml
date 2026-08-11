@@ -195,9 +195,9 @@ Item {
         // selectionRect
         Rectangle {
             id: selectionRect
-            property bool vis: Wallpaper.contextArea.selecting && Wallpaper.contextArea.width > 0 && Wallpaper.contextArea.height > 0 && intersects(Wallpaper.contextArea, panel.screen)
+            property bool intersect: Wallpaper.contextArea.width > 0 && Wallpaper.contextArea.height > 0 && intersects(Wallpaper.contextArea, panel.screen)
 
-            opacity: vis ? 1 : 0
+            opacity: Wallpaper.contextArea.selecting && intersect ? 1 : 0
             width: Math.min(Wallpaper.contextArea.x + Wallpaper.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Wallpaper.contextArea.x, panel.screen.x)
             height: Math.min(Wallpaper.contextArea.y + Wallpaper.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Wallpaper.contextArea.y, panel.screen.y)
             x: Math.max(Wallpaper.contextArea.x, panel.screen.x) - panel.screen.x
@@ -236,29 +236,7 @@ Item {
         }
     }
 
-    function overlapsAny(target) {
-        const screens = Quickshell.screens;
-        const newScreens = [];
-        for (let i = 0; i < screens.length; i++) {
-            const screen = screens[i];
-
-            if (intersects(target, screen)) {
-                newScreens.push(getRelativePos(target, screen));
-            }
-        }
-        return newScreens;
-    }
-
     function intersects(a, b) {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
-    }
-
-    function getRelativePos(target, screen) {
-        var relative = {
-            x: target.x - screen.x,
-            y: target.y - screen.y,
-            name: screen.name
-        };
-        return relative;
     }
 }
