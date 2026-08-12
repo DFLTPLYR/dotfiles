@@ -12,7 +12,6 @@ import qs.components
 Item {
     id: panel
     property ShellScreen screen
-    property Item area: null
     property var file
     property bool edit: false
     signal dockUpdate(var data)
@@ -160,6 +159,7 @@ Item {
                 z: -999999
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
+                propagateComposedEvents: true
                 onPressed: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
@@ -181,7 +181,6 @@ Item {
                     var minY = Math.min(sp.y, gp.y);
                     var maxX = Math.max(sp.x, gp.x);
                     var maxY = Math.max(sp.y, gp.y);
-
                     Background.contextArea.x = minX;
                     Background.contextArea.y = minY;
                     Background.contextArea.width = maxX - minX;
@@ -192,10 +191,6 @@ Item {
                     if (mouse.button !== Qt.LeftButton)
                         return;
                     Background.contextArea.selecting = false;
-                }
-
-                Component.onCompleted: {
-                    panel.area = this;
                 }
             }
         }
@@ -214,14 +209,8 @@ Item {
             color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
             border.width: 1
             border.color: Colors.theme.outline
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
         }
+
         // simple desktop popup
         ContextMenu {
             id: contextMenu
