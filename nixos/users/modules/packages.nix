@@ -10,6 +10,7 @@
     pkg-config
     qt6.qtbase
     qt6.qtdeclarative
+    qt6.qtwayland
     ((pkgs.quickshell.override {stdenv = pkgs.clangStdenv;}).overrideAttrs (old: {
       cmakeFlags =
         (old.cmakeFlags or [])
