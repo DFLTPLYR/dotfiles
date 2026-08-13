@@ -256,7 +256,7 @@ Item {
                     id: boxMa
                     anchors.fill: parent
                     drag.target: parent
-                    onReleased: mouse => {
+                    onPositionChanged: mouse => {
                         modelData.x = panel.screen.x + parent.x;
                         modelData.y = panel.screen.y + parent.y;
                     }
