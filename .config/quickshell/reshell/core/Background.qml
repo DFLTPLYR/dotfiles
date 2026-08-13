@@ -16,6 +16,14 @@ Singleton {
         onSelectingChanged: {
             if (selecting)
                 return;
+            if (width > 100 || height > 100)
+                config.boxes.push({
+                    width,
+                    height,
+                    x,
+                    y
+                });
+
             width = 0;
             height = 0;
             x = 0;
@@ -26,6 +34,10 @@ Singleton {
         property int x: 0
         property int y: 0
     }
+
+    property list<var> boxes: []
+
+    onBoxesChanged: print(boxes)
 
     property FileModel containers: FileModel {
         signal generate

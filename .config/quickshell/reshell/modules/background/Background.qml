@@ -16,14 +16,7 @@ Item {
     property bool edit: false
     signal dockUpdate(var data)
     signal save
-
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Control) {}
-    }
-
-    Keys.onReleased: event => {
-        if (event.key === Qt.Key_Control) {}
-    }
+    focus: true
 
     component LazyContainer: LazyLoader {
         id: containerloader
@@ -159,16 +152,20 @@ Item {
                 z: -999999
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-                propagateComposedEvents: true
                 onPressed: mouse => {
-                    if (mouse.button !== Qt.LeftButton)
-                        return;
-                    if (contextMenu.opened)
-                        contextMenu.close();
-                    Background.contextArea.selecting = true;
-                    Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
-                    Background.contextArea.x = Background.contextArea.startPoint.x;
-                    Background.contextArea.y = Background.contextArea.startPoint.y;
+                    if (mouse.button === Qt.RightButton) {
+                        contextMenu.x = mouse.x;
+                        contextMenu.y = mouse.y;
+                        contextMenu.open();
+                    } else {
+                        if (contextMenu.opened) {
+                            contextMenu.close();
+                        }
+                        Background.contextArea.selecting = true;
+                        Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
+                        Background.contextArea.x = Background.contextArea.startPoint.x;
+                        Background.contextArea.y = Background.contextArea.startPoint.y;
+                    }
                 }
 
                 onPositionChanged: mouse => {
@@ -199,16 +196,24 @@ Item {
         Rectangle {
             id: selectionRect
             property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && intersects(Background.contextArea, panel.screen)
-
-            opacity: Background.contextArea.selecting && intersect ? 1 : 0
             width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
             height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
+            color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
+            opacity: Background.contextArea.selecting && intersect ? 1 : 0
+
+            border.width: 1
+            border.color: Colors.theme.outline
+
             x: Math.max(Background.contextArea.x, panel.screen.x) - panel.screen.x
             y: Math.max(Background.contextArea.y, panel.screen.y) - panel.screen.y
             z: 9999
-            color: Colors.setOpacity(Colors.theme.tertiary, 0.5)
-            border.width: 1
-            border.color: Colors.theme.outline
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
 
         // simple desktop popup
@@ -217,6 +222,34 @@ Item {
             screen: panel.screen
             x: (screen.width - width) / 2
             y: (screen.height - height) / 2
+        }
+
+        Repeater {
+            model: ScriptModel {
+                values: Background.boxes
+            }
+            delegate: Rectangle {
+                required property var modelData
+                property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
+                width: Math.min(modelData.x + modelData.width, panel.screen.x + panel.screen.width) - Math.max(modelData.x, panel.screen.x)
+                height: Math.min(modelData.y + modelData.height, panel.screen.y + panel.screen.height) - Math.max(modelData.y, panel.screen.y)
+                color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
+                opacity: intersect ? 1 : 0
+
+                border.width: 1
+                border.color: Colors.theme.outline
+
+                x: Math.max(modelData.x, panel.screen.x) - panel.screen.x
+                y: Math.max(modelData.y, panel.screen.y) - panel.screen.y
+                z: 9999
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
         }
 
         // Contents
