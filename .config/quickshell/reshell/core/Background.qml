@@ -16,13 +16,15 @@ Singleton {
         onSelectingChanged: {
             if (selecting)
                 return;
-            const box = boxFactory.createObject(null, {
-                x,
-                y,
-                width,
-                height
-            });
-            config.boxes = [...config.boxes, box];
+            if (width >= 50 && height >= 50) {
+                const box = boxFactory.createObject(null, {
+                    x,
+                    y,
+                    width,
+                    height
+                });
+                config.boxes = [...config.boxes, box];
+            }
             width = 0;
             height = 0;
             x = 0;

@@ -5,7 +5,6 @@ Pane {
     id: container
     clip: false
     signal resized
-    property alias bg: background
     property int rulersSize: 12
     property bool pointerVisible: true
 
