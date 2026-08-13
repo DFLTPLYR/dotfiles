@@ -230,23 +230,35 @@ Item {
             }
             delegate: Rectangle {
                 required property var modelData
+                property int test: modelData.x
+                onTestChanged: print(test)
                 property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
-                width: Math.min(modelData.x + modelData.width, panel.screen.x + panel.screen.width) - Math.max(modelData.x, panel.screen.x)
-                height: Math.min(modelData.y + modelData.height, panel.screen.y + panel.screen.height) - Math.max(modelData.y, panel.screen.y)
+                width: modelData.width
+                height: modelData.height
                 color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
                 opacity: intersect ? 1 : 0
 
                 border.width: 1
                 border.color: Colors.theme.outline
 
-                x: Math.max(modelData.x, panel.screen.x) - panel.screen.x
-                y: Math.max(modelData.y, panel.screen.y) - panel.screen.y
+                x: modelData.x - panel.screen.x
+                y: modelData.y - panel.screen.y
                 z: 9999
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: 400
                         easing.type: Easing.InOutQuad
+                    }
+                }
+
+                MouseArea {
+                    id: boxMa
+                    anchors.fill: parent
+                    drag.target: parent
+                    onReleased: mouse => {
+                        modelData.x = panel.screen.x + parent.x;
+                        modelData.y = panel.screen.y + parent.y;
                     }
                 }
             }

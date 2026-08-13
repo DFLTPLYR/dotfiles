@@ -16,14 +16,13 @@ Singleton {
         onSelectingChanged: {
             if (selecting)
                 return;
-            if (width > 100 || height > 100)
-                config.boxes.push({
-                    width,
-                    height,
-                    x,
-                    y
-                });
-
+            const box = boxFactory.createObject(null, {
+                x,
+                y,
+                width,
+                height
+            });
+            config.boxes = [...config.boxes, box];
             width = 0;
             height = 0;
             x = 0;
@@ -35,10 +34,16 @@ Singleton {
         property int y: 0
     }
 
-    property list<var> boxes: []
+    property var boxes: []
 
-    onBoxesChanged: print(boxes)
-
+    property Component boxFactory: Component {
+        QtObject {
+            property int x: 0
+            property int y: 0
+            property int width: 0
+            property int height: 0
+        }
+    }
     property FileModel containers: FileModel {
         signal generate
         onSaved: list => {
