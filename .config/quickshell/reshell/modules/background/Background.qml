@@ -237,6 +237,20 @@ Item {
                 readonly property bool pointerVisible: Global.widget
                 property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
 
+                property point pressPos
+                property int pressX
+                property int pressY
+                property int pressW
+                property int pressH
+
+                function grabPress(area, mx, my) {
+                    pressPos = area.mapToGlobal(mx, my);
+                    pressX = modelData.x;
+                    pressY = modelData.y;
+                    pressW = modelData.width;
+                    pressH = modelData.height;
+                }
+
                 width: modelData.width
                 height: modelData.height
                 color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
@@ -279,25 +293,17 @@ Item {
                     MouseArea {
                         id: leftHandleArea
 
-                        property point pressPos
-                        property int pressX
-                        property int pressW
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressX = box.modelData.x;
-                            pressW = box.modelData.width;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(30, pressW - (gp.x - pressPos.x));
+                            const newW = Math.max(30, box.pressW - (gp.x - box.pressPos.x));
                             box.modelData.width = newW;
-                            box.modelData.x = pressX + pressW - newW;
+                            box.modelData.x = box.pressX + box.pressW - newW;
                         }
 
                         drag {
@@ -355,21 +361,15 @@ Item {
                     MouseArea {
                         id: rightHandleArea
 
-                        property point pressPos
-                        property int pressW
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressW = box.modelData.width;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            box.modelData.width = Math.max(50, pressW + (gp.x - pressPos.x));
+                            box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
                         }
 
                         drag {
@@ -429,25 +429,17 @@ Item {
                     MouseArea {
                         id: topHandleArea
 
-                        property point pressPos
-                        property int pressY
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressY = box.modelData.y;
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newH = Math.max(50, pressH - (gp.y - pressPos.y));
+                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
                             box.modelData.height = newH;
-                            box.modelData.y = pressY + pressH - newH;
+                            box.modelData.y = box.pressY + box.pressH - newH;
                         }
 
                         drag {
@@ -507,21 +499,15 @@ Item {
                     MouseArea {
                         id: bottomHandleArea
 
-                        property point pressPos
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            box.modelData.height = Math.max(50, pressH + (gp.y - pressPos.y));
+                            box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
                         }
 
                         drag {
@@ -582,31 +568,19 @@ Item {
                     MouseArea {
                         id: topRightHandleArea
 
-                        property point pressPos
-                        property int pressX
-                        property int pressY
-                        property int pressW
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressX = box.modelData.x;
-                            pressY = box.modelData.y;
-                            pressW = box.modelData.width;
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, pressW + (gp.x - pressPos.x));
-                            const newH = Math.max(50, pressH - (gp.y - pressPos.y));
+                            const newW = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
                             box.modelData.width = newW;
                             box.modelData.height = newH;
-                            box.modelData.y = pressY + pressH - newH;
+                            box.modelData.y = box.pressY + box.pressH - newH;
                         }
 
                         drag {
@@ -665,32 +639,20 @@ Item {
                     MouseArea {
                         id: topLeftHandleArea
 
-                        property point pressPos
-                        property int pressX
-                        property int pressY
-                        property int pressW
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressX = box.modelData.x;
-                            pressY = box.modelData.y;
-                            pressW = box.modelData.width;
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, pressW - (gp.x - pressPos.x));
-                            const newH = Math.max(50, pressH - (gp.y - pressPos.y));
+                            const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
+                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
                             box.modelData.width = newW;
                             box.modelData.height = newH;
-                            box.modelData.x = pressX + pressW - newW;
-                            box.modelData.y = pressY + pressH - newH;
+                            box.modelData.x = box.pressX + box.pressW - newW;
+                            box.modelData.y = box.pressY + box.pressH - newH;
                         }
 
                         drag {
@@ -749,30 +711,16 @@ Item {
                     MouseArea {
                         id: bottomRightHandleArea
 
-                        property point pressPos
-                        property int pressX
-                        property int pressY
-                        property int pressW
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressX = box.modelData.x;
-                            pressY = box.modelData.y;
-                            pressW = box.modelData.width;
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, pressW + (gp.x - pressPos.x));
-                            const newH = Math.max(50, pressH + (gp.y - pressPos.y));
-                            box.modelData.width = newW;
-                            box.modelData.height = newH;
+                            box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                            box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
                         }
 
                         drag {
@@ -831,31 +779,19 @@ Item {
                     MouseArea {
                         id: bottomLeftHandleArea
 
-                        property point pressPos
-                        property int pressX
-                        property int pressY
-                        property int pressW
-                        property int pressH
-
                         anchors.fill: parent
                         enabled: box.pointerVisible
                         hoverEnabled: true
-                        onPressed: mouse => {
-                            pressPos = mapToGlobal(mouse.x, mouse.y);
-                            pressX = box.modelData.x;
-                            pressY = box.modelData.y;
-                            pressW = box.modelData.width;
-                            pressH = box.modelData.height;
-                        }
+                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
                         onPositionChanged: mouse => {
                             if (!drag.active)
                                 return;
                             const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, pressW - (gp.x - pressPos.x));
-                            const newH = Math.max(50, pressH + (gp.y - pressPos.y));
+                            const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
+                            const newH = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
                             box.modelData.width = newW;
                             box.modelData.height = newH;
-                            box.modelData.x = pressX + pressW - newW;
+                            box.modelData.x = box.pressX + box.pressW - newW;
                         }
 
                         drag {
