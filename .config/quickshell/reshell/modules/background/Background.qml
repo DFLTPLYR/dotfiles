@@ -228,612 +228,7 @@ Item {
             model: ScriptModel {
                 values: Background.boxes
             }
-            delegate: Rectangle {
-                id: box
-
-                signal resized
-                required property var modelData
-                readonly property int handlerSize: 12
-                readonly property bool pointerVisible: Global.widget
-                property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
-
-                property point pressPos
-                property int pressX
-                property int pressY
-                property int pressW
-                property int pressH
-
-                function grabPress(area, mx, my) {
-                    pressPos = area.mapToGlobal(mx, my);
-                    pressX = modelData.x;
-                    pressY = modelData.y;
-                    pressW = modelData.width;
-                    pressH = modelData.height;
-                }
-
-                width: modelData.width
-                height: modelData.height
-                color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
-                opacity: intersect ? 1 : 0
-                x: modelData.x - panel.screen.x
-                y: modelData.y - panel.screen.y
-                z: 9999
-
-                Rectangle {
-                    id: leftHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: leftHandleArea.containsMouse && !leftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: leftHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: leftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: leftHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: leftHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(30, box.pressW - (gp.x - box.pressPos.x));
-                            box.modelData.width = newW;
-                            box.modelData.x = box.pressX + box.pressW - newW;
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: rightHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: rightHandleArea.containsMouse && !rightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: rightHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: rightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: rightHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: rightHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: topHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    x: parent.x / 2
-                    y: 0
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.top
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: topHandleArea.containsMouse && !topHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: topHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: topHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                            box.modelData.height = newH;
-                            box.modelData.y = box.pressY + box.pressH - newH;
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    x: parent.x / 2
-                    y: parent.y
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.bottom
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: bottomHandleArea.containsMouse && !bottomHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: bottomHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: bottomHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                // Corners
-
-                Rectangle {
-                    id: topRightHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.right
-                    anchors.verticalCenter: parent.top
-
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: topRightHandleArea.containsMouse && !topRightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topRightHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: topRightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topRightHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: topRightHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
-                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                            box.modelData.width = newW;
-                            box.modelData.height = newH;
-                            box.modelData.y = box.pressY + box.pressH - newH;
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis | Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: topLeftHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.left
-                    anchors.verticalCenter: parent.top
-
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: topLeftHandleArea.containsMouse && !topLeftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topLeftHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: topLeftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: topLeftHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: topLeftHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
-                            const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                            box.modelData.width = newW;
-                            box.modelData.height = newH;
-                            box.modelData.x = box.pressX + box.pressW - newW;
-                            box.modelData.y = box.pressY + box.pressH - newH;
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis | Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomRightHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.right
-                    anchors.verticalCenter: parent.bottom
-
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: bottomRightHandleArea.containsMouse && !bottomRightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomRightHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: bottomRightHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomRightHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: bottomRightHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
-                            box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis | Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: bottomLeftHandle
-
-                    width: box.handlerSize
-                    height: box.handlerSize
-                    radius: box.handlerSize
-                    color: Colors.theme.primary
-                    anchors.horizontalCenter: parent.left
-                    anchors.verticalCenter: parent.bottom
-
-                    opacity: box.pointerVisible ? 1 : 0
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: bottomLeftHandleArea.containsMouse && !bottomLeftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomLeftHandle
-                                color: Colors.theme.secondary
-                            }
-                        },
-                        State {
-                            name: "dragging"
-                            when: bottomLeftHandleArea.drag.active
-
-                            PropertyChanges {
-                                target: bottomLeftHandle
-                                color: Colors.theme.tertiary
-                            }
-                        }
-                    ]
-
-                    MouseArea {
-                        id: bottomLeftHandleArea
-
-                        anchors.fill: parent
-                        enabled: box.pointerVisible
-                        hoverEnabled: true
-                        onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
-                        onPositionChanged: mouse => {
-                            if (!drag.active)
-                                return;
-                            const gp = mapToGlobal(mouse.x, mouse.y);
-                            const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
-                            const newH = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
-                            box.modelData.width = newW;
-                            box.modelData.height = newH;
-                            box.modelData.x = box.pressX + box.pressW - newW;
-                        }
-
-                        drag {
-                            target: parent
-                            axis: Drag.YAxis | Drag.XAxis
-                        }
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 400
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-
-                MouseArea {
-                    id: boxMa
-                    anchors.fill: parent
-                    z: -1
-                    hoverEnabled: true
-                    drag.target: box
-                    onPositionChanged: mouse => {
-                        box.modelData.x = panel.screen.x + parent.x;
-                        box.modelData.y = panel.screen.y + parent.y;
-                    }
-                }
-            }
+            delegate: Box {}
         }
 
         // Contents
@@ -852,5 +247,609 @@ Item {
 
     function intersects(a, b) {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
+    component Box: Rectangle {
+        id: box
+        required property var modelData
+        readonly property int handlerSize: 12
+        readonly property bool pointerVisible: Global.widget
+        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
+
+        property point pressPos
+        property int pressX
+        property int pressY
+        property int pressW
+        property int pressH
+
+        function grabPress(area, mx, my) {
+            pressPos = area.mapToGlobal(mx, my);
+            pressX = modelData.x;
+            pressY = modelData.y;
+            pressW = modelData.width;
+            pressH = modelData.height;
+        }
+
+        width: modelData.width
+        height: modelData.height
+        color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
+        opacity: intersect ? 1 : 0
+        x: modelData.x - panel.screen.x
+        y: modelData.y - panel.screen.y
+        z: 9999
+
+        Rectangle {
+            id: leftHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: leftHandleArea.containsMouse && !leftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: leftHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: leftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: leftHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: leftHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    const newW = Math.max(30, box.pressW - (gp.x - box.pressPos.x));
+                    box.modelData.width = newW;
+                    box.modelData.x = box.pressX + box.pressW - newW;
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: rightHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: rightHandleArea.containsMouse && !rightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: rightHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: rightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: rightHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: rightHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: topHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            x: parent.x / 2
+            y: 0
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.top
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: topHandleArea.containsMouse && !topHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: topHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: topHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
+                    box.modelData.height = newH;
+                    box.modelData.y = box.pressY + box.pressH - newH;
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: bottomHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            x: parent.x / 2
+            y: parent.y
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.bottom
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: bottomHandleArea.containsMouse && !bottomHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: bottomHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: bottomHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        // Corners
+        Rectangle {
+            id: topRightHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.right
+            anchors.verticalCenter: parent.top
+
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: topRightHandleArea.containsMouse && !topRightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topRightHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: topRightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topRightHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: topRightHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    const newW = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
+                    box.modelData.width = newW;
+                    box.modelData.height = newH;
+                    box.modelData.y = box.pressY + box.pressH - newH;
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis | Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: topLeftHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.left
+            anchors.verticalCenter: parent.top
+
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: topLeftHandleArea.containsMouse && !topLeftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topLeftHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: topLeftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: topLeftHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: topLeftHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
+                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
+                    box.modelData.width = newW;
+                    box.modelData.height = newH;
+                    box.modelData.x = box.pressX + box.pressW - newW;
+                    box.modelData.y = box.pressY + box.pressH - newH;
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis | Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: bottomRightHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.right
+            anchors.verticalCenter: parent.bottom
+
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: bottomRightHandleArea.containsMouse && !bottomRightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomRightHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: bottomRightHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomRightHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: bottomRightHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                    box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis | Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Rectangle {
+            id: bottomLeftHandle
+
+            width: box.handlerSize
+            height: box.handlerSize
+            radius: box.handlerSize
+            color: Colors.theme.primary
+            anchors.horizontalCenter: parent.left
+            anchors.verticalCenter: parent.bottom
+
+            opacity: box.pointerVisible ? 1 : 0
+            states: [
+                State {
+                    name: "hovered"
+                    when: bottomLeftHandleArea.containsMouse && !bottomLeftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomLeftHandle
+                        color: Colors.theme.secondary
+                    }
+                },
+                State {
+                    name: "dragging"
+                    when: bottomLeftHandleArea.drag.active
+
+                    PropertyChanges {
+                        target: bottomLeftHandle
+                        color: Colors.theme.tertiary
+                    }
+                }
+            ]
+
+            MouseArea {
+                id: bottomLeftHandleArea
+
+                anchors.fill: parent
+                enabled: box.pointerVisible
+                hoverEnabled: true
+                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPositionChanged: mouse => {
+                    if (!drag.active)
+                        return;
+                    const gp = mapToGlobal(mouse.x, mouse.y);
+                    const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
+                    const newH = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
+                    box.modelData.width = newW;
+                    box.modelData.height = newH;
+                    box.modelData.x = box.pressX + box.pressW - newW;
+                }
+
+                drag {
+                    target: parent
+                    axis: Drag.YAxis | Drag.XAxis
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 400
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        MouseArea {
+            id: boxMa
+            anchors.fill: parent
+            z: -1
+            hoverEnabled: true
+            drag.target: box
+            onPositionChanged: mouse => {
+                box.modelData.x = panel.screen.x + parent.x;
+                box.modelData.y = panel.screen.y + parent.y;
+            }
+        }
     }
 }
