@@ -8,6 +8,7 @@ import Quickshell.Wayland
 
 import qs.core
 import qs.components
+import System
 
 Item {
     id: panel
