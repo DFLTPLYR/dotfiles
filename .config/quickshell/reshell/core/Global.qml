@@ -68,8 +68,23 @@ Singleton {
         target: "config"
         function cycleState() {
             config.state = (config.state + 1) % stateNames.length;
-            Quickshell.execDetached({
-                command: ["notify-send", "State", stateNames[config.state]]
+
+            Notification.send({
+                appname: "Shell",
+                title: `State Update`,
+                body: `State Change  ${stateNames[config.state]}`,
+                icon: "setting",
+                timeout: 5000
+            });
+        }
+        function sendNotification(json: string): void {
+            const data = JSON.parse(json);
+            Notification.send({
+                appname: data.appname ?? "Shell",
+                title: data.title ?? "",
+                body: data.body ?? "",
+                icon: data.icon ?? "",
+                timeout: data.timeout ?? 5000
             });
         }
     }
