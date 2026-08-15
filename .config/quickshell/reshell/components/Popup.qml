@@ -4,7 +4,8 @@ import qs.core
 
 Popup {
     id: popup
-
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     focus: true
 
