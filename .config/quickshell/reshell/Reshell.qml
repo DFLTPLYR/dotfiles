@@ -123,7 +123,7 @@ Variants {
                 // background
                 LazyLoader {
                     active: Background.ready
-                    component: Background {
+                    component: BackgroundPanel {
                         screen: display.screen
                         file: fileview
                         onDockUpdate: dock => {

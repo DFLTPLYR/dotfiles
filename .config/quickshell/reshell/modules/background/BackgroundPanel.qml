@@ -216,19 +216,25 @@ Item {
             }
         }
 
+        Repeater {
+            model: ScriptModel {
+                values: Background.boxes
+            }
+            delegate: Box {}
+            onItemAdded: (idx, item) => {
+                print("index: ", idx, " item: ", item);
+            }
+            onItemRemoved: (idx, item) => {
+                print("index: ", idx, " item: ", item);
+            }
+        }
+
         // simple desktop popup
         ContextMenu {
             id: contextMenu
             screen: panel.screen
             x: (screen.width - width) / 2
             y: (screen.height - height) / 2
-        }
-
-        Repeater {
-            model: ScriptModel {
-                values: Background.boxes
-            }
-            delegate: Box {}
         }
 
         // Contents
@@ -278,6 +284,7 @@ Item {
         y: modelData.y - panel.screen.y
         z: 9999
 
+        // Sides
         Rectangle {
             id: leftHandle
 
@@ -846,10 +853,22 @@ Item {
             z: -1
             hoverEnabled: true
             drag.target: box
+            acceptedButtons: Qt.RightButton | Qt.LeftButton
             onPositionChanged: mouse => {
                 box.modelData.x = panel.screen.x + parent.x;
                 box.modelData.y = panel.screen.y + parent.y;
             }
+            onClicked: mouse => {
+                if (mouse.button === Qt.RightButton) {
+                    popup.x = mouse.x;
+                    popup.y = mouse.y;
+                    popup.opened ? popup.close() : popup.open();
+                }
+            }
+        }
+
+        Popup {
+            id: popup
         }
     }
 }
