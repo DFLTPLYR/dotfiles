@@ -77,14 +77,13 @@ Singleton {
                 timeout: 5000
             });
         }
-        function sendNotification(json: string): void {
-            const data = JSON.parse(json);
+        function sendNotification(appname: string, title: string, body: string, icon: string, timeout: int): void {
             Notification.send({
-                appname: data.appname ?? "Shell",
-                title: data.title ?? "",
-                body: data.body ?? "",
-                icon: data.icon ?? "",
-                timeout: data.timeout ?? 5000
+                appname,
+                title,
+                body,
+                icon,
+                timeout
             });
         }
     }
