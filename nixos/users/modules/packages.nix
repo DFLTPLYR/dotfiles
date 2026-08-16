@@ -78,7 +78,6 @@
     onlyoffice-desktopeditors
     vlc
     localsend
-    aseprite
     protonplus
     prismlauncher
 
