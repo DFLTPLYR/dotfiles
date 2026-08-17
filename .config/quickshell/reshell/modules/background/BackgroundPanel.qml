@@ -131,7 +131,7 @@ Item {
 
         exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.keyboardFocus: bottom.hasMenu ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
         WlrLayershell.namespace: `Background-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 
@@ -146,9 +146,32 @@ Item {
 
         Item {
             id: controlArea
+            property bool grab: false
+            property bool select: false
+
             width: parent.width
             height: parent.height
+            focus: true
             z: Global.normal ? 999 : 0
+
+            Keys.onPressed: event => {
+                if (event.key === Qt.Key_Control) {
+                    controlArea.grab = true;
+                }
+                if (event.key === Qt.Key_Shift) {
+                    controlArea.select = true;
+                }
+            }
+
+            Keys.onReleased: event => {
+                if (event.key === Qt.Key_Control) {
+                    controlArea.grab = false;
+                }
+                if (event.key === Qt.Key_Shift) {
+                    controlArea.select = false;
+                }
+            }
+
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -158,19 +181,20 @@ Item {
                         contextMenu.y = mouse.y;
                         contextMenu.open();
                     } else {
-                        if (contextMenu.opened) {
+                        if (contextMenu.opened)
                             contextMenu.close();
+                        if (controlArea.select) {
+                            Background.contextArea.selecting = true;
+                            Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
+                            Background.contextArea.x = Background.contextArea.startPoint.x;
+                            Background.contextArea.y = Background.contextArea.startPoint.y;
                         }
-                        Background.contextArea.selecting = true;
-                        Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
-                        Background.contextArea.x = Background.contextArea.startPoint.x;
-                        Background.contextArea.y = Background.contextArea.startPoint.y;
                     }
                 }
 
                 onPositionChanged: mouse => {
                     const idx = Background.contextIdx;
-                    if (idx < 0)
+                    if (idx < 0 || !controlArea.select)
                         return;
                     const sp = Background.contextArea.startPoint;
                     const gp = mapToGlobal(mouse.x, mouse.y);
@@ -214,19 +238,21 @@ Item {
                     }
                 }
             }
-        }
 
-        Repeater {
-            id: containerRepeater
-            model: ScriptModel {
-                values: Background.boxes
-            }
-            delegate: Box {}
-            onItemAdded: (idx, item) => {
-                print("index: ", idx, " item: ", item);
-            }
-            onItemRemoved: (idx, item) => {
-                print("index: ", idx, " item: ", item);
+            Repeater {
+                id: containerRepeater
+                model: ScriptModel {
+                    values: Background.boxes
+                }
+                delegate: Box {
+                    ma.enabled: controlArea.grab
+                }
+                onItemAdded: (idx, item) => {
+                    print("index: ", idx, " item: ", item);
+                }
+                onItemRemoved: (idx, item) => {
+                    print("index: ", idx, " item: ", item);
+                }
             }
         }
 
@@ -261,7 +287,8 @@ Item {
         required property int index
         required property var modelData
         readonly property int handlerSize: 12
-        readonly property bool pointerVisible: Global.widget
+        readonly property bool pointerVisible: Global.edit
+        property alias ma: boxMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
 
         property point pressPos
