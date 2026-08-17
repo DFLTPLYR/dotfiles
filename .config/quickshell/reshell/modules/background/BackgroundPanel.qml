@@ -2,13 +2,13 @@ pragma ComponentBehavior: Bound
 
 import QtQml.Models
 import QtQuick
+import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
 
 import qs.core
 import qs.components
-import System
 
 Item {
     id: panel
@@ -148,9 +148,8 @@ Item {
             id: controlArea
             width: parent.width
             height: parent.height
-
+            z: Global.normal ? 999 : 0
             MouseArea {
-                z: -999999
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onPressed: mouse => {
@@ -191,33 +190,34 @@ Item {
                     Background.contextArea.selecting = false;
                 }
             }
-        }
 
-        // selectionRect
-        Rectangle {
-            id: selectionRect
-            property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && intersects(Background.contextArea, panel.screen)
-            width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
-            height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
-            color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
-            opacity: Background.contextArea.selecting && intersect ? 1 : 0
+            // selectionRect
+            Rectangle {
+                id: selectionRect
+                property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && intersects(Background.contextArea, panel.screen)
+                width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
+                height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
+                color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
+                opacity: Background.contextArea.selecting && intersect ? 1 : 0
 
-            border.width: 1
-            border.color: Colors.theme.outline
+                border.width: 1
+                border.color: Colors.theme.outline
 
-            x: Math.max(Background.contextArea.x, panel.screen.x) - panel.screen.x
-            y: Math.max(Background.contextArea.y, panel.screen.y) - panel.screen.y
-            z: 9999
+                x: Math.max(Background.contextArea.x, panel.screen.x) - panel.screen.x
+                y: Math.max(Background.contextArea.y, panel.screen.y) - panel.screen.y
+                z: 9999
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 150
-                    easing.type: Easing.InOutQuad
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
         }
 
         Repeater {
+            id: containerRepeater
             model: ScriptModel {
                 values: Background.boxes
             }
@@ -258,6 +258,7 @@ Item {
 
     component Box: Rectangle {
         id: box
+        required property int index
         required property var modelData
         readonly property int handlerSize: 12
         readonly property bool pointerVisible: Global.widget
@@ -283,7 +284,7 @@ Item {
         opacity: intersect ? 1 : 0
         x: modelData.x - panel.screen.x
         y: modelData.y - panel.screen.y
-        z: 9999
+        z: 0
 
         // Sides
         Rectangle {
@@ -868,8 +869,20 @@ Item {
             }
         }
 
-        Popup {
+        Menu {
             id: popup
+
+            width: 200
+            height: contentHeight
+
+            Button {
+                width: parent.width
+                onClicked: {
+                    const boxes = Background.boxes.slice();   // new array so the binding re-fires
+                    boxes.splice(box.index, 1);
+                    Background.boxes = boxes;
+                }
+            }
         }
     }
 }
