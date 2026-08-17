@@ -73,7 +73,7 @@ Singleton {
                 appname: "Shell",
                 title: `State Update`,
                 body: `State Change  ${stateNames[config.state]}`,
-                icon: "setting",
+                icon: "view-grid",
                 timeout: 5000
             });
         }
