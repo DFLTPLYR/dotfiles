@@ -1,0 +1,123 @@
+pragma ComponentBehavior: Bound
+import Quickshell
+import QtQuick
+import QtQuick.Layouts
+
+import qs.core
+import qs.types
+import qs.components
+import qs.modules.settings
+
+Page {
+    id: page
+
+    GroupContainer {
+        label: "Displays"
+
+        Rectangle {
+            id: exampleNotif
+            anchors {
+                left: parent.left
+                leftMargin: parent.padding
+                right: parent.right
+                rightMargin: parent.padding
+            }
+            height: 500
+            color: Colors.theme.on_surface
+            radius: 5
+            clip: true
+
+            Flickable {
+                id: flick
+                property real zoom: 0.1
+                property int maxX: 0
+                property int maxY: 0
+
+                anchors.fill: parent
+                boundsBehavior: Flickable.StopAtBounds
+                focus: true
+                acceptedButtons: Qt.MiddleButton | Qt.LeftButton
+
+                contentWidth: maxX + 2000
+                contentHeight: maxY + 2000
+
+                contentX: (contentWidth - width) / 2
+                contentY: (contentHeight - height) / 2
+                transformOrigin: Item.Center
+
+                // background grid
+                Canvas {
+                    id: canvas
+                    clip: false
+                    // anchors.fill: parent
+                    width: flick.contentWidth
+                    height: flick.contentHeight
+                    onPaint: {
+                        var ctx = getContext("2d");
+                        var gridSize = 10;
+
+                        ctx.strokeStyle = Colors.setOpacity(Colors.theme.surface, 0.5);
+                        ctx.lineWidth = 1;
+
+                        for (var x = 0; x <= width; x += gridSize) {
+                            ctx.beginPath();
+                            ctx.moveTo(x, 0);
+                            ctx.lineTo(x, height);
+                            ctx.stroke();
+                        }
+
+                        for (var y = 0; y <= height; y += gridSize) {
+                            ctx.beginPath();
+                            ctx.moveTo(0, y);
+                            ctx.lineTo(width, y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Display
+                Item {
+                    id: content
+
+                    scale: flick.zoom
+                    transformOrigin: Item.TopLeft
+                    anchors.centerIn: parent
+
+                    Repeater {
+                        id: displayRepeater
+                        model: Quickshell.screens
+                        delegate: Rectangle {
+                            id: display
+                            required property ShellScreen modelData
+                            width: modelData.width
+                            height: modelData.height
+                            x: modelData.x
+                            y: modelData.y
+                        }
+                    }
+                }
+
+                WheelHandler {
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    target: null
+
+                    onWheel: event => {
+                        let isShiftWheel = event.modifiers & Qt.ShiftModifier;
+                        print(isShiftWheel, event);
+                        if (isShiftWheel) {
+                            let delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
+                            flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
+                        }
+                    }
+                }
+
+                Component.onCompleted: {
+                    for (const s of Quickshell.screens) {
+                        maxX = Math.max(maxX, s.x + s.width);
+                        maxY = Math.max(maxY, s.y + s.height);
+                    }
+                }
+            }
+        }
+    }
+}

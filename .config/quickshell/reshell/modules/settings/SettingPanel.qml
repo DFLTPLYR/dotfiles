@@ -114,5 +114,8 @@ ApplicationWindow {
 
         // BackgroundPage
         BackgroundPage {}
+
+        // WallpaperPage
+        WallpaperPage {}
     }
 }
