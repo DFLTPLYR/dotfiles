@@ -50,6 +50,8 @@ Page {
                 rightMargin: parent.padding
             }
             height: exampleNotifItem.height + parent.padding
+            color: Colors.theme.on_surface
+            radius: 5
 
             property QtObject style: Style {
                 Component.onCompleted: {
@@ -90,9 +92,6 @@ Page {
                 "time": 1777989368250,
                 "urgency": "1"
             }
-
-            color: Colors.theme.on_surface
-            radius: 5
 
             NotificationItem {
                 id: exampleNotifItem
