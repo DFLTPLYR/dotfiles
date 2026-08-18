@@ -23,7 +23,12 @@ Page {
                 rightMargin: parent.padding
             }
             height: 500
-            color: Colors.theme.on_surface
+            width: parent.width
+            color: Colors.theme.surface
+            border {
+                width: 1
+                color: Colors.theme.on_surface
+            }
             radius: 5
             clip: true
 
@@ -37,7 +42,7 @@ Page {
                 boundsBehavior: Flickable.StopAtBounds
                 focus: true
                 acceptedButtons: Qt.MiddleButton | Qt.LeftButton
-
+                clip: true
                 contentWidth: maxX + 2000
                 contentHeight: maxY + 2000
 
@@ -56,7 +61,7 @@ Page {
                         var ctx = getContext("2d");
                         var gridSize = 10;
 
-                        ctx.strokeStyle = Colors.setOpacity(Colors.theme.surface, 0.5);
+                        ctx.strokeStyle = Colors.setOpacity(Colors.theme.on_surface, 0.5);
                         ctx.lineWidth = 1;
 
                         for (var x = 0; x <= width; x += gridSize) {
@@ -89,10 +94,84 @@ Page {
                         delegate: Rectangle {
                             id: display
                             required property ShellScreen modelData
+
                             width: modelData.width
                             height: modelData.height
+                            color: Colors.setOpacity(Colors.theme.surface, 0.2)
                             x: modelData.x
                             y: modelData.y
+
+                            // Outline
+                            Item {
+                                anchors.fill: parent
+                                property real zoom: flick.zoom
+                                focusPolicy: Qt.NoFocus
+                                focus: false
+                                // border
+                                Rectangle {
+                                    anchors {
+                                        top: parent.top
+                                        right: parent.right
+                                        left: parent.left
+                                    }
+                                    height: 2 / flick.zoom
+                                    color: Colors.theme.primary
+                                }
+
+                                Rectangle {
+                                    anchors {
+                                        bottom: parent.bottom
+                                        right: parent.right
+                                        left: parent.left
+                                    }
+                                    height: 2 / flick.zoom
+                                    color: Colors.theme.primary
+                                    y: parent.height
+                                }
+
+                                Rectangle {
+                                    anchors {
+                                        top: parent.top
+                                        bottom: parent.bottom
+                                        left: parent.left
+                                    }
+                                    width: 2 / flick.zoom
+                                    color: Colors.theme.primary
+                                }
+                                Rectangle {
+                                    anchors {
+                                        top: parent.top
+                                        bottom: parent.bottom
+                                        right: parent.right
+                                    }
+                                    width: 2 / flick.zoom
+                                    color: Colors.theme.primary
+                                    x: parent.width
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                onPressed: mouse => {
+                                    if (mouse.button === Qt.RightButton) {
+                                        contextMenu.x = mouse.x;
+                                        contextMenu.y = mouse.y;
+                                        contextMenu.open();
+                                    } else {
+                                        if (contextMenu.opened)
+                                            contextMenu.close();
+                                    }
+                                }
+                            }
+
+                            Menu {
+                                id: contextMenu
+
+                                Button {
+                                    text: "change Image"
+                                }
+                            }
                         }
                     }
                 }
@@ -103,7 +182,6 @@ Page {
 
                     onWheel: event => {
                         let isShiftWheel = event.modifiers & Qt.ShiftModifier;
-                        print(isShiftWheel, event);
                         if (isShiftWheel) {
                             let delta = event.angleDelta.y > 0 ? 0.1 : -0.1;
                             flick.zoom = Math.max(0.1, Math.min(5, flick.zoom + delta));
@@ -118,6 +196,10 @@ Page {
                     }
                 }
             }
+        }
+
+        Button {
+            text: "Add Image"
         }
     }
 }
