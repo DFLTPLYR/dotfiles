@@ -60,6 +60,11 @@ Button {
 
         opacity: enabled ? 1 : 0.3
 
+        topLeftRadius: config.background.rounding.topLeft
+        topRightRadius: config.background.rounding.topRight
+        bottomLeftRadius: config.background.rounding.bottomLeft
+        bottomRightRadius: config.background.rounding.bottomRight
+
         border {
             width: config.background.border.width
             color: config.background.border.color
