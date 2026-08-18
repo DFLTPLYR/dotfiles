@@ -287,7 +287,7 @@ Item {
         required property int index
         required property var modelData
         readonly property int handlerSize: 12
-        readonly property bool pointerVisible: Global.edit
+        readonly property bool pointerVisible: boxMa.hoverEnabled && boxMa.containsMouse
         property alias ma: boxMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
 
@@ -880,9 +880,10 @@ Item {
             id: boxMa
             anchors.fill: parent
             z: -1
-            hoverEnabled: true
+            hoverEnabled: Global.edit
             drag.target: box
             acceptedButtons: Qt.RightButton | Qt.LeftButton
+            propagateComposedEvents: true
             onPositionChanged: mouse => {
                 box.modelData.x = panel.screen.x + parent.x;
                 box.modelData.y = panel.screen.y + parent.y;
