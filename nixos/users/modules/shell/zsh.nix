@@ -18,7 +18,7 @@
       export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
       eval "$(fzf --zsh)"
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-        exec start-hyprland
+        exec uwsm start -S hyprland-uwsm.desktop
       fi
       for f in ~/.config/zsh/functions/*.zsh; do
         [ -r "$f" ] && source "$f"
