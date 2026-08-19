@@ -47,7 +47,6 @@
     self,
     nixpkgs,
     home-manager,
-    lerd,
     ...
   } @ inputs: let
     system = "x86_64-linux";
