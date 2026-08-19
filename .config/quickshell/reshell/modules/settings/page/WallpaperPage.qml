@@ -7,6 +7,7 @@ import qs.core
 import qs.types
 import qs.components
 import qs.modules.settings
+import System
 
 Page {
     id: page
@@ -85,7 +86,7 @@ Page {
                     id: content
 
                     scale: flick.zoom
-                    transformOrigin: Item.TopLeft
+                    transformOrigin: Item.Center
                     anchors.centerIn: parent
 
                     Repeater {
@@ -200,6 +201,15 @@ Page {
 
         Button {
             text: "Add Image"
+            onClicked: {
+                fm.open();
+                print("clicked");
+            }
+
+            FileManager {
+                id: fm
+                onOutput: (path, mimeType) => console.log(path, mimeType)
+            }
         }
     }
 }
