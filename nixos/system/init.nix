@@ -16,6 +16,7 @@
     ./services.nix
     ./udev.nix
     ./user.nix
+    ./lerd/lerd.nix
   ];
 
   nixpkgs.config.allowUnfree = true;

@@ -31,6 +31,12 @@
       url = "github:AlvaroParker/helium-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lerd = {
+      url = "github:lerd-env/lerd-nixos";
+      # Build lerd against your own nixpkgs instead of the one it pins,
+      # so you don't download a second copy of nixpkgs:
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # nix4nvchad = {
     #   url = "github:nix-community/nix4nvchad";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +47,7 @@
     self,
     nixpkgs,
     home-manager,
+    lerd,
     ...
   } @ inputs: let
     system = "x86_64-linux";

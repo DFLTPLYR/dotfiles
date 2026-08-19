@@ -166,6 +166,26 @@
         "type": "github"
       }
     },
+    "lerd": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786734377,
+        "narHash": "sha256-cHGC5obXRzxwsrUex8PGs5fp5D7Bb7HyVJMovM4o3R8=",
+        "owner": "lerd-env",
+        "repo": "lerd-nixos",
+        "rev": "e1415ae6e05f15748d43b2e15ee5a0cf00a8cdbb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lerd-env",
+        "repo": "lerd-nixos",
+        "type": "github"
+      }
+    },
     "matugen": {
       "inputs": {
         "nixpkgs": "nixpkgs_2",
@@ -336,6 +356,7 @@
         "helium": "helium",
         "herdr": "herdr",
         "home-manager": "home-manager",
+        "lerd": "lerd",
         "matugen": "matugen",
         "millennium": "millennium",
         "nixpkgs": "nixpkgs_4",
