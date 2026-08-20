@@ -53,8 +53,8 @@ hl.bind("SUPER + Tab", function()
 	hl.dispatch(hl.dsp.window.bring_to_top()) -- Bring it to the top
 end)
 
-hl.bind(mainMod .. "+ equal", hl.dsp.layout("colresize +0.2"))
-hl.bind(mainMod .. "+ minus", hl.dsp.layout("colresize -0.2"))
+hl.bind(mainMod .. "+ equal", hl.dsp.layout("colresize +0.02"), { repeating = true })
+hl.bind(mainMod .. "+ minus", hl.dsp.layout("colresize -0.05"), { repeating = true })
 hl.bind(mainMod .. "+ SHIFT + comma", hl.dsp.layout("consume_or_expel prev"))
 hl.bind(mainMod .. "+ SHIFT + period", hl.dsp.layout("consume_or_expel next"))
 hl.bind(mainMod .. "+ comma", hl.dsp.layout("swapcol l"))
