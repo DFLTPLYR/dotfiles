@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 import Quickshell
 import QtQuick
-import QtQuick.Layouts
 
 import qs.core
 import qs.components
@@ -85,7 +84,6 @@ Page {
                     id: content
 
                     scale: flick.zoom
-                    transformOrigin: Item.Center
                     anchors.centerIn: parent
 
                     Repeater {
@@ -145,12 +143,13 @@ Page {
             FileManager {
                 id: fm
                 onOutput: (path, type) => {
-                    Background.images = [...Background.images, Background.imageContainerFactory.createObject(page, {
-                            path,
-                            type,
-                            width: 400,
-                            height: 400
-                        })];
+                    const img = Background.imageContainerFactory.createObject(page, {
+                        path,
+                        type,
+                        width: 400,
+                        height: 400
+                    });
+                    Background.images = [...Background.images, img];
                 }
             }
         }
@@ -248,6 +247,13 @@ Page {
         property bool pointerVisible: true
 
         signal resized
+
+        onResized: {
+            modelData.x = x;
+            modelData.y = y;
+            modelData.width = width;
+            modelData.height = height;
+        }
 
         width: modelData.width ?? sourceSize.width
         height: modelData.height ?? sourceSize.height

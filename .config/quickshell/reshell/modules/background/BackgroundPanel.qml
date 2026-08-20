@@ -247,6 +247,36 @@ Item {
                 delegate: Box {
                     ma.enabled: controlArea.grab
                 }
+            }
+
+            Repeater {
+                id: bgRepeater
+                model: ScriptModel {
+                    values: Background.images
+                }
+                delegate: DelegateChooser {
+                    role: "type"
+                    DelegateChoice {
+                        roleValue: "image/gif"
+                        AnimatedImage {}
+                    }
+                    DelegateChoice {
+                        roleValue: "image/jpeg" || "image/jpg" || "image/png"
+                        Image {
+                            required property var modelData
+                            property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
+
+                            width: modelData.width
+                            height: modelData.height
+
+                            source: modelData.path
+
+                            x: modelData.x - panel.screen.x
+                            y: modelData.y - panel.screen.y
+                            z: modelData.z
+                        }
+                    }
+                }
                 onItemAdded: (idx, item) => {
                     print("index: ", idx, " item: ", item);
                 }
