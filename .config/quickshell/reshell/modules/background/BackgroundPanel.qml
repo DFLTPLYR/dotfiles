@@ -142,6 +142,32 @@ Item {
         Item {
             id: layered
             anchors.fill: parent
+
+            Repeater {
+                id: bgRepeater
+                model: ScriptModel {
+                    values: Background.wallpaperArr
+                }
+                delegate: DelegateChooser {
+                    role: "type"
+                    DelegateChoice {
+                        roleValue: "image/gif"
+                        AnimatedImage {}
+                    }
+                    DelegateChoice {
+                        roleValue: "image/jpeg"
+                        WallpaperImage {}
+                    }
+                    DelegateChoice {
+                        roleValue: "image/jpg"
+                        WallpaperImage {}
+                    }
+                    DelegateChoice {
+                        roleValue: "image/png"
+                        WallpaperImage {}
+                    }
+                }
+            }
         }
 
         Item {
@@ -242,46 +268,10 @@ Item {
             Repeater {
                 id: containerRepeater
                 model: ScriptModel {
-                    values: Background.boxes
+                    values: Background.widgetArr
                 }
                 delegate: Box {
                     ma.enabled: controlArea.grab
-                }
-            }
-
-            Repeater {
-                id: bgRepeater
-                model: ScriptModel {
-                    values: Background.images
-                }
-                delegate: DelegateChooser {
-                    role: "type"
-                    DelegateChoice {
-                        roleValue: "image/gif"
-                        AnimatedImage {}
-                    }
-                    DelegateChoice {
-                        roleValue: "image/jpeg" || "image/jpg" || "image/png"
-                        Image {
-                            required property var modelData
-                            property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
-
-                            width: modelData.width
-                            height: modelData.height
-
-                            source: modelData.path
-
-                            x: modelData.x - panel.screen.x
-                            y: modelData.y - panel.screen.y
-                            z: modelData.z
-                        }
-                    }
-                }
-                onItemAdded: (idx, item) => {
-                    print("index: ", idx, " item: ", item);
-                }
-                onItemRemoved: (idx, item) => {
-                    print("index: ", idx, " item: ", item);
                 }
             }
         }
@@ -310,6 +300,20 @@ Item {
 
     function intersects(a, b) {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
+    component WallpaperImage: Image {
+        required property var modelData
+        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
+
+        width: modelData.width
+        height: modelData.height
+
+        source: modelData.path
+
+        x: modelData.x - panel.screen.x
+        y: modelData.y - panel.screen.y
+        z: modelData.z
     }
 
     component Box: Rectangle {
@@ -936,9 +940,9 @@ Item {
             Button {
                 width: parent.width
                 onClicked: {
-                    const boxes = Background.boxes.slice();   // new array so the binding re-fires
+                    const boxes = Background.widgetArr.slice();   // new array so the binding re-fires
                     boxes.splice(box.index, 1);
-                    Background.boxes = boxes;
+                    Background.widgetArr = boxes;
                 }
             }
         }

@@ -94,7 +94,7 @@ Page {
 
                     Repeater {
                         id: containers
-                        model: Background.images
+                        model: Background.wallpaperArr
                         delegate: DelegateChooser {
                             role: "type"
                             DelegateChoice {
@@ -105,7 +105,15 @@ Page {
                                 }
                             }
                             DelegateChoice {
-                                roleValue: "image/jpeg" || "image/jpg" || "image/png"
+                                roleValue: "image/jpeg"
+                                ResizeableImage {}
+                            }
+                            DelegateChoice {
+                                roleValue: "image/jpg"
+                                ResizeableImage {}
+                            }
+                            DelegateChoice {
+                                roleValue: "image/png"
                                 ResizeableImage {}
                             }
                         }
@@ -149,7 +157,7 @@ Page {
                         width: 400,
                         height: 400
                     });
-                    Background.images = [...Background.images, img];
+                    Background.wallpaperArr = [...Background.wallpaperArr, img];
                 }
             }
         }
@@ -251,9 +259,7 @@ Page {
         readonly property int handlerSize: 30
         property bool pointerVisible: true
 
-        signal resized
-
-        onResized: {
+        function setDimension() {
             modelData.x = x;
             modelData.y = y;
             modelData.width = width;
@@ -275,7 +281,7 @@ Page {
         MouseArea {
             anchors.fill: parent
             drag.target: rezImg
-            onReleased: rezImg.resized()
+            onReleased: rezImg.setDimension()
         }
 
         // Sides
@@ -326,7 +332,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -396,7 +402,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -469,7 +475,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -541,7 +547,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -618,7 +624,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -695,7 +701,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -770,7 +776,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
@@ -845,7 +851,7 @@ Page {
                 }
 
                 onReleased: mouse => {
-                    rezImg.resized();
+                    rezImg.setDimension();
                 }
 
                 drag {
