@@ -153,6 +153,11 @@ Page {
                 }
             }
         }
+
+        Button {
+            text: "Save"
+            onClicked: {}
+        }
     }
 
     component Display: Rectangle {

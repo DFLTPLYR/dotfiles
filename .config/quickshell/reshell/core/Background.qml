@@ -1,12 +1,13 @@
 pragma ComponentBehavior: Bound
 pragma Singleton
-
+import QtQml.Models
 import QtQuick
 import Quickshell
 import Quickshell.Io
 
 Singleton {
     id: config
+
     property bool ready: false
     property bool enableSetting: false
     property alias config: adapter.config
@@ -101,6 +102,8 @@ Singleton {
             property JsonObject config: JsonObject {
                 property string mode: "standard"
                 property string current: "default"
+                property list<var> wallpapers: []
+                property list<var> widgets: []
                 property list<var> preset: [
                     {
                         name: "default"
