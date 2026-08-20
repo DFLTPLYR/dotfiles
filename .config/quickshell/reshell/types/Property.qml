@@ -78,7 +78,7 @@ QtObject {
 
         onOpened: {
             bg.config = parent.slotConfig;
-            const old = root.keys();
+            const old = Utils.keys(root);
             const _orig = [];
             for (const i in old) {
                 const val = {
@@ -92,7 +92,7 @@ QtObject {
         }
 
         function updateHasChanges() {
-            const current = root.keys();
+            const current = Utils.keys(root);
             for (const i in current) {
                 const prop = current[i].property;
                 const orig = menu.originalValues.find(v => v.prop === prop);
@@ -216,24 +216,8 @@ QtObject {
         }
     }
 
-    function isKeyValid(k, extraEndings) {
-        if (k === "objectName" || k === "menu" || typeof root[k] === "function")
-            return false;
-        if (k.endsWith("Changed"))
-            return false;
-        if (typeof root[k] === "undefined")
-            return false;
-        if (extraEndings?.length) {
-            for (const e of extraEndings) {
-                if (k.endsWith(e))
-                    return false;
-            }
-        }
-        return true;
-    }
-
     function getSettings() {
-        const ks = Object.keys(root).filter(k => isKeyValid(k, ["Options"]));
+        const ks = Object.keys(root).filter(k => Utils.isKeyValid(root, k, ["Options"]));
         const keys = ks.map(k => ({
                     property: k,
                     type: typeof root[k]
@@ -254,25 +238,9 @@ QtObject {
         return keys;
     }
 
-    function keys() {
-        const ks = Object.keys(root).filter(k => isKeyValid(k));
-        return ks.map(k => ({
-                    property: k,
-                    type: typeof root[k]
-                }));
-    }
-
-    function getProperty() {
-        const ks = Object.keys(root).filter(k => isKeyValid(k));
-        const obj = {};
-        for (const k of ks)
-            obj[k] = root[k];
-        return obj;
-    }
-
     function setProperty(object) {
         for (const k of Object.keys(object)) {
-            if (!isKeyValid(k))
+            if (!Utils.isKeyValid(root, k))
                 continue;
             let val = object[k];
             if (val === undefined || val === null)
