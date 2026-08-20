@@ -287,7 +287,7 @@ Item {
         required property int index
         required property var modelData
         readonly property int handlerSize: 12
-        readonly property bool pointerVisible: boxMa.hoverEnabled && boxMa.containsMouse
+        readonly property bool pointerVisible: Global.edit
         property alias ma: boxMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
 
@@ -311,7 +311,7 @@ Item {
         opacity: intersect ? 1 : 0
         x: modelData.x - panel.screen.x
         y: modelData.y - panel.screen.y
-        z: 0
+        z: modelData.z
 
         // Sides
         Rectangle {

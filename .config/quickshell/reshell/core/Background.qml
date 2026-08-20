@@ -17,11 +17,12 @@ Singleton {
             if (selecting)
                 return;
             if (width >= 50 && height >= 50) {
-                const box = boxFactory.createObject(null, {
+                const box = widgetContainerFactory.createObject(null, {
                     x,
                     y,
                     width,
-                    height
+                    height,
+                    z: 0
                 });
                 config.boxes = [...config.boxes, box];
             }
@@ -37,15 +38,27 @@ Singleton {
     }
 
     property var boxes: []
+    property var images: []
 
-    property Component boxFactory: Component {
-        QtObject {
-            property int x: 0
-            property int y: 0
-            property int width: 0
-            property int height: 0
+    property Component widgetContainerFactory: Component {
+        Container {}
+    }
+    property Component imageContainerFactory: Component {
+        Container {
+            property string path: ""
+            property string type: ""
         }
     }
+
+    component Container: QtObject {
+        id: root
+        property int x: 0
+        property int y: 0
+        property int z: 0
+        property int width: 0
+        property int height: 0
+    }
+
     property FileModel containers: FileModel {
         signal generate
         onSaved: list => {

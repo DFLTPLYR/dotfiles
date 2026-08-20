@@ -106,7 +106,7 @@ PopupModal {
             id: settingPanel
             visible: settingLoader.active
             page: settingLoader.page
-            onClosing: {
+            onClosed: {
                 settingLoader.active = false;
                 Global.save();
             }

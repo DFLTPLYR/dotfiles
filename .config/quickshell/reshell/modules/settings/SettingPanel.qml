@@ -1,20 +1,16 @@
 pragma ComponentBehavior: Bound
+import Quickshell
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import qs.core
 import qs.modules.settings.page
 
-ApplicationWindow {
+FloatingWindow {
     id: floatingwindow
 
     title: "Settings"
-    background: Rectangle {
-        anchors.fill: parent
-        color: Colors.theme.surface
-    }
-
+    color: Colors.theme.surface
     property int page: 0
 
     RowLayout {
