@@ -54,6 +54,14 @@ PopupModal {
         spacing: 0
 
         Button {
+            text: "Save"
+            Layout.fillWidth: true
+            onClicked: {
+                Background.save();
+            }
+        }
+
+        Button {
             text: "Refresh"
             Layout.fillWidth: true
             onClicked: Quickshell.reload(false)

@@ -127,9 +127,22 @@ Singleton {
     }
 
     function save() {
-
-        // const keys = Utils.getProperty(Background.wallpaperArr[0]);
-        // print(JSON.stringify(keys));
+        const current = adapter.config.current;
+        const theme = adapter.config.preset.find(s => s.name === current);
+        const wpArr = [];
+        const wdArr = [];
+        for (let i in config.wallpaperArr) {
+            const image = config.wallpaperArr[i];
+            const keys = Utils.getProperty(image);
+            wpArr.push(keys);
+        }
+        for (let i in config.widgetArr) {
+            const image = config.widgetArr[i];
+            const keys = Utils.getProperty(image);
+            wdArr.push(keys);
+        }
+        theme.widgets = wdArr;
+        theme.wallpapers = wpArr;
         fileView.writeAdapter();
     }
 }

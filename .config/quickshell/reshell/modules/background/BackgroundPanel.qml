@@ -341,7 +341,7 @@ Item {
 
         width: modelData.width
         height: modelData.height
-        color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
+        color: "transparent"
         opacity: intersect ? 1 : 0
         x: modelData.x - panel.screen.x
         y: modelData.y - panel.screen.y
@@ -938,6 +938,7 @@ Item {
             height: contentHeight
 
             Button {
+                text: "Remove"
                 width: parent.width
                 onClicked: {
                     const boxes = Background.widgetArr.slice();   // new array so the binding re-fires

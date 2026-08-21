@@ -14,109 +14,47 @@ Rectangle {
     required property ShellScreen monitor
     color: colors.window
 
-    component LazyContainer: LazyLoader {
-        id: containerloader
-        required property int index
-        required property var model
-        property var relative: model.screens
-        property var coords: {
-            if (!root.monitor || !relative || !relative.count)
-                return undefined;
-            for (let i = 0; i < relative.count; i++) {
-                const screen = relative.get(i);
-                if (screen.name === root.monitor.name)
-                    return screen;
-            }
-            return undefined;
-        }
-        property var contents: model.contents
-        property var currentContent
-        onContentsChanged: {
-            if (!contents || !item || !root.monitor)
-                return;
-            return addContent();
-        }
-        onItemChanged: {
-            if (!contents || !item || !root.monitor)
-                return;
-            return addContent();
-        }
+    component WallpaperImage: Image {
+        required property var modelData
+        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, monitor)
 
-        function addContent() {
-            const type = contents.type;
+        width: modelData.width
+        height: modelData.height
 
-            if (containerloader.currentContent) {
-                containerloader.currentContent.destroy();
-            }
-            switch (type) {
-            case "image":
-                const img = Components.createImage(contents.source, contents.kind, item);
-                containerloader.currentContent = img;
-                return;
-            case "widget":
-                const component = Qt.createComponent(contents.source);
-                const incubator = component.incubateObject(containerloader.item, {});
-                if (incubator.status !== Component.Ready) {
-                    incubator.onStatusChanged = function (status) {
-                        if (status === Component.Ready) {
-                            const widget = incubator.object;
-                            widget.parent = containerloader.item;
-                            widget.anchors.fill = containerloader.item;
-                            containerloader.currentContent = widget;
-                            if (contents.props) {
-                                widget.property.setProperty(contents.props);
-                            }
-                            widget.modal.connect((modal, hasChanges) => {
-                                bottom.hasMenu = modal ? true : false;
-                                if (modal) {
-                                    modal.y = item.height;
-                                    modal.x = (item.width - modal.width) / 2;
-                                }
-                                if (hasChanges) {
-                                    const props = widget.property.getProperty();
-                                    const conf = Background.containers.get(containerloader.index);
-                                    const withProps = conf.contents;
-                                    withProps.props = props;
-                                    Background.containers.setProperty(containerloader.index, "contents", withProps);
-                                    Background.containers.save();
-                                }
-                            });
-                        }
-                    };
-                }
-                return;
-            default:
-                return;
-            }
-        }
+        source: modelData.path
 
-        active: (coords && root.monitor) || false
-
-        component: Pane {
-            parent: layered
-            bg.color: "transparent"
-            width: containerloader.model.width
-            height: containerloader.model.height
-            visible: containerloader.coords ? true : false
-            x: containerloader.coords ? containerloader.coords.x : 0
-            y: containerloader.coords ? containerloader.coords.y : 0
-            z: containerloader.model.z
-        }
-    }
-
-    DelegateModel {
-        id: images
-        model: Background.containers
-        delegate: LazyContainer {}
+        x: modelData.x - monitor.x
+        y: modelData.y - monitor.y
+        z: modelData.z
     }
 
     Item {
         id: layered
         anchors.fill: parent
-        Instantiator {
-            model: images
-            onObjectRemoved: (idx, obj) => {
-                obj.destroy();
+
+        Repeater {
+            id: bgRepeater
+            model: ScriptModel {
+                values: Background.wallpaperArr
+            }
+            delegate: DelegateChooser {
+                role: "type"
+                DelegateChoice {
+                    roleValue: "image/gif"
+                    AnimatedImage {}
+                }
+                DelegateChoice {
+                    roleValue: "image/jpeg"
+                    WallpaperImage {}
+                }
+                DelegateChoice {
+                    roleValue: "image/jpg"
+                    WallpaperImage {}
+                }
+                DelegateChoice {
+                    roleValue: "image/png"
+                    WallpaperImage {}
+                }
             }
         }
     }
