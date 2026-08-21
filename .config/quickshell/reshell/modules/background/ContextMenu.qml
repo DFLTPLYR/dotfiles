@@ -116,6 +116,7 @@ PopupModal {
             page: settingLoader.page
             onClosed: {
                 settingLoader.active = false;
+                Background.save();
                 Global.save();
             }
         }

@@ -195,8 +195,6 @@ Singleton {
         }
         adapter.config.preset[themeIdx].widgets = wdArr;
         adapter.config.preset[themeIdx].wallpapers = wpArr;
-        fileView.watchChanges = false;
         fileView.writeAdapter();
-        Qt.callLater(() => { fileView.watchChanges = true; });
     }
 }
