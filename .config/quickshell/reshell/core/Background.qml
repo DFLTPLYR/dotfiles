@@ -8,6 +8,51 @@ import Quickshell.Io
 Singleton {
     id: config
 
+    property Component contentDelegate: Component {
+        DelegateChooser {
+            id: chooser
+            role: "type"
+            required property ShellScreen panel
+            DelegateChoice {
+                roleValue: "image/gif"
+                AnimatedImage {}
+            }
+            DelegateChoice {
+                roleValue: "image/jpeg"
+                WallpaperImage {
+                    screen: chooser.panel
+                }
+            }
+            DelegateChoice {
+                roleValue: "image/jpg"
+                WallpaperImage {
+                    screen: chooser.panel
+                }
+            }
+            DelegateChoice {
+                roleValue: "image/png"
+                WallpaperImage {
+                    screen: chooser.panel
+                }
+            }
+        }
+    }
+
+    component WallpaperImage: Image {
+        required property var modelData
+        required property ShellScreen screen
+        property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, screen)
+
+        width: modelData.width
+        height: modelData.height
+
+        source: modelData.path
+
+        x: modelData.x - screen.x
+        y: modelData.y - screen.y
+        z: modelData.z
+    }
+
     component Container: QtObject {
         property int x: 0
         property int y: 0

@@ -14,20 +14,6 @@ Rectangle {
     required property ShellScreen monitor
     color: colors.window
 
-    component WallpaperImage: Image {
-        required property var modelData
-        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, monitor)
-
-        width: modelData.width
-        height: modelData.height
-
-        source: modelData.path
-
-        x: modelData.x - monitor.x
-        y: modelData.y - monitor.y
-        z: modelData.z
-    }
-
     Item {
         id: layered
         anchors.fill: parent
@@ -37,25 +23,9 @@ Rectangle {
             model: ScriptModel {
                 values: Background.wallpaperArr
             }
-            delegate: DelegateChooser {
-                role: "type"
-                DelegateChoice {
-                    roleValue: "image/gif"
-                    AnimatedImage {}
-                }
-                DelegateChoice {
-                    roleValue: "image/jpeg"
-                    WallpaperImage {}
-                }
-                DelegateChoice {
-                    roleValue: "image/jpg"
-                    WallpaperImage {}
-                }
-                DelegateChoice {
-                    roleValue: "image/png"
-                    WallpaperImage {}
-                }
-            }
+            delegate: Background.contentDelegate.createObject(null, {
+                panel: root.monitor
+            })
         }
     }
 

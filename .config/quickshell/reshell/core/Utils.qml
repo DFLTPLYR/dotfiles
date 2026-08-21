@@ -6,6 +6,10 @@ import Quickshell
 Singleton {
     id: root
 
+    function intersects(a, b) {
+        return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
+    }
+
     function isKeyValid(obj, k, extraEndings) {
         if (k === "objectName" || k === "menu" || typeof obj[k] === "function")
             return false;

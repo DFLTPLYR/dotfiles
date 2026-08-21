@@ -19,101 +19,6 @@ Item {
     signal save
     focus: true
 
-    component LazyContainer: LazyLoader {
-        id: containerloader
-        required property int index
-        required property var model
-        property var relative: model.screens
-        property var coords
-        property var contents: model.contents
-        property var currentContent
-        onItemChanged: {
-            if (!contents || !item)
-                return;
-            return addContent();
-        }
-
-        function addContent() {
-            const type = contents.type;
-            if (containerloader.currentContent) {
-                containerloader.currentContent.destroy();
-            }
-            switch (type) {
-            case "image":
-                item.parent = layered;
-                const img = Components.createImage(contents.source, contents.kind, item);
-                containerloader.currentContent = img;
-                return;
-            case "widget":
-                item.parent = controlArea;
-                const component = Qt.createComponent(contents.source);
-                const incubator = component.incubateObject(containerloader.item, {});
-                if (incubator && incubator.status !== Component.Ready) {
-                    incubator.onStatusChanged = function (status) {
-                        if (status === Component.Ready) {
-                            const widget = incubator.object;
-                            widget.parent = containerloader.item;
-                            widget.anchors.fill = containerloader.item;
-                            containerloader.currentContent = widget;
-                            if (contents.props) {
-                                widget.property.setProperty(contents.props);
-                            }
-                            widget.modal.connect((modal, hasChanges) => {
-                                bottom.hasMenu = modal ? true : false;
-                                if (modal) {
-                                    modal.y = item.height;
-                                    modal.x = (item.width - modal.width) / 2;
-                                }
-                                if (hasChanges) {
-                                    const props = widget.property.getProperty();
-                                    const conf = Background.containers.get(containerloader.index);
-                                    const withProps = conf.contents;
-                                    withProps.props = props;
-                                    Background.containers.setProperty(containerloader.index, "contents", withProps);
-                                    Background.containers.save();
-                                }
-                            });
-                        }
-                    };
-                }
-                return;
-            default:
-                return;
-            }
-        }
-
-        active: coords || false
-        onRelativeChanged: {
-            if (!relative || !relative.count)
-                return;
-            for (let i = 0; i < relative.count; i++) {
-                const screen = relative.get(i);
-                if (screen.name === panel.screen.name) {
-                    return coords = screen;
-                }
-            }
-        }
-
-        component: Pane {
-            bg.color: "transparent"
-            bg.border.color: Global.widget ? Colors.theme.primary : "transparent"
-            bg.border.width: Global.widget ? 2 : 0
-            width: containerloader.model.width
-            height: containerloader.model.height
-            visible: containerloader.coords ? true : false
-            x: containerloader.coords ? containerloader.coords.x : 0
-            y: containerloader.coords ? containerloader.coords.y : 0
-            z: containerloader.model.z
-        }
-    }
-
-    Instantiator {
-        model: DelegateModel {
-            model: Background.containers
-            delegate: LazyContainer {}
-        }
-    }
-
     // bottom
     PanelWindow {
         id: bottom
@@ -148,25 +53,9 @@ Item {
                 model: ScriptModel {
                     values: Background.wallpaperArr
                 }
-                delegate: DelegateChooser {
-                    role: "type"
-                    DelegateChoice {
-                        roleValue: "image/gif"
-                        AnimatedImage {}
-                    }
-                    DelegateChoice {
-                        roleValue: "image/jpeg"
-                        WallpaperImage {}
-                    }
-                    DelegateChoice {
-                        roleValue: "image/jpg"
-                        WallpaperImage {}
-                    }
-                    DelegateChoice {
-                        roleValue: "image/png"
-                        WallpaperImage {}
-                    }
-                }
+                delegate: Background.contentDelegate.createObject(null, {
+                    panel: panel.screen
+                })
             }
         }
 
