@@ -108,9 +108,6 @@ FloatingWindow {
         // NotificationPage
         NotificationPage {}
 
-        // BackgroundPage
-        BackgroundPage {}
-
         // WallpaperPage
         WallpaperPage {}
     }

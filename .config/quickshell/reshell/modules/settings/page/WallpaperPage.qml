@@ -164,7 +164,9 @@ Page {
 
         Button {
             text: "Save"
-            onClicked: {}
+            onClicked: {
+                Background.save();
+            }
         }
     }
 
@@ -177,6 +179,7 @@ Page {
         color: Colors.setOpacity(Colors.theme.surface, 0.2)
         x: modelData.x
         y: modelData.y
+        z: 999
 
         // Outline
         Item {

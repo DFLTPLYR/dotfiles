@@ -120,24 +120,27 @@ Singleton {
         watchChanges: true
         preload: true
         onLoaded: {
-            if (containers.count === 0) {
-                const current = adapter.config.current;
-                const theme = adapter.config.preset.find(s => s.name === current);
-                const wallpapers = theme?.wallpapers;
-                for (let i in wallpapers) {
-                    const wp = wallpapers[i];
-                    const img = imageContainerFactory.createObject(null, {
-                        path: wp.path,
-                        type: wp.type,
-                        width: wp.width,
-                        height: wp.height
-                    });
-                    Background.wallpaperArr = [...Background.wallpaperArr, img];
-                }
-                // wallpaperArr = theme?.wallpapers ? theme?.wallpapers : null;
-                // widgetArr = theme?.widgets ? theme?.widgets : null;
-                // containers.sources = theme?.contents ? theme?.contents : null;
+            Background.wallpaperArr = [];
+            Background.widgetArr = [];
+            const current = adapter.config.current;
+            const theme = adapter.config.preset.find(s => s.name === current);
+            const wallpapers = theme?.wallpapers;
+            for (let i in wallpapers) {
+                const wp = wallpapers[i];
+                const img = imageContainerFactory.createObject(null, {
+                    path: wp.path,
+                    type: wp.type,
+                    width: wp.width,
+                    height: wp.height,
+                    x: wp.x,
+                    y: wp.y,
+                    z: wp.z
+                });
+                Background.wallpaperArr = [...Background.wallpaperArr, img];
             }
+            // wallpaperArr = theme?.wallpapers ? theme?.wallpapers : null;
+            // widgetArr = theme?.widgets ? theme?.widgets : null;
+            // containers.sources = theme?.contents ? theme?.contents : null;
             config.ready = true;
         }
         onFileChanged: {
@@ -173,7 +176,11 @@ Singleton {
 
     function save() {
         const current = adapter.config.current;
-        const theme = adapter.config.preset.find(s => s.name === current);
+        const preset = adapter.config.preset;
+        const themeIdx = preset.findIndex(s => s.name === current);
+        if (themeIdx === -1)
+            return;
+
         const wpArr = [];
         const wdArr = [];
         for (let i in config.wallpaperArr) {
@@ -186,8 +193,10 @@ Singleton {
             const keys = Utils.getProperty(image);
             wdArr.push(keys);
         }
-        theme.widgets = wdArr;
-        theme.wallpapers = wpArr;
+        adapter.config.preset[themeIdx].widgets = wdArr;
+        adapter.config.preset[themeIdx].wallpapers = wpArr;
+        fileView.watchChanges = false;
         fileView.writeAdapter();
+        Qt.callLater(() => { fileView.watchChanges = true; });
     }
 }
