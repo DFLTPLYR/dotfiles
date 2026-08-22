@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtCore
-import QtQml.Models
 import QtQuick
 import QtQuick.Layouts
 
@@ -137,7 +136,7 @@ Item {
             // selectionRect
             Rectangle {
                 id: selectionRect
-                property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && intersects(Background.contextArea, panel.screen)
+                property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && Utils.intersects(Background.contextArea, panel.screen)
                 width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
                 height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
                 color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
@@ -191,24 +190,6 @@ Item {
         }
     }
 
-    function intersects(a, b) {
-        return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
-    }
-
-    component WallpaperImage: Image {
-        required property var modelData
-        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
-
-        width: modelData.width
-        height: modelData.height
-
-        source: modelData.path
-
-        x: modelData.x - panel.screen.x
-        y: modelData.y - panel.screen.y
-        z: modelData.z
-    }
-
     component Box: Rectangle {
         id: box
         required property int index
@@ -216,7 +197,7 @@ Item {
         readonly property int handlerSize: 12
         readonly property bool pointerVisible: Global.edit
         property alias ma: boxMa
-        property bool intersect: modelData.width > 0 && modelData.height > 0 && intersects(modelData, panel.screen)
+        property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
 
         property point pressPos
         property int pressX
@@ -234,11 +215,51 @@ Item {
 
         width: modelData.width
         height: modelData.height
-        color: "transparent"
+        color: boxMa.containsMouse ? Colors.theme.surface : "transparent"
         opacity: intersect ? 1 : 0
         x: modelData.x - panel.screen.x
         y: modelData.y - panel.screen.y
         z: modelData.z
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 400
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        MouseArea {
+            id: boxMa
+            anchors.fill: parent
+            z: -1
+            hoverEnabled: Global.edit
+            drag.target: box
+            acceptedButtons: Qt.RightButton | Qt.LeftButton
+            propagateComposedEvents: true
+            onPositionChanged: mouse => {
+                box.modelData.x = panel.screen.x + parent.x;
+                box.modelData.y = panel.screen.y + parent.y;
+            }
+            onClicked: mouse => {
+                if (mouse.button === Qt.RightButton) {
+                    popup.x = mouse.x;
+                    popup.y = mouse.y;
+                    popup.opened ? popup.close() : popup.open();
+                }
+            }
+        }
+
+        Menu {
+            id: popup
+            Button {
+                text: "Remove"
+                onClicked: {
+                    const boxes = Background.widgetArr.slice();
+                    boxes.splice(box.index, 1);
+                    Background.widgetArr = boxes;
+                }
+            }
+        }
 
         // Sides
         Rectangle {
@@ -792,51 +813,6 @@ Item {
                 ColorAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
-                }
-            }
-        }
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 400
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        MouseArea {
-            id: boxMa
-            anchors.fill: parent
-            z: -1
-            hoverEnabled: Global.edit
-            drag.target: box
-            acceptedButtons: Qt.RightButton | Qt.LeftButton
-            propagateComposedEvents: true
-            onPositionChanged: mouse => {
-                box.modelData.x = panel.screen.x + parent.x;
-                box.modelData.y = panel.screen.y + parent.y;
-            }
-            onClicked: mouse => {
-                if (mouse.button === Qt.RightButton) {
-                    popup.x = mouse.x;
-                    popup.y = mouse.y;
-                    popup.opened ? popup.close() : popup.open();
-                }
-            }
-        }
-
-        Menu {
-            id: popup
-
-            width: 200
-            height: contentHeight
-
-            Button {
-                text: "Remove"
-                width: parent.width
-                onClicked: {
-                    const boxes = Background.widgetArr.slice();
-                    boxes.splice(box.index, 1);
-                    Background.widgetArr = boxes;
                 }
             }
         }
