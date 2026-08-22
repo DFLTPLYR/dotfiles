@@ -830,7 +830,7 @@ Item {
                 text: "Remove"
                 width: parent.width
                 onClicked: {
-                    const boxes = Background.widgetArr.slice();   // new array so the binding re-fires
+                    const boxes = Background.widgetArr.slice();
                     boxes.splice(box.index, 1);
                     Background.widgetArr = boxes;
                 }

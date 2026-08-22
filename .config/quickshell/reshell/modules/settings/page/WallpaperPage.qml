@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import Quickshell
 import QtQuick
+import QtQuick.Layouts
 
 import qs.core
 import qs.components
@@ -10,6 +11,7 @@ import System
 Page {
     id: page
     GroupContainer {
+        id: group
         label: "Displays"
 
         Rectangle {
@@ -142,30 +144,34 @@ Page {
             }
         }
 
-        Button {
-            text: "Add Image"
-            onClicked: {
-                fm.open();
-            }
+        RowLayout {
+            spacing: 10
+            layoutDirection: Qt.RightToLeft
+            Button {
+                text: "Add Image"
+                onClicked: {
+                    fm.open();
+                }
 
-            FileManager {
-                id: fm
-                onOutput: (path, type) => {
-                    const img = Background.imageContainerFactory.createObject(page, {
-                        path,
-                        type,
-                        width: 400,
-                        height: 400
-                    });
-                    Background.wallpaperArr = [...Background.wallpaperArr, img];
+                FileManager {
+                    id: fm
+                    onOutput: (path, type) => {
+                        const img = Background.imageContainerFactory.createObject(page, {
+                            path,
+                            type,
+                            width: 400,
+                            height: 400
+                        });
+                        Background.wallpaperArr = [...Background.wallpaperArr, img];
+                    }
                 }
             }
-        }
 
-        Button {
-            text: "Save"
-            onClicked: {
-                Background.save();
+            Button {
+                text: "Save"
+                onClicked: {
+                    Background.save();
+                }
             }
         }
     }
@@ -229,33 +235,11 @@ Page {
                 x: parent.width
             }
         }
-
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            onPressed: mouse => {
-                if (mouse.button === Qt.RightButton) {
-                    contextMenu.x = mouse.x;
-                    contextMenu.y = mouse.y;
-                    contextMenu.open();
-                } else {
-                    if (contextMenu.opened)
-                        contextMenu.close();
-                }
-            }
-        }
-
-        Menu {
-            id: contextMenu
-
-            Button {
-                text: "change Image"
-            }
-        }
     }
 
     component ResizeableImage: Image {
         id: rezImg
+        required property int index
         required property string path
         required property var modelData
         source: path
@@ -283,8 +267,28 @@ Page {
 
         MouseArea {
             anchors.fill: parent
+            acceptedButtons: Qt.RightButton | Qt.LeftButton
             drag.target: rezImg
             onReleased: rezImg.setDimension()
+            onClicked: mouse => {
+                if (mouse.button === Qt.RightButton) {
+                    options.x = mouse.x;
+                    options.y = mouse.y;
+                    options.opened ? options.close() : options.open();
+                }
+            }
+        }
+
+        Menu {
+            id: options
+            Button {
+                text: "Remove"
+                onClicked: {
+                    const w = Background.wallpaperArr.slice();
+                    w.splice(rezImg, 1);
+                    Background.wallpaperArr = w;
+                }
+            }
         }
 
         // Sides
