@@ -7,6 +7,7 @@ import Quickshell.Io
 
 Singleton {
     id: config
+    signal generate
 
     property Component contentDelegate: Component {
         DelegateChooser {
@@ -104,16 +105,6 @@ Singleton {
     property var widgetArr: []
     property var wallpaperArr: []
 
-    property FileModel containers: FileModel {
-        signal generate
-        onSaved: list => {
-            const current = adapter.config.current;
-            const theme = adapter.config.preset.find(s => s.name === current);
-            theme.contents = [...list];
-            fileView.writeAdapter();
-        }
-    }
-
     FileView {
         id: fileView
         path: Qt.resolvedUrl("data/background.json")
@@ -168,7 +159,7 @@ Singleton {
                 ]
                 property string theme: "scheme-content"
                 onThemeChanged: {
-                    containers.generate();
+                    config.generate();
                 }
             }
         }

@@ -192,5 +192,23 @@ Page {
                 }
             }
         }
+
+        ListView {
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            height: 80
+            orientation: ListView.Horizontal
+            boundsBehavior: ListView.StopAtBounds
+            model: Colors.colorscheme
+            delegate: Button {
+                required property var modelData
+                checkable: true
+                checked: modelData === Background.config.theme
+                text: modelData.replace("scheme-", "")
+                onToggled: Background.config.theme = modelData
+            }
+        }
     }
 }

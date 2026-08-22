@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import QtCore
 import QtQml.Models
 import QtQuick
 import QtQuick.Layouts
@@ -56,6 +57,9 @@ Item {
                 delegate: Background.contentDelegate.createObject(null, {
                     panel: panel.screen
                 })
+                onItemAdded: (_idx, item) => {
+                    item.parent = layered;
+                }
             }
         }
 
@@ -175,14 +179,15 @@ Item {
 
         // Contents
         Connections {
-            target: Background.containers
+            target: Background
             function onGenerate() {
-                const screen = layered.grabToImage(function (result) {
+                layered.grabToImage(function (result) {
                     result.saveToFile(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${panel.screen.name}.jpg`);
-
-                    const exist = Global.readyBg.find(panel.screen.name);
-                    Global.readyBg = [...Global.readyBg, panel.screen.name];
-                }, Qt.size(background.screen.width, background.screen.height));
+                    if (!Global.readyBg.includes(panel.screen.name)) {
+                        Global.readyBg = [...Global.readyBg, panel.screen.name];
+                    }
+                    print("saved for:", panel.screen.name);
+                }, Qt.size(panel.screen.width, panel.screen.height));
             }
         }
     }
