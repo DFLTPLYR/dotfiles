@@ -130,7 +130,7 @@ Scope {
                                 data.widgets[i] = {
                                     name: widget.objectName,
                                     source: widget.parent.modelData.source,
-                                    props: widget.property.getProperty()
+                                    props: Utils.getProperty(widget.property)
                                 };
                             }
                         }
