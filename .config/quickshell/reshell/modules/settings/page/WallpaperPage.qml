@@ -176,6 +176,15 @@ Page {
         }
     }
 
+    FileManager {
+        id: changefm
+        property var target: null
+        onOutput: (path, type) => {
+            target.path = path;
+            target.type = type;
+        }
+    }
+
     component Display: Rectangle {
         id: display
         required property ShellScreen modelData
@@ -240,9 +249,8 @@ Page {
     component ResizeableImage: Image {
         id: rezImg
         required property int index
-        required property string path
         required property var modelData
-        source: path
+        source: modelData.path
         readonly property int handlerSize: 30
         property bool pointerVisible: true
 
@@ -281,6 +289,15 @@ Page {
 
         Menu {
             id: options
+
+            Button {
+                text: "Change Image"
+                onClicked: {
+                    changefm.target = rezImg.modelData;
+                    changefm.open();
+                }
+            }
+
             Button {
                 text: "Remove"
                 onClicked: {
