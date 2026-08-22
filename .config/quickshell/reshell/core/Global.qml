@@ -99,7 +99,6 @@ Singleton {
             }
             Colorscheme.generate(paths, Background.config.theme);
             readyBg = [];
-            print("generated");
         }
     }
 

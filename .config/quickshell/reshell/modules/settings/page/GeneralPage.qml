@@ -202,12 +202,16 @@ Page {
             orientation: ListView.Horizontal
             boundsBehavior: ListView.StopAtBounds
             model: Colors.colorscheme
-            delegate: Button {
+            delegate: RadioDelegate {
                 required property var modelData
                 checkable: true
                 checked: modelData === Background.config.theme
                 text: modelData.replace("scheme-", "")
-                onToggled: Background.config.theme = modelData
+                onCheckedChanged: {
+                    if (checked) {
+                        Background.config.theme = modelData;
+                    }
+                }
             }
         }
     }

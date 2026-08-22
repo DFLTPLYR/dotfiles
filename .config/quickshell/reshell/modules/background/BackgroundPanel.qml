@@ -186,7 +186,6 @@ Item {
                     if (!Global.readyBg.includes(panel.screen.name)) {
                         Global.readyBg = [...Global.readyBg, panel.screen.name];
                     }
-                    print("saved for:", panel.screen.name);
                 }, Qt.size(panel.screen.width, panel.screen.height));
             }
         }
