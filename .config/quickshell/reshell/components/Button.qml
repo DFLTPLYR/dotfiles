@@ -87,7 +87,7 @@ Button {
         }
 
         Component.onCompleted: {
-            Global.bindRadii(background, config.background.rounding);
+            Utils.bindRadii(background, config.background.rounding);
         }
     }
 }

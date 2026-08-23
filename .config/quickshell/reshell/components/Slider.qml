@@ -49,7 +49,7 @@ Slider {
     }
 
     Component.onCompleted: {
-        Global.bindRadii(background, background.state.rounding);
+        Utils.bindRadii(background, background.state.rounding);
     }
 
     background: Rectangle {
@@ -79,7 +79,7 @@ Slider {
             height: progress.state.height
             color: progress.state.color
             Component.onCompleted: {
-                Global.bindRadii(progress, progress.state.rounding);
+                Utils.bindRadii(progress, progress.state.rounding);
             }
 
             border {
@@ -142,7 +142,7 @@ Slider {
         implicitHeight: handle.state.width
         color: control.pressed ? Qt.darker(handle.state.color, 1.2) : handle.state.color
         Component.onCompleted: {
-            Global.bindRadii(handle, handle.state.rounding);
+            Utils.bindRadii(handle, handle.state.rounding);
         }
 
         border {

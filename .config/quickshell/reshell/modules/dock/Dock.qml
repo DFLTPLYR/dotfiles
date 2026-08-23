@@ -412,8 +412,8 @@ Scope {
             }
 
             Component.onCompleted: {
-                Global.bindRadii(this, config.style.rounding);
-                Global.bindMargins(this, config.style.margin);
+                Utils.bindRadii(this, config.style.rounding);
+                Utils.bindMargins(this, config.style.margin);
             }
         }
 
@@ -684,7 +684,7 @@ Scope {
         }
 
         Component.onCompleted: {
-            Global.bindRadii(this, config.style.rounding);
+            Utils.bindRadii(this, config.style.rounding);
 
             const reg = Components.createRegion();
             slot.region = reg;

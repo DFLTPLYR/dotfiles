@@ -13,7 +13,7 @@ Popup {
         color: Colors.setOpacity(Colors.theme.surface, 0.6)
         border.color: Colors.theme.outline
         Component.onCompleted: {
-            Global.bindRadii(background);
+            Utils.bindRadii(background);
         }
     }
 }

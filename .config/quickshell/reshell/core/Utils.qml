@@ -2,9 +2,40 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
+import qs.core
 
 Singleton {
     id: root
+
+    function bindMargins(item, margin) {
+        item.anchors.topMargin = Qt.binding(function () {
+            return margin.top;
+        });
+        item.anchors.leftMargin = Qt.binding(function () {
+            return margin.left;
+        });
+        item.anchors.rightMargin = Qt.binding(function () {
+            return margin.right;
+        });
+        item.anchors.bottomMargin = Qt.binding(function () {
+            return margin.bottom;
+        });
+    }
+
+    function bindRadii(rect, stateRounding = null) {
+        rect.bottomLeftRadius = Qt.binding(function () {
+            return (stateRounding ? stateRounding.bottomLeft : 0) + Components.config.rounding.bottomLeft;
+        });
+        rect.bottomRightRadius = Qt.binding(function () {
+            return (stateRounding ? stateRounding.bottomRight : 0) + Components.config.rounding.bottomRight;
+        });
+        rect.topLeftRadius = Qt.binding(function () {
+            return (stateRounding ? stateRounding.topLeft : 0) + Components.config.rounding.topLeft;
+        });
+        rect.topRightRadius = Qt.binding(function () {
+            return (stateRounding ? stateRounding.topRight : 0) + Components.config.rounding.topRight;
+        });
+    }
 
     function intersects(a, b) {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);

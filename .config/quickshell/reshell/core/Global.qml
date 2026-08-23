@@ -40,7 +40,6 @@ Singleton {
     property bool docks: true
 
     // global item
-
     property bool hasConnection: false
     property alias general: adapter
     property list<var> widgets: []
@@ -151,36 +150,6 @@ Singleton {
             }
         }
         return null;
-    }
-
-    function bindMargins(item, margin) {
-        item.anchors.topMargin = Qt.binding(function () {
-            return margin.top;
-        });
-        item.anchors.leftMargin = Qt.binding(function () {
-            return margin.left;
-        });
-        item.anchors.rightMargin = Qt.binding(function () {
-            return margin.right;
-        });
-        item.anchors.bottomMargin = Qt.binding(function () {
-            return margin.bottom;
-        });
-    }
-
-    function bindRadii(rect, stateRounding = null) {
-        rect.bottomLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomLeft : 0) + Components.config.rounding.bottomLeft;
-        });
-        rect.bottomRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.bottomRight : 0) + Components.config.rounding.bottomRight;
-        });
-        rect.topLeftRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topLeft : 0) + Components.config.rounding.topLeft;
-        });
-        rect.topRightRadius = Qt.binding(function () {
-            return (stateRounding ? stateRounding.topRight : 0) + Components.config.rounding.topRight;
-        });
     }
 
     FolderListModel {

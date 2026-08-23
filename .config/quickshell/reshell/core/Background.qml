@@ -75,7 +75,7 @@ Singleton {
     property bool ready: false
     property bool enableSetting: false
     property alias config: jsonadapter.config
-    property QtObject contextArea: QtObject {
+    property QtObject selectionRect: QtObject {
         property point startPoint
         property bool selecting: false
         onSelectingChanged: {
@@ -182,7 +182,7 @@ Singleton {
             return;
 
         const wpArr = [];
-        const wdArr = [];
+        const wdgArr = [];
         for (let i in config.wallpaperArr) {
             const image = config.wallpaperArr[i];
             const keys = Utils.getProperty(image);
@@ -191,10 +191,11 @@ Singleton {
         for (let i in config.widgetArr) {
             const image = config.widgetArr[i];
             const keys = Utils.getProperty(image);
-            wdArr.push(keys);
+            print(keys);
+            wdgArr.push(keys);
         }
-        jsonadapter.config.preset[themeIdx].widgets = wdArr;
+        jsonadapter.config.preset[themeIdx].widgets = wdgArr;
         jsonadapter.config.preset[themeIdx].wallpapers = wpArr;
-        fileView.writejsonadapter();
+        fileView.writeAdapter();
     }
 }

@@ -106,10 +106,10 @@ Item {
                         if (contextMenu.opened)
                             contextMenu.close();
                         if (controlArea.select) {
-                            Background.contextArea.selecting = true;
-                            Background.contextArea.startPoint = mapToGlobal(mouse.x, mouse.y);
-                            Background.contextArea.x = Background.contextArea.startPoint.x;
-                            Background.contextArea.y = Background.contextArea.startPoint.y;
+                            Background.selectionRect.selecting = true;
+                            Background.selectionRect.startPoint = mapToGlobal(mouse.x, mouse.y);
+                            Background.selectionRect.x = Background.selectionRect.startPoint.x;
+                            Background.selectionRect.y = Background.selectionRect.startPoint.y;
                         }
                     }
                 }
@@ -118,39 +118,39 @@ Item {
                     const idx = Background.contextIdx;
                     if (idx < 0 || !controlArea.select)
                         return;
-                    const sp = Background.contextArea.startPoint;
+                    const sp = Background.selectionRect.startPoint;
                     const gp = mapToGlobal(mouse.x, mouse.y);
                     var minX = Math.min(sp.x, gp.x);
                     var minY = Math.min(sp.y, gp.y);
                     var maxX = Math.max(sp.x, gp.x);
                     var maxY = Math.max(sp.y, gp.y);
-                    Background.contextArea.x = minX;
-                    Background.contextArea.y = minY;
-                    Background.contextArea.width = maxX - minX;
-                    Background.contextArea.height = maxY - minY;
+                    Background.selectionRect.x = minX;
+                    Background.selectionRect.y = minY;
+                    Background.selectionRect.width = maxX - minX;
+                    Background.selectionRect.height = maxY - minY;
                 }
 
                 onReleased: mouse => {
                     if (mouse.button !== Qt.LeftButton)
                         return;
-                    Background.contextArea.selecting = false;
+                    Background.selectionRect.selecting = false;
                 }
             }
 
             // selectionRect
             Rectangle {
                 id: selectionRect
-                property bool intersect: Background.contextArea.width > 0 && Background.contextArea.height > 0 && Utils.intersects(Background.contextArea, panel.screen)
-                width: Math.min(Background.contextArea.x + Background.contextArea.width, panel.screen.x + panel.screen.width) - Math.max(Background.contextArea.x, panel.screen.x)
-                height: Math.min(Background.contextArea.y + Background.contextArea.height, panel.screen.y + panel.screen.height) - Math.max(Background.contextArea.y, panel.screen.y)
+                property bool intersect: Background.selectionRect.width > 0 && Background.selectionRect.height > 0 && Utils.intersects(Background.selectionRect, panel.screen)
+                width: Math.min(Background.selectionRect.x + Background.selectionRect.width, panel.screen.x + panel.screen.width) - Math.max(Background.selectionRect.x, panel.screen.x)
+                height: Math.min(Background.selectionRect.y + Background.selectionRect.height, panel.screen.y + panel.screen.height) - Math.max(Background.selectionRect.y, panel.screen.y)
                 color: Colors.setOpacity(Colors.theme.on_primary, 0.5)
-                opacity: Background.contextArea.selecting && intersect ? 1 : 0
+                opacity: Background.selectionRect.selecting && intersect ? 1 : 0
 
                 border.width: 1
                 border.color: Colors.theme.outline
 
-                x: Math.max(Background.contextArea.x, panel.screen.x) - panel.screen.x
-                y: Math.max(Background.contextArea.y, panel.screen.y) - panel.screen.y
+                x: Math.max(Background.selectionRect.x, panel.screen.x) - panel.screen.x
+                y: Math.max(Background.selectionRect.y, panel.screen.y) - panel.screen.y
                 z: 9999
 
                 Behavior on opacity {
@@ -225,9 +225,16 @@ Item {
         y: modelData.y - panel.screen.y
         z: modelData.z
 
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         Behavior on opacity {
             NumberAnimation {
-                duration: 400
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
         }
