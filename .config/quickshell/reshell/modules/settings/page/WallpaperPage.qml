@@ -182,6 +182,7 @@ Page {
         onOutput: (path, type) => {
             target.path = path;
             target.type = type;
+            target = null;
         }
     }
 

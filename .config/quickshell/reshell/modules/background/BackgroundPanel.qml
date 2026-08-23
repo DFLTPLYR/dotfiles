@@ -36,7 +36,7 @@ Item {
 
         exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+        WlrLayershell.keyboardFocus: bgMa.containsMouse ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 
@@ -53,11 +53,13 @@ Item {
                 model: ScriptModel {
                     values: Background.wallpaperArr
                 }
-                delegate: Background.contentDelegate.createObject(null, {
-                    panel: panel.screen
-                })
                 onItemAdded: (_idx, item) => {
                     item.parent = layered;
+                }
+                Component.onCompleted: {
+                    delegate = Background.contentDelegate.createObject(null, {
+                        panel: panel.screen
+                    });
                 }
             }
         }
@@ -91,7 +93,9 @@ Item {
             }
 
             MouseArea {
+                id: bgMa
                 anchors.fill: parent
+                hoverEnabled: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onPressed: mouse => {
                     if (mouse.button === Qt.RightButton) {

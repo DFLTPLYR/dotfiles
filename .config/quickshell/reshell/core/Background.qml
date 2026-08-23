@@ -74,7 +74,7 @@ Singleton {
 
     property bool ready: false
     property bool enableSetting: false
-    property alias config: adapter.config
+    property alias config: jsonadapter.config
     property QtObject contextArea: QtObject {
         property point startPoint
         property bool selecting: false
@@ -113,9 +113,10 @@ Singleton {
         onLoaded: {
             Background.wallpaperArr = [];
             Background.widgetArr = [];
-            const current = adapter.config.current;
-            const theme = adapter.config.preset.find(s => s.name === current);
+            const current = jsonadapter.config.current;
+            const theme = jsonadapter.config.preset.find(s => s.name === current);
             const wallpapers = theme?.wallpapers;
+            const widgets = theme?.widgets;
             for (let i in wallpapers) {
                 const wp = wallpapers[i];
                 const img = imageContainerFactory.createObject(null, {
@@ -129,9 +130,17 @@ Singleton {
                 });
                 Background.wallpaperArr = [...Background.wallpaperArr, img];
             }
-            // wallpaperArr = theme?.wallpapers ? theme?.wallpapers : null;
-            // widgetArr = theme?.widgets ? theme?.widgets : null;
-            // containers.sources = theme?.contents ? theme?.contents : null;
+            for (let i in widgets) {
+                const wp = widgets[i];
+                const wdg = widgetContainerFactory.createObject(null, {
+                    width: wp.width,
+                    height: wp.height,
+                    x: wp.x,
+                    y: wp.y,
+                    z: wp.z
+                });
+                Background.widgetArr = [...Background.widgetArr, wdg];
+            }
             config.ready = true;
         }
         onFileChanged: {
@@ -146,7 +155,7 @@ Singleton {
         }
 
         adapter: JsonAdapter {
-            id: adapter
+            id: jsonadapter
             property JsonObject config: JsonObject {
                 property string mode: "standard"
                 property string current: "default"
@@ -166,8 +175,8 @@ Singleton {
     }
 
     function save() {
-        const current = adapter.config.current;
-        const preset = adapter.config.preset;
+        const current = jsonadapter.config.current;
+        const preset = jsonadapter.config.preset;
         const themeIdx = preset.findIndex(s => s.name === current);
         if (themeIdx === -1)
             return;
@@ -184,8 +193,8 @@ Singleton {
             const keys = Utils.getProperty(image);
             wdArr.push(keys);
         }
-        adapter.config.preset[themeIdx].widgets = wdArr;
-        adapter.config.preset[themeIdx].wallpapers = wpArr;
-        fileView.writeAdapter();
+        jsonadapter.config.preset[themeIdx].widgets = wdArr;
+        jsonadapter.config.preset[themeIdx].wallpapers = wpArr;
+        fileView.writejsonadapter();
     }
 }

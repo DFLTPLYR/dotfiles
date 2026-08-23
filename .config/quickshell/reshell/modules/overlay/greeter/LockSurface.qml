@@ -23,9 +23,11 @@ Rectangle {
             model: ScriptModel {
                 values: Background.wallpaperArr
             }
-            delegate: Background.contentDelegate.createObject(null, {
-                panel: root.monitor
-            })
+            Component.onCompleted: {
+                delegate = Background.contentDelegate.createObject(null, {
+                    panel: root.monitor
+                });
+            }
         }
     }
 
