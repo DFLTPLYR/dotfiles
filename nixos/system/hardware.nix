@@ -48,6 +48,8 @@
     size = 4096;
   }];
 
+  zramSwap.enable = true;
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # Crucial for Steam / 32-bit games
