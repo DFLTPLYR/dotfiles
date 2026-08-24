@@ -6,7 +6,6 @@ import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
-import System
 import qs.core
 import qs.components
 
@@ -167,14 +166,17 @@ Item {
                 model: ScriptModel {
                     values: Background.widgetArr
                 }
-                delegate: Box {}
+                delegate: Widget {
+                    grab: controlArea.grab
+                }
             }
         }
 
         // simple desktop popup
         ContextMenu {
             id: contextMenu
-            screen: panel.screen
+            panel: panel
+            area: controlArea
             x: (screen.width - width) / 2
             y: (screen.height - height) / 2
         }
@@ -193,7 +195,7 @@ Item {
         }
     }
 
-    component Box: Rectangle {
+    component Widget: Rectangle {
         id: box
         required property int index
         required property var modelData
@@ -201,7 +203,7 @@ Item {
         readonly property bool pointerVisible: Global.edit
         property alias ma: boxMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
-
+        property bool grab
         property point pressPos
         property int pressX
         property int pressY
@@ -267,13 +269,27 @@ Item {
 
         Menu {
             id: popup
-            Button {
+            Action {
                 text: "Remove"
-                onClicked: {
+                onTriggered: {
                     const boxes = Background.widgetArr.slice();
                     boxes.splice(box.index, 1);
                     Background.widgetArr = boxes;
                 }
+            }
+        }
+
+        //Drop
+        DropArea {
+            anchors.fill: parent
+            onContainsDragChanged: {
+                box.border.width = containsDrag ? 1 : 0;
+                box.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+            }
+            onDropped: drop => {
+                print(drop);
+            // const target = drop.source.parent;
+            // const delegateModel = target.DelegateModel;
             }
         }
 

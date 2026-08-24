@@ -15,16 +15,6 @@ Popup {
     rightPadding: 2
     leftPadding: 2
     transformOrigin: Item.Center
-    onOpenedChanged: {
-        if (!opened) {
-            Global.modal = null;
-            return;
-        }
-        if (Global.modal)
-            Global.modal.close();
-
-        Global.modal = modalPopup;
-    }
 
     Connections {
         function onEditChanged() {
