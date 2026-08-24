@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
-
+import System
 import qs.core
 import qs.components
 
@@ -96,6 +96,7 @@ Item {
                 id: bgMa
                 anchors.fill: parent
                 hoverEnabled: true
+                propagateComposedEvents: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onPressed: mouse => {
                     if (mouse.button === Qt.RightButton) {
@@ -166,9 +167,7 @@ Item {
                 model: ScriptModel {
                     values: Background.widgetArr
                 }
-                delegate: Box {
-                    ma.enabled: controlArea.grab
-                }
+                delegate: Box {}
             }
         }
 
@@ -219,16 +218,22 @@ Item {
 
         width: modelData.width
         height: modelData.height
-        color: boxMa.containsMouse ? Colors.theme.surface : "transparent"
+        color: "transparent"
         opacity: intersect ? 1 : 0
         x: modelData.x - panel.screen.x
         y: modelData.y - panel.screen.y
         z: modelData.z
 
-        Behavior on color {
-            ColorAnimation {
-                duration: 300
-                easing.type: Easing.InOutQuad
+        Outline {
+            anchors.fill: parent
+            opacity: boxMa.containsMouse ? 1 : 0
+
+            Behavior on opacity {
+
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
 
@@ -243,8 +248,8 @@ Item {
             id: boxMa
             anchors.fill: parent
             z: -1
-            hoverEnabled: Global.edit
             drag.target: box
+            hoverEnabled: Global.edit
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             propagateComposedEvents: true
             onPositionChanged: mouse => {

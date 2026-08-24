@@ -15,6 +15,27 @@ Page {
         label: "Displays"
 
         Rectangle {
+            id: displayContainter
+            property bool grab: false
+            property bool select: false
+
+            Keys.onPressed: event => {
+                if (event.key === Qt.Key_Control) {
+                    displayContainter.grab = true;
+                }
+                if (event.key === Qt.Key_Shift) {
+                    displayContainter.select = true;
+                }
+            }
+
+            Keys.onReleased: event => {
+                if (event.key === Qt.Key_Control) {
+                    displayContainer.grab = false;
+                }
+                if (event.key === Qt.Key_Shift) {
+                    displayContainer.select = false;
+                }
+            }
 
             anchors {
                 left: parent.left
@@ -22,6 +43,7 @@ Page {
                 right: parent.right
                 rightMargin: parent.padding
             }
+
             border {
                 width: 1
                 color: Colors.theme.on_surface
@@ -29,10 +51,9 @@ Page {
 
             height: 500
             width: parent.width
-            color: Colors.theme.surface
             radius: 5
             clip: true
-
+            color: "transparent"
             Flickable {
                 id: flick
                 property real zoom: 0.1
