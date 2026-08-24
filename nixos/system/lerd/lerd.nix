@@ -59,7 +59,7 @@
   #    initial scaffold). lerd serves your app's PHP from containers regardless
   #    of this — pin the per-project version with `lerd isolate <ver>`.
   environment.systemPackages = with pkgs; [
-    inputs.lerd.packages.${pkgs.system}.default
+    inputs.lerd.packages.${pkgs.stdenv.hostPlatform.system}.default
     php84
     php84Packages.composer
   ];

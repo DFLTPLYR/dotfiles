@@ -53,7 +53,6 @@
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    inputs.helium.packages.${system}.default
     (pkgs.firefoxpwa-unwrapped.override {firefoxRuntime = pkgs.firefox-unwrapped;})
     fetch
 
@@ -71,6 +70,7 @@
     pavucontrol
     droidcam
     adw-gtk3
+    inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     kitty
     obsidian
