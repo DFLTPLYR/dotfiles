@@ -4,6 +4,16 @@
   ...
 }: {
   # Enable sound.
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
+  };
+
   services.mpd = {
     enable = true;
     user = "dfltplyr";
@@ -25,21 +35,10 @@
     };
   };
 
-  # The system service (services.mpd) already runs mpd as user dfltplyr;
-  # disable the user-level service from the mpd package to avoid port conflict.
-  systemd.user.services.mpd = { enable = false; };
+  systemd.user.services.mpd = {enable = false;};
 
   systemd.services.mpd.environment = {
     PIPEWIRE_RUNTIME_DIR = "/run/user/1000";
     PULSE_SERVER = "unix:/run/user/1000/pulse/native";
-  };
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-    wireplumber.enable = true; # Manages audio routing policies
   };
 }
