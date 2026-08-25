@@ -35,7 +35,7 @@ Item {
 
         exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.keyboardFocus: bgMa.containsMouse ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: bgMa.containsMouse || Global.edit ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 
@@ -177,8 +177,6 @@ Item {
             id: contextMenu
             panel: panel
             area: controlArea
-            x: (screen.width - width) / 2
-            y: (screen.height - height) / 2
         }
 
         // Contents
@@ -196,12 +194,13 @@ Item {
     }
 
     component Widget: Rectangle {
-        id: box
+        id: widget
         required property int index
         required property var modelData
         readonly property int handlerSize: 12
-        readonly property bool pointerVisible: Global.edit
-        property alias ma: boxMa
+        readonly property bool pointerVisible: Global.widget
+        property string path: modelData.path
+        property alias ma: widgetMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
         property bool grab
         property point pressPos
@@ -209,6 +208,41 @@ Item {
         property int pressY
         property int pressW
         property int pressH
+
+        onPathChanged: {
+            incubateChild();
+        }
+        Component.onCompleted: {
+            incubateChild();
+        }
+
+        function incubateChild() {
+            const source = modelData?.path;
+            if (!source)
+                return;
+            const component = Qt.createComponent(source);
+            if (!component || component.status === Component.Error) {
+                console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
+                return;
+            }
+            const incubator = component.incubateObject(widget, {
+                objectName: modelData.name
+            });
+            if (!incubator)
+                return;
+            const setup = comp => {
+                comp.parent = widget;
+                comp.anchors.fill = widget;
+                comp.visible = Qt.binding(() => widget.intersect);
+            };
+            if (incubator.status === Component.Ready)
+                setup(incubator.object);
+            else
+                incubator.onStatusChanged = status => {
+                    if (status === Component.Ready)
+                        setup(incubator.object);
+                };
+        }
 
         function grabPress(area, mx, my) {
             pressPos = area.mapToGlobal(mx, my);
@@ -228,7 +262,7 @@ Item {
 
         Outline {
             anchors.fill: parent
-            opacity: boxMa.containsMouse ? 1 : 0
+            opacity: widgetMa.containsMouse ? 1 : 0
 
             Behavior on opacity {
 
@@ -247,16 +281,16 @@ Item {
         }
 
         MouseArea {
-            id: boxMa
+            id: widgetMa
             anchors.fill: parent
             z: -1
-            drag.target: box
-            hoverEnabled: Global.edit
+            drag.target: widget
+            hoverEnabled: Global.widget
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             propagateComposedEvents: true
             onPositionChanged: mouse => {
-                box.modelData.x = panel.screen.x + parent.x;
-                box.modelData.y = panel.screen.y + parent.y;
+                widget.modelData.x = panel.screen.x + parent.x;
+                widget.modelData.y = panel.screen.y + parent.y;
             }
             onClicked: mouse => {
                 if (mouse.button === Qt.RightButton) {
@@ -269,12 +303,30 @@ Item {
 
         Menu {
             id: popup
+            width: 120
             Action {
                 text: "Remove"
                 onTriggered: {
-                    const boxes = Background.widgetArr.slice();
-                    boxes.splice(box.index, 1);
-                    Background.widgetArr = boxes;
+                    const widgets = Background.widgetArr.slice();
+                    widgets.splice(widget.index, 1);
+                    Background.widgetArr = widgets;
+                }
+            }
+
+            Menu {
+                id: widgetMenu
+                title: "widgets"
+
+                Instantiator {
+                    model: Global.widgets
+                    delegate: Action {
+                        required property var modelData
+                        text: modelData.name
+                        onTriggered: {}
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        widgetMenu.insertAction(widgetMenu.count, obj);
+                    }
                 }
             }
         }
@@ -283,8 +335,8 @@ Item {
         DropArea {
             anchors.fill: parent
             onContainsDragChanged: {
-                box.border.width = containsDrag ? 1 : 0;
-                box.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                widget.border.width = containsDrag ? 1 : 0;
+                widget.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
             }
             onDropped: drop => {
                 print(drop);
@@ -297,13 +349,13 @@ Item {
         Rectangle {
             id: leftHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -329,16 +381,16 @@ Item {
                 id: leftHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    const newW = Math.max(30, box.pressW - (gp.x - box.pressPos.x));
-                    box.modelData.width = newW;
-                    box.modelData.x = box.pressX + box.pressW - newW;
+                    const newW = Math.max(30, widget.pressW - (gp.x - widget.pressPos.x));
+                    widget.modelData.width = newW;
+                    widget.modelData.x = widget.pressX + widget.pressW - newW;
                 }
 
                 drag {
@@ -365,13 +417,13 @@ Item {
         Rectangle {
             id: rightHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -397,14 +449,14 @@ Item {
                 id: rightHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
+                    widget.modelData.width = Math.max(50, widget.pressW + (gp.x - widget.pressPos.x));
                 }
 
                 drag {
@@ -431,15 +483,15 @@ Item {
         Rectangle {
             id: topHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             x: parent.x / 2
             y: 0
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.top
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -465,16 +517,16 @@ Item {
                 id: topHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                    box.modelData.height = newH;
-                    box.modelData.y = box.pressY + box.pressH - newH;
+                    const newH = Math.max(50, widget.pressH - (gp.y - widget.pressPos.y));
+                    widget.modelData.height = newH;
+                    widget.modelData.y = widget.pressY + widget.pressH - newH;
                 }
 
                 drag {
@@ -501,15 +553,15 @@ Item {
         Rectangle {
             id: bottomHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             x: parent.x / 2
             y: parent.y
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.bottom
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -535,14 +587,14 @@ Item {
                 id: bottomHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
+                    widget.modelData.height = Math.max(50, widget.pressH + (gp.y - widget.pressPos.y));
                 }
 
                 drag {
@@ -570,14 +622,14 @@ Item {
         Rectangle {
             id: topRightHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.top
 
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -603,18 +655,18 @@ Item {
                 id: topRightHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    const newW = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
-                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                    box.modelData.width = newW;
-                    box.modelData.height = newH;
-                    box.modelData.y = box.pressY + box.pressH - newH;
+                    const newW = Math.max(50, widget.pressW + (gp.x - widget.pressPos.x));
+                    const newH = Math.max(50, widget.pressH - (gp.y - widget.pressPos.y));
+                    widget.modelData.width = newW;
+                    widget.modelData.height = newH;
+                    widget.modelData.y = widget.pressY + widget.pressH - newH;
                 }
 
                 drag {
@@ -641,14 +693,14 @@ Item {
         Rectangle {
             id: topLeftHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.top
 
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -674,19 +726,19 @@ Item {
                 id: topLeftHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
-                    const newH = Math.max(50, box.pressH - (gp.y - box.pressPos.y));
-                    box.modelData.width = newW;
-                    box.modelData.height = newH;
-                    box.modelData.x = box.pressX + box.pressW - newW;
-                    box.modelData.y = box.pressY + box.pressH - newH;
+                    const newW = Math.max(50, widget.pressW - (gp.x - widget.pressPos.x));
+                    const newH = Math.max(50, widget.pressH - (gp.y - widget.pressPos.y));
+                    widget.modelData.width = newW;
+                    widget.modelData.height = newH;
+                    widget.modelData.x = widget.pressX + widget.pressW - newW;
+                    widget.modelData.y = widget.pressY + widget.pressH - newH;
                 }
 
                 drag {
@@ -713,14 +765,14 @@ Item {
         Rectangle {
             id: bottomRightHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.bottom
 
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -746,15 +798,15 @@ Item {
                 id: bottomRightHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    box.modelData.width = Math.max(50, box.pressW + (gp.x - box.pressPos.x));
-                    box.modelData.height = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
+                    widget.modelData.width = Math.max(50, widget.pressW + (gp.x - widget.pressPos.x));
+                    widget.modelData.height = Math.max(50, widget.pressH + (gp.y - widget.pressPos.y));
                 }
 
                 drag {
@@ -781,14 +833,14 @@ Item {
         Rectangle {
             id: bottomLeftHandle
 
-            width: box.handlerSize
-            height: box.handlerSize
-            radius: box.handlerSize
+            width: widget.handlerSize
+            height: widget.handlerSize
+            radius: widget.handlerSize
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.bottom
 
-            opacity: box.pointerVisible ? 1 : 0
+            opacity: widget.pointerVisible ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -814,18 +866,18 @@ Item {
                 id: bottomLeftHandleArea
 
                 anchors.fill: parent
-                enabled: box.pointerVisible
+                enabled: widget.pointerVisible
                 hoverEnabled: true
-                onPressed: mouse => box.grabPress(parent, mouse.x, mouse.y)
+                onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
                     if (!drag.active)
                         return;
                     const gp = mapToGlobal(mouse.x, mouse.y);
-                    const newW = Math.max(50, box.pressW - (gp.x - box.pressPos.x));
-                    const newH = Math.max(50, box.pressH + (gp.y - box.pressPos.y));
-                    box.modelData.width = newW;
-                    box.modelData.height = newH;
-                    box.modelData.x = box.pressX + box.pressW - newW;
+                    const newW = Math.max(50, widget.pressW - (gp.x - widget.pressPos.x));
+                    const newH = Math.max(50, widget.pressH + (gp.y - widget.pressPos.y));
+                    widget.modelData.width = newW;
+                    widget.modelData.height = newH;
+                    widget.modelData.x = widget.pressX + widget.pressW - newW;
                 }
 
                 drag {

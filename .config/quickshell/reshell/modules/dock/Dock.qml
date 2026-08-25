@@ -568,6 +568,8 @@ Scope {
                         const delegateModel = target.DelegateModel;
                         const index = delegateModel.itemsIndex;
                         const obj = target.widget.get(index);
+                        if (!obj)
+                            return;
                         slot.widgets.append(obj);
                         target.widget.remove(index, 1);
                         return;
@@ -627,57 +629,68 @@ Scope {
                     onSourceChanged: widgetContainer.incubateChild()
 
                     function incubateChild() {
-                        const component = Qt.createComponent(modelData.source);
+                        const source = modelData?.source;
+                        if (!source)
+                            return;
+                        const component = Qt.createComponent(source);
+                        if (!component || component.status === Component.Error) {
+                            console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
+                            return;
+                        }
                         const incubator = component.incubateObject(widgetContainer, {
                             objectName: modelData.name,
                             screen: dock.screen,
                             container: grid,
                             slotConfig: config
                         });
-                        if (incubator.status !== Component.Ready) {
-                            incubator.onStatusChanged = function (status) {
-                                if (status === Component.Ready) {
-                                    const widget = incubator.object;
-                                    if (!widget || !widgetContainer)
-                                        return;
-                                    widgetContainer.width = Qt.binding(() => {
-                                        return widget.width;
-                                    });
-                                    widgetContainer.height = Qt.binding(() => {
-                                        return widget.height;
-                                    });
-                                    if (modelData.props) {
-                                        widget.property.setProperty(modelData.props);
-                                    }
-                                    panel.activeWidgets = [...panel.activeWidgets, widget];
-                                    slot.activeWidgets = [...slot.activeWidgets, widget];
+                        if (!incubator)
+                            return;
+                        const setup = widget => {
+                            if (!widget || !widgetContainer)
+                                return;
+                            widgetContainer.width = Qt.binding(() => {
+                                return widget.width;
+                            });
+                            widgetContainer.height = Qt.binding(() => {
+                                return widget.height;
+                            });
+                            if (modelData.props) {
+                                widget.property.setProperty(modelData.props);
+                            }
+                            panel.activeWidgets = [...panel.activeWidgets, widget];
+                            slot.activeWidgets = [...slot.activeWidgets, widget];
 
-                                    widget.swap.connect((fromIndex, toIndex) => {
-                                        widgetsModel.items.move(fromIndex, toIndex);
-                                        panel.timer.restart();
-                                    });
+                            widget.swap.connect((fromIndex, toIndex) => {
+                                widgetsModel.items.move(fromIndex, toIndex);
+                                panel.timer.restart();
+                            });
 
-                                    widget.remove.connect(() => {
-                                        widgetsModel.items.remove(widgetContainer.index, 1);
-                                        panel.timer.restart();
-                                    });
+                            widget.remove.connect(() => {
+                                widgetsModel.items.remove(widgetContainer.index, 1);
+                                panel.timer.restart();
+                            });
 
-                                    widget.modal.connect((modal, hasChanges) => {
-                                        if (hasChanges) {
-                                            panel.timer.restart();
-                                        }
-                                        const container = modal?.background ?? null;
-                                        if (container) {
-                                            slot.region.item = container;
-                                            panel.hasFocus = true;
-                                        } else {
-                                            slot.region.item = null;
-                                            panel.hasFocus = false;
-                                        }
-                                    });
+                            widget.modal.connect((modal, hasChanges) => {
+                                if (hasChanges) {
+                                    panel.timer.restart();
                                 }
+                                const container = modal?.background ?? null;
+                                if (container) {
+                                    slot.region.item = container;
+                                    panel.hasFocus = true;
+                                } else {
+                                    slot.region.item = null;
+                                    panel.hasFocus = false;
+                                }
+                            });
+                        };
+                        if (incubator.status === Component.Ready)
+                            setup(incubator.object);
+                        else
+                            incubator.onStatusChanged = status => {
+                                if (status === Component.Ready)
+                                    setup(incubator.object);
                             };
-                        }
                     }
                 }
             }

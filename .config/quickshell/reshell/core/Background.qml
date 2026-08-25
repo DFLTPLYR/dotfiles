@@ -60,6 +60,7 @@ Singleton {
         property int z: 0
         property int width: 0
         property int height: 0
+        property string path: ""
     }
 
     property Component widgetContainerFactory: Component {
@@ -67,7 +68,6 @@ Singleton {
     }
     property Component imageContainerFactory: Component {
         Container {
-            property string path: ""
             property string type: ""
         }
     }
@@ -137,7 +137,8 @@ Singleton {
                     height: wp.height,
                     x: wp.x,
                     y: wp.y,
-                    z: wp.z
+                    z: wp.z,
+                    path: wp.path
                 });
                 Background.widgetArr = [...Background.widgetArr, wdg];
             }
@@ -189,9 +190,11 @@ Singleton {
             wpArr.push(keys);
         }
         for (let i in config.widgetArr) {
-            const image = config.widgetArr[i];
-            const keys = Utils.getProperty(image);
-            print(keys);
+            const wdg = config.widgetArr[i];
+            const keys = Utils.getProperty(wdg);
+            if (keys["path"]) {
+                print(wdg);
+            }
             wdgArr.push(keys);
         }
         jsonadapter.config.preset[themeIdx].widgets = wdgArr;

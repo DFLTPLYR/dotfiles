@@ -161,7 +161,7 @@ Singleton {
                 if (fileName === "Wrapper.qml") {
                     return;
                 }
-                const name = fileName.replace(/\.qml$/, '');
+                const name = fileName.replace(/\.(desktop|dock)\.qml$/, '').replace(/\.qml$/, '');
                 const exist = config.widgets.find(s => s && s.name === name);
                 if (!exist) {
                     const path = Quickshell.shellPath(`widgets/${fileName}`);

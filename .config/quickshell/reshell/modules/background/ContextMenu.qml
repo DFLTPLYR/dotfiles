@@ -47,6 +47,7 @@ Menu {
             duration: 300
         }
     }
+
     Action {
         text: "Save"
         onTriggered: {
@@ -95,6 +96,35 @@ Menu {
         }
         onObjectAdded: (idx, obj) => {
             modal.insertAction(modal.count, obj);
+        }
+    }
+
+    Menu {
+        id: widgetMenu
+        title: "widgets"
+
+        Instantiator {
+            model: Global.widgets
+            delegate: Action {
+                required property var modelData
+                text: modelData.name
+                onTriggered: {
+                    var source = modelData.source;
+                    const gp = area.mapToGlobal(modal.x, modal.y);
+                    const wdg = Background.widgetContainerFactory.createObject(null, {
+                        width: 400,
+                        height: 400,
+                        x: gp.x,
+                        y: gp.y,
+                        z: 0,
+                        path: source
+                    });
+                    Background.widgetArr = [...Background.widgetArr, wdg];
+                }
+            }
+            onObjectAdded: (idx, obj) => {
+                widgetMenu.insertAction(widgetMenu.count, obj);
+            }
         }
     }
 
