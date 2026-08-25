@@ -8,6 +8,7 @@ import Quickshell
 import Quickshell.Wayland
 import qs.core
 import qs.components
+import System
 
 Item {
     id: panel
@@ -237,6 +238,13 @@ Item {
                 comp.anchors.fill = widget;
                 widget.item = comp;
                 comp.visible = Qt.binding(() => widget.intersect);
+                const props = Utils.getProperty(comp.property);
+                const shared = WidgetStore.getSharedInstance(widget.modelData.path, props);
+                widget.modelData.instance = shared;
+                Object.keys(props).forEach(k => {
+                    comp.property[k] = Qt.binding(() => shared[k]);
+                });
+            // comp.property.setProperty(widget.modelData.);
             };
             if (incubator.status === Component.Ready)
                 setup(incubator.object);
@@ -265,10 +273,9 @@ Item {
 
         Outline {
             anchors.fill: parent
-            opacity: widgetMa.containsMouse ? 1 : 0
+            opacity: widgetMa.containsMouse || !modelData.path ? 1 : 0
 
             Behavior on opacity {
-
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
@@ -288,7 +295,6 @@ Item {
             anchors.fill: parent
             z: -1
             drag.target: widget
-            hoverEnabled: Global.widget
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             propagateComposedEvents: true
             onPositionChanged: mouse => {
@@ -313,6 +319,7 @@ Item {
                     const widgets = Background.widgetArr.slice();
                     widgets.splice(widget.index, 1);
                     Background.widgetArr = widgets;
+                    Background.save();
                 }
             }
 

@@ -4,6 +4,7 @@ import QtQml.Models
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import System
 
 Singleton {
     id: config
@@ -43,7 +44,7 @@ Singleton {
         required property var modelData
         required property ShellScreen screen
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, screen)
-
+        objectName: modelData.name || Math.random().toString(36).substring(2, 10)
         width: modelData.width
         height: modelData.height
 
@@ -61,10 +62,14 @@ Singleton {
         property int width: 0
         property int height: 0
         property string path: ""
+        property string name: ""
     }
 
     property Component widgetContainerFactory: Component {
-        Container {}
+        Container {
+            property var instance: null
+            onInstanceChanged: print(instance ? JSON.stringify(Utils.getProperty(instance)) : null)
+        }
     }
     property Component imageContainerFactory: Component {
         Container {
@@ -87,7 +92,8 @@ Singleton {
                     y,
                     width,
                     height,
-                    z: 0
+                    z: 0,
+                    name: Math.random().toString(36).substring(2, 10)
                 });
                 config.widgetArr = [...config.widgetArr, box];
             }
@@ -141,6 +147,8 @@ Singleton {
                     path: wp.path
                 });
                 Background.widgetArr = [...Background.widgetArr, wdg];
+                if (wp.path && wp.instance)
+                    WidgetStore.seedSharedInstance(wp.path, wp.instance);
             }
             config.ready = true;
         }
@@ -158,7 +166,6 @@ Singleton {
         adapter: JsonAdapter {
             id: jsonadapter
             property JsonObject config: JsonObject {
-                property string mode: "standard"
                 property string current: "default"
                 property list<var> preset: [
                     {
@@ -191,9 +198,12 @@ Singleton {
         }
         for (let i in config.widgetArr) {
             const wdg = config.widgetArr[i];
-            const keys = Utils.getProperty(wdg);
+            const keys = Utils.getProperty(wdg, ["instance"]);
             if (keys["path"]) {
-                print(wdg);
+                const shared = WidgetStore.widgetProps(keys["path"]);
+                if (shared && Object.keys(shared).length)
+                    keys["instance"] = Object.assign({}, shared);
+                print(Object.keys(shared));
             }
             wdgArr.push(keys);
         }

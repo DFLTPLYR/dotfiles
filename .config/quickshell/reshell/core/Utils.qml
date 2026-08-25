@@ -57,16 +57,16 @@ Singleton {
         return true;
     }
 
-    function keys(obj) {
-        const ks = Object.keys(obj).filter(k => isKeyValid(obj, k));
+    function keys(obj, extraEndings = null) {
+        const ks = Object.keys(obj).filter(k => isKeyValid(obj, k, extraEndings));
         return ks.map(k => ({
                     property: k,
                     type: typeof obj[k]
                 }));
     }
 
-    function getProperty(obj) {
-        const ks = Object.keys(obj).filter(k => isKeyValid(obj, k));
+    function getProperty(obj, extraEndings = null) {
+        const ks = Object.keys(obj).filter(k => isKeyValid(obj, k, extraEndings));
         const keys = {};
         for (const k of ks)
             keys[k] = obj[k];
