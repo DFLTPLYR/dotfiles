@@ -109,7 +109,7 @@ Menu {
                 required property var modelData
                 text: modelData.name
                 onTriggered: {
-                    var source = modelData.source;
+                    const source = modelData.source;
                     const gp = area.mapToGlobal(modal.x, modal.y);
                     const wdg = Background.widgetContainerFactory.createObject(null, {
                         width: 400,

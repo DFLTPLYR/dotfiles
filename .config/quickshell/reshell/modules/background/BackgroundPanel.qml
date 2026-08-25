@@ -202,6 +202,7 @@ Item {
         property string path: modelData.path
         property alias ma: widgetMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
+        property var item
         property bool grab
         property point pressPos
         property int pressX
@@ -225,14 +226,16 @@ Item {
                 console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
                 return;
             }
-            const incubator = component.incubateObject(widget, {
-                objectName: modelData.name
-            });
+            const incubator = component.incubateObject(widget, {});
             if (!incubator)
                 return;
             const setup = comp => {
+                if (widget.item) {
+                    widget.item.destroy();
+                }
                 comp.parent = widget;
                 comp.anchors.fill = widget;
+                widget.item = comp;
                 comp.visible = Qt.binding(() => widget.intersect);
             };
             if (incubator.status === Component.Ready)
@@ -322,26 +325,16 @@ Item {
                     delegate: Action {
                         required property var modelData
                         text: modelData.name
-                        onTriggered: {}
+                        onTriggered: {
+                            const source = modelData.source;
+                            widget.modelData.path = source;
+                            Background.save();
+                        }
                     }
                     onObjectAdded: (idx, obj) => {
                         widgetMenu.insertAction(widgetMenu.count, obj);
                     }
                 }
-            }
-        }
-
-        //Drop
-        DropArea {
-            anchors.fill: parent
-            onContainsDragChanged: {
-                widget.border.width = containsDrag ? 1 : 0;
-                widget.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
-            }
-            onDropped: drop => {
-                print(drop);
-            // const target = drop.source.parent;
-            // const delegateModel = target.DelegateModel;
             }
         }
 
