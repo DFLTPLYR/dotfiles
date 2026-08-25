@@ -4,7 +4,6 @@ import qs.core
 
 Menu {
     id: menu
-
     padding: 2
 
     delegate: MenuItem {
@@ -66,10 +65,11 @@ Menu {
         }
 
         background: Rectangle {
+            clip: true
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: menuItem.highlighted ? Colors.theme.surface : "transparent"
+            color: "transparent"
         }
     }
 
@@ -79,6 +79,6 @@ Menu {
         implicitHeight: 40
         color: Colors.theme.surface
         border.color: Colors.theme.outline
-        radius: 2
+        radius: 4
     }
 }
