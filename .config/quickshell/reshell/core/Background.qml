@@ -67,15 +67,23 @@ Singleton {
 
     property Component widgetContainerFactory: Component {
         Container {
-            property var instance: null
             property var property: null
-            onInstanceChanged: {
+            property var config: ({})
+            onConfigChanged: {
+                if (typeof this.config !== "object" || !this.config)
+                    return;
+                const val = Utils.getProperty(this.config);
+                if (Object.keys(val).length)
+                    setUp(val);
+            }
+
+            function setUp(data) {
                 const obj = Widgets.createObject();
-                for (let i in instance) {
-                    const value = instance[i];
+                for (let i in data) {
+                    const value = data[i];
                     Widgets.setProperty(obj, i, value);
                 }
-                property = obj;
+                return this.property = obj;
             }
 
             function bindProperty(obj) {
@@ -161,7 +169,8 @@ Singleton {
                     x: wp.x,
                     y: wp.y,
                     z: wp.z,
-                    path: wp.path
+                    path: wp.path,
+                    config: wp.config || {}
                 });
                 Background.widgetArr = [...Background.widgetArr, wdg];
             }
@@ -215,7 +224,8 @@ Singleton {
             const wdg = config.widgetArr[i];
             const keys = Utils.getProperty(wdg, ["instance", "property"]);
             const props = Utils.getProperty(wdg.property);
-            print(JSON.stringify(props));
+            if (Object.keys(props).length)
+                keys.config = props;
             wdgArr.push(keys);
         }
         jsonadapter.config.preset[themeIdx].widgets = wdgArr;

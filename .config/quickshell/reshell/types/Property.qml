@@ -9,7 +9,7 @@ import qs.components
 
 QtObject {
     id: root
-
+    property var sharedContext
     property Menu menu: Menu {
         id: menu
         property var originalValues: []
@@ -17,8 +17,7 @@ QtObject {
         signal entered
         signal exited(bool hasChanges)
         signal remove
-
-        width: 200
+        width: 150
         height: contentHeight
         leftPadding: 5
 
@@ -78,12 +77,13 @@ QtObject {
 
         onOpened: {
             bg.config = parent.slotConfig;
-            const old = Utils.keys(root);
+            const source = sharedContext && Object.keys(sharedContext).length > 0 ? sharedContext : root;
+            const old = Utils.keys(source);
             const _orig = [];
             for (const i in old) {
                 const val = {
                     prop: old[i].property,
-                    val: root[old[i].property]
+                    val: source[old[i].property]
                 };
                 _orig.push(val);
             }
@@ -92,11 +92,12 @@ QtObject {
         }
 
         function updateHasChanges() {
-            const current = Utils.keys(root);
+            const source = sharedContext && Object.keys(sharedContext).length > 0 ? sharedContext : root;
+            const current = Utils.keys(source);
             for (const i in current) {
                 const prop = current[i].property;
                 const orig = menu.originalValues.find(v => v.prop === prop);
-                if (!orig || root[prop] !== orig.val) {
+                if (!orig || source[prop] !== orig.val) {
                     menu.hasChanges = true;
                     return;
                 }
@@ -138,10 +139,15 @@ QtObject {
                         SpinBox {
                             Layout.preferredWidth: parent.width / 2
                             Layout.preferredHeight: parent.height / 2
-                            value: root[modelData.property] ?? 0
+                            value: {
+                                if (sharedContext && sharedContext[modelData.property] !== undefined)
+                                    return sharedContext[modelData.property];
+                                return root[modelData.property] ?? 0;
+                            }
                             onValueChanged: {
-                                if (root[modelData.property] !== value) {
-                                    root[modelData.property] = value;
+                                const target = (sharedContext && sharedContext[modelData.property] !== undefined) ? sharedContext : root;
+                                if (target[modelData.property] !== value) {
+                                    target[modelData.property] = value;
                                     updateLoop.restart();
                                 }
                             }
@@ -169,9 +175,14 @@ QtObject {
 
                             TextField {
                                 width: parent.width
-                                placeholderText: root[string.modelData.property]
+                                placeholderText: {
+                                    if (sharedContext && sharedContext[string.modelData.property] !== undefined)
+                                        return sharedContext[string.modelData.property];
+                                    return root[string.modelData.property];
+                                }
                                 onTextChanged: {
-                                    root[string.modelData.property] = text;
+                                    const target = (sharedContext && sharedContext[string.modelData.property] !== undefined) ? sharedContext : root;
+                                    target[string.modelData.property] = text;
                                     updateLoop.restart();
                                 }
                             }

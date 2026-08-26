@@ -234,13 +234,15 @@ Item {
                 }
                 const props = Utils.getProperty(comp.property);
                 widget.item = comp;
-                if (props && !widget.modelData.property)
-                    widget.modelData.instance = props;
+
+                if (!widget.modelData.property)
+                    widget.modelData.setUp(props);
 
                 comp.parent = widget;
                 comp.anchors.fill = widget;
                 comp.visible = Qt.binding(() => widget.intersect);
                 widget.modelData.bindProperty(comp.property);
+                comp.property.sharedContext = widget.modelData.property;
             };
             if (incubator.status === Component.Ready)
                 setup(incubator.object);
