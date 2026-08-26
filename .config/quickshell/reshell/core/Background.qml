@@ -68,7 +68,24 @@ Singleton {
     property Component widgetContainerFactory: Component {
         Container {
             property var instance: null
-            onInstanceChanged: print(instance ? JSON.stringify(Utils.getProperty(instance)) : null)
+            property var property: null
+            onInstanceChanged: {
+                const obj = Widgets.createObject();
+                for (let i in instance) {
+                    const value = instance[i];
+                    Widgets.setProperty(obj, i, value);
+                }
+                property = obj;
+            }
+
+            function bindProperty(obj) {
+                const prop = Utils.getProperty(property);
+                for (let i in prop) {
+                    obj[i] = Qt.binding(() => {
+                        return property[i];
+                    });
+                }
+            }
         }
     }
     property Component imageContainerFactory: Component {
@@ -147,8 +164,6 @@ Singleton {
                     path: wp.path
                 });
                 Background.widgetArr = [...Background.widgetArr, wdg];
-                if (wp.path && wp.instance)
-                    WidgetStore.seedSharedInstance(wp.path, wp.instance);
             }
             config.ready = true;
         }
@@ -198,13 +213,9 @@ Singleton {
         }
         for (let i in config.widgetArr) {
             const wdg = config.widgetArr[i];
-            const keys = Utils.getProperty(wdg, ["instance"]);
-            if (keys["path"]) {
-                const shared = WidgetStore.widgetProps(keys["path"]);
-                if (shared && Object.keys(shared).length)
-                    keys["instance"] = Object.assign({}, shared);
-                print(Object.keys(shared));
-            }
+            const keys = Utils.getProperty(wdg, ["instance", "property"]);
+            const props = Utils.getProperty(wdg.property);
+            print(JSON.stringify(props));
             wdgArr.push(keys);
         }
         jsonadapter.config.preset[themeIdx].widgets = wdgArr;

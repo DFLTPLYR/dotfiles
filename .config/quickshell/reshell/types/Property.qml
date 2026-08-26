@@ -118,7 +118,7 @@ QtObject {
 
             model: ScriptModel {
                 values: {
-                    return root.getSettings();
+                    return Utils.getSettings(root);
                 }
             }
 
@@ -213,44 +213,6 @@ QtObject {
             id: updateLoop
             interval: 1000
             onTriggered: menu.updateHasChanges()
-        }
-    }
-
-    function getSettings() {
-        const ks = Object.keys(root).filter(k => Utils.isKeyValid(root, k, ["Options"]));
-        const keys = ks.map(k => ({
-                    property: k,
-                    type: typeof root[k]
-                }));
-
-        for (const i in keys) {
-            const key = keys[i];
-            const options = this[key.property + "Options"];
-            if (options) {
-                key.options = options;
-                key.type = "dropdown";
-            }
-            if (key.property.includes("Font")) {
-                key.type = "font";
-            }
-        }
-
-        return keys;
-    }
-
-    function setProperty(object) {
-        for (const k of Object.keys(object)) {
-            if (!Utils.isKeyValid(root, k))
-                continue;
-            let val = object[k];
-            if (val === undefined || val === null)
-                continue;
-            if (typeof val === "object" && val.value !== undefined)
-                val = val.value;
-            if (val === null || typeof val === "object")
-                continue;
-            if (root[k] !== val)
-                root[k] = val;
         }
     }
 }

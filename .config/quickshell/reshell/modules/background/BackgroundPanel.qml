@@ -2,13 +2,11 @@ pragma ComponentBehavior: Bound
 
 import QtCore
 import QtQuick
-import QtQuick.Layouts
 
 import Quickshell
 import Quickshell.Wayland
 import qs.core
 import qs.components
-import System
 
 Item {
     id: panel
@@ -234,17 +232,15 @@ Item {
                 if (widget.item) {
                     widget.item.destroy();
                 }
+                const props = Utils.getProperty(comp.property);
+                widget.item = comp;
+                if (props && !widget.modelData.property)
+                    widget.modelData.instance = props;
+
                 comp.parent = widget;
                 comp.anchors.fill = widget;
-                widget.item = comp;
                 comp.visible = Qt.binding(() => widget.intersect);
-                const props = Utils.getProperty(comp.property);
-                const shared = WidgetStore.getSharedInstance(widget.modelData.path, props);
-                widget.modelData.instance = shared;
-                Object.keys(props).forEach(k => {
-                    comp.property[k] = Qt.binding(() => shared[k]);
-                });
-            // comp.property.setProperty(widget.modelData.);
+                widget.modelData.bindProperty(comp.property);
             };
             if (incubator.status === Component.Ready)
                 setup(incubator.object);

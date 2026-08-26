@@ -72,4 +72,42 @@ Singleton {
             keys[k] = obj[k];
         return keys;
     }
+
+    function setProperty(component, prop) {
+        for (const k of Object.keys(prop)) {
+            if (!Utils.isKeyValid(component, k))
+                continue;
+            let val = prop[k];
+            if (val === undefined || val === null)
+                continue;
+            if (typeof val === "object" && val.value !== undefined)
+                val = val.value;
+            if (val === null || typeof val === "object")
+                continue;
+            if (component[k] !== val)
+                component[k] = val;
+        }
+    }
+
+    function getSettings(obj) {
+        const ks = Object.keys(obj).filter(k => Utils.isKeyValid(obj, k, ["Options"]));
+        const keys = ks.map(k => ({
+                    property: k,
+                    type: typeof obj[k]
+                }));
+
+        for (const i in keys) {
+            const key = keys[i];
+            const options = this[key.property + "Options"];
+            if (options) {
+                key.options = options;
+                key.type = "dropdown";
+            }
+            if (key.property.includes("Font")) {
+                key.type = "font";
+            }
+        }
+
+        return keys;
+    }
 }

@@ -206,8 +206,6 @@ Scope {
                 onRemove: dock.removeDock(index)
             }
 
-            Background {}
-
             Component.onCompleted: {
                 dock.addDock({
                     panel,
@@ -216,59 +214,6 @@ Scope {
                 });
             }
         }
-    }
-
-    component Background: Rectangle {
-        id: background
-
-        property bool show: modalPopup.opened
-
-        anchors.fill: parent
-
-        color: "transparent"
-        border.width: 2
-
-        onShowChanged: {
-            background.state = show ? "show" : "hide";
-        }
-
-        state: "hide"
-
-        states: [
-            State {
-                name: "hide"
-                PropertyChanges {
-                    target: background
-                    opacity: 0
-                    border.color: "transparent"
-                }
-            },
-            State {
-                name: "show"
-                PropertyChanges {
-                    target: background
-                    opacity: 1
-                    border.color: Colors.theme.tertiary
-                }
-            }
-        ]
-
-        transitions: [
-            Transition {
-                from: "*"
-                to: "*"
-                NumberAnimation {
-                    properties: "opacity"
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-                ColorAnimation {
-                    properties: "border.color"
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        ]
     }
 
     component DockContainer: Item {
@@ -655,7 +600,7 @@ Scope {
                                 return widget.height;
                             });
                             if (modelData.props) {
-                                widget.property.setProperty(modelData.props);
+                                Utils.setProperty(widget.property, modelData.props);
                             }
                             panel.activeWidgets = [...panel.activeWidgets, widget];
                             slot.activeWidgets = [...slot.activeWidgets, widget];
