@@ -165,9 +165,7 @@ Item {
                 model: ScriptModel {
                     values: Background.widgetArr
                 }
-                delegate: Widget {
-                    grab: controlArea.grab
-                }
+                delegate: Widget {}
             }
         }
 
@@ -197,12 +195,13 @@ Item {
         required property int index
         required property var modelData
         readonly property int handlerSize: 12
-        readonly property bool pointerVisible: Global.widget
         property string path: modelData.path
         property alias ma: widgetMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
         property var item
-        property bool grab
+
+        property bool edit: false
+        readonly property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
         property point pressPos
         property int pressX
         property int pressY
@@ -212,6 +211,7 @@ Item {
         onPathChanged: {
             incubateChild();
         }
+
         Component.onCompleted: {
             incubateChild();
         }
@@ -271,7 +271,7 @@ Item {
 
         Outline {
             anchors.fill: parent
-            opacity: widgetMa.containsMouse || !modelData.path ? 1 : 0
+            opacity: widget.resizing || widget.edit || !modelData.path ? 1 : 0
 
             Behavior on opacity {
                 NumberAnimation {
@@ -290,14 +290,19 @@ Item {
 
         MouseArea {
             id: widgetMa
-            anchors.fill: parent
             z: -1
-            drag.target: widget
-            acceptedButtons: Qt.RightButton | Qt.LeftButton
+            anchors.fill: parent
+            hoverEnabled: widget.edit
+            drag.target: widget.edit ? widget : null
+            acceptedButtons: widget.edit ? Qt.RightButton | Qt.LeftButton : Qt.LeftButton
             propagateComposedEvents: true
+            pressAndHoldInterval: 300
             onPositionChanged: mouse => {
                 widget.modelData.x = panel.screen.x + parent.x;
                 widget.modelData.y = panel.screen.y + parent.y;
+            }
+            onPressAndHold: mouse => {
+                widget.edit = true;
             }
             onClicked: mouse => {
                 if (mouse.button === Qt.RightButton) {
@@ -306,11 +311,31 @@ Item {
                     popup.opened ? popup.close() : popup.open();
                 }
             }
+            onExited: {
+                if (!widget.resizing)
+                    delayedExit.restart();
+            }
+
+            Timer {
+                id: delayedExit
+                interval: 300
+                onTriggered: {
+                    widget.edit = false;
+                }
+            }
         }
 
         Menu {
             id: popup
             width: 120
+
+            Action {
+                text: "Save"
+                onTriggered: {
+                    Background.save();
+                }
+            }
+
             Action {
                 text: "Remove"
                 onTriggered: {
@@ -353,7 +378,7 @@ Item {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -379,7 +404,7 @@ Item {
                 id: leftHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -421,7 +446,7 @@ Item {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -447,7 +472,7 @@ Item {
                 id: rightHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -489,7 +514,7 @@ Item {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.top
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -515,7 +540,7 @@ Item {
                 id: topHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -559,7 +584,7 @@ Item {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.bottom
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -585,7 +610,7 @@ Item {
                 id: bottomHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -627,7 +652,7 @@ Item {
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.top
 
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -653,7 +678,7 @@ Item {
                 id: topRightHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -698,7 +723,7 @@ Item {
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.top
 
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -724,7 +749,7 @@ Item {
                 id: topLeftHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -770,7 +795,7 @@ Item {
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.bottom
 
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -796,7 +821,7 @@ Item {
                 id: bottomRightHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {
@@ -838,7 +863,7 @@ Item {
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.bottom
 
-            opacity: widget.pointerVisible ? 1 : 0
+            opacity: widget.edit ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -864,7 +889,7 @@ Item {
                 id: bottomLeftHandleArea
 
                 anchors.fill: parent
-                enabled: widget.pointerVisible
+                enabled: widget.edit
                 hoverEnabled: true
                 onPressed: mouse => widget.grabPress(parent, mouse.x, mouse.y)
                 onPositionChanged: mouse => {

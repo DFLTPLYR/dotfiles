@@ -15,7 +15,8 @@ Wrapper {
     }
 
     Rectangle {
-        anchors.fill: parent
+        width: parent.width / 2
+        height: parent.width / 2
         radius: width / 2
         Text {
             anchors.centerIn: parent

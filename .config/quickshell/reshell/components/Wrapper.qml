@@ -66,7 +66,6 @@ Item {
         enabled: Global.widget
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        preventStealing: true
         drag.target: wrapper
         drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
         onReleased: mouse => {

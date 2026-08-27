@@ -44,7 +44,6 @@ Singleton {
         required property var modelData
         required property ShellScreen screen
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, screen)
-        objectName: modelData.name || Math.random().toString(36).substring(2, 10)
         width: modelData.width
         height: modelData.height
 
@@ -53,6 +52,9 @@ Singleton {
         x: modelData.x - screen.x
         y: modelData.y - screen.y
         z: modelData.z
+        smooth: true
+        mipmap: true
+        asynchronous: true
     }
 
     component Container: QtObject {
@@ -62,7 +64,6 @@ Singleton {
         property int width: 0
         property int height: 0
         property string path: ""
-        property string name: ""
     }
 
     property Component widgetContainerFactory: Component {
@@ -117,8 +118,7 @@ Singleton {
                     y,
                     width,
                     height,
-                    z: 0,
-                    name: Math.random().toString(36).substring(2, 10)
+                    z: 0
                 });
                 config.widgetArr = [...config.widgetArr, box];
             }
