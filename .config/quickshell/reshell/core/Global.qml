@@ -95,8 +95,19 @@ Singleton {
                 var target = Quickshell.screens[i];
                 paths.push(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${target.name}.jpg`);
             }
-            Colorscheme.generate(paths, Background.config.theme);
+            ColorGen.configPath = `${StandardPaths.writableLocation(StandardPaths.ConfigLocation)}/matugen/templates/themed/`;
+            ColorGen.generate(paths, Background.config.theme);
             readyBg = [];
+        }
+    }
+
+    Connections {
+        target: ColorGen
+        function onError(message) {
+            console.log("ColorGen error:", message);
+        }
+        function onOutput(data) {
+            // console.log("ColorGen output:", data);
         }
     }
 

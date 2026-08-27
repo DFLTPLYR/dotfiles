@@ -189,8 +189,9 @@ Page {
             }
 
             Button {
-                text: "Save"
+                text: "Apply"
                 onClicked: {
+                    Background.generate();
                     Background.save();
                 }
             }

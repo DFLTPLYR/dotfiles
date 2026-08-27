@@ -321,6 +321,7 @@ Item {
                 interval: 300
                 onTriggered: {
                     widget.edit = false;
+                    Background.save();
                 }
             }
         }
@@ -403,6 +404,7 @@ Item {
             MouseArea {
                 id: leftHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -471,6 +473,7 @@ Item {
             MouseArea {
                 id: rightHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -539,6 +542,7 @@ Item {
             MouseArea {
                 id: topHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -608,7 +612,7 @@ Item {
 
             MouseArea {
                 id: bottomHandleArea
-
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -677,6 +681,7 @@ Item {
             MouseArea {
                 id: topRightHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -748,6 +753,7 @@ Item {
             MouseArea {
                 id: topLeftHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -820,6 +826,7 @@ Item {
             MouseArea {
                 id: bottomRightHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
@@ -888,6 +895,7 @@ Item {
             MouseArea {
                 id: bottomLeftHandleArea
 
+                cursorShape: Qt.DragMoveCursor
                 anchors.fill: parent
                 enabled: widget.edit
                 hoverEnabled: true
