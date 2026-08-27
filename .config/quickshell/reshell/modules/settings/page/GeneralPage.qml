@@ -169,7 +169,7 @@ Page {
                 MouseArea {
                     id: ma
                     anchors.fill: parent
-                    enabled: theme.current || !Colorscheme.isRunning
+                    enabled: theme.current || !ColorGen.isRunning
                     hoverEnabled: true
                     onClicked: {
                         const colorscheme = Colors.themes.find(s => s.name === theme.model.name);
@@ -180,14 +180,8 @@ Page {
                             return;
                         const text = colorscheme.file.text();
                         const json = JSON.parse(text);
-                        const cTheme = darkmodeToggle.checked ? json.dark : json.light;
-
-                        const configPath = String(StandardPaths.writableLocation(StandardPaths.ConfigLocation)).replace("file://", "") + "/matugen/themed.toml";
-                        const jsonStr = JSON.stringify({
-                            "colors": cTheme
-                        });
-
-                        Colorscheme.apply(cTheme.primary, configPath, jsonStr);
+                        ColorGen.configPath = Quickshell.shellPath('core/theme');
+                        ColorGen.changeTheme(text);
                     }
                 }
             }

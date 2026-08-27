@@ -82,8 +82,8 @@ Scope {
     }
 
     Connections {
-        target: Colorscheme
-        function onGenerated(result) {
+        target: ColorGen
+        function onOutput(_result) {
             file.adapter.style.color = Colors.setOpacity(Colors.theme.surface, file.adapter.style.opacity);
             file.writeAdapter();
         }
