@@ -2,6 +2,6 @@
 **/*.json
 !reshell/core/data/emoji.json
 !reshell/core/data/themes/*.json
-reshell/core/data/themes/content.json
+reshell/core/data/themes/dynamic.json
 .qmlls.ini
 .qmllint.ini
