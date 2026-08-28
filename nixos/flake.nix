@@ -5,7 +5,6 @@
     fetch.url = "github:areofyl/fetch";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    matugen.url = "github:InioX/Matugen";
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     herdr = {
       url = "github:ogulcancelik/herdr/v0.7.1";

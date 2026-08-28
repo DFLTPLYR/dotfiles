@@ -3,28 +3,27 @@ name = "Steam"
 category = "misc"
 
 [templates.millennium]
-input_path = 'steam.css'
+input_path = 'steam/steam.css'
 output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matugen.css'
 
 [templates.themed_office]
-input_path = "onlyoffice.json.template"
+input_path = "onlyoffice/onlyoffice.json.template"
 output_path = "~/.local/share/onlyoffice/desktopeditors/uithemes/matugen.json"
 
-
 [templates.reshell]
-input_path = "material.json"
+input_path = "reshell/material.json"
 output_path = "~/.config/quickshell/reshell/core/data/themes/dynamic.json"
 
 [templates.themed_helix]
-input_path = "helix.toml"
+input_path = "helix/helix.toml"
 output_path = "~/.config/helix/themes/themed.toml"
 
 [templates.themed_vesktop]
-input_path = "vesktop.css"
+input_path = "discord/vesktop.css"
 output_path = "~/.config/vesktop/themes/vesktop.css"
 
 [templates.themed_opencode]
-input_path = "open-code.json"
+input_path = "opencode/open-code.json"
 output_path = "~/.config/opencode/themes/matugen.json"
 
 [templates.themed_hypr]
@@ -32,46 +31,46 @@ input_path = "hypr/colors.lua"
 output_path = "~/.config/hypr/config/colors.lua"
 
 [templates.themed_qt5ct]
-input_path = "qtct.conf"
+input_path = "qt/qtct.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"
 
 [templates.themed_qt6ct]
-input_path = "qtct.conf"
+input_path = "qt/qtct.conf"
 output_path = "~/.config/qt6ct/colors/matugen.conf"
 
 [templates.themed_gtk3]
-input_path = "gtk3-colors.css"
+input_path = "gtk/gtk3-colors.css"
 output_path = "~/.config/gtk-3.0/colors.css"
 post_hook = 'if command -v gsettings >/dev/null 2>&1; then gsettings set org.gnome.desktop.interface gtk-theme "" && gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; fi'
 
 [templates.themed_gtk4]
-input_path = "gtk-colors.css"
+input_path = "gtk/gtk-colors.css"
 output_path = "~/.config/gtk-4.0/colors.css"
 
 [templates.themed_kitty]
-input_path = "kitty-colors.conf"
+input_path = "kitty/kitty-colors.conf"
 output_path = "~/.config/kitty/current-theme.conf"
 
 [templates.themed_neovim]
-input_path = "nvim-colors.lua"
+input_path = "neovim/nvim-colors.lua"
 output_path = "~/.config/nvim/theme.lua"
 post_hook = 'echo "[$(date "+%Y-%m-%d %H:%M:%S")] matugen ran - themed_neovim" >> ~/nvim-log.txt; pkill -SIGUSR1 nvim 2>/dev/null || true'
 
 [templates.themed_rofi]
-input_path = "rofi-colors.rasi"
+input_path = "rofi/rofi-colors.rasi"
 output_path = "~/.config/rofi/colors.rasi"
 
 [templates.themed_btop]
-input_path = "btop.theme"
+input_path = "btop/btop.theme"
 output_path = "~/.config/btop/themes/matugen.theme"
 
-[templates.themed_niri]
-input_path = "niri-colors.kdl"
-output_path = "~/.config/niri/modules/colors.kdl"
-post_hook = 'niri msg action load-config-file 2>/dev/null || true'
+# [templates.themed_niri]
+# input_path = "niri-colors.kdl"
+# output_path = "~/.config/niri/modules/colors.kdl"
+# post_hook = 'niri msg action load-config-file 2>/dev/null || true'
 
 [templates.themed_zenChrome]
-input_path = "userChrome.css"
+input_path = "zen/userChrome.css"
 output_path = "~/dotfiles/.config/matugen/data/themed-userChrome.css"
 pre_hook = '''
 for dir in ~/.config/zen ~/.zen; do
@@ -85,7 +84,7 @@ fi
 '''
 
 [templates.themed_zenContent]
-input_path = "userContent.css"
+input_path = "zen/userContent.css"
 output_path = "~/dotfiles/.config/matugen/data/themed-userContent.css"
 pre_hook = '''
 for dir in ~/.config/zen ~/.zen; do

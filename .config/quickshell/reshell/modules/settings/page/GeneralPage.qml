@@ -60,9 +60,12 @@ Page {
             id: darkmodeToggle
             text: "Dark mode"
             checkable: true
-            checked: Global.general.darkmode
+            checked: ColorGen.isDarkMode
             onCheckedChanged: {
-                Global.general.darkmode = checked;
+                const colorscheme = Colors.themes.find(s => s.name === Global.general.theme);
+                const text = colorscheme.file.text();
+                ColorGen.isDarkMode = checked;
+                ColorGen.changeTheme(text);
             }
         }
 
@@ -179,31 +182,7 @@ Page {
                         if (!colorscheme.file)
                             return;
                         const text = colorscheme.file.text();
-                        const json = JSON.parse(text);
-                        ColorGen.configPath = Quickshell.shellPath('core/theme');
                         ColorGen.changeTheme(text);
-                    }
-                }
-            }
-        }
-
-        ListView {
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            height: 80
-            orientation: ListView.Horizontal
-            boundsBehavior: ListView.StopAtBounds
-            model: Colors.colorscheme
-            delegate: RadioDelegate {
-                required property var modelData
-                checkable: true
-                checked: modelData === Background.config.theme
-                text: modelData.replace("scheme-", "")
-                onCheckedChanged: {
-                    if (checked) {
-                        Background.config.theme = modelData;
                     }
                 }
             }

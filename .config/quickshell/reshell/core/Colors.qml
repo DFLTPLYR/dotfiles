@@ -8,11 +8,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "./ntc.js" as NTC
+import System
 
 Singleton {
     id: config
     property list<var> themes: []
-    property var theme: (themes.find(s => Global.general.theme === s.name) ?? defaultTheme)[Global.general.darkmode ? "dark" : "light"]
+    property var theme: (themes.find(s => Global.general.theme === s.name) ?? defaultTheme)[ColorGen.isDarkMode ? "dark" : "light"]
     property list<string> colorscheme: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
     readonly property QtObject defaultTheme: QtObject {
         property DarkTheme dark: DarkTheme {}
