@@ -44,14 +44,25 @@ Singleton {
         required property var modelData
         required property ShellScreen screen
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, screen)
-        width: modelData.width
-        height: modelData.height
+        width: {
+            if (modelData.width === 0) {
+                return sourceSize.width;
+            }
+            return modelData.width;
+        }
+        height: {
+            if (modelData.height === 0) {
+                return sourceSize.height;
+            }
+            return modelData.height;
+        }
 
         source: modelData.path
 
         x: modelData.x - screen.x
         y: modelData.y - screen.y
         z: modelData.z
+        scale: modelData.scale
         smooth: true
         mipmap: true
         asynchronous: true
@@ -100,6 +111,7 @@ Singleton {
     property Component imageContainerFactory: Component {
         Container {
             property string type: ""
+            property int scale: 1
         }
     }
 

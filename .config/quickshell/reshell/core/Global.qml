@@ -95,7 +95,7 @@ Singleton {
                 var target = Quickshell.screens[i];
                 paths.push(`${StandardPaths.writableLocation(StandardPaths.CacheLocation)}/cropped_${target.name}.jpg`);
             }
-            ColorGen.generate(paths, Background.config.theme);
+            ColorGen.generate(paths);
             readyBg = [];
         }
     }

@@ -15,28 +15,6 @@ Page {
         label: "Displays"
 
         Rectangle {
-            id: displayContainter
-            property bool grab: false
-            property bool select: false
-
-            Keys.onPressed: event => {
-                if (event.key === Qt.Key_Control) {
-                    displayContainter.grab = true;
-                }
-                if (event.key === Qt.Key_Shift) {
-                    displayContainter.select = true;
-                }
-            }
-
-            Keys.onReleased: event => {
-                if (event.key === Qt.Key_Control) {
-                    displayContainer.grab = false;
-                }
-                if (event.key === Qt.Key_Shift) {
-                    displayContainer.select = false;
-                }
-            }
-
             anchors {
                 left: parent.left
                 leftMargin: parent.padding
@@ -54,6 +32,7 @@ Page {
             radius: 5
             clip: true
             color: "transparent"
+
             Flickable {
                 id: flick
                 property real zoom: 0.1
@@ -159,7 +138,7 @@ Page {
                 Component.onCompleted: {
                     for (const s of Quickshell.screens) {
                         maxX = Math.max(maxX, s.x + s.width);
-                        maxY = Math.max(maxY, s.y + s.height);
+                        maxY = Math.max(maxY, s.y + s.height) / 2;
                     }
                 }
             }
@@ -180,8 +159,9 @@ Page {
                         const img = Background.imageContainerFactory.createObject(page, {
                             path,
                             type,
-                            width: 400,
-                            height: 400
+                            width: 0,
+                            height: 0,
+                            scale: 1
                         });
                         Background.wallpaperArr = [...Background.wallpaperArr, img];
                     }
@@ -290,6 +270,7 @@ Page {
         height: modelData.height ?? sourceSize.height
         x: modelData.x ?? 0
         y: modelData.y ?? 0
+        scale: modelData.scale
 
         Component.onCompleted: {
             if (modelData.width === 0)
@@ -312,22 +293,43 @@ Page {
             }
         }
 
+        WheelHandler {
+            orientation: Qt.Vertical
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            onWheel: {
+                const scale = rezImg.modelData.scale;
+                let delta = event.angleDelta.y > 0 ? 1 : -1;
+                if (scale === 1 && delta === -1)
+                    return;
+                rezImg.modelData.scale = scale + delta;
+            }
+        }
+
         Menu {
             id: options
 
-            Button {
+            Action {
+                text: "Native Resolution"
+                onTriggered: {
+                    rezImg.scale = 1;
+                    rezImg.width = sourceSize.width;
+                    rezImg.height = sourceSize.height;
+                }
+            }
+
+            Action {
                 text: "Change Image"
-                onClicked: {
+                onTriggered: {
                     changefm.target = rezImg.modelData;
                     changefm.open();
                 }
             }
 
-            Button {
+            Action {
                 text: "Remove"
-                onClicked: {
+                onTriggered: {
                     const w = Background.wallpaperArr.slice();
-                    w.splice(rezImg, 1);
+                    w.splice(rezImg.index, 1);
                     Background.wallpaperArr = w;
                 }
             }
