@@ -12,6 +12,7 @@ import System
 
 Singleton {
     id: config
+    property var dynamic: null
     property list<var> themes: []
     property var theme: (themes.find(s => Global.general.theme === s.name) ?? defaultTheme)[ColorGen.isDarkMode ? "dark" : "light"]
     property list<string> colorscheme: ["scheme-content", "scheme-expressive", "scheme-fidelity", "scheme-fruit-salad", "scheme-monochrome", "scheme-neutral", "scheme-rainbow", "scheme-tonal-spot", "scheme-vibrant"]
@@ -36,6 +37,9 @@ Singleton {
                     light: file.adapter.light,
                     dark: file.adapter.dark
                 };
+                if (theme.name === "dynamic") {
+                    config.dynamic = theme;
+                }
                 config.themes.push(theme);
             }
         }

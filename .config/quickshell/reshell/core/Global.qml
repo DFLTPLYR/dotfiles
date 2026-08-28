@@ -106,7 +106,8 @@ Singleton {
             console.log("ColorGen error:", message);
         }
         function onOutput(data) {
-            // console.log("ColorGen output:", data);
+            if (general.theme === "dynamic")
+                Colors.dynamic.file.setText(data);
         }
     }
 

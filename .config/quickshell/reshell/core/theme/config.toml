@@ -10,9 +10,9 @@ output_path = '~/.steam/steam/steamui/skins/Material-Theme/css/main/colors/matug
 input_path = "onlyoffice/onlyoffice.json.template"
 output_path = "~/.local/share/onlyoffice/desktopeditors/uithemes/matugen.json"
 
-[templates.reshell]
-input_path = "reshell/material.json"
-output_path = "~/.config/quickshell/reshell/core/data/themes/dynamic.json"
+# [templates.reshell]
+# input_path = "reshell/material.json"
+# output_path = "~/.config/quickshell/reshell/core/data/themes/dynamic.json"
 
 [templates.themed_helix]
 input_path = "helix/helix.toml"
