@@ -20,7 +20,7 @@ Wrapper {
 
     GridLayout {
         anchors.fill: parent
-
+        clip: true
         QtObject {
             id: date
 
