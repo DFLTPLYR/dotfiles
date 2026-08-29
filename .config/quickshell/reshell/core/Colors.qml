@@ -77,6 +77,104 @@ Singleton {
         property color shadow: "#282828"
         property color hover: "#83a598"
         property color on_hover: "#282828"
+
+        Behavior on primary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_primary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on secondary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_secondary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on tertiary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_tertiary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on error {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_error {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on surface {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_surface {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on surface_variant {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_surface_variant {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on outline {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on shadow {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on hover {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_hover {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         property JsonObject terminal: JsonObject {
             property JsonObject normal: JsonObject {
                 property color black: "#282828"
@@ -87,6 +185,55 @@ Singleton {
                 property color magenta: "#b16286"
                 property color cyan: "#689d6a"
                 property color white: "#a89984"
+
+                Behavior on black {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on red {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on green {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on yellow {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on blue {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on magenta {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on cyan {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on white {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
             property JsonObject bright: JsonObject {
                 property color black: "#928374"
@@ -97,6 +244,55 @@ Singleton {
                 property color magenta: "#d3869b"
                 property color cyan: "#8ec07c"
                 property color white: "#ebdbb2"
+
+                Behavior on black {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on red {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on green {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on yellow {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on blue {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on magenta {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on cyan {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on white {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
             property color foreground: "#ebdbb2"
             property color background: "#282828"
@@ -104,6 +300,43 @@ Singleton {
             property color selectionBg: "#665c54"
             property color cursorText: "#282828"
             property color cursor: "#ebdbb2"
+
+            Behavior on foreground {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on background {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on selectionFg {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on selectionBg {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on cursorText {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on cursor {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
     }
 
@@ -124,6 +357,104 @@ Singleton {
         property color shadow: "#d5c4a1"
         property color hover: "#458588"
         property color on_hover: "#fbf1c7"
+
+        Behavior on primary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_primary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on secondary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_secondary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on tertiary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_tertiary {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on error {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_error {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on surface {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_surface {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on surface_variant {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_surface_variant {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on outline {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on shadow {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on hover {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on on_hover {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         property JsonObject terminal: JsonObject {
             property JsonObject normal: JsonObject {
                 property color black: "#fbf1c7"
@@ -134,6 +465,55 @@ Singleton {
                 property color magenta: "#b16286"
                 property color cyan: "#689d6a"
                 property color white: "#7c6f64"
+
+                Behavior on black {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on red {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on green {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on yellow {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on blue {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on magenta {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on cyan {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on white {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
             property JsonObject bright: JsonObject {
                 property color black: "#928374"
@@ -144,6 +524,55 @@ Singleton {
                 property color magenta: "#8f3f71"
                 property color cyan: "#427b58"
                 property color white: "#3c3836"
+
+                Behavior on black {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on red {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on green {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on yellow {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on blue {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on magenta {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on cyan {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on white {
+                    ColorAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
             property color foreground: "#3c3836"
             property color background: "#fbf1c7"
@@ -151,6 +580,43 @@ Singleton {
             property color selectionBg: "#3c3836"
             property color cursorText: "#625e5c"
             property color cursor: "#3c3836"
+
+            Behavior on foreground {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on background {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on selectionFg {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on selectionBg {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on cursorText {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on cursor {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
     }
 

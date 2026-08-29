@@ -1,16 +1,30 @@
 {pkgs}:
 pkgs.mkShell {
-  name = "hello-world-dev";
-  buildInputs = with pkgs; [
+  name = "rusty-qt-dev";
+
+  nativeBuildInputs = with pkgs; [
     rustup
     pkg-config
+    cmake
+    gnumake
+    wrapQtAppsHook
     qt6.qtbase
     qt6.qtdeclarative
+    qt6.qttools
+  ];
+
+  buildInputs = with pkgs; [
+    openssl
+    wayland
+    wayland-protocols
+    libxkbcommon
+    dbus
+    gtk3
+    libGL
+    mesa
   ];
 
   shellHook = ''
     export QMAKE=$(which qmake6)
-    QTDECL=${pkgs.qt6.qtdeclarative}
-    export CXXFLAGS="-I$QTDECL/include -I$QTDECL/include/QtQml"
   '';
 }

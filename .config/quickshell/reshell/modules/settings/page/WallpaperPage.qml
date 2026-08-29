@@ -207,6 +207,7 @@ Page {
             property real zoom: flick.zoom
             focusPolicy: Qt.NoFocus
             focus: false
+
             // border
             Rectangle {
                 anchors {
@@ -255,9 +256,10 @@ Page {
         id: rezImg
         required property int index
         required property var modelData
-        source: modelData.path
         readonly property int handlerSize: 30
         property bool pointerVisible: true
+
+        property bool resize: false
 
         function setDimension() {
             modelData.x = x;
@@ -271,6 +273,7 @@ Page {
         x: modelData.x ?? 0
         y: modelData.y ?? 0
         scale: modelData.scale
+        source: modelData.path
 
         Component.onCompleted: {
             if (modelData.width === 0)
@@ -280,10 +283,16 @@ Page {
         }
 
         MouseArea {
+            hoverEnabled: rezImg.resize
+            onHoveredChanged: {
+                if (!containsMouse)
+                    delayTimer.start();
+            }
             anchors.fill: parent
             acceptedButtons: Qt.RightButton | Qt.LeftButton
-            drag.target: rezImg
+            drag.target: rezImg.resize ? rezImg : null
             onReleased: rezImg.setDimension()
+            onPressAndHold: rezImg.resize = true
             onClicked: mouse => {
                 if (mouse.button === Qt.RightButton) {
                     options.x = mouse.x;
@@ -293,10 +302,21 @@ Page {
             }
         }
 
+        Timer {
+            id: delayTimer
+            interval: 2000
+            repeat: false
+
+            onTriggered: {
+                rezImg.resize = false;
+            }
+        }
+
         WheelHandler {
+            enabled: rezImg.resize
             orientation: Qt.Vertical
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-            onWheel: {
+            onWheel: event => {
                 const scale = rezImg.modelData.scale;
                 let delta = event.angleDelta.y > 0 ? 1 : -1;
                 if (scale === 1 && delta === -1)
@@ -307,6 +327,13 @@ Page {
 
         Menu {
             id: options
+
+            Action {
+                text: "Change Dimension"
+                onTriggered: {
+                    rezImg.resize = true;
+                }
+            }
 
             Action {
                 text: "Native Resolution"
@@ -345,7 +372,7 @@ Page {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -371,7 +398,7 @@ Page {
                 id: leftHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseXChanged: {
                     if (drag.active) {
@@ -416,7 +443,7 @@ Page {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -442,7 +469,7 @@ Page {
                 id: rightHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseXChanged: {
                     if (drag.active) {
@@ -488,7 +515,7 @@ Page {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.top
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -514,7 +541,7 @@ Page {
                 id: topHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -561,7 +588,7 @@ Page {
             color: Colors.theme.primary
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.bottom
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -587,7 +614,7 @@ Page {
                 id: bottomHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -633,7 +660,7 @@ Page {
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.top
 
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -659,7 +686,7 @@ Page {
                 id: topRightHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -709,7 +736,7 @@ Page {
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.top
 
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -735,7 +762,7 @@ Page {
                 id: topLeftHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -786,7 +813,7 @@ Page {
             anchors.horizontalCenter: parent.right
             anchors.verticalCenter: parent.bottom
 
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -812,7 +839,7 @@ Page {
                 id: bottomRightHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -861,7 +888,7 @@ Page {
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.bottom
 
-            opacity: rezImg.pointerVisible ? 1 : 0
+            opacity: rezImg.resize ? 1 : 0
             states: [
                 State {
                     name: "hovered"
@@ -887,7 +914,7 @@ Page {
                 id: bottomLeftHandleArea
 
                 anchors.fill: parent
-                enabled: rezImg.pointerVisible
+                enabled: rezImg.resize
                 hoverEnabled: true
                 onMouseYChanged: {
                     if (drag.active) {
@@ -1082,6 +1109,7 @@ Page {
                     if (Global.general.theme === "dynamic") {
                         const colorscheme = Colors.themes.find(s => s.name === "dynamic");
                         const text = colorscheme.file.text();
+                        Background.generate();
                         ColorGen.changeTheme(text);
                     }
                 }
