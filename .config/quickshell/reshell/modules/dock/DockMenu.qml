@@ -536,6 +536,7 @@ PopupModal {
                         item.parent = container;
                         item.width = container.width;
                         item.height = container.height;
+                        item.widget = true;
                     }
                 }
             }

@@ -45,8 +45,4 @@ Wrapper {
         property int icon: 10
         property int text: 10
     }
-
-    Component.onCompleted: {
-        print(Hardware.gpuUsedVram.toFixed(0));
-    }
 }

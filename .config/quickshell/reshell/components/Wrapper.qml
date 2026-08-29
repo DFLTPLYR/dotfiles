@@ -13,6 +13,7 @@ Item {
     property var screen: Quickshell.screens[0]
     property Property property: Property {}
     property bool swapping: false
+    property bool widget: false
     property Menu menu
 
     signal drop(int mouseX, int mouseY)
@@ -64,12 +65,11 @@ Item {
     MouseArea {
         id: ma
         anchors.fill: parent
-        hoverEnabled: true
+        enabled: wrapper.widget
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         propagateComposedEvents: true
         drag.target: wrapper
         drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
-        onClicked: mouse => {}
         onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
                 wrapper.Drag.drop();

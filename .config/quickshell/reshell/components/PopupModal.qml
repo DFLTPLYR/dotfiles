@@ -15,13 +15,13 @@ Popup {
     rightPadding: 2
     leftPadding: 2
     transformOrigin: Item.Center
+    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     Connections {
         function onEditChanged() {
             if (modalPopup.opened)
                 modalPopup.close();
         }
-
         target: Global
     }
 

@@ -290,7 +290,6 @@ Item {
 
         MouseArea {
             id: widgetMa
-            z: -1
             anchors.fill: parent
             hoverEnabled: widget.edit
             drag.target: widget.edit ? widget : null
