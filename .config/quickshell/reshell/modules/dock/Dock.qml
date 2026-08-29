@@ -194,7 +194,6 @@ Scope {
                     item: modalPopup.opened ? modalPopup.background : null
                     Component.onCompleted: panel.regions.push(this)
                 }
-                dim: true
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
                 y: panel.height / 2 - modalPopup.height / 2
@@ -362,33 +361,31 @@ Scope {
             }
         }
 
-        LazyLoader {
-            active: Global.edit
-            component: MouseArea {
-                parent: container
-                anchors.fill: parent
-                propagateComposedEvents: true
-                acceptedButtons: modalPopup.opened ? Qt.LeftButton | Qt.RightButton : Qt.RightButton
-                onClicked: mouse => {
-                    switch (mouse.button) {
-                    case Qt.RightButton:
-                        if (!modalPopup.opened) {}
-                        modalPopup.opened ? modalPopup.close() : modalPopup.open();
-                        return;
-                    case Qt.LeftButton:
-                        if (modalPopup.opened)
-                            modalPopup.close();
-                        return;
-                    default:
-                        return;
-                    }
+        MouseArea {
+            z: -1
+            parent: container
+            anchors.fill: parent
+            propagateComposedEvents: true
+            acceptedButtons: modalPopup.opened ? Qt.LeftButton | Qt.RightButton : Qt.RightButton
+            onClicked: mouse => {
+                switch (mouse.button) {
+                case Qt.RightButton:
+                    if (!modalPopup.opened) {}
+                    modalPopup.opened ? modalPopup.close() : modalPopup.open();
+                    return;
+                case Qt.LeftButton:
+                    if (modalPopup.opened)
+                        modalPopup.close();
+                    return;
+                default:
+                    return;
                 }
+            }
 
-                Component.onCompleted: {
-                    const reg = Components.createRegion();
-                    reg.item = this;
-                    panel.regions.push(reg);
-                }
+            Component.onCompleted: {
+                const reg = Components.createRegion();
+                reg.item = this;
+                panel.regions.push(reg);
             }
         }
     }

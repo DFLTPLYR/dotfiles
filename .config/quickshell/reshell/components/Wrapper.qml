@@ -63,11 +63,13 @@ Item {
 
     MouseArea {
         id: ma
-        enabled: Global.widget
         anchors.fill: parent
+        hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        propagateComposedEvents: true
         drag.target: wrapper
         drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
+        onClicked: mouse => {}
         onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
                 wrapper.Drag.drop();

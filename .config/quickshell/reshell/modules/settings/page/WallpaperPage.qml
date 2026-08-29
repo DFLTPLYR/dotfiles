@@ -84,7 +84,8 @@ Page {
                 // Display
                 Item {
                     id: content
-
+                    width: flick.maxX
+                    height: flick.maxY
                     scale: flick.zoom
                     anchors.centerIn: parent
 
@@ -257,7 +258,6 @@ Page {
         required property int index
         required property var modelData
         readonly property int handlerSize: 30
-        property bool pointerVisible: true
 
         property bool resize: false
 
@@ -283,16 +283,17 @@ Page {
         }
 
         MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton | Qt.LeftButton
             hoverEnabled: rezImg.resize
             onHoveredChanged: {
                 if (!containsMouse)
                     delayTimer.start();
             }
-            anchors.fill: parent
-            acceptedButtons: Qt.RightButton | Qt.LeftButton
             drag.target: rezImg.resize ? rezImg : null
             onReleased: rezImg.setDimension()
             onPressAndHold: rezImg.resize = true
+            pressAndHoldInterval: 200
             onClicked: mouse => {
                 if (mouse.button === Qt.RightButton) {
                     options.x = mouse.x;

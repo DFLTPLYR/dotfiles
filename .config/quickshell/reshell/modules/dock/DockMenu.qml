@@ -511,8 +511,9 @@ PopupModal {
             width: origPlacement.width
             height: origPlacement.height
             border.color: Colors.theme.primary
+
             Drag.active: ma.drag.active
-            Drag.keys: [modelData.source]
+            Drag.keys: [origPlacement.modelData.source]
             Drag.hotSpot: {
                 switch (modal.specs.position) {
                 case "top":

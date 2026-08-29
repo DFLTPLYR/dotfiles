@@ -35,18 +35,19 @@ Page {
 
     component DisplayTemp: GroupContainer {
         label: "Screen Temp"
-
-        Button {
-            text: "Increase"
-            onClicked: {
-                Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
+        Row {
+            Button {
+                text: "Increase"
+                onClicked: {
+                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
+                }
             }
-        }
 
-        Button {
-            text: "Decrease"
-            onClicked: {
-                Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
+            Button {
+                text: "Decrease"
+                onClicked: {
+                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
+                }
             }
         }
     }
