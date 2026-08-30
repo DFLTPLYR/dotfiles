@@ -260,6 +260,7 @@ Page {
         readonly property int handlerSize: 30
 
         property bool resize: false
+        readonly property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
 
         function setDimension() {
             modelData.x = x;
@@ -1091,11 +1092,12 @@ Page {
         }
 
         ListView {
+            visible: Global.general.theme === "dynamic"
             anchors {
                 left: parent.left
                 right: parent.right
             }
-            height: 150
+            height: 40
             orientation: ListView.Horizontal
             boundsBehavior: ListView.StopAtBounds
             model: ColorGen.variantTypes

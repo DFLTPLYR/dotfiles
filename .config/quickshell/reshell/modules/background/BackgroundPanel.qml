@@ -198,10 +198,9 @@ Item {
         property string path: modelData.path
         property alias ma: widgetMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
-        property var item
-
         property bool edit: false
         readonly property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
+        property var item
         property point pressPos
         property int pressX
         property int pressY
@@ -209,10 +208,6 @@ Item {
         property int pressH
 
         onPathChanged: {
-            incubateChild();
-        }
-
-        Component.onCompleted: {
             incubateChild();
         }
 
@@ -243,6 +238,7 @@ Item {
                 comp.visible = Qt.binding(() => widget.intersect);
                 widget.modelData.bindProperty(comp.property);
                 comp.property.sharedContext = widget.modelData.property;
+                popup.insertMenu(popup.count, item.property.menu);
             };
             if (incubator.status === Component.Ready)
                 setup(incubator.object);
@@ -292,10 +288,14 @@ Item {
             id: widgetMa
             anchors.fill: parent
             hoverEnabled: widget.edit
+            onHoveredChanged: {
+                if ((!containsMouse && !widget.resizing) || popup.opened)
+                    widget.edit = false;
+            }
             drag.target: widget.edit ? widget : null
             acceptedButtons: widget.edit ? Qt.RightButton | Qt.LeftButton : Qt.LeftButton
             propagateComposedEvents: true
-            pressAndHoldInterval: 300
+            pressAndHoldInterval: 200
             onPositionChanged: mouse => {
                 widget.modelData.x = panel.screen.x + parent.x;
                 widget.modelData.y = panel.screen.y + parent.y;
@@ -308,19 +308,6 @@ Item {
                     popup.x = mouse.x;
                     popup.y = mouse.y;
                     popup.opened ? popup.close() : popup.open();
-                }
-            }
-            onExited: {
-                if (!widget.resizing)
-                    delayedExit.restart();
-            }
-
-            Timer {
-                id: delayedExit
-                interval: 300
-                onTriggered: {
-                    widget.edit = false;
-                    Background.save();
                 }
             }
         }

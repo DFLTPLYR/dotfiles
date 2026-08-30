@@ -18,9 +18,6 @@ Singleton {
         precision: SystemClock.Seconds
     }
 
-    // signal
-    signal colorUpdate
-
     // states
     readonly property var stateNames: ["Normal", "Edit", "Widget"]
     readonly property QtObject states: QtObject {

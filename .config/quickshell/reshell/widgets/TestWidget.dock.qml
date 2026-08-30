@@ -2,11 +2,9 @@ import QtQuick
 import qs.components
 import qs.types
 
-Wrapper {
+TestWrap {
     id: wrap
-
-    width: wrap.setSize()
-    height: wrap.setSize()
+    anchors.fill: parent
 
     property: Property {
         property int icon: 12
@@ -18,15 +16,12 @@ Wrapper {
         width: parent.width / 2
         height: parent.width / 2
         radius: width / 2
+        x: (parent.width / 2) - (width / 2)
+        y: (parent.height / 2) - (height / 2)
+
         Text {
             anchors.centerIn: parent
             text: property.test
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                print("test");
-            }
         }
     }
 }

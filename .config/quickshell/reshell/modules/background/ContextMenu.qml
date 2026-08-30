@@ -117,8 +117,7 @@ Menu {
                         x: gp.x,
                         y: gp.y,
                         z: 0,
-                        path: source,
-                        name: Math.random().toString(36).substring(2, 10)
+                        path: source
                     });
                     Background.widgetArr = [...Background.widgetArr, wdg];
                 }
