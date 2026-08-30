@@ -22,4 +22,5 @@ vim.pack.add({
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 	{ src = "https://github.com/saadparwaiz1/cmp_luasnip" },
 	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+	{ src = "https://codeberg.org/andyg/leap.nvim" },
 })
