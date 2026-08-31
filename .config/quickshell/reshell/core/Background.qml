@@ -121,24 +121,6 @@ Singleton {
     property QtObject selectionRect: QtObject {
         property point startPoint
         property bool selecting: false
-        // onSelectingChanged: {
-        //     if (selecting)
-        //         return;
-        //     if (width >= 50 && height >= 50) {
-        //         const box = widgetContainerFactory.createObject(null, {
-        //             x,
-        //             y,
-        //             width,
-        //             height,
-        //             z: 0
-        //         });
-        //         config.widgetArr = [...config.widgetArr, box];
-        //     }
-        //     width = 0;
-        //     height = 0;
-        //     x = 0;
-        //     y = 0;
-        // }
         property int width: 0
         property int height: 0
         property int x: 0

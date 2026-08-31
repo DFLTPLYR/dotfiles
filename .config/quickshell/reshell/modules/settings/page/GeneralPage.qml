@@ -20,7 +20,6 @@ Page {
     DisplayTemp {}
 
     GroupContainer {
-
         RowLayout {
             height: 400
             anchors {

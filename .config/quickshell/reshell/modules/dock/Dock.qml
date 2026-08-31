@@ -173,7 +173,7 @@ Scope {
             }
 
             WlrLayershell.keyboardFocus: panel.hasFocus ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-            WlrLayershell.layer: modalPopup.visible ? WlrLayer.Overlay : WlrLayer.Top
+            WlrLayershell.layer: modalPopup.opened ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${dock.name}`
 
             mask: Region {
@@ -495,6 +495,11 @@ Scope {
                 slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
             }
             onDropped: drop => {
+                const widget = {
+                    source: drop.keys[0],
+                    name: Math.random().toString(36).substring(2, 10)
+                };
+                slot.widgets.append(widget);
                 switch (Global.state) {
                 case Global.states.edit:
                     const widget = {
@@ -593,6 +598,7 @@ Scope {
                             widgetContainer.height = Qt.binding(() => {
                                 return widget.height;
                             });
+                            widget.widget = true;
                             if (modelData.props) {
                                 Utils.setProperty(widget.property, modelData.props);
                             }

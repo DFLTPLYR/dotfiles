@@ -64,6 +64,7 @@ Item {
 
     MouseArea {
         id: ma
+        enabled: wrapper.widget
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         propagateComposedEvents: true

@@ -232,12 +232,16 @@ Item {
                 popup.insertMenu(popup.count, menu);
 
                 menu.entered.connect(() => {
-                    return print("test");
+                    return bottom.keyboardFocus = true;
                 });
 
                 menu.exited.connect(hasChanges => {
-                    return wrapper.modal(null, hasChanges);
+                    if (hasChanges) {
+                        Background.save();
+                    }
+                    return bottom.keyboardFocus = false;
                 });
+
                 menu.remove.connect(() => {
                     const widgets = Background.widgetArr.slice();
                     widgets.splice(widget.index, 1);

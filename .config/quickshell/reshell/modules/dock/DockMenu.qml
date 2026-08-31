@@ -499,6 +499,7 @@ PopupModal {
     component WidgetPlaceholder: Item {
         id: origPlacement
         required property var modelData
+        property var widget
         Layout.fillWidth: true
         Layout.leftMargin: 10
         Layout.rightMargin: 10
@@ -536,14 +537,8 @@ PopupModal {
                         item.parent = container;
                         item.width = container.width;
                         item.height = container.height;
-                        item.widget = true;
+                        item.focus = false;
                     }
-                }
-            }
-
-            Drag.onActiveChanged: {
-                if (Drag.active) {
-                    container.parent = stack;
                 }
             }
 
