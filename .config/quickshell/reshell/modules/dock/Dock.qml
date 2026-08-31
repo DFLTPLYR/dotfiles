@@ -487,37 +487,34 @@ Scope {
         ]
 
         // todo: Do a transfer
-        Loader {
-            active: Global.edit || Global.widget
+        DropArea {
+            objectName: "Slot"
             anchors.fill: parent
-            sourceComponent: DropArea {
-                objectName: "Slot"
-                onContainsDragChanged: {
-                    slot.border.width = containsDrag ? 1 : 0;
-                    slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
-                }
-                onDropped: drop => {
-                    switch (Global.state) {
-                    case Global.states.edit:
-                        const widget = {
-                            source: drop.keys[0],
-                            name: Math.random().toString(36).substring(2, 10)
-                        };
-                        slot.widgets.append(widget);
+            onContainsDragChanged: {
+                slot.border.width = containsDrag ? 1 : 0;
+                slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+            }
+            onDropped: drop => {
+                switch (Global.state) {
+                case Global.states.edit:
+                    const widget = {
+                        source: drop.keys[0],
+                        name: Math.random().toString(36).substring(2, 10)
+                    };
+                    slot.widgets.append(widget);
+                    return;
+                case Global.states.widget:
+                    const target = drop.source.parent;
+                    const delegateModel = target.DelegateModel;
+                    const index = delegateModel.itemsIndex;
+                    const obj = target.widget.get(index);
+                    if (!obj)
                         return;
-                    case Global.states.widget:
-                        const target = drop.source.parent;
-                        const delegateModel = target.DelegateModel;
-                        const index = delegateModel.itemsIndex;
-                        const obj = target.widget.get(index);
-                        if (!obj)
-                            return;
-                        slot.widgets.append(obj);
-                        target.widget.remove(index, 1);
-                        return;
-                    default:
-                        return;
-                    }
+                    slot.widgets.append(obj);
+                    target.widget.remove(index, 1);
+                    return;
+                default:
+                    return;
                 }
             }
         }

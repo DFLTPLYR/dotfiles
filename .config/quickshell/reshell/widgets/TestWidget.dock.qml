@@ -1,8 +1,9 @@
 import QtQuick
 import qs.components
 import qs.types
+import qs.core
 
-TestWrap {
+WidgetWrap {
     id: wrap
     anchors.fill: parent
 
@@ -22,6 +23,14 @@ TestWrap {
         Text {
             anchors.centerIn: parent
             text: property.test
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: true
+            onClicked: {
+                print(Global.fonts);
+            }
         }
     }
 }

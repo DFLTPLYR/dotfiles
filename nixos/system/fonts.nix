@@ -17,11 +17,4 @@
     nerd-fonts.iosevka
     material-symbols
   ];
-
-  fonts.fontconfig.defaultFonts = {
-    serif = ["Noto Serif" "Liberation Serif"];
-    sansSerif = ["Noto Sans" "Liberation Sans"];
-    monospace = ["Iosevka NFM" "Fira Code" "Noto Sans Mono"];
-    emoji = ["Noto Color Emoji"];
-  };
 }

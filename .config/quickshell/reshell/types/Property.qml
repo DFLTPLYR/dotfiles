@@ -17,6 +17,7 @@ QtObject {
         signal entered
         signal exited(bool hasChanges)
         signal remove
+
         title: "Properties"
         width: 150
         height: contentHeight

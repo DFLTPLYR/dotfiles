@@ -13,6 +13,7 @@ import System
 Singleton {
     id: config
 
+    property var fonts: []
     property SystemClock clock: SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -202,6 +203,13 @@ Singleton {
             if (Networking.connectivity === NetworkConnectivity.Full || Networking.connectivity === NetworkConnectivity.Limited) {
                 config.hasConnection = true;
             }
+        }
+    }
+
+    Connections {
+        target: SysFont
+        function onListChanged() {
+            config.fonts = SysFont.list;
         }
     }
 }

@@ -1,7 +1,7 @@
 import QtQml
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
+
 import qs.components
 import qs.core
 import qs.types
@@ -21,15 +21,9 @@ Wrapper {
     GridLayout {
         anchors.fill: parent
         clip: true
-        QtObject {
-            id: date
-
-            property var locale: Qt.locale("en_US")
-            property date currentDate: new Date()
-        }
 
         Text {
-            text: date.currentDate.toLocaleDateString(date.locale, wrap.property.format)
+            text: Qt.formatDateTime(Global.clock.date, property.format)
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary

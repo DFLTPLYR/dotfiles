@@ -21,6 +21,7 @@ Item {
     PanelWindow {
         id: bottom
         property bool hasMenu: false
+        property bool keyboardFocus: false
         screen: panel.screen
 
         color: "transparent"
@@ -34,7 +35,7 @@ Item {
 
         exclusionMode: ExclusionMode.Ignore
 
-        WlrLayershell.keyboardFocus: bgMa.containsMouse || Global.edit ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+        WlrLayershell.keyboardFocus: bgMa.containsMouse || bottom.keyboardFocus ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         WlrLayershell.namespace: `Background-${screen.name}`
         WlrLayershell.layer: WlrLayer.Bottom
 
@@ -238,7 +239,22 @@ Item {
                 comp.visible = Qt.binding(() => widget.intersect);
                 widget.modelData.bindProperty(comp.property);
                 comp.property.sharedContext = widget.modelData.property;
-                popup.insertMenu(popup.count, item.property.menu);
+                const menu = item.property.menu;
+                popup.insertMenu(popup.count, menu);
+
+                menu.entered.connect(() => {
+                    return print("test");
+                });
+
+                menu.exited.connect(hasChanges => {
+                    return wrapper.modal(null, hasChanges);
+                });
+                menu.remove.connect(() => {
+                    const widgets = Background.widgetArr.slice();
+                    widgets.splice(widget.index, 1);
+                    Background.widgetArr = widgets;
+                    Background.save();
+                });
             };
             if (incubator.status === Component.Ready)
                 setup(incubator.object);

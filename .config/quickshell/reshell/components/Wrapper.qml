@@ -65,27 +65,28 @@ Item {
     MouseArea {
         id: ma
         anchors.fill: parent
-        enabled: wrapper.widget
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         propagateComposedEvents: true
         drag.target: wrapper
         drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
-        onReleased: mouse => {
-            if (mouse.button === Qt.LeftButton) {
-                wrapper.Drag.drop();
-                wrapper.drop(mouseX, mouseY);
-                parent.x = 0;
-                parent.y = 0;
-            } else {
+        onClicked: mouse => {
+            if (mouse.button === Qt.RightButton) {
                 wrapper.menu.open();
                 wrapper.menu.x = mouseX;
                 wrapper.menu.y = mouseY;
             }
         }
+        onReleased: {
+            if (mouse.button === Qt.LeftButton) {
+                wrapper.Drag.drop();
+                wrapper.drop(mouseX, mouseY);
+                parent.x = 0;
+                parent.y = 0;
+            }
+        }
     }
 
     DropArea {
-        z: 1
         enabled: Global.widget
         anchors.fill: parent
         // stupid ass
