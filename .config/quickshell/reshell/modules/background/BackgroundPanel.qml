@@ -66,7 +66,6 @@ Item {
         Item {
             id: controlArea
             property bool grab: false
-            property bool select: false
 
             width: parent.width
             height: parent.height
@@ -77,17 +76,11 @@ Item {
                 if (event.key === Qt.Key_Control) {
                     controlArea.grab = true;
                 }
-                if (event.key === Qt.Key_Shift) {
-                    controlArea.select = true;
-                }
             }
 
             Keys.onReleased: event => {
                 if (event.key === Qt.Key_Control) {
                     controlArea.grab = false;
-                }
-                if (event.key === Qt.Key_Shift) {
-                    controlArea.select = false;
                 }
             }
 
@@ -105,19 +98,15 @@ Item {
                     } else {
                         if (contextMenu.opened)
                             contextMenu.close();
-                        if (controlArea.select) {
-                            Background.selectionRect.selecting = true;
-                            Background.selectionRect.startPoint = mapToGlobal(mouse.x, mouse.y);
-                            Background.selectionRect.x = Background.selectionRect.startPoint.x;
-                            Background.selectionRect.y = Background.selectionRect.startPoint.y;
-                        }
+                        Background.selectionRect.selecting = true;
+                        Background.selectionRect.startPoint = mapToGlobal(mouse.x, mouse.y);
+                        Background.selectionRect.x = Background.selectionRect.startPoint.x;
+                        Background.selectionRect.y = Background.selectionRect.startPoint.y;
                     }
                 }
 
                 onPositionChanged: mouse => {
                     const idx = Background.contextIdx;
-                    if (idx < 0 || !controlArea.select)
-                        return;
                     const sp = Background.selectionRect.startPoint;
                     const gp = mapToGlobal(mouse.x, mouse.y);
                     var minX = Math.min(sp.x, gp.x);
