@@ -19,7 +19,42 @@ Page {
 
     DisplayTemp {}
 
-    GroupContainer {
+    FontSection {}
+
+    component GreeterSection: GroupContainer {
+        label: "Greeter"
+
+        Toggle {
+            property bool greeter: Global.general.greeter
+            text: greeter ? "Enable" : "Disable"
+            checked: greeter
+            onCheckedChanged: {
+                Global.general.greeter = checked;
+                Global.save();
+            }
+        }
+    }
+
+    component DisplayTemp: GroupContainer {
+        label: "Screen Temp"
+        Row {
+            Button {
+                text: "Increase"
+                onClicked: {
+                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
+                }
+            }
+
+            Button {
+                text: "Decrease"
+                onClicked: {
+                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
+                }
+            }
+        }
+    }
+
+    component FontSection: GroupContainer {
         RowLayout {
             height: 400
             anchors {
@@ -230,70 +265,37 @@ Page {
                         "name": "zee/zed"
                     }
                 ]
+
                 model: alphabet
                 clip: true
                 delegate: Row {
                     required property var modelData
-                    anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 20
-
                     Text {
                         text: modelData.alpha
                         font.pixelSize: 16
                         font.weight: Font.Bold
                         width: 30
-                        font.family: example.family
+                        font.family: example.family || SysFont.current
                     }
                     Text {
                         text: modelData.lowercase
                         font.pixelSize: 16
                         width: 30
-                        font.family: example.family
+                        font.family: example.family || SysFont.current
                     }
                     Text {
                         text: modelData.phonic
                         font.pixelSize: 16
                         width: 120
-                        font.family: example.family
+                        font.family: example.family || SysFont.current
                     }
                     Text {
                         text: modelData.name
                         font.pixelSize: 16
                         width: 80
-                        font.family: example.family
+                        font.family: example.family || SysFont.current
                     }
-                }
-            }
-        }
-    }
-    component GreeterSection: GroupContainer {
-        label: "Greeter"
-
-        Toggle {
-            property bool greeter: Global.general.greeter
-            text: greeter ? "Enable" : "Disable"
-            checked: greeter
-            onCheckedChanged: {
-                Global.general.greeter = checked;
-                Global.save();
-            }
-        }
-    }
-
-    component DisplayTemp: GroupContainer {
-        label: "Screen Temp"
-        Row {
-            Button {
-                text: "Increase"
-                onClicked: {
-                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
-                }
-            }
-
-            Button {
-                text: "Decrease"
-                onClicked: {
-                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
                 }
             }
         }
