@@ -87,7 +87,6 @@ Item {
             MouseArea {
                 id: bgMa
                 anchors.fill: parent
-                hoverEnabled: true
                 propagateComposedEvents: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onPressed: mouse => {
