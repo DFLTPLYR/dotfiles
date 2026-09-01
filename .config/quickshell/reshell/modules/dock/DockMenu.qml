@@ -50,6 +50,7 @@ PopupModal {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: tabbar.currentIndex
+                clip: true
 
                 PropertyTab {
                     id: propertyTab
@@ -102,7 +103,6 @@ PopupModal {
         width: parent.width
         height: parent.height
         contentHeight: container.height
-        clip: true
 
         ColumnLayout {
             id: container
@@ -348,7 +348,6 @@ PopupModal {
         width: parent.width
         height: parent.height
         contentHeight: container.height
-        clip: true
 
         Connections {
             target: modal
@@ -481,7 +480,6 @@ PopupModal {
         width: modal.width
         height: modal.height
         contentHeight: column.height
-        clip: true
 
         ColumnLayout {
             id: column
@@ -511,11 +509,30 @@ PopupModal {
             property point pressPos: Qt.point(0, 0)
             width: origPlacement.width
             height: origPlacement.height
-            border.color: Colors.theme.primary
+            border.color: ma.drag.active ? "transparent" : Colors.theme.primary
 
             Drag.active: ma.drag.active
             Drag.keys: [origPlacement.modelData.source]
             Drag.hotSpot: pressPos
+
+            states: [
+                State {
+                    name: "orig"
+                    when: !ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: origPlacement
+                    }
+                },
+                State {
+                    name: "dragged"
+                    when: ma.drag.active
+                    ParentChange {
+                        target: container
+                        parent: stack
+                    }
+                }
+            ]
 
             LazyLoader {
                 active: container.visible
@@ -536,18 +553,9 @@ PopupModal {
                 drag.target: container
                 onPressed: mouse => {
                     container.pressPos = Qt.point(mouse.x, mouse.y);
-                    Global.dragging = true;
-                    Global.dragWidget = origPlacement.modelData;
-                    const globalPos = mapToGlobal(mouse.x, mouse.y);
-                    Global.dragPos = globalPos;
                 }
-                onPositionChanged: mouse => {
-                    const globalPos = mapToGlobal(mouse.x, mouse.y);
-                    Global.dragPos = globalPos;
-                }
+
                 onReleased: {
-                    Global.dragging = false;
-                    Global.dragWidget = null;
                     container.x = 0;
                     container.y = 0;
                     container.Drag.drop();

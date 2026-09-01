@@ -77,7 +77,7 @@ Item {
                 wrapper.menu.y = mouseY;
             }
         }
-        onReleased: {
+        onReleased: mouse => {
             if (mouse.button === Qt.LeftButton) {
                 wrapper.Drag.drop();
                 wrapper.drop(mouseX, mouseY);

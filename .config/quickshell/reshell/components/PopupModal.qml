@@ -16,7 +16,7 @@ Popup {
     leftPadding: 2
     transformOrigin: Item.Center
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
+    dim: true
     Connections {
         function onEditChanged() {
             if (modalPopup.opened)
@@ -30,7 +30,6 @@ Popup {
 
         anchors.fill: parent
         color: Colors.setOpacity(Colors.theme.surface, 1)
-        clip: true
 
         border {
             width: 2
