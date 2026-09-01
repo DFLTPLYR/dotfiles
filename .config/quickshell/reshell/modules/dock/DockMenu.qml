@@ -508,26 +508,14 @@ PopupModal {
         Rectangle {
             id: container
             color: "transparent"
-
+            property point pressPos: Qt.point(0, 0)
             width: origPlacement.width
             height: origPlacement.height
             border.color: Colors.theme.primary
 
             Drag.active: ma.drag.active
             Drag.keys: [origPlacement.modelData.source]
-            Drag.hotSpot: {
-                switch (modal.specs.position) {
-                case "top":
-                case "left":
-                    return Qt.point(0, 0);
-                case "bottom":
-                    return Qt.point(0, height);
-                case "right":
-                    return Qt.point(width, height);
-                default:
-                    return Qt.point(0, 0);
-                }
-            }
+            Drag.hotSpot: pressPos
 
             LazyLoader {
                 active: container.visible
@@ -542,28 +530,24 @@ PopupModal {
                 }
             }
 
-            states: [
-                State {
-                    when: ma.drag.active
-                    ParentChange {
-                        target: container
-                        parent: stack
-                    }
-                },
-                State {
-                    when: !ma.drag.active
-                    ParentChange {
-                        target: container
-                        parent: origPlacement
-                    }
-                }
-            ]
-
             MouseArea {
                 id: ma
                 anchors.fill: parent
                 drag.target: container
+                onPressed: mouse => {
+                    container.pressPos = Qt.point(mouse.x, mouse.y);
+                    Global.dragging = true;
+                    Global.dragWidget = origPlacement.modelData;
+                    const globalPos = mapToGlobal(mouse.x, mouse.y);
+                    Global.dragPos = globalPos;
+                }
+                onPositionChanged: mouse => {
+                    const globalPos = mapToGlobal(mouse.x, mouse.y);
+                    Global.dragPos = globalPos;
+                }
                 onReleased: {
+                    Global.dragging = false;
+                    Global.dragWidget = null;
                     container.x = 0;
                     container.y = 0;
                     container.Drag.drop();
