@@ -121,6 +121,13 @@ Singleton {
     property QtObject selectionRect: QtObject {
         property point startPoint
         property bool selecting: false
+        onSelectingChanged: {
+            if (!selecting) {
+                width = 0;
+                height = 0;
+                startPoint = null;
+            }
+        }
         property int width: 0
         property int height: 0
         property int x: 0

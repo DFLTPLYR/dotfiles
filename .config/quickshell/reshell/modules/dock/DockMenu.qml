@@ -534,7 +534,7 @@ PopupModal {
                 }
             ]
 
-            LazyLoader {
+            Loader {
                 active: container.visible
                 source: modelData.source
                 onItemChanged: {
