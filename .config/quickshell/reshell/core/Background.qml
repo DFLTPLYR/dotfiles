@@ -108,6 +108,7 @@ Singleton {
             }
         }
     }
+
     property Component imageContainerFactory: Component {
         Container {
             property string type: ""

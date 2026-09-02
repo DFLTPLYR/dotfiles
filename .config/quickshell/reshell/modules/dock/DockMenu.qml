@@ -498,6 +498,7 @@ PopupModal {
         id: origPlacement
         required property var modelData
         property var widget
+
         Layout.fillWidth: true
         Layout.leftMargin: 10
         Layout.rightMargin: 10

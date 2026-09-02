@@ -10,7 +10,9 @@ import qs.components
 QtObject {
     id: root
     property var sharedContext
-    property Menu menu: Menu {
+    property PropertyMenu menu: PropertyMenu {}
+
+    component PropertyMenu: Menu {
         id: menu
         property var originalValues: []
         property bool hasChanges: false
@@ -19,66 +21,11 @@ QtObject {
         signal remove
 
         title: "Properties"
-        width: 150
+        width: 180
         height: contentHeight
         leftPadding: 5
 
-        background: Rectangle {
-            id: bg
-            property var config
-
-            anchors.fill: parent
-            color: Colors.theme.surface
-            border.color: Colors.theme.outline
-            state: bg.config?.position || "none"
-
-            states: [
-                State {
-                    name: "left"
-                    PropertyChanges {
-                        target: menu
-                        leftMargin: parent.width
-                        y: (parent.height - height) / 2
-                    }
-                },
-                State {
-                    name: "right"
-                    PropertyChanges {
-                        target: menu
-                        rightMargin: parent.width
-                        y: (parent.height - height) / 2
-                    }
-                },
-                State {
-                    name: "top"
-                    PropertyChanges {
-                        target: menu
-                        topMargin: parent.height
-                        x: (parent.width - width) / 2
-                    }
-                },
-                State {
-                    name: "bottom"
-                    PropertyChanges {
-                        target: menu
-                        bottomMargin: parent.height
-                        x: (parent.width - width) / 2
-                    }
-                }
-            ]
-
-            Connections {
-                target: Global
-                function onStateChanged() {
-                    if (menu.opened && Global.state !== 3) {
-                        menu.close();
-                    }
-                }
-            }
-        }
-
         onOpened: {
-            bg.config = parent.slotConfig;
             const source = sharedContext && Object.keys(sharedContext).length > 0 ? sharedContext : root;
             const old = Utils.keys(source);
             const _orig = [];
@@ -118,15 +65,15 @@ QtObject {
             height: 100
             clip: true
             orientation: ListView.Vertical
-
+            boundsBehavior: Flickable.StopAtBounds
+            boundsMovement: Flickable.StopAtBounds
             model: ScriptModel {
                 values: {
                     return Utils.getSettings(root);
                 }
             }
 
-            DelegateChooser {
-                id: chooser
+            delegate: DelegateChooser {
                 role: "type"
 
                 DelegateChoice {
@@ -191,28 +138,7 @@ QtObject {
                         }
                     }
                 }
-
-                DelegateChoice {
-                    roleValue: "font"
-
-                    Item {
-                        id: font
-
-                        required property var modelData
-                        height: 50
-                        width: ListView.view.width
-
-                        Row {
-                            anchors.fill: parent
-                            Label {
-                                height: parent.height
-                                text: font.modelData.property
-                            }
-                        }
-                    }
-                }
             }
-            delegate: chooser
         }
 
         Action {

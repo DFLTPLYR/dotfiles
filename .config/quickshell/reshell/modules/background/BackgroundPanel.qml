@@ -65,24 +65,11 @@ Item {
 
         Item {
             id: controlArea
-            property bool grab: false
 
             width: parent.width
             height: parent.height
             focus: true
             z: Global.normal ? 999 : 0
-
-            Keys.onPressed: event => {
-                if (event.key === Qt.Key_Control) {
-                    controlArea.grab = true;
-                }
-            }
-
-            Keys.onReleased: event => {
-                if (event.key === Qt.Key_Control) {
-                    controlArea.grab = false;
-                }
-            }
 
             MouseArea {
                 id: bgMa
@@ -188,7 +175,8 @@ Item {
         property alias ma: widgetMa
         property bool intersect: modelData.width > 0 && modelData.height > 0 && Utils.intersects(modelData, panel.screen)
         property bool edit: false
-        readonly property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
+        property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
+        readonly property bool containsMouse: leftHandleArea.containsMouse || rightHandleArea.containsMouse || topHandleArea.containsMouse || bottomHandleArea.containsMouse || topRightHandleArea.containsMouse || topLeftHandleArea.containsMouse || bottomRightHandleArea.containsMouse || bottomLeftHandleArea.containsMouse
         property var item
         property point pressPos
         property int pressX
@@ -275,7 +263,7 @@ Item {
 
         Outline {
             anchors.fill: parent
-            opacity: widget.resizing || widget.edit || !modelData.path ? 1 : 0
+            opacity: widget.containsMouse || widget.resizing || widget.edit || !modelData.path ? 1 : 0
 
             Behavior on opacity {
                 NumberAnimation {
@@ -297,7 +285,7 @@ Item {
             anchors.fill: parent
             hoverEnabled: widget.edit
             onHoveredChanged: {
-                if ((!containsMouse && !widget.resizing) || popup.opened)
+                if (((!containsMouse && !widget.containsMouse) && !widget.resizing) || popup.opened)
                     widget.edit = false;
             }
             drag.target: widget.edit ? widget : null
