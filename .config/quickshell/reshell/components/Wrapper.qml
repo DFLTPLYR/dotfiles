@@ -87,21 +87,6 @@ Item {
         }
     }
 
-    DropArea {
-        enabled: Global.widget
-        anchors.fill: parent
-        // stupid ass
-        onEntered: drag => {
-            const widgetA = drag.source.parent.DelegateModel.itemsIndex;
-            const widgetB = wrapper.parent.DelegateModel.itemsIndex;
-            wrapper.swap(widgetB, widgetA);
-        }
-        onContainsDragChanged: {
-            background.border.width = containsDrag ? 1 : 0;
-            background.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
-        }
-    }
-
     Component.onCompleted: {
         wrapper.menu = wrapper.property.menu;
     }

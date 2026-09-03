@@ -51,6 +51,7 @@
     btop-rocm
     trash-cli
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.rmpcd
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     (pkgs.firefoxpwa-unwrapped.override {firefoxRuntime = pkgs.firefox-unwrapped;})
     fetch

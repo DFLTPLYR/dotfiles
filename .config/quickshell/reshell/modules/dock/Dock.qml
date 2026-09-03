@@ -495,31 +495,28 @@ Scope {
                 slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
             }
             onDropped: drop => {
-                const widget = {
-                    source: drop.keys[0],
-                    name: Math.random().toString(36).substring(2, 10)
-                };
-                slot.widgets.append(widget);
-                switch (Global.state) {
-                case Global.states.edit:
+                const source = drop.source.parent;
+                const isInternalDrag = source?.widget !== undefined;
+
+                if (isInternalDrag) {
+                    // Moving widget from another slot
+                    const sourceIndex = source.DelegateModel?.itemsIndex;
+                    if (sourceIndex === undefined)
+                        return;
+                    const obj = source.widget.get(sourceIndex);
+                    if (!obj)
+                        return;
+                    slot.widgets.append(obj);
+                    source.widget.remove(sourceIndex, 1);
+                    panel.timer.restart();
+                } else {
+                    // New widget from palette
                     const widget = {
                         source: drop.keys[0],
                         name: Math.random().toString(36).substring(2, 10)
                     };
                     slot.widgets.append(widget);
-                    return;
-                case Global.states.widget:
-                    const target = drop.source.parent;
-                    const delegateModel = target.DelegateModel;
-                    const index = delegateModel.itemsIndex;
-                    const obj = target.widget.get(index);
-                    if (!obj)
-                        return;
-                    slot.widgets.append(obj);
-                    target.widget.remove(index, 1);
-                    return;
-                default:
-                    return;
+                    panel.timer.restart();
                 }
             }
         }
@@ -563,19 +560,23 @@ Scope {
             DelegateModel {
                 id: widgetsModel
                 model: slot.widgets
-                delegate: Pane {
+                delegate: Rectangle {
                     id: widgetContainer
-                    bg.color: "transparent"
+                    color: "transparent"
                     required property var modelData
                     required property int index
                     property ListModel widget: widgetsModel.model
                     property string source: modelData.source
+                    property var wdg
                     onSourceChanged: widgetContainer.incubateChild()
 
                     function incubateChild() {
                         const source = modelData?.source;
                         if (!source)
                             return;
+                        if (widgetContainer.wdg !== undefined) {
+                            widgetContainer.wdg.destroy();
+                        }
                         const component = Qt.createComponent(source);
                         if (!component || component.status === Component.Error) {
                             console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
@@ -605,11 +606,6 @@ Scope {
                             panel.activeWidgets = [...panel.activeWidgets, widget];
                             slot.activeWidgets = [...slot.activeWidgets, widget];
 
-                            widget.swap.connect((fromIndex, toIndex) => {
-                                widgetsModel.items.move(fromIndex, toIndex);
-                                panel.timer.restart();
-                            });
-
                             widget.remove.connect(() => {
                                 widgetsModel.items.remove(widgetContainer.index, 1);
                                 panel.timer.restart();
@@ -628,6 +624,8 @@ Scope {
                                     panel.hasFocus = false;
                                 }
                             });
+
+                            widgetContainer.wdg = widget;
                         };
                         if (incubator.status === Component.Ready)
                             setup(incubator.object);
@@ -636,6 +634,36 @@ Scope {
                                 if (status === Component.Ready)
                                     setup(incubator.object);
                             };
+                    }
+
+                    DropArea {
+                        anchors.fill: parent
+                        onDropped: drop => {
+                            const srcParent = drop.source.parent;
+                            const srcDM = srcParent.DelegateModel;
+                            const tgtDM = widgetContainer.DelegateModel;
+                            const sourceIndex = srcDM?.itemsIndex;
+                            const targetIndex = tgtDM?.itemsIndex;
+
+                            if (sourceIndex === undefined || targetIndex === undefined)
+                                return;
+
+                            if (tgtDM.model === srcDM.model) {
+                                widgetsModel.items.move(sourceIndex, targetIndex);
+                            } else {
+                                const srcWidgets = srcParent.widget;
+                                const tgtWidgets = widgetContainer.widget;
+                                const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
+                                const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
+                                srcWidgets.set(sourceIndex, tgtObj);
+                                tgtWidgets.set(targetIndex, srcObj);
+                            }
+                            panel.timer.restart();
+                        }
+                        onContainsDragChanged: {
+                            widgetContainer.border.width = containsDrag ? 1 : 0;
+                            widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                        }
                     }
                 }
             }

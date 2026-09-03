@@ -23,10 +23,9 @@ PopupModal {
         component: ColumnLayout {
             anchors.fill: parent
 
-            Rectangle {
+            Item {
                 id: tabContainer
-                color: Colors.theme.surface
-
+                z: -1111
                 Layout.preferredHeight: tabbar.height
                 Layout.fillWidth: true
 
@@ -51,7 +50,6 @@ PopupModal {
                 Layout.fillHeight: true
                 currentIndex: tabbar.currentIndex
                 clip: true
-
                 PropertyTab {
                     id: propertyTab
                 }
@@ -550,6 +548,7 @@ PopupModal {
 
             MouseArea {
                 id: ma
+                z: 999
                 anchors.fill: parent
                 drag.target: container
                 onPressed: mouse => {

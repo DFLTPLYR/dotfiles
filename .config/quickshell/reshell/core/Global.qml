@@ -14,6 +14,7 @@ Singleton {
     id: config
 
     property var fonts: []
+
     property SystemClock clock: SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -210,6 +211,10 @@ Singleton {
         target: SysFont
         function onListChanged() {
             config.fonts = SysFont.list;
+            const families = [];
+            for (const obj of SysFont.list) {
+                const font = JSON.parse(obj);
+            }
         }
     }
 }
