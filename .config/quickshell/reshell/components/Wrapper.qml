@@ -59,36 +59,6 @@ Item {
         return 0;
     }
 
-    Drag.active: ma.drag.active
-
-    MouseArea {
-        id: ma
-        enabled: wrapper.widget
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        propagateComposedEvents: true
-        drag.target: wrapper
-        drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
-        onPressed: mouse => {
-            wrapper.Drag.hotSpot = Qt.point(mouse.x, mouse.y);
-        }
-        onClicked: mouse => {
-            if (mouse.button === Qt.RightButton) {
-                wrapper.menu.open();
-                wrapper.menu.x = mouseX;
-                wrapper.menu.y = mouseY;
-            }
-        }
-        onReleased: mouse => {
-            if (mouse.button === Qt.LeftButton) {
-                wrapper.Drag.drop();
-                wrapper.drop(mouseX, mouseY);
-                parent.x = 0;
-                parent.y = 0;
-            }
-        }
-    }
-
     Component.onCompleted: {
         wrapper.menu = wrapper.property.menu;
     }

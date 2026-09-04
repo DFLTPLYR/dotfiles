@@ -609,26 +609,30 @@ Scope {
                             panel.activeWidgets = [...panel.activeWidgets, widget];
                             slot.activeWidgets = [...slot.activeWidgets, widget];
 
-                            widget.remove.connect(() => {
-                                widgetsModel.items.remove(widgetContainer.index, 1);
-                                panel.timer.restart();
-                            });
+                            widgetContainer.wdg = widget;
+                            ma.parent = widget;
 
-                            widget.modal.connect((modal, hasChanges) => {
+                            const menu = widget.property.menu;
+                            menu.entered.connect(() => {
+                                slot.region.item = menu.background;
+                                panel.hasFocus = true;
+                                return;
+                            });
+                            menu.exited.connect(hasChanges => {
+                                slot.region.item = null;
+                                panel.hasFocus = false;
+
                                 if (hasChanges) {
                                     panel.timer.restart();
                                 }
-                                const container = modal?.background ?? null;
-                                if (container) {
-                                    slot.region.item = container;
-                                    panel.hasFocus = true;
-                                } else {
-                                    slot.region.item = null;
-                                    panel.hasFocus = false;
-                                }
+                                return;
                             });
+                            menu.remove.connect(() => {
+                                const container = widgetContainer;
+                                container.widget.remove(container.index, 1);
 
-                            widgetContainer.wdg = widget;
+                                panel.timer.restart();
+                            });
                         };
                         if (incubator.status === Component.Ready)
                             setup(incubator.object);
@@ -666,6 +670,36 @@ Scope {
                         onContainsDragChanged: {
                             widgetContainer.border.width = containsDrag ? 1 : 0;
                             widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                        }
+                    }
+
+                    MouseArea {
+                        id: ma
+                        anchors.fill: parent
+                        drag.target: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        propagateComposedEvents: true
+
+                        drag.axis: config.side ? Drag.YAxis : Drag.XAxis
+                        onPressAndHold: mouse => {
+                            parent.drag.active = true;
+                            parent.drag.hotspot = qt.point(mouse.x, mouse.y);
+                        }
+                        onReleased: mouse => {
+                            if (mouse.button === Qt.LeftButton) {
+                                parent.Drag.drop();
+                                parent.x = 0;
+                                parent.y = 0;
+                                parent.Drag.active = false;
+                            }
+                        }
+                        onClicked: mouse => {
+                            if (mouse.button === Qt.RightButton) {
+                                const menu = widgetContainer.wdg.property.menu;
+                                menu.open();
+                                menu.x = mouseX;
+                                menu.y = mouseY;
+                            }
                         }
                     }
                 }
