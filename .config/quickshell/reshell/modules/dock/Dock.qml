@@ -676,14 +676,14 @@ Scope {
                     MouseArea {
                         id: ma
                         anchors.fill: parent
-                        drag.target: parent
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         propagateComposedEvents: true
-
                         drag.axis: config.side ? Drag.YAxis : Drag.XAxis
+                        pressAndHoldInterval: 200
                         onPressAndHold: mouse => {
-                            parent.drag.active = true;
-                            parent.drag.hotspot = qt.point(mouse.x, mouse.y);
+                            parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
+                            parent.Drag.active = true;
+                            drag.target = parent;
                         }
                         onReleased: mouse => {
                             if (mouse.button === Qt.LeftButton) {
@@ -692,8 +692,11 @@ Scope {
                                 parent.y = 0;
                                 parent.Drag.active = false;
                             }
+
+                            drag.target = null;
                         }
                         onClicked: mouse => {
+                            widgetContainer.wdg.clicked(mouse);
                             if (mouse.button === Qt.RightButton) {
                                 const menu = widgetContainer.wdg.property.menu;
                                 menu.open();

@@ -1,3 +1,4 @@
+pragma NativeMethodBehavior: AcceptThisObject
 import QtQuick
 import Quickshell
 import Quickshell.WindowManager
@@ -19,6 +20,11 @@ Wrapper {
     height: wrap.setHeight(list.contentHeight)
 
     readonly property var sets: wrap.screen ? WindowManager.screenProjection(wrap.screen)?.windowsets : null
+    property var pending: null
+    onClicked: {
+        if (pending?.canActivate)
+            pending.activate();
+    }
 
     ListView {
         id: list
@@ -94,9 +100,9 @@ Wrapper {
                 propagateComposedEvents: true
                 anchors.fill: parent
                 enabled: Global.normal
-                onClicked: {
-                    if (modelData.canActivate) {
-                        modelData.activate();
+                onHoveredChanged: {
+                    if (containsMouse) {
+                        wrap.pending = modelData;
                     }
                 }
             }

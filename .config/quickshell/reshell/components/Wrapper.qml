@@ -16,23 +16,7 @@ Item {
     property bool widget: false
     property Menu menu
 
-    signal drop(int mouseX, int mouseY)
-    signal swap(int item1, int item2)
-    signal remove
-    signal modal(var modal, bool hasChanges)
-
-    onMenuChanged: {
-        menu.entered.connect(() => {
-            return wrapper.modal(wrapper.menu, false);
-        });
-
-        menu.exited.connect(hasChanges => {
-            return wrapper.modal(null, hasChanges);
-        });
-        menu.remove.connect(() => {
-            wrapper.remove();
-        });
-    }
+    signal clicked(button: var)
 
     function setSize() {
         if (wrapper.container && wrapper.slotConfig) {
