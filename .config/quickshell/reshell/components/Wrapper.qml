@@ -59,7 +59,6 @@ Item {
         return 0;
     }
 
-    Drag.hotSpot: Qt.point(width / 2, height / 2)
     Drag.active: ma.drag.active
 
     MouseArea {
@@ -70,6 +69,9 @@ Item {
         propagateComposedEvents: true
         drag.target: wrapper
         drag.axis: wrapper.slotConfig ? (wrapper.slotConfig.side ? Drag.YAxis : Drag.XAxis) : Drag.XAndYAxis
+        onPressed: mouse => {
+            wrapper.Drag.hotSpot = Qt.point(mouse.x, mouse.y);
+        }
         onClicked: mouse => {
             if (mouse.button === Qt.RightButton) {
                 wrapper.menu.open();
