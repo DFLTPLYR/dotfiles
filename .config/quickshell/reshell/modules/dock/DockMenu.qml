@@ -275,6 +275,7 @@ PopupModal {
                 font.pixelSize: 32
                 text: "Margins"
             }
+
             FlexboxLayout {
                 id: margin
                 property var margin: modal.specs.style.margin
@@ -378,6 +379,7 @@ PopupModal {
 
             RowLayout {
                 Layout.fillWidth: true
+                spacing: 10
                 Label {
                     text: "Slots"
                     font.pixelSize: 32
@@ -399,12 +401,15 @@ PopupModal {
             ListView {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
+
                 model: [...modal.slots]
                 orientation: ListView.Horizontal
+                spacing: 5
                 delegate: Rectangle {
                     required property var modelData
                     width: 60
                     height: 40
+                    clip: true
                     color: modelData.state === "selected" ? Colors.theme.primary : Colors.theme.surface
 
                     Text {

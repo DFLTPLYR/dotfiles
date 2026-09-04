@@ -172,7 +172,7 @@ Scope {
                 }
             }
 
-            WlrLayershell.keyboardFocus: panel.hasFocus ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+            WlrLayershell.keyboardFocus: panel.hasFocus || modalPopup.opened ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
             WlrLayershell.layer: modalPopup.opened ? WlrLayer.Overlay : WlrLayer.Top
             WlrLayershell.namespace: `Dock-${dock.name}`
 
@@ -196,8 +196,6 @@ Scope {
                 }
                 width: Math.min(800, panel.screen.width / 2)
                 height: Math.min(1200, panel.screen.height / 2)
-                y: panel.height / 2 - modalPopup.height / 2
-                x: panel.width / 2 - modalPopup.width / 2
                 specs: file.adapter
                 slots: panel.dockSlots
                 onSave: timer.restart()
@@ -243,10 +241,10 @@ Scope {
                 name: "top"
                 PropertyChanges {
                     target: container
-                    width: parent.width * (config.width / 100)
-                    height: config.height
                     y: 0
                     x: (parent.width - width) * (config.x / 100)
+                    width: parent.width * (config.width / 100)
+                    height: config.height
                 }
             },
             State {
@@ -368,17 +366,49 @@ Scope {
             propagateComposedEvents: true
             acceptedButtons: modalPopup.opened ? Qt.LeftButton | Qt.RightButton : Qt.RightButton
             onClicked: mouse => {
-                switch (mouse.button) {
-                case Qt.RightButton:
-                    if (!modalPopup.opened) {}
-                    modalPopup.opened ? modalPopup.close() : modalPopup.open();
-                    return;
-                case Qt.LeftButton:
-                    if (modalPopup.opened)
-                        modalPopup.close();
-                    return;
-                default:
-                    return;
+                const modal = modalPopup;
+
+                const position = mouse => {
+                    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+                    const clickX = container.x + mouse.x;
+                    const clickY = container.y + mouse.y;
+                    switch (config.position) {
+                    case "top":
+                        return {
+                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                            y: container.y + container.height
+                        };
+                    case "bottom":
+                        return {
+                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                            y: container.y - modal.height
+                        };
+                    case "left":
+                        return {
+                            x: container.x + container.width,
+                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                        };
+                    case "right":
+                        return {
+                            x: container.x - modal.width,
+                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                        };
+                    default:
+                        return {
+                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                        };
+                    }
+                };
+
+                if (mouse.button === Qt.RightButton) {
+                    const pos = position(mouse);
+                    modal.x = pos.x;
+                    modal.y = pos.y;
+                    modal.opened ? modal.close() : modal.open();
+                } else {
+                    if (modal.opened)
+                        modal.close();
                 }
             }
 
