@@ -64,7 +64,8 @@ Singleton {
         z: modelData.z
         scale: modelData.scale
         smooth: true
-        mipmap: true
+        mipmap: false
+        cache: true
         asynchronous: true
     }
 
@@ -144,8 +145,24 @@ Singleton {
         watchChanges: true
         preload: true
         onLoaded: {
+            // Destroy previous containers first: createObject(null) has no
+            // parent so clearing the arrays alone leaks them on every reload.
+            const oldWallpapers = Background.wallpaperArr;
+            const oldWidgets = Background.widgetArr;
             Background.wallpaperArr = [];
             Background.widgetArr = [];
+            for (let i in oldWallpapers) {
+                const o = oldWallpapers[i];
+                if (o && o.destroy)
+                    o.destroy();
+            }
+            for (let i in oldWidgets) {
+                const o = oldWidgets[i];
+                if (o && o.property && o.property.destroy)
+                    o.property.destroy();
+                if (o && o.destroy)
+                    o.destroy();
+            }
             const current = jsonadapter.config.current;
             const theme = jsonadapter.config.preset.find(s => s.name === current);
             const wallpapers = theme?.wallpapers;

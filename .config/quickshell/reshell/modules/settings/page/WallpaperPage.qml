@@ -105,6 +105,10 @@ Page {
                                 AnimatedImage {
                                     required property string path
                                     source: path
+                                    sourceSize.width: 1280
+                                    sourceSize.height: 720
+                                    asynchronous: true
+                                    cache: true
                                 }
                             }
                             DelegateChoice {
@@ -275,6 +279,10 @@ Page {
         y: modelData.y ?? 0
         scale: modelData.scale
         source: modelData.path
+        sourceSize.width: 1920
+        sourceSize.height: 1080
+        asynchronous: true
+        cache: true
 
         Component.onCompleted: {
             if (modelData.width === 0)
