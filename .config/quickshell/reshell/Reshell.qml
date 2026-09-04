@@ -117,7 +117,6 @@ Variants {
                             model.save();
                         }
                     }
-                    onObjectRemoved: (_idx, object) => object.destroy()
                 }
 
                 // background
@@ -146,6 +145,7 @@ Variants {
         property string sizing: "custom"
         property string position: "right"
         property bool reverse: true
+
         readonly property JsonObject style: JsonObject {
             property color color: Colors.setOpacity(Colors.theme.surface, 0.5)
             property DirectionJson padding: DirectionJson {}

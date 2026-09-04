@@ -477,6 +477,11 @@ PopupModal {
                 }
             }
         }
+
+        Component.onDestruction: {
+            if (container.selectedSlot)
+                container.selectedSlot.state = "none";
+        }
     }
 
     component WidgetsTab: Flickable {

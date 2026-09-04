@@ -482,33 +482,6 @@ Scope {
 
         transitions: [
             Transition {
-                to: "hovered"
-                NumberAnimation {
-                    property: "border.width"
-                    duration: 150
-                }
-                ColorAnimation {
-                    property: "border.color"
-                    duration: 150
-                }
-            },
-            Transition {
-                to: "none"
-                NumberAnimation {
-                    property: "border.width"
-                    duration: 150
-                }
-                ColorAnimation {
-                    property: "border.color"
-                    duration: 150
-                }
-            },
-            Transition {
-                to: "selected"
-                NumberAnimation {
-                    property: "border.width"
-                    duration: 150
-                }
                 ColorAnimation {
                     property: "border.color"
                     duration: 150

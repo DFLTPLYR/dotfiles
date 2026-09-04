@@ -58,6 +58,7 @@ QtObject {
             menu.updateHasChanges();
             menu.exited(menu.hasChanges);
         }
+
         Properties {
             width: menu.width
             height: 100
@@ -150,6 +151,22 @@ QtObject {
                                 target[string.modelData.property] = text;
                                 updateLoop.restart();
                             }
+                        }
+                    }
+                }
+            }
+
+            DelegateChoice {
+                roleValue: "boolean"
+
+                Item {
+                    required property var modelData
+
+                    Toggle {
+                        text: modelData.property
+                        checked: root[modelData.property]
+                        onCheckedChanged: {
+                            return root[modelData.property] = checked;
                         }
                     }
                 }
