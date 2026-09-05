@@ -613,6 +613,13 @@ Scope {
                             ma.parent = widget;
 
                             const menu = widget.property.menu;
+                            widget.area.connect(modal => {
+                                const has = modal !== null;
+                                slot.region.item = modal;
+                                panel.hasFocus = has;
+                                return;
+                            });
+
                             menu.entered.connect(() => {
                                 slot.region.item = menu.background;
                                 panel.hasFocus = true;

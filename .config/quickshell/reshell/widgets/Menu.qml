@@ -7,12 +7,29 @@ import qs.types
 Wrapper {
     id: wrap
 
+    property: Property {
+        property int icon: 12
+        property bool dim: false
+    }
+
     width: wrap.setSize()
     height: wrap.setSize()
 
+    onClicked: mouse => {
+        if (mouse.button === Qt.RightButton)
+            return;
+        if (modal.visible) {
+            modal.close();
+            wrap.area(null);
+        } else {
+            modal.open();
+            wrap.area(modal.background);
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
-        color: button.containsMouse || button.toggled ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
+        color: hoverArea.hovered ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
         radius: width / 2
 
         Text {
@@ -20,7 +37,7 @@ Wrapper {
             text: "power-off"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: button.toggled ? Colors.theme.tertiary : Colors.theme.primary
+            color: hoverArea.hovered ? Colors.theme.tertiary : Colors.theme.primary
 
             font {
                 family: Components.icon.family
@@ -37,25 +54,8 @@ Wrapper {
             }
         }
 
-        MouseArea {
-            id: button
-
-            property bool toggled: false
-
-            enabled: Global.normal
-            hoverEnabled: true
-            anchors.fill: parent
-            onClicked: {
-                if (modal.opened) {
-                    modal.close();
-                    wrap.modal(null, false);
-                    button.toggled = false;
-                } else {
-                    modal.open();
-                    wrap.modal(modal, false);
-                    button.toggled = true;
-                }
-            }
+        HoverHandler {
+            id: hoverArea
         }
 
         Behavior on color {
@@ -68,7 +68,7 @@ Wrapper {
 
     PopupModal {
         id: modal
-
+        dim: wrap.property.dim
         width: content.contentWidth + (modal.leftPadding + modal.rightPadding)
         height: content.contentHeight + (modal.bottomPadding + modal.topPadding)
         y: wrap.slotConfig && wrap.slotConfig.side ? wrap.height / 2 - modal.height / 2 : wrap.height
@@ -98,10 +98,5 @@ Wrapper {
                 }
             }
         }
-    }
-
-    property: Property {
-        property int icon: 12
-        property int width: 100
     }
 }

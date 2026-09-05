@@ -16,6 +16,7 @@ Item {
     property bool widget: false
     property Menu menu
 
+    signal area(var modal)
     signal clicked(button: var)
 
     function setSize() {
