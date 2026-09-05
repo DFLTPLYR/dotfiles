@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
-import QtQml.Models
 
 import Quickshell
 
@@ -19,13 +18,12 @@ PopupModal {
 
     // Content
     LazyLoader {
-        active: modal.opened
+        activeAsync: modal.opened
         component: ColumnLayout {
             anchors.fill: parent
-
             Item {
                 id: tabContainer
-                z: -1111
+                z: -1
                 Layout.preferredHeight: tabbar.height
                 Layout.fillWidth: true
 
@@ -104,11 +102,13 @@ PopupModal {
 
         ColumnLayout {
             id: container
+
             anchors {
                 left: parent.left
                 right: parent.right
                 margins: 2
             }
+
             Button {
                 text: "Delete Dock"
                 onClicked: modal.remove()
@@ -121,19 +121,24 @@ PopupModal {
                 }
             }
 
-            RowLayout {
+            ColumnLayout {
                 Layout.fillWidth: true
                 Label {
                     font.pixelSize: 32
                     text: "Position"
                 }
 
-                Dropdown {
-                    Layout.fillWidth: true
-                    model: ["left", "right", "top", "bottom"]
-                    currentValue: modal.specs.position
-                    onCurrentValueChanged: {
-                        modal.specs.position = currentValue;
+                Row {
+                    Repeater {
+                        model: ["left", "right", "top", "bottom"]
+                        delegate: RadioDelegate {
+                            required property var modelData
+                            text: modelData
+                            checked: modelData === modal.specs.position
+                            onToggled: {
+                                modal.specs.position = modelData;
+                            }
+                        }
                     }
                 }
             }
@@ -336,6 +341,7 @@ PopupModal {
             Slider {
                 id: opacitySlider
                 to: 1.0
+                value: modal.specs.style.opacity
                 onValueChanged: {
                     modal.specs.style.opacity = value.toFixed(2);
                 }
@@ -405,37 +411,21 @@ PopupModal {
                 model: [...modal.slots]
                 orientation: ListView.Horizontal
                 spacing: 5
-                delegate: Rectangle {
+
+                delegate: RadioDelegate {
                     required property var modelData
-                    width: 60
-                    height: 40
-                    clip: true
-                    color: modelData.state === "selected" ? Colors.theme.primary : Colors.theme.surface
-
-                    Text {
-                        color: modelData.state === "selected" ? Colors.theme.on_primary : Colors.theme.on_surface
-                        anchors.centerIn: parent
-                        text: modelData.objectName
+                    required property int index
+                    hoverEnabled: true
+                    text: modelData.objectName
+                    checked: index === 0
+                    onToggled: {
+                        if (container.selectedSlot)
+                            container.selectedSlot.state = "none";
+                        container.selectedSlot = modelData;
                     }
-
-                    MouseArea {
-                        id: ma
-                        hoverEnabled: true
-                        onHoveredChanged: {
-                            if (modelData.state !== "selected") {
-                                modelData.state = containsMouse ? "hovered" : "none";
-                            }
-                        }
-                        anchors.fill: parent
-                        onClicked: {
-                            if (container.selectedSlot == modelData) {
-                                modelData.state = "none";
-                                return container.selectedSlot = null;
-                            } else {
-                                if (container.selectedSlot)
-                                    container.selectedSlot.state = "none";
-                                container.selectedSlot = modelData;
-                            }
+                    onHoveredChanged: {
+                        if (modelData.state !== "selected") {
+                            modelData.state = hovered ? "hovered" : "none";
                         }
                     }
                 }
@@ -448,12 +438,16 @@ PopupModal {
                 //Position
                 Row {
                     Layout.fillWidth: true
+
                     Repeater {
                         model: modal.specs.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
-                        delegate: Button {
+                        delegate: RadioDelegate {
                             required property var modelData
-                            text: modelData.toUpperCase()
-                            onClicked: container.selectedSlot.updatePosition(modelData)
+                            text: modelData
+                            checked: container.selectedSlot?.position === modelData || false
+                            onToggled: {
+                                container.selectedSlot.updatePosition(modelData);
+                            }
                         }
                     }
                 }
