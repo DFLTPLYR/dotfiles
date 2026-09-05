@@ -21,7 +21,7 @@ QtObject {
         signal remove
 
         title: "Properties"
-        width: 180
+        width: 200
         height: contentHeight
         leftPadding: 5
 
@@ -59,13 +59,17 @@ QtObject {
             menu.exited(menu.hasChanges);
         }
 
-        Properties {
-            width: menu.width
-            height: 100
-            clip: true
-            orientation: ListView.Vertical
-            boundsBehavior: Flickable.StopAtBounds
-            boundsMovement: Flickable.StopAtBounds
+        Instantiator {
+            id: propertiesInstantiator
+            model: ScriptModel {
+                values: {
+                    return Utils.getSettings(root);
+                }
+            }
+            delegate: PropertyItems {}
+            onObjectAdded: (idx, obj) => {
+                menu.insertItem(0, obj);
+            }
         }
 
         Action {
@@ -82,95 +86,67 @@ QtObject {
         }
     }
 
-    component Properties: ListView {
-        id: properties
-        model: ScriptModel {
-            values: {
-                return Utils.getSettings(root);
+    component PropertyItems: DelegateChooser {
+        role: "type"
+
+        DelegateChoice {
+            roleValue: "number"
+            PropertyItem {
+                required property var modelData
+                Label {
+                    text: modelData.property
+                }
+
+                SpinBox {
+                    width: parent.width / 2
+                    value: {
+                        if (root.sharedContext && root.sharedContext[modelData.property] !== undefined)
+                            return root.sharedContext[modelData.property];
+                        return root[modelData.property] ?? 0;
+                    }
+                    onValueChanged: {
+                        const target = (root.sharedContext && root.sharedContext[modelData.property] !== undefined) ? root.sharedContext : root;
+                        if (target[modelData.property] !== value) {
+                            target[modelData.property] = value;
+                            updateLoop.restart();
+                        }
+                    }
+                }
             }
         }
 
-        delegate: DelegateChooser {
-            role: "type"
+        DelegateChoice {
+            roleValue: "string"
 
-            DelegateChoice {
-                roleValue: "number"
-                ColumnLayout {
-                    required property var modelData
-                    height: 50
-                    width: ListView.view.width
-                    Label {
-                        text: modelData.property
-                    }
-                    SpinBox {
-                        Layout.preferredWidth: parent.width / 2
-                        Layout.preferredHeight: parent.height / 2
-                        value: {
-                            if (sharedContext && sharedContext[modelData.property] !== undefined)
-                                return sharedContext[modelData.property];
-                            return root[modelData.property] ?? 0;
-                        }
-                        onValueChanged: {
-                            const target = (sharedContext && sharedContext[modelData.property] !== undefined) ? sharedContext : root;
-                            if (target[modelData.property] !== value) {
-                                target[modelData.property] = value;
-                                updateLoop.restart();
-                            }
+            PropertyItem {
+                required property var modelData
+
+                Label {
+                    text: modelData.property
+                }
+                TextField {
+                    width: parent.width
+                    text: root[modelData.property]
+                    onTextEdited: {
+                        const target = (root.sharedContext && root.sharedContext[modelData.property] !== undefined) ? root.sharedContext : root;
+                        if (target[modelData.property] !== text) {
+                            target[modelData.property] = text;
+                            updateLoop.restart();
                         }
                     }
                 }
             }
+        }
+    }
 
-            DelegateChoice {
-                roleValue: "string"
+    component PropertyItem: Item {
+        id: prop
+        default property alias content: col.data
+        height: col.height
 
-                Item {
-                    id: string
-
-                    required property var modelData
-                    height: 50
-                    width: ListView.view.width
-
-                    Row {
-                        anchors.fill: parent
-
-                        Label {
-                            height: parent.height
-                            text: string.modelData.property
-                        }
-
-                        TextField {
-                            width: parent.width
-                            placeholderText: {
-                                if (sharedContext && sharedContext[string.modelData.property] !== undefined)
-                                    return sharedContext[string.modelData.property];
-                                return root[string.modelData.property];
-                            }
-                            onTextChanged: {
-                                const target = (sharedContext && sharedContext[string.modelData.property] !== undefined) ? sharedContext : root;
-                                target[string.modelData.property] = text;
-                                updateLoop.restart();
-                            }
-                        }
-                    }
-                }
-            }
-
-            DelegateChoice {
-                roleValue: "boolean"
-
-                Item {
-                    required property var modelData
-
-                    Toggle {
-                        text: modelData.property
-                        checked: root[modelData.property]
-                        onCheckedChanged: {
-                            return root[modelData.property] = checked;
-                        }
-                    }
-                }
-            }
+        Column {
+            id: col
+            width: parent.width
         }
     }
 }
