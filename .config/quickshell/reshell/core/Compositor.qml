@@ -16,8 +16,8 @@ Singleton {
     Connections {
         target: ToplevelManager
         function onActiveToplevelChanged() {
-            if (ToplevelManager.activeToplevel?.screens !== undefined) {
-                config.focusedMonitor = ToplevelManager.activeToplevel.screens[0].name;
+            if (ToplevelManager.activeToplevel?.screens !== undefined || null) {
+                config.focusedMonitor = ToplevelManager.activeToplevel?.screens[0]?.name;
                 config.animate = false;
             } else {
                 Quickshell.screens[0].name;

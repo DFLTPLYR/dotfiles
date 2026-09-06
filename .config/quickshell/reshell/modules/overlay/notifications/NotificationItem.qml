@@ -66,7 +66,7 @@ StyledPane {
 
             height: contentRow.hasImage ? parent.height : 0
             width: contentRow.hasImage ? parent.height : 0
-
+            clip: true
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit

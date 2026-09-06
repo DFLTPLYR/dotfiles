@@ -9,20 +9,23 @@ Popup {
     leftMargin: 0
     bottomMargin: 0
     topMargin: 0
+
     // padding
     topPadding: 2
     bottomPadding: 2
     rightPadding: 2
     leftPadding: 2
+
     transformOrigin: Item.Center
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     dim: true
+
     Connections {
+        target: Global
         function onEditChanged() {
             if (modalPopup.opened)
                 modalPopup.close();
         }
-        target: Global
     }
 
     background: Rectangle {
