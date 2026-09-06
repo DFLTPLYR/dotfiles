@@ -16,6 +16,7 @@ QtObject {
         id: menu
         property var originalValues: []
         property bool hasChanges: false
+        property var editSource: (root.sharedContext && Object.keys(root.sharedContext).length > 0) ? root.sharedContext : root
         signal entered
         signal exited(bool hasChanges)
         signal remove
@@ -26,7 +27,7 @@ QtObject {
         leftPadding: 5
 
         onOpened: {
-            const source = sharedContext && Object.keys(sharedContext).length > 0 ? sharedContext : root;
+            const source = menu.editSource;
             const old = Utils.keys(source);
             const _orig = [];
             for (const i in old) {
@@ -41,7 +42,7 @@ QtObject {
         }
 
         function updateHasChanges() {
-            const source = sharedContext && Object.keys(sharedContext).length > 0 ? sharedContext : root;
+            const source = menu.editSource;
             const current = Utils.keys(source);
             for (const i in current) {
                 const prop = current[i].property;
@@ -61,14 +62,16 @@ QtObject {
 
         Instantiator {
             id: propertiesInstantiator
+            active: menu.opened
             model: ScriptModel {
-                values: {
-                    return Utils.getSettings(root);
-                }
+                values: Utils.getSettings(menu.editSource)
             }
             delegate: PropertyItems {}
             onObjectAdded: (idx, obj) => {
-                menu.insertItem(0, obj);
+                menu.insertItem(idx, obj);
+            }
+            onObjectRemoved: (idx, obj) => {
+                menu.removeItem(obj);
             }
         }
 
