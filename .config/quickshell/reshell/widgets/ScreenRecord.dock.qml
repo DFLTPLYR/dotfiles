@@ -1,0 +1,54 @@
+import QtQuick
+import qs.components
+import qs.core
+import qs.types
+
+import System
+
+Wrapper {
+    id: wrap
+    property: Property {
+        property string path: `/home/dfltplyr/Videos/Record-${Qt.formatDateTime(Global.clock.date, "hh:mm::ss")}.mp4`
+    }
+    width: wrap.setSize()
+    height: wrap.setSize()
+
+    Button {
+        id: button
+
+        enabled: Global.normal
+        text: "camcorder"
+        anchors.fill: parent
+        content.color: Colors.theme.primary
+        onClicked: proc.running = true
+
+        font {
+            family: Components.icon.family
+            weight: Components.icon.weight
+            styleName: Components.icon.styleName
+            pixelSize: parent ? Math.min(parent.width, parent.height) / 3 : 0
+        }
+    }
+    onClicked: mouse => {
+        if (ScreenRec.isRunning) {
+            ScreenRec.stop();
+            Notification.send({
+                appname: "Shell",
+                title: `Saved`,
+                body: `Record -  ${property.path}`,
+                icon: "media-record",
+                timeout: 5000
+            });
+        } else {
+            ScreenRec.start(property.path);
+
+            Notification.send({
+                appname: "Shell",
+                title: `Started`,
+                body: `Record -  ${property.path}`,
+                icon: "media-record",
+                timeout: 5000
+            });
+        }
+    }
+}
