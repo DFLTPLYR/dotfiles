@@ -8,6 +8,12 @@ import System
 Wrapper {
     id: wrap
 
+    property: Property {
+        property int size: 120
+        property int icon: 10
+        property int text: 10
+    }
+
     width: wrap.setWidth(property.size)
     height: wrap.setHeight(property.size)
 
@@ -37,11 +43,5 @@ Wrapper {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-    }
-
-    property: Property {
-        property int size: 120
-        property int icon: 10
-        property int text: 10
     }
 }

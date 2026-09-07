@@ -46,7 +46,7 @@ Popup {
             property: "opacity"
             from: 0
             to: 1
-            duration: 100
+            duration: 200
             easing.type: Easing.InOutQuad
         }
 
@@ -65,7 +65,7 @@ Popup {
             property: "opacity"
             from: 1
             to: 0
-            duration: 100
+            duration: 200
             easing.type: Easing.InQuad
         }
 

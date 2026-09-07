@@ -103,7 +103,7 @@ Menu {
         title: "widgets"
 
         Instantiator {
-            model: Global.widgets
+            model: Global.widgets.filter(s => s.type !== "dock")
             delegate: Action {
                 required property var modelData
                 text: modelData.name
