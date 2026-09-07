@@ -217,4 +217,20 @@ Singleton {
             }
         }
     }
+
+    Connections {
+        target: ScreenRec
+        function onFinished(path) {
+            Notification.send({
+                appname: "Shell",
+                title: `Saved`,
+                body: `Saved at -  ${path}`,
+                icon: "media-record",
+                timeout: 5000
+            });
+        }
+        function onError(err) {
+            print(err);
+        }
+    }
 }

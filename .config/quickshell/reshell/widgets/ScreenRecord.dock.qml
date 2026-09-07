@@ -30,18 +30,12 @@ Wrapper {
         }
     }
     onClicked: mouse => {
+        if (mouse.button === Qt.RightButton)
+            return;
         if (ScreenRec.isRunning) {
             ScreenRec.stop();
-            Notification.send({
-                appname: "Shell",
-                title: `Saved`,
-                body: `Record -  ${property.path}`,
-                icon: "media-record",
-                timeout: 5000
-            });
         } else {
             ScreenRec.start(property.path);
-
             Notification.send({
                 appname: "Shell",
                 title: `Started`,

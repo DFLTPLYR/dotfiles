@@ -30,10 +30,10 @@
     viu
     chafa
     ueberzugpp
-    ffmpeg
 
     # Shell / CLI
     wl-gammarelay-rs
+    wl-screenrec
     ani-cli
     cava
     starship
