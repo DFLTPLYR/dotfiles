@@ -30,6 +30,7 @@
     viu
     chafa
     ueberzugpp
+    ffmpeg
 
     # Shell / CLI
     wl-gammarelay-rs
