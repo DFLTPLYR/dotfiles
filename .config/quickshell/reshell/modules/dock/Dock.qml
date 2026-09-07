@@ -651,6 +651,7 @@ Scope {
                     }
 
                     DropArea {
+                        z: -99
                         anchors.fill: parent
                         onDropped: drop => {
                             const srcParent = drop.source.parent;
@@ -691,6 +692,7 @@ Scope {
                             parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
                             parent.Drag.active = true;
                             drag.target = parent;
+                            parent.z = 99;
                         }
                         onReleased: mouse => {
                             if (mouse.button === Qt.LeftButton) {
@@ -701,6 +703,8 @@ Scope {
                             }
 
                             drag.target = null;
+
+                            parent.z = 0;
                         }
                         onClicked: mouse => {
                             widgetContainer.wdg.clicked(mouse);
