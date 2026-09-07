@@ -5,6 +5,9 @@
 }: {
   # Enable sound.
 
+  # Realtime priority for PipeWire (recommended by NixOS PipeWire wiki).
+  security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -34,8 +37,6 @@
       ];
     };
   };
-
-  systemd.user.services.mpd = {enable = false;};
 
   systemd.services.mpd.environment = {
     PIPEWIRE_RUNTIME_DIR = "/run/user/1000";
