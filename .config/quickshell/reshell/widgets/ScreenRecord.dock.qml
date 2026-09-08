@@ -13,22 +13,39 @@ Wrapper {
     width: wrap.setSize()
     height: wrap.setSize()
 
-    Button {
-        id: button
-
-        enabled: Global.normal
-        text: "camcorder"
+    Rectangle {
         anchors.fill: parent
-        content.color: Colors.theme.primary
-        onClicked: proc.running = true
+        color: hoverArea.hovered ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
+        radius: width / 2
 
-        font {
-            family: Components.icon.family
-            weight: Components.icon.weight
-            styleName: Components.icon.styleName
-            pixelSize: parent ? Math.min(parent.width, parent.height) / 3 : 0
+        Text {
+            anchors.fill: parent
+            text: "screen_record"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: hoverArea.hovered || ScreenRec.isRunning ? Colors.theme.tertiary : Colors.theme.primary
+            font.family: "Material Symbols Rounded"
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        HoverHandler {
+            id: hoverArea
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
         }
     }
+
     onClicked: mouse => {
         if (mouse.button === Qt.RightButton)
             return;

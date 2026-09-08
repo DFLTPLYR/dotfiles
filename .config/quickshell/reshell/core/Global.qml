@@ -95,6 +95,18 @@ Singleton {
             property bool greeter: false
             property bool darkmode: true
             property string theme: "gruvbox"
+            property JsonObject recorder: JsonObject {
+                property bool replay: false
+                onReplayChanged: {
+                    ScreenRec.replay = replay;
+                }
+                property string monitor: Quickshell.screens[0].name
+                onMonitorChanged: {
+                    ScreenRec.monitor = monitor;
+                }
+                property int fps: 60
+                property int duration: 30
+            }
         }
     }
 
@@ -158,6 +170,7 @@ Singleton {
 
     IpcHandler {
         target: "config"
+
         function cycleState() {
             config.state = (config.state + 1) % stateNames.length;
 
@@ -169,6 +182,7 @@ Singleton {
                 timeout: 5000
             });
         }
+
         function sendNotification(appname: string, title: string, body: string, icon: string, timeout: int): void {
             Notification.send({
                 appname,

@@ -17,6 +17,8 @@ Page {
 
     GreeterSection {}
 
+    ScreenRecSection {}
+
     DisplayTemp {}
 
     FontSection {}
@@ -31,6 +33,77 @@ Page {
             onCheckedChanged: {
                 Global.general.greeter = checked;
                 Global.save();
+            }
+        }
+    }
+
+    component ScreenRecSection: GroupContainer {
+        id: screenRec
+        property bool recorder: Global.general.recorder
+        label: "Screen Recorder"
+
+        Toggle {
+            id: replayToggle
+            text: Global.general.recorder.replay ? "Enable" : "Disable"
+            checked: Global.general.recorder.replay
+            onCheckedChanged: {
+                Global.general.recorder.replay = checked;
+                Global.save();
+            }
+        }
+
+        Column {
+            visible: replayToggle.checked
+            Label {
+                text: "Replay Monitor"
+                font.pixelSize: 14
+            }
+            Row {
+
+                Repeater {
+                    model: Quickshell.screens
+                    delegate: RadioDelegate {
+                        required property var modelData
+                        text: modelData.name
+                        checked: modelData.name === Global.general.recorder.monitor
+
+                        onCheckedChanged: {
+                            if (checked) {
+                                Global.general.recorder.monitor = text;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Column {
+            visible: replayToggle.checked
+            Label {
+                text: "Duration"
+                font.pixelSize: 14
+            }
+            SpinBox {
+                value: Global.general.recorder.duration
+                width: 100
+                onValueChanged: {
+                    Global.general.recorder.duration = value;
+                }
+            }
+        }
+
+        Column {
+            visible: replayToggle.checked
+            Label {
+                text: "Fps"
+                font.pixelSize: 14
+            }
+            SpinBox {
+                value: Global.general.recorder.fps
+                width: 100
+                onValueChanged: {
+                    Global.general.recorder.fps = value;
+                }
             }
         }
     }

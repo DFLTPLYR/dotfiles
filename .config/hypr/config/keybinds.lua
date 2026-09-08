@@ -34,6 +34,7 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(filemanager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(mode))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(clip))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(clipboard))
 hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f quickshell"))
 

@@ -25,19 +25,6 @@ Page {
         }
     ]
 
-    // to be added
-    // PopupModal {
-    //     id: popup
-    //     width: page.width / 8
-    //     height: page.height / 8
-    //     x: (page.width / 2) - (width / 2)
-    //     y: (page.height / 2) - (height / 2)
-    //
-    //     Toggle {
-    //         text: "Screen 1"
-    //     }
-    // }
-
     GroupContainer {
         label: "Notification Section"
 
