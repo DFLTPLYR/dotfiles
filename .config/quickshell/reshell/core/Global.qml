@@ -61,30 +61,6 @@ Singleton {
         }
     ]
 
-    IpcHandler {
-        target: "config"
-        function cycleState() {
-            config.state = (config.state + 1) % stateNames.length;
-
-            Notification.send({
-                appname: "Shell",
-                title: `State Update`,
-                body: `State Change  ${stateNames[config.state]}`,
-                icon: "view-grid",
-                timeout: 5000
-            });
-        }
-        function sendNotification(appname: string, title: string, body: string, icon: string, timeout: int): void {
-            Notification.send({
-                appname,
-                title,
-                body,
-                icon,
-                timeout
-            });
-        }
-    }
-
     property var readyBg: []
     onReadyBgChanged: {
         if (readyBg.length >= Quickshell.screens.length) {
@@ -96,17 +72,6 @@ Singleton {
             }
             ColorGen.generate(paths);
             readyBg = [];
-        }
-    }
-
-    Connections {
-        target: ColorGen
-        function onError(message) {
-            console.log("ColorGen error:", message);
-        }
-        function onOutput(data) {
-            if (general.theme === "dynamic")
-                Colors.dynamic.file.setText(data);
         }
     }
 
@@ -191,6 +156,34 @@ Singleton {
         }
     }
 
+    IpcHandler {
+        target: "config"
+        function cycleState() {
+            config.state = (config.state + 1) % stateNames.length;
+
+            Notification.send({
+                appname: "Shell",
+                title: `State Update`,
+                body: `State Change  ${stateNames[config.state]}`,
+                icon: "view-grid",
+                timeout: 5000
+            });
+        }
+        function sendNotification(appname: string, title: string, body: string, icon: string, timeout: int): void {
+            Notification.send({
+                appname,
+                title,
+                body,
+                icon,
+                timeout
+            });
+        }
+
+        function clip() {
+            ScreenRec.clip();
+        }
+    }
+
     Connections {
         target: ToplevelManager
         function onActiveToplevelChanged() {
@@ -223,7 +216,7 @@ Singleton {
         function onFinished(path) {
             Notification.send({
                 appname: "Shell",
-                title: `Saved`,
+                title: `Recording`,
                 body: `Saved at -  ${path}`,
                 icon: "media-record",
                 timeout: 5000
@@ -231,6 +224,37 @@ Singleton {
         }
         function onError(err) {
             print(err);
+        }
+        function onStarted() {
+            Notification.send({
+                appname: "Shell",
+                title: `Recording`,
+                body: `Record Started`,
+                icon: "media-record",
+                timeout: 5000
+            });
+        }
+
+        function onClipped(path) {
+            print("clipped", path);
+            Notification.send({
+                appname: "Shell",
+                title: "Replay",
+                body: `Saved at - ${path}`,
+                icon: "media-record",
+                timeout: 5000
+            });
+        }
+    }
+
+    Connections {
+        target: ColorGen
+        function onError(message) {
+            console.log("ColorGen error:", message);
+        }
+        function onOutput(data) {
+            if (general.theme === "dynamic")
+                Colors.dynamic.file.setText(data);
         }
     }
 }

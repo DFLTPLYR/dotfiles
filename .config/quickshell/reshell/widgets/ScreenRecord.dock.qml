@@ -36,13 +36,6 @@ Wrapper {
             ScreenRec.stop();
         } else {
             ScreenRec.start(property.path);
-            Notification.send({
-                appname: "Shell",
-                title: `Started`,
-                body: `Record -  ${property.path}`,
-                icon: "media-record",
-                timeout: 5000
-            });
         }
     }
 }
