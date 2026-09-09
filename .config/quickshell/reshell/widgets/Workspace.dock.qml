@@ -99,7 +99,6 @@ Wrapper {
                 hoverEnabled: true
                 propagateComposedEvents: true
                 anchors.fill: parent
-                enabled: Global.normal
                 onHoveredChanged: {
                     if (containsMouse) {
                         wrap.pending = modelData;

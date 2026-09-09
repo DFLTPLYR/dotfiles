@@ -69,11 +69,11 @@ Item {
             width: parent.width
             height: parent.height
             focus: true
-            z: Global.normal ? 999 : 0
 
             MouseArea {
                 id: bgMa
                 anchors.fill: parent
+                hoverEnabled: Background.selectionRect.selecting
                 propagateComposedEvents: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onPressed: mouse => {

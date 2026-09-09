@@ -8,7 +8,7 @@ browser = "zen"
 editor = "nvim"
 
 qs_config = "qs -c reshell ipc call config"
-mode = qs_config .. " cycleState"
+settings = qs_config .. " toggleSettings"
 clip = qs_config .. " clip"
 selectshot =
 	[[mkdir -p ~/Pictures/Screenshots && grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy]]

@@ -4,7 +4,6 @@ import QtQuick
 
 import qs.core
 import qs.components
-import qs.modules.settings
 
 Menu {
     id: modal
@@ -88,8 +87,8 @@ Menu {
             required property int page
             text: `Open ${name}`
             onTriggered: {
-                settingLoader.active = true;
-                settingLoader.page = page;
+                Global.setting.visible = true;
+                Global.setting.page = page;
                 modal.close();
             }
         }
@@ -123,22 +122,6 @@ Menu {
             }
             onObjectAdded: (idx, obj) => {
                 widgetMenu.insertAction(widgetMenu.count, obj);
-            }
-        }
-    }
-
-    LazyLoader {
-        id: settingLoader
-        property int page: 0
-        active: false
-        SettingPanel {
-            id: settingPanel
-            visible: settingLoader.active
-            page: settingLoader.page
-            onClosed: {
-                settingLoader.active = false;
-                Background.save();
-                Global.save();
             }
         }
     }

@@ -20,14 +20,6 @@ Popup {
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     dim: true
 
-    Connections {
-        target: Global
-        function onEditChanged() {
-            if (modalPopup.opened)
-                modalPopup.close();
-        }
-    }
-
     background: Rectangle {
         id: background
 
