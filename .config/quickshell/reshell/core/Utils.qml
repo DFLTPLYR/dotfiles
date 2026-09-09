@@ -7,6 +7,16 @@ import qs.core
 Singleton {
     id: root
 
+    function formatTime(s) {
+        s = Number(s);
+        const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+        if (h === 0 && m === 0)
+            return `${String(sec).padStart(2, '0')}`;
+        if (h === 0)
+            return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
     function bindMargins(item, margin) {
         item.anchors.topMargin = Qt.binding(function () {
             return margin.top;

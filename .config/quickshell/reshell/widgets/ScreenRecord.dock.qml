@@ -1,3 +1,4 @@
+import Quickshell
 import QtQuick
 import qs.components
 import qs.core
@@ -8,18 +9,32 @@ import System
 Wrapper {
     id: wrap
     property: Property {
-        property string path: `/home/dfltplyr/Videos/Record-${Qt.formatDateTime(Global.clock.date, "hh:mm::ss")}.mp4`
+        property string path: `${Quickshell.env("HOME")}/Videos/Record-${Qt.formatDateTime(Global.clock.date, "hh:mm::ss")}.mp4`
     }
-    width: wrap.setSize()
-    height: wrap.setSize()
 
-    Rectangle {
-        anchors.fill: parent
-        color: hoverArea.hovered ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
-        radius: width / 2
+    width: wrap.setWidth(container.width)
+    height: wrap.setHeight(container.height)
+
+    Row {
+        id: container
+        anchors.centerIn: parent
+        spacing: 10
 
         Text {
-            anchors.fill: parent
+            text: Utils.formatTime(ScreenRec.elapsed)
+            visible: ScreenRec.isRunning
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: Colors.theme.primary
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+
+        Text {
             text: "screen_record"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -36,13 +51,6 @@ Wrapper {
 
         HoverHandler {
             id: hoverArea
-        }
-
-        Behavior on color {
-            ColorAnimation {
-                duration: 300
-                easing.type: Easing.InOutQuad
-            }
         }
     }
 

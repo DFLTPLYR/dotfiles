@@ -33,7 +33,7 @@
 
     # Shell / CLI
     wl-gammarelay-rs
-    wl-screenrec
+    gpu-screen-recorder
     ani-cli
     cava
     starship
