@@ -489,7 +489,6 @@ Scope {
             }
         ]
 
-        // todo: Do a transfer
         DropArea {
             objectName: "Slot"
             anchors.fill: parent
@@ -662,17 +661,12 @@ Scope {
 
                             if (sourceIndex === undefined || targetIndex === undefined)
                                 return;
-
-                            if (tgtDM.model === srcDM.model) {
-                                widgetsModel.items.move(sourceIndex, targetIndex);
-                            } else {
-                                const srcWidgets = srcParent.widget;
-                                const tgtWidgets = widgetContainer.widget;
-                                const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
-                                const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
-                                srcWidgets.set(sourceIndex, tgtObj);
-                                tgtWidgets.set(targetIndex, srcObj);
-                            }
+                            const srcWidgets = srcParent.widget;
+                            const tgtWidgets = widgetContainer.widget;
+                            const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
+                            const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
+                            srcWidgets.set(sourceIndex, tgtObj);
+                            tgtWidgets.set(targetIndex, srcObj);
                             panel.timer.restart();
                         }
                         onContainsDragChanged: {
