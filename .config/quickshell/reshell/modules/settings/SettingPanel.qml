@@ -110,5 +110,8 @@ FloatingWindow {
 
         // WallpaperPage
         WallpaperPage {}
+
+        // Polkit
+        PolkitPage {}
     }
 }

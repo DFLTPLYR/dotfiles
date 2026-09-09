@@ -51,20 +51,20 @@ Singleton {
 
     readonly property var settings: [
         {
-            "type": "button",
             "name": "General",
             "page": 0
         },
         {
-            "type": "menu",
-            "name": "Components",
-            "page": 1,
-            "items": ["notification", "polkit", "volume"]
+            "name": "Notification",
+            "page": 1
         },
         {
-            "type": "button",
             "name": "Wallpaper",
             "page": 2
+        },
+        {
+            "name": "Polkit",
+            "page": 3
         }
     ]
 

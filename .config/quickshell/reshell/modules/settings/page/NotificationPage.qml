@@ -26,19 +26,21 @@ Page {
     ]
 
     GroupContainer {
+        id: notificationGroup
         label: "Notification Section"
 
         Rectangle {
             id: exampleNotif
+            height: exampleNotifItem.height + parent.padding
+            color: Colors.theme.on_surface
+            radius: 5
+
             anchors {
                 left: parent.left
                 leftMargin: parent.padding
                 right: parent.right
                 rightMargin: parent.padding
             }
-            height: exampleNotifItem.height + parent.padding
-            color: Colors.theme.on_surface
-            radius: 5
 
             property QtObject style: Style {
                 Component.onCompleted: {
@@ -118,160 +120,183 @@ Page {
     }
 
     GroupContainer {
-        label: "Position"
-
-        ListView {
-            orientation: ListView.Horizontal
-            boundsBehavior: ListView.StopAtBounds
+        label: "Properties"
+        Flickable {
             anchors {
                 left: parent.left
+                leftMargin: parent.padding
                 right: parent.right
+                rightMargin: parent.padding
             }
-            height: 50
+            height: page.height - (notificationGroup.height + parent.padding * 12)
+            clip: true
+            contentHeight: innerCol.implicitHeight
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
 
-            model: ["left", "middle", "right"]
-            delegate: RadioDelegate {
-                required property var modelData
-                text: modelData
-                checked: page.config.position === modelData
-                onCheckedChanged: {
-                    if (checked) {
-                        page.config.position = modelData;
+            ColumnLayout {
+                id: innerCol
+                clip: true
+                width: parent.width
+
+                GroupContainer {
+                    label: "Position"
+
+                    ListView {
+                        orientation: ListView.Horizontal
+                        boundsBehavior: ListView.StopAtBounds
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        height: 50
+
+                        model: ["left", "middle", "right"]
+                        delegate: RadioDelegate {
+                            required property var modelData
+                            text: modelData
+                            checked: page.config.position === modelData
+                            onCheckedChanged: {
+                                if (checked) {
+                                    page.config.position = modelData;
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-    }
 
-    GroupContainer {
-        label: "Direction"
+                GroupContainer {
+                    label: "Direction"
 
-        Toggle {
-            text: !checked ? qsTr("Bottom To Top") : qsTr("Top To Bottom")
-            checked: page.config.reverse
-            onClicked: {
-                page.config.reverse = checked;
-            }
-        }
-    }
-
-    GroupContainer {
-        label: "Size"
-
-        ListView {
-            orientation: ListView.Horizontal
-            boundsBehavior: ListView.StopAtBounds
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            height: 50
-
-            model: ["small", "medium", "large", "custom"]
-            delegate: RadioDelegate {
-                required property var modelData
-                text: modelData
-                checked: page.config.sizing === modelData
-                onCheckedChanged: {
-                    if (checked) {
-                        page.config.sizing = modelData;
+                    Toggle {
+                        text: !checked ? qsTr("Bottom To Top") : qsTr("Top To Bottom")
+                        checked: page.config.reverse
+                        onClicked: {
+                            page.config.reverse = checked;
+                        }
                     }
                 }
-            }
-        }
 
-        ColumnLayout {
-            visible: page.config.sizing === "custom"
-            Layout.fillWidth: true
+                GroupContainer {
+                    label: "Size"
 
-            Column {
-                spacing: 10
+                    ListView {
+                        orientation: ListView.Horizontal
+                        boundsBehavior: ListView.StopAtBounds
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+                        height: 50
 
-                Label {
-                    text: "Width"
-                    font.pixelSize: 14
-                }
+                        model: ["small", "medium", "large", "custom"]
+                        delegate: RadioDelegate {
+                            required property var modelData
+                            text: modelData
+                            checked: page.config.sizing === modelData
+                            onCheckedChanged: {
+                                if (checked) {
+                                    page.config.sizing = modelData;
+                                }
+                            }
+                        }
+                    }
 
-                SpinBox {
-                    width: 100
-                    value: page.config.width
-                    onValueChanged: {
-                        exampleNotifItem.width = value;
+                    ColumnLayout {
+                        visible: page.config.sizing === "custom"
+                        Layout.fillWidth: true
+
+                        Column {
+                            spacing: 10
+
+                            Label {
+                                text: "Width"
+                                font.pixelSize: 14
+                            }
+
+                            SpinBox {
+                                width: 100
+                                value: page.config.width
+                                onValueChanged: {
+                                    exampleNotifItem.width = value;
+                                }
+                            }
+                        }
+
+                        Column {
+                            spacing: 10
+
+                            Label {
+                                text: "Height"
+                                font.pixelSize: 14
+                            }
+
+                            SpinBox {
+                                width: 100
+                                value: page.config.height
+                                onValueChanged: {
+                                    exampleNotifItem.height = value;
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            Column {
-                spacing: 10
+                GroupContainer {
+                    label: "Rounding"
 
-                Label {
-                    text: "Height"
-                    font.pixelSize: 14
-                }
+                    GridLayout {
+                        columns: 2
+                        // Radius
+                        Repeater {
+                            model: [
+                                {
+                                    label: "Top Left",
+                                    prop: "topLeft"
+                                },
+                                {
+                                    label: "Top Right",
+                                    prop: "topRight"
+                                },
+                                {
+                                    label: "Bottom Left",
+                                    prop: "bottomLeft"
+                                },
+                                {
+                                    label: "Bottom Right",
+                                    prop: "bottomRight"
+                                },
+                            ]
+                            delegate: Column {
+                                id: radii
+                                required property var modelData
+                                width: parent.width / 2
 
-                SpinBox {
-                    width: 100
-                    value: page.config.height
-                    onValueChanged: {
-                        exampleNotifItem.height = value;
+                                Label {
+                                    text: radii.modelData.label
+                                }
+
+                                SpinBox {
+                                    width: 100
+                                    value: exampleNotif.style.background.rounding[radii.modelData.prop]
+                                    onValueChanged: exampleNotif.style.background.rounding[radii.modelData.prop] = value
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-    }
 
-    GroupContainer {
-        label: "Rounding"
-
-        GridLayout {
-            columns: 2
-            // Radius
-            Repeater {
-                model: [
-                    {
-                        label: "Top Left",
-                        prop: "topLeft"
-                    },
-                    {
-                        label: "Top Right",
-                        prop: "topRight"
-                    },
-                    {
-                        label: "Bottom Left",
-                        prop: "bottomLeft"
-                    },
-                    {
-                        label: "Bottom Right",
-                        prop: "bottomRight"
-                    },
-                ]
-                delegate: Column {
-                    id: radii
-                    required property var modelData
-                    width: parent.width / 2
-
-                    Label {
-                        text: radii.modelData.label
-                    }
+                GroupContainer {
+                    label: "Duration"
 
                     SpinBox {
                         width: 100
-                        value: exampleNotif.style.background.rounding[radii.modelData.prop]
-                        onValueChanged: exampleNotif.style.background.rounding[radii.modelData.prop] = value
+                        value: page.config.duration
+                        onValueChanged: {
+                            page.config.duration = value;
+                        }
                     }
                 }
-            }
-        }
-    }
-
-    GroupContainer {
-        label: "Duration"
-
-        SpinBox {
-            width: 100
-            value: page.config.duration
-            onValueChanged: {
-                page.config.duration = value;
             }
         }
     }
