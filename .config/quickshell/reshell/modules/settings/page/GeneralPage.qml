@@ -155,6 +155,7 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         text: font.val.name
                         font.family: font.val.name
+                        color: Colors.theme.primary
                     }
                     MouseArea {
                         id: mafont
@@ -342,32 +343,41 @@ Page {
                 model: alphabet
                 clip: true
                 delegate: Row {
+                    id: row
                     required property var modelData
                     spacing: 20
+
                     Text {
-                        text: modelData.alpha
+                        text: row.modelData.alpha
                         font.pixelSize: 16
                         font.weight: Font.Bold
                         width: 30
                         font.family: example.family || SysFont.current
+                        color: Colors.theme.primary
                     }
+
                     Text {
-                        text: modelData.lowercase
+                        text: row.modelData.lowercase
                         font.pixelSize: 16
                         width: 30
                         font.family: example.family || SysFont.current
+                        color: Colors.theme.primary
                     }
+
                     Text {
-                        text: modelData.phonic
+                        text: row.modelData.phonic
                         font.pixelSize: 16
                         width: 120
                         font.family: example.family || SysFont.current
+                        color: Colors.theme.primary
                     }
+
                     Text {
-                        text: modelData.name
+                        text: row.modelData.name
                         font.pixelSize: 16
                         width: 80
                         font.family: example.family || SysFont.current
+                        color: Colors.theme.primary
                     }
                 }
             }

@@ -10,7 +10,7 @@ Slider {
         property QtObject background: QtObject {
             property int height: 4
             property int width: 200
-            property color color: Colors.theme.surface
+            property color color: Colors.theme.on_primary
             property Corner rounding: Corner {
                 topLeft: 100
                 topRight: 100
@@ -22,7 +22,7 @@ Slider {
             property QtObject progress: QtObject {
                 property int height: 4
                 property int width: 26
-                property color color: Colors.theme.primary
+                property color color: Colors.theme.tertiary
                 property Corner rounding: Corner {
                     topLeft: 100
                     topRight: 100
@@ -35,8 +35,8 @@ Slider {
         }
         property QtObject handle: QtObject {
             property color color: Colors.theme.primary
-            property int height: 26
-            property int width: 26
+            property int height: 16
+            property int width: 16
             property Corner rounding: Corner {
                 topLeft: 13
                 topRight: 13
@@ -46,10 +46,6 @@ Slider {
             property Border border: Border {}
             property Direction margin: Direction {}
         }
-    }
-
-    Component.onCompleted: {
-        Utils.bindRadii(background, background.state.rounding);
     }
 
     background: Rectangle {
@@ -138,12 +134,10 @@ Slider {
 
         x: control.leftPadding + control.visualPosition * (control.availableWidth - width)
         y: control.topPadding + control.availableHeight / 2 - height / 2
+
         implicitWidth: handle.state.height
         implicitHeight: handle.state.width
         color: control.pressed ? Qt.darker(handle.state.color, 1.2) : handle.state.color
-        Component.onCompleted: {
-            Utils.bindRadii(handle, handle.state.rounding);
-        }
 
         border {
             width: handle.state.border.width
@@ -177,5 +171,13 @@ Slider {
                 easing.type: Easing.OutCubic
             }
         }
+
+        Component.onCompleted: {
+            Utils.bindRadii(handle, handle.state.rounding);
+        }
+    }
+
+    Component.onCompleted: {
+        Utils.bindRadii(background, background.state.rounding);
     }
 }
