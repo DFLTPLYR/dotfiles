@@ -261,7 +261,7 @@ Page {
         id: rezImg
         required property int index
         required property var modelData
-        readonly property int handlerSize: 30
+        readonly property int handlerSize: 8 / flick.zoom
 
         property bool resize: false
         readonly property bool resizing: leftHandleArea.drag.active || rightHandleArea.drag.active || topHandleArea.drag.active || bottomHandleArea.drag.active || topRightHandleArea.drag.active || topLeftHandleArea.drag.active || bottomRightHandleArea.drag.active || bottomLeftHandleArea.drag.active
@@ -323,7 +323,6 @@ Page {
         }
 
         WheelHandler {
-            enabled: rezImg.resize
             orientation: Qt.Vertical
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: event => {
@@ -332,6 +331,7 @@ Page {
                 if (scale === 1 && delta === -1)
                     return;
                 rezImg.modelData.scale = scale + delta;
+                rezImg.scale = scale + delta;
             }
         }
 

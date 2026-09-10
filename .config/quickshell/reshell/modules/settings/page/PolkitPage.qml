@@ -54,6 +54,7 @@ Page {
             }
         }
     }
+
     component Content: Flickable {
         id: content
         property QtObject component: QtObject {
@@ -89,14 +90,13 @@ Page {
                 color: Colors.theme.outline
             }
 
-            ResizeArea {
+            ResizeHandle {
                 anchors.horizontalCenter: parent.left
                 anchors.verticalCenter: parent.bottom
-                onResize: (xAxis, yAxis) => {
-                    if (container.width < 30)
-                        container.width = 30;
-                    container.width = container.width - xAxis;
-                    container.x = container.x + xAxis;
+                onResize: (dx, dy) => {
+                    const gp = mapToGlobal(dx, dy);
+                    const newW = Math.max(30, (gp.x - container.x));
+                    container.width = newW;
                 }
             }
         }
@@ -161,7 +161,7 @@ Page {
         }
     }
 
-    component ResizeArea: Rectangle {
+    component ResizeHandle: Rectangle {
         id: resizeHandle
         property int size: 18
         signal resize(int x, int y)

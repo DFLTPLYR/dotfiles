@@ -176,7 +176,8 @@ Singleton {
                     height: wp.height,
                     x: wp.x,
                     y: wp.y,
-                    z: wp.z
+                    z: wp.z,
+                    scale: wp.scale
                 });
                 Background.wallpaperArr = [...Background.wallpaperArr, img];
             }
