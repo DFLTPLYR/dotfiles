@@ -389,8 +389,9 @@ Page {
                     when: leftHandleArea.containsMouse && !leftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: leftHandle
-                        color: Colors.theme.secondary
+                        leftHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -398,8 +399,9 @@ Page {
                     when: leftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: leftHandle
-                        color: Colors.theme.tertiary
+                        leftHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -460,8 +462,9 @@ Page {
                     when: rightHandleArea.containsMouse && !rightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: rightHandle
-                        color: Colors.theme.secondary
+                        rightHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -469,8 +472,9 @@ Page {
                     when: rightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: rightHandle
-                        color: Colors.theme.tertiary
+                        rightHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -532,8 +536,9 @@ Page {
                     when: topHandleArea.containsMouse && !topHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topHandle
-                        color: Colors.theme.secondary
+                        topHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -541,8 +546,9 @@ Page {
                     when: topHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topHandle
-                        color: Colors.theme.tertiary
+                        topHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -605,8 +611,9 @@ Page {
                     when: bottomHandleArea.containsMouse && !bottomHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomHandle
-                        color: Colors.theme.secondary
+                        bottomHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -614,8 +621,9 @@ Page {
                     when: bottomHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomHandle
-                        color: Colors.theme.tertiary
+                        bottomHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -677,8 +685,9 @@ Page {
                     when: topRightHandleArea.containsMouse && !topRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topRightHandle
-                        color: Colors.theme.secondary
+                        topRightHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -686,8 +695,9 @@ Page {
                     when: topRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topRightHandle
-                        color: Colors.theme.tertiary
+                        topRightHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -753,8 +763,9 @@ Page {
                     when: topLeftHandleArea.containsMouse && !topLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topLeftHandle
-                        color: Colors.theme.secondary
+                        topLeftHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -762,8 +773,9 @@ Page {
                     when: topLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topLeftHandle
-                        color: Colors.theme.tertiary
+                        topLeftHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -830,8 +842,9 @@ Page {
                     when: bottomRightHandleArea.containsMouse && !bottomRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomRightHandle
-                        color: Colors.theme.secondary
+                        bottomRightHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -839,8 +852,9 @@ Page {
                     when: bottomRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomRightHandle
-                        color: Colors.theme.tertiary
+                        bottomRightHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -905,8 +919,9 @@ Page {
                     when: bottomLeftHandleArea.containsMouse && !bottomLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomLeftHandle
-                        color: Colors.theme.secondary
+                        bottomLeftHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -914,8 +929,9 @@ Page {
                     when: bottomLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomLeftHandle
-                        color: Colors.theme.tertiary
+                        bottomLeftHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]

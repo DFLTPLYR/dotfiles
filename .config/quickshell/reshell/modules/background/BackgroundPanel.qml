@@ -506,8 +506,9 @@ Item {
                     when: topHandleArea.containsMouse && !topHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topHandle
-                        color: Colors.theme.secondary
+                        topHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -515,8 +516,9 @@ Item {
                     when: topHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topHandle
-                        color: Colors.theme.tertiary
+                        topHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -577,8 +579,9 @@ Item {
                     when: bottomHandleArea.containsMouse && !bottomHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomHandle
-                        color: Colors.theme.secondary
+                        bottomHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -586,8 +589,9 @@ Item {
                     when: bottomHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomHandle
-                        color: Colors.theme.tertiary
+                        bottomHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -645,8 +649,9 @@ Item {
                     when: topRightHandleArea.containsMouse && !topRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topRightHandle
-                        color: Colors.theme.secondary
+                        topRightHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -654,8 +659,9 @@ Item {
                     when: topRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topRightHandle
-                        color: Colors.theme.tertiary
+                        topRightHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -717,8 +723,9 @@ Item {
                     when: topLeftHandleArea.containsMouse && !topLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topLeftHandle
-                        color: Colors.theme.secondary
+                        topLeftHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -726,8 +733,9 @@ Item {
                     when: topLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: topLeftHandle
-                        color: Colors.theme.tertiary
+                        topLeftHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -790,8 +798,9 @@ Item {
                     when: bottomRightHandleArea.containsMouse && !bottomRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomRightHandle
-                        color: Colors.theme.secondary
+                        bottomRightHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -799,8 +808,9 @@ Item {
                     when: bottomRightHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomRightHandle
-                        color: Colors.theme.tertiary
+                        bottomRightHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
@@ -859,8 +869,9 @@ Item {
                     when: bottomLeftHandleArea.containsMouse && !bottomLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomLeftHandle
-                        color: Colors.theme.secondary
+                        bottomLeftHandle {
+                            color: Colors.theme.secondary
+                        }
                     }
                 },
                 State {
@@ -868,8 +879,9 @@ Item {
                     when: bottomLeftHandleArea.drag.active
 
                     PropertyChanges {
-                        target: bottomLeftHandle
-                        color: Colors.theme.tertiary
+                        bottomLeftHandle {
+                            color: Colors.theme.tertiary
+                        }
                     }
                 }
             ]
