@@ -236,7 +236,6 @@ Singleton {
         }
 
         function onClipped(path) {
-            print("clipped", path);
             Notification.send({
                 appname: "Shell",
                 title: "Replay",
