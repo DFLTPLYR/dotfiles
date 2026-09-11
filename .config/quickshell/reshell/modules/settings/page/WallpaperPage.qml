@@ -205,6 +205,7 @@ Page {
         x: modelData.x
         y: modelData.y
         z: 999
+        focus: false
 
         // Outline
         Item {
@@ -244,6 +245,7 @@ Page {
                 width: 2 / flick.zoom
                 color: Colors.theme.primary
             }
+
             Rectangle {
                 anchors {
                     top: parent.top
@@ -283,7 +285,7 @@ Page {
         sourceSize.height: 1080
         asynchronous: true
         cache: true
-
+        Drag.active: ma.drag.active
         Component.onCompleted: {
             if (modelData.width === 0)
                 width = sourceSize.width;
@@ -292,6 +294,7 @@ Page {
         }
 
         MouseArea {
+            id: ma
             anchors.fill: parent
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             hoverEnabled: rezImg.resize
@@ -325,6 +328,7 @@ Page {
         WheelHandler {
             orientation: Qt.Vertical
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            acceptedModifiers: !Qt.ShiftModifier
             onWheel: event => {
                 const scale = rezImg.modelData.scale;
                 let delta = event.angleDelta.y > 0 ? 1 : -1;

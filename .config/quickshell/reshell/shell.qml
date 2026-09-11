@@ -39,6 +39,13 @@ ShellRoot {
         }
     }
 
+    Connections {
+        target: SysFont
+        function onCurrentChanged() {
+            print(SysFont.current);
+        }
+    }
+
     Component.onDestruction: {
         ScreenRec.pkill();
     }
