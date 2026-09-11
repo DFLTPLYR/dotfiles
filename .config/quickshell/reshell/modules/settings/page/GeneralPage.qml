@@ -138,14 +138,13 @@ Page {
             }
 
             ListView {
-                model: Global.fonts
+                model: SysFont.list.filter(f => f.category === "sans-serif")
                 clip: true
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 delegate: Rectangle {
                     id: font
                     required property var modelData
-                    property var val: JSON.parse(modelData)
                     width: ListView.view.width
                     height: 40
                     color: "transparent"
@@ -153,8 +152,8 @@ Page {
                     Text {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: font.val.name
-                        font.family: font.val.name
+                        text: font.modelData.name
+                        font.family: font.modelData.name
                         color: Colors.theme.primary
                     }
                     MouseArea {
@@ -162,15 +161,14 @@ Page {
                         hoverEnabled: true
                         onHoveredChanged: {
                             if (containsMouse) {
-                                example.family = font.val.name;
+                                example.family = font.modelData.name;
                             }
                         }
                         anchors.fill: parent
                         onClicked: {
-                            const family = font.val.family;
-                            const name = font.val.name;
+                            const family = font.modelData.family;
+                            const name = font.modelData.name;
                             SysFont.apply(name, 12, family);
-                            Quickshell.reload(false);
                         }
                     }
                 }
