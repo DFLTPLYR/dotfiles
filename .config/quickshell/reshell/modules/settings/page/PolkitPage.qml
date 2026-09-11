@@ -18,7 +18,7 @@ Page {
             id: exampleNotif
             color: Colors.theme.on_surface
             radius: 5
-            height: page.height * 0.6
+            height: page.height * 0.4
 
             anchors {
                 left: parent.left
@@ -28,6 +28,23 @@ Page {
             }
 
             Content {}
+        }
+    }
+
+    GroupContainer {
+        label: "Data"
+
+        Flickable {
+            anchors {
+                left: parent.left
+                leftMargin: parent.padding
+                right: parent.right
+                rightMargin: parent.padding
+            }
+            height: page.height * 0.4
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
         }
     }
 
@@ -58,6 +75,7 @@ Page {
 
     component Content: Flickable {
         id: content
+        property var focused
         property QtObject component: QtObject {
             property int width: 300
             property int height: 200
@@ -77,8 +95,13 @@ Page {
             anchors.fill: parent
         }
 
+        onDragStarted: {
+            focused = null;
+        }
+
         Rectangle {
             id: container
+            readonly property bool focused: content.focused === container
             property bool edit: true
             property int handlerSize: 12
             property point pressPos
@@ -91,14 +114,30 @@ Page {
             height: content.component.height
             color: "transparent"
 
-            Component.onCompleted: {
-                x = (parent.width - width) / 2;
-                y = (parent.height - height) / 2;
-            }
-
             border {
                 width: 2
                 color: Colors.theme.outline
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton | Qt.LeftButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        if (menu.opened) {
+                            return menu.close();
+                        }
+                        menu.x = mouse.x;
+                        menu.y = mouse.y;
+                        menu.open();
+                    } else {
+                        content.focused = container;
+                    }
+                }
+            }
+
+            Menu {
+                id: menu
             }
 
             function grabPress(area, mx, my) {
@@ -117,7 +156,7 @@ Page {
             // Sides
             Rectangle {
                 id: leftHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -151,7 +190,7 @@ Page {
                     cursorShape: Qt.SizeHorCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(leftHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -181,7 +220,7 @@ Page {
 
             Rectangle {
                 id: rightHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -215,7 +254,7 @@ Page {
                     cursorShape: Qt.SizeHorCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(rightHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -243,7 +282,7 @@ Page {
 
             Rectangle {
                 id: topHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -279,7 +318,7 @@ Page {
                     cursorShape: Qt.SizeVerCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(topHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -309,7 +348,7 @@ Page {
 
             Rectangle {
                 id: bottomHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -344,7 +383,7 @@ Page {
                     cursorShape: Qt.SizeVerCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(bottomHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -373,7 +412,7 @@ Page {
             // Corners
             Rectangle {
                 id: topRightHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -410,7 +449,7 @@ Page {
                     cursorShape: Qt.SizeBDiagCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(topRightHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -442,7 +481,7 @@ Page {
 
             Rectangle {
                 id: topLeftHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -479,7 +518,7 @@ Page {
                     cursorShape: Qt.SizeFDiagCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(topLeftHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -512,7 +551,7 @@ Page {
 
             Rectangle {
                 id: bottomRightHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -549,7 +588,7 @@ Page {
                     cursorShape: Qt.SizeFDiagCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(bottomRightHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -578,7 +617,7 @@ Page {
 
             Rectangle {
                 id: bottomLeftHandle
-
+                visible: container.focused
                 width: container.handlerSize
                 height: container.handlerSize
                 radius: container.handlerSize
@@ -615,7 +654,7 @@ Page {
                     cursorShape: Qt.SizeBDiagCursor
                     anchors.fill: parent
                     hoverEnabled: true
-                    enabled: container.edit
+                    enabled: container.focused
                     preventStealing: true
                     onPressed: mouse => container.grabPress(bottomLeftHandle, mouse.x, mouse.y)
                     onPositionChanged: mouse => {
@@ -644,57 +683,10 @@ Page {
                     }
                 }
             }
-        }
 
-        Pane {
-            id: pane
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            height: 120
-            width: 300
-
-            ColumnLayout {
-                anchors.fill: parent
-
-                // Message Context
-
-                RowLayout {
-                    spacing: 8
-                    Layout.fillWidth: true
-                    Text {
-                        text: "Message"
-                        wrapMode: Text.Wrap
-                        verticalAlignment: Text.AlignVCenter
-                        color: Colors.theme.on_surface
-                        Layout.fillWidth: true
-                        Layout.maximumWidth: 300
-                    }
-                }
-
-                // Text Input
-                TextField {
-                    id: textInput
-                    focus: true
-                    echoMode: TextInput.Password
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
-                // Buttons
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignRight
-
-                    // cancel
-                    Button {
-                        text: "Cancel"
-                    }
-
-                    // submit
-                    Button {
-                        text: "Submit"
-                    }
-                }
+            Component.onCompleted: {
+                x = (parent.width - width) / 2;
+                y = (parent.height - height) / 2;
             }
         }
 

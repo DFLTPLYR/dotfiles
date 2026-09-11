@@ -31,7 +31,7 @@ Page {
 
         Rectangle {
             id: exampleNotif
-            height: exampleNotifItem.height + parent.padding
+            height: page.height * 0.4
             color: Colors.theme.on_surface
             radius: 5
 
@@ -128,7 +128,7 @@ Page {
                 right: parent.right
                 rightMargin: parent.padding
             }
-            height: page.height - (notificationGroup.height + parent.padding * 12)
+            height: page.height * 0.4
             clip: true
             contentHeight: innerCol.implicitHeight
             boundsBehavior: Flickable.StopAtBounds

@@ -21,7 +21,7 @@ Rectangle {
 
     Column {
         id: col
-        anchors.fill: parent
+        width: group.width
         padding: 10
 
         Label {
