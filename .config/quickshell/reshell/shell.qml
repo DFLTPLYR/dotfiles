@@ -39,18 +39,11 @@ ShellRoot {
         }
     }
 
-    Connections {
-        target: SysFont
-        function onCurrentChanged() {
-            print(SysFont.current);
-        }
+    Component.onCompleted: {
+        ColorGen.configPath = Quickshell.shellPath('core/theme');
     }
 
     Component.onDestruction: {
         ScreenRec.pkill();
-    }
-
-    Component.onCompleted: {
-        ColorGen.configPath = Quickshell.shellPath('core/theme');
     }
 }

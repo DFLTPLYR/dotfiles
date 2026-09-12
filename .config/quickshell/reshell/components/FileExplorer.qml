@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import Qt.labs.folderlistmodel
 import QtCore
 import QtQuick
