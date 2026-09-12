@@ -35,7 +35,7 @@ Button {
         text: control.text
         font: control.font
 
-        color: control.hovered || control.down ? Qt.darker(config.content.color, 1.5) : config.content.color
+        color: control.hovered || control.down ? Qt.darker(control.config.content.color, 1.5) : control.config.content.color
         opacity: enabled ? 1.0 : 0.3
 
         horizontalAlignment: Text.AlignHCenter
@@ -60,17 +60,17 @@ Button {
 
         opacity: enabled ? 1 : 0.3
 
-        topLeftRadius: config.background.rounding.topLeft
-        topRightRadius: config.background.rounding.topRight
-        bottomLeftRadius: config.background.rounding.bottomLeft
-        bottomRightRadius: config.background.rounding.bottomRight
+        topLeftRadius: control.config.background.rounding.topLeft
+        topRightRadius: control.config.background.rounding.topRight
+        bottomLeftRadius: control.config.background.rounding.bottomLeft
+        bottomRightRadius: control.config.background.rounding.bottomRight
 
         border {
-            width: config.background.border.width
-            color: config.background.border.color
+            width: control.config.background.border.width
+            color: control.config.background.border.color
         }
 
-        color: control.hovered || control.down ? Qt.darker(config.background.color, 1.5) : config.background.color
+        color: control.hovered || control.down ? Qt.darker(control.config.background.color, 1.5) : control.config.background.color
 
         Behavior on color {
             ColorAnimation {
@@ -87,7 +87,7 @@ Button {
         }
 
         Component.onCompleted: {
-            Utils.bindRadii(background, config.background.rounding);
+            Utils.bindRadii(background, control.config.background.rounding);
         }
     }
 }

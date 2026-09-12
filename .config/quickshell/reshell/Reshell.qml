@@ -30,7 +30,7 @@ Variants {
         // config
         FileView {
             id: fileview
-            path: Qt.resolvedUrl(`./core/data/monitor/${modelData.name}.json`)
+            path: Qt.resolvedUrl(`./core/data/monitor/${reshell.modelData.name}.json`)
             watchChanges: true
             preload: true
             onLoaded: {

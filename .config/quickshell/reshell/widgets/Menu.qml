@@ -89,6 +89,7 @@ Wrapper {
                 model: ["suspend", "poweroff", "hibernate", "reboot"]
 
                 delegate: Button {
+                    required property var modelData
                     text: modelData
                     width: ListView.view.width
                     onClicked: {

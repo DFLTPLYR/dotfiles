@@ -27,6 +27,10 @@ Page {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.VerticalFlick
+
+            ColumnLayout {
+                width: parent.width
+            }
         }
     }
 

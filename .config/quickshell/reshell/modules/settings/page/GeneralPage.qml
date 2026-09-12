@@ -128,6 +128,7 @@ Page {
     }
 
     component FontSection: GroupContainer {
+        label: "Fonts"
         RowLayout {
             height: 400
             anchors {
