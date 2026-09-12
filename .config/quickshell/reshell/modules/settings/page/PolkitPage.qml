@@ -10,7 +10,10 @@ import qs.modules.settings
 
 Page {
     id: page
-
+    property QtObject component: QtObject {
+        property int width: 300
+        property int height: 200
+    }
     Content {}
 
     GroupContainer {
@@ -30,6 +33,13 @@ Page {
 
             ColumnLayout {
                 width: parent.width
+                Row {
+                    spacing: 10
+                    Label {
+                        text: "width"
+                    }
+                    SpinBox {}
+                }
             }
         }
     }
@@ -78,10 +88,6 @@ Page {
             Flickable {
                 id: content
                 property var focused
-                property QtObject component: QtObject {
-                    property int width: 300
-                    property int height: 200
-                }
 
                 anchors.fill: parent
                 boundsBehavior: Flickable.StopAtBounds
@@ -112,8 +118,8 @@ Page {
                     property int pressW
                     property int pressH
 
-                    width: content.component.width
-                    height: content.component.height
+                    width: page.component.width
+                    height: page.component.height
                     color: "transparent"
 
                     border {
@@ -146,8 +152,8 @@ Page {
                         pressPos = area.mapToGlobal(mx, my);
                         pressX = container.x;
                         pressY = container.y;
-                        pressW = content.component.width;
-                        pressH = content.component.height;
+                        pressW = page.component.width;
+                        pressH = page.component.height;
                     }
 
                     function globalDelta(area, mx, my) {
@@ -200,7 +206,7 @@ Page {
                                     return;
                                 const d = container.globalDelta(leftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(30, container.pressW - d.x);
-                                content.component.width = newW;
+                                page.component.width = newW;
                                 container.x = container.pressX + container.pressW - newW;
                             }
                         }
@@ -263,7 +269,7 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(rightHandleArea, mouse.x, mouse.y);
-                                content.component.width = Math.max(50, container.pressW + d.x);
+                                page.component.width = Math.max(50, container.pressW + d.x);
                             }
                         }
 
@@ -328,7 +334,7 @@ Page {
                                     return;
                                 const d = container.globalDelta(topHandleArea, mouse.x, mouse.y);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                content.component.height = newH;
+                                page.component.height = newH;
                                 container.y = container.pressY + container.pressH - newH;
                             }
                         }
@@ -392,7 +398,7 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(bottomHandleArea, mouse.x, mouse.y);
-                                content.component.height = Math.max(50, container.pressH + d.y);
+                                page.component.height = Math.max(50, container.pressH + d.y);
                             }
                         }
 
@@ -460,8 +466,8 @@ Page {
                                 const d = container.globalDelta(topRightHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW + d.x);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                content.component.width = newW;
-                                content.component.height = newH;
+                                page.component.width = newW;
+                                page.component.height = newH;
                                 container.y = container.pressY + container.pressH - newH;
                             }
                         }
@@ -529,8 +535,8 @@ Page {
                                 const d = container.globalDelta(topLeftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW - d.x);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                content.component.width = newW;
-                                content.component.height = newH;
+                                page.component.width = newW;
+                                page.component.height = newH;
                                 container.x = container.pressX + container.pressW - newW;
                                 container.y = container.pressY + container.pressH - newH;
                             }
@@ -597,8 +603,8 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(bottomRightHandleArea, mouse.x, mouse.y);
-                                content.component.width = Math.max(50, container.pressW + d.x);
-                                content.component.height = Math.max(50, container.pressH + d.y);
+                                page.component.width = Math.max(50, container.pressW + d.x);
+                                page.component.height = Math.max(50, container.pressH + d.y);
                             }
                         }
 
@@ -665,8 +671,8 @@ Page {
                                 const d = container.globalDelta(bottomLeftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW - d.x);
                                 const newH = Math.max(50, container.pressH + d.y);
-                                content.component.width = newW;
-                                content.component.height = newH;
+                                page.component.width = newW;
+                                page.component.height = newH;
                                 container.x = container.pressX + container.pressW - newW;
                             }
                         }

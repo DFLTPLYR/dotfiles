@@ -28,7 +28,7 @@ SpinBox {
             property Corner rounding: Corner {}
         }
     }
-
+    implicitWidth: 100
     editable: true
     wheelEnabled: true
     from: -1e+09
