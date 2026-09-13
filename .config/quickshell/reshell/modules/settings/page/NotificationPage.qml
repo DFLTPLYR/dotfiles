@@ -17,8 +17,13 @@ Page {
     grid.data: [
         Button {
             text: "Set"
-            visible: Quickshell.screens.length >= 1
             onClicked: popup.opened ? popup.close() : popup.open()
+
+            Popup {
+                id: popup
+                width: 100
+                y: -height
+            }
         },
         Button {
             text: "Apply"
@@ -32,7 +37,7 @@ Page {
         Rectangle {
             id: exampleNotif
             height: page.height * 0.4
-            color: Colors.theme.on_surface
+            color: "transparent"
             radius: 5
 
             anchors {
@@ -40,6 +45,11 @@ Page {
                 leftMargin: parent.padding
                 right: parent.right
                 rightMargin: parent.padding
+            }
+
+            border {
+                width: 1
+                color: Colors.theme.on_surface
             }
 
             property QtObject style: Style {
@@ -121,6 +131,7 @@ Page {
 
     GroupContainer {
         label: "Properties"
+
         Flickable {
             anchors {
                 left: parent.left

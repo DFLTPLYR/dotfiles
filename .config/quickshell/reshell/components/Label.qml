@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls.Basic
 
 import qs.core
+import System
 
 Label {
     id: control
@@ -19,7 +20,7 @@ Label {
         }
     }
     color: control.config.content.color
-
+    font.family: SysFont.current
     font.capitalization: Font.Capitalize
     background: Rectangle {
         id: background

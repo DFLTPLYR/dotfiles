@@ -13,36 +13,12 @@ Page {
     property QtObject component: QtObject {
         property int width: 300
         property int height: 200
+        property var contents: []
     }
+
     Content {}
 
-    GroupContainer {
-        label: "Data"
-
-        Flickable {
-            anchors {
-                left: parent.left
-                leftMargin: parent.padding
-                right: parent.right
-                rightMargin: parent.padding
-            }
-            height: page.height * 0.4
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
-            flickableDirection: Flickable.VerticalFlick
-
-            ColumnLayout {
-                width: parent.width
-                Row {
-                    spacing: 10
-                    Label {
-                        text: "width"
-                    }
-                    SpinBox {}
-                }
-            }
-        }
-    }
+    Components {}
 
     component Grid: Canvas {
         clip: false
@@ -50,7 +26,7 @@ Page {
             var ctx = getContext("2d");
             var gridSize = 10;
 
-            ctx.strokeStyle = Colors.setOpacity(Colors.theme.on_primary, 0.5);
+            ctx.strokeStyle = Colors.setOpacity(Colors.theme.on_surface, 0.5);
             ctx.lineWidth = 1;
 
             for (var x = 0; x <= width; x += gridSize) {
@@ -74,7 +50,7 @@ Page {
 
         Rectangle {
             id: exampleNotif
-            color: Colors.theme.on_surface
+            color: "transparent"
             radius: 5
             height: page.height * 0.4
 
@@ -83,6 +59,11 @@ Page {
                 leftMargin: parent.padding
                 right: parent.right
                 rightMargin: parent.padding
+            }
+
+            border {
+                width: 1
+                color: Colors.theme.on_surface
             }
 
             Flickable {
@@ -124,28 +105,17 @@ Page {
 
                     border {
                         width: 2
-                        color: Colors.theme.outline
+                        color: Colors.theme.primary
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton | Qt.LeftButton
                         onClicked: mouse => {
-                            if (mouse.button === Qt.RightButton) {
-                                if (menu.opened) {
-                                    return menu.close();
-                                }
-                                menu.x = mouse.x;
-                                menu.y = mouse.y;
-                                menu.open();
-                            } else {
+                            if (mouse.button === Qt.RightButton) {} else {
                                 content.focused = container;
                             }
                         }
-                    }
-
-                    Menu {
-                        id: menu
                     }
 
                     function grabPress(area, mx, my) {
@@ -702,6 +672,43 @@ Page {
                     for (const s of Quickshell.screens) {
                         contentWidth = Math.max(contentWidth, s.x + s.width);
                         contentHeight = Math.max(contentHeight, s.y + s.height) / 2;
+                    }
+                }
+            }
+        }
+    }
+
+    component Components: GroupContainer {
+        label: "Components"
+
+        Flickable {
+            anchors {
+                left: parent.left
+                leftMargin: parent.padding
+                right: parent.right
+                rightMargin: parent.padding
+            }
+            height: page.height * 0.4
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
+
+            GridLayout {
+                width: parent.width
+                Repeater {
+                    model: ["Cancel", "Confirm", "Title", "Description", "Textfield"]
+                    delegate: CheckBox {
+                        required property var modelData
+                        text: modelData
+                    }
+                }
+            }
+
+            ColumnLayout {
+
+                Row {
+                    Label {
+                        text: "Background"
                     }
                 }
             }

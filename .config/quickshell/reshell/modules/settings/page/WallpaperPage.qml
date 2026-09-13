@@ -27,7 +27,7 @@ Page {
                 color: Colors.theme.on_surface
             }
 
-            height: 500
+            height: page.height * 0.4
             width: parent.width
             radius: 5
             clip: true
