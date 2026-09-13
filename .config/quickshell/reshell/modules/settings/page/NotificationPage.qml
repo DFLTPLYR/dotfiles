@@ -14,15 +14,68 @@ Page {
     property bool perMonitor: false
     property var config: Global.getConfig().adapter.notification
 
+    property QtObject previewStyle: Style {
+        Component.onCompleted: {
+            const s = page.config.style;
+            color = s.color;
+            padding.top = s.padding.top;
+            padding.bottom = s.padding.bottom;
+            padding.left = s.padding.left;
+            padding.right = s.padding.right;
+            inset.top = s.inset.top;
+            inset.bottom = s.inset.bottom;
+            inset.left = s.inset.left;
+            inset.right = s.inset.right;
+            background.rounding.topLeft = s.background.rounding.topLeft;
+            background.rounding.topRight = s.background.rounding.topRight;
+            background.rounding.bottomLeft = s.background.rounding.bottomLeft;
+            background.rounding.bottomRight = s.background.rounding.bottomRight;
+            background.margins.top = s.background.margins.top;
+            background.margins.bottom = s.background.margins.bottom;
+            background.margins.left = s.background.margins.left;
+            background.margins.right = s.background.margins.right;
+        }
+    }
+
+    property var previewExample: {
+        "notificationId": 69,
+        "actions": [
+            {
+                "identifier": "default",
+                "text": "Activate"
+            }
+        ],
+        "appIcon": "firefox",
+        "appName": "firefox",
+        "body": "This is the text body of the notification. \nPretty cool, huh?",
+        "image": "",
+        "summary": "Notification Example",
+        "time": 1777989368250,
+        "urgency": "1"
+    }
+
     grid.data: [
         Button {
+            id: monitorMenu
+            visible: Quickshell.screens.length > 1
             text: "Set"
             onClicked: popup.opened ? popup.close() : popup.open()
 
-            Popup {
+            Menu {
                 id: popup
-                width: 100
                 y: -height
+                x: -popup.width / 2
+
+                Instantiator {
+                    model: Quickshell.screens
+                    delegate: Action {
+                        required property ShellScreen modelData
+                        text: modelData.name
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        popup.insertAction(idx, obj);
+                    }
+                }
             }
         },
         Button {
@@ -30,15 +83,42 @@ Page {
         }
     ]
 
-    GroupContainer {
-        id: notificationGroup
-        label: "Notification Section"
+    Content {}
+
+    Properties {}
+
+    component Grid: Canvas {
+        clip: false
+        onPaint: {
+            var ctx = getContext("2d");
+            var gridSize = 10;
+
+            ctx.strokeStyle = Colors.setOpacity(Colors.theme.on_surface, 0.5);
+            ctx.lineWidth = 1;
+
+            for (var x = 0; x <= width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            for (var y = 0; y <= height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+        }
+    }
+
+    component Content: GroupContainer {
+        label: "Notification Item"
 
         Rectangle {
-            id: exampleNotif
-            height: page.height * 0.4
             color: "transparent"
             radius: 5
+            height: page.height * 0.4
 
             anchors {
                 left: parent.left
@@ -52,84 +132,59 @@ Page {
                 color: Colors.theme.on_surface
             }
 
-            property QtObject style: Style {
-                Component.onCompleted: {
-                    const s = page.config.style;
-                    color = s.color;
-                    padding.top = s.padding.top;
-                    padding.bottom = s.padding.bottom;
-                    padding.left = s.padding.left;
-                    padding.right = s.padding.right;
-                    inset.top = s.inset.top;
-                    inset.bottom = s.inset.bottom;
-                    inset.left = s.inset.left;
-                    inset.right = s.inset.right;
-                    background.rounding.topLeft = s.background.rounding.topLeft;
-                    background.rounding.topRight = s.background.rounding.topRight;
-                    background.rounding.bottomLeft = s.background.rounding.bottomLeft;
-                    background.rounding.bottomRight = s.background.rounding.bottomRight;
-                    background.margins.top = s.background.margins.top;
-                    background.margins.bottom = s.background.margins.bottom;
-                    background.margins.left = s.background.margins.left;
-                    background.margins.right = s.background.margins.right;
-                }
-            }
+            Flickable {
+                id: content
 
-            property var example: {
-                "notificationId": 69,
-                "actions": [
-                    {
-                        "identifier": "default",
-                        "text": "Activate"
+                anchors.fill: parent
+                boundsBehavior: Flickable.StopAtBounds
+                focus: true
+                acceptedButtons: Qt.MiddleButton | Qt.LeftButton
+                clip: true
+
+                contentX: (contentWidth - width) / 2
+                contentY: (contentHeight - height) / 2
+                transformOrigin: Item.Center
+
+                Grid {
+                    anchors.fill: parent
+                }
+
+                NotificationItem {
+                    id: notificationItem
+                    ma.enabled: false
+                    style: page.previewStyle
+                    width: page.config.width
+                    height: page.config.height
+
+                    // Notification Bg
+                    bg {
+                        color: style.color
+
+                        bottomRightRadius: style.background.rounding.bottomRight
+                        bottomLeftRadius: style.background.rounding.bottomLeft
+                        topRightRadius: style.background.rounding.topRight
+                        topLeftRadius: style.background.rounding.topLeft
                     }
-                ],
-                "appIcon": "firefox",
-                "appName": "firefox",
-                "body": "This is the text body of the notification. \nPretty cool, huh?",
-                "image": "",
-                "summary": "Notification Example",
-                "time": 1777989368250,
-                "urgency": "1"
-            }
 
-            NotificationItem {
-                id: exampleNotifItem
-                ma.enabled: false
-                property var style: exampleNotif.style
-                anchors.centerIn: parent
-                width: page.config.width
-                height: page.config.height
+                    modelData: page.previewExample
 
-                // Notification Bg
-                bg {
-                    color: style.color
-
-                    bottomRightRadius: style.background.rounding.bottomRight
-                    bottomLeftRadius: style.background.rounding.bottomLeft
-                    topRightRadius: style.background.rounding.topRight
-                    topLeftRadius: style.background.rounding.topLeft
+                    Component.onCompleted: {
+                        x = (parent.width - width) / 2;
+                        y = (parent.height - height) / 2;
+                    }
                 }
 
-                modelData: exampleNotif.example
-            }
-
-            Row {
-                anchors {
-                    rightMargin: 5
-                    bottomMargin: 5
-                    bottom: parent.bottom
-                    right: parent.right
-                }
-
-                Button {
-                    text: "Replay Anim"
-                    onClicked: exampleNotifItem.runAnim()
+                Component.onCompleted: {
+                    for (const s of Quickshell.screens) {
+                        contentWidth = Math.max(contentWidth, s.x + s.width);
+                        contentHeight = Math.max(contentHeight, s.y + s.height) / 2;
+                    }
                 }
             }
         }
     }
 
-    GroupContainer {
+    component Properties: GroupContainer {
         label: "Properties"
 
         Flickable {
@@ -229,7 +284,7 @@ Page {
                                 width: 100
                                 value: page.config.width
                                 onValueChanged: {
-                                    exampleNotifItem.width = value;
+                                    page.config.width = value;
                                 }
                             }
                         }
@@ -246,7 +301,7 @@ Page {
                                 width: 100
                                 value: page.config.height
                                 onValueChanged: {
-                                    exampleNotifItem.height = value;
+                                    page.config.height = value;
                                 }
                             }
                         }
@@ -289,8 +344,8 @@ Page {
 
                                 SpinBox {
                                     width: 100
-                                    value: exampleNotif.style.background.rounding[radii.modelData.prop]
-                                    onValueChanged: exampleNotif.style.background.rounding[radii.modelData.prop] = value
+                                    value: page.previewStyle.background.rounding[radii.modelData.prop]
+                                    onValueChanged: page.previewStyle.background.rounding[radii.modelData.prop] = value
                                 }
                             }
                         }

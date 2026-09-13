@@ -49,7 +49,6 @@ Page {
         label: "Notification Section"
 
         Rectangle {
-            id: exampleNotif
             color: "transparent"
             radius: 5
             height: page.height * 0.4
