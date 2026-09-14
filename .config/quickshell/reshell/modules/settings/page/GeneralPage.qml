@@ -13,13 +13,14 @@ import qs.components
 import qs.modules.settings
 
 Page {
+    id: page
     property var screen
 
     GreeterSection {}
 
     ScreenRecSection {}
 
-    DisplayTemp {}
+    DisplayGamma {}
 
     FontSection {}
 
@@ -108,20 +109,70 @@ Page {
         }
     }
 
-    component DisplayTemp: GroupContainer {
-        label: "Screen Temp"
-        Row {
-            Button {
-                text: "Increase"
-                onClicked: {
-                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "500"]);
-                }
-            }
+    component DisplayGamma: GroupContainer {
+        label: "Display"
 
-            Button {
-                text: "Decrease"
-                onClicked: {
-                    Quickshell.execDetached(["busctl", "--user", "call", "--", "rs.wl-gammarelay", "/", "rs.wl.gammarelay", "UpdateTemperature", "n", "-500"]);
+        Flickable {
+            anchors {
+                left: parent.left
+                leftMargin: parent.padding
+                right: parent.right
+                rightMargin: parent.padding
+            }
+            height: innerCol.height
+            clip: true
+            contentHeight: innerCol.implicitHeight
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
+
+            ColumnLayout {
+                id: innerCol
+                clip: true
+                width: parent.width
+
+                GroupContainer {
+                    label: `Gamma ${Gamma.gamma}`
+
+                    Row {
+                        Button {
+                            text: "Increase"
+                            onClicked: Gamma.increaseGamma()
+                        }
+                        Button {
+                            text: "Decrease"
+                            onClicked: Gamma.decreaseGamma()
+                        }
+                    }
+                }
+
+                GroupContainer {
+                    label: `Temperature ${Gamma.temperature}`
+
+                    Row {
+                        Button {
+                            text: "Increase"
+                            onClicked: Gamma.increaseTemperature()
+                        }
+                        Button {
+                            text: "Decrease"
+                            onClicked: Gamma.decreaseTemperature()
+                        }
+                    }
+                }
+
+                GroupContainer {
+                    label: `Brightness ${Gamma.brightness}`
+
+                    Row {
+                        Button {
+                            text: "Increase"
+                            onClicked: Gamma.increaseBrightness()
+                        }
+                        Button {
+                            text: "Decrease"
+                            onClicked: Gamma.decreaseBrightness()
+                        }
+                    }
                 }
             }
         }
