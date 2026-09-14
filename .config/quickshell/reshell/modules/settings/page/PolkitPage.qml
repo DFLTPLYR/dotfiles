@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
+import QtQml.Models
 
 import qs.core
 import qs.components
@@ -10,10 +11,171 @@ import qs.modules.settings
 
 Page {
     id: page
+    property var selectedItem: null
     property QtObject component: QtObject {
         property int width: 300
         property int height: 200
-        property var contents: []
+    }
+
+    property ObjectModel elements: ObjectModel {
+        id: elementModel
+        Rectangle {
+            id: descRoot
+            property string label: "Description"
+            property int rowHeight: 32
+            x: 12
+            y: 12
+            width: 200
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: descBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: descBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: descRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: page.selectedItem = descRoot
+                onReleased: Utils.clampToParent(descRoot)
+            }
+
+            Text {
+                width: parent.width
+                height: descRoot.rowHeight
+                verticalAlignment: Text.AlignVCenter
+                text: "Description"
+                wrapMode: Text.Wrap
+            }
+        }
+
+        Rectangle {
+            id: titleRoot
+            property string label: "Title"
+            property int rowHeight: 32
+            x: 12
+            y: 52
+            width: 200
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: titleBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: titleBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: titleRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: page.selectedItem = titleRoot
+                onReleased: Utils.clampToParent(titleRoot)
+            }
+
+            Text {
+                width: parent.width
+                height: titleRoot.rowHeight
+                verticalAlignment: Text.AlignVCenter
+                text: "Title"
+                wrapMode: Text.Wrap
+            }
+        }
+        Rectangle {
+            id: inputRoot
+            property string label: "Input"
+            property int rowHeight: 40
+            x: 12
+            y: 92
+            width: 180
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: inputBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: inputBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: inputRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: page.selectedItem = inputRoot
+                onReleased: Utils.clampToParent(inputRoot)
+            }
+
+            TextField {
+                z: -1
+                width: parent.width
+                height: inputRoot.rowHeight - 4
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        Rectangle {
+            id: okRoot
+            property string label: "OK"
+            property int rowHeight: 40
+            x: 12
+            y: 140
+            width: 130
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: okBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: okBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: okRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: page.selectedItem = okRoot
+                onReleased: Utils.clampToParent(okRoot)
+            }
+
+            Button {
+                z: -1
+                width: parent.width
+                height: okRoot.rowHeight - 4
+                anchors.verticalCenter: parent.verticalCenter
+                text: "OK"
+            }
+        }
+
+        Rectangle {
+            id: cancelRoot
+            property string label: "Cancel"
+            property int rowHeight: 40
+            x: 150
+            y: 140
+            width: 130
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: cancelBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: cancelBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: cancelRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: page.selectedItem = cancelRoot
+                onReleased: Utils.clampToParent(cancelRoot)
+            }
+
+            Button {
+                z: -1
+                width: parent.width
+                height: cancelRoot.rowHeight - 4
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Cancel"
+            }
+        }
     }
 
     Content {}
@@ -41,6 +203,44 @@ Page {
                 ctx.moveTo(0, y);
                 ctx.lineTo(width, y);
                 ctx.stroke();
+            }
+        }
+    }
+
+    component ResizeDot: Rectangle {
+        id: dot
+        signal press(var mouse)
+        signal move(var mouse)
+        signal release
+        property int dotCursor: Qt.ArrowCursor
+        property bool leftEdge: false
+        property bool rightEdge: false
+        property bool topEdge: false
+        property bool bottomEdge: false
+        width: 12
+        height: 12
+        radius: 12
+        color: dotArea.containsMouse || dotArea.pressed ? Colors.theme.secondary : Colors.theme.primary
+
+        MouseArea {
+            id: dotArea
+            anchors.fill: parent
+            hoverEnabled: true
+            preventStealing: true
+            cursorShape: dot.dotCursor
+            onPressed: mouse => dot.press(mouse)
+            onPositionChanged: mouse => {
+                if (!dotArea.pressed)
+                    return;
+                dot.move(mouse);
+            }
+            onReleased: dot.release()
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
             }
         }
     }
@@ -113,7 +313,152 @@ Page {
                         onClicked: mouse => {
                             if (mouse.button === Qt.RightButton) {} else {
                                 content.focused = container;
+                                page.selectedItem = null;
                             }
+                        }
+                    }
+
+                    Repeater {
+                        model: elementModel
+                    }
+
+                    Item {
+                        id: selectionOverlay
+                        readonly property Item sel: page.selectedItem
+                        visible: sel !== null && sel.visible
+                        x: (sel ? sel.x : 0) - dotRadius
+                        y: (sel ? sel.y : 0) - dotRadius
+                        width: (sel ? sel.width : 0) + dotRadius * 2
+                        height: (sel ? sel.height : 0) + dotRadius * 2
+                        z: 50
+
+                        property int dotRadius: 6
+                        property point pressPos
+                        property real pressX
+                        property real pressY
+                        property real pressW
+                        property real pressH
+
+                        function grab(dot, mx, my) {
+                            if (!sel)
+                                return;
+                            pressPos = dot.mapToGlobal(mx, my);
+                            pressX = sel.x;
+                            pressY = sel.y;
+                            pressW = sel.width;
+                            pressH = sel.height;
+                        }
+
+                        function resize(dot, mx, my) {
+                            if (!sel)
+                                return;
+                            const gp = dot.mapToGlobal(mx, my);
+                            const dx = gp.x - pressPos.x;
+                            const dy = gp.y - pressPos.y;
+                            if (dot.leftEdge) {
+                                const w = Math.max(30, pressW - dx);
+                                sel.width = w;
+                                sel.x = pressX + pressW - w;
+                            }
+                            if (dot.rightEdge)
+                                sel.width = Math.max(30, pressW + dx);
+                            if (dot.topEdge) {
+                                const h = Math.max(24, pressH - dy);
+                                sel.height = h;
+                                sel.y = pressY + pressH - h;
+                            }
+                            if (dot.bottomEdge)
+                                sel.height = Math.max(24, pressH + dy);
+                        }
+
+                        function finish() {
+                            if (sel)
+                                Utils.clampToParent(sel);
+                        }
+
+                        ResizeDot {
+                            id: leftDot
+                            anchors.horizontalCenter: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            dotCursor: Qt.SizeHorCursor
+                            leftEdge: true
+                            onPress: mouse => selectionOverlay.grab(leftDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(leftDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: rightDot
+                            anchors.horizontalCenter: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            dotCursor: Qt.SizeHorCursor
+                            rightEdge: true
+                            onPress: mouse => selectionOverlay.grab(rightDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(rightDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: topDot
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.top
+                            dotCursor: Qt.SizeVerCursor
+                            topEdge: true
+                            onPress: mouse => selectionOverlay.grab(topDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(topDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: bottomDot
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.bottom
+                            dotCursor: Qt.SizeVerCursor
+                            bottomEdge: true
+                            onPress: mouse => selectionOverlay.grab(bottomDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(bottomDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: topRightDot
+                            anchors.horizontalCenter: parent.right
+                            anchors.verticalCenter: parent.top
+                            dotCursor: Qt.SizeBDiagCursor
+                            rightEdge: true
+                            topEdge: true
+                            onPress: mouse => selectionOverlay.grab(topRightDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(topRightDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: topLeftDot
+                            anchors.horizontalCenter: parent.left
+                            anchors.verticalCenter: parent.top
+                            dotCursor: Qt.SizeFDiagCursor
+                            leftEdge: true
+                            topEdge: true
+                            onPress: mouse => selectionOverlay.grab(topLeftDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(topLeftDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: bottomRightDot
+                            anchors.horizontalCenter: parent.right
+                            anchors.verticalCenter: parent.bottom
+                            dotCursor: Qt.SizeFDiagCursor
+                            rightEdge: true
+                            bottomEdge: true
+                            onPress: mouse => selectionOverlay.grab(bottomRightDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(bottomRightDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
+                        }
+                        ResizeDot {
+                            id: bottomLeftDot
+                            anchors.horizontalCenter: parent.left
+                            anchors.verticalCenter: parent.bottom
+                            dotCursor: Qt.SizeBDiagCursor
+                            leftEdge: true
+                            bottomEdge: true
+                            onPress: mouse => selectionOverlay.grab(bottomLeftDot, mouse.x, mouse.y)
+                            onMove: mouse => selectionOverlay.resize(bottomLeftDot, mouse.x, mouse.y)
+                            onRelease: selectionOverlay.finish()
                         }
                     }
 
@@ -678,9 +1023,10 @@ Page {
     }
 
     component Components: GroupContainer {
-        label: "Components"
+        label: "Elements"
 
         Flickable {
+            id: elementsFlick
             anchors {
                 left: parent.left
                 leftMargin: parent.padding
@@ -691,23 +1037,25 @@ Page {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.VerticalFlick
+            contentWidth: width
+            contentHeight: elementsGrid.implicitHeight
 
             GridLayout {
+                id: elementsGrid
                 width: parent.width
+                columns: 4
+
                 Repeater {
-                    model: ["Cancel", "Confirm", "Title", "Description", "Textfield"]
+                    model: elementModel.count
                     delegate: CheckBox {
-                        required property var modelData
-                        text: modelData
-                    }
-                }
-            }
-
-            ColumnLayout {
-
-                Row {
-                    Label {
-                        text: "Background"
+                        required property int index
+                        readonly property var target: elementModel.get(index)
+                        text: target ? (target.label ?? ("Item " + index)) : ("Item " + index)
+                        checked: target ? target.visible : true
+                        onToggled: {
+                            if (target)
+                                target.visible = checked;
+                        }
                     }
                 }
             }

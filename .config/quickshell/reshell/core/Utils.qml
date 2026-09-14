@@ -51,6 +51,13 @@ Singleton {
         return !(a.x + a.width < b.x || a.x > b.x + b.width || a.y + a.height < b.y || a.y > b.y + b.height);
     }
 
+    function clampToParent(item) {
+        if (!item || !item.parent || item.parent.width === undefined || item.parent.height === undefined)
+            return;
+        item.x = Math.max(0, Math.min(item.x, Math.max(0, item.parent.width - item.width)));
+        item.y = Math.max(0, Math.min(item.y, Math.max(0, item.parent.height - item.height)));
+    }
+
     function isKeyValid(obj, k, extraEndings) {
         if (k === "objectName" || k === "menu" || typeof obj[k] === "function")
             return false;
