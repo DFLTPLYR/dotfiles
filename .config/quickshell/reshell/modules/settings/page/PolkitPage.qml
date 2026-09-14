@@ -11,176 +11,9 @@ import qs.modules.settings
 
 Page {
     id: page
-    property var selectedItem: null
-    property QtObject component: QtObject {
-        property int width: 300
-        property int height: 200
-    }
-
-    property ObjectModel elements: ObjectModel {
-        id: elementModel
-        Rectangle {
-            id: descRoot
-            property string label: "Description"
-            property int rowHeight: 32
-            x: 12
-            y: 12
-            width: 200
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: descBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: descBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: descRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: page.selectedItem = descRoot
-                onReleased: Utils.clampToParent(descRoot)
-            }
-
-            Text {
-                width: parent.width
-                height: descRoot.rowHeight
-                verticalAlignment: Text.AlignVCenter
-                text: "Description"
-                wrapMode: Text.Wrap
-            }
-        }
-
-        Rectangle {
-            id: titleRoot
-            property string label: "Title"
-            property int rowHeight: 32
-            x: 12
-            y: 52
-            width: 200
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: titleBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: titleBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: titleRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: page.selectedItem = titleRoot
-                onReleased: Utils.clampToParent(titleRoot)
-            }
-
-            Text {
-                width: parent.width
-                height: titleRoot.rowHeight
-                verticalAlignment: Text.AlignVCenter
-                text: "Title"
-                wrapMode: Text.Wrap
-            }
-        }
-        Rectangle {
-            id: inputRoot
-            property string label: "Input"
-            property int rowHeight: 40
-            x: 12
-            y: 92
-            width: 180
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: inputBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: inputBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: inputRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: page.selectedItem = inputRoot
-                onReleased: Utils.clampToParent(inputRoot)
-            }
-
-            TextField {
-                z: -1
-                width: parent.width
-                height: inputRoot.rowHeight - 4
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        Rectangle {
-            id: okRoot
-            property string label: "OK"
-            property int rowHeight: 40
-            x: 12
-            y: 140
-            width: 130
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: okBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: okBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: okRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: page.selectedItem = okRoot
-                onReleased: Utils.clampToParent(okRoot)
-            }
-
-            Button {
-                z: -1
-                width: parent.width
-                height: okRoot.rowHeight - 4
-                anchors.verticalCenter: parent.verticalCenter
-                text: "OK"
-            }
-        }
-
-        Rectangle {
-            id: cancelRoot
-            property string label: "Cancel"
-            property int rowHeight: 40
-            x: 150
-            y: 140
-            width: 130
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: cancelBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: cancelBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: cancelRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: page.selectedItem = cancelRoot
-                onReleased: Utils.clampToParent(cancelRoot)
-            }
-
-            Button {
-                z: -1
-                width: parent.width
-                height: cancelRoot.rowHeight - 4
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Cancel"
-            }
-        }
-    }
-
     Content {}
 
-    Components {}
+    Elements {}
 
     component Grid: Canvas {
         clip: false
@@ -298,8 +131,8 @@ Page {
                     property int pressW
                     property int pressH
 
-                    width: page.component.width
-                    height: page.component.height
+                    width: Components.polkit.width
+                    height: Components.polkit.height
                     color: "transparent"
 
                     border {
@@ -313,18 +146,18 @@ Page {
                         onClicked: mouse => {
                             if (mouse.button === Qt.RightButton) {} else {
                                 content.focused = container;
-                                page.selectedItem = null;
+                                Components.polkitSelectedItem = null;
                             }
                         }
                     }
 
                     Repeater {
-                        model: elementModel
+                        model: Components.polkitElements
                     }
 
                     Item {
                         id: selectionOverlay
-                        readonly property Item sel: page.selectedItem
+                        readonly property Item sel: Components.polkitSelectedItem
                         visible: sel !== null && sel.visible
                         x: (sel ? sel.x : 0) - dotRadius
                         y: (sel ? sel.y : 0) - dotRadius
@@ -466,8 +299,8 @@ Page {
                         pressPos = area.mapToGlobal(mx, my);
                         pressX = container.x;
                         pressY = container.y;
-                        pressW = page.component.width;
-                        pressH = page.component.height;
+                        pressW = Components.polkit.width;
+                        pressH = Components.polkit.height;
                     }
 
                     function globalDelta(area, mx, my) {
@@ -520,7 +353,7 @@ Page {
                                     return;
                                 const d = container.globalDelta(leftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(30, container.pressW - d.x);
-                                page.component.width = newW;
+                                Components.polkit.width = newW;
                                 container.x = container.pressX + container.pressW - newW;
                             }
                         }
@@ -583,7 +416,7 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(rightHandleArea, mouse.x, mouse.y);
-                                page.component.width = Math.max(50, container.pressW + d.x);
+                                Components.polkit.width = Math.max(50, container.pressW + d.x);
                             }
                         }
 
@@ -648,7 +481,7 @@ Page {
                                     return;
                                 const d = container.globalDelta(topHandleArea, mouse.x, mouse.y);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                page.component.height = newH;
+                                Components.polkit.height = newH;
                                 container.y = container.pressY + container.pressH - newH;
                             }
                         }
@@ -712,7 +545,7 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(bottomHandleArea, mouse.x, mouse.y);
-                                page.component.height = Math.max(50, container.pressH + d.y);
+                                Components.polkit.height = Math.max(50, container.pressH + d.y);
                             }
                         }
 
@@ -780,8 +613,8 @@ Page {
                                 const d = container.globalDelta(topRightHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW + d.x);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                page.component.width = newW;
-                                page.component.height = newH;
+                                Components.polkit.width = newW;
+                                Components.polkit.height = newH;
                                 container.y = container.pressY + container.pressH - newH;
                             }
                         }
@@ -849,8 +682,8 @@ Page {
                                 const d = container.globalDelta(topLeftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW - d.x);
                                 const newH = Math.max(50, container.pressH - d.y);
-                                page.component.width = newW;
-                                page.component.height = newH;
+                                Components.polkit.width = newW;
+                                Components.polkit.height = newH;
                                 container.x = container.pressX + container.pressW - newW;
                                 container.y = container.pressY + container.pressH - newH;
                             }
@@ -917,8 +750,8 @@ Page {
                                 if (!pressed)
                                     return;
                                 const d = container.globalDelta(bottomRightHandleArea, mouse.x, mouse.y);
-                                page.component.width = Math.max(50, container.pressW + d.x);
-                                page.component.height = Math.max(50, container.pressH + d.y);
+                                Components.polkit.width = Math.max(50, container.pressW + d.x);
+                                Components.polkit.height = Math.max(50, container.pressH + d.y);
                             }
                         }
 
@@ -985,8 +818,8 @@ Page {
                                 const d = container.globalDelta(bottomLeftHandleArea, mouse.x, mouse.y);
                                 const newW = Math.max(50, container.pressW - d.x);
                                 const newH = Math.max(50, container.pressH + d.y);
-                                page.component.width = newW;
-                                page.component.height = newH;
+                                Components.polkit.width = newW;
+                                Components.polkit.height = newH;
                                 container.x = container.pressX + container.pressW - newW;
                             }
                         }
@@ -1022,7 +855,7 @@ Page {
         }
     }
 
-    component Components: GroupContainer {
+    component Elements: GroupContainer {
         label: "Elements"
 
         Flickable {
@@ -1046,10 +879,10 @@ Page {
                 columns: 4
 
                 Repeater {
-                    model: elementModel.count
+                    model: Components.polkitElements.count
                     delegate: CheckBox {
                         required property int index
-                        readonly property var target: elementModel.get(index)
+                        readonly property var target: Components.polkitElements.get(index)
                         text: target ? (target.label ?? ("Item " + index)) : ("Item " + index)
                         checked: target ? target.visible : true
                         onToggled: {
