@@ -3,7 +3,6 @@
 //@ pragma IconTheme Papirus-Dark
 //@ pragma Env QSG_RENDER_LOOP=threaded
 //@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
-//@ pragma AppId 69420
 //@ pragma ShellId 69420
 
 import QtQuick
