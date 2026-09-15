@@ -678,7 +678,7 @@ Scope {
                     MouseArea {
                         id: ma
                         anchors.fill: parent
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        acceptedButtons: Qt.AllButtons
                         propagateComposedEvents: true
                         drag.axis: config.side ? Drag.YAxis : Drag.XAxis
                         pressAndHoldInterval: 200
