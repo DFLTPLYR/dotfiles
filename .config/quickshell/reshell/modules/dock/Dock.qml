@@ -613,9 +613,8 @@ Scope {
 
                             const menu = widget.property.menu;
                             widget.area.connect(modal => {
-                                const has = modal !== null;
                                 slot.region.item = modal;
-                                panel.hasFocus = has;
+                                panel.hasFocus = modal !== null;
                                 return;
                             });
 
@@ -683,10 +682,18 @@ Scope {
                         drag.axis: config.side ? Drag.YAxis : Drag.XAxis
                         pressAndHoldInterval: 200
                         onPressAndHold: mouse => {
-                            parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
-                            parent.Drag.active = true;
-                            drag.target = parent;
-                            parent.z = 99;
+                            if (mouse.button === Qt.LeftButton) {
+                                parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
+                                parent.Drag.active = true;
+                                drag.target = parent;
+                                parent.z = 99;
+                            } else if (mouse.button === Qt.RightButton) {
+                                const menu = widgetContainer.wdg.property.menu;
+                                menu.open();
+                                menu.x = mouseX;
+                                menu.y = mouseY;
+                                return;
+                            }
                         }
                         onReleased: mouse => {
                             if (mouse.button === Qt.LeftButton) {
@@ -702,12 +709,6 @@ Scope {
                         }
                         onClicked: mouse => {
                             widgetContainer.wdg.clicked(mouse);
-                            if (mouse.button === Qt.RightButton) {
-                                const menu = widgetContainer.wdg.property.menu;
-                                menu.open();
-                                menu.x = mouseX;
-                                menu.y = mouseY;
-                            }
                         }
                     }
                 }

@@ -2,6 +2,7 @@ pragma NativeMethodBehavior: AcceptThisObject
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
+import QtQml.Models
 
 import qs.core
 import qs.types
@@ -12,12 +13,31 @@ Wrapper {
     clip: true
 
     property: Property {
-        property int radius: 0
-        property bool showText: false
+        property int icon: 24
     }
 
     width: wrap.setWidth(list.contentWidth)
     height: wrap.setHeight(list.contentHeight)
+
+    property QtObject focused: QtObject {
+        property var item: null
+        property var menu: null
+    }
+
+    onClicked: mouse => {
+        const actions = wrap.focused;
+        switch (mouse.button) {
+        case Qt.LeftButton:
+            actions.item.activate();
+        case Qt.MiddleButton:
+            actions.item.secondaryActivate();
+        case Qt.RightButton:
+            actions.menu.open();
+            return;
+        default:
+            return;
+        }
+    }
 
     ListView {
         id: list
@@ -29,51 +49,102 @@ Wrapper {
         interactive: false
 
         model: SystemTray.items
-        delegate: Image {
+        delegate: Rectangle {
             id: trayItem
+            color: "transparent"
             required property SystemTrayItem modelData
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
-            source: trayItem.modelData.icon
 
-            MouseArea {
-                id: trayMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-                onClicked: mouse => {
-                    const actions = trayItem.modelData;
-                    switch (mouse.button) {
-                    case Qt.LeftButton:
-                        traymenu.open();
-                        actions.activate();
-                    case Qt.MiddleButton:
-                        actions.secondaryActivate();
-                    case Qt.RightButton:
-                        return;
-                    default:
-                        return;
+            Image {
+                anchors.centerIn: parent
+                source: trayItem.modelData.icon
+                width: wrap.property.icon
+                height: wrap.property.icon
+
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (wrap.focused === trayItem.modelData) {
+                            wrap.focused.menu = null;
+                            wrap.item.focused = null;
+                            return;
+                        }
+
+                        wrap.focused.menu = traymenu;
+                        wrap.focused.item = trayItem.modelData;
                     }
                 }
-            }
 
-            QsMenuOpener {
-                id: traymenuItems
-                menu: trayItem.modelData.menu
-            }
-            Instantiator {
-                model: traymenuItems.children
-                delegate: Action {
-                    required property var modelData
-                    text: modelData.text
+                QsMenuOpener {
+                    id: traymenuItems
+                    menu: trayItem.modelData.menu
                 }
-                onObjectAdded: (idx, obj) => {
-                    traymenu.insertAction(idx, obj);
-                }
-            }
 
-            Menu {
-                id: traymenu
+                Instantiator {
+                    model: traymenuItems.children
+                    delegate: DelegateChooser {
+                        role: "isSeparator"
+                        DelegateChoice {
+                            roleValue: true
+                            MenuSeparator {}
+                        }
+                        DelegateChoice {
+                            roleValue: false
+                            delegate: DelegateChooser {
+                                role: "hasChildren"
+                                // submenu
+                                DelegateChoice {
+                                    roleValue: true
+                                    Menu {
+                                        required property var modelData
+                                        title: modelData.text
+                                        enabled: modelData.enabled
+
+                                        QsMenuOpener {
+                                            id: subOpener
+                                            menu: parent.modelData
+                                        }
+                                        Instantiator {
+                                            model: subOpener.children
+                                            delegate: Action {
+                                                required property var modelData
+                                                text: modelData.text
+                                                enabled: modelData.enabled
+                                                checkable: modelData.buttonType !== QsMenuButtonType.None
+                                                checked: modelData.checkState !== Qt.Unchecked
+                                                onTriggered: modelData.triggered()
+                                            }
+                                            onObjectAdded: (idx, obj) => insertAction(idx, obj)
+                                            onObjectRemoved: (idx, obj) => removeAction(obj)
+                                        }
+                                    }
+                                }
+                                // leaf
+                                DelegateChoice {
+                                    roleValue: false
+                                    Action {
+                                        required property var modelData
+                                        text: modelData.text
+                                        enabled: modelData.enabled
+                                        icon.name: modelData.icon
+                                        checkable: modelData.buttonType !== QsMenuButtonType.None
+                                        checked: modelData.buttonType !== QsMenuButtonType.None && modelData.checkState !== Qt.Unchecked
+                                        onTriggered: modelData.triggered()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => traymenu.insertAction(idx, obj)
+                    onObjectRemoved: (idx, obj) => traymenu.removeAction(obj)
+                }
+
+                Menu {
+                    id: traymenu
+                    width: 200
+                    onOpened: wrap.area(traymenu.background)
+                    onClosed: wrap.area(null)
+                }
             }
         }
     }
