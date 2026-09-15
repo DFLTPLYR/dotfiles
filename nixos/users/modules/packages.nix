@@ -30,6 +30,7 @@
     viu
     chafa
     ueberzugpp
+    proton-vpn
 
     # Shell / CLI
     wl-gammarelay-rs
