@@ -987,6 +987,7 @@ Page {
     component ColorSchemeSection: GroupContainer {
         label: "Color Scheme"
 
+        clip: true
         Toggle {
             id: darkmodeToggle
             text: "Dark mode"

@@ -876,7 +876,13 @@ Page {
             GridLayout {
                 id: elementsGrid
                 width: parent.width
-                columns: 4
+                columns: 3
+
+                CheckBox {
+                    text: "Background"
+                    checked: true
+                    checkable: false
+                }
 
                 Repeater {
                     model: Components.polkitElements.count
@@ -888,6 +894,31 @@ Page {
                         onToggled: {
                             if (target)
                                 target.visible = checked;
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                anchors.top: elementsGrid.bottom
+                width: parent.width
+
+                Button {
+                    text: "Test"
+                    onClicked: {
+                        const elem = Components.polkitElements.count;
+                        for (let i = 0; i < elem; i++) {
+                            const base = Components.polkitElements.get(i);
+                            const target = base.children.filter(s => !(s instanceof MouseArea));
+                            const content = {
+                                width: base.width,
+                                height: base.height,
+                                x: base.x,
+                                y: base.y
+                            };
+                            const val = Utils.getEditable(target[0]);
+                            for (const k in val)
+                                print(k, "=", val[k]);
                         }
                     }
                 }

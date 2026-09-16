@@ -24,38 +24,6 @@ Singleton {
 
     property ObjectModel polkitElements: ObjectModel {
         Rectangle {
-            id: descRoot
-            property string label: "Description"
-            property int rowHeight: 32
-            x: 12
-            y: 12
-            width: 200
-            height: rowHeight
-            visible: true
-            clip: true
-            color: "transparent"
-            z: descBg.drag.active ? 10 : 0
-
-            MouseArea {
-                id: descBg
-                anchors.fill: parent
-                preventStealing: true
-                drag.target: descRoot
-                drag.axis: Drag.XAndYAxis
-                onClicked: Components.polkitSelectedItem = descRoot
-                onReleased: Utils.clampToParent(descRoot)
-            }
-
-            Text {
-                width: parent.width
-                height: descRoot.rowHeight
-                verticalAlignment: Text.AlignVCenter
-                text: "Description"
-                wrapMode: Text.Wrap
-            }
-        }
-
-        Rectangle {
             id: titleRoot
             property string label: "Title"
             property int rowHeight: 32
@@ -83,6 +51,37 @@ Singleton {
                 height: titleRoot.rowHeight
                 verticalAlignment: Text.AlignVCenter
                 text: "Title"
+                wrapMode: Text.Wrap
+            }
+        }
+        Rectangle {
+            id: descRoot
+            property string label: "Description"
+            property int rowHeight: 32
+            x: 12
+            y: 12
+            width: 200
+            height: rowHeight
+            visible: true
+            clip: true
+            color: "transparent"
+            z: descBg.drag.active ? 10 : 0
+
+            MouseArea {
+                id: descBg
+                anchors.fill: parent
+                preventStealing: true
+                drag.target: descRoot
+                drag.axis: Drag.XAndYAxis
+                onClicked: Components.polkitSelectedItem = descRoot
+                onReleased: Utils.clampToParent(descRoot)
+            }
+
+            Text {
+                width: parent.width
+                height: descRoot.rowHeight
+                verticalAlignment: Text.AlignVCenter
+                text: "Description"
                 wrapMode: Text.Wrap
             }
         }
@@ -116,7 +115,6 @@ Singleton {
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
-
         Rectangle {
             id: okRoot
             property string label: "OK"
@@ -148,7 +146,6 @@ Singleton {
                 text: "OK"
             }
         }
-
         Rectangle {
             id: cancelRoot
             property string label: "Cancel"
