@@ -18,19 +18,19 @@ Wrapper {
         columns: wrap.slotConfig ? (wrap.slotConfig.side ? 1 : 2) : 2
         rows: wrap.slotConfig ? (wrap.slotConfig.side ? 2 : 1) : 1
 
-        Icon {
-            text: "gaming-pad-alt"
+        Text {
+            text: "videogame_asset"
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary
-            font.pixelSize: property.icon
-            fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            font.pixelSize: property.icon
+            font.family: "Material Symbols Rounded"
         }
 
         Text {
-            text: `${Hardware.gpuUsedVram.toFixed(0)} %`
+            text: `${Hardware.gpuUtilization.toFixed(0)} %`
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary

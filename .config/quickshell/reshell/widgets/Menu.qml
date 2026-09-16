@@ -35,17 +35,11 @@ Wrapper {
 
         Text {
             anchors.fill: parent
-            text: "power-off"
+            text: "power_settings_new"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: hoverArea.hovered ? Colors.theme.tertiary : Colors.theme.primary
-
-            font {
-                family: Components.icon.family
-                weight: Components.icon.weight
-                styleName: Components.icon.styleName
-                pixelSize: property.icon
-            }
+            font.family: "Material Symbols Rounded"
 
             Behavior on color {
                 ColorAnimation {

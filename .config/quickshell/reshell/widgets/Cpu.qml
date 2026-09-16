@@ -23,11 +23,12 @@ Wrapper {
         columns: wrap.slotConfig ? (wrap.slotConfig.side ? 1 : 2) : 2
         rows: wrap.slotConfig ? (wrap.slotConfig.side ? 2 : 1) : 1
 
-        Icon {
-            text: "circuit"
+        Text {
+            text: "memory_alt"
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Colors.theme.primary
+            font.family: "Material Symbols Rounded"
             font.pixelSize: property.icon
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter

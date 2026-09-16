@@ -25,7 +25,6 @@ Wrapper {
 
     onClicked: mouse => {
         const actions = wrap.focused;
-
         switch (mouse.button) {
         case Qt.LeftButton:
             actions.item.activate();
