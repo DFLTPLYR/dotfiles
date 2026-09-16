@@ -4,7 +4,6 @@ import Quickshell
 import Quickshell.Services.SystemTray
 import QtQml.Models
 
-import qs.core
 import qs.types
 import qs.components
 
@@ -26,11 +25,14 @@ Wrapper {
 
     onClicked: mouse => {
         const actions = wrap.focused;
+
         switch (mouse.button) {
         case Qt.LeftButton:
             actions.item.activate();
+            return;
         case Qt.MiddleButton:
             actions.item.secondaryActivate();
+            return;
         case Qt.RightButton:
             actions.menu.open();
             return;
@@ -90,53 +92,31 @@ Wrapper {
                         }
                         DelegateChoice {
                             roleValue: false
-                            delegate: DelegateChooser {
-                                role: "hasChildren"
-                                // submenu
-                                DelegateChoice {
-                                    roleValue: true
-                                    Menu {
-                                        required property var modelData
-                                        title: modelData.text
-                                        enabled: modelData.enabled
-
-                                        QsMenuOpener {
-                                            id: subOpener
-                                            menu: parent.modelData
-                                        }
-                                        Instantiator {
-                                            model: subOpener.children
-                                            delegate: Action {
-                                                required property var modelData
-                                                text: modelData.text
-                                                enabled: modelData.enabled
-                                                checkable: modelData.buttonType !== QsMenuButtonType.None
-                                                checked: modelData.checkState !== Qt.Unchecked
-                                                onTriggered: modelData.triggered()
-                                            }
-                                            onObjectAdded: (idx, obj) => insertAction(idx, obj)
-                                            onObjectRemoved: (idx, obj) => removeAction(obj)
-                                        }
-                                    }
-                                }
-                                // leaf
-                                DelegateChoice {
-                                    roleValue: false
-                                    Action {
-                                        required property var modelData
-                                        text: modelData.text
-                                        enabled: modelData.enabled
-                                        icon.name: modelData.icon
-                                        checkable: modelData.buttonType !== QsMenuButtonType.None
-                                        checked: modelData.buttonType !== QsMenuButtonType.None && modelData.checkState !== Qt.Unchecked
-                                        onTriggered: modelData.triggered()
-                                    }
-                                }
+                            Action {
+                                required property var modelData
+                                text: modelData.text
+                                enabled: modelData.enabled
+                                icon.name: modelData.icon
+                                checkable: modelData.buttonType !== QsMenuButtonType.None
+                                checked: modelData.buttonType !== QsMenuButtonType.None && modelData.checkState !== Qt.Unchecked
+                                onTriggered: modelData.triggered()
                             }
                         }
                     }
-                    onObjectAdded: (idx, obj) => traymenu.insertAction(idx, obj)
-                    onObjectRemoved: (idx, obj) => traymenu.removeAction(obj)
+                    onObjectAdded: (idx, obj) => {
+                        if (obj instanceof Action) {
+                            traymenu.insertAction(idx, obj);
+                        } else {
+                            traymenu.insertItem(idx, obj);
+                        }
+                    }
+                    onObjectRemoved: (idx, obj) => {
+                        if (obj instanceof Action) {
+                            traymenu.removeAction(idx, obj);
+                        } else {
+                            traymenu.removeItem(idx, obj);
+                        }
+                    }
                 }
 
                 Menu {
