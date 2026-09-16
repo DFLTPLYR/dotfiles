@@ -58,7 +58,38 @@ Singleton {
         item.y = Math.max(0, Math.min(item.y, Math.max(0, item.parent.height - item.height)));
     }
 
+    // QML exposes no WRITE flag to JS, so readonly props are filtered
+    // via denylist. `getProperty` keeps objects (configs need them);
+    // use `getEditable` for SpinBox/TextField-style editors.
+    readonly property var readonlyKeys: [
+        "parent",
+        "children",
+        "data",
+        "resources",
+        "childrenRect",
+        "visibleChildren",
+        "activeFocus",
+        "visualFocus",
+        "pressed",
+        "hovered",
+        "focused",
+        "editing",
+        "displayText",
+        "lineCount",
+        "contentWidth",
+        "contentHeight",
+        "contentX",
+        "contentY",
+        "originX",
+        "originY",
+        "baselineOffset",
+        "availableWidth",
+        "availableHeight"
+    ]
+
     function isKeyValid(obj, k, extraEndings) {
+        if (readonlyKeys.includes(k))
+            return false;
         if (k === "objectName" || k === "menu" || typeof obj[k] === "function")
             return false;
         if (k.endsWith("Changed"))
@@ -87,6 +118,20 @@ Singleton {
         const keys = {};
         for (const k of ks)
             keys[k] = obj[k];
+        return keys;
+    }
+
+    // Scalar-only subset of getProperty for property editors.
+    // Drops anchors/font/palette/etc. (typeof object) and keeps
+    // number/string/boolean/color (color arrives as string).
+    function getEditable(obj, extraEndings = null) {
+        const ks = Object.keys(obj).filter(k => isKeyValid(obj, k, extraEndings));
+        const keys = {};
+        for (const k of ks) {
+            const t = typeof obj[k];
+            if (t === "number" || t === "string" || t === "boolean")
+                keys[k] = obj[k];
+        }
         return keys;
     }
 
