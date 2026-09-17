@@ -532,54 +532,50 @@ Scope {
         Layout.fillHeight: true
         Layout.margins: 1
 
-        Item {
-            id: grid
-            anchors.fill: parent
-            ListView {
-                id: widgetList
-                interactive: false
-                orientation: config.side ? ListView.Vertical : ListView.Horizontal
-                spacing: slot.spacing
-                model: widgetsModel
-                cacheBuffer: 50
-                implicitHeight: config.side ? contentHeight : parent.height
-                implicitWidth: config.side ? parent.width : contentWidth
-                x: {
-                    switch (slot.position) {
-                    case "center":
-                        return (parent.width - width) / 2;
-                    case "right":
-                    case "bottom":
-                        return parent.width - width;
-                    case "top":
-                    case "left":
-                        return 0;
-                    }
+        ListView {
+            id: widgetList
+            interactive: false
+            orientation: config.side ? ListView.Vertical : ListView.Horizontal
+            spacing: slot.spacing
+            model: widgetsModel
+            cacheBuffer: 50
+            implicitHeight: config.side ? contentHeight : parent.height
+            implicitWidth: config.side ? parent.width : contentWidth
+            x: {
+                switch (slot.position) {
+                case "center":
+                    return (parent.width - width) / 2;
+                case "right":
+                case "bottom":
+                    return parent.width - width;
+                case "top":
+                case "left":
+                    return 0;
                 }
-                y: {
-                    switch (slot.position) {
-                    case "center":
-                        return (parent.height - height) / 2;
-                    case "right":
-                    case "bottom":
-                        return parent.height - height;
-                    case "top":
-                    case "left":
-                        return 0;
-                    }
+            }
+            y: {
+                switch (slot.position) {
+                case "center":
+                    return (parent.height - height) / 2;
+                case "right":
+                case "bottom":
+                    return parent.height - height;
+                case "top":
+                case "left":
+                    return 0;
                 }
+            }
 
-                Behavior on x {
-                    NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.InOutQuad
-                    }
+            Behavior on x {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.InOutQuad
                 }
-                Behavior on y {
-                    NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.InOutQuad
-                    }
+            }
+            Behavior on y {
+                NumberAnimation {
+                    duration: 150
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
@@ -612,7 +608,7 @@ Scope {
                     const incubator = component.incubateObject(widgetContainer, {
                         objectName: modelData.name,
                         screen: dock.screen,
-                        container: grid,
+                        container: slot,
                         slotConfig: config
                     });
                     if (!incubator)

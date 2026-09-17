@@ -26,6 +26,12 @@ PopupModal {
             selectedSlot.state = "selected";
     }
 
+    onClosed: {
+        if (selectedSlot) {
+            selectedSlot.state = "none";
+            selectedSlot = null;
+        }
+    }
     // Content
     ColumnLayout {
         anchors.fill: parent
