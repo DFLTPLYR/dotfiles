@@ -368,40 +368,43 @@ Scope {
             onClicked: mouse => {
                 const modal = modalPopup;
 
-                const position = mouse => {
-                    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-                    const clickX = container.x + mouse.x;
-                    const clickY = container.y + mouse.y;
-                    switch (config.position) {
-                    case "top":
-                        return {
-                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
-                            y: container.y + container.height
-                        };
-                    case "bottom":
-                        return {
-                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
-                            y: container.y - modal.height
-                        };
-                    case "left":
-                        return {
-                            x: container.x + container.width,
-                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
-                        };
-                    case "right":
-                        return {
-                            x: container.x - modal.width,
-                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
-                        };
-                    default:
-                        return {
-                            x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
-                            y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
-                        };
-                    }
-                };
-
                 if (mouse.button === Qt.RightButton) {
+                    const slot = slotcontainer.childAt(mouse.x, mouse.y);
+                    if (slot) {
+                        modalPopup.select(slot);
+                    }
+                    const position = mouse => {
+                        const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+                        const clickX = container.x + mouse.x;
+                        const clickY = container.y + mouse.y;
+                        switch (config.position) {
+                        case "top":
+                            return {
+                                x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                                y: container.y + container.height
+                            };
+                        case "bottom":
+                            return {
+                                x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                                y: container.y - modal.height
+                            };
+                        case "left":
+                            return {
+                                x: container.x + container.width,
+                                y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                            };
+                        case "right":
+                            return {
+                                x: container.x - modal.width,
+                                y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                            };
+                        default:
+                            return {
+                                x: clamp(clickX - (modal.width / 2), 0, panel.width - modal.width),
+                                y: clamp(clickY - (modal.height / 2), 0, panel.height - modal.height)
+                            };
+                        }
+                    };
                     const pos = position(mouse);
                     modal.x = pos.x;
                     modal.y = pos.y;
@@ -529,10 +532,9 @@ Scope {
         Layout.fillHeight: true
         Layout.margins: 1
 
-        GridLayout {
+        Item {
             id: grid
             anchors.fill: parent
-
             ListView {
                 id: widgetList
                 interactive: false
@@ -540,9 +542,8 @@ Scope {
                 spacing: slot.spacing
                 model: widgetsModel
                 cacheBuffer: 50
-                Layout.preferredHeight: config.side ? contentHeight : parent.height
-                Layout.preferredWidth: config.side ? parent.width : contentWidth
-
+                implicitHeight: config.side ? contentHeight : parent.height
+                implicitWidth: config.side ? parent.width : contentWidth
                 x: {
                     switch (slot.position) {
                     case "center":
@@ -550,7 +551,8 @@ Scope {
                     case "right":
                     case "bottom":
                         return parent.width - width;
-                    default:
+                    case "top":
+                    case "left":
                         return 0;
                     }
                 }
@@ -561,7 +563,8 @@ Scope {
                     case "right":
                     case "bottom":
                         return parent.height - height;
-                    default:
+                    case "top":
+                    case "left":
                         return 0;
                     }
                 }
@@ -579,158 +582,158 @@ Scope {
                     }
                 }
             }
+        }
 
-            DelegateModel {
-                id: widgetsModel
-                model: slot.widgets
-                delegate: Rectangle {
-                    id: widgetContainer
-                    color: "transparent"
-                    required property var modelData
-                    required property int index
-                    property ListModel widget: widgetsModel.model
-                    property string source: modelData.source
-                    property var wdg
-                    onSourceChanged: widgetContainer.incubateChild()
+        DelegateModel {
+            id: widgetsModel
+            model: slot.widgets
+            delegate: Rectangle {
+                id: widgetContainer
+                color: "transparent"
+                required property var modelData
+                required property int index
+                property ListModel widget: widgetsModel.model
+                property string source: modelData.source
+                property var wdg
+                onSourceChanged: widgetContainer.incubateChild()
 
-                    function incubateChild() {
-                        const source = modelData?.source;
-                        if (!source)
+                function incubateChild() {
+                    const source = modelData?.source;
+                    if (!source)
+                        return;
+                    if (widgetContainer.wdg !== undefined) {
+                        widgetContainer.wdg.destroy();
+                    }
+                    const component = Qt.createComponent(source);
+                    if (!component || component.status === Component.Error) {
+                        console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
+                        return;
+                    }
+                    const incubator = component.incubateObject(widgetContainer, {
+                        objectName: modelData.name,
+                        screen: dock.screen,
+                        container: grid,
+                        slotConfig: config
+                    });
+                    if (!incubator)
+                        return;
+                    const setup = widget => {
+                        if (!widget || !widgetContainer)
                             return;
-                        if (widgetContainer.wdg !== undefined) {
-                            widgetContainer.wdg.destroy();
-                        }
-                        const component = Qt.createComponent(source);
-                        if (!component || component.status === Component.Error) {
-                            console.warn(`Failed to load widget ${source}: ${component?.errorString() ?? "invalid context"}`);
-                            return;
-                        }
-                        const incubator = component.incubateObject(widgetContainer, {
-                            objectName: modelData.name,
-                            screen: dock.screen,
-                            container: grid,
-                            slotConfig: config
+                        widgetContainer.width = Qt.binding(() => {
+                            return widget.width;
                         });
-                        if (!incubator)
+                        widgetContainer.height = Qt.binding(() => {
+                            return widget.height;
+                        });
+                        widget.widget = true;
+                        if (modelData.props) {
+                            Utils.setProperty(widget.property, modelData.props);
+                        }
+                        panel.activeWidgets = [...panel.activeWidgets, widget];
+                        slot.activeWidgets = [...slot.activeWidgets, widget];
+
+                        widgetContainer.wdg = widget;
+                        ma.parent = widget;
+
+                        const menu = widget.property.menu;
+                        widget.area.connect(modal => {
+                            slot.region.item = modal;
+                            panel.hasFocus = modal !== null;
                             return;
-                        const setup = widget => {
-                            if (!widget || !widgetContainer)
-                                return;
-                            widgetContainer.width = Qt.binding(() => {
-                                return widget.width;
-                            });
-                            widgetContainer.height = Qt.binding(() => {
-                                return widget.height;
-                            });
-                            widget.widget = true;
-                            if (modelData.props) {
-                                Utils.setProperty(widget.property, modelData.props);
-                            }
-                            panel.activeWidgets = [...panel.activeWidgets, widget];
-                            slot.activeWidgets = [...slot.activeWidgets, widget];
+                        });
 
-                            widgetContainer.wdg = widget;
-                            ma.parent = widget;
+                        menu.entered.connect(() => {
+                            slot.region.item = menu.background;
+                            panel.hasFocus = true;
+                            return;
+                        });
+                        menu.exited.connect(hasChanges => {
+                            slot.region.item = null;
+                            panel.hasFocus = false;
 
-                            const menu = widget.property.menu;
-                            widget.area.connect(modal => {
-                                slot.region.item = modal;
-                                panel.hasFocus = modal !== null;
-                                return;
-                            });
-
-                            menu.entered.connect(() => {
-                                slot.region.item = menu.background;
-                                panel.hasFocus = true;
-                                return;
-                            });
-                            menu.exited.connect(hasChanges => {
-                                slot.region.item = null;
-                                panel.hasFocus = false;
-
-                                if (hasChanges) {
-                                    panel.timer.restart();
-                                }
-                                return;
-                            });
-                            menu.remove.connect(() => {
-                                const container = widgetContainer;
-                                container.widget.remove(container.index, 1);
-
+                            if (hasChanges) {
                                 panel.timer.restart();
-                            });
-                        };
-                        if (incubator.status === Component.Ready)
-                            setup(incubator.object);
-                        else
-                            incubator.onStatusChanged = status => {
-                                if (status === Component.Ready)
-                                    setup(incubator.object);
-                            };
-                    }
+                            }
+                            return;
+                        });
+                        menu.remove.connect(() => {
+                            const container = widgetContainer;
+                            container.widget.remove(container.index, 1);
 
-                    DropArea {
-                        z: -99
-                        anchors.fill: parent
-                        onDropped: drop => {
-                            const srcParent = drop.source.parent;
-                            const srcDM = srcParent.DelegateModel;
-                            const tgtDM = widgetContainer.DelegateModel;
-                            const sourceIndex = srcDM?.itemsIndex;
-                            const targetIndex = tgtDM?.itemsIndex;
-
-                            if (sourceIndex === undefined || targetIndex === undefined)
-                                return;
-                            const srcWidgets = srcParent.widget;
-                            const tgtWidgets = widgetContainer.widget;
-                            const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
-                            const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
-                            srcWidgets.set(sourceIndex, tgtObj);
-                            tgtWidgets.set(targetIndex, srcObj);
                             panel.timer.restart();
-                        }
-                        onContainsDragChanged: {
-                            widgetContainer.border.width = containsDrag ? 1 : 0;
-                            widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                        });
+                    };
+                    if (incubator.status === Component.Ready)
+                        setup(incubator.object);
+                    else
+                        incubator.onStatusChanged = status => {
+                            if (status === Component.Ready)
+                                setup(incubator.object);
+                        };
+                }
+
+                DropArea {
+                    z: -99
+                    anchors.fill: parent
+                    onDropped: drop => {
+                        const srcParent = drop.source.parent;
+                        const srcDM = srcParent.DelegateModel;
+                        const tgtDM = widgetContainer.DelegateModel;
+                        const sourceIndex = srcDM?.itemsIndex;
+                        const targetIndex = tgtDM?.itemsIndex;
+
+                        if (sourceIndex === undefined || targetIndex === undefined)
+                            return;
+                        const srcWidgets = srcParent.widget;
+                        const tgtWidgets = widgetContainer.widget;
+                        const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
+                        const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
+                        srcWidgets.set(sourceIndex, tgtObj);
+                        tgtWidgets.set(targetIndex, srcObj);
+                        panel.timer.restart();
+                    }
+                    onContainsDragChanged: {
+                        widgetContainer.border.width = containsDrag ? 1 : 0;
+                        widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                    }
+                }
+
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+                    acceptedButtons: Qt.AllButtons
+                    propagateComposedEvents: true
+                    drag.axis: config.side ? Drag.YAxis : Drag.XAxis
+                    pressAndHoldInterval: 200
+                    onPressAndHold: mouse => {
+                        if (mouse.button === Qt.LeftButton) {
+                            parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
+                            parent.Drag.active = true;
+                            drag.target = parent;
+                            parent.z = 99;
+                        } else if (mouse.button === Qt.RightButton) {
+                            const menu = widgetContainer.wdg.property.menu;
+                            menu.open();
+                            menu.x = mouseX;
+                            menu.y = mouseY;
+                            return;
                         }
                     }
-
-                    MouseArea {
-                        id: ma
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                        propagateComposedEvents: true
-                        drag.axis: config.side ? Drag.YAxis : Drag.XAxis
-                        pressAndHoldInterval: 200
-                        onPressAndHold: mouse => {
-                            if (mouse.button === Qt.LeftButton) {
-                                parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
-                                parent.Drag.active = true;
-                                drag.target = parent;
-                                parent.z = 99;
-                            } else if (mouse.button === Qt.RightButton) {
-                                const menu = widgetContainer.wdg.property.menu;
-                                menu.open();
-                                menu.x = mouseX;
-                                menu.y = mouseY;
-                                return;
-                            }
+                    onReleased: mouse => {
+                        if (mouse.button === Qt.LeftButton) {
+                            parent.Drag.drop();
+                            parent.x = 0;
+                            parent.y = 0;
+                            parent.Drag.active = false;
                         }
-                        onReleased: mouse => {
-                            if (mouse.button === Qt.LeftButton) {
-                                parent.Drag.drop();
-                                parent.x = 0;
-                                parent.y = 0;
-                                parent.Drag.active = false;
-                            }
 
-                            drag.target = null;
+                        drag.target = null;
 
-                            parent.z = 0;
-                        }
-                        onClicked: mouse => {
-                            widgetContainer.wdg.clicked(mouse);
-                        }
+                        parent.z = 0;
+                    }
+                    onClicked: mouse => {
+                        widgetContainer.wdg.clicked(mouse);
                     }
                 }
             }

@@ -15,78 +15,80 @@ PopupModal {
     signal add(var obj)
     signal remove
     signal save
+    property var selectedSlot: null
+    function select(slot) {
+        if (selectedSlot === slot)
+            return;
+        if (selectedSlot)
+            selectedSlot.state = "none";
+        selectedSlot = slot;
+        if (selectedSlot)
+            selectedSlot.state = "selected";
+    }
 
     // Content
-    LazyLoader {
-        activeAsync: modal.opened
-        component: ColumnLayout {
-            anchors.fill: parent
-            Item {
-                id: tabContainer
-                z: -1
-                Layout.preferredHeight: tabbar.height
-                Layout.fillWidth: true
+    ColumnLayout {
+        anchors.fill: parent
+        Item {
+            id: tabContainer
+            z: -1
+            Layout.preferredHeight: tabbar.height
+            Layout.fillWidth: true
 
-                TabBar {
-                    id: tabbar
-                    TabButton {
-                        text: "Properties"
-                    }
-
-                    TabButton {
-                        text: "Slots"
-                    }
-
-                    TabButton {
-                        text: "Widgets"
-                    }
-                }
-            }
-
-            StackLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                currentIndex: tabbar.currentIndex
-                clip: true
-                PropertyTab {
-                    id: propertyTab
+            TabBar {
+                id: tabbar
+                TabButton {
+                    text: "Properties"
                 }
 
-                SlotTab {
-                    id: slotTab
+                TabButton {
+                    text: "Slots"
                 }
 
-                WidgetsTab {
-                    id: widgetsTab
-                }
-            }
-
-            Rectangle {
-                color: Colors.theme.surface
-                Layout.fillWidth: true
-                Layout.preferredHeight: footerContainer.height
-
-                Row {
-                    id: footerContainer
-                    layoutDirection: Qt.RightToLeft
-                    spacing: 0
-                    width: parent.width
-
-                    Button {
-                        text: "Quit and Save"
-                        onClicked: {
-                            modal.save();
-                            Qt.callLater(() => {
-                                modal.close();
-                            });
-                        }
-                    }
+                TabButton {
+                    text: "Widgets"
                 }
             }
         }
-        onItemChanged: {
-            if (item) {
-                modal.contentData.push(item);
+
+        StackLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: tabbar.currentIndex
+            clip: true
+            PropertyTab {
+                id: propertyTab
+            }
+
+            SlotTab {
+                id: slotTab
+            }
+
+            WidgetsTab {
+                id: widgetsTab
+            }
+        }
+
+        Rectangle {
+            color: Colors.theme.surface
+            Layout.fillWidth: true
+            Layout.preferredHeight: footerContainer.height
+
+            Row {
+                id: footerContainer
+                layoutDirection: Qt.RightToLeft
+                spacing: 0
+                width: parent.width
+
+                Button {
+                    text: "Quit and Save"
+                    onClicked: {
+                        modal.save();
+                        Qt.callLater(() => {
+                            modal.close();
+                        });
+                    }
+                }
             }
         }
     }
@@ -370,13 +372,6 @@ PopupModal {
         ColumnLayout {
             id: container
 
-            property var selectedSlot: null
-
-            onSelectedSlotChanged: {
-                if (modal.visible && container.selectedSlot)
-                    container.selectedSlot.state = "selected";
-            }
-
             anchors {
                 left: parent.left
                 right: parent.right
@@ -415,30 +410,21 @@ PopupModal {
 
                 delegate: RadioDelegate {
                     required property var modelData
-                    required property int index
-                    hoverEnabled: true
                     text: modelData.objectName
-                    checked: index === 0
-                    onToggled: {
-                        if (container.selectedSlot)
-                            container.selectedSlot.state = "none";
-                        container.selectedSlot = modelData;
-                    }
+                    autoExclusive: false
+                    checked: modal.selectedSlot === modelData
+                    hoverEnabled: true
+                    onToggled: modal.select(checked ? modelData : null)
                     onHoveredChanged: {
-                        if (modelData.state !== "selected") {
-                            modelData.state = hovered ? "hovered" : "none";
-                        }
+                        if (modal.selectedSlot === modelData)
+                            return;
+                        modelData.state = hovered ? "hovered" : "none";
                     }
-                }
-
-                Component.onCompleted: {
-                    if (!container.selectedSlot && modal.slots.length > 0)
-                        container.selectedSlot = modal.slots[0];
                 }
             }
 
             Column {
-                visible: container.selectedSlot
+                visible: modal.selectedSlot
                 Layout.fillWidth: true
 
                 //Position
@@ -446,13 +432,13 @@ PopupModal {
                     Layout.fillWidth: true
 
                     Repeater {
-                        model: modal.specs.side ? ["top", "center", "bottom",] : ["left", "center", "right"]
+                        model: modal.specs.side ? ["top", "center", "bottom"] : ["left", "center", "right"]
                         delegate: RadioDelegate {
                             required property var modelData
                             text: modelData
-                            checked: container.selectedSlot?.position === modelData || false
+                            checked: modal.selectedSlot?.position === modelData || false
                             onToggled: {
-                                container.selectedSlot.updatePosition(modelData);
+                                modal.selectedSlot.updatePosition(modelData);
                             }
                         }
                     }
@@ -465,22 +451,17 @@ PopupModal {
                 }
 
                 Button {
-                    text: `Remove ${container.selectedSlot?.objectName || null}`
+                    text: `Remove ${modal.selectedSlot?.objectName || null}`
                     onClicked: {
-                        container.selectedSlot.removeSlot();
+                        modal.selectedSlot.removeSlot();
                         Qt.callLater(() => {
                             if (modal.slots.length > 0) {
-                                container.selectedSlot = modal.slots[0];
+                                modal.selectedSlot = modal.slots[0];
                             }
                         });
                     }
                 }
             }
-        }
-
-        Component.onDestruction: {
-            if (container.selectedSlot)
-                container.selectedSlot.state = "none";
         }
     }
 
