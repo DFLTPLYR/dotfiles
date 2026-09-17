@@ -128,6 +128,7 @@ QtObject {
                     text: modelData.property
                 }
                 TextField {
+                    focus: true
                     width: parent.width
                     text: root[modelData.property]
                     onTextEdited: {

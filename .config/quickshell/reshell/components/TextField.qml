@@ -7,7 +7,7 @@ TextField {
     id: control
 
     placeholderText: qsTr("Enter description")
-
+    color: Colors.theme.surface
     background: Rectangle {
         anchors.fill: parent
         border {

@@ -77,7 +77,7 @@ Wrapper {
 
             ListView {
                 id: menulist
-
+                interactive: false
                 width: 100
                 height: contentHeight // implicitHeight also works
                 model: ["suspend", "poweroff", "hibernate", "reboot"]
