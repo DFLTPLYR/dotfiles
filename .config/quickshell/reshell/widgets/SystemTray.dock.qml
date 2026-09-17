@@ -105,8 +105,10 @@ Wrapper {
                     onObjectAdded: (idx, obj) => {
                         if (obj instanceof Action) {
                             traymenu.insertAction(idx, obj);
-                        } else {
+                        } else if (obj instanceof MenuSeparator) {
                             traymenu.insertItem(idx, obj);
+                        } else {
+                            return;
                         }
                     }
                     onObjectRemoved: (idx, obj) => {
