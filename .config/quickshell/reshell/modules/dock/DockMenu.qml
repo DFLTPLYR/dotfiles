@@ -32,69 +32,78 @@ PopupModal {
             selectedSlot = null;
         }
     }
+
     // Content
-    ColumnLayout {
-        anchors.fill: parent
-        Item {
-            id: tabContainer
-            z: -1
-            Layout.preferredHeight: tabbar.height
-            Layout.fillWidth: true
+    LazyLoader {
+        active: modal.opened
+        component: ColumnLayout {
+            anchors.fill: parent
+            Item {
+                id: tabContainer
+                z: -1
+                Layout.preferredHeight: tabbar.height
+                Layout.fillWidth: true
 
-            TabBar {
-                id: tabbar
-                TabButton {
-                    text: "Properties"
-                }
+                TabBar {
+                    id: tabbar
+                    TabButton {
+                        text: "Properties"
+                    }
 
-                TabButton {
-                    text: "Slots"
-                }
+                    TabButton {
+                        text: "Slots"
+                    }
 
-                TabButton {
-                    text: "Widgets"
-                }
-            }
-        }
-
-        StackLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: tabbar.currentIndex
-            clip: true
-            PropertyTab {
-                id: propertyTab
-            }
-
-            SlotTab {
-                id: slotTab
-            }
-
-            WidgetsTab {
-                id: widgetsTab
-            }
-        }
-
-        Rectangle {
-            color: Colors.theme.surface
-            Layout.fillWidth: true
-            Layout.preferredHeight: footerContainer.height
-
-            Row {
-                id: footerContainer
-                layoutDirection: Qt.RightToLeft
-                spacing: 0
-                width: parent.width
-
-                Button {
-                    text: "Quit and Save"
-                    onClicked: {
-                        modal.save();
-                        Qt.callLater(() => {
-                            modal.close();
-                        });
+                    TabButton {
+                        text: "Widgets"
                     }
                 }
+            }
+
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabbar.currentIndex
+                clip: true
+                PropertyTab {
+                    id: propertyTab
+                }
+
+                SlotTab {
+                    id: slotTab
+                }
+
+                WidgetsTab {
+                    id: widgetsTab
+                }
+            }
+
+            Rectangle {
+                color: Colors.theme.surface
+                Layout.fillWidth: true
+                Layout.preferredHeight: footerContainer.height
+
+                Row {
+                    id: footerContainer
+                    layoutDirection: Qt.RightToLeft
+                    spacing: 0
+                    width: parent.width
+
+                    Button {
+                        text: "Quit and Save"
+                        onClicked: {
+                            modal.save();
+                            Qt.callLater(() => {
+                                modal.close();
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        onItemChanged: {
+            if (item) {
+                modal.contentData.push(item);
             }
         }
     }
