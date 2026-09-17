@@ -540,21 +540,42 @@ Scope {
                 spacing: slot.spacing
                 model: widgetsModel
                 cacheBuffer: 50
-
                 Layout.preferredHeight: config.side ? contentHeight : parent.height
                 Layout.preferredWidth: config.side ? parent.width : contentWidth
-                Layout.alignment: {
+
+                x: {
                     switch (slot.position) {
-                    case "left":
-                    case "top":
-                        return Qt.AlignLeft | Qt.AlignTop;
+                    case "center":
+                        return (parent.width - width) / 2;
                     case "right":
                     case "bottom":
-                        return Qt.AlignRight | Qt.AlignBottom;
-                    case "center":
-                        return Qt.AlignCenter;
+                        return parent.width - width;
                     default:
-                        return Qt.AlignLeft | Qt.AlignTop;
+                        return 0;
+                    }
+                }
+                y: {
+                    switch (slot.position) {
+                    case "center":
+                        return (parent.height - height) / 2;
+                    case "right":
+                    case "bottom":
+                        return parent.height - height;
+                    default:
+                        return 0;
+                    }
+                }
+
+                Behavior on x {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Behavior on y {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.InOutQuad
                     }
                 }
             }
