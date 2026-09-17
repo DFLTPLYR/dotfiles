@@ -15,7 +15,6 @@ Wrapper {
         property int radius: 0
         property bool showText: false
     }
-
     width: wrap.setWidth(list.contentWidth)
     height: wrap.setHeight(list.contentHeight)
 
@@ -45,19 +44,11 @@ Wrapper {
             color: ma.containsMouse ? Colors.setOpacity(Colors.theme.primary, 0.2) : "transparent"
             width: (wrap.slotConfig?.side) ? (wrap.parent?.width || 0) : height
             height: (wrap.slotConfig?.side) ? width : (wrap.parent?.height || 0)
-            opacity: list.windows.length > 1 ? 1 : 0
             radius: wrap.property.radius
 
             Behavior on color {
                 ColorAnimation {
                     duration: 600
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 200
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -104,6 +95,32 @@ Wrapper {
                         wrap.pending = modelData;
                     }
                 }
+            }
+        }
+
+        populate: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 150
+                easing.type: Easing.InOutQuad
+            }
+        }
+        add: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 150
+                easing.type: Easing.InOutQuad
+            }
+        }
+        displaced: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 150
+                easing.type: Easing.InOutQuad
             }
         }
     }
