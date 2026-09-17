@@ -8,6 +8,7 @@ import qs.types
 
 Item {
     id: wrapper
+    property bool preview: false
     property var container
     property var slotConfig
     property var screen: Quickshell.screens[0]

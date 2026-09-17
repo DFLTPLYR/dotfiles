@@ -405,6 +405,7 @@ PopupModal {
             }
 
             ListView {
+                id: slotList
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
 
@@ -428,6 +429,11 @@ PopupModal {
                             modelData.state = hovered ? "hovered" : "none";
                         }
                     }
+                }
+
+                Component.onCompleted: {
+                    if (!container.selectedSlot && modal.slots.length > 0)
+                        container.selectedSlot = modal.slots[0];
                 }
             }
 
@@ -543,7 +549,8 @@ PopupModal {
                 onItemChanged: {
                     if (item) {
                         item.parent = container;
-                        item.width = container.width;
+                        item.preview = true;
+                        item.width = container.width / 4;
                         item.height = container.height;
                         item.focus = false;
                     }
