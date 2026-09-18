@@ -2,8 +2,6 @@ pragma ComponentBehavior: Bound
 import Quickshell
 
 import QtQuick
-
-import qs.core
 import qs.types
 
 Item {
@@ -16,7 +14,6 @@ Item {
     property bool swapping: false
     property bool widget: false
     property Menu menu
-
     signal area(var modal)
     signal clicked(button: var)
 

@@ -32,14 +32,8 @@
     };
     lerd = {
       url = "github:lerd-env/lerd-nixos";
-      # Build lerd against your own nixpkgs instead of the one it pins,
-      # so you don't download a second copy of nixpkgs:
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nix4nvchad = {
-    #   url = "github:nix-community/nix4nvchad";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
 
   outputs = {
@@ -53,7 +47,6 @@
   in {
     # dev shells
     devShells.${system} = {
-      quickcli = import ./devshell/quickcli.nix {inherit pkgs;};
       rmk = import ./devshell/rmk.nix {inherit pkgs;};
       rusty-qt = import ./devshell/rusty-qt.nix {inherit pkgs;};
     };
