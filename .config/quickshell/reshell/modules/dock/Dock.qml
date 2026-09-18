@@ -492,40 +492,6 @@ Scope {
             }
         ]
 
-        DropArea {
-            objectName: "Slot"
-            anchors.fill: parent
-            onContainsDragChanged: {
-                slot.border.width = containsDrag ? 1 : 0;
-                slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
-            }
-            onDropped: drop => {
-                const source = drop.source.parent;
-                const isInternalDrag = source?.widget !== undefined;
-
-                if (isInternalDrag) {
-                    // Moving widget from another slot
-                    const sourceIndex = source.DelegateModel?.itemsIndex;
-                    if (sourceIndex === undefined)
-                        return;
-                    const obj = source.widget.get(sourceIndex);
-                    if (!obj)
-                        return;
-                    slot.widgets.append(obj);
-                    source.widget.remove(sourceIndex, 1);
-                    panel.timer.restart();
-                } else {
-                    // New widget from palette
-                    const widget = {
-                        source: drop.keys[0],
-                        name: Math.random().toString(36).substring(2, 10)
-                    };
-                    slot.widgets.append(widget);
-                    panel.timer.restart();
-                }
-            }
-        }
-
         color: "transparent"
 
         Layout.fillWidth: true
@@ -647,7 +613,6 @@ Scope {
                         menu.exited.connect(hasChanges => {
                             slot.region.item = null;
                             panel.hasFocus = false;
-
                             if (hasChanges) {
                                 panel.timer.restart();
                             }
@@ -669,32 +634,6 @@ Scope {
                         };
                 }
 
-                DropArea {
-                    z: -99
-                    anchors.fill: parent
-                    onDropped: drop => {
-                        const srcParent = drop.source.parent;
-                        const srcDM = srcParent.DelegateModel;
-                        const tgtDM = widgetContainer.DelegateModel;
-                        const sourceIndex = srcDM?.itemsIndex;
-                        const targetIndex = tgtDM?.itemsIndex;
-
-                        if (sourceIndex === undefined || targetIndex === undefined)
-                            return;
-                        const srcWidgets = srcParent.widget;
-                        const tgtWidgets = widgetContainer.widget;
-                        const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
-                        const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
-                        srcWidgets.set(sourceIndex, tgtObj);
-                        tgtWidgets.set(targetIndex, srcObj);
-                        panel.timer.restart();
-                    }
-                    onContainsDragChanged: {
-                        widgetContainer.border.width = containsDrag ? 1 : 0;
-                        widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
-                    }
-                }
-
                 MouseArea {
                     id: ma
                     anchors.fill: parent
@@ -704,7 +643,7 @@ Scope {
                     pressAndHoldInterval: 200
                     onPressAndHold: mouse => {
                         if (mouse.button === Qt.LeftButton) {
-                            parent.Drag.hotspot = Qt.point(mouse.x, mouse.y);
+                            parent.Drag.hotSpot = Qt.point(mouse.x, mouse.y);
                             parent.Drag.active = true;
                             drag.target = parent;
                             parent.z = 99;
@@ -731,6 +670,67 @@ Scope {
                     onClicked: mouse => {
                         widgetContainer.wdg.clicked(mouse);
                     }
+
+                    DropArea {
+                        id: swapArea
+                        anchors.fill: parent
+                        onDropped: drop => {
+                            const srcParent = drop.source.parent;
+                            const srcDM = srcParent.DelegateModel;
+                            const tgtDM = widgetContainer.DelegateModel;
+                            const sourceIndex = srcDM?.itemsIndex;
+                            const targetIndex = tgtDM?.itemsIndex;
+
+                            if (sourceIndex === undefined || targetIndex === undefined)
+                                return;
+                            const srcWidgets = srcParent.widget;
+                            const tgtWidgets = widgetContainer.widget;
+                            const srcObj = JSON.parse(JSON.stringify(srcWidgets.get(sourceIndex)));
+                            const tgtObj = JSON.parse(JSON.stringify(tgtWidgets.get(targetIndex)));
+                            srcWidgets.set(sourceIndex, tgtObj);
+                            tgtWidgets.set(targetIndex, srcObj);
+                            panel.timer.restart();
+                        }
+                        onContainsDragChanged: {
+                            widgetContainer.border.width = containsDrag ? 1 : 0;
+                            widgetContainer.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+                        }
+                    }
+                }
+            }
+        }
+
+        DropArea {
+            z: -999
+            objectName: "Slot"
+            anchors.fill: parent
+            onContainsDragChanged: {
+                slot.border.width = containsDrag ? 1 : 0;
+                slot.border.color = containsDrag ? Colors.theme.tertiary : "transparent";
+            }
+            onDropped: drop => {
+                const source = drop.source.parent;
+                const isInternalDrag = source?.widget !== undefined;
+
+                if (isInternalDrag) {
+                    // Moving widget from another slot
+                    const sourceIndex = source.DelegateModel?.itemsIndex;
+                    if (sourceIndex === undefined)
+                        return;
+                    const obj = source.widget.get(sourceIndex);
+                    if (!obj)
+                        return;
+                    slot.widgets.append(obj);
+                    source.widget.remove(sourceIndex, 1);
+                    panel.timer.restart();
+                } else {
+                    // New widget from palette
+                    const widget = {
+                        source: drop.keys[0],
+                        name: Math.random().toString(36).substring(2, 10)
+                    };
+                    slot.widgets.append(widget);
+                    panel.timer.restart();
                 }
             }
         }
