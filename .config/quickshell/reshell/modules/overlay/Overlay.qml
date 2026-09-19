@@ -17,7 +17,8 @@ PanelWindow {
     implicitHeight: screen.height
     implicitWidth: screen.width
 
-    exclusionMode: ExclusionMode.Ignore
+    exclusionMode: ExclusionMode.Auto
+
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     WlrLayershell.namespace: `Overlay-${screen.name}`

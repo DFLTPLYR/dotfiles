@@ -61,31 +61,7 @@ Singleton {
     // QML exposes no WRITE flag to JS, so readonly props are filtered
     // via denylist. `getProperty` keeps objects (configs need them);
     // use `getEditable` for SpinBox/TextField-style editors.
-    readonly property var readonlyKeys: [
-        "parent",
-        "children",
-        "data",
-        "resources",
-        "childrenRect",
-        "visibleChildren",
-        "activeFocus",
-        "visualFocus",
-        "pressed",
-        "hovered",
-        "focused",
-        "editing",
-        "displayText",
-        "lineCount",
-        "contentWidth",
-        "contentHeight",
-        "contentX",
-        "contentY",
-        "originX",
-        "originY",
-        "baselineOffset",
-        "availableWidth",
-        "availableHeight"
-    ]
+    readonly property var readonlyKeys: ["parent", "children", "data", "resources", "childrenRect", "visibleChildren", "activeFocus", "visualFocus", "pressed", "hovered", "focused", "editing", "displayText", "lineCount", "contentWidth", "contentHeight", "contentX", "contentY", "originX", "originY", "baselineOffset", "availableWidth", "availableHeight"]
 
     function isKeyValid(obj, k, extraEndings) {
         if (readonlyKeys.includes(k))
@@ -165,7 +141,7 @@ Singleton {
                 key.options = options;
                 key.type = "dropdown";
             }
-            if (key.property.includes("Font")) {
+            if (key.property.includes("fontFamily")) {
                 key.type = "font";
             }
         }

@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
+import System
 import qs.components
 import qs.core
 import qs.types
@@ -15,6 +16,7 @@ Wrapper {
         property int size: 40
         property int fontSize: 10
         property string format: "hh:mm AP"
+        property string fontFamily: SysFont.current
     }
 
     GridLayout {
@@ -28,8 +30,8 @@ Wrapper {
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-
             font {
+                family: property.fontFamily
                 pixelSize: property.fontSize
             }
         }

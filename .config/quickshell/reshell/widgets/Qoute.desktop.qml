@@ -11,21 +11,12 @@ import qs.types
 Wrapper {
     id: wrap
     visible: Global.hasConnection
-    onModal: (_modal, hasChanges) => {
-        if (hasChanges) {
-            getDefinition.update();
-        }
-    }
 
     property: Property {
         id: prop
         property string word: ""
-        property string wordFont: ""
-        onWordFontChanged: {
-            mainWord.font = wordFont;
-        }
         onWordChanged: {
-            if (wrap.word === undefined) {
+            if (wrap.word !== undefined) {
                 getDefinition.update();
             }
         }
@@ -55,6 +46,7 @@ Wrapper {
         command: ["curl", wrap.url]
         stdout: StdioCollector {
             onStreamFinished: {
+                print(wrap.property.word);
                 try {
                     const word = JSON.parse(text)[0];
                     return wrap.word = word;

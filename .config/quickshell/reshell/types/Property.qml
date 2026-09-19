@@ -1,6 +1,6 @@
 pragma ComponentBehavior: Bound
 import Quickshell
-
+import System
 import QtQuick
 import QtQuick.Layouts
 import QtQml.Models
@@ -25,6 +25,7 @@ QtObject {
         width: 200
         height: contentHeight
         leftPadding: 5
+        cascade: true
 
         onOpened: {
             const source = menu.editSource;
@@ -60,6 +61,13 @@ QtObject {
             menu.exited(menu.hasChanges);
         }
 
+        Action {
+            text: "remove"
+            onTriggered: {
+                menu.remove();
+            }
+        }
+
         Instantiator {
             id: propertiesInstantiator
             active: menu.opened
@@ -68,20 +76,16 @@ QtObject {
             }
             delegate: PropertyItems {}
             onObjectAdded: (idx, obj) => {
-                menu.insertItem(idx, obj);
+                if (obj instanceof PropertyItem) {
+                    menu.insertItem(0, obj);
+                } else if (obj instanceof Menu) {
+                    menu.insertMenu(0, obj);
+                }
             }
             onObjectRemoved: (idx, obj) => {
                 menu.removeItem(obj);
             }
         }
-
-        Action {
-            text: "remove"
-            onTriggered: {
-                menu.remove();
-            }
-        }
-
         Timer {
             id: updateLoop
             interval: 1000
@@ -137,6 +141,38 @@ QtObject {
                             target[modelData.property] = text;
                             updateLoop.restart();
                         }
+                    }
+                }
+            }
+        }
+
+        DelegateChoice {
+            roleValue: "font"
+            Menu {
+                id: fontMenu
+                title: "Font"
+                height: 400
+
+                cascade: true
+                Instantiator {
+                    model: SysFont.list.filter(f => f.category === "sans-serif")
+                    delegate: Rectangle {
+                        height: 30
+                        color: "red"
+                        required property var modelData
+                        Text {
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: modelData.name
+                            font.family: modelData.name
+                            color: Colors.theme.primary
+                        }
+                        HoverHandler {
+                            onHoveredChanged: print("test")
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        fontMenu.insertItem(idx, obj);
                     }
                 }
             }
