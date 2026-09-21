@@ -554,6 +554,7 @@ Scope {
                 color: "transparent"
                 required property var modelData
                 required property int index
+                property var slot: slot
                 property ListModel widget: widgetsModel.model
                 property string source: modelData.source
                 property var wdg
@@ -711,7 +712,9 @@ Scope {
             onDropped: drop => {
                 const source = drop.source.parent;
                 const isInternalDrag = source?.widget !== undefined;
-
+                if (slot === source.slot) {
+                    return;
+                }
                 if (isInternalDrag) {
                     // Moving widget from another slot
                     const sourceIndex = source.DelegateModel?.itemsIndex;
