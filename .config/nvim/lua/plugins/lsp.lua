@@ -23,6 +23,30 @@ vim.lsp.enable({
 	"qmlls",
 })
 
+vim.lsp.config("rust_analyzer", {
+	settings = {
+		["rust-analyzer"] = {
+			cargo = {
+				features = "all",
+				buildScripts = {
+					enable = true,
+				},
+			},
+			procMacro = {
+				enable = true,
+			},
+			check = {
+				command = "clippy",
+			},
+			completion = {
+				autoimport = {
+					enable = true,
+				},
+			},
+		},
+	},
+})
+
 vim.diagnostic.config({ virtual_text = true })
 local flake = "(builtins.getFlake (toString ./.))"
 
