@@ -65,6 +65,7 @@
     just
     lmstudio
     qtcreator
+    wrangler
 
     # Apps
     telegram-desktop
