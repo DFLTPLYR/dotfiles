@@ -6,8 +6,6 @@
   home.packages = with pkgs; [
     # System / dotfiles
     stow
-    wayland
-    pkg-config
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtwayland
