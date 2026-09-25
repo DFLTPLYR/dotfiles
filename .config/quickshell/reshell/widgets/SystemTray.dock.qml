@@ -91,6 +91,143 @@ Wrapper {
                         }
                         DelegateChoice {
                             roleValue: false
+                            DelegateChooser {
+                                role: "hasChildren"
+                                DelegateChoice {
+                                    roleValue: true
+                                    TraySubMenu {}
+                                }
+                                DelegateChoice {
+                                    roleValue: false
+                                    Action {
+                                        required property var modelData
+                                        text: modelData.text
+                                        enabled: modelData.enabled
+                                        icon.name: modelData.icon
+                                        checkable: modelData.buttonType !== QsMenuButtonType.None
+                                        checked: modelData.buttonType !== QsMenuButtonType.None && modelData.checkState !== Qt.Unchecked
+                                        onTriggered: modelData.triggered()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    onObjectAdded: (idx, obj) => {
+                        if (obj instanceof Action) {
+                            traymenu.insertAction(idx, obj);
+                        } else if (obj instanceof Menu) {
+                            traymenu.insertMenu(idx, obj);
+                        } else if (obj instanceof MenuSeparator) {
+                            traymenu.insertItem(idx, obj);
+                        } else {
+                            return;
+                        }
+                    }
+                    onObjectRemoved: (idx, obj) => {
+                        if (obj instanceof Action) {
+                            traymenu.removeAction(obj);
+                        } else if (obj instanceof Menu) {
+                            traymenu.removeMenu(obj);
+                        } else {
+                            traymenu.removeItem(obj);
+                        }
+                    }
+                }
+
+                Menu {
+                    id: traymenu
+                    width: 200
+                    onOpened: wrap.area(traymenu.background)
+                    onClosed: wrap.area(null)
+                }
+            }
+        }
+    }
+
+    component TraySubMenu: Menu {
+        id: subMenu
+        required property var modelData
+
+        title: modelData.text ?? ""
+        enabled: modelData.enabled ?? true
+        icon.name: modelData.icon ?? ""
+        width: 200
+
+        QsMenuOpener {
+            id: subOpener
+            menu: subMenu.modelData
+        }
+
+        Instantiator {
+            model: subOpener.children
+            delegate: DelegateChooser {
+                role: "isSeparator"
+                DelegateChoice {
+                    roleValue: true
+                    MenuSeparator {}
+                }
+                DelegateChoice {
+                    roleValue: false
+                    DelegateChooser {
+                        role: "hasChildren"
+                        DelegateChoice {
+                            roleValue: true
+                            Menu {
+                                id: subSubMenu
+                                required property var modelData
+
+                                title: modelData.text ?? ""
+                                enabled: modelData.enabled ?? true
+                                icon.name: modelData.icon ?? ""
+                                width: 200
+
+                                QsMenuOpener {
+                                    id: subSubOpener
+                                    menu: subSubMenu.modelData
+                                }
+
+                                // Leaf level: no further submenu expansion to avoid
+                                // recursive instantiation (QML forbids it).
+                                Instantiator {
+                                    model: subSubOpener.children
+                                    delegate: DelegateChooser {
+                                        role: "isSeparator"
+                                        DelegateChoice {
+                                            roleValue: true
+                                            MenuSeparator {}
+                                        }
+                                        DelegateChoice {
+                                            roleValue: false
+                                            Action {
+                                                required property var modelData
+                                                text: modelData.text
+                                                enabled: modelData.enabled
+                                                icon.name: modelData.icon
+                                                checkable: modelData.buttonType !== QsMenuButtonType.None
+                                                checked: modelData.buttonType !== QsMenuButtonType.None && modelData.checkState !== Qt.Unchecked
+                                                onTriggered: modelData.triggered()
+                                            }
+                                        }
+                                    }
+                                    onObjectAdded: (idx, obj) => {
+                                        if (obj instanceof Action) {
+                                            subSubMenu.insertAction(idx, obj);
+                                        } else if (obj instanceof MenuSeparator) {
+                                            subSubMenu.insertItem(idx, obj);
+                                        }
+                                    }
+                                    onObjectRemoved: (idx, obj) => {
+                                        if (obj instanceof Action) {
+                                            subSubMenu.removeAction(obj);
+                                        } else {
+                                            subSubMenu.removeItem(obj);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        DelegateChoice {
+                            roleValue: false
                             Action {
                                 required property var modelData
                                 text: modelData.text
@@ -102,29 +239,24 @@ Wrapper {
                             }
                         }
                     }
-                    onObjectAdded: (idx, obj) => {
-                        if (obj instanceof Action) {
-                            traymenu.insertAction(idx, obj);
-                        } else if (obj instanceof MenuSeparator) {
-                            traymenu.insertItem(idx, obj);
-                        } else {
-                            return;
-                        }
-                    }
-                    onObjectRemoved: (idx, obj) => {
-                        if (obj instanceof Action) {
-                            traymenu.removeAction(idx, obj);
-                        } else {
-                            traymenu.removeItem(idx, obj);
-                        }
-                    }
                 }
-
-                Menu {
-                    id: traymenu
-                    width: 200
-                    onOpened: wrap.area(traymenu.background)
-                    onClosed: wrap.area(null)
+            }
+            onObjectAdded: (idx, obj) => {
+                if (obj instanceof Action) {
+                    subMenu.insertAction(idx, obj);
+                } else if (obj instanceof Menu) {
+                    subMenu.insertMenu(idx, obj);
+                } else if (obj instanceof MenuSeparator) {
+                    subMenu.insertItem(idx, obj);
+                }
+            }
+            onObjectRemoved: (idx, obj) => {
+                if (obj instanceof Action) {
+                    subMenu.removeAction(obj);
+                } else if (obj instanceof Menu) {
+                    subMenu.removeMenu(obj);
+                } else {
+                    subMenu.removeItem(obj);
                 }
             }
         }
