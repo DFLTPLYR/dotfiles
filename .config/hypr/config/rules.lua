@@ -34,6 +34,18 @@ rule({
 rule({
 	name = "Deadlock",
 	match = {
+		class = "cs2",
+	},
+	monitor = "DP-1",
+	content = "game",
+	fullscreen = true,
+	maximize = true,
+	fullscreen_state = 3,
+})
+
+rule({
+	name = "CS2",
+	match = {
 		class = "steam_app_1422450",
 	},
 	monitor = "DP-1",
@@ -41,4 +53,13 @@ rule({
 	fullscreen = true,
 	maximize = true,
 	fullscreen_state = 3,
+})
+
+rule({
+	name = "Kitty",
+	match = {
+		class = "kitty",
+		initial_class = "kitty",
+	},
+	size = { "monitor_w * 0.5", "monitor_h * 0.5" },
 })
