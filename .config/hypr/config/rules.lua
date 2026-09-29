@@ -61,5 +61,5 @@ rule({
 		class = "kitty",
 		initial_class = "kitty",
 	},
-	size = { "monitor_w * 0.5", "monitor_h * 0.5" },
+	suppress_event = "maximize",
 })
