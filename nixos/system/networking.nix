@@ -8,11 +8,11 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.dns = "systemd-resolved";
   networking.networkmanager.insertNameservers = [
-    "94.140.14.14"
-    "94.140.15.15"
+    "8.8.8.8"
+    "8.8.4.4"
   ];
   networking.nameservers = [
-    "94.140.14.14"
-    "94.140.15.15"
+    "8.8.8.8"
+    "8.8.4.4"
   ];
 }
