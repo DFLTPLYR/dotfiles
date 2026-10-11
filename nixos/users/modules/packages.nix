@@ -9,18 +9,6 @@
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtwayland
-    ((pkgs.quickshell.override {stdenv = pkgs.clangStdenv;}).overrideAttrs (old: {
-      cmakeFlags =
-        (old.cmakeFlags or [])
-        ++ [
-          "-DX11=OFF"
-          "-DHYPRLAND=OFF"
-          "-DHYPRLAND_GLOBAL_SHORTCUTS=OFF"
-          "-DHYPRLAND_FOCUS_GRAB=OFF"
-          "-DI3=OFF"
-          "-DI3_IPC=OFF"
-        ];
-    }))
     neovim
     helix
     unzip
