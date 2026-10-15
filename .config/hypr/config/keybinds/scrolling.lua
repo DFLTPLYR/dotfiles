@@ -5,6 +5,14 @@
 local mainMod = "SUPER"
 local logfile = "/tmp/hypr/tmp.log"
 
+local function log(msg)
+	local f = io.open(logfile, "a")
+	if f then
+		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
+		f:close()
+	end
+end
+
 hl.bind(mainMod .. " + SHIFT + D", function()
 	local f = io.open(logfile, "r")
 	if f then
@@ -14,14 +22,6 @@ hl.bind(mainMod .. " + SHIFT + D", function()
 		io.open(logfile, "w"):close()
 	end
 end)
-
-local function log(msg)
-	local f = io.open(logfile, "a")
-	if f then
-		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
-		f:close()
-	end
-end
 
 local function scroll(func, ...)
 	local args = { ... }
