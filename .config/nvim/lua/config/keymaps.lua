@@ -131,6 +131,19 @@ end, { desc = "Open mini.files (cwd)" })
 -- <leader>g - Git
 keymap("n", "<leader>gs", "<cmd>Git<CR>", opts)
 keymap("n", "<leader>gp", "<cmd>Git push<CR>", opts)
+-- Recommended/example keymaps
+vim.keymap.set({ "n", "x" }, "<C-a>", function()
+	require("opencode").ask("@this: ")
+end, { desc = "Ask OpenCode…" })
+vim.keymap.set({ "n", "x" }, "<C-x>", function()
+	require("opencode").select()
+end, { desc = "Select OpenCode…" })
+vim.keymap.set({ "n", "x" }, "go", function()
+	return require("opencode").operator("@this")
+end, { desc = "Send range to OpenCode", expr = true })
+vim.keymap.set({ "n" }, "goo", function()
+	return require("opencode").operator("@this") .. "_"
+end, { desc = "Send line to OpenCode", expr = true })
 
 -- <leader>p - Paste (visual)
 keymap("v", "<Leader>p", '"_dP')
