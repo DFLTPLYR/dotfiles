@@ -2,8 +2,8 @@
   description = "I Use NixosBtw";
 
   inputs = {
-    fetch.url = "github:areofyl/fetch";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    fetch.url = "github:areofyl/fetch";
     flake-utils.url = "github:numtide/flake-utils";
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     herdr = {
@@ -14,20 +14,20 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    rmpc = {
-      url = "github:mierak/rmpc";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     helium = {
       url = "github:AlvaroParker/helium-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lerd = {
       url = "github:lerd-env/lerd-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rmpc = {
+      url = "github:mierak/rmpc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
