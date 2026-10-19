@@ -3,7 +3,7 @@
     enable = true;
     package = pkgs.rofi;
     theme = "solarized";
-    extraConfig = {
+    settings = {
       show-icons = true;
       icon-theme = "Papirus-Dark";
       drun-display-format = "{name}";
