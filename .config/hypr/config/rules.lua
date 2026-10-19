@@ -1,19 +1,27 @@
 local rule = hl.window_rule
-rule({
-	name = "Discord",
-	match = {
-		class = "vesktop",
-	},
-	monitor = "DP-2",
-})
+-- rule({
+-- 	name = "Discord",
+-- 	match = {
+-- 		class = "vesktop",
+-- 	},
+-- 	monitor = "DP-2",
+-- })
 
-rule({
-	name = "Telegram",
-	match = {
-		class = "org.telegram.desktop",
-	},
-	monitor = "DP-2",
-})
+-- rule({
+-- 	name = "Telegram",
+-- 	match = {
+-- 		class = "org.telegram.desktop",
+-- 	},
+-- 	monitor = "DP-2",
+-- })
+
+-- rule({
+-- 	name = "Steam",
+-- 	match = {
+-- 		class = "steam",
+-- 	},
+-- 	monitor = "DP-2",
+-- })
 
 rule({
 	name = "Youtube",
@@ -22,15 +30,6 @@ rule({
 	},
 	opacity = "1 override 1 override 1 override",
 })
-
-rule({
-	name = "Steam",
-	match = {
-		class = "steam",
-	},
-	monitor = "DP-2",
-})
-
 rule({
 	name = "Deadlock",
 	match = {
