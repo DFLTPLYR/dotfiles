@@ -34,14 +34,15 @@
     direnv
     libnotify
     mpc
+    mpv
     yazi
     python314Packages.speedtest-cli
+    python314Packages.uv
     btop-rocm
     trash-cli
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.rmpcd
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    (pkgs.firefoxpwa-unwrapped.override {firefoxRuntime = pkgs.firefox-unwrapped;})
     fetch
     lowfi
 
@@ -61,17 +62,13 @@
     droidcam
     adw-gtk3
     inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
-    # Zen re-uploaded the 1.23.3b tarball upstream, so the flake's pinned hash
-    # is stale. Remove this override once zen-browser-flake updates sources.json.
-    (let
-      unwrapped = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.override {
-        hash = "sha256-uyBF0+IWVNQP6EElAJLurf0sH8gx7vtQkiJ3PIvcoUk=";
-      };
-    in
-      pkgs.wrapFirefox unwrapped {
-        pname = "zen-browser";
-        version = unwrapped.version;
-      })
+    (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+      wrapFirefox = browser: args:
+        pkgs.wrapFirefox browser (args
+          // {
+            nativeMessagingHosts = [pkgs.firefoxpwa];
+          });
+    })
     kitty
     obsidian
     mpdris2-rs

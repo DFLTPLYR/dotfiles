@@ -18,6 +18,7 @@
       user.email = "gonzales.johncris01@gmail.com";
     };
   };
+
   programs.direnv.enable = true;
 
   programs.zoxide = {

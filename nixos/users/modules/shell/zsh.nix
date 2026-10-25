@@ -12,6 +12,7 @@
     shellAliases = {
       vi = "nvim";
       vim = "nvim";
+      radio = "mpv --no-video";
     };
     syntaxHighlighting.enable = true;
     initContent = ''

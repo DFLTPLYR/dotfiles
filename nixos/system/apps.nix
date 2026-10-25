@@ -5,6 +5,17 @@
 }: {
   nixpkgs.overlays = [
     inputs.millennium.overlays.default
+    (final: prev: {
+      firefoxpwa-unwrapped = prev.firefoxpwa-unwrapped.overrideAttrs (old: rec {
+        version = "2.20.1";
+        src = prev.fetchFromGitHub {
+          owner = "filips123";
+          repo = "PWAsForFirefox";
+          tag = "v${version}";
+          hash = "sha256-kOtdGRW2DN0qQLrtvbsywBdGlM/1cboQGu2NM7cO8E8=";
+        };
+      });
+    })
   ];
 
   environment.systemPackages = with pkgs; [
@@ -19,6 +30,7 @@
     bc
     bun
     papirus-icon-theme
+    firefoxpwa
   ];
 
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -29,7 +41,7 @@
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
-    nativeMessagingHosts.packages = [pkgs.firefoxpwa-unwrapped];
+    nativeMessagingHosts.packages = [pkgs.firefoxpwa];
   };
 
   programs.steam = {
