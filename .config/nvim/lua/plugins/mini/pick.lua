@@ -151,11 +151,14 @@ local preview = (function()
 		end
 
 		local current_item = MiniPick.get_picker_matches().current
+
 		if current_item ~= state.last_item then
 			state.last_item = current_item
 			create_buf()
 			vim.api.nvim_win_set_buf(state.win_id, state.buf_id)
 			show_preview(current_item)
+
+			vim.schedule(vim.cmd.redraw)
 		end
 	end
 
@@ -192,6 +195,23 @@ local preview = (function()
 end)()
 
 local group = vim.api.nvim_create_augroup("UserMiniPick", { clear = true })
+local update_pending = false
+
+local function schedule_preview_update()
+	if update_pending then
+		return
+	end
+
+	update_pending = true
+
+	vim.schedule(function()
+		update_pending = false
+
+		if MiniPick.is_picker_active() then
+			preview.update()
+		end
+	end)
+end
 
 vim.api.nvim_create_autocmd("User", {
 	pattern = "MiniPickStart",
@@ -206,7 +226,7 @@ vim.api.nvim_create_autocmd("User", {
 	pattern = "MiniPickMatch",
 	group = group,
 	callback = function()
-		vim.schedule(preview.update)
+		schedule_preview_update()
 	end,
 })
 
@@ -228,14 +248,14 @@ require("mini.pick").setup({
 			char = "<Down>",
 			func = function()
 				feedkeys("<C-n>")
-				vim.schedule(preview.update)
+				schedule_preview_update()
 			end,
 		},
 		move_up_arrow = {
 			char = "<Up>",
 			func = function()
 				feedkeys("<C-p>")
-				vim.schedule(preview.update)
+				schedule_preview_update()
 			end,
 		},
 		scroll_side_preview_down = {
