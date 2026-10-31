@@ -1,5 +1,4 @@
 local opt = vim.opt
-
 opt.guicursor = "i:ver25"
 opt.colorcolumn = "0"
 opt.signcolumn = "yes:1"
@@ -17,7 +16,10 @@ opt.fillchars = { eob = " " }
 opt.list = true
 opt.number = true
 opt.relativenumber = true
-opt.wrap = false
+opt.wrap = true
+opt.textwidth = 0
+opt.wrapmargin = 0
+opt.linebreak = true
 opt.cursorline = true
 opt.scrolloff = 8
 opt.clipboard = "unnamedplus"

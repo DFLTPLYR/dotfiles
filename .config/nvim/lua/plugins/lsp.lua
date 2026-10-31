@@ -80,6 +80,7 @@ vim.lsp.config("nixd", {
 		},
 	},
 })
+
 vim.lsp.enable("nixd")
 
 vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled())

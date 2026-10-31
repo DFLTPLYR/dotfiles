@@ -1,4 +1,5 @@
 vim.pack.add({
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/ibhagwan/fzf-lua" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/mason-org/mason.nvim" },

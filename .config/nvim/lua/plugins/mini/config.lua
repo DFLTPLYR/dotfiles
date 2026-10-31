@@ -1,6 +1,5 @@
 require("mini.extra").setup()
 require("mini.starter").setup()
-
 require("mini.animate").setup({
 	scroll = { enable = false },
 })
