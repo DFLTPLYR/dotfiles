@@ -16,7 +16,7 @@ opt.fillchars = { eob = " " }
 opt.list = true
 opt.number = true
 opt.relativenumber = true
-opt.wrap = true
+opt.wrap = false
 opt.textwidth = 0
 opt.wrapmargin = 0
 opt.linebreak = true
