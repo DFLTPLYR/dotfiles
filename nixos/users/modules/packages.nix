@@ -77,6 +77,7 @@
     localsend
     protonplus
     prismlauncher
+    easyeffects
 
     # Screenshots / clipboard
     grim
