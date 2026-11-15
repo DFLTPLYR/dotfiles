@@ -3,8 +3,7 @@
   pkgs,
   ...
 }: {
-  # Use latest kernel. Zen Btw
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = ["v4l2loopback"];
   boot.kernelParams = ["acpi=force"];
   boot.extraModulePackages = [
