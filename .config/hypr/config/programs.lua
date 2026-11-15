@@ -17,6 +17,7 @@ end
 
 settings = desktop_env("toggleSettings", "riced settings")
 clip = desktop_env("clip", "riced ...")
+app_menu = "if pgrep -f riced >/dev/null; then riced ipc app_menu; else " .. menu .. "; fi"
 
 selectshot =
 	[[mkdir -p ~/Pictures/Screenshots && grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy]]
