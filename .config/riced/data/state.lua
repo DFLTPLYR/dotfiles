@@ -30,12 +30,20 @@ local state = {
 
 local screenshot = require("components.screenshot")
 
+function state.close_settings()
+	state.settings = false
+end
+
 riced.ipc({
 	settings = function(self, args)
 		if #args ~= 0 then
 			error("usage: riced ipc settings")
 		end
-		state.settings = not state.settings
+		if state.settings then
+			state.close_settings()
+		else
+			state.settings = true
+		end
 	end,
 	app_menu = function(self, args)
 		if #args ~= 0 then

@@ -1,7 +1,13 @@
+local state = require("data.state")
+
 local panel = {
 	menu_open = false,
 	page = 1,
 }
+
+local function close()
+	state.close_settings()
+end
 
 local function spacer(props, content)
 	return iced.container(content or iced.space(), props)
@@ -45,10 +51,21 @@ local function view()
 				},
 				transition = iced.transition("basic"),
 				on_press = function()
+					if panel.page == item.page then
+						return
+					end
 					panel.page = item.page
 				end,
 			})
 		end,
+	})
+
+	local header = iced.row({
+		iced.text("Settings", { size = 20, color = theme.primary, font = { weight = "bold" } }),
+		iced.container(iced.space(), { width = iced.Length.fill }),
+	}, {
+		width = iced.Length.fill,
+		align_y = "center",
 	})
 
 	local row = iced.row({
@@ -56,10 +73,20 @@ local function view()
 			width = 180,
 			height = iced.Length.fill,
 		}, nav),
-		spacer({
-			width = iced.Length.fill,
-			height = iced.Length.fill,
-		}, currentPage),
+		spacer(
+			{
+				width = iced.Length.fill,
+				height = iced.Length.fill,
+			},
+			iced.column({
+				header,
+				currentPage,
+			}, {
+				width = iced.Length.fill,
+				height = iced.Length.fill,
+				spacing = 12,
+			})
+		),
 	}, {
 		width = iced.Length.fill,
 		height = iced.Length.fill,

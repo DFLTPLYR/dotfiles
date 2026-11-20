@@ -34,7 +34,7 @@ local handlers = {
 }
 function events.update(self, event, component)
 	if type(event) == "table" and event.type == "window_closed" and event.id == "settings" then
-		state.settings = false
+		state.close_settings()
 		return
 	end
 	if state.app_menu then
@@ -45,6 +45,10 @@ function events.update(self, event, component)
 		end
 	end
 	if state.settings then
+		if type(event) == "table" and event.type == "key" and event.event == "press" and event.key == "Escape" then
+			state.close_settings()
+			return
+		end
 		local result = require("components.panel.pages.outputs").update(event)
 		if result ~= false then
 			return result

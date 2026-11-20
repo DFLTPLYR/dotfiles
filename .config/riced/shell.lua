@@ -135,7 +135,7 @@ end
 function app:subscription(active)
 	local subscriptions = {}
 	local state = require("data.state")
-	if state.app_menu then
+	if state.app_menu or state.settings then
 		subscriptions[#subscriptions + 1] = iced.on_key(true)
 	end
 	if state.wallpaper_transitioning then
