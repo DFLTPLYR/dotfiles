@@ -245,7 +245,7 @@ local function map()
 
 	if layout and type(state.wallpaper) == "string" and state.wallpaper ~= "" then
 		layers[#layers + 1] = iced.pin(
-			iced.image(state.wallpaper, {
+			iced.image(iced.icon_path(state.wallpaper, { size = 1024, thumbnail = true }) or state.wallpaper, {
 				width = layout.width * layout.scale,
 				height = layout.height * layout.scale,
 				content_fit = "cover",
