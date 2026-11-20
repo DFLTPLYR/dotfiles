@@ -1,37 +1,6 @@
 require("components.motion")
 riced.stylesheet = require("components.style.stylesheet")
 local dbus = riced.plugin("dbus")
-local raw_log = log -- original callable table
-local last, last_at = nil, 0
-
-log = setmetatable({ table = raw_log.table }, {
-	__call = function(_, ...)
-		local values = table.pack(...)
-		for i = 1, values.n do
-			values[i] = tostring(values[i])
-		end
-		local message = table.concat(values, "\t", 1, values.n)
-		raw_log(...) -- keep writing to stderr/logs
-
-		if not dbus.alive or message == "" then
-			return
-		end
-		local now = os.time()
-		if message == last and now - last_at < 30 then
-			return
-		end -- debounce repeats
-		last, last_at = message, now
-		dbus.notify({
-			summary = "riced",
-			body = message:match("^[^\n]*") or message, -- first line; tracebacks stay in the log
-			icon = "dialog-error",
-		}, function(_, err)
-			if err then
-				raw_log(err)
-			end -- raw_log, not log: avoids a notify loop
-		end)
-	end,
-})
 
 local app = {}
 -- Late-bind through the module table so editing data/events.lua takes effect
