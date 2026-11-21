@@ -215,7 +215,7 @@ local function picker()
 		}, { spacing = 12, width = iced.Length.fill, height = iced.Length.fill }),
 		{
 			width = 560,
-			height = 420,
+			height = 900,
 			padding = 16,
 			style = {
 				background = iced.opacity(theme.background, 70),
