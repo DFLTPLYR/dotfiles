@@ -1,15 +1,9 @@
----@class TopLayer
----@field test boolean
-
 ---@class State
 ---@field settings boolean
-
----@class State
 ---@field app_menu boolean
 ---@field app_menu_query string
 ---@field app_menu_selected integer
-
----@class State
+---@field dismissed table<integer, boolean>
 ---@field wallpaper string
 ---@field wallpaper_previous string|nil
 ---@field wallpaper_progress number
@@ -27,8 +21,6 @@ local state = {
 	wallpaper_progress = 0,
 	wallpaper_transitioning = false,
 }
-
-local screenshot = require("components.screenshot")
 
 function state.close_settings()
 	state.settings = false
@@ -78,7 +70,6 @@ riced.ipc({
 				end
 			end)
 		end)
-		log("test")
 	end,
 })
 

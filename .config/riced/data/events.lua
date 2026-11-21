@@ -21,9 +21,6 @@ function events.dismiss(id, restore)
 end
 
 local handlers = {
-	increment = function(self, args)
-		self.count = self.count + 1
-	end,
 	top = {
 		workspace = function(self, args)
 			if args and args.id then

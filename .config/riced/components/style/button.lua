@@ -1,73 +1,30 @@
 require("components.motion")
 
-return {
-	default = {
+local Transparent = "#00000000"
+
+-- The default/material/boxy variants are identical for now.
+local function base()
+	return {
 		padding = 8,
 		style = {
 			background = Theme.surface,
 			text_color = Theme.onsurface,
-			-- border = { color = "#404040", width = 1, radius = 2 },
 			hovered = {
 				background = iced.opacity(Theme.primary, 80),
 				border = { color = theme.secondary, width = 1, radius = 2 },
 			},
 			pressed = {
 				background = theme.success,
-				-- border = { color = "#808080", width = 1, radius = 2 },
 			},
-			-- disabled = {
-			-- 	background = "#181818",
-			-- 	text_color = "#808080",
-			-- },
 		},
 		transition = iced.transition("basic"),
-	},
-	material = {
-		default = {
-			padding = 8,
-			style = {
-				background = Theme.surface,
-				text_color = Theme.onsurface,
-				-- border = { color = "#404040", width = 1, radius = 2 },
-				hovered = {
-					background = iced.opacity(Theme.primary, 80),
-					border = { color = theme.secondary, width = 1, radius = 2 },
-				},
-				pressed = {
-					background = theme.success,
-					-- border = { color = "#808080", width = 1, radius = 2 },
-				},
-				-- disabled = {
-				-- 	background = "#181818",
-				-- 	text_color = "#808080",
-				-- },
-			},
-			transition = iced.transition("basic"),
-		},
-	},
-	boxy = {
-		default = {
-			padding = 8,
-			style = {
-				background = Theme.surface,
-				text_color = Theme.onsurface,
-				-- border = { color = "#404040", width = 1, radius = 2 },
-				hovered = {
-					background = iced.opacity(Theme.primary, 80),
-					border = { color = theme.secondary, width = 1, radius = 2 },
-				},
-				pressed = {
-					background = theme.success,
-					-- border = { color = "#808080", width = 1, radius = 2 },
-				},
-				-- disabled = {
-				-- 	background = "#181818",
-				-- 	text_color = "#808080",
-				-- },
-			},
-			transition = iced.transition("basic"),
-		},
-	},
+	}
+end
+
+return {
+	default = base(),
+	material = base(),
+	boxy = base(),
 	workspaces = {
 		height = 20,
 		style = {

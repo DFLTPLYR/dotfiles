@@ -1,5 +1,3 @@
-Transparent = "#00000000"
-
 -- Active stylesheet: "material" or "default" (button/text/container below).
 local STYLE = "material"
 

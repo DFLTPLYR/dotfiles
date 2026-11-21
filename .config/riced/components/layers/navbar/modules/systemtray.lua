@@ -151,7 +151,6 @@ iced.define("systemtray", function()
 			out[1] = iced.container(iced.text("No menu items"), { padding = 2 })
 		end
 		local height = math.min(360, math.max(48, 16 + #out * 28))
-		log(height)
 		return iced.scrollable(iced.column(out, { spacing = 0 }), {
 			width = iced.Length.fill,
 			height = height,
