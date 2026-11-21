@@ -1,4 +1,5 @@
 local state = require("data.state")
+local widgets = require("components.desktop_widgets")
 local events = {}
 
 -- on_press can be a plain string, or events.send(name, args) when a handler needs arguments.
@@ -30,9 +31,9 @@ local handlers = {
 	},
 }
 function events.update(self, event, component)
-	if type(event) == "table" and event.type == "window_closed" and event.id == "settings" then
-		state.close_settings()
-		return
+	local desktop = widgets.update(event)
+	if desktop ~= false then
+		return desktop
 	end
 	if state.app_menu then
 		local appmenu = require("components.layers.appmenu.appmenu")

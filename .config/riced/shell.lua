@@ -107,10 +107,12 @@ function app:subscription(active)
 	if state.app_menu or state.settings then
 		subscriptions[#subscriptions + 1] = iced.on_key(true)
 	end
+	if state.settings or require("components.desktop_widgets").dragging() then
+		subscriptions[#subscriptions + 1] = iced.on_mouse()
+	end
 	if state.wallpaper_transitioning then
 		subscriptions[#subscriptions + 1] = iced.every(16)
 	end
-	-- subscriptions[#subscriptions + 1] = iced.on_mouse()
 	if #subscriptions == 0 then
 		return nil
 	end

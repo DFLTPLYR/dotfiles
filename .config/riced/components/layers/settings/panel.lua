@@ -5,6 +5,9 @@ local panel = {
 	page = 1,
 }
 
+local PANEL_WIDTH = 800
+local PANEL_HEIGHT = 600
+
 local function close()
 	state.close_settings()
 end
@@ -18,6 +21,7 @@ local function view()
 		{ label = "Wallpaper", page = 2, leaf = iced.wallpaper() },
 		{ label = "Outputs", page = 3, leaf = iced.outputs() },
 		{ label = "Theme", page = 4, leaf = iced.theme() },
+		{ label = "Widgets", page = 5, leaf = iced.widgets() },
 	}
 	-- Derived from state: a local set in on_press dies with that view pass.
 	local currentPage = (pages[panel.page] or pages[1]).leaf
@@ -60,13 +64,26 @@ local function view()
 		end,
 	})
 
+
 	local header = iced.row({
 		iced.text("Settings", { size = 20, color = theme.primary, font = { weight = "bold" } }),
 		iced.container(iced.space(), { width = iced.Length.fill }),
+		iced.button("✕", {
+			width = 32,
+			height = 32,
+			on_press = close,
+			style = {
+				background = "#00000000",
+				text_color = theme.secondary,
+				hovered = { background = iced.opacity(theme.danger, 30) },
+				border = { color = iced.opacity(theme.text, 20), width = 1, radius = 4 },
+			},
+		}),
 	}, {
 		width = iced.Length.fill,
 		align_y = "center",
 	})
+
 
 	local row = iced.row({
 		spacer({
@@ -93,30 +110,51 @@ local function view()
 		spacing = 8,
 	})
 
-	return iced.container(iced.stack({
-		iced.container(iced.space(), {
 
-			width = iced.Length.fill_portion(7),
+	local content = iced.container(row, {
+		width = PANEL_WIDTH,
+		height = PANEL_HEIGHT,
+		padding = 12,
+		style = {
+			background = iced.opacity(theme.background, 96),
+			border = { color = iced.opacity(theme.text, 20), width = 1, radius = 6 },
+			shadow = { color = iced.opacity(theme.background, 90), offset = { x = 4, y = 4 }, blur = 12 },
+		},
+	})
+
+
+	local stack = iced.stack({
+		iced.mouse_area(
+			iced.container(iced.space(), {
+				width = iced.Length.fill,
+				height = iced.Length.fill,
+				style = { background = iced.opacity(theme.background, 45) },
+			}),
+			{ on_press = close }
+		),
+		-- Swallow clicks on the panel so they do not reach the backdrop.
+		iced.container(iced.mouse_area(content, { on_press = "settings:noop" }), {
+			width = iced.Length.fill,
 			height = iced.Length.fill,
-			style = {
-				background = iced.opacity(theme.background, 80),
-			},
+			align_x = "center",
+			align_y = "center",
 		}),
-		row,
 	}, {
 		width = iced.Length.fill,
 		height = iced.Length.fill,
-	}))
+	})
+	return stack
 end
 function panel:view()
-	local content = view()
-
-	return iced.window({
+	return iced.layer(view(), {
 		id = "settings",
-		title = "Settings",
-		width = 800,
-		height = 600,
-		content = content,
+		size = iced.Size(iced.Extent.fill, iced.Extent.fill),
+		layer = iced.Layer.top,
+		anchor = { "top", "bottom", "left", "right" },
+		exclusive_zone = -1,
+		keyboard_interactivity = iced.KeyboardInteractivity.exclusive,
+		output_option = iced.Output.active,
+		namespace = "riced-settings",
 	})
 end
 

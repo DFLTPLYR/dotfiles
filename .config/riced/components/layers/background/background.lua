@@ -1,3 +1,5 @@
+local desktop = require("components.desktop_widgets")
+
 local shell = {
 	drag = false,
 }
@@ -62,21 +64,27 @@ local function content(current, previous, progress)
 end
 
 function shell.view(current, previous, progress)
+	local layers = {
+		content(current, previous, progress),
+		iced.mouse_area(
+			iced.container(iced.space(), {
+				width = iced.Length.fill,
+				height = iced.Length.fill,
+			}),
+			{}
+		),
+	}
+	for _, widget in ipairs(desktop.view()) do
+		layers[#layers + 1] = widget
+	end
+
 	return iced.layer(
-		iced.stack({
-			content(current, previous, progress),
-			iced.mouse_area(
-				iced.container(iced.space(), {
-					width = iced.Length.fill,
-					height = iced.Length.fill,
-				}),
-				{}
-			),
-		}),
+		iced.stack(layers),
 		{
 			id = "background",
 			size = iced.Size(iced.Extent.fill, iced.Extent.fill),
-			layer = iced.Layer.background,
+			-- Promote above windows while a widget is dragged so the preview is visible.
+			layer = desktop.dragging() and iced.Layer.overlay or iced.Layer.background,
 			anchor = { "top", "bottom", "left", "right" },
 			exclusive_zone = -1,
 			keyboard_interactivity = iced.KeyboardInteractivity.none,

@@ -10,6 +10,7 @@ local defaults = {
 	docks = {},
 	background = "/home/dfltplyr/Pictures/Wallpaper/cats.png",
 	outputs = {},
+	widgets = {},
 }
 
 -- Tables are shared with defaults otherwise, so give each file its own copy.
