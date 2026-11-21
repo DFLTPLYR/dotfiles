@@ -46,7 +46,7 @@ function events.update(self, event, component)
 			state.close_settings()
 			return
 		end
-		local result = require("components.panel.pages.outputs").update(event)
+		local result = require("components.layers.settings.pages.outputs").update(event)
 		if result ~= false then
 			return result
 		end

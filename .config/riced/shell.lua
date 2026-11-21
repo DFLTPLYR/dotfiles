@@ -87,7 +87,7 @@ function app:view(props)
 	}
 
 	if state.settings then
-		table.insert(layers, require("components.panel.settings").view(props))
+		table.insert(layers, require("components.layers.settings.panel").view(props))
 	end
 
 	if state.app_menu then
