@@ -12,13 +12,13 @@ local defaults = {
 	outputs = {},
 }
 
+-- Tables are shared with defaults otherwise, so give each file its own copy.
 local function copy_defaults()
-	return {
-		theme = defaults.theme,
-		docks = {},
-		background = defaults.background,
-		outputs = {},
-	}
+	local copy = {}
+	for key, value in pairs(defaults) do
+		copy[key] = type(value) == "table" and {} or value
+	end
+	return copy
 end
 
 local settings = riced.file({
@@ -38,26 +38,24 @@ local settings = riced.file({
 })
 
 -- onError runs before `settings` exists, so repair bad/partial data here.
-if
-	type(settings.data) ~= "table"
-	or type(settings.data.theme) ~= "string"
-	or type(settings.data.docks) ~= "table"
-	or type(settings.data.background) ~= "string"
-	or type(settings.data.outputs) ~= "table"
-then
+local function valid(data)
+	if type(data) ~= "table" then
+		return false
+	end
+	for key, default in pairs(defaults) do
+		if type(data[key]) ~= type(default) then
+			return false
+		end
+	end
+	return true
+end
+
+if not valid(settings.data) then
+	local previous = type(settings.data) == "table" and settings.data or {}
 	local repaired = copy_defaults()
-	if type(settings.data) == "table" then
-		if type(settings.data.theme) == "string" then
-			repaired.theme = settings.data.theme
-		end
-		if type(settings.data.docks) == "table" then
-			repaired.docks = settings.data.docks
-		end
-		if type(settings.data.background) == "string" then
-			repaired.background = settings.data.background
-		end
-		if type(settings.data.outputs) == "table" then
-			repaired.outputs = settings.data.outputs
+	for key, default in pairs(defaults) do
+		if type(previous[key]) == type(default) then
+			repaired[key] = previous[key]
 		end
 	end
 	settings.data = repaired
