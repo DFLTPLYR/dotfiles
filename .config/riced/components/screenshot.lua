@@ -2,9 +2,8 @@
 local plugin = riced.plugin("screenshot")
 local screenshot = {}
 
-function screenshot.capture(app, output)
+function screenshot.capture(output)
 	if not plugin.alive then
-		app.screenshot_error = "screenshot extension offline"
 		return
 	end
 	if plugin.capturing then
@@ -12,7 +11,6 @@ function screenshot.capture(app, output)
 	end -- one capture at a time
 	local path = "~/Pictures/Screenshots/" .. os.date("%Y%m%d-%H%M%S") .. ".png"
 	plugin.capture(output, path, function(_, err)
-		app.screenshot_error = err
 		if err then
 			log(err)
 		end

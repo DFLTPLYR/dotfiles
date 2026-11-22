@@ -66,7 +66,7 @@ function app:update(event, component)
 		end
 		return
 	elseif event == "screenshot" then
-		screenshot.capture(self)
+		screenshot.capture()
 	end
 	return require("data.events").update(self, event, component)
 end
@@ -76,14 +76,12 @@ function app:view(props)
 	local state = require("data.state")
 	local background = require("components.layers.background.background")
 	local bar = require("components.layers.navbar.bar")
-	local dock = require("components.layers.dock.dock")
 	local notification = require("components.layers.notification.notification")
 
 	local layers = {
 		background.view(state.wallpaper, state.wallpaper_previous, state.wallpaper_progress),
 		bar.view(props),
 		notification.view(props),
-		-- dock.view(props),
 	}
 
 	if state.settings then
