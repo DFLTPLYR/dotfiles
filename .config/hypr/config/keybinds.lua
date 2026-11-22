@@ -4,25 +4,6 @@
 require(".config.keybinds.scrolling")
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
-local logfile = "/tmp/hypr/tmp.log"
-
-hl.bind(mainMod .. " + SHIFT + D", function()
-	local f = io.open(logfile, "r")
-	if f then
-		f:close()
-		os.remove(logfile)
-	else
-		io.open(logfile, "w"):close()
-	end
-end)
-
-local function log(msg)
-	local f = io.open(logfile, "a")
-	if f then
-		f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
-		f:close()
-	end
-end
 
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
@@ -40,7 +21,7 @@ hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(clipboard))
 hl.bind(mainMod .. " + DELETE", hl.dsp.exec_cmd("pkill -f riced"))
 
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+hl.bind(mainMod .. " + Y", hl.dsp.window.pseudo())
 
 -- Toggle fullscreen
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))

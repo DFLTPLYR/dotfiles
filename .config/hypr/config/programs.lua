@@ -15,8 +15,8 @@ local function desktop_env(qs_args, riced_cmd)
 	)
 end
 
-settings = desktop_env("toggleSettings", "riced settings")
-clip = desktop_env("clip", "riced ...")
+settings = desktop_env("toggleSettings", "riced ipc settings")
+clip = desktop_env("clip", clipboard)
 app_menu = "if pgrep -f riced >/dev/null; then riced ipc app_menu; else " .. menu .. "; fi"
 
 selectshot =
