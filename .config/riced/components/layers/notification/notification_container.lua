@@ -8,7 +8,7 @@ iced.define("notification_container", function()
 					iced.text(item.app_name, { size = 12, width = iced.Length.fill, wrap = "word_or_glyph" }),
 					iced.button("Dismiss", {
 						on_press = function()
-							self.animate.exit()
+							require("data.events").dismiss(item.id)
 						end,
 					}),
 				}, { spacing = 8 }),
@@ -18,14 +18,9 @@ iced.define("notification_container", function()
 			{
 				width = iced.Length.fill,
 				transition = iced.transition("notification_motion", {
-					exit = {
-						-- callback = function(instance)
-						-- 	require("data.events").dismiss(instance.props.id, instance.animate.enter)
-						-- end,
-					},
 					press = {
-						callback = function(instance)
-							instance.animate.exit()
+						callback = function()
+							require("data.events").dismiss(item.id)
 						end,
 					},
 				}),

@@ -9,6 +9,9 @@ end
 
 function events.dismiss(id, restore)
 	state.dismissed = state.dismissed or {}
+	if state.dismissed[id] then
+		return
+	end
 	state.dismissed[id] = true
 	riced.plugin("dbus").close_notification(id, function(result, err)
 		if err then
@@ -24,8 +27,9 @@ end
 local handlers = {
 	top = {
 		workspace = function(self, args)
-			if args and args.id then
-				os.execute("hyprctl dispatch 'hl.dsp.focus({workspace = " .. args.id .. "})' >/dev/null 2>&1")
+			local id = args and tonumber(args.id)
+			if id then
+				os.execute("hyprctl dispatch 'hl.dsp.focus({workspace = " .. id .. "})' >/dev/null 2>&1")
 			end
 		end,
 	},
