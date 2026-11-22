@@ -292,9 +292,32 @@ function desktop.dragging()
 	return desktop.drag ~= nil
 end
 
+local function active_size()
+	local wayland = riced.plugins("wayland")
+	local store = wayland and wayland.alive and wayland.store
+	local focused = store and store.focused and store.focused.output
+	for _, output in ipairs(store and store.outputs or {}) do
+		if output.name == focused then
+			-- Positions are logical; wl_output reports the mode in physical pixels.
+			local scale = math.max(output.scale or 1, 1)
+			return (output.width or 0) / scale, (output.height or 0) / scale
+		end
+	end
+end
+
+local function clamp_position(value, extent, size)
+	local position = math.max(math.floor(value), 0)
+	if extent and extent > 0 then
+		position = math.min(position, math.max(extent - size, 0))
+	end
+	return math.floor(position)
+end
+
 local function place(drag)
 	local list = widgets()
-	local x, y = math.max(drag.x, 0), math.max(drag.y, 0)
+	local max_x, max_y = active_size()
+	local x = clamp_position(drag.x, max_x, drag.width or 0)
+	local y = clamp_position(drag.y, max_y, drag.height or 0)
 	if drag.index then
 		local widget = list[drag.index]
 		if type(widget) == "table" then
