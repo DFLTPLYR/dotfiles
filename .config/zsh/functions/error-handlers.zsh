@@ -1,24 +1,6 @@
 function command_not_found_handler {
     local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
     printf "${green}zsh${reset}: command ${purple}NOT${reset} found: ${bright}'%s'${reset}\n" "$1"
-
-    if ! ${PM_COMMAND[@]} -h &>/dev/null; then
-        return 127
-    fi
-
-    printf "${bright}Searching for packages that provide '${bright}%s${green}'...\n${reset}" "${1}"
-
-    if ! "${PM_COMMAND[@]}" fq "/usr/bin/$1"; then
-        printf "${bright}${green}[ ${1} ]${reset} ${purple}NOT${reset} found in the system and no package provides it.\n"
-        return 127
-    else
-        printf "${green}[ ${1} ] ${reset} might be provided by the above packages.\n"
-        for entry in $entries; do
-            # Assuming the entry already has ANSI color codes, we don't add more colors
-            printf "  %s\n" "${entry}"
-        done
-
-    fi
     return 127
 }
 
