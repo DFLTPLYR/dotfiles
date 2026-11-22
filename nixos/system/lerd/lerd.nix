@@ -41,8 +41,8 @@
   networking.networkmanager.dns = "systemd-resolved"; # if you use NetworkManager
 
   # 6. Trust lerd's mkcert root CA system-wide (curl, PHP, Node, …).
-  #    The file doesn't exist yet on a fresh install — add this line AFTER the
-  #    "First-time lerd setup" step below generates and copies it in.
+  # This is the public certificate. The matching rootCA-key.pem is the secret
+  # and must never be committed (certs/.gitignore guards that name).
   security.pki.certificateFiles = [./certs/lerd-rootCA.pem];
 
   # 7. Point lerd's host-binary services at the Nix profile.
