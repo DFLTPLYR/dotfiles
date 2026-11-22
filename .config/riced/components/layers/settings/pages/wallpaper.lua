@@ -29,12 +29,14 @@ local function directory()
 	return dir or (os.getenv("HOME") or "") .. "/Pictures/Wallpaper"
 end
 
-local cache = {}
+local cache = { directory = nil, names = {}, at = 0 }
+local REFRESH_SECONDS = 2
 local EXTENSIONS = { png = true, jpg = true, jpeg = true, webp = true, bmp = true }
 
 local function images()
 	local dir = directory()
-	if cache.directory == dir then
+	local now = os.time()
+	if cache.directory == dir and now - cache.at < REFRESH_SECONDS then
 		return cache.names
 	end
 	local names = {}
@@ -51,7 +53,7 @@ local function images()
 		end
 	end
 	table.sort(names)
-	cache.directory, cache.names = dir, names
+	cache.directory, cache.names, cache.at = dir, names, now
 	return names
 end
 
