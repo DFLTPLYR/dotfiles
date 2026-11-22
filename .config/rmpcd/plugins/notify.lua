@@ -1,8 +1,10 @@
+local default_album_art_path = (os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/rmpcd-notify-album-art"
+
 ---@type NotifyPlugin
 local M = {
 	enabled = true,
 	with_album_art = true,
-	album_art_path = "/tmp/rmpcd-notify-album-art",
+	album_art_path = default_album_art_path,
 }
 
 ---@param new_song Song
@@ -36,9 +38,13 @@ end
 local function notify_debounced(_new_song, _with_album_art, _album_art_path) end
 
 M.setup = function(self, args)
-	self.with_album_art = (args.with_album_art ~= nil) and args.with_album_art or true
-	self.album_art_path = args.album_art_path or "/tmp/rmpcd-notify-album-art"
-	self.enabled = (args.enabled ~= nil) and args.enabled or true
+	if args.with_album_art ~= nil then
+		self.with_album_art = args.with_album_art
+	end
+	self.album_art_path = args.album_art_path or default_album_art_path
+	if args.enabled ~= nil then
+		self.enabled = args.enabled
+	end
 
 	local notify_send = util.which("notify-send")
 	if not notify_send then
@@ -63,7 +69,7 @@ M.song_change = function(self, _old_song, new_song)
 		return
 	end
 
-	notify_debounced(new_song, self.with_album_art or true, self.album_art_path)
+	notify_debounced(new_song, self.with_album_art, self.album_art_path)
 end
 
 M.subscribed_channels = { "rmpcd.notify" }
