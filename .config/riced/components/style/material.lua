@@ -139,12 +139,13 @@ return iced.stylesheet({
 	text = {
 		default = {
 			color = onsurface,
-			font = { family = "Noto Sans" },
+			size = 16,
+			font = { family = "Iosevka NFP" },
 		},
 		navbar_middle = {
 			color = onsurface,
-			size = 14,
-			font = { family = "Noto Sans", weight = "bold" },
+			size = 16,
+			font = { family = "Iosevka NFP", weight = "bold" },
 		},
 	},
 	container = { default = {} },

@@ -131,13 +131,14 @@ end
 local function row(entry, active)
 	local title = active and theme.primary or theme.text
 	local detail = active and theme.background or theme.secondary
+	local bg_color = active and iced.opacity(theme.primary, 20) or iced.opacity(theme.background, 20)
 	return iced.button(
 		iced.row({
 			icon(entry),
 			iced.column({
 				iced.text(entry.name or entry.id or "?", { color = title }),
 				iced.text(entry.comment or entry.id or "", {
-					size = 12,
+					size = 16,
 					color = detail,
 					wrap = "none",
 				}),
@@ -148,7 +149,7 @@ local function row(entry, active)
 			height = ROW_HEIGHT,
 			on_press = { event = "app_menu_launch", args = entry.id },
 			style = {
-				background = active and iced.opacity(theme.primary, 20) or iced.opacity(theme.background, 20),
+				background = bg_color,
 				hovered = {
 					background = iced.opacity(theme.background, 20),
 				},
