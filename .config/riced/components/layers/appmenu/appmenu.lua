@@ -49,11 +49,34 @@ end
 
 local ROW_HEIGHT = 56
 local ROW_SPACING = 2
-local VISIBLE_ROWS = 5
+local MIN_PANEL_HEIGHT = 360
+local MAX_PANEL_HEIGHT = 900
+
+local function panel_height(props)
+	local screen = props and props.height or 0
+	if not screen or screen <= 0 then
+		local bounds = iced.bounds("app_menu_screen")
+		screen = bounds and bounds.height or 0
+	end
+	if screen <= 0 then
+		return MAX_PANEL_HEIGHT
+	end
+	return math.max(MIN_PANEL_HEIGHT, math.min(MAX_PANEL_HEIGHT, math.floor(screen * 0.85)))
+end
+
+local function visible_rows()
+	local bounds = iced.bounds("app_menu_results")
+	if not bounds or bounds.height <= 0 then
+		return 10 -- first frame before layout; corrected on the rebuild
+	end
+	-- n rows need n*ROW_HEIGHT + (n-1)*ROW_SPACING
+	return math.max(1, math.floor((bounds.height + ROW_SPACING) / (ROW_HEIGHT + ROW_SPACING)))
+end
 
 local function scroll()
 	local selected = state.app_menu_selected or 1
-	local first = math.floor((selected - 1) / VISIBLE_ROWS) * VISIBLE_ROWS
+	local rows = visible_rows()
+	local first = math.floor((selected - 1) / rows) * rows
 	local y = first * (ROW_HEIGHT + ROW_SPACING)
 	return {
 		type = "scroll_to",
@@ -158,7 +181,7 @@ local function row(entry, active)
 	)
 end
 
-local function picker()
+local function picker(props)
 	local entries = matches()
 	local selected = math.min(math.max(state.app_menu_selected or 1, 1), math.max(#entries, 1))
 	local results
@@ -168,7 +191,13 @@ local function picker()
 				online() and "no matches" or "applications extension is offline",
 				{ color = iced.opacity(theme.secondary, 70) }
 			),
-			{ width = iced.Length.fill, height = iced.Length.fill, align_x = "center", align_y = "center" }
+			{
+				id = "app_menu_results",
+				width = iced.Length.fill,
+				height = iced.Length.fill,
+				align_x = "center",
+				align_y = "center",
+			}
 		)
 	else
 		results = iced.scrollable(
@@ -216,7 +245,7 @@ local function picker()
 		}, { spacing = 12, width = iced.Length.fill, height = iced.Length.fill }),
 		{
 			width = 560,
-			height = 900,
+			height = panel_height(props),
 			padding = 16,
 			style = {
 				background = iced.opacity(theme.background, 70),
@@ -227,9 +256,10 @@ local function picker()
 end
 
 -- Only the picker takes clicks; the rest of the overlay stays transparent.
-local function content()
-	local menu = iced.measure(picker(), { id = "menu" })
+local function content(props)
+	local menu = iced.measure(picker(props), { id = "menu" })
 	return iced.container(iced.region(menu), {
+		id = "app_menu_screen",
 		width = iced.Length.fill,
 		height = iced.Length.fill,
 		align_x = "center",
@@ -237,7 +267,7 @@ local function content()
 	})
 end
 
-function shell.view()
+function shell.view(props)
 	local bounds = iced.bounds("menu")
 	local blur = "none"
 	if bounds and bounds.width > 0 and bounds.height > 0 then
@@ -245,7 +275,7 @@ function shell.view()
 			{ x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height },
 		}
 	end
-	return iced.layer(content(), {
+	return iced.layer(content(props), {
 		id = "app_menu",
 		size = iced.Size(iced.Extent.fill, iced.Extent.fill),
 		layer = iced.Layer.overlay,
