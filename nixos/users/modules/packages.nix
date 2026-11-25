@@ -20,6 +20,7 @@
 
     # Shell / CLI
     wl-gammarelay-rs
+    llama-cpp-vulkan
     gpu-screen-recorder
     ani-cli
     cava
@@ -56,6 +57,7 @@
     wrangler
 
     # Apps
+    mindustry-wayland
     telegram-desktop
     thunderbird
     pavucontrol
