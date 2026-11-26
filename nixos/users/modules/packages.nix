@@ -5,61 +5,73 @@
 }: {
   home.packages = with pkgs; [
     # System / dotfiles
-    stow
-    neovim
-    helix
-    unzip
-    tree-sitter
-    viu
-    chafa
-    ueberzugpp
+    adw-gtk3
     proton-vpn
+    stow
+    unzip
+    wl-gammarelay-rs
 
     # Shell / CLI
-    wl-gammarelay-rs
-    llama-cpp-vulkan
-    gpu-screen-recorder
+    btop-rocm
+    direnv
+    fastfetch
+    fd
+    fetch
+    fzf
+    jq
+    libnotify
+    oh-my-zsh
+    python314Packages.speedtest-cli
+    ripgrep
+    starship
+    trash-cli
+
+    # Terminal / TUI
+    chafa
+    helix
+    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    lazygit
+    neovim
+    tree-sitter
+    ueberzugpp
+    viu
+    yazi
+
+    # Media
     ani-cli
     cava
-    starship
-    oh-my-zsh
-    ripgrep
-    jq
-    fd
-    fzf
-    fastfetch
-    lazygit
-    direnv
-    libnotify
+    easyeffects
+    gpu-screen-recorder
+    lowfi
     mpc
     mpv
-    yazi
-    python314Packages.speedtest-cli
-    python314Packages.uv
-    btop-rocm
-    trash-cli
+    pavucontrol
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.default
     inputs.rmpc.packages.${pkgs.stdenv.hostPlatform.system}.rmpcd
-    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    fetch
-    lowfi
+    vlc
 
     # Development
+    just
+    llama-cpp-vulkan
+    lmstudio
     nodejs
     opencode
+    python314Packages.uv
     rustup
-    just
-    lmstudio
     wrangler
 
-    # Apps
+    # Desktop apps
+    droidcam
+    inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
+    kitty
+    localsend
     mindustry-wayland
+    obsidian
+    onlyoffice-desktopeditors
+    prismlauncher
+    protonplus
     telegram-desktop
     thunderbird
-    pavucontrol
-    droidcam
-    adw-gtk3
-    inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
     (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
       wrapFirefox = browser: args:
         pkgs.wrapFirefox browser (args
@@ -67,19 +79,11 @@
             nativeMessagingHosts = [pkgs.firefoxpwa];
           });
     })
-    kitty
-    obsidian
-    onlyoffice-desktopeditors
-    vlc
-    localsend
-    protonplus
-    prismlauncher
-    easyeffects
 
     # Screenshots / clipboard
+    cliphist
     grim
     slurp
-    cliphist
     wl-clipboard
   ];
 }
