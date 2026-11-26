@@ -35,6 +35,8 @@ opt.foldcolumn = "0"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
+opt.pumheight = 10
+opt.pumborder = "rounded"
 
 vim.g.autoformat = true
 vim.g.netrw_banner = false
