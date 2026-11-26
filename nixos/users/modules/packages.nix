@@ -6,9 +6,6 @@
   home.packages = with pkgs; [
     # System / dotfiles
     stow
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtwayland
     neovim
     helix
     unzip
@@ -53,7 +50,6 @@
     rustup
     just
     lmstudio
-    qtcreator
     wrangler
 
     # Apps

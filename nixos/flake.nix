@@ -45,7 +45,6 @@
     devShells.${system} = {
       riced = import ./devshell/riced.nix {inherit pkgs;};
       rmk = import ./devshell/rmk.nix {inherit pkgs;};
-      rusty-qt = import ./devshell/rusty-qt.nix {inherit pkgs;};
     };
 
     # system config
