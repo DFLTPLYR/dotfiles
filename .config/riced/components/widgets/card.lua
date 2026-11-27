@@ -58,20 +58,17 @@ function card.card(entry, width, height, content, icon_name)
 	for _, child in ipairs(content) do
 		children[#children + 1] = child
 	end
-	return iced.container(
-		iced.column(children, { width = iced.Length.fill, height = iced.Length.fill, spacing = 6 }),
-		{
-			width = width,
-			height = height,
-			padding = 10,
-			clip = true,
-			style = {
-				background = iced.opacity(theme.background, 88),
-				border = { color = iced.opacity(theme.text, 20), width = 1, radius = 8 },
-				shadow = { color = iced.opacity(theme.background, 80), offset = { x = 2, y = 2 }, blur = 6 },
-			},
-		}
-	)
+	return iced.container(iced.column(children, { width = iced.Length.fill, height = iced.Length.fill, spacing = 6 }), {
+		width = width,
+		height = height,
+		padding = 10,
+		clip = true,
+		style = {
+			background = iced.opacity(theme.background, 88),
+			border = { color = iced.opacity(theme.text, 20), width = 1, radius = 8 },
+			shadow = { color = iced.opacity(theme.background, 80), offset = { x = 2, y = 2 }, blur = 6 },
+		},
+	})
 end
 
 return card
