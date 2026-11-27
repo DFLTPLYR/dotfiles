@@ -64,26 +64,13 @@ local function view()
 		end,
 	})
 
-
 	local header = iced.row({
 		iced.text("Settings", { size = 20, color = theme.primary, font = { weight = "bold" } }),
 		iced.container(iced.space(), { width = iced.Length.fill }),
-		iced.button("✕", {
-			width = 32,
-			height = 32,
-			on_press = close,
-			style = {
-				background = "#00000000",
-				text_color = theme.secondary,
-				hovered = { background = iced.opacity(theme.danger, 30) },
-				border = { color = iced.opacity(theme.text, 20), width = 1, radius = 4 },
-			},
-		}),
 	}, {
 		width = iced.Length.fill,
 		align_y = "center",
 	})
-
 
 	local row = iced.row({
 		spacer({
@@ -110,25 +97,25 @@ local function view()
 		spacing = 8,
 	})
 
-
 	local content = iced.container(row, {
-		width = PANEL_WIDTH,
-		height = PANEL_HEIGHT,
+		width = iced.Length.fill,
+		height = iced.Length.fill,
 		padding = 12,
 		style = {
-			background = iced.opacity(theme.background, 96),
-			border = { color = iced.opacity(theme.text, 20), width = 1, radius = 6 },
+			background = iced.opacity(theme.background, 50),
+			-- border = { color = iced.opacity(theme.text, 20), width = 0, radius = 6 },
 			shadow = { color = iced.opacity(theme.background, 90), offset = { x = 4, y = 4 }, blur = 12 },
 		},
 	})
-
 
 	local stack = iced.stack({
 		iced.mouse_area(
 			iced.container(iced.space(), {
 				width = iced.Length.fill,
 				height = iced.Length.fill,
-				style = { background = iced.opacity(theme.background, 45) },
+				style = {
+					background = iced.opacity(theme.background, 45),
+				},
 			}),
 			{ on_press = close }
 		),
