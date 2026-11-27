@@ -14,9 +14,9 @@ output_path = '~/.config/obs-studio/themes/reshell.obt'
 input_path = "onlyoffice/onlyoffice.json.template"
 output_path = "~/.local/share/onlyoffice/desktopeditors/uithemes/matugen.json"
 
-# [templates.reshell]
-# input_path = "reshell/material.json"
-# output_path = "~/.config/quickshell/reshell/core/data/themes/dynamic.json"
+[templates.riced]
+input_path = "riced/dynamic.json"
+output_path = "~/.config/riced/data/theme/dynamic.json"
 
 [templates.helix]
 input_path = "helix/helix.toml"

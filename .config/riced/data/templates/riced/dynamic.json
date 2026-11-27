@@ -1,0 +1,94 @@
+{
+  "dark": {
+    "error": "{{ colors.error }}",
+    "hover": "{{ colors.hover }}",
+    "on_error": "{{ colors.on_error }}",
+    "on_hover": "{{ colors.on_hover }}",
+    "on_primary": "{{ colors.on_primary }}",
+    "on_secondary": "{{ colors.on_secondary }}",
+    "on_surface": "{{ colors.on_surface }}",
+    "on_surface_variant": "{{ colors.on_surface_variant }}",
+    "on_tertiary": "{{ colors.on_tertiary }}",
+    "outline": "{{ colors.outline }}",
+    "primary": "{{ colors.primary }}",
+    "secondary": "{{ colors.secondary }}",
+    "shadow": "{{ colors.shadow }}",
+    "surface": "{{ colors.surface }}",
+    "surface_variant": "{{ colors.surface_variant }}",
+    "terminal": {
+      "background": "{{ colors.terminal.background }}",
+      "bright": {
+        "black": "{{ colors.terminal.bright.black }}",
+        "blue": "{{ colors.terminal.bright.blue }}",
+        "cyan": "{{ colors.terminal.bright.cyan }}",
+        "green": "{{ colors.terminal.bright.green }}",
+        "magenta": "{{ colors.terminal.bright.magenta }}",
+        "red": "{{ colors.terminal.bright.red }}",
+        "white": "{{ colors.terminal.bright.white }}",
+        "yellow": "{{ colors.terminal.bright.yellow }}"
+      },
+      "cursor": "{{ colors.terminal.cursor }}",
+      "cursorText": "{{ colors.terminal.cursorText }}",
+      "foreground": "{{ colors.terminal.foreground }}",
+      "normal": {
+        "black": "{{ colors.terminal.normal.black }}",
+        "blue": "{{ colors.terminal.normal.blue }}",
+        "cyan": "{{ colors.terminal.normal.cyan }}",
+        "green": "{{ colors.terminal.normal.green }}",
+        "magenta": "{{ colors.terminal.normal.magenta }}",
+        "red": "{{ colors.terminal.normal.red }}",
+        "white": "{{ colors.terminal.normal.white }}",
+        "yellow": "{{ colors.terminal.normal.yellow }}"
+      },
+      "selectionBg": "{{ colors.terminal.selectionBg }}",
+      "selectionFg": "{{ colors.terminal.selectionFg }}"
+    },
+    "tertiary": "{{ colors.tertiary }}"
+  },
+  "light": {
+    "error": "{{ colors.error }}",
+    "hover": "{{ colors.hover }}",
+    "on_error": "{{ colors.on_error }}",
+    "on_hover": "{{ colors.on_hover }}",
+    "on_primary": "{{ colors.on_primary }}",
+    "on_secondary": "{{ colors.on_secondary }}",
+    "on_surface": "{{ colors.on_surface }}",
+    "on_surface_variant": "{{ colors.on_surface_variant }}",
+    "on_tertiary": "{{ colors.on_tertiary }}",
+    "outline": "{{ colors.outline }}",
+    "primary": "{{ colors.primary }}",
+    "secondary": "{{ colors.secondary }}",
+    "shadow": "{{ colors.shadow }}",
+    "surface": "{{ colors.surface }}",
+    "surface_variant": "{{ colors.surface_variant }}",
+    "terminal": {
+      "background": "{{ colors.terminal.background }}",
+      "bright": {
+        "black": "{{ colors.terminal.bright.black }}",
+        "blue": "{{ colors.terminal.bright.blue }}",
+        "cyan": "{{ colors.terminal.bright.cyan }}",
+        "green": "{{ colors.terminal.bright.green }}",
+        "magenta": "{{ colors.terminal.bright.magenta }}",
+        "red": "{{ colors.terminal.bright.red }}",
+        "white": "{{ colors.terminal.bright.white }}",
+        "yellow": "{{ colors.terminal.bright.yellow }}"
+      },
+      "cursor": "{{ colors.terminal.cursor }}",
+      "cursorText": "{{ colors.terminal.cursorText }}",
+      "foreground": "{{ colors.terminal.foreground }}",
+      "normal": {
+        "black": "{{ colors.terminal.normal.black }}",
+        "blue": "{{ colors.terminal.normal.blue }}",
+        "cyan": "{{ colors.terminal.normal.cyan }}",
+        "green": "{{ colors.terminal.normal.green }}",
+        "magenta": "{{ colors.terminal.normal.magenta }}",
+        "red": "{{ colors.terminal.normal.red }}",
+        "white": "{{ colors.terminal.normal.white }}",
+        "yellow": "{{ colors.terminal.normal.yellow }}"
+      },
+      "selectionBg": "{{ colors.terminal.selectionBg }}",
+      "selectionFg": "{{ colors.terminal.selectionFg }}"
+    },
+    "tertiary": "{{ colors.tertiary }}"
+  }
+}
