@@ -62,6 +62,7 @@
 
     # Desktop apps
     droidcam
+    protonmail-desktop
     inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
     kitty
     localsend
