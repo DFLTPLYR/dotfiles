@@ -6,32 +6,38 @@ local function quoted(value)
 	return "'" .. value:gsub("'", "'\\''") .. "'"
 end
 
-local function palette_names()
-	local names = {}
+local function load_palettes()
+	local list = {}
 	if not io.popen then
-		return names
+		return list
 	end
 	local state = riced.file({ path = "data/theme/themeagen.json" })
 	local directory = state.path:match("^(.*)[/\\][^/\\]+$")
 	if not directory then
-		return names
+		return list
 	end
 	local pipe = io.popen("ls -1 " .. quoted(directory) .. " 2>/dev/null")
 	if not pipe then
-		return names
+		return list
 	end
 	for line in pipe:lines() do
 		local name = line:match("^(.+)%.json$")
 		if name and name ~= "themeagen" then
-			names[#names + 1] = name
+			local colors = riced.file({ path = directory .. "/" .. line }).data
+			if type(colors) == "table" and type(colors.dark) == "table" and type(colors.light) == "table" then
+				list[#list + 1] = { name = name, colors = colors }
+			end
 		end
 	end
 	pipe:close()
-	table.sort(names)
-	return names
+	table.sort(list, function(a, b)
+		return a.name < b.name
+	end)
+	return list
 end
 
-local names = palette_names()
+local palettes = load_palettes()
+local SWATCHES = { "surface", "primary", "secondary", "tertiary", "hover", "error" }
 
 iced.define("theme", function()
 	local page = {}
@@ -39,8 +45,11 @@ iced.define("theme", function()
 	function page:view(props)
 		local themeagen = riced.plugins("themeagen")
 		local mode = themeagen.mode or "dark"
-		local selected = themeagen.source and themeagen.source.kind == "manual"
-			and settings.data.theme or nil
+		local selected = settings.data.theme
+		-- Wallpaper-driven palettes are shown as the dynamic entry.
+		if themeagen.source and themeagen.source.kind ~= "manual" then
+			selected = "dynamic"
+		end
 
 		local function save(name)
 			local data = settings.data
@@ -63,16 +72,11 @@ iced.define("theme", function()
 			end)
 		end
 
-		local function set_theme(name)
+		local function set_theme(palette)
 			if not themeagen.alive or not themeagen.populate then
 				return
 			end
-			local colors = riced.file({ path = "data/theme/" .. name .. ".json" }).data
-			if type(colors) ~= "table" or type(colors.dark) ~= "table" or type(colors.light) ~= "table" then
-				log("invalid theme: " .. name)
-				return
-			end
-			themeagen.populate({ colors = colors, mode = themeagen.mode or "dark" }, function(result, error)
+			themeagen.populate({ colors = palette.colors, mode = themeagen.mode or "dark" }, function(result, error)
 				if error then
 					log(error)
 					return
@@ -80,7 +84,7 @@ iced.define("theme", function()
 				for _, message in ipairs(result.errors or {}) do
 					log(message)
 				end
-				save(name)
+				save(palette.name)
 			end)
 		end
 
@@ -106,14 +110,54 @@ iced.define("theme", function()
 			})
 		end
 
-		local palettes = {}
-		for _, name in ipairs(names) do
-			palettes[#palettes + 1] = iced.button(name, {
-				style = control_style(name == selected),
-				on_press = function()
-					set_theme(name)
-				end,
-			})
+		local function palette_button(palette)
+			local colors = palette.colors[mode] or palette.colors.dark
+			local swatches = {}
+			for _, key in ipairs(SWATCHES) do
+				swatches[#swatches + 1] = iced.container(iced.text(key), {
+					width = iced.Length.fill,
+					height = iced.Length.fill,
+					align_x = "center",
+					align_y = "center",
+					style = {
+						background = colors[key],
+					},
+				})
+			end
+			local active = palette.name == selected
+			return iced.button(
+				iced.column({
+					iced.text(palette.name, {
+						width = iced.Length.fill,
+						center = true,
+						size = 24,
+						color = active and theme.background or theme.text,
+					}),
+					iced.column(swatches, {
+						width = iced.Length.fill,
+						height = iced.Length.fill,
+						spacing = 2,
+					}),
+				}, {
+					width = iced.Length.fill,
+					height = iced.Length.fill,
+					spacing = 4,
+				}),
+				{
+					width = iced.Length.fill,
+					height = iced.Length.fill,
+					padding = 6,
+					style = control_style(active),
+					on_press = function()
+						set_theme(palette)
+					end,
+				}
+			)
+		end
+
+		local buttons = {}
+		for _, palette in ipairs(palettes) do
+			buttons[#buttons + 1] = palette_button(palette)
 		end
 
 		local children = {
@@ -126,8 +170,8 @@ iced.define("theme", function()
 				mode_button("Light", "light"),
 			}, { spacing = 8 }),
 		}
-		if #palettes > 0 then
-			children[#children + 1] = iced.grid(palettes, { columns = 3, spacing = 8 })
+		if #buttons > 0 then
+			children[#children + 1] = iced.grid(buttons, { columns = 3, spacing = 8 })
 		else
 			children[#children + 1] = iced.text("no palettes found", {
 				size = 12,
