@@ -3,7 +3,7 @@
 local state = require("data.state")
 local settings = require("data.settings").file
 
-local PREVIEW_HEIGHT = 200
+local PREVIEW_HEIGHT = 700
 local PREVIEW_SIZE = 1024
 local THUMB_SIZE = 512
 local PAGE_SIZE = 9
